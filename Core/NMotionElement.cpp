@@ -408,7 +408,7 @@ UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage, const string &netcla
  NameT tmpname;
  res=true;
 
- CreateNeuronBranchLink(net,"Afferent_Ia1.LTZone","Motoneuron1", "PosChannel");
+ res=CreateNeuronBranchLink(net,"Afferent_Ia1.LTZone","Motoneuron1", "PosChannel");
 /* NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron1"));
  NPulseMembrane* branch=0;
 // NPulseSynapse* synapse=0;
@@ -418,7 +418,7 @@ UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage, const string &netcla
  res&=net->CreateLink("Afferent_Ia1.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
- CreateNeuronBranchLink(net,"Afferent_Ia1.LTZone","PostAfferent11", "PosChannel");
+ res=CreateNeuronBranchLink(net,"Afferent_Ia1.LTZone","PostAfferent11", "PosChannel");
 /* neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("PostAfferent11"));
  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
  channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
@@ -426,70 +426,70 @@ UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage, const string &netcla
 				 channel->GetLongName(net,tmpname));
   */
 
- CreateNeuronBranchLink(net,"Afferent_Ia2.LTZone","Motoneuron2", "PosChannel");
+ res=CreateNeuronBranchLink(net,"Afferent_Ia2.LTZone","Motoneuron2", "PosChannel");
 /* neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron2"));
  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
  channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
  res&=net->CreateLink("Afferent_Ia2.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
- CreateNeuronBranchLink(net,"Afferent_Ia2.LTZone","PostAfferent21", "PosChannel");
+ res=CreateNeuronBranchLink(net,"Afferent_Ia2.LTZone","PostAfferent21", "PosChannel");
 /* neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("PostAfferent21"));
  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
  channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
  res&=net->CreateLink("Afferent_Ia2.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
- CreateNeuronBranchLink(net,"PostAfferent11.LTZone","Motoneuron2", "NegChannel");
+ res=CreateNeuronBranchLink(net,"PostAfferent11.LTZone","Motoneuron2", "NegChannel");
 /* neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron2"));
  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
  channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
  res&=net->CreateLink("PostAfferent11.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
- CreateNeuronBranchLink(net,"PostAfferent21.LTZone","Motoneuron1", "NegChannel");
+ res=CreateNeuronBranchLink(net,"PostAfferent21.LTZone","Motoneuron1", "NegChannel");
 /* neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron1"));
  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
  channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
  res&=net->CreateLink("PostAfferent21.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
- CreateNeuronBranchLink(net,"Motoneuron1.LTZone","Renshow1", "PosChannel");
+ res=CreateNeuronBranchLink(net,"Motoneuron1.LTZone","Renshow1", "PosChannel");
 /* neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Renshow1"));
  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
  channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
  res&=net->CreateLink("Motoneuron1.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
- CreateNeuronBranchLink(net,"Renshow1.LTZone","Motoneuron1", "NegChannel");
+ res=CreateNeuronBranchLink(net,"Renshow1.LTZone","Motoneuron1", "NegChannel");
 /* neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron1"));
  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
  channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
  res&=net->CreateLink("Renshow1.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
- CreateNeuronBranchLink(net,"Renshow1.LTZone","PostAfferent11", "NegChannel");
+ res=CreateNeuronBranchLink(net,"Renshow1.LTZone","PostAfferent11", "NegChannel");
 /* neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("PostAfferent11"));
  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
  channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
  res&=net->CreateLink("Renshow1.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
- CreateNeuronBranchLink(net,"Motoneuron2.LTZone","Renshow2", "PosChannel");
+ res=CreateNeuronBranchLink(net,"Motoneuron2.LTZone","Renshow2", "PosChannel");
 /* neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Renshow2"));
  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
  channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
  res&=net->CreateLink("Motoneuron2.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
- CreateNeuronBranchLink(net,"Renshow2.LTZone","Motoneuron2", "NegChannel");
+ res=CreateNeuronBranchLink(net,"Renshow2.LTZone","Motoneuron2", "NegChannel");
 /* neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron2"));
  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
  channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
  res&=net->CreateLink("Renshow2.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
- CreateNeuronBranchLink(net,"Renshow2.LTZone","PostAfferent21", "NegChannel");
+ res=CreateNeuronBranchLink(net,"Renshow2.LTZone","PostAfferent21", "NegChannel");
 /* neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("PostAfferent21"));
  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
  channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
@@ -501,42 +501,42 @@ UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage, const string &netcla
  {
  case 0:
   // Канал Ib
-  CreateNeuronBranchLink(net,"Afferent_Ib1.LTZone","PostAfferent12", "PosChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_Ib1.LTZone","PostAfferent12", "PosChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("PostAfferent12"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
   res&=net->CreateLink("Afferent_Ib1.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"PostAfferent12.LTZone","Motoneuron2", "PosChannel");
+  res=CreateNeuronBranchLink(net,"PostAfferent12.LTZone","Motoneuron2", "PosChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron2"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
   res&=net->CreateLink("PostAfferent12.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"PostAfferent12.LTZone","Motoneuron1", "NegChannel");
+  res=CreateNeuronBranchLink(net,"PostAfferent12.LTZone","Motoneuron1", "NegChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron1"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
   res&=net->CreateLink("PostAfferent12.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"Afferent_Ib2.LTZone","PostAfferent22", "PosChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_Ib2.LTZone","PostAfferent22", "PosChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("PostAfferent22"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
   res&=net->CreateLink("Afferent_Ib2.LTZone",0,
 				 channel->GetLongName(net,tmpname));*/
 
-  CreateNeuronBranchLink(net,"PostAfferent22.LTZone","Motoneuron1", "PosChannel");
+  res=CreateNeuronBranchLink(net,"PostAfferent22.LTZone","Motoneuron1", "PosChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron1"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
   res&=net->CreateLink("PostAfferent22.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"PostAfferent22.LTZone","Motoneuron2", "NegChannel");
+  res=CreateNeuronBranchLink(net,"PostAfferent22.LTZone","Motoneuron2", "NegChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron2"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
@@ -545,28 +545,28 @@ UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage, const string &netcla
   */
 
   // Канал II
-  CreateNeuronBranchLink(net,"Afferent_II1.LTZone","PostAfferent14", "PosChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","PostAfferent14", "PosChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("PostAfferent14"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
   res&=net->CreateLink("Afferent_II1.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron1", "NegChannel");
+  res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron1", "NegChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron1"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
   res&=net->CreateLink("PostAfferent14.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron2", "PosChannel");
+  res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron2", "PosChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron2"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
   res&=net->CreateLink("PostAfferent14.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"Afferent_II2.LTZone","PostAfferent24", "PosChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","PostAfferent24", "PosChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("PostAfferent24"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
@@ -574,14 +574,14 @@ UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage, const string &netcla
 				 channel->GetLongName(net,tmpname));
   */
 
-  CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron2", "NegChannel");
+  res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron2", "NegChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron2"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
   res&=net->CreateLink("PostAfferent24.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron1", "PosChannel");
+  res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron1", "PosChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron1"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
@@ -591,28 +591,28 @@ UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage, const string &netcla
 
  case 1:
   // Варинат канала b без промежуточных нейронов
-  CreateNeuronBranchLink(net,"Afferent_Ib1.LTZone","Motoneuron2", "PosChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_Ib1.LTZone","Motoneuron2", "PosChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron2"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
   res&=net->CreateLink("Afferent_Ib1.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"Afferent_Ib1.LTZone","Motoneuron1", "NegChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_Ib1.LTZone","Motoneuron1", "NegChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron1"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
   res&=net->CreateLink("Afferent_Ib1.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"Afferent_Ib2.LTZone","Motoneuron1", "PosChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_Ib2.LTZone","Motoneuron1", "PosChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron1"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
   res&=net->CreateLink("Afferent_Ib2.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"Afferent_Ib2.LTZone","Motoneuron2", "NegChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_Ib2.LTZone","Motoneuron2", "NegChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron2"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
@@ -620,28 +620,28 @@ UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage, const string &netcla
 				 channel->GetLongName(net,tmpname));
   */
   // Варинат канала II без промежуточных нейронов
-  CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron1", "NegChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron1", "NegChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron1"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
   res&=net->CreateLink("Afferent_II1.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron2", "PosChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron2", "PosChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron2"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
   res&=net->CreateLink("Afferent_II1.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron2", "NegChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron2", "NegChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron2"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("NegChannel"));
   res&=net->CreateLink("Afferent_II2.LTZone",0,
 				 channel->GetLongName(net,tmpname));
   */
-  CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron1", "PosChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron1", "PosChannel");
 /*  neuron=dynamic_cast<NPulseNeuron*>(net->GetComponent("Motoneuron1"));
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
   channel=dynamic_cast<NPulseChannel*>(branch->GetComponentL("PosChannel"));
