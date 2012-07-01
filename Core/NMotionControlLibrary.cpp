@@ -52,14 +52,25 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
  UploadClass("NSimpleMotionElement",net);
 
  // Создаем СУ с ветвлением
- net=CreateBranchedMotionElement(storage, "NNet",0);
+ net=CreateBranchedMotionElement(storage, "NNet","NSynSPNeuron","NSAfferentNeuron",0);
  net->SetName("MotionElement");
  UploadClass("NBranchedMotionElement",net);
 
  // Создаем СУ с ветвлением без вставочных интернейронов
- net=CreateBranchedMotionElement(storage, "NNet",1);
+ net=CreateBranchedMotionElement(storage, "NNet","NSynSPNeuron","NSAfferentNeuron",1);
  net->SetName("MotionElement");
  UploadClass("NSimpleBranchedMotionElement",net);
+
+
+ // Создаем СУ с ветвлением и непрерывными нейронами
+ net=CreateBranchedMotionElement(storage, "NNet","NContinuesSynSPNeuron","NContinuesSAfferentNeuron",0);
+ net->SetName("MotionElement");
+ UploadClass("NContinuesBranchedMotionElement",net);
+
+ // Создаем СУ с ветвлением и непрерывными нейронами без вставочных интернейронов
+ net=CreateBranchedMotionElement(storage, "NNet","NContinuesSynSPNeuron","NContinuesSAfferentNeuron",1);
+ net->SetName("MotionElement");
+ UploadClass("NContinuesSimpleBranchedMotionElement",net);
 
  // Создаем прототип систем управления
  UEPtr<NEngineMotionControl> cs=0;
@@ -285,6 +296,27 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
    UploadClass(string("NIndRangeBranchedCrosslinksEngineControlRangeAfferent")+RDK::sntoa(i+1),net);
   else
    UploadClass("NIndRangeBranchedCrosslinksEngineControlRangeAfferent",net);
+ }
+
+ // Формируем сеть управления двигателем c разделением информационного потока с датчиков
+ // на полосы по амплитуде без пересекающихся диапазонов
+ // Автоматическое формирование нейронов
+ // Перекрестные связи
+ // Нейроны с непрерывной переходной функцией
+ for(size_t i=0;i<max_number_of_mc;i++)
+ {
+  cs=dynamic_pointer_cast<NEngineMotionControl>(storage->TakeObject("NEngineMotionControl"));
+  cs->NumMotionElements=i+1;
+  cs->CreationMode=10;
+  cs->MotionElementClassName="NContinuesBranchedMotionElement";
+  cs->Create();
+  net=cs;
+
+  net->SetName("EngineControlRangeAfferent");
+  if(i>0)
+   UploadClass(string("NContinuesIndRangeBranchedCrosslinksEngineControlRangeAfferent")+RDK::sntoa(i+1),net);
+  else
+   UploadClass("NContinuesIndRangeBranchedCrosslinksEngineControlRangeAfferent",net);
  }
 
 

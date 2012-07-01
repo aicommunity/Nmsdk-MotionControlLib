@@ -31,6 +31,7 @@ RDK::ULProperty<size_t, NEngineMotionControl> NumMotionElements;
 // 3 - Branched Range Crosslinks
 // 4 - Branched Ind. Range
 // 5 - Branched Ind. Range Crosslinks
+// 10 - Branched Ind. Range Continues LTZone neurons
 RDK::ULProperty<int, NEngineMotionControl> CreationMode;
 
 // Имя класса управляющего элемента
@@ -49,7 +50,13 @@ RDK::ULProperty<real, NEngineMotionControl> IIMin;
 RDK::ULProperty<real, NEngineMotionControl> IIMax;
 
 protected: // Временные переменные
-vector<vector<NReceptor*> > receptor;
+vector<vector<UEPtr<NReceptor> > > receptors;
+
+vector<pair<double,double> > Ia_ranges_pos,Ia_ranges_neg;
+vector<pair<double,double> > Ib_ranges_pos,Ib_ranges_neg;
+vector<pair<double,double> > II_ranges_pos,II_ranges_neg;
+
+vector<NNet*> Motions;
 
 
 public: // Методы
@@ -111,6 +118,33 @@ virtual bool Create(void);
 // Вспомогательные методы
 // --------------------------
 protected:
+// Вычисляет диапазоны действия афферентнов
+// Возвращает число получившихся диапазонов
+int CalcAfferentRange(int num_motions, bool cross_ranges, double a_min, double a_max,
+			vector<pair<double,double> > &pos_ranges, vector<pair<double,double> > &neg_ranges);
+
+// Настройка рецепторов
+void MotionElementsSetup(UEPtr<NAContainer> net, int inp_mode, int out_mode, double exp_coeff, double receptor_max_output, double receptor_gain, int real_ranges);
+
+// Настройка преобразователя импульс-аналог
+void PACSetup(UEPtr<NAContainer> net,
+		double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value);
+
+// Настройка преобразователя аналог-аналог
+void AACSetup(UEPtr<NAContainer> net, double gain_value);
+
+// Настройка разделителей интервалов
+void IntervalSeparatorsSetup(UEPtr<NAContainer> net, int mode_value, double pos_gain_value, double neg_gain_value);
+
+// Задание вспомогательных компонент
+void AdditionalComponentsSetup(UEPtr<NAContainer> net);
+
+// Установка стандартных связей
+void StandardLinksSetup(UEPtr<NANet> net, const string &engine_integrator_name);
+
+// Установка связей разделителей интервалов
+void IntervalSeparatorLinksSetup(UEPtr<NANet> net);
+
 // Формируем сеть управления двигателем с разделением информационного потока с датчиков
 // на две полосы по знаку
 NANet* CreateEngineControlSignumAfferent(void);
@@ -118,6 +152,9 @@ NANet* CreateEngineControlSignumAfferent(void);
 // Формируем сеть управления двигателем c разделением информационного потока с датчиков
 // на полосы по амплитуде
 NANet* CreateEngineControlRangeAfferent(bool crosslinks=false, bool crossranges=true);
+
+// Формируем сеть управления на нейронах с непрерывной генераторной функцией нейронов
+NANet* CreateEngineControlContinuesNeuronsSimple(bool crossranges=true);
 // --------------------------
 
 };

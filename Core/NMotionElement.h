@@ -23,7 +23,8 @@ namespace NMSDK {
 UEPtr<NANet> CreateMotionElement(NStorage *storage, const string &netclassname, int mode);
 
 // Аналогично, но с развязкой по дендритам
-UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage, const string &netclassname, int mode);
+UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage, const string &netclassname,
+	const string &neuron_class_name, const string &afferent_neuron_class_name, int mode);
 
 bool CreateNeuronBranchLink(UEPtr<NANet> net,const string &source,
 	const string &target_head, const string &target_tail);
