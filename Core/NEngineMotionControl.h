@@ -13,8 +13,8 @@ See file license.txt for more information
 #ifndef NEngineMotionControlH
 #define NEngineMotionControlH
 
-#include "../Kernel/NBios.h"
-#include "../Libraries/ReceiverLib/NReceptor.h"
+#include "../../Kernel/NBios.h"
+#include "../ReceiverLib/NReceptor.h"
 
 namespace NMSDK {
 
