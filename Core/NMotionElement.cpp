@@ -21,6 +21,161 @@ See file license.txt for more information
 namespace NMSDK {
 
 // Формирует СУ двигательной единицей
+UEPtr<NANet> CreateSimplestMotionElement(NStorage *storage, const string &netclassname, int mode)
+{
+ UEPtr<NAContainer> cont;
+ bool res;
+
+ UEPtr<NANet> net=RDK::dynamic_pointer_cast<NANet>(storage->TakeObject(netclassname));
+ if(!net)
+  return 0;
+
+ // Клетка реншоу 1
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynRenshowCell"));
+ if(!cont)
+  return 0;
+ cont->SetName("Renshow1");
+ res=net->AddComponent(cont);
+
+ // Клетка реншоу 2
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynRenshowCell"));
+ if(!cont)
+  return 0;
+ cont->SetName("Renshow2");
+ res=net->AddComponent(cont);
+
+ // Мотонейрон 1
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynMotoneuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("Motoneuron1");
+ res=net->AddComponent(cont);
+
+ // Мотонейрон 2
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynMotoneuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("Motoneuron2");
+ res=net->AddComponent(cont);
+
+ // Постафферентные нейроны
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent11");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent12");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent13");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent14");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent21");
+ res=net->AddComponent(cont);
+
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent22");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent23");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent24");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_Ia1");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_Ia2");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_Ib1");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_Ib2");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_II1");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_II2");
+ res=net->AddComponent(cont);
+
+ // Установка связей
+ ULongId item,conn;
+
+ res=net->CreateLink("Afferent_II1.LTZone",0,
+				 "Motoneuron1.PNeuronMembrane.PosChannel");
+
+ res=net->CreateLink("Afferent_II1.LTZone",0,
+				 "Motoneuron2.PNeuronMembrane.NegChannel");
+
+ res=net->CreateLink("Afferent_II1.LTZone",0,
+				 "Motoneuron1.PNeuronMembrane.NegChannel");
+
+ res=net->CreateLink("Afferent_II1.LTZone",0,
+				 "Motoneuron2.PNeuronMembrane.PosChannel");
+
+ res=net->CreateLink("PostAfferent14.LTZone",0,
+				 "Motoneuron1.PNeuronMembrane.PosChannel");
+ res=net->CreateLink("PostAfferent14.LTZone",0,
+				 "Motoneuron2.PNeuronMembrane.NegChannel");
+ res=net->CreateLink("PostAfferent24.LTZone",0,
+				 "Motoneuron1.PNeuronMembrane.NegChannel");
+ res=net->CreateLink("PostAfferent24.LTZone",0,
+				 "Motoneuron2.PNeuronMembrane.PosChannel");
+
+
+ if(!res)
+  res=true;
+
+ return net;
+}
+
+// Формирует простейшую СУ двигательной единицей из двух мотонейронов
 UEPtr<NANet> CreateMotionElement(NStorage *storage, const string &netclassname, int mode)
 {
  UEPtr<NAContainer> cont;
@@ -264,6 +419,7 @@ UEPtr<NANet> CreateMotionElement(NStorage *storage, const string &netclassname, 
  return net;
 }
 
+
 bool CreateNeuronBranchLink(UEPtr<NANet> net,const string &source,
 	const string &target_head, const string &target_tail)
 {
@@ -458,6 +614,154 @@ UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage,
   res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron1", "PosChannel");
  break;
  }
+
+ if(!res)
+  res=true;
+
+ return net;
+}
+
+// Формирует СУ двигательной единицей
+// Аналогично, но с развязкой по дендритам
+UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage,
+	const string &netclassname, const string &neuron_class_name, const string &afferent_neuron_class_name, int mode)
+{
+ UEPtr<NAContainer> cont;
+ bool res;
+
+ UEPtr<NANet> net=dynamic_pointer_cast<NANet>(storage->TakeObject(netclassname));
+ if(!net)
+  return 0;
+/*
+ // Клетка реншоу 1
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Renshow1");
+ res=net->AddComponent(cont);
+
+ // Клетка реншоу 2
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Renshow2");
+ res=net->AddComponent(cont);
+				*/
+ // Мотонейрон 1
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Motoneuron1");
+ res=net->AddComponent(cont);
+
+ // Мотонейрон 2
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Motoneuron2");
+ res=net->AddComponent(cont);
+  /*
+ // Постафферентные нейроны
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent11");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent12");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent13");
+ res=net->AddComponent(cont);
+			  */
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent14");
+ res=net->AddComponent(cont);
+	  /*
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent21");
+ res=net->AddComponent(cont);
+
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent22");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent23");
+ res=net->AddComponent(cont);
+              */
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent24");
+ res=net->AddComponent(cont);
+		 /*
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_Ia1");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_Ia2");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_Ib1");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_Ib2");
+ res=net->AddComponent(cont);
+                     */
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_II1");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_II2");
+ res=net->AddComponent(cont);
+
+ // Установка связей
+ ULongId item,conn;
+ NameT tmpname;
+ res=true;
+
+ res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron1", "PosChannel");
+ res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron2", "NegChannel");
+ res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron1", "NegChannel");
+ res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron2", "PosChannel");
+
+ res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron1", "PosChannel");
+ res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron2", "NegChannel");
+
+ res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron1", "NegChannel");
+ res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron2", "PosChannel");
 
  if(!res)
   res=true;

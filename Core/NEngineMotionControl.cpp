@@ -107,16 +107,22 @@ bool NEngineMotionControl::AReset(void)
   try {
    cont=GetComponent(string("MotionElement")+RDK::sntoa(n));
   }
-  catch (EComponentNameNotExist *exc) {
+  catch (EComponentNameNotExist &exc)
+  {
    continue;
-
   }
-  receptors[n][0]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ia1.Receptor"));
-  receptors[n][1]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ia2.Receptor"));
-  receptors[n][2]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ib1.Receptor"));
-  receptors[n][3]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ib2.Receptor"));
-  receptors[n][4]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_II1.Receptor"));
-  receptors[n][5]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_II2.Receptor"));
+  try {
+   receptors[n][0]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ia1.Receptor"));
+   receptors[n][1]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ia2.Receptor"));
+   receptors[n][2]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ib1.Receptor"));
+   receptors[n][3]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ib2.Receptor"));
+   receptors[n][4]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_II1.Receptor"));
+   receptors[n][5]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_II2.Receptor"));
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }
  }
 
  return true;
@@ -130,6 +136,7 @@ bool NEngineMotionControl::ACalculate(void)
  // Receptors
  for(size_t i=0;i<NumMotionElements;i++)
  {
+  try {
   if(receptors[i][0]->GetInputData(size_t(0))->Double[0] > 0)
    ++pos_speed;
   if(receptors[i][1]->GetInputData(size_t(0))->Double[0] > 0)
@@ -144,6 +151,12 @@ bool NEngineMotionControl::ACalculate(void)
    ++pos_angle;
   if(receptors[i][5]->GetInputData(size_t(0))->Double[0] > 0)
    ++neg_angle;
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }
+
  }
 
  POutputData[0].Double[0]=pos_angle;
@@ -192,6 +205,10 @@ bool NEngineMotionControl::Create(void)
 
  case 10:
   CreateEngineControlContinuesNeuronsSimple(false);
+ break;
+
+ case 11:
+  CreateEngineControl2NeuronsSimplest();
  break;
 
  };
@@ -274,6 +291,8 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<NAContainer> net, int inp_m
 
  for(size_t i=0;i<NumMotionElements;i++)
  {
+  try
+  {
   UEPtr<NReceptor> receptor=0;
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(MotionElementClassName));
   if(!cont)
@@ -336,6 +355,12 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<NAContainer> net, int inp_m
   receptor->MaxOutputRange=receptor_max_output;
   receptor->Gain=receptor_gain;
   receptor->ExpCoeff=exp_coeff;
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }
+
  }
 
 }
@@ -553,6 +578,22 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<NAContainer> net)
  UEPtr<NStorage> storage=dynamic_pointer_cast<NStorage>(Storage);
  bool res=true;
 
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NPGenerator"));
+ if(!cont)
+  return;
+ cont->SetName("IIPosAfferentGenerator");
+ ((NPulseGenerator*)cont)->Amplitude=1;
+ ((NPulseGenerator*)cont)->Frequency=0;
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NPGenerator"));
+ if(!cont)
+  return;
+ cont->SetName("IINegAfferentGenerator");
+ ((NPulseGenerator*)cont)->Amplitude=1;
+ ((NPulseGenerator*)cont)->Frequency=0;
+ res=net->AddComponent(cont);
+
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NCGenerator"));
  if(!cont)
   return;
@@ -723,9 +764,9 @@ void NEngineMotionControl::IntervalSeparatorLinksSetup(UEPtr<NANet> net)
 				 string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1));
  }
 
-
  for(size_t k=0;k<Motions.size();k++)
  {
+ try{
   res=net->CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia2.Receptor");
   res=net->CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia1.Receptor");
 
@@ -735,6 +776,12 @@ void NEngineMotionControl::IntervalSeparatorLinksSetup(UEPtr<NANet> net)
   res=net->CreateLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib2.Receptor");
   res=net->CreateLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib1.Receptor");
  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }
+ }
+
  if(res)
   return;
 }
@@ -1086,6 +1133,83 @@ NANet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cros
  StandardLinksSetup(net, "Sum");
 
  IntervalSeparatorLinksSetup(net);
+
+ if(!res)
+  return 0;
+
+ return net;
+}
+
+
+// Формируем сеть управления на 2 импульсных нейронах
+NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(void)
+{
+ NAContainer *cont;
+ bool res;
+ UEPtr<NStorage> storage=static_pointer_cast<NStorage>(Storage);
+ size_t num_motions=NumMotionElements;
+
+ // Число неперекрывающихся диапазонов
+ int real_ranges=0;
+ bool crossranges=false;
+ bool crosslinks=false;
+
+
+ real_ranges=CalcAfferentRange(num_motions, crossranges, IaMin, IaMax,
+			Ia_ranges_pos, Ia_ranges_neg);
+ real_ranges=CalcAfferentRange(num_motions, crossranges, IbMin, IbMax,
+			Ib_ranges_pos, Ib_ranges_neg);
+ real_ranges=CalcAfferentRange(num_motions, crossranges, IIMin, IIMax,
+			II_ranges_pos, II_ranges_neg);
+
+
+ NANet *net=this;//dynamic_cast<NANet*>(storage->TakeObject(netclassname));
+ if(!net)
+  return 0;
+
+ int outmode=1;
+ int inpmode=0;
+
+ double exp_coeff=0.0001;//0.00001;
+
+ // Двигательные элементы
+ MotionElementsSetup(net, inpmode, outmode, exp_coeff, 0.01, 1, real_ranges);
+
+ AdditionalComponentsSetup(net);
+
+ PACSetup(net, 1, 0.001, 0.01, 100);
+
+ IntervalSeparatorsSetup(net, 5, 1, -1);
+
+ // Компоненты вычисления статистики
+ for(size_t i=0;i<num_motions;i++)
+ {
+  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NFrequencyReceiver"));
+  if(!cont)
+   return 0;
+  cont->SetName("PosMNFrequencyReceiver"+RDK::sntoa(i+1));
+  res=net->AddComponent(cont);
+
+  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NFrequencyReceiver"));
+  if(!cont)
+   return 0;
+  cont->SetName("NegMNFrequencyReceiver"+RDK::sntoa(i+1));
+  res=net->AddComponent(cont);
+ }
+
+
+ // Установка связей
+ ULongId item,conn;
+
+ StandardLinksSetup(net, "Pac");
+
+ IntervalSeparatorLinksSetup(net);
+
+ for(size_t k=0;k<Motions.size();k++)
+ {
+  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron1.LTZone",0,string("PosMNFrequencyReceiver")+RDK::sntoa(k+1));
+  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron2.LTZone",0,string("NegMNFrequencyReceiver")+RDK::sntoa(k+1));
+ }
 
  if(!res)
   return 0;

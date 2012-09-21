@@ -61,7 +61,6 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
  net->SetName("MotionElement");
  UploadClass("NSimpleBranchedMotionElement",net);
 
-
  // Создаем СУ с ветвлением и непрерывными нейронами
  net=CreateBranchedMotionElement(storage, "NNet","NContinuesSynSPNeuron","NContinuesSAfferentNeuron",0);
  net->SetName("MotionElement");
@@ -71,6 +70,16 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
  net=CreateBranchedMotionElement(storage, "NNet","NContinuesSynSPNeuron","NContinuesSAfferentNeuron",1);
  net->SetName("MotionElement");
  UploadClass("NContinuesSimpleBranchedMotionElement",net);
+
+ // Создаем простейшую СУ
+ net=CreateSimplestMotionElement(storage, "NNet",0);
+ net->SetName("MotionElement");
+ UploadClass("NSimplestMotionElement",net);
+
+ // Создаем простейшую СУ с ветвлением
+ net=CreateSimplestBranchedMotionElement(storage, "NNet","NSynSPNeuron","NSAfferentNeuron",0);
+ net->SetName("MotionElement");
+ UploadClass("NSimplestBranchedMotionElement",net);
 
  // Создаем прототип систем управления
  UEPtr<NEngineMotionControl> cs=0;
@@ -319,6 +328,41 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
    UploadClass("NContinuesIndRangeBranchedCrosslinksEngineControlRangeAfferent",net);
  }
 
+ // Формируем сеть управления двигателем c простейшей моделью СУ
+ for(size_t i=0;i<max_number_of_mc;i++)
+ {
+  cs=dynamic_pointer_cast<NEngineMotionControl>(storage->TakeObject("NEngineMotionControl"));
+  cs->NumMotionElements=i+1;
+  cs->CreationMode=11;
+  cs->MotionElementClassName="NSimplestMotionElement";
+  cs->Create();
+  net=cs;
+
+  net->SetName("EngineControlRangeAfferent");
+  if(i>0)
+   UploadClass(string("NSimplestEngineControl")+RDK::sntoa(i+1),net);
+  else
+   UploadClass("NSimplestEngineControl",net);
+ }
+
+
+ // Формируем сеть управления двигателем c простейшей моделью СУ
+ // Ветвление дендритов
+ for(size_t i=0;i<max_number_of_mc;i++)
+ {
+  cs=dynamic_pointer_cast<NEngineMotionControl>(storage->TakeObject("NEngineMotionControl"));
+  cs->NumMotionElements=i+1;
+  cs->CreationMode=11;
+  cs->MotionElementClassName="NSimplestBranchedMotionElement";
+  cs->Create();
+  net=cs;
+
+  net->SetName("EngineControlRangeAfferent");
+  if(i>0)
+   UploadClass(string("NSimplestBranchedEngineControl")+RDK::sntoa(i+1),net);
+  else
+   UploadClass("NSimplestBranchedEngineControl",net);
+ }
 
 }
 // --------------------------
