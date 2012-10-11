@@ -112,12 +112,12 @@ bool NEngineMotionControl::AReset(void)
    continue;
   }
   try {
+   receptors[n][4]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_II1.Receptor"));
+   receptors[n][5]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_II2.Receptor"));
    receptors[n][0]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ia1.Receptor"));
    receptors[n][1]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ia2.Receptor"));
    receptors[n][2]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ib1.Receptor"));
    receptors[n][3]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ib2.Receptor"));
-   receptors[n][4]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_II1.Receptor"));
-   receptors[n][5]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_II2.Receptor"));
   }
   catch (EComponentNameNotExist &exc)
   {
@@ -137,22 +137,22 @@ bool NEngineMotionControl::ACalculate(void)
  for(size_t i=0;i<NumMotionElements;i++)
  {
   try {
-  if(receptors[i][0]->GetInputData(size_t(0))->Double[0] > 0)
+  if(receptors[i][0] && receptors[i][0]->GetInputData(size_t(0))->Double[0] > 0)
    ++pos_speed;
-  if(receptors[i][1]->GetInputData(size_t(0))->Double[0] > 0)
+  if(receptors[i][1] && receptors[i][1]->GetInputData(size_t(0))->Double[0] > 0)
    ++neg_speed;
 
-  if(receptors[i][2]->GetInputData(size_t(0))->Double[0] > 0)
+  if(receptors[i][2] && receptors[i][2]->GetInputData(size_t(0))->Double[0] > 0)
    ++pos_moment;
-  if(receptors[i][3]->GetInputData(size_t(0))->Double[0] > 0)
+  if(receptors[i][3] &&receptors[i][3]->GetInputData(size_t(0))->Double[0] > 0)
    ++neg_moment;
 
-  if(receptors[i][4]->GetInputData(size_t(0))->Double[0] > 0)
+  if(receptors[i][4] && receptors[i][4]->GetInputData(size_t(0)) && receptors[i][4]->GetInputData(size_t(0))->Double[0] > 0)
    ++pos_angle;
-  if(receptors[i][5]->GetInputData(size_t(0))->Double[0] > 0)
+  if(receptors[i][5] && receptors[i][5]->GetInputData(size_t(0)) && receptors[i][5]->GetInputData(size_t(0))->Double[0] > 0)
    ++neg_angle;
   }
-  catch (EComponentNameNotExist &exc)
+  catch (UEPtr<NReceptor>::EUsingZeroPtr &exc)
   {
    continue;
   }
@@ -766,20 +766,22 @@ void NEngineMotionControl::IntervalSeparatorLinksSetup(UEPtr<NANet> net)
 
  for(size_t k=0;k<Motions.size();k++)
  {
- try{
-  res=net->CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia2.Receptor");
-  res=net->CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia1.Receptor");
-
-  res=net->CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II1.Receptor");
-  res=net->CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II2.Receptor");
-
-  res=net->CreateLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib2.Receptor");
-  res=net->CreateLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib1.Receptor");
- }
-  catch (EComponentNameNotExist &exc)
-  {
-   continue;
+  try{
+   res=net->CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia2.Receptor");
+   res=net->CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia1.Receptor");
   }
+  catch (EComponentNameNotExist &exc) {  }
+  try{
+   res=net->CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II1.Receptor");
+   res=net->CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II2.Receptor");
+  }
+  catch (EComponentNameNotExist &exc) {  }
+
+  try{
+   res=net->CreateLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib2.Receptor");
+   res=net->CreateLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib1.Receptor");
+  }
+  catch (EComponentNameNotExist &exc) {  }
  }
 
  if(res)
