@@ -659,32 +659,32 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<NAContainer> net)
  cont->SetName("Motoneuron2FrequencyReceiver");
  res=net->AddComponent(cont);
 
-
+	   /*
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NCGenerator"));
  if(!cont)
   return;
  cont->SetName("EngineMoment");
  ((NConstGenerator*)cont)->Amplitude=0;
  res=net->AddComponent(cont);
-
+                         */
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NManipulatorSource"));
  if(!cont)
   return;
  cont->SetName("NManipulatorSource1");
  res=net->AddComponent(cont);
-
+  /*
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NManipulatorSourceEmulator"));
  if(!cont)
   return;
  cont->SetName("NManipulatorSourceEmulator1");
  res=net->AddComponent(cont);
-
+    */
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NManipulatorInput"));
  if(!cont)
   return;
  cont->SetName("NManipulatorInput1");
  res=net->AddComponent(cont);
-
+	/*
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NManipulatorInputEmulator"));
  if(!cont)
   return;
@@ -697,7 +697,7 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<NAContainer> net)
   return;
  cont->SetName("Engine");
  res=net->AddComponent(cont);
-
+          */
  if(res)
   return;
 }
@@ -718,17 +718,57 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<NANet> net,
 
  res=net->CreateLink(engine_integrator_name,0,"NManipulatorInput1");
 
- res=net->CreateLink(engine_integrator_name,0,"NManipulatorInputEmulator1");
+ try {
+  for(int i=0;i<Motions.size();i++)
+  {
+   res&=net->CreateLink("NManipulatorSource1",2,
+				 std::string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),0);
+   res&=net->CreateLink("NManipulatorSource1",2,
+				 std::string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),0);
+  }
+ }
+ catch (EComponentNameNotExist &exc)
+ {
+ }
 
- res=net->CreateLink("NManipulatorInputEmulator1",0,"Engine",0);
+ try {
+  for(int i=0;i<Motions.size();i++)
+  {
+   res&=net->CreateLink("NManipulatorSource1",1,
+				 std::string("II_PosIntervalSeparator")+RDK::sntoa(i+1),0);
+   res&=net->CreateLink("NManipulatorSource1",1,
+				 std::string("II_NegIntervalSeparator")+RDK::sntoa(i+1),0);
+  }
+ }
+ catch (EComponentNameNotExist &exc)
+ {
+ }
 
- res=net->CreateLink("Engine",0,"NManipulatorSourceEmulator1",0);
- res=net->CreateLink("Engine",1,"NManipulatorSourceEmulator1",1);
- res=net->CreateLink("Engine",2,"NManipulatorSourceEmulator1",2);
+ try {
+  for(int i=0;i<Motions.size();i++)
+  {
+   res&=net->CreateLink("NManipulatorSource1",0,
+				 std::string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),0);
+   res&=net->CreateLink("NManipulatorSource1",0,
+				 std::string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),0);
+  }
+ }
+ catch (EComponentNameNotExist &exc)
+ {
+ }
 
 
- res=net->CreateLink("EngineMoment",0,
-				 "Engine",1);
+// res=net->CreateLink(engine_integrator_name,0,"NManipulatorInputEmulator1");
+
+// res=net->CreateLink("NManipulatorInputEmulator1",0,"Engine",0);
+
+// res=net->CreateLink("Engine",0,"NManipulatorSourceEmulator1",0);
+// res=net->CreateLink("Engine",1,"NManipulatorSourceEmulator1",1);
+// res=net->CreateLink("Engine",2,"NManipulatorSourceEmulator1",2);
+
+
+// res=net->CreateLink("EngineMoment",0,
+//				 "Engine",1);
 
  if(res)
   return;
@@ -742,25 +782,25 @@ void NEngineMotionControl::IntervalSeparatorLinksSetup(UEPtr<NANet> net)
  // Связи с моделью манипулятора (по умолчанию)
  for(size_t i=0;i<NumMotionElements;i++)
  {
-  res=net->CreateLink("NManipulatorSourceEmulator1",2,
+  res=net->CreateLink("NManipulatorSource1",2,
 				 string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1));
-  res=net->CreateLink("NManipulatorSourceEmulator1",2,
+  res=net->CreateLink("NManipulatorSource1",2,
 				 string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1));
  }
 
  for(size_t i=0;i<NumMotionElements;i++)
  {
-  res=net->CreateLink("NManipulatorSourceEmulator1",1,
+  res=net->CreateLink("NManipulatorSource1",1,
 				 string("II_PosIntervalSeparator")+RDK::sntoa(i+1));
-  res=net->CreateLink("NManipulatorSourceEmulator1",1,
+  res=net->CreateLink("NManipulatorSource1",1,
 				 string("II_NegIntervalSeparator")+RDK::sntoa(i+1));
  }
 
  for(size_t i=0;i<NumMotionElements;i++)
  {
-  res=net->CreateLink("NManipulatorSourceEmulator1",0,
+  res=net->CreateLink("NManipulatorSource1",0,
 				 string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1));
-  res=net->CreateLink("NManipulatorSourceEmulator1",0,
+  res=net->CreateLink("NManipulatorSource1",0,
 				 string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1));
  }
 
@@ -872,7 +912,7 @@ NANet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
  ULongId item,conn;
 
  StandardLinksSetup(net, "Pac");
-
+/*
  res=net->CreateLink("Engine",2,
 				 "Ia_PosSignumSeparator");
  if(!res)
@@ -925,7 +965,7 @@ NANet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
   delete net;
   return 0;
  }
-
+		  */
 
  for(size_t k=0;k<Motions.size();k++)
  {
