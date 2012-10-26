@@ -81,6 +81,11 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
  net->SetName("MotionElement");
  UploadClass("NSimplestBranchedMotionElement",net);
 
+ // Создаем простейшую СУ с ветвлением и простым афферентным нейроном
+ net=CreateSimplestBranchedMotionElement(storage, "NNet","NSynSPNeuron","NSimpleAfferentNeuron",0);
+ net->SetName("MotionElement");
+ UploadClass("NSimplestAfferentBranchedMotionElement",net);
+
  // Создаем прототип систем управления
  UEPtr<NEngineMotionControl> cs=0;
  cs=new NEngineMotionControl;

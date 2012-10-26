@@ -719,7 +719,7 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<NANet> net,
  res=net->CreateLink(engine_integrator_name,0,"NManipulatorInput1");
 
  try {
-  for(int i=0;i<Motions.size();i++)
+  for(size_t i=0;i<Motions.size();i++)
   {
    res&=net->CreateLink("NManipulatorSource1",2,
 				 std::string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),0);
@@ -732,7 +732,7 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<NANet> net,
  }
 
  try {
-  for(int i=0;i<Motions.size();i++)
+  for(size_t i=0;i<Motions.size();i++)
   {
    res&=net->CreateLink("NManipulatorSource1",1,
 				 std::string("II_PosIntervalSeparator")+RDK::sntoa(i+1),0);
@@ -745,7 +745,7 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<NANet> net,
  }
 
  try {
-  for(int i=0;i<Motions.size();i++)
+  for(size_t i=0;i<Motions.size();i++)
   {
    res&=net->CreateLink("NManipulatorSource1",0,
 				 std::string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),0);
