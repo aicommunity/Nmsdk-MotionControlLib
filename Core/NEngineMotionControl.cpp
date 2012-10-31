@@ -291,74 +291,103 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<NAContainer> net, int inp_m
 
  for(size_t i=0;i<NumMotionElements;i++)
  {
-  try
-  {
   UEPtr<NReceptor> receptor=0;
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(MotionElementClassName));
   if(!cont)
-   return;
+   continue;
   cont->SetName(string("MotionElement")+RDK::sntoa(i));
   net->AddComponent(cont);
   Motions.push_back(static_pointer_cast<NNet>(cont));
 
-  receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ia1.Receptor"));
-  receptor->MinInputRange=0;
-  receptor->MaxInputRange=fabs(IaMin)/real_ranges;
-  receptor->InputAdaptationMode=inp_mode;
-  receptor->OutputAdaptationMode=out_mode;
-  receptor->MaxOutputRange=receptor_max_output;
-  receptor->Gain=receptor_gain;
-  receptor->ExpCoeff=exp_coeff;
-
-  receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ia2.Receptor"));
-  receptor->MinInputRange=0;
-  receptor->MaxInputRange=fabs(IaMax)/real_ranges;
-  receptor->InputAdaptationMode=inp_mode;
-  receptor->OutputAdaptationMode=out_mode;
-  receptor->MaxOutputRange=receptor_max_output;
-  receptor->Gain=receptor_gain;
-  receptor->ExpCoeff=exp_coeff;
-
-  receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ib1.Receptor"));
-  receptor->MinInputRange=0;
-  receptor->MaxInputRange=fabs(IbMin)/real_ranges;
-  receptor->InputAdaptationMode=inp_mode;
-  receptor->OutputAdaptationMode=out_mode;
-  receptor->MaxOutputRange=receptor_max_output;
-  receptor->Gain=receptor_gain;
-  receptor->ExpCoeff=exp_coeff;
-
-  receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ib2.Receptor"));
-  receptor->MinInputRange=0;
-  receptor->MaxInputRange=fabs(IbMax)/real_ranges;
-  receptor->InputAdaptationMode=inp_mode;
-  receptor->OutputAdaptationMode=out_mode;
-  receptor->MaxOutputRange=receptor_max_output;
-  receptor->Gain=receptor_gain;
-  receptor->ExpCoeff=exp_coeff;
-
-  receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_II1.Receptor"));
-  receptor->MinInputRange=0;
-  receptor->MaxInputRange=fabs(IIMin)/real_ranges;
-  receptor->InputAdaptationMode=inp_mode;
-  receptor->OutputAdaptationMode=out_mode;
-  receptor->MaxOutputRange=receptor_max_output;
-  receptor->Gain=receptor_gain;
-  receptor->ExpCoeff=exp_coeff;
-
-
-  receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_II2.Receptor"));
-  receptor->MinInputRange=0;
-  receptor->MaxInputRange=fabs(IIMax)/real_ranges;
-  receptor->InputAdaptationMode=inp_mode;
-  receptor->OutputAdaptationMode=out_mode;
-  receptor->MaxOutputRange=receptor_max_output;
-  receptor->Gain=receptor_gain;
-  receptor->ExpCoeff=exp_coeff;
+  try
+  {
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ia1.Receptor"));
+   receptor->MinInputRange=0;
+   receptor->MaxInputRange=fabs(IaMin)/real_ranges;
+   receptor->InputAdaptationMode=inp_mode;
+   receptor->OutputAdaptationMode=out_mode;
+   receptor->MaxOutputRange=receptor_max_output;
+   receptor->Gain=receptor_gain;
+   receptor->ExpCoeff=exp_coeff;
   }
   catch (EComponentNameNotExist &exc)
   {
-   continue;
+  }
+
+  try
+  {
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ia2.Receptor"));
+   receptor->MinInputRange=0;
+   receptor->MaxInputRange=fabs(IaMax)/real_ranges;
+   receptor->InputAdaptationMode=inp_mode;
+   receptor->OutputAdaptationMode=out_mode;
+   receptor->MaxOutputRange=receptor_max_output;
+   receptor->Gain=receptor_gain;
+   receptor->ExpCoeff=exp_coeff;
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+  }
+
+  try
+  {
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ib1.Receptor"));
+   receptor->MinInputRange=0;
+   receptor->MaxInputRange=fabs(IbMin)/real_ranges;
+   receptor->InputAdaptationMode=inp_mode;
+   receptor->OutputAdaptationMode=out_mode;
+   receptor->MaxOutputRange=receptor_max_output;
+   receptor->Gain=receptor_gain;
+   receptor->ExpCoeff=exp_coeff;
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+  }
+
+  try
+  {
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ib2.Receptor"));
+   receptor->MinInputRange=0;
+   receptor->MaxInputRange=fabs(IbMax)/real_ranges;
+   receptor->InputAdaptationMode=inp_mode;
+   receptor->OutputAdaptationMode=out_mode;
+   receptor->MaxOutputRange=receptor_max_output;
+   receptor->Gain=receptor_gain;
+   receptor->ExpCoeff=exp_coeff;
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+  }
+
+  try
+  {
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_II1.Receptor"));
+   receptor->MinInputRange=0;
+   receptor->MaxInputRange=fabs(IIMin)/real_ranges;
+   receptor->InputAdaptationMode=inp_mode;
+   receptor->OutputAdaptationMode=out_mode;
+   receptor->MaxOutputRange=receptor_max_output;
+   receptor->Gain=receptor_gain;
+   receptor->ExpCoeff=exp_coeff;
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+  }
+
+
+  try
+  {
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_II2.Receptor"));
+   receptor->MinInputRange=0;
+   receptor->MaxInputRange=fabs(IIMax)/real_ranges;
+   receptor->InputAdaptationMode=inp_mode;
+   receptor->OutputAdaptationMode=out_mode;
+   receptor->MaxOutputRange=receptor_max_output;
+   receptor->Gain=receptor_gain;
+   receptor->ExpCoeff=exp_coeff;
+  }
+  catch (EComponentNameNotExist &exc)
+  {
   }
 
  }
@@ -470,7 +499,7 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int m
  {
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
-   return;
+   continue;
   cont->SetName(string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1));
   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
   ((NIntervalSeparator*)cont)->Gain=neg_gain;
@@ -487,7 +516,7 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int m
  {
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
-   return;
+   continue;
   cont->SetName(string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1));
   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
   ((NIntervalSeparator*)cont)->Mode=mode;
@@ -504,7 +533,7 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int m
  {
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
-   return;
+   continue;
   cont->SetName(string("II_NegIntervalSeparator")+RDK::sntoa(i+1));
   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
   ((NIntervalSeparator*)cont)->Mode=mode;
@@ -521,7 +550,7 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int m
  {
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
-   return;
+   continue;
   cont->SetName(string("II_PosIntervalSeparator")+RDK::sntoa(i+1));
   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
   ((NIntervalSeparator*)cont)->Mode=mode;
@@ -538,7 +567,7 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int m
  {
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
-   return;
+   continue;
   cont->SetName(string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1));
   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
   ((NIntervalSeparator*)cont)->Mode=mode;
@@ -555,7 +584,7 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int m
  {
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
-   return;
+   continue;
   cont->SetName(string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1));
   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
   ((NIntervalSeparator*)cont)->Mode=mode;
@@ -1246,12 +1275,12 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(void)
  StandardLinksSetup(net, "Pac");
 
  IntervalSeparatorLinksSetup(net);
-
+	/*
  for(size_t k=0;k<Motions.size();k++)
  {
   res=net->CreateLink(Motions[k]->GetName()+".Motoneuron1.LTZone",0,string("PosMNFrequencyReceiver")+RDK::sntoa(k+1));
   res=net->CreateLink(Motions[k]->GetName()+".Motoneuron2.LTZone",0,string("NegMNFrequencyReceiver")+RDK::sntoa(k+1));
- }
+ }    */
 
  if(!res)
   return 0;
