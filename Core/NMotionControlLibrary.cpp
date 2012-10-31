@@ -369,6 +369,29 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
    UploadClass("NSimplestBranchedEngineControl",net);
  }
 
+ // Формируем сеть управления двигателем c простейшей моделью СУ
+ // и простейшими дендритами
+ // Ветвление дендритов
+ max_number_of_mc=10;
+ for(size_t i=0;i<max_number_of_mc;i++)
+ {
+  cs=dynamic_pointer_cast<NEngineMotionControl>(storage->TakeObject("NEngineMotionControl"));
+  cs->NumMotionElements=i+1;
+  cs->CreationMode=11;
+  cs->MotionElementClassName="NSimplestAfferentBranchedMotionElement";
+  cs->Create();
+  net=cs;
+
+  net->SetName("EngineControlRangeAfferent");
+  if(i>0)
+   UploadClass(string("NSimplestAfferentBranchedEngineControl")+RDK::sntoa(i+1),net);
+  else
+   UploadClass("NSimplestAfferentBranchedEngineControl",net);
+ }
+
+
+
+
 }
 // --------------------------
 
