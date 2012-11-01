@@ -1238,13 +1238,13 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(void)
  if(!net)
   return 0;
 
- int outmode=1;
+ int outmode=0;
  int inpmode=0;
 
  double exp_coeff=0.0001;//0.00001;
 
  // Двигательные элементы
- MotionElementsSetup(net, inpmode, outmode, exp_coeff, 0.01, 1, real_ranges);
+ MotionElementsSetup(net, inpmode, outmode, exp_coeff, 100, 1, real_ranges);
 
  AdditionalComponentsSetup(net);
 
@@ -1257,13 +1257,13 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(void)
  {
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NFrequencyReceiver"));
   if(!cont)
-   return 0;
+   continue;
   cont->SetName("PosMNFrequencyReceiver"+RDK::sntoa(i+1));
   res=net->AddComponent(cont);
 
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NFrequencyReceiver"));
   if(!cont)
-   return 0;
+   continue;
   cont->SetName("NegMNFrequencyReceiver"+RDK::sntoa(i+1));
   res=net->AddComponent(cont);
  }
@@ -1275,6 +1275,7 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(void)
  StandardLinksSetup(net, "Pac");
 
  IntervalSeparatorLinksSetup(net);
+
 	/*
  for(size_t k=0;k<Motions.size();k++)
  {
