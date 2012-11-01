@@ -396,7 +396,7 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<NAContainer> net, int inp_m
 
 // Настройка преобразователя импульс-аналог
 void NEngineMotionControl::PACSetup(UEPtr<NAContainer> net,
-		double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value)
+		double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode)
 {
  NAContainer* cont=0;
  UEPtr<NStorage> storage=dynamic_pointer_cast<NStorage>(Storage);
@@ -430,17 +430,23 @@ void NEngineMotionControl::PACSetup(UEPtr<NAContainer> net,
 //  values[i].assign(2,0.5);
  ((NPac*)cont)->DissociationTC=values;
 
- // Усиление
- for(size_t i=0;i<values.size()/2;i++)
+ if(gain_div_mode)
  {
-//  values[i].assign(1,100.0);
-  values[i].assign(1,gain_value/Motions.size());
- }
+  // Усиление
+  for(size_t i=0;i<values.size()/2;i++)
+   values[i].assign(1,gain_value/Motions.size());
 
- for(size_t i=values.size()/2;i<values.size();i++)
+  for(size_t i=values.size()/2;i<values.size();i++)
+   values[i].assign(1,-gain_value/Motions.size());
+ }
+ else
  {
-//  values[i].assign(1,-100.0);
-  values[i].assign(1,-gain_value/Motions.size());
+  // Усиление
+  for(size_t i=0;i<values.size()/2;i++)
+   values[i].assign(1,gain_value);
+
+  for(size_t i=values.size()/2;i<values.size();i++)
+   values[i].assign(1,-gain_value);
  }
 
  ((NPac*)cont)->Gain=values;
@@ -481,7 +487,7 @@ void NEngineMotionControl::AACSetup(UEPtr<NAContainer> net, double gain_value)
 }
 
 // Настройка разделителей интервалов
-void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int mode_value, double pos_gain_value, double neg_gain_value)
+void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int mode_value, double pos_gain_value, double neg_gain_value, bool II, bool Ia, bool Ib)
 {
  NAContainer* cont=0;
  UEPtr<NStorage> storage=dynamic_pointer_cast<NStorage>(Storage);
@@ -495,6 +501,8 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int m
  pos_gain.assign(1,pos_gain_value);
  neg_gain.assign(1,neg_gain_value);
 
+if(Ib)
+{
  for(size_t i=0;i<NumMotionElements;i++)
  {
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NIntervalSeparator"));
@@ -528,7 +536,10 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int m
   ((NIntervalSeparator*)cont)->MaxRange=right_value;
   res=net->AddComponent(cont);
  }
+}
 
+if(II)
+{
  for(size_t i=0;i<NumMotionElements;i++)
  {
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NIntervalSeparator"));
@@ -562,7 +573,10 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int m
   ((NIntervalSeparator*)cont)->MaxRange=right_value;
   res=net->AddComponent(cont);
  }
+}
 
+if(Ia)
+{
  for(size_t i=0;i<NumMotionElements;i++)
  {
   cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NIntervalSeparator"));
@@ -596,6 +610,7 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int m
   ((NIntervalSeparator*)cont)->MaxRange=right_value;
   res=net->AddComponent(cont);
  }
+}
  if(res)
   return;
 }
@@ -622,7 +637,7 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<NAContainer> net)
  ((NPulseGenerator*)cont)->Amplitude=1;
  ((NPulseGenerator*)cont)->Frequency=0;
  res=net->AddComponent(cont);
-
+/*
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NCGenerator"));
  if(!cont)
   return;
@@ -687,46 +702,19 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<NAContainer> net)
   return;
  cont->SetName("Motoneuron2FrequencyReceiver");
  res=net->AddComponent(cont);
-
-	   /*
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NCGenerator"));
- if(!cont)
-  return;
- cont->SetName("EngineMoment");
- ((NConstGenerator*)cont)->Amplitude=0;
- res=net->AddComponent(cont);
-                         */
+                  */
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NManipulatorSource"));
  if(!cont)
   return;
  cont->SetName("NManipulatorSource1");
  res=net->AddComponent(cont);
-  /*
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NManipulatorSourceEmulator"));
- if(!cont)
-  return;
- cont->SetName("NManipulatorSourceEmulator1");
- res=net->AddComponent(cont);
-    */
+
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NManipulatorInput"));
  if(!cont)
   return;
  cont->SetName("NManipulatorInput1");
  res=net->AddComponent(cont);
-	/*
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NManipulatorInputEmulator"));
- if(!cont)
-  return;
- cont->SetName("NManipulatorInputEmulator1");
- res=net->AddComponent(cont);
 
- // Двигатель
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NDCEngine"));
- if(!cont)
-  return;
- cont->SetName("Engine");
- res=net->AddComponent(cont);
-          */
  if(res)
   return;
 }
@@ -804,10 +792,12 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<NANet> net,
 }
 
 // Установка связей разделителей интервалов
-void NEngineMotionControl::IntervalSeparatorLinksSetup(UEPtr<NANet> net)
+void NEngineMotionControl::IntervalSeparatorLinksSetup(UEPtr<NANet> net, bool II, bool Ia, bool Ib)
 {
  bool res=true;
 
+if(Ia)
+{
  // Связи с моделью манипулятора (по умолчанию)
  for(size_t i=0;i<NumMotionElements;i++)
  {
@@ -816,7 +806,10 @@ void NEngineMotionControl::IntervalSeparatorLinksSetup(UEPtr<NANet> net)
   res=net->CreateLink("NManipulatorSource1",2,
 				 string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1));
  }
+}
 
+if(II)
+{
  for(size_t i=0;i<NumMotionElements;i++)
  {
   res=net->CreateLink("NManipulatorSource1",1,
@@ -824,7 +817,10 @@ void NEngineMotionControl::IntervalSeparatorLinksSetup(UEPtr<NANet> net)
   res=net->CreateLink("NManipulatorSource1",1,
 				 string("II_NegIntervalSeparator")+RDK::sntoa(i+1));
  }
+}
 
+if(Ib)
+{
  for(size_t i=0;i<NumMotionElements;i++)
  {
   res=net->CreateLink("NManipulatorSource1",0,
@@ -832,6 +828,7 @@ void NEngineMotionControl::IntervalSeparatorLinksSetup(UEPtr<NANet> net)
   res=net->CreateLink("NManipulatorSource1",0,
 				 string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1));
  }
+}
 
  for(size_t k=0;k<Motions.size();k++)
  {
@@ -1248,10 +1245,10 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(void)
 
  AdditionalComponentsSetup(net);
 
- PACSetup(net, 1, 0.001, 0.01, 100);
+ PACSetup(net, 1, 0.001, 0.01, 100,false);
 
- IntervalSeparatorsSetup(net, 5, 1, -1);
-
+ IntervalSeparatorsSetup(net, 5, 1, -1,true,false,false);
+		 /*
  // Компоненты вычисления статистики
  for(size_t i=0;i<num_motions;i++)
  {
@@ -1267,14 +1264,14 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(void)
   cont->SetName("NegMNFrequencyReceiver"+RDK::sntoa(i+1));
   res=net->AddComponent(cont);
  }
-
+                  */
 
  // Установка связей
  ULongId item,conn;
 
  StandardLinksSetup(net, "Pac");
 
- IntervalSeparatorLinksSetup(net);
+ IntervalSeparatorLinksSetup(net,true,false,false);
 
 	/*
  for(size_t k=0;k<Motions.size();k++)

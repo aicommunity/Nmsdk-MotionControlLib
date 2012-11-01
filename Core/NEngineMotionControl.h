@@ -129,13 +129,13 @@ void MotionElementsSetup(UEPtr<NAContainer> net, int inp_mode, int out_mode, dou
 
 // Настройка преобразователя импульс-аналог
 void PACSetup(UEPtr<NAContainer> net,
-		double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value);
+		double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode=true);
 
 // Настройка преобразователя аналог-аналог
 void AACSetup(UEPtr<NAContainer> net, double gain_value);
 
 // Настройка разделителей интервалов
-void IntervalSeparatorsSetup(UEPtr<NAContainer> net, int mode_value, double pos_gain_value, double neg_gain_value);
+void IntervalSeparatorsSetup(UEPtr<NAContainer> net, int mode_value, double pos_gain_value, double neg_gain_value, bool II=true, bool Ia=true, bool Ib=true);
 
 // Задание вспомогательных компонент
 void AdditionalComponentsSetup(UEPtr<NAContainer> net);
@@ -144,7 +144,7 @@ void AdditionalComponentsSetup(UEPtr<NAContainer> net);
 void StandardLinksSetup(UEPtr<NANet> net, const string &engine_integrator_name);
 
 // Установка связей разделителей интервалов
-void IntervalSeparatorLinksSetup(UEPtr<NANet> net);
+void IntervalSeparatorLinksSetup(UEPtr<NANet> net, bool II=true, bool Ia=true, bool Ib=true);
 
 // Формируем сеть управления двигателем с разделением информационного потока с датчиков
 // на две полосы по знаку
