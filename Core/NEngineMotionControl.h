@@ -50,6 +50,17 @@ RDK::ULProperty<real, NEngineMotionControl> IbMax;
 RDK::ULProperty<real, NEngineMotionControl> IIMin;
 RDK::ULProperty<real, NEngineMotionControl> IIMax;
 
+// Режим настройки диапазонов афферентных нейронов
+// 0 - диапазоны одинаковой длины
+// 1 - диапазоны с удвоением длины, и минимальной шириной в процентах
+// MinAfferentRange от соответствующей разницы *Max-*Min
+RDK::ULProperty<int, NEngineMotionControl> AfferentRangeMode;
+
+// Процентная величина от соответствующей разницы *Max-*Min
+// определяющая минимальную ширину диапазона афферетных нейронов
+// изменяяется в интервале [0;1]
+RDK::ULProperty<double, NEngineMotionControl,ptPubState> MinAfferentRange;
+
 protected: // Временные переменные
 vector<vector<UEPtr<NReceptor> > > receptors;
 
@@ -77,6 +88,12 @@ bool SetNumMotionElements(size_t value);
 
 // Режим формирования сети
 bool SetCreationMode(int value);
+
+// Режим настройки диапазонов афферентных нейронов
+bool SetAfferentRangeMode(int value);
+
+// Процентная величина от соответствующей разницы *Max-*Min
+bool SetMinAfferentRange(double value);
 // --------------------------
 
 // --------------------------
@@ -122,7 +139,7 @@ protected:
 // Вычисляет диапазоны действия афферентнов
 // Возвращает число получившихся диапазонов
 int CalcAfferentRange(int num_motions, bool cross_ranges, double a_min, double a_max,
-			vector<pair<double,double> > &pos_ranges, vector<pair<double,double> > &neg_ranges);
+			vector<pair<double,double> > &pos_ranges, vector<pair<double,double> > &neg_ranges, int range_mode);
 
 // Настройка рецепторов
 void MotionElementsSetup(UEPtr<NAContainer> net, int inp_mode, int out_mode, double exp_coeff, double receptor_max_output, double receptor_gain, int real_ranges);
@@ -136,6 +153,9 @@ void AACSetup(UEPtr<NAContainer> net, double gain_value);
 
 // Настройка разделителей интервалов
 void IntervalSeparatorsSetup(UEPtr<NAContainer> net, int mode_value, double pos_gain_value, double neg_gain_value, bool II=true, bool Ia=true, bool Ib=true);
+
+// Настройка разделителей интервалов
+void IntervalSeparatorsUpdate(UEPtr<NAContainer> net, int mode_value);
 
 // Задание вспомогательных компонент
 void AdditionalComponentsSetup(UEPtr<NAContainer> net);

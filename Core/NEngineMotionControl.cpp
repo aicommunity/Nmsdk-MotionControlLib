@@ -26,7 +26,10 @@ NEngineMotionControl::NEngineMotionControl(void)
    IbMin("IbMin",this),
    IbMax("IbMax",this),
    IIMin("IIMin",this),
-   IIMax("IIMax",this)
+   IIMax("IIMax",this),
+   AfferentRangeMode("AfferentRangeMode",this,&NEngineMotionControl::SetAfferentRangeMode),
+   MinAfferentRange("MinAfferentRange",this)
+
 {
 }
 
@@ -49,6 +52,48 @@ bool NEngineMotionControl::SetNumMotionElements(size_t value)
 bool NEngineMotionControl::SetCreationMode(int value)
 {
  Ready=false;
+ return true;
+}
+
+// Режим настройки диапазонов афферентных нейронов
+bool NEngineMotionControl::SetAfferentRangeMode(int value)
+{
+ if(value < 0 || value > 1)
+  return false;
+
+ bool crossranges=false;
+ int real_ranges=0;
+
+ real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IaMin, IaMax,
+			Ia_ranges_pos, Ia_ranges_neg,value);
+ real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IbMin, IbMax,
+			Ib_ranges_pos, Ib_ranges_neg,value);
+ real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IIMin, IIMax,
+			II_ranges_pos, II_ranges_neg,value);
+
+ IntervalSeparatorsUpdate(this, 5);
+
+ return true;
+}
+
+// Процентная величина от соответствующей разницы *Max-*Min
+bool NEngineMotionControl::SetMinAfferentRange(double value)
+{
+ if(value <=0 || value >1)
+  return false;
+
+ bool crossranges=false;
+ int real_ranges=0;
+
+ real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IaMin, IaMax,
+			Ia_ranges_pos, Ia_ranges_neg,AfferentRangeMode);
+ real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IbMin, IbMax,
+			Ib_ranges_pos, Ib_ranges_neg,AfferentRangeMode);
+ real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IIMin, IIMax,
+			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
+
+ IntervalSeparatorsUpdate(this, 5);
+
  return true;
 }
 // --------------------------
@@ -78,6 +123,8 @@ bool NEngineMotionControl::ADefault(void)
  IbMax=10;
  IIMin=-M_PI/2;
  IIMax=M_PI/2;
+ AfferentRangeMode=0;
+ MinAfferentRange=0.1;
  MotionElementClassName="NMotionElement";
 
  return true;
@@ -222,7 +269,7 @@ bool NEngineMotionControl::Create(void)
 // --------------------------
 // Вычисляет диапазоны действия афферентнов
 int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, double a_min, double a_max,
-			vector<pair<double,double> > &pos_ranges, vector<pair<double,double> > &neg_ranges)
+			vector<pair<double,double> > &pos_ranges, vector<pair<double,double> > &neg_ranges, int range_mode)
 {
  int real_ranges=0;
  if(cross_ranges)
@@ -267,18 +314,56 @@ int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, 
  }
  else
  {
- for(int i=0;i<num_motions;i++)
- {
-   real left_range=a_min,right_range=a_max;
-   real pos_range=(right_range-0)/real_ranges;
-   real neg_range=(0-left_range)/real_ranges;
+  if(range_mode == 0)
+  {
+   for(int i=0;i<num_motions;i++)
+   {
+	real left_range=a_min,right_range=a_max;
+	real pos_range=(right_range-0)/real_ranges;
+	real neg_range=(0-left_range)/real_ranges;
 
-   pos_ranges[i].first=rr_index*pos_range;
-   pos_ranges[i].second=(rr_index+1)*pos_range;
-   neg_ranges[i].first=left_range+rr_index*neg_range;
-   neg_ranges[i].second=left_range+(rr_index+1)*neg_range;
-   ++rr_index;
- }
+	pos_ranges[i].first=rr_index*pos_range;
+	pos_ranges[i].second=(rr_index+1)*pos_range;
+	neg_ranges[num_motions-i-1].first=left_range+rr_index*neg_range;
+	neg_ranges[num_motions-i-1].second=left_range+(rr_index+1)*neg_range;
+	++rr_index;
+   }
+  }
+  else
+  if(range_mode == 1)
+  {
+   MinAfferentRange=1./real_ranges;
+   real left_range=a_min*MinAfferentRange/real_ranges,right_range=a_max*MinAfferentRange/real_ranges;
+   real pos_range=(right_range-0)*(1);
+   real neg_range=(left_range-0)*(1);
+   for(int i=0;i<num_motions;i++)
+   {
+	if(i==0)
+	 pos_ranges[i].first=rr_index*pos_range;
+	else
+	 pos_ranges[i].first=pos_ranges[i-1].second;
+
+	pos_range=(right_range-0)*(i+1);
+
+	pos_ranges[i].second=(rr_index+1)*pos_range;
+	++rr_index;
+   }
+
+   rr_index=0;
+   neg_range=(left_range-0)*(rr_index+1);
+   for(int i=0;i<num_motions;i++)
+   {
+	if(rr_index==0)
+	 neg_ranges[i].second=rr_index*neg_range;
+	else
+	 neg_ranges[i].second=neg_ranges[i-1].first;
+
+	neg_range=(left_range-0)*(i+1);
+
+	neg_ranges[i].first=(rr_index+1)*neg_range;
+	++rr_index;
+   }
+  }
  }
  return real_ranges;
 }
@@ -511,7 +596,6 @@ if(Ib)
   cont->SetName(string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1));
   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
   ((NIntervalSeparator*)cont)->Gain=neg_gain;
-  ((NIntervalSeparator*)cont)->Mode=mode;
 
   left_value.assign(1,Ib_ranges_neg[i].first);
   right_value.assign(1,Ib_ranges_neg[i].second);
@@ -527,7 +611,6 @@ if(Ib)
    continue;
   cont->SetName(string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1));
   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
-  ((NIntervalSeparator*)cont)->Mode=mode;
   ((NIntervalSeparator*)cont)->Gain=pos_gain;
 
   left_value.assign(1,Ib_ranges_pos[i].first);
@@ -547,7 +630,6 @@ if(II)
    continue;
   cont->SetName(string("II_NegIntervalSeparator")+RDK::sntoa(i+1));
   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
-  ((NIntervalSeparator*)cont)->Mode=mode;
   ((NIntervalSeparator*)cont)->Gain=neg_gain;
 
   left_value.assign(1,II_ranges_neg[i].first);
@@ -564,7 +646,6 @@ if(II)
    continue;
   cont->SetName(string("II_PosIntervalSeparator")+RDK::sntoa(i+1));
   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
-  ((NIntervalSeparator*)cont)->Mode=mode;
   ((NIntervalSeparator*)cont)->Gain=pos_gain;
 
   left_value.assign(1,II_ranges_pos[i].first);
@@ -584,7 +665,6 @@ if(Ia)
    continue;
   cont->SetName(string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1));
   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
-  ((NIntervalSeparator*)cont)->Mode=mode;
   ((NIntervalSeparator*)cont)->Gain=neg_gain;
 
   left_value.assign(1,Ia_ranges_neg[i].first);
@@ -601,7 +681,6 @@ if(Ia)
    continue;
   cont->SetName(string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1));
   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
-  ((NIntervalSeparator*)cont)->Mode=mode;
   ((NIntervalSeparator*)cont)->Gain=pos_gain;
 
   left_value.assign(1,Ia_ranges_pos[i].first);
@@ -611,6 +690,135 @@ if(Ia)
   res=net->AddComponent(cont);
  }
 }
+
+ IntervalSeparatorsUpdate(net, mode_value);
+ if(res)
+  return;
+}
+
+// Настройка разделителей интервалов
+void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<NAContainer> net, int mode_value)
+{
+ NAContainer* cont=0;
+ bool res=true;
+ Real left_value,right_value;
+
+ vector<int> mode;
+ mode.assign(1,mode_value);
+
+ for(size_t i=0;i<NumMotionElements;i++)
+ {
+  try
+  {
+   cont=net->GetComponent(string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1));
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }
+  ((NIntervalSeparator*)cont)->Mode=mode;
+
+  left_value.assign(1,Ib_ranges_neg[i].first);
+  right_value.assign(1,Ib_ranges_neg[i].second);
+  ((NIntervalSeparator*)cont)->MinRange=left_value;
+  ((NIntervalSeparator*)cont)->MaxRange=right_value;
+ }
+
+ for(size_t i=0;i<NumMotionElements;i++)
+ {
+  try
+  {
+   cont=net->GetComponent(string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1));
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }
+
+  ((NIntervalSeparator*)cont)->Mode=mode;
+
+  left_value.assign(1,Ib_ranges_pos[i].first);
+  right_value.assign(1,Ib_ranges_pos[i].second);
+  ((NIntervalSeparator*)cont)->MinRange=left_value;
+  ((NIntervalSeparator*)cont)->MaxRange=right_value;
+ }
+
+ for(size_t i=0;i<NumMotionElements;i++)
+ {
+  try
+  {
+   cont=net->GetComponent(string("II_NegIntervalSeparator")+RDK::sntoa(i+1));
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }
+
+  ((NIntervalSeparator*)cont)->Mode=mode;
+
+  left_value.assign(1,II_ranges_neg[i].first);
+  right_value.assign(1,II_ranges_neg[i].second);
+  ((NIntervalSeparator*)cont)->MinRange=left_value;
+  ((NIntervalSeparator*)cont)->MaxRange=right_value;
+ }
+
+ for(size_t i=0;i<NumMotionElements;i++)
+ {
+  try
+  {
+   cont=net->GetComponent(string("II_PosIntervalSeparator")+RDK::sntoa(i+1));
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }
+
+  ((NIntervalSeparator*)cont)->Mode=mode;
+
+  left_value.assign(1,II_ranges_pos[i].first);
+  right_value.assign(1,II_ranges_pos[i].second);
+  ((NIntervalSeparator*)cont)->MinRange=left_value;
+  ((NIntervalSeparator*)cont)->MaxRange=right_value;
+ }
+
+ for(size_t i=0;i<NumMotionElements;i++)
+ {
+  try
+  {
+   cont=net->GetComponent(string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1));
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }
+
+  ((NIntervalSeparator*)cont)->Mode=mode;
+
+  left_value.assign(1,Ia_ranges_neg[i].first);
+  right_value.assign(1,Ia_ranges_neg[i].second);
+  ((NIntervalSeparator*)cont)->MinRange=left_value;
+  ((NIntervalSeparator*)cont)->MaxRange=right_value;
+ }
+
+ for(size_t i=0;i<NumMotionElements;i++)
+ {
+  try
+  {
+   cont=net->GetComponent(string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1));
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }
+
+  ((NIntervalSeparator*)cont)->Mode=mode;
+
+  left_value.assign(1,Ia_ranges_pos[i].first);
+  right_value.assign(1,Ia_ranges_pos[i].second);
+  ((NIntervalSeparator*)cont)->MinRange=left_value;
+  ((NIntervalSeparator*)cont)->MaxRange=right_value;
+ }
+
  if(res)
   return;
 }
@@ -1081,11 +1289,11 @@ NANet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, b
  int real_ranges=0;
 
  real_ranges=CalcAfferentRange(num_motions, crossranges, IaMin, IaMax,
-			Ia_ranges_pos, Ia_ranges_neg);
+			Ia_ranges_pos, Ia_ranges_neg,AfferentRangeMode);
  real_ranges=CalcAfferentRange(num_motions, crossranges, IbMin, IbMax,
-			Ib_ranges_pos, Ib_ranges_neg);
+			Ib_ranges_pos, Ib_ranges_neg,AfferentRangeMode);
  real_ranges=CalcAfferentRange(num_motions, crossranges, IIMin, IIMax,
-			II_ranges_pos, II_ranges_neg);
+			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
 
  NANet *net=this;//dynamic_cast<NANet*>(storage->TakeObject(netclassname));
@@ -1172,11 +1380,11 @@ NANet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cros
  int real_ranges=0;
 
  real_ranges=CalcAfferentRange(num_motions, crossranges, IaMin, IaMax,
-			Ia_ranges_pos, Ia_ranges_neg);
+			Ia_ranges_pos, Ia_ranges_neg,AfferentRangeMode);
  real_ranges=CalcAfferentRange(num_motions, crossranges, IbMin, IbMax,
-			Ib_ranges_pos, Ib_ranges_neg);
+			Ib_ranges_pos, Ib_ranges_neg,AfferentRangeMode);
  real_ranges=CalcAfferentRange(num_motions, crossranges, IIMin, IIMax,
-			II_ranges_pos, II_ranges_neg);
+			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
  NANet *net=this;
  if(!net)
@@ -1224,11 +1432,11 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(void)
 
 
  real_ranges=CalcAfferentRange(num_motions, crossranges, IaMin, IaMax,
-			Ia_ranges_pos, Ia_ranges_neg);
+			Ia_ranges_pos, Ia_ranges_neg,AfferentRangeMode);
  real_ranges=CalcAfferentRange(num_motions, crossranges, IbMin, IbMax,
-			Ib_ranges_pos, Ib_ranges_neg);
+			Ib_ranges_pos, Ib_ranges_neg,AfferentRangeMode);
  real_ranges=CalcAfferentRange(num_motions, crossranges, IIMin, IIMax,
-			II_ranges_pos, II_ranges_neg);
+			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
 
  NANet *net=this;//dynamic_cast<NANet*>(storage->TakeObject(netclassname));
