@@ -86,6 +86,10 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
  net->SetName("MotionElement");
  UploadClass("NSimplestAfferentBranchedMotionElement",net);
 
+ net=CreateSimplestBranchedMotionElement(storage, "NNet","NNewSynSPNeuron","NSimpleAfferentNeuron",0);
+ net->SetName("MotionElement");
+ UploadClass("NNewSimplestAfferentBranchedMotionElement",net);
+
  // Создаем прототип систем управления
  UEPtr<NEngineMotionControl> cs=0;
  cs=new NEngineMotionControl;
@@ -387,6 +391,23 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
    UploadClass(string("NSimplestAfferentBranchedEngineControl")+RDK::sntoa(i+1),net);
   else
    UploadClass("NSimplestAfferentBranchedEngineControl",net);
+ }
+
+ max_number_of_mc=10;
+ for(size_t i=0;i<max_number_of_mc;i++)
+ {
+  cs=dynamic_pointer_cast<NEngineMotionControl>(storage->TakeObject("NEngineMotionControl"));
+  cs->NumMotionElements=i+1;
+  cs->CreationMode=11;
+  cs->MotionElementClassName="NNewSimplestAfferentBranchedMotionElement";
+  cs->Create();
+  net=cs;
+
+  net->SetName("EngineControlRangeAfferent");
+  if(i>0)
+   UploadClass(string("NNewSimplestAfferentBranchedEngineControl")+RDK::sntoa(i+1),net);
+  else
+   UploadClass("NNewSimplestAfferentBranchedEngineControl",net);
  }
 
 

@@ -427,7 +427,17 @@ bool CreateNeuronBranchLink(UEPtr<NANet> net,const string &source,
  UEPtr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
  UEPtr<NPulseMembrane> branch;
  UEPtr<NPulseChannel> channel;
- branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
+ UEPtr<UAContainer> ltmembr;
+
+ try
+ {
+  ltmembr=neuron->GetComponent("LTMembrane");
+ }
+ catch(UAContainer::EComponentNameNotExist &exc){}
+ if(ltmembr)
+  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
+ else
+  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
  channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
  bool res=net->CreateLink(source,0,
 				 channel->GetLongName(net,tmpname));
