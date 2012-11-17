@@ -849,14 +849,14 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<NAContainer> net)
  ((NPulseGenerator*)cont)->Amplitude=1;
  ((NPulseGenerator*)cont)->Frequency=0;
  res=net->AddComponent(cont);
-/*
+
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NCGenerator"));
  if(!cont)
   return;
  cont->SetName("AfferentSource1");
  ((NConstGenerator*)cont)->Amplitude=0;
  res=net->AddComponent(cont);
-
+/*
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NCGenerator"));
  if(!cont)
   return;
