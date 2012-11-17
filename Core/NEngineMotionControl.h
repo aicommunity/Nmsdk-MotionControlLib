@@ -33,6 +33,7 @@ RDK::ULProperty<size_t, NEngineMotionControl> NumMotionElements;
 // 5 - Branched Ind. Range Crosslinks
 // 10 - Branched Ind. Range Continues LTZone neurons
 // 11 - Simplest 2 neuron model
+// 12 - As 11 but speed and force control added
 RDK::ULProperty<int, NEngineMotionControl> CreationMode;
 
 // »м€ класса управл€ющего элемента
@@ -178,7 +179,7 @@ NANet* CreateEngineControlRangeAfferent(bool crosslinks=false, bool crossranges=
 NANet* CreateEngineControlContinuesNeuronsSimple(bool crossranges=true);
 
 // ‘ормируем сеть управлени€ на 2 импульсных нейронах
-NANet* CreateEngineControl2NeuronsSimplest(void);
+NANet* CreateEngineControl2NeuronsSimplest(bool use_speed_force=false);
 // --------------------------
 
 };

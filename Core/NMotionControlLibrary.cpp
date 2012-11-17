@@ -77,18 +77,22 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
  UploadClass("NSimplestMotionElement",net);
 
  // Создаем простейшую СУ с ветвлением
- net=CreateSimplestBranchedMotionElement(storage, "NNet","NSynSPNeuron","NSAfferentNeuron",0);
+ net=CreateSimplestBranchedMotionElement(storage, "NNet","NSynSPNeuron","NSAfferentNeuron",0,false);
  net->SetName("MotionElement");
  UploadClass("NSimplestBranchedMotionElement",net);
 
  // Создаем простейшую СУ с ветвлением и простым афферентным нейроном
- net=CreateSimplestBranchedMotionElement(storage, "NNet","NSynSPNeuron","NSimpleAfferentNeuron",0);
+ net=CreateSimplestBranchedMotionElement(storage, "NNet","NSynSPNeuron","NSimpleAfferentNeuron",0,false);
  net->SetName("MotionElement");
  UploadClass("NSimplestAfferentBranchedMotionElement",net);
 
- net=CreateSimplestBranchedMotionElement(storage, "NNet","NNewSynSPNeuron","NSimpleAfferentNeuron",0);
+ net=CreateSimplestBranchedMotionElement(storage, "NNet","NNewSynSPNeuron","NSimpleAfferentNeuron",0,false);
  net->SetName("MotionElement");
  UploadClass("NNewSimplestAfferentBranchedMotionElement",net);
+
+ net=CreateSimplestBranchedMotionElement(storage, "NNet","NNewSynSPNeuron","NSimpleAfferentNeuron",0,true);
+ net->SetName("MotionElement");
+ UploadClass("NAsfNewSimplestAfferentBranchedMotionElement",net);
 
  // Создаем прототип систем управления
  UEPtr<NEngineMotionControl> cs=0;
@@ -410,6 +414,22 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
    UploadClass("NNewSimplestAfferentBranchedEngineControl",net);
  }
 
+
+ for(size_t i=0;i<max_number_of_mc;i++)
+ {
+  cs=dynamic_pointer_cast<NEngineMotionControl>(storage->TakeObject("NEngineMotionControl"));
+  cs->NumMotionElements=i+1;
+  cs->CreationMode=12;
+  cs->MotionElementClassName="NAsfNewSimplestAfferentBranchedMotionElement";
+  cs->Create();
+  net=cs;
+
+  net->SetName("EngineControlRangeAfferent");
+  if(i>0)
+   UploadClass(string("NAsfNewSimplestAfferentBranchedEngineControl")+RDK::sntoa(i+1),net);
+  else
+   UploadClass("NAsfNewSimplestAfferentBranchedEngineControl",net);
+ }
 
 
 

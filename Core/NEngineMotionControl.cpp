@@ -258,6 +258,10 @@ bool NEngineMotionControl::Create(void)
   CreateEngineControl2NeuronsSimplest();
  break;
 
+ case 12:
+  CreateEngineControl2NeuronsSimplest(true);
+ break;
+
  };
 
  return true;
@@ -1006,36 +1010,45 @@ void NEngineMotionControl::IntervalSeparatorLinksSetup(UEPtr<NANet> net, bool II
 
 if(Ia)
 {
- // Связи с моделью манипулятора (по умолчанию)
- for(size_t i=0;i<NumMotionElements;i++)
- {
-  res=net->CreateLink("NManipulatorSource1",2,
+ try{
+  // Связи с моделью манипулятора (по умолчанию)
+  for(size_t i=0;i<NumMotionElements;i++)
+  {
+   res=net->CreateLink("NManipulatorSource1",2,
 				 string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1));
-  res=net->CreateLink("NManipulatorSource1",2,
+   res=net->CreateLink("NManipulatorSource1",2,
 				 string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1));
+  }
  }
+ catch (EComponentNameNotExist &exc) {  }
 }
 
 if(II)
 {
- for(size_t i=0;i<NumMotionElements;i++)
- {
-  res=net->CreateLink("NManipulatorSource1",1,
+ try{
+  for(size_t i=0;i<NumMotionElements;i++)
+  {
+   res=net->CreateLink("NManipulatorSource1",1,
 				 string("II_PosIntervalSeparator")+RDK::sntoa(i+1));
-  res=net->CreateLink("NManipulatorSource1",1,
+   res=net->CreateLink("NManipulatorSource1",1,
 				 string("II_NegIntervalSeparator")+RDK::sntoa(i+1));
+  }
  }
+ catch (EComponentNameNotExist &exc) {  }
 }
 
 if(Ib)
 {
- for(size_t i=0;i<NumMotionElements;i++)
- {
-  res=net->CreateLink("NManipulatorSource1",0,
+ try{
+  for(size_t i=0;i<NumMotionElements;i++)
+  {
+   res=net->CreateLink("NManipulatorSource1",0,
 				 string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1));
-  res=net->CreateLink("NManipulatorSource1",0,
+   res=net->CreateLink("NManipulatorSource1",0,
 				 string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1));
+  }
  }
+ catch (EComponentNameNotExist &exc) {  }
 }
 
  for(size_t k=0;k<Motions.size();k++)
@@ -1418,7 +1431,7 @@ NANet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cros
 
 
 // Формируем сеть управления на 2 импульсных нейронах
-NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(void)
+NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_force)
 {
  NAContainer *cont;
  bool res;
@@ -1455,7 +1468,10 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(void)
 
  PACSetup(net, 1, 0.001, 0.01, 100,false);
 
- IntervalSeparatorsSetup(net, 5, 1, -1,true,false,false);
+ if(use_speed_force)
+  IntervalSeparatorsSetup(net, 5, 1, -1,true,true,true);
+ else
+  IntervalSeparatorsSetup(net, 5, 1, -1,true,false,false);
 		 /*
  // Компоненты вычисления статистики
  for(size_t i=0;i<num_motions;i++)
@@ -1479,7 +1495,10 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(void)
 
  StandardLinksSetup(net, "Pac");
 
- IntervalSeparatorLinksSetup(net,true,false,false);
+ if(use_speed_force)
+  IntervalSeparatorLinksSetup(net,true,true,true);
+ else
+  IntervalSeparatorLinksSetup(net,true,false,false);
 
 	/*
  for(size_t k=0;k<Motions.size();k++)

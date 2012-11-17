@@ -634,7 +634,8 @@ UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage,
 // Формирует СУ двигательной единицей
 // Аналогично, но с развязкой по дендритам
 UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage,
-	const string &netclassname, const string &neuron_class_name, const string &afferent_neuron_class_name, int mode)
+	const string &netclassname, const string &neuron_class_name,
+	const string &afferent_neuron_class_name, int mode, bool use_speed_force)
 {
  UEPtr<NAContainer> cont;
  bool res;
@@ -720,31 +721,7 @@ UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage,
   return 0;
  cont->SetName("PostAfferent24");
  res=net->AddComponent(cont);
-		 /*
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
- if(!cont)
-  return 0;
- cont->SetName("Afferent_Ia1");
- res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
- if(!cont)
-  return 0;
- cont->SetName("Afferent_Ia2");
- res=net->AddComponent(cont);
-
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
- if(!cont)
-  return 0;
- cont->SetName("Afferent_Ib1");
- res=net->AddComponent(cont);
-
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
- if(!cont)
-  return 0;
- cont->SetName("Afferent_Ib2");
- res=net->AddComponent(cont);
-                     */
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
  if(!cont)
   return 0;
@@ -756,6 +733,33 @@ UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage,
   return 0;
  cont->SetName("Afferent_II2");
  res=net->AddComponent(cont);
+
+ if(use_speed_force)
+ {
+  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+  if(!cont)
+   return 0;
+  cont->SetName("Afferent_Ia1");
+  res=net->AddComponent(cont);
+
+  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+  if(!cont)
+   return 0;
+  cont->SetName("Afferent_Ia2");
+  res=net->AddComponent(cont);
+
+  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+  if(!cont)
+   return 0;
+  cont->SetName("Afferent_Ib1");
+  res=net->AddComponent(cont);
+
+  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+  if(!cont)
+   return 0;
+  cont->SetName("Afferent_Ib2");
+  res=net->AddComponent(cont);
+ }
 
  // Установка связей
  ULongId item,conn;
@@ -772,6 +776,19 @@ UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage,
 
  res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron1", "NegChannel");
  res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron2", "PosChannel");
+
+ if(use_speed_force)
+ {
+  res=net->CreateLink("Afferent_Ia1.LTZone",0,"Motoneuron1.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ia1.LTZone",0,"Motoneuron2.PNeuronMembrane.NegChannel");
+  res=net->CreateLink("Afferent_Ia2.LTZone",0,"Motoneuron2.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ia2.LTZone",0,"Motoneuron1.PNeuronMembrane.NegChannel");
+
+  res=net->CreateLink("Afferent_Ib1.LTZone",0,"Motoneuron1.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ib1.LTZone",0,"Motoneuron2.PNeuronMembrane.NegChannel");
+  res=net->CreateLink("Afferent_Ib2.LTZone",0,"Motoneuron2.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ib2.LTZone",0,"Motoneuron1.PNeuronMembrane.NegChannel");
+ }
 
  if(!res)
   res=true;

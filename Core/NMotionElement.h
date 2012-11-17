@@ -22,13 +22,13 @@ namespace NMSDK {
 // 	    mode == 1 - модель без вставочных интернейронов
 UEPtr<NANet> CreateMotionElement(NStorage *storage, const string &netclassname, int mode);
 
-// Формирует простейшую СУ двигательной единицей из двух мотонейронов
-UEPtr<NANet> CreateSimplestMotionElement(NStorage *storage, const string &netclassname, int mode);
-UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage, const string &netclassname, int mode);
-
 // Аналогично, но с развязкой по дендритам
 UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage, const string &netclassname,
 	const string &neuron_class_name, const string &afferent_neuron_class_name, int mode);
+
+// Формирует простейшую СУ двигательной единицей из двух мотонейронов
+UEPtr<NANet> CreateSimplestMotionElement(NStorage *storage, const string &netclassname, int mode);
+UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage, const string &netclassname, int mode, bool use_speed_force=false);
 
 bool CreateNeuronBranchLink(UEPtr<NANet> net,const string &source,
 	const string &target_head, const string &target_tail);
