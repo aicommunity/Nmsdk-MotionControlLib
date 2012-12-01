@@ -77,22 +77,26 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
  UploadClass("NSimplestMotionElement",net);
 
  // Создаем простейшую СУ с ветвлением
- net=CreateSimplestBranchedMotionElement(storage, "NNet","NSynSPNeuron","NSAfferentNeuron",0,false);
+ net=CreateSimplestBranchedMotionElement(storage, "NNet","NSynSPNeuron","NSAfferentNeuron",0,false,false);
  net->SetName("MotionElement");
  UploadClass("NSimplestBranchedMotionElement",net);
 
  // Создаем простейшую СУ с ветвлением и простым афферентным нейроном
- net=CreateSimplestBranchedMotionElement(storage, "NNet","NSynSPNeuron","NSimpleAfferentNeuron",0,false);
+ net=CreateSimplestBranchedMotionElement(storage, "NNet","NSynSPNeuron","NSimpleAfferentNeuron",0,false,false);
  net->SetName("MotionElement");
  UploadClass("NSimplestAfferentBranchedMotionElement",net);
 
- net=CreateSimplestBranchedMotionElement(storage, "NNet","NNewSynSPNeuron","NSimpleAfferentNeuron",0,false);
+ net=CreateSimplestBranchedMotionElement(storage, "NNet","NNewSynSPNeuron","NSimpleAfferentNeuron",0,false,false);
  net->SetName("MotionElement");
  UploadClass("NNewSimplestAfferentBranchedMotionElement",net);
 
- net=CreateSimplestBranchedMotionElement(storage, "NNet","NNewSynSPNeuron","NSimpleAfferentNeuron",0,true);
+ net=CreateSimplestBranchedMotionElement(storage, "NNet","NNewSynSPNeuron","NSimpleAfferentNeuron",0,true,false);
  net->SetName("MotionElement");
  UploadClass("NAsfNewSimplestAfferentBranchedMotionElement",net);
+
+ net=CreateSimplestBranchedMotionElement(storage, "NNet","NNewSynSPNeuron","NSimpleAfferentNeuron",0,true,true);
+ net->SetName("MotionElement");
+ UploadClass("NAslsNewSimplestAfferentBranchedMotionElement",net);
 
  // Создаем прототип систем управления
  UEPtr<NEngineMotionControl> cs=0;
@@ -380,7 +384,7 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
  // Формируем сеть управления двигателем c простейшей моделью СУ
  // и простейшими дендритами
  // Ветвление дендритов
- max_number_of_mc=10;
+ max_number_of_mc=5;
  for(size_t i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(storage->TakeObject("NEngineMotionControl"));
@@ -397,7 +401,7 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
    UploadClass("NSimplestAfferentBranchedEngineControl",net);
  }
 
- max_number_of_mc=10;
+ max_number_of_mc=5;
  for(size_t i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(storage->TakeObject("NEngineMotionControl"));
@@ -429,6 +433,22 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
    UploadClass(string("NAsfNewSimplestAfferentBranchedEngineControl")+RDK::sntoa(i+1),net);
   else
    UploadClass("NAsfNewSimplestAfferentBranchedEngineControl",net);
+ }
+
+ for(size_t i=0;i<max_number_of_mc;i++)
+ {
+  cs=dynamic_pointer_cast<NEngineMotionControl>(storage->TakeObject("NEngineMotionControl"));
+  cs->NumMotionElements=i+1;
+  cs->CreationMode=13;
+  cs->MotionElementClassName="NAslsNewSimplestAfferentBranchedMotionElement";
+  cs->Create();
+  net=cs;
+
+  net->SetName("EngineControlRangeAfferent");
+  if(i>0)
+   UploadClass(string("NAslsNewSimplestAfferentBranchedEngineControl")+RDK::sntoa(i+1),net);
+  else
+   UploadClass("NAslsNewSimplestAfferentBranchedEngineControl",net);
  }
 
 

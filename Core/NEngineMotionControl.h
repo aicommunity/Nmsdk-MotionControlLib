@@ -51,6 +51,10 @@ RDK::ULProperty<real, NEngineMotionControl> IbMax;
 RDK::ULProperty<real, NEngineMotionControl> IIMin;
 RDK::ULProperty<real, NEngineMotionControl> IIMax;
 
+// Диапазон афферентных нейронов по каналу Ic
+RDK::ULProperty<real, NEngineMotionControl> IcMin;
+RDK::ULProperty<real, NEngineMotionControl> IcMax;
+
 // Режим настройки диапазонов афферентных нейронов
 // 0 - диапазоны одинаковой длины
 // 1 - диапазоны с удвоением длины, и минимальной шириной в процентах
@@ -68,6 +72,7 @@ vector<vector<UEPtr<NReceptor> > > receptors;
 vector<pair<double,double> > Ia_ranges_pos,Ia_ranges_neg;
 vector<pair<double,double> > Ib_ranges_pos,Ib_ranges_neg;
 vector<pair<double,double> > II_ranges_pos,II_ranges_neg;
+vector<pair<double,double> > Ic_ranges_pos,Ic_ranges_neg;
 
 vector<NNet*> Motions;
 
@@ -153,7 +158,7 @@ void PACSetup(UEPtr<NAContainer> net,
 void AACSetup(UEPtr<NAContainer> net, double gain_value);
 
 // Настройка разделителей интервалов
-void IntervalSeparatorsSetup(UEPtr<NAContainer> net, int mode_value, double pos_gain_value, double neg_gain_value, bool II=true, bool Ia=true, bool Ib=true);
+void IntervalSeparatorsSetup(UEPtr<NAContainer> net, int mode_value, double pos_gain_value, double neg_gain_value, bool II=true, bool Ia=true, bool Ib=true, bool Ic=false);
 
 // Настройка разделителей интервалов
 void IntervalSeparatorsUpdate(UEPtr<NAContainer> net, int mode_value);
@@ -165,7 +170,7 @@ void AdditionalComponentsSetup(UEPtr<NAContainer> net);
 void StandardLinksSetup(UEPtr<NANet> net, const string &engine_integrator_name);
 
 // Установка связей разделителей интервалов
-void IntervalSeparatorLinksSetup(UEPtr<NANet> net, bool II=true, bool Ia=true, bool Ib=true);
+void IntervalSeparatorLinksSetup(UEPtr<NANet> net, bool II=true, bool Ia=true, bool Ib=true, bool Ic=false);
 
 // Формируем сеть управления двигателем с разделением информационного потока с датчиков
 // на две полосы по знаку
@@ -179,7 +184,7 @@ NANet* CreateEngineControlRangeAfferent(bool crosslinks=false, bool crossranges=
 NANet* CreateEngineControlContinuesNeuronsSimple(bool crossranges=true);
 
 // Формируем сеть управления на 2 импульсных нейронах
-NANet* CreateEngineControl2NeuronsSimplest(bool use_speed_force=false);
+NANet* CreateEngineControl2NeuronsSimplest(bool use_speed_force=false, bool use_add_contours=false);
 // --------------------------
 
 };

@@ -15,10 +15,163 @@ See file license.txt for more information
 
 #include "NMotionElement.h"
 #include "../PulseLib/NPulseNeuron.h"
-#include "../PulseLib/NAfferentNeuron.h"
 #include "../../Kernel/NStorage.h"
 //---------------------------------------------------------------------------
 namespace NMSDK {
+
+// --------------------------
+// Конструкторы и деструкторы
+// --------------------------
+NMotionElement::NMotionElement(void)
+:
+NumControlLoops("NumControlLoops",this, &NMotionElement::SetNumControlLoops),
+EnableControlLoopFlags("EnableControlLoopFlags",this, &NMotionElement::SetEnableControlLoopFlags),
+InterneuronPresentMode("InterneuronPresentMode",this, &NMotionElement::SetInterneuronPresentMode),
+RecurrentInhibitionMode("RecurrentInhibitionMode",this, &NMotionElement::SetRecurrentInhibitionMode),
+RecurrentInhibitionBranchMode("RecurrentInhibitionBranchMode",this, &NMotionElement::SetRecurrentInhibitionBranchMode),
+MotoneuronBranchMode("MotoneuronBranchMode",this, &NMotionElement::SetMotoneuronBranchMode),
+ExternalControlMode("ExternalControlMode",this, &NMotionElement::SetExternalControlMode),
+
+Afferents("Afferents",this),
+ExternalControlGenerators("ExternalControlGenerators",this),
+Motoneurons("Motoneurons",this)
+{
+
+}
+
+NMotionElement::~NMotionElement(void)
+{
+
+}
+// --------------------------
+
+// --------------------------
+// Методы управления параметрами
+// --------------------------
+bool NMotionElement::SetNumControlLoops(int value)
+{
+ if(value <=0)
+  return false;
+ Ready=false;
+ return true;
+}
+
+bool NMotionElement::SetEnableControlLoopFlags(const std::vector<int> &value)
+{
+ return true;
+}
+
+bool NMotionElement::SetInterneuronPresentMode(int value)
+{
+ if(value <=0)
+  return false;
+ Ready=false;
+ return true;
+}
+
+bool NMotionElement::SetRecurrentInhibitionMode(int value)
+{
+ if(value <=0)
+  return false;
+ Ready=false;
+ return true;
+}
+
+bool NMotionElement::SetRecurrentInhibitionBranchMode(int value)
+{
+ if(value <=0)
+  return false;
+ Ready=false;
+ return true;
+}
+
+bool NMotionElement::SetMotoneuronBranchMode(int value)
+{
+ if(value <=0)
+  return false;
+ Ready=false;
+ return true;
+}
+
+bool NMotionElement::SetExternalControlMode(int value)
+{
+ if(value <=0)
+  return false;
+ Ready=false;
+ return true;
+}
+// --------------------------
+
+
+
+// --------------------------
+// Системные методы управления объектом
+// --------------------------
+// Выделяет память для новой чистой копии объекта этого класса
+NMotionElement* NMotionElement::New(void)
+{
+ return new NMotionElement;
+}
+// --------------------------
+
+// --------------------------
+// Proctected computation methods
+// --------------------------
+// Восстановление настроек по умолчанию и сброс процесса счета
+bool NMotionElement::ADefault(void)
+{
+ return true;
+}
+
+// Обеспечивает сборку внутренней структуры объекта
+// после настройки параметров
+// Автоматически вызывает метод Reset() и выставляет Ready в true
+// в случае успешной сборки
+bool NMotionElement::ABuild(void)
+{
+ BackupExternalLinks();
+ CreateStructure();
+ CreateInternalLinks();
+ RestoreExternalLinks();
+ return true;
+}
+
+// Reset computation
+bool NMotionElement::AReset(void)
+{
+ return true;
+}
+
+// Execute math. computations of current object on current step
+bool NMotionElement::ACalculate(void)
+{
+ return true;
+}
+
+// Создает структуру в соответствии с текущими значениями параметров
+// Если структура существует, то пытается модифицировать ее с минимальными изменениями
+void NMotionElement::CreateStructure(void)
+{
+
+}
+
+// Создает внутренние связи в соответствии с текущими значениями параметров
+void NMotionElement::CreateInternalLinks(void)
+{
+
+}
+
+// Сохраняет и восстанавливает внешние связи
+void NMotionElement::BackupExternalLinks(void)
+{
+
+}
+
+void NMotionElement::RestoreExternalLinks(void)
+{
+
+}
+// --------------------------
 
 // Формирует СУ двигательной единицей
 UEPtr<NANet> CreateSimplestMotionElement(NStorage *storage, const string &netclassname, int mode)
@@ -635,7 +788,7 @@ UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage,
 // Аналогично, но с развязкой по дендритам
 UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage,
 	const string &netclassname, const string &neuron_class_name,
-	const string &afferent_neuron_class_name, int mode, bool use_speed_force)
+	const string &afferent_neuron_class_name, int mode, bool use_speed_force, bool use_add_contours)
 {
  UEPtr<NAContainer> cont;
  bool res;
@@ -761,6 +914,21 @@ UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage,
   res=net->AddComponent(cont);
  }
 
+ if(use_add_contours)
+ {
+  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+  if(!cont)
+   return 0;
+  cont->SetName("Afferent_Ic1");
+  res=net->AddComponent(cont);
+
+  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+  if(!cont)
+   return 0;
+  cont->SetName("Afferent_Ic2");
+  res=net->AddComponent(cont);
+ }
+
  // Установка связей
  ULongId item,conn;
  NameT tmpname;
@@ -779,11 +947,6 @@ UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage,
 
  if(use_speed_force)
  {
-/*  res=net->CreateLink("Afferent_Ia1.LTZone",0,"Motoneuron1.PNeuronMembrane.PosChannel");
-  res=net->CreateLink("Afferent_Ia1.LTZone",0,"Motoneuron2.PNeuronMembrane.NegChannel");
-  res=net->CreateLink("Afferent_Ia2.LTZone",0,"Motoneuron2.PNeuronMembrane.PosChannel");
-  res=net->CreateLink("Afferent_Ia2.LTZone",0,"Motoneuron1.PNeuronMembrane.NegChannel");
-*/
   res=net->CreateLink("Afferent_Ia1.LTZone",0,"Motoneuron1.PNeuronMembrane.NegChannel");
   res=net->CreateLink("Afferent_Ia1.LTZone",0,"Motoneuron2.PNeuronMembrane.PosChannel");
   res=net->CreateLink("Afferent_Ia2.LTZone",0,"Motoneuron2.PNeuronMembrane.NegChannel");
@@ -794,6 +957,15 @@ UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage,
   res=net->CreateLink("Afferent_Ib2.LTZone",0,"Motoneuron2.PNeuronMembrane.PosChannel");
   res=net->CreateLink("Afferent_Ib2.LTZone",0,"Motoneuron1.PNeuronMembrane.NegChannel");
  }
+
+ if(use_add_contours)
+ {
+  res=net->CreateLink("Afferent_Ic1.LTZone",0,"Motoneuron1.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ic1.LTZone",0,"Motoneuron2.PNeuronMembrane.NegChannel");
+  res=net->CreateLink("Afferent_Ic2.LTZone",0,"Motoneuron2.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ic2.LTZone",0,"Motoneuron1.PNeuronMembrane.NegChannel");
+ }
+
 
  if(!res)
   res=true;

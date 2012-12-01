@@ -27,6 +27,8 @@ NEngineMotionControl::NEngineMotionControl(void)
    IbMax("IbMax",this),
    IIMin("IIMin",this),
    IIMax("IIMax",this),
+   IcMin("IcMin",this),
+   IcMax("IcMax",this),
    AfferentRangeMode("AfferentRangeMode",this,&NEngineMotionControl::SetAfferentRangeMode),
    MinAfferentRange("MinAfferentRange",this)
 
@@ -71,6 +73,9 @@ bool NEngineMotionControl::SetAfferentRangeMode(int value)
  real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IIMin, IIMax,
 			II_ranges_pos, II_ranges_neg,value);
 
+ real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IcMin, IcMax,
+			Ic_ranges_pos, Ic_ranges_neg,value);
+
  IntervalSeparatorsUpdate(this, 5);
 
  return true;
@@ -91,6 +96,9 @@ bool NEngineMotionControl::SetMinAfferentRange(double value)
 			Ib_ranges_pos, Ib_ranges_neg,AfferentRangeMode);
  real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IIMin, IIMax,
 			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
+
+ real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IcMin, IcMax,
+			Ic_ranges_pos, Ic_ranges_neg,value);
 
  IntervalSeparatorsUpdate(this, 5);
 
@@ -123,6 +131,8 @@ bool NEngineMotionControl::ADefault(void)
  IbMax=10;
  IIMin=-M_PI/2;
  IIMax=M_PI/2;
+ IcMin=-10;
+ IcMax=10;
  AfferentRangeMode=0;
  MinAfferentRange=0.1;
  MotionElementClassName="NMotionElement";
@@ -170,6 +180,18 @@ bool NEngineMotionControl::AReset(void)
   {
    continue;
   }
+/*
+  try {
+   cont->GetComponentL("Afferent_Ic1.Receptor");
+   receptors[n].resize(8);
+
+   receptors[n][6]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ic1.Receptor"));
+   receptors[n][7]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_Ic2.Receptor"));
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }     */
  }
 
  return true;
@@ -262,6 +284,10 @@ bool NEngineMotionControl::Create(void)
   CreateEngineControl2NeuronsSimplest(true);
  break;
 
+
+ case 13:
+  CreateEngineControl2NeuronsSimplest(true,true);
+ break;
  };
 
  return true;
@@ -479,6 +505,37 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<NAContainer> net, int inp_m
   {
   }
 
+  try
+  {
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ic1.Receptor"));
+   receptor->MinInputRange=0;
+   receptor->MaxInputRange=fabs(IcMin)/real_ranges;
+   receptor->InputAdaptationMode=inp_mode;
+   receptor->OutputAdaptationMode=out_mode;
+   receptor->MaxOutputRange=receptor_max_output;
+   receptor->Gain=receptor_gain;
+   receptor->ExpCoeff=exp_coeff;
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+  }
+
+  try
+  {
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ic2.Receptor"));
+   receptor->MinInputRange=0;
+   receptor->MaxInputRange=fabs(IcMax)/real_ranges;
+   receptor->InputAdaptationMode=inp_mode;
+   receptor->OutputAdaptationMode=out_mode;
+   receptor->MaxOutputRange=receptor_max_output;
+   receptor->Gain=receptor_gain;
+   receptor->ExpCoeff=exp_coeff;
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+  }
+
+
  }
 
 }
@@ -576,7 +633,7 @@ void NEngineMotionControl::AACSetup(UEPtr<NAContainer> net, double gain_value)
 }
 
 // Настройка разделителей интервалов
-void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int mode_value, double pos_gain_value, double neg_gain_value, bool II, bool Ia, bool Ib)
+void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<NAContainer> net, int mode_value, double pos_gain_value, double neg_gain_value, bool II, bool Ia, bool Ib, bool Ic)
 {
  NAContainer* cont=0;
  UEPtr<NStorage> storage=dynamic_pointer_cast<NStorage>(Storage);
@@ -689,6 +746,41 @@ if(Ia)
 
   left_value.assign(1,Ia_ranges_pos[i].first);
   right_value.assign(1,Ia_ranges_pos[i].second);
+  ((NIntervalSeparator*)cont)->MinRange=left_value;
+  ((NIntervalSeparator*)cont)->MaxRange=right_value;
+  res=net->AddComponent(cont);
+ }
+}
+
+if(Ic)
+{
+ for(size_t i=0;i<NumMotionElements;i++)
+ {
+  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NIntervalSeparator"));
+  if(!cont)
+   continue;
+  cont->SetName(string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1));
+  ((NIntervalSeparator*)cont)->SetNumOutputs(1);
+  ((NIntervalSeparator*)cont)->Gain=neg_gain;
+
+  left_value.assign(1,Ic_ranges_neg[i].first);
+  right_value.assign(1,Ic_ranges_neg[i].second);
+  ((NIntervalSeparator*)cont)->MinRange=left_value;
+  ((NIntervalSeparator*)cont)->MaxRange=right_value;
+  res=net->AddComponent(cont);
+ }
+
+ for(size_t i=0;i<NumMotionElements;i++)
+ {
+  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NIntervalSeparator"));
+  if(!cont)
+   continue;
+  cont->SetName(string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1));
+  ((NIntervalSeparator*)cont)->SetNumOutputs(1);
+  ((NIntervalSeparator*)cont)->Gain=pos_gain;
+
+  left_value.assign(1,Ic_ranges_pos[i].first);
+  right_value.assign(1,Ic_ranges_pos[i].second);
   ((NIntervalSeparator*)cont)->MinRange=left_value;
   ((NIntervalSeparator*)cont)->MaxRange=right_value;
   res=net->AddComponent(cont);
@@ -823,6 +915,44 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<NAContainer> net, int 
   ((NIntervalSeparator*)cont)->MaxRange=right_value;
  }
 
+ for(size_t i=0;i<NumMotionElements;i++)
+ {
+  try
+  {
+   cont=net->GetComponent(string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1));
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }
+  ((NIntervalSeparator*)cont)->Mode=mode;
+
+  left_value.assign(1,Ic_ranges_neg[i].first);
+  right_value.assign(1,Ic_ranges_neg[i].second);
+  ((NIntervalSeparator*)cont)->MinRange=left_value;
+  ((NIntervalSeparator*)cont)->MaxRange=right_value;
+ }
+
+ for(size_t i=0;i<NumMotionElements;i++)
+ {
+  try
+  {
+   cont=net->GetComponent(string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1));
+  }
+  catch (EComponentNameNotExist &exc)
+  {
+   continue;
+  }
+
+  ((NIntervalSeparator*)cont)->Mode=mode;
+
+  left_value.assign(1,Ic_ranges_pos[i].first);
+  right_value.assign(1,Ic_ranges_pos[i].second);
+  ((NIntervalSeparator*)cont)->MinRange=left_value;
+  ((NIntervalSeparator*)cont)->MaxRange=right_value;
+ }
+
+
  if(res)
   return;
 }
@@ -914,12 +1044,15 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<NAContainer> net)
   return;
  cont->SetName("Motoneuron2FrequencyReceiver");
  res=net->AddComponent(cont);
-                  */
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NManipulatorSource"));
- if(!cont)
+				  */
+
+ UEPtr<UADItem> cont2=0;
+ cont2=dynamic_pointer_cast<UADItem>(storage->TakeObject("NManipulatorSource"));
+ if(!cont2)
   return;
- cont->SetName("NManipulatorSource1");
- res=net->AddComponent(cont);
+ cont2->SetName("NManipulatorSource1");
+// cont2->SetNumOutputs(4);
+ res=net->AddComponent(cont2);
 
  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NManipulatorInput"));
  if(!cont)
@@ -986,25 +1119,25 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<NANet> net,
  {
  }
 
-
-// res=net->CreateLink(engine_integrator_name,0,"NManipulatorInputEmulator1");
-
-// res=net->CreateLink("NManipulatorInputEmulator1",0,"Engine",0);
-
-// res=net->CreateLink("Engine",0,"NManipulatorSourceEmulator1",0);
-// res=net->CreateLink("Engine",1,"NManipulatorSourceEmulator1",1);
-// res=net->CreateLink("Engine",2,"NManipulatorSourceEmulator1",2);
-
-
-// res=net->CreateLink("EngineMoment",0,
-//				 "Engine",1);
+ try {
+  for(size_t i=0;i<Motions.size();i++)
+  {
+   res&=net->CreateLink("NManipulatorSource1",3,
+				 std::string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),0);
+   res&=net->CreateLink("NManipulatorSource1",3,
+				 std::string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),0);
+  }
+ }
+ catch (EComponentNameNotExist &exc)
+ {
+ }
 
  if(res)
   return;
 }
 
 // Установка связей разделителей интервалов
-void NEngineMotionControl::IntervalSeparatorLinksSetup(UEPtr<NANet> net, bool II, bool Ia, bool Ib)
+void NEngineMotionControl::IntervalSeparatorLinksSetup(UEPtr<NANet> net, bool II, bool Ia, bool Ib, bool Ic)
 {
  bool res=true;
 
@@ -1051,6 +1184,22 @@ if(Ib)
  catch (EComponentNameNotExist &exc) {  }
 }
 
+if(Ic)
+{
+ try{
+  for(size_t i=0;i<NumMotionElements;i++)
+  {
+   res=net->CreateLink("NManipulatorSource1",3,
+				 string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1));
+   res=net->CreateLink("NManipulatorSource1",3,
+				 string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1));
+  }
+ }
+ catch (EComponentNameNotExist &exc) {  }
+}
+
+
+
  for(size_t k=0;k<Motions.size();k++)
  {
   try{
@@ -1067,6 +1216,12 @@ if(Ib)
   try{
    res=net->CreateLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib2.Receptor");
    res=net->CreateLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib1.Receptor");
+  }
+  catch (EComponentNameNotExist &exc) {  }
+
+  try{
+   res=net->CreateLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ic2.Receptor");
+   res=net->CreateLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ic1.Receptor");
   }
   catch (EComponentNameNotExist &exc) {  }
  }
@@ -1431,7 +1586,7 @@ NANet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cros
 
 
 // Формируем сеть управления на 2 импульсных нейронах
-NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_force)
+NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_force, bool use_add_contours)
 {
  NAContainer *cont;
  bool res;
@@ -1451,6 +1606,12 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_
  real_ranges=CalcAfferentRange(num_motions, crossranges, IIMin, IIMax,
 			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
+ if(use_add_contours)
+ {
+  real_ranges=CalcAfferentRange(num_motions, crossranges, IcMin, IcMax,
+			Ic_ranges_pos, Ic_ranges_neg,AfferentRangeMode);
+ }
+
 
  NANet *net=this;//dynamic_cast<NANet*>(storage->TakeObject(netclassname));
  if(!net)
@@ -1469,7 +1630,12 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_
  PACSetup(net, 1, 0.001, 0.01, 100,false);
 
  if(use_speed_force)
-  IntervalSeparatorsSetup(net, 5, 1, -1,true,true,true);
+ {
+  if(use_add_contours)
+   IntervalSeparatorsSetup(net, 5, 1, -1,true,true,true,true);
+  else
+   IntervalSeparatorsSetup(net, 5, 1, -1,true,true,true);
+ }
  else
   IntervalSeparatorsSetup(net, 5, 1, -1,true,false,false);
 		 /*
@@ -1496,7 +1662,12 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_
  StandardLinksSetup(net, "Pac");
 
  if(use_speed_force)
-  IntervalSeparatorLinksSetup(net,true,true,true);
+ {
+  if(use_add_contours)
+   IntervalSeparatorLinksSetup(net,true,true,true,true);
+  else
+   IntervalSeparatorLinksSetup(net,true,true,true);
+ }
  else
   IntervalSeparatorLinksSetup(net,true,false,false);
 
