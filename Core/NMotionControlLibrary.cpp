@@ -384,7 +384,7 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
  // Формируем сеть управления двигателем c простейшей моделью СУ
  // и простейшими дендритами
  // Ветвление дендритов
- max_number_of_mc=5;
+ max_number_of_mc=10;
  for(size_t i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(storage->TakeObject("NEngineMotionControl"));
@@ -401,7 +401,7 @@ void NMotionControlLibrary::ACreateClassSamples(NStorage *storage)
    UploadClass("NSimplestAfferentBranchedEngineControl",net);
  }
 
- max_number_of_mc=5;
+ max_number_of_mc=10;
  for(size_t i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(storage->TakeObject("NEngineMotionControl"));

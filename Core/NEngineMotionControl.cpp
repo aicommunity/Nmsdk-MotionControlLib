@@ -60,7 +60,7 @@ bool NEngineMotionControl::SetCreationMode(int value)
 // Режим настройки диапазонов афферентных нейронов
 bool NEngineMotionControl::SetAfferentRangeMode(int value)
 {
- if(value < 0 || value > 1)
+ if(value < 0 || value > 3)
   return false;
 
  bool crossranges=false;
@@ -391,6 +391,58 @@ int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, 
 	neg_range=(left_range-0)*(i+1);
 
 	neg_ranges[i].first=(rr_index+1)*neg_range;
+	++rr_index;
+   }
+  }
+  else
+  if(range_mode == 2)
+  {
+   for(int i=0;i<num_motions;i++)
+   {
+	if(i==0)
+	 pos_ranges[i].first=0;
+	else
+	 pos_ranges[i].first=pos_ranges[i-1].second;
+
+	pos_ranges[i].second=a_max/powl(2.0,num_motions-i-1);
+	++rr_index;
+   }
+
+   rr_index=0;
+   for(int i=0;i<num_motions;i++)
+   {
+	if(rr_index==0)
+	 neg_ranges[i].second=0;
+	else
+	 neg_ranges[i].second=neg_ranges[i-1].first;
+
+	neg_ranges[i].first=a_min/powl(2.0,num_motions-i-1);
+	++rr_index;
+   }
+  }
+  else
+  if(range_mode == 3)
+  {
+   for(int i=0;i<num_motions;i++)
+   {
+	if(i==0)
+	 pos_ranges[i].first=0;
+	else
+	 pos_ranges[i].first=pos_ranges[i-1].second;
+
+	pos_ranges[i].second=a_max/(num_motions-i);
+	++rr_index;
+   }
+
+   rr_index=0;
+   for(int i=0;i<num_motions;i++)
+   {
+	if(rr_index==0)
+	 neg_ranges[i].second=0;
+	else
+	 neg_ranges[i].second=neg_ranges[i-1].first;
+
+	neg_ranges[i].first=a_min/(num_motions-i);
 	++rr_index;
    }
   }
@@ -1478,7 +1530,7 @@ NANet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, b
 
  AdditionalComponentsSetup(net);
 
- PACSetup(net, 1, 0.001, 0.01, 100);
+ PACSetup(net, 1, 0.001, 0.001, 100);
 
  IntervalSeparatorsSetup(net, 5, 1, -1);
 
@@ -1627,7 +1679,7 @@ NANet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_
 
  AdditionalComponentsSetup(net);
 
- PACSetup(net, 1, 0.001, 0.01, 100,false);
+ PACSetup(net, 1, 0.001, 0.001, 100,false);
 
  if(use_speed_force)
  {
