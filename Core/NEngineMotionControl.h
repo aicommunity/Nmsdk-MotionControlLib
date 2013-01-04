@@ -13,12 +13,12 @@ See file license.txt for more information
 #ifndef NEngineMotionControlH
 #define NEngineMotionControlH
 
-#include "../../Kernel/NBios.h"
+#include "../../Kernel/NSupport.h"
 #include "../ReceiverLib/NReceptor.h"
 
 namespace NMSDK {
 
-class NEngineMotionControl: public NANet
+class NEngineMotionControl: public UANet
 {
 public: // Публичные свойства
 // Число управляющих элементов
@@ -148,43 +148,43 @@ int CalcAfferentRange(int num_motions, bool cross_ranges, double a_min, double a
 			vector<pair<double,double> > &pos_ranges, vector<pair<double,double> > &neg_ranges, int range_mode);
 
 // Настройка рецепторов
-void MotionElementsSetup(UEPtr<NAContainer> net, int inp_mode, int out_mode, double exp_coeff, double receptor_max_output, double receptor_gain, int real_ranges);
+void MotionElementsSetup(UEPtr<UAContainer> net, int inp_mode, int out_mode, double exp_coeff, double receptor_max_output, double receptor_gain, int real_ranges);
 
 // Настройка преобразователя импульс-аналог
-void PACSetup(UEPtr<NAContainer> net,
+void PACSetup(UEPtr<UAContainer> net,
 		double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode=true);
 
 // Настройка преобразователя аналог-аналог
-void AACSetup(UEPtr<NAContainer> net, double gain_value);
+void AACSetup(UEPtr<UAContainer> net, double gain_value);
 
 // Настройка разделителей интервалов
-void IntervalSeparatorsSetup(UEPtr<NAContainer> net, int mode_value, double pos_gain_value, double neg_gain_value, bool II=true, bool Ia=true, bool Ib=true, bool Ic=false);
+void IntervalSeparatorsSetup(UEPtr<UAContainer> net, int mode_value, double pos_gain_value, double neg_gain_value, bool II=true, bool Ia=true, bool Ib=true, bool Ic=false);
 
 // Настройка разделителей интервалов
-void IntervalSeparatorsUpdate(UEPtr<NAContainer> net, int mode_value);
+void IntervalSeparatorsUpdate(UEPtr<UAContainer> net, int mode_value);
 
 // Задание вспомогательных компонент
-void AdditionalComponentsSetup(UEPtr<NAContainer> net);
+void AdditionalComponentsSetup(UEPtr<UAContainer> net);
 
 // Установка стандартных связей
-void StandardLinksSetup(UEPtr<NANet> net, const string &engine_integrator_name);
+void StandardLinksSetup(UEPtr<UANet> net, const string &engine_integrator_name);
 
 // Установка связей разделителей интервалов
-void IntervalSeparatorLinksSetup(UEPtr<NANet> net, bool II=true, bool Ia=true, bool Ib=true, bool Ic=false);
+void IntervalSeparatorLinksSetup(UEPtr<UANet> net, bool II=true, bool Ia=true, bool Ib=true, bool Ic=false);
 
 // Формируем сеть управления двигателем с разделением информационного потока с датчиков
 // на две полосы по знаку
-NANet* CreateEngineControlSignumAfferent(void);
+UANet* CreateEngineControlSignumAfferent(void);
 
 // Формируем сеть управления двигателем c разделением информационного потока с датчиков
 // на полосы по амплитуде
-NANet* CreateEngineControlRangeAfferent(bool crosslinks=false, bool crossranges=true);
+UANet* CreateEngineControlRangeAfferent(bool crosslinks=false, bool crossranges=true);
 
 // Формируем сеть управления на нейронах с непрерывной генераторной функцией нейронов
-NANet* CreateEngineControlContinuesNeuronsSimple(bool crossranges=true);
+UANet* CreateEngineControlContinuesNeuronsSimple(bool crossranges=true);
 
 // Формируем сеть управления на 2 импульсных нейронах
-NANet* CreateEngineControl2NeuronsSimplest(bool use_speed_force=false, bool use_add_contours=false);
+UANet* CreateEngineControl2NeuronsSimplest(bool use_speed_force=false, bool use_add_contours=false);
 // --------------------------
 
 };

@@ -15,12 +15,12 @@ See file license.txt for more information
 #define NMotionControlLibraryH
 
 #include "NEngineMotionControl.h"
-#include "../../Kernel/NLibrary.h"
+#include "../../Kernel/NSupport.h"
 #include "NMotionElement.h"
 
 namespace NMSDK {
 
-class NMotionControlLibrary: public NLibrary
+class NMotionControlLibrary: public UALibrary
 {
 public: // Методы
 // --------------------------
@@ -40,7 +40,7 @@ NMotionControlLibrary(void);
 // --------------------------
 // Заполняет массив ClassSamples готовыми экземплярами образцов и их именами.
 // Не требуется предварительная очистка массива и уборка памяти.
-virtual void ACreateClassSamples(NStorage *storage);
+virtual void CreateClassSamples(UAStorage *storage);
 // --------------------------
 };     
 

@@ -15,7 +15,7 @@ See file license.txt for more information
 
 #include "NMotionElement.h"
 #include "../PulseLib/NPulseNeuron.h"
-#include "../../Kernel/NStorage.h"
+//#include "../../Kernel/NStorage.h"
 //---------------------------------------------------------------------------
 namespace NMSDK {
 
@@ -174,124 +174,124 @@ void NMotionElement::RestoreExternalLinks(void)
 // --------------------------
 
 // Формирует СУ двигательной единицей
-UEPtr<NANet> CreateSimplestMotionElement(NStorage *storage, const string &netclassname, int mode)
+UEPtr<UANet> CreateSimplestMotionElement(UAContainerStorage *storage, const string &netclassname, int mode)
 {
- UEPtr<NAContainer> cont;
+ UEPtr<UAContainer> cont;
  bool res;
 
- UEPtr<NANet> net=RDK::dynamic_pointer_cast<NANet>(storage->TakeObject(netclassname));
+ UEPtr<UANet> net=RDK::dynamic_pointer_cast<UANet>(storage->TakeObject(netclassname));
  if(!net)
   return 0;
 
  // Клетка реншоу 1
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynRenshowCell"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynRenshowCell"));
  if(!cont)
   return 0;
  cont->SetName("Renshow1");
  res=net->AddComponent(cont);
 
  // Клетка реншоу 2
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynRenshowCell"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynRenshowCell"));
  if(!cont)
   return 0;
  cont->SetName("Renshow2");
  res=net->AddComponent(cont);
 
  // Мотонейрон 1
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynMotoneuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynMotoneuron"));
  if(!cont)
   return 0;
  cont->SetName("Motoneuron1");
  res=net->AddComponent(cont);
 
  // Мотонейрон 2
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynMotoneuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynMotoneuron"));
  if(!cont)
   return 0;
  cont->SetName("Motoneuron2");
  res=net->AddComponent(cont);
 
  // Постафферентные нейроны
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent11");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent12");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent13");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent14");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent21");
  res=net->AddComponent(cont);
 
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent22");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent23");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent24");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSAfferentNeuron"));
  if(!cont)
   return 0;
  cont->SetName("Afferent_Ia1");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSAfferentNeuron"));
  if(!cont)
   return 0;
  cont->SetName("Afferent_Ia2");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSAfferentNeuron"));
  if(!cont)
   return 0;
  cont->SetName("Afferent_Ib1");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSAfferentNeuron"));
  if(!cont)
   return 0;
  cont->SetName("Afferent_Ib2");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSAfferentNeuron"));
  if(!cont)
   return 0;
  cont->SetName("Afferent_II1");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSAfferentNeuron"));
  if(!cont)
   return 0;
  cont->SetName("Afferent_II2");
@@ -329,124 +329,124 @@ UEPtr<NANet> CreateSimplestMotionElement(NStorage *storage, const string &netcla
 }
 
 // Формирует простейшую СУ двигательной единицей из двух мотонейронов
-UEPtr<NANet> CreateMotionElement(NStorage *storage, const string &netclassname, int mode)
+UEPtr<UANet> CreateMotionElement(UAContainerStorage *storage, const string &netclassname, int mode)
 {
- UEPtr<NAContainer> cont;
+ UEPtr<UAContainer> cont;
  bool res;
 
- UEPtr<NANet> net=RDK::dynamic_pointer_cast<NANet>(storage->TakeObject(netclassname));
+ UEPtr<UANet> net=RDK::dynamic_pointer_cast<UANet>(storage->TakeObject(netclassname));
  if(!net)
   return 0;
 
  // Клетка реншоу 1
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynRenshowCell"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynRenshowCell"));
  if(!cont)
   return 0;
  cont->SetName("Renshow1");
  res=net->AddComponent(cont);
 
  // Клетка реншоу 2
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynRenshowCell"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynRenshowCell"));
  if(!cont)
   return 0;
  cont->SetName("Renshow2");
  res=net->AddComponent(cont);
 
  // Мотонейрон 1
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynMotoneuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynMotoneuron"));
  if(!cont)
   return 0;
  cont->SetName("Motoneuron1");
  res=net->AddComponent(cont);
 
  // Мотонейрон 2
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynMotoneuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynMotoneuron"));
  if(!cont)
   return 0;
  cont->SetName("Motoneuron2");
  res=net->AddComponent(cont);
 
  // Постафферентные нейроны
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent11");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent12");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent13");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent14");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent21");
  res=net->AddComponent(cont);
 
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent22");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent23");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSynSPNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSynSPNeuron"));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent24");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSAfferentNeuron"));
  if(!cont)
   return 0;
  cont->SetName("Afferent_Ia1");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSAfferentNeuron"));
  if(!cont)
   return 0;
  cont->SetName("Afferent_Ia2");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSAfferentNeuron"));
  if(!cont)
   return 0;
  cont->SetName("Afferent_Ib1");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSAfferentNeuron"));
  if(!cont)
   return 0;
  cont->SetName("Afferent_Ib2");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSAfferentNeuron"));
  if(!cont)
   return 0;
  cont->SetName("Afferent_II1");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject("NSAfferentNeuron"));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NSAfferentNeuron"));
  if(!cont)
   return 0;
  cont->SetName("Afferent_II2");
@@ -573,7 +573,7 @@ UEPtr<NANet> CreateMotionElement(NStorage *storage, const string &netclassname, 
 }
 
 
-bool CreateNeuronBranchLink(UEPtr<NANet> net,const string &source,
+bool CreateNeuronBranchLink(UEPtr<UANet> net,const string &source,
 	const string &target_head, const string &target_tail)
 {
  string tmpname;
@@ -599,125 +599,125 @@ bool CreateNeuronBranchLink(UEPtr<NANet> net,const string &source,
 
 // Формирует СУ двигательной единицей
 // Аналогично, но с развязкой по дендритам
-UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage,
+UEPtr<UANet> CreateBranchedMotionElement(UAContainerStorage *storage,
 	const string &netclassname, const string &neuron_class_name, const string &afferent_neuron_class_name, int mode)
 {
- UEPtr<NAContainer> cont;
+ UEPtr<UAContainer> cont;
  bool res;
 
- UEPtr<NANet> net=dynamic_pointer_cast<NANet>(storage->TakeObject(netclassname));
+ UEPtr<UANet> net=dynamic_pointer_cast<UANet>(storage->TakeObject(netclassname));
  if(!net)
   return 0;
 
  // Клетка реншоу 1
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Renshow1");
  res=net->AddComponent(cont);
 
  // Клетка реншоу 2
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Renshow2");
  res=net->AddComponent(cont);
 
  // Мотонейрон 1
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Motoneuron1");
  res=net->AddComponent(cont);
 
  // Мотонейрон 2
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Motoneuron2");
  res=net->AddComponent(cont);
 
  // Постафферентные нейроны
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent11");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent12");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent13");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent14");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent21");
  res=net->AddComponent(cont);
 
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent22");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent23");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent24");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Afferent_Ia1");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Afferent_Ia2");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Afferent_Ib1");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Afferent_Ib2");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Afferent_II1");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Afferent_II2");
@@ -786,102 +786,102 @@ UEPtr<NANet> CreateBranchedMotionElement(NStorage *storage,
 
 // Формирует СУ двигательной единицей
 // Аналогично, но с развязкой по дендритам
-UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage,
+UEPtr<UANet> CreateSimplestBranchedMotionElement(UAContainerStorage *storage,
 	const string &netclassname, const string &neuron_class_name,
 	const string &afferent_neuron_class_name, int mode, bool use_speed_force, bool use_add_contours)
 {
- UEPtr<NAContainer> cont;
+ UEPtr<UAContainer> cont;
  bool res;
 
- UEPtr<NANet> net=dynamic_pointer_cast<NANet>(storage->TakeObject(netclassname));
+ UEPtr<UANet> net=dynamic_pointer_cast<UANet>(storage->TakeObject(netclassname));
  if(!net)
   return 0;
 /*
  // Клетка реншоу 1
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Renshow1");
  res=net->AddComponent(cont);
 
  // Клетка реншоу 2
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Renshow2");
  res=net->AddComponent(cont);
 				*/
  // Мотонейрон 1
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Motoneuron1");
  res=net->AddComponent(cont);
 
  // Мотонейрон 2
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Motoneuron2");
  res=net->AddComponent(cont);
   /*
  // Постафферентные нейроны
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent11");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent12");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent13");
  res=net->AddComponent(cont);
 			  */
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent14");
  res=net->AddComponent(cont);
 	  /*
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent21");
  res=net->AddComponent(cont);
 
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent22");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent23");
  res=net->AddComponent(cont);
               */
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("PostAfferent24");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Afferent_II1");
  res=net->AddComponent(cont);
 
- cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+ cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
  if(!cont)
   return 0;
  cont->SetName("Afferent_II2");
@@ -889,25 +889,25 @@ UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage,
 
  if(use_speed_force)
  {
-  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+  cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
   if(!cont)
    return 0;
   cont->SetName("Afferent_Ia1");
   res=net->AddComponent(cont);
 
-  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+  cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
   if(!cont)
    return 0;
   cont->SetName("Afferent_Ia2");
   res=net->AddComponent(cont);
 
-  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+  cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
   if(!cont)
    return 0;
   cont->SetName("Afferent_Ib1");
   res=net->AddComponent(cont);
 
-  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+  cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
   if(!cont)
    return 0;
   cont->SetName("Afferent_Ib2");
@@ -916,13 +916,13 @@ UEPtr<NANet> CreateSimplestBranchedMotionElement(NStorage *storage,
 
  if(use_add_contours)
  {
-  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+  cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
   if(!cont)
    return 0;
   cont->SetName("Afferent_Ic1");
   res=net->AddComponent(cont);
 
-  cont=dynamic_pointer_cast<NAContainer>(storage->TakeObject(afferent_neuron_class_name));
+  cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject(afferent_neuron_class_name));
   if(!cont)
    return 0;
   cont->SetName("Afferent_Ic2");
