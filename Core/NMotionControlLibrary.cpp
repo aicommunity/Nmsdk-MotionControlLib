@@ -86,14 +86,17 @@ void NMotionControlLibrary::CreateClassSamples(UAStorage *storage)
  net->SetName("MotionElement");
  UploadClass("NSimplestAfferentBranchedMotionElement",net);
 
+ // Создаем простейшую СУ с ветвлением, простым афферентным нейроном и обновленной моделью нейрона с выделенным участком мембраны на сому
  net=CreateSimplestBranchedMotionElement(dynamic_cast<UAContainerStorage*>(storage), "NNet","NNewSynSPNeuron","NSimpleAfferentNeuron",0,false,false);
  net->SetName("MotionElement");
  UploadClass("NNewSimplestAfferentBranchedMotionElement",net);
 
+ // Создаем простейшую СУ с ветвлением, простым афферентным нейроном и обновленной моделью нейрона с выделенным участком мембраны на сому, на 3 афферентных канала
  net=CreateSimplestBranchedMotionElement(dynamic_cast<UAContainerStorage*>(storage), "NNet","NNewSynSPNeuron","NSimpleAfferentNeuron",0,true,false);
  net->SetName("MotionElement");
  UploadClass("NAsfNewSimplestAfferentBranchedMotionElement",net);
 
+ // Создаем простейшую СУ с ветвлением, простым афферентным нейроном и и обновленной моделью нейрона с выделенным участком мембраны на сому, на 4 афферентных канала
  net=CreateSimplestBranchedMotionElement(dynamic_cast<UAContainerStorage*>(storage), "NNet","NNewSynSPNeuron","NSimpleAfferentNeuron",0,true,true);
  net->SetName("MotionElement");
  UploadClass("NAslsNewSimplestAfferentBranchedMotionElement",net);
@@ -282,7 +285,7 @@ void NMotionControlLibrary::CreateClassSamples(UAStorage *storage)
 
 
  // Формируем сеть управления двигателем c разделением информационного потока с датчиков
- // на полосы по амплитуде
+ // на полосы по амплитуде без пересечения диапазонов
  // Автоматическое формирование нейронов
  for(size_t i=0;i<max_number_of_mc;i++)
  {
@@ -382,7 +385,7 @@ void NMotionControlLibrary::CreateClassSamples(UAStorage *storage)
  }
 
  // Формируем сеть управления двигателем c простейшей моделью СУ
- // и простейшими дендритами
+ // и простейшими афферентами
  // Ветвление дендритов
  max_number_of_mc=10;
  for(size_t i=0;i<max_number_of_mc;i++)
@@ -401,6 +404,10 @@ void NMotionControlLibrary::CreateClassSamples(UAStorage *storage)
    UploadClass("NSimplestAfferentBranchedEngineControl",net);
  }
 
+ // Формируем сеть управления двигателем c простейшей моделью СУ
+ // и простейшими афферентами
+ // Ветвление дендритов
+ // Новая модель нейрона с выделенной сомой
  max_number_of_mc=10;
  for(size_t i=0;i<max_number_of_mc;i++)
  {
@@ -419,6 +426,11 @@ void NMotionControlLibrary::CreateClassSamples(UAStorage *storage)
  }
 
 
+ // Формируем сеть управления двигателем c простейшей моделью СУ
+ // и простейшими афферентами
+ // Ветвление дендритов
+ // Новая модель нейрона с выделенной сомой
+ // 3 афферентных канала
  for(size_t i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UAContainerStorage*>(storage)->TakeObject("NEngineMotionControl"));
@@ -435,6 +447,11 @@ void NMotionControlLibrary::CreateClassSamples(UAStorage *storage)
    UploadClass("NAsfNewSimplestAfferentBranchedEngineControl",net);
  }
 
+ // Формируем сеть управления двигателем c простейшей моделью СУ
+ // и простейшими афферентами
+ // Ветвление дендритов
+ // Новая модель нейрона с выделенной сомой
+ // 4 афферентных канала
  for(size_t i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UAContainerStorage*>(storage)->TakeObject("NEngineMotionControl"));
