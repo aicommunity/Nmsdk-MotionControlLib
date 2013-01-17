@@ -14,7 +14,7 @@ See file license.txt for more information
 #define NEngineMotionControlH
 
 #include "../../Kernel/NSupport.h"
-#include "../ReceiverLib/NReceptor.h"
+#include "../PulseLib/NReceptor.h"
 
 namespace NMSDK {
 

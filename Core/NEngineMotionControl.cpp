@@ -3,10 +3,10 @@
 #include "../BCL/NNet.h"
 #include "../SourceLib/NConstGenerator.h"
 #include "../SourceLib/NPulseGenerator.h"
-#include "../ActLib/NPac.h"
+#include "../PulseLib/NPac.h"
 #include "../SensorLib/NSignumSeparator.h"
 #include "../SensorLib/NIntervalSeparator.h"
-#include "../ReceiverLib/NReceptor.h"
+#include "../PulseLib/NReceptor.h"
 #include "../SourceLib/NManipulatorSource.h"
 #include "../SourceLib/NManipulatorSourceEmulator.h"
 #include "../ReceiverLib/NManipulatorInputEmulator.h"
@@ -46,6 +46,8 @@ NEngineMotionControl::~NEngineMotionControl(void)
 // „исло управл€ющих элементов
 bool NEngineMotionControl::SetNumMotionElements(size_t value)
 {
+// NumMotionElements.v=value;
+// Create();
  Ready=false;
  return true;
 }
@@ -456,6 +458,9 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UAContainer> net, int inp_m
  UEPtr<UAContainer> cont;
  UEPtr<UAContainerStorage> storage=dynamic_pointer_cast<UAContainerStorage>(Storage);
 
+ if(!storage)
+  return;
+
  for(size_t i=0;i<NumMotionElements;i++)
  {
   UEPtr<NReceptor> receptor=0;
@@ -599,6 +604,9 @@ void NEngineMotionControl::PACSetup(UEPtr<UAContainer> net,
  UAContainer* cont=0;
  UEPtr<UAContainerStorage> storage=dynamic_pointer_cast<UAContainerStorage>(Storage);
 
+ if(!storage)
+  return;
+
  cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NPac"));
  if(!cont)
   return;
@@ -657,6 +665,9 @@ void NEngineMotionControl::AACSetup(UEPtr<UAContainer> net, double gain_value)
  NSum* cont=0;
  UEPtr<UAContainerStorage> storage=dynamic_pointer_cast<UAContainerStorage>(Storage);
 
+ if(!storage)
+  return;
+
  cont=dynamic_pointer_cast<NSum>(storage->TakeObject("NSum"));
  if(!cont)
   return;
@@ -692,6 +703,9 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<UAContainer> net, int m
  bool res=true;
  Real left_value,right_value;
  Real pos_gain,neg_gain;
+
+ if(!storage)
+  return;
 
  vector<int> mode;
  mode.assign(1,mode_value);
@@ -1016,6 +1030,9 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UAContainer> net)
  UEPtr<UAContainerStorage> storage=dynamic_pointer_cast<UAContainerStorage>(Storage);
  bool res=true;
 
+ if(!storage)
+  return;
+
  cont=dynamic_pointer_cast<UAContainer>(storage->TakeObject("NPGenerator"));
  if(!cont)
   return;
@@ -1299,6 +1316,9 @@ UANet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
  if(!net)
   return 0;
 
+ if(!storage)
+  return 0;
+
  // ƒвигательный элемент
 // size_t num_motions=1;
 
@@ -1504,6 +1524,9 @@ UANet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, b
  bool res;
  UEPtr<UAContainerStorage> storage=static_pointer_cast<UAContainerStorage>(Storage);
  size_t num_motions=NumMotionElements;
+
+ if(!storage)
+  return 0;
 
  // „исло неперекрывающихс€ диапазонов
  int real_ranges=0;
