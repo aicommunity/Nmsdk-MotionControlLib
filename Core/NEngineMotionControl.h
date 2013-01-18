@@ -55,16 +55,23 @@ RDK::ULProperty<real, NEngineMotionControl> IIMax;
 RDK::ULProperty<real, NEngineMotionControl> IcMin;
 RDK::ULProperty<real, NEngineMotionControl> IcMax;
 
+// Максимальное усиление управляющего воздействия
+RDK::ULProperty<double, NEngineMotionControl> PacGain;
+
 // Режим настройки диапазонов афферентных нейронов
 // 0 - диапазоны одинаковой длины
 // 1 - диапазоны с удвоением длины, и минимальной шириной в процентах
 // MinAfferentRange от соответствующей разницы *Max-*Min
 RDK::ULProperty<int, NEngineMotionControl> AfferentRangeMode;
 
+// Режим настрйоки диапазонов pac
+RDK::ULProperty<int, NEngineMotionControl> PacRangeMode;
+
 // Процентная величина от соответствующей разницы *Max-*Min
 // определяющая минимальную ширину диапазона афферетных нейронов
 // изменяяется в интервале [0;1]
 RDK::ULProperty<double, NEngineMotionControl,ptPubState> MinAfferentRange;
+
 
 protected: // Временные переменные
 vector<vector<UEPtr<NReceptor> > > receptors;
@@ -98,8 +105,14 @@ bool SetCreationMode(int value);
 // Режим настройки диапазонов афферентных нейронов
 bool SetAfferentRangeMode(int value);
 
+// Режим настрйоки диапазонов pac
+bool SetPacRangeMode(int value);
+
 // Процентная величина от соответствующей разницы *Max-*Min
 bool SetMinAfferentRange(double value);
+
+// Максимальное усиление управляющего воздействия
+bool SetPacGain(double value);
 // --------------------------
 
 // --------------------------
@@ -146,6 +159,8 @@ protected:
 // Возвращает число получившихся диапазонов
 int CalcAfferentRange(int num_motions, bool cross_ranges, double a_min, double a_max,
 			vector<pair<double,double> > &pos_ranges, vector<pair<double,double> > &neg_ranges, int range_mode);
+
+void SetupPacRange(void);
 
 // Настройка рецепторов
 void MotionElementsSetup(UEPtr<UAContainer> net, int inp_mode, int out_mode, double exp_coeff, double receptor_max_output, double receptor_gain, int real_ranges);

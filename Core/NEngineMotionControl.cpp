@@ -29,7 +29,10 @@ NEngineMotionControl::NEngineMotionControl(void)
    IIMax("IIMax",this),
    IcMin("IcMin",this),
    IcMax("IcMax",this),
+   PacGain("PacGain",this,&NEngineMotionControl::SetPacGain),
    AfferentRangeMode("AfferentRangeMode",this,&NEngineMotionControl::SetAfferentRangeMode),
+   PacRangeMode("PacRangeMode",this,&NEngineMotionControl::SetPacRangeMode),
+
    MinAfferentRange("MinAfferentRange",this)
 
 {
@@ -83,6 +86,18 @@ bool NEngineMotionControl::SetAfferentRangeMode(int value)
  return true;
 }
 
+// Режим настрйоки диапазонов pac
+bool NEngineMotionControl::SetPacRangeMode(int value)
+{
+ if(value < 0 || value > 3)
+  return false;
+
+ PacRangeMode.v=value;
+ SetupPacRange();
+
+ return true;
+}
+
 // Процентная величина от соответствующей разницы *Max-*Min
 bool NEngineMotionControl::SetMinAfferentRange(double value)
 {
@@ -103,6 +118,18 @@ bool NEngineMotionControl::SetMinAfferentRange(double value)
 			Ic_ranges_pos, Ic_ranges_neg,value);
 
  IntervalSeparatorsUpdate(this, 5);
+
+ return true;
+}
+
+// Максимальное усиление управляющего воздействия
+bool NEngineMotionControl::SetPacGain(double value)
+{
+ if(value <0)
+  return false;
+
+ PacGain.v=value;
+ SetupPacRange();
 
  return true;
 }
@@ -135,7 +162,9 @@ bool NEngineMotionControl::ADefault(void)
  IIMax=M_PI/2;
  IcMin=-10;
  IcMax=10;
+ PacGain=100;
  AfferentRangeMode=0;
+ PacRangeMode=0;
  MinAfferentRange=0.1;
  MotionElementClassName="NMotionElement";
 
@@ -452,6 +481,100 @@ int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, 
  return real_ranges;
 }
 
+void NEngineMotionControl::SetupPacRange(void)
+{
+ if(NumMotionElements <= 0)
+  return;
+ UEPtr<NPac> cont;
+ try
+ {
+  cont=dynamic_pointer_cast<NPac>(GetComponentL("Pac"));
+ }
+ catch (EComponentNameNotExist &exc)
+ {
+  return;
+ }
+
+ double a_min=-PacGain;
+ double a_max=PacGain;
+ int num_motions=NumMotionElements;
+ vector<Real> values=cont->Gain;
+// values.resize(num_motions*2);
+ int rr_index=0;
+ if(PacRangeMode == 0)
+ {
+   for(int i=0;i<num_motions;i++)
+   {
+	real left_range=a_min,right_range=a_max;
+	real pos_range=(right_range-0)/NumMotionElements;
+	real neg_range=(0-left_range)/NumMotionElements;
+
+	values[i+values.size()/2].assign(1,(rr_index+1)*pos_range);
+//	pos_ranges[i].second=(rr_index+1)*pos_range;
+	values[values.size()/2-i-1].assign(1,left_range+rr_index*neg_range);
+//	neg_ranges[num_motions-i-1].second=left_range+(rr_index+1)*neg_range;
+	++rr_index;
+   }
+ }
+ else
+ if(PacRangeMode == 1)
+ {
+   real min_afferent_range=1./NumMotionElements;
+   real left_range=a_min*min_afferent_range/NumMotionElements,right_range=a_max*min_afferent_range/NumMotionElements;
+   real pos_range=(right_range-0)*(1);
+   real neg_range=(left_range-0)*(1);
+   for(int i=0;i<num_motions;i++)
+   {
+	pos_range=(right_range-0)*(i+1);
+	values[i+values.size()/2].assign(1,(rr_index+1)*pos_range);
+	++rr_index;
+   }
+
+   rr_index=0;
+   neg_range=(left_range-0)*(rr_index+1);
+   for(int i=0;i<num_motions;i++)
+   {
+	neg_range=(left_range-0)*(i+1);
+	values[i].assign(1,(rr_index+1)*neg_range);
+	++rr_index;
+   }
+ }
+ else
+ if(PacRangeMode == 2)
+ {
+   for(int i=0;i<num_motions;i++)
+   {
+	values[i+values.size()/2].assign(1,a_max/powl(2.0,num_motions-i-1));
+	++rr_index;
+   }
+
+   rr_index=0;
+   for(int i=0;i<num_motions;i++)
+   {
+	values[i].assign(1,a_min/powl(2.0,num_motions-i-1));
+	++rr_index;
+   }
+ }
+ else
+ if(PacRangeMode == 3)
+ {
+   for(int i=0;i<num_motions;i++)
+   {
+	values[i+values.size()/2].assign(1,a_max/(num_motions-i));
+	++rr_index;
+   }
+
+   rr_index=0;
+   for(int i=0;i<num_motions;i++)
+   {
+	values[i].assign(1,a_min/(num_motions-i));
+	++rr_index;
+   }
+ }
+ cont->Gain=values;
+}
+
+
 // Настройка рецепторов
 void NEngineMotionControl::MotionElementsSetup(UEPtr<UAContainer> net, int inp_mode, int out_mode, double exp_coeff, double receptor_max_output, double receptor_gain, int real_ranges)
 {
@@ -636,24 +759,24 @@ void NEngineMotionControl::PACSetup(UEPtr<UAContainer> net,
 //  values[i].assign(2,0.5);
  ((NPac*)cont)->DissociationTC=values;
 
- if(gain_div_mode)
- {
-  // Усиление
-  for(size_t i=0;i<values.size()/2;i++)
-   values[i].assign(1,gain_value/Motions.size());
+  if(gain_div_mode)
+  {
+   // Усиление
+   for(size_t i=0;i<values.size()/2;i++)
+	values[i].assign(1,gain_value/Motions.size());
 
-  for(size_t i=values.size()/2;i<values.size();i++)
-   values[i].assign(1,-gain_value/Motions.size());
- }
- else
- {
-  // Усиление
-  for(size_t i=0;i<values.size()/2;i++)
-   values[i].assign(1,gain_value);
+   for(size_t i=values.size()/2;i<values.size();i++)
+	values[i].assign(1,-gain_value/Motions.size());
+  }
+  else
+  {
+   // Усиление
+   for(size_t i=0;i<values.size()/2;i++)
+	values[i].assign(1,gain_value);
 
-  for(size_t i=values.size()/2;i<values.size();i++)
-   values[i].assign(1,-gain_value);
- }
+   for(size_t i=values.size()/2;i<values.size();i++)
+	values[i].assign(1,-gain_value);
+  }
 
  ((NPac*)cont)->Gain=values;
 
