@@ -19,7 +19,7 @@ See file license.txt for more information
 //---------------------------------------------------------------------------
 namespace NMSDK {
 
-class NMotionElement: public UANet
+class NMotionElement: public UNet
 {
 public: // Параметры
 // Число контуров управления
@@ -135,17 +135,17 @@ void RestoreExternalLinks(void);
 // Формирует СУ двигательной единицей
 // Если mode == 0 - формируется полная модель
 // 	    mode == 1 - модель без вставочных интернейронов
-UEPtr<UANet> CreateMotionElement(UAContainerStorage *storage, const string &netclassname, int mode);
+UEPtr<UNet> CreateMotionElement(UStorage *storage, const string &netclassname, int mode);
 
 // Аналогично, но с развязкой по дендритам
-UEPtr<UANet> CreateBranchedMotionElement(UAContainerStorage *storage, const string &netclassname,
+UEPtr<UNet> CreateBranchedMotionElement(UStorage *storage, const string &netclassname,
 	const string &neuron_class_name, const string &afferent_neuron_class_name, int mode);
 
 // Формирует простейшую СУ двигательной единицей из двух мотонейронов
-UEPtr<UANet> CreateSimplestMotionElement(UAContainerStorage *storage, const string &netclassname, int mode);
-UEPtr<UANet> CreateSimplestBranchedMotionElement(UAContainerStorage *storage, const string &netclassname, int mode, bool use_speed_force=false, bool use_add_contours=false);
+UEPtr<UNet> CreateSimplestMotionElement(UStorage *storage, const string &netclassname, int mode);
+UEPtr<UNet> CreateSimplestBranchedMotionElement(UStorage *storage, const string &netclassname, int mode, bool use_speed_force=false, bool use_add_contours=false);
 
-bool CreateNeuronBranchLink(UEPtr<UANet> net,const string &source,
+bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
 	const string &target_head, const string &target_tail);
 
 }
