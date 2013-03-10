@@ -83,13 +83,13 @@ virtual ~NMotionElement(void);
 // --------------------------
 // Методы управления параметрами
 // --------------------------
-bool SetNumControlLoops(int value);
+bool SetNumControlLoops(const int &value);
 bool SetEnableControlLoopFlags(const std::vector<int> &value);
-bool SetInterneuronPresentMode(int value);
-bool SetRecurrentInhibitionMode(int value);
-bool SetRecurrentInhibitionBranchMode(int value);
-bool SetMotoneuronBranchMode(int value);
-bool SetExternalControlMode(int value);
+bool SetInterneuronPresentMode(const int &value);
+bool SetRecurrentInhibitionMode(const int &value);
+bool SetRecurrentInhibitionBranchMode(const int &value);
+bool SetMotoneuronBranchMode(const int &value);
+bool SetExternalControlMode(const int &value);
 // --------------------------
 
 // --------------------------

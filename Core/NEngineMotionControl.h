@@ -97,22 +97,22 @@ virtual ~NEngineMotionControl(void);
 // --------------------------
 protected:
 // Число управляющих элементов
-bool SetNumMotionElements(size_t value);
+bool SetNumMotionElements(const size_t &value);
 
 // Режим формирования сети
-bool SetCreationMode(int value);
+bool SetCreationMode(const int &value);
 
 // Режим настройки диапазонов афферентных нейронов
-bool SetAfferentRangeMode(int value);
+bool SetAfferentRangeMode(const int &value);
 
 // Режим настрйоки диапазонов pac
-bool SetPacRangeMode(int value);
+bool SetPacRangeMode(const int &value);
 
 // Процентная величина от соответствующей разницы *Max-*Min
-bool SetMinAfferentRange(double value);
+bool SetMinAfferentRange(const double &value);
 
 // Максимальное усиление управляющего воздействия
-bool SetPacGain(double value);
+bool SetPacGain(const double &value);
 // --------------------------
 
 // --------------------------

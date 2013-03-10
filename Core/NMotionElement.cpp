@@ -48,7 +48,7 @@ NMotionElement::~NMotionElement(void)
 // --------------------------
 // Методы управления параметрами
 // --------------------------
-bool NMotionElement::SetNumControlLoops(int value)
+bool NMotionElement::SetNumControlLoops(const int &value)
 {
  if(value <=0)
   return false;
@@ -61,7 +61,7 @@ bool NMotionElement::SetEnableControlLoopFlags(const std::vector<int> &value)
  return true;
 }
 
-bool NMotionElement::SetInterneuronPresentMode(int value)
+bool NMotionElement::SetInterneuronPresentMode(const int &value)
 {
  if(value <=0)
   return false;
@@ -69,7 +69,7 @@ bool NMotionElement::SetInterneuronPresentMode(int value)
  return true;
 }
 
-bool NMotionElement::SetRecurrentInhibitionMode(int value)
+bool NMotionElement::SetRecurrentInhibitionMode(const int &value)
 {
  if(value <=0)
   return false;
@@ -77,7 +77,7 @@ bool NMotionElement::SetRecurrentInhibitionMode(int value)
  return true;
 }
 
-bool NMotionElement::SetRecurrentInhibitionBranchMode(int value)
+bool NMotionElement::SetRecurrentInhibitionBranchMode(const int &value)
 {
  if(value <=0)
   return false;
@@ -85,7 +85,7 @@ bool NMotionElement::SetRecurrentInhibitionBranchMode(int value)
  return true;
 }
 
-bool NMotionElement::SetMotoneuronBranchMode(int value)
+bool NMotionElement::SetMotoneuronBranchMode(const int &value)
 {
  if(value <=0)
   return false;
@@ -93,7 +93,7 @@ bool NMotionElement::SetMotoneuronBranchMode(int value)
  return true;
 }
 
-bool NMotionElement::SetExternalControlMode(int value)
+bool NMotionElement::SetExternalControlMode(const int &value)
 {
  if(value <=0)
   return false;

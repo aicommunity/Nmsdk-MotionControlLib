@@ -47,7 +47,7 @@ NEngineMotionControl::~NEngineMotionControl(void)
 // Методы управления параметрами
 // --------------------------
 // Число управляющих элементов
-bool NEngineMotionControl::SetNumMotionElements(size_t value)
+bool NEngineMotionControl::SetNumMotionElements(const size_t &value)
 {
 // NumMotionElements.v=value;
 // Create();
@@ -56,14 +56,14 @@ bool NEngineMotionControl::SetNumMotionElements(size_t value)
 }
 
 // Режим формирования сети
-bool NEngineMotionControl::SetCreationMode(int value)
+bool NEngineMotionControl::SetCreationMode(const int &value)
 {
  Ready=false;
  return true;
 }
 
 // Режим настройки диапазонов афферентных нейронов
-bool NEngineMotionControl::SetAfferentRangeMode(int value)
+bool NEngineMotionControl::SetAfferentRangeMode(const int &value)
 {
  if(value < 0 || value > 3)
   return false;
@@ -87,7 +87,7 @@ bool NEngineMotionControl::SetAfferentRangeMode(int value)
 }
 
 // Режим настрйоки диапазонов pac
-bool NEngineMotionControl::SetPacRangeMode(int value)
+bool NEngineMotionControl::SetPacRangeMode(const int &value)
 {
  if(value < 0 || value > 3)
   return false;
@@ -99,22 +99,21 @@ bool NEngineMotionControl::SetPacRangeMode(int value)
 }
 
 // Процентная величина от соответствующей разницы *Max-*Min
-bool NEngineMotionControl::SetMinAfferentRange(double value)
+bool NEngineMotionControl::SetMinAfferentRange(const double &value)
 {
  if(value <=0 || value >1)
   return false;
 
  bool crossranges=false;
- int real_ranges=0;
 
- real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IaMin, IaMax,
+ CalcAfferentRange(NumMotionElements, crossranges, IaMin, IaMax,
 			Ia_ranges_pos, Ia_ranges_neg,AfferentRangeMode);
- real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IbMin, IbMax,
+ CalcAfferentRange(NumMotionElements, crossranges, IbMin, IbMax,
 			Ib_ranges_pos, Ib_ranges_neg,AfferentRangeMode);
- real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IIMin, IIMax,
+ CalcAfferentRange(NumMotionElements, crossranges, IIMin, IIMax,
 			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
- real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IcMin, IcMax,
+ CalcAfferentRange(NumMotionElements, crossranges, IcMin, IcMax,
 			Ic_ranges_pos, Ic_ranges_neg,value);
 
  IntervalSeparatorsUpdate(this, 5);
@@ -123,7 +122,7 @@ bool NEngineMotionControl::SetMinAfferentRange(double value)
 }
 
 // Максимальное усиление управляющего воздействия
-bool NEngineMotionControl::SetPacGain(double value)
+bool NEngineMotionControl::SetPacGain(const double &value)
 {
  if(value <0)
   return false;
