@@ -1270,7 +1270,7 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
 				 engine_integrator_name);
 
  res=net->CreateLink(engine_integrator_name,0,"NManipulatorInput1");
-
+  /*
  try {
   for(size_t i=0;i<Motions.size();i++)
   {
@@ -1322,7 +1322,7 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
  catch (EComponentNameNotExist &exc)
  {
  }
-
+     */
  if(res)
   return;
 }
