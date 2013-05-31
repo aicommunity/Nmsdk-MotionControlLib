@@ -240,7 +240,7 @@ bool NEngineMotionControl::ACalculate(void)
  for(size_t i=0;i<NumMotionElements;i++)
  {
   try {
-  if(receptors[i][0] && receptors[i][0]->GetInputData(size_t(0))->Double[0] > 0)
+/*  if(receptors[i][0] && receptors[i][0]->GetInputData(size_t(0))->Double[0] > 0)
    ++pos_speed;
   if(receptors[i][1] && receptors[i][1]->GetInputData(size_t(0))->Double[0] > 0)
    ++neg_speed;
@@ -253,7 +253,7 @@ bool NEngineMotionControl::ACalculate(void)
   if(receptors[i][4] && receptors[i][4]->GetInputData(size_t(0)) && receptors[i][4]->GetInputData(size_t(0))->Double[0] > 0)
    ++pos_angle;
   if(receptors[i][5] && receptors[i][5]->GetInputData(size_t(0)) && receptors[i][5]->GetInputData(size_t(0))->Double[0] > 0)
-   ++neg_angle;
+   ++neg_angle;*/
   }
   catch (UEPtr<NReceptor>::EUsingZeroPtr &exc)
   {
@@ -281,12 +281,12 @@ bool NEngineMotionControl::ACalculate(void)
 bool NEngineMotionControl::Create(bool full_recreate)
 {
  // Удаляем все кроме интерфейсных компонент
-/* if(full_recreate)
+ if(full_recreate)
   ClearStructure(0);
  else
   ClearStructure(0);
-  */
- DelAllComponents();
+
+ //DelAllComponents();
  Motions.clear();
  receptors.clear();
  switch(CreationMode)
@@ -1392,25 +1392,25 @@ if(Ic)
  for(size_t k=0;k<Motions.size();k++)
  {
   try{
-   res=net->CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia2.Receptor");
-   res=net->CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia1.Receptor");
+   res=net->CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia2.Receptor",0);
+   res=net->CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia1.Receptor",0);
   }
   catch (EComponentNameNotExist &exc) {  }
   try{
-   res=net->CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II1.Receptor");
-   res=net->CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II2.Receptor");
-  }
-  catch (EComponentNameNotExist &exc) {  }
-
-  try{
-   res=net->CreateLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib2.Receptor");
-   res=net->CreateLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib1.Receptor");
+   res=net->CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II1.Receptor",0);
+   res=net->CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II2.Receptor",0);
   }
   catch (EComponentNameNotExist &exc) {  }
 
   try{
-   res=net->CreateLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ic2.Receptor");
-   res=net->CreateLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ic1.Receptor");
+   res=net->BreakLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib2.Receptor",0);
+   res=net->BreakLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib1.Receptor",0);
+  }
+  catch (EComponentNameNotExist &exc) {  }
+
+  try{
+   res=net->CreateLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ic2.Receptor",0);
+   res=net->CreateLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ic1.Receptor",0);
   }
   catch (EComponentNameNotExist &exc) {  }
  }
