@@ -34,7 +34,18 @@ NEngineMotionControl::NEngineMotionControl(void)
    AfferentRangeMode("AfferentRangeMode",this,&NEngineMotionControl::SetAfferentRangeMode),
    PacRangeMode("PacRangeMode",this,&NEngineMotionControl::SetPacRangeMode),
 
-   MinAfferentRange("MinAfferentRange",this)
+   MinAfferentRange("MinAfferentRange",this),
+
+   CurrentContourAmplitude("CurrentContourAmplitude",this),
+   CurrentContourAverage("CurrentContourAverage",this),
+   CurrentTransientTime("CurrentTransientTime",this),
+   DestContourAmplitude("DestContourAmplitude",this),
+   DestTransientTime("DestTransientTime",this),
+   UseContourData("UseContourData",this),
+   TransientHistoryTime("TransientHistoryTime",this),
+   TransientObjectIndex("TransientObjectIndex",this),
+   TransientAverageThreshold("TransientAverageThreshold",this)
+
 
 {
 }
@@ -169,6 +180,11 @@ bool NEngineMotionControl::ADefault(void)
  MotionElementClassName="NMotionElement";
  AdaptiveStructureMode=0;
 
+ DestTransientTime=0.1;
+ TransientHistoryTime=1.0;
+ TransientObjectIndex=0;
+ TransientAverageThreshold=0.05;
+
  return true;
 }
 
@@ -180,12 +196,22 @@ bool NEngineMotionControl::ABuild(void)
 {
  if(AdaptiveStructureMode)
   Create(NumMotionElements);
+
+ CurrentContourAmplitude->resize(4);
+ CurrentContourAverage->resize(4);
+
+ DestContourAmplitude->resize(4);
+ UseContourData->resize(4);
  return true;
 }
 
 // Reset computation
 bool NEngineMotionControl::AReset(void)
 {
+ CurrentContourAmplitude->assign(4,0);
+ CurrentContourAverage->assign(4,0);
+ CurrentTransientTime=0;
+
  SetNumOutputs(6);
  for(int i=0;i<NumOutputs;i++)
   SetOutputDataSize(i,1);
@@ -228,12 +254,74 @@ bool NEngineMotionControl::AReset(void)
   }     */
  }
 
+
+
  return true;
 }
 
 // Execute math. computations of current object on current step
 bool NEngineMotionControl::ACalculate(void)
 {
+ // Считаем статистику
+ // за ожидаемое время переходного процесса
+ CurrentContourAmplitude->assign(4,0);
+ CurrentContourAverage->assign(4,0);
+ CurrentTransientTime=0;
+
+ UEPtr<NManipulatorSource> source=dynamic_pointer_cast<NManipulatorSource>(GetComponent("NManipulatorSource1"));
+ HistorySize=DestTransientTime*TimeStep;
+ vector<double> measure;
+ measure.resize(source->GetNumOutputs());
+ for(size_t i=0;i<measure.size();i++)
+ {
+  measure[i]=source->GetOutputData(i).Double[0];
+ }
+
+ History.push_back(measure);
+ if(History.size()>HistorySize)
+  History.erase(History.begin());
+
+ double min_val, max_val,avg_val;
+ for(size_t i=0;i<measure.size();i++)
+ {
+  min_val=10000;
+  max_val=-10000;
+  avg_val=0;
+  for(size_t j=0;j<History.size();j++)
+  {
+   if(min_val>History[j][i])
+	min_val=History[j][i];
+   if(max_val<History[j][i])
+	max_val=History[j][i];
+   avg_val+=History[j][i];
+  }
+  (*CurrentContourAmplitude)[i]=max_val-min_val;
+  (*CurrentContourAverage)[i]=avg_val/History.size();
+ }
+
+ TransientHistorySize=TransientHistoryTime*TimeStep;
+ if(TransientObjectIndex>=0 && TransientObjectIndex<measure.size())
+ {
+  TransientHistory.push_back((*CurrentContourAverage)[TransientObjectIndex]);
+  if(TransientHistory.size()>TransientHistorySize)
+   TransientHistory.erase(TransientHistory.begin());
+  min_val=10000;
+  max_val=-10000;
+  double delta=10000;
+  CurrentTransientTime=TransientHistoryTime;
+  for(size_t j=1;j<TransientHistory.size()-1;j++)
+  {
+   delta=(TransientHistory[j+1]-TransientHistory[j])*TimeStep;
+   if(fabs(delta)<TransientAverageThreshold)
+   {
+	CurrentTransientTime=double(j)/TimeStep;
+	break;
+   }
+  }
+ }
+ else
+  CurrentTransientTime=0;
+
  if(AdaptiveStructureMode == 2)
   AdaptiveTuning();
 
@@ -372,11 +460,11 @@ bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
 /// Алгоритм адаптивной настройки
 void NEngineMotionControl::AdaptiveTuning(void)
 {
- std::vector<double> current_contour_amplitude;
- std::vector<bool> use_contour_data;
- double current_transient_time;
- std::vector<double> dest_contour_amplitude;
- double dest_transient_time;
+ std::vector<double> &current_contour_amplitude=*CurrentContourAmplitude;
+ std::vector<bool> &use_contour_data=*UseContourData;
+ double &current_transient_time=*CurrentTransientTime;
+ std::vector<double> &dest_contour_amplitude=*DestContourAmplitude;
+ double &dest_transient_time=*DestTransientTime;
 
  int num_motion_elements=NumMotionElements;
  double control_grain=PacGain;

@@ -78,7 +78,33 @@ RDK::ULProperty<int, NEngineMotionControl> PacRangeMode;
 // изменяяется в интервале [0;1]
 RDK::ULProperty<double, NEngineMotionControl,ptPubState> MinAfferentRange;
 
+/// Текущая амплитуда колебаний
+RDK::ULProperty<std::vector<double>, NEngineMotionControl,ptPubState> CurrentContourAmplitude;
 
+/// Текущее среднее колебаний
+RDK::ULProperty<std::vector<double>, NEngineMotionControl,ptPubState> CurrentContourAverage;
+
+/// Текущее время переходного процесса
+RDK::ULProperty<double, NEngineMotionControl,ptPubState> CurrentTransientTime;
+
+/// Желаемая амплитуда колебаний
+RDK::ULProperty<std::vector<double>, NEngineMotionControl> DestContourAmplitude;
+
+/// Желаемое время переходного процесса
+RDK::ULProperty<double, NEngineMotionControl> DestTransientTime;
+
+/// Используемые в адаптации контуры управления
+RDK::ULProperty<std::vector<bool>, NEngineMotionControl> UseContourData;
+
+/// Интервал времени на котором анализируем переходный процесс
+RDK::ULProperty<double, NEngineMotionControl> TransientHistoryTime;
+
+/// Индекс выхода источника сигнала (объекта) по которому анализируем переходный процесс
+RDK::ULProperty<int, NEngineMotionControl> TransientObjectIndex;
+
+ /// Максимально допустимая скорость изменения среднего значения сигнала за интервал времени, по которой
+/// принимаем решение о том, что переходный процесс завершен
+RDK::ULProperty<double, NEngineMotionControl> TransientAverageThreshold;
 
 protected: // Временные переменные
 vector<vector<UEPtr<NReceptor> > > receptors;
@@ -89,6 +115,12 @@ vector<pair<double,double> > II_ranges_pos,II_ranges_neg;
 vector<pair<double,double> > Ic_ranges_pos,Ic_ranges_neg;
 
 vector<NNet*> Motions;
+
+vector<vector<double> > History;
+
+vector<double> TransientHistory;
+
+int HistorySize,TransientHistorySize;
 
 
 public: // Методы
