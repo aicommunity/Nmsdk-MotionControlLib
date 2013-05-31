@@ -39,6 +39,11 @@ RDK::ULProperty<int, NEngineMotionControl> CreationMode;
 // »м€ класса управл€ющего элемента
 RDK::ULProperty<NameT, NEngineMotionControl> MotionElementClassName;
 
+/// –ежим включени€ адаптивной перестройки структуры
+/// 0 - нет адаптивности
+/// 1 - адаптивность включена
+RDK::ULProperty<bool, NEngineMotionControl> AdaptiveStructureMode;
+
 // ƒиапазон афферентных нейронов по каналу Ia
 RDK::ULProperty<real, NEngineMotionControl> IaMin;
 RDK::ULProperty<real, NEngineMotionControl> IaMax;
@@ -71,6 +76,7 @@ RDK::ULProperty<int, NEngineMotionControl> PacRangeMode;
 // определ€юща€ минимальную ширину диапазона афферетных нейронов
 // измен€€етс€ в интервале [0;1]
 RDK::ULProperty<double, NEngineMotionControl,ptPubState> MinAfferentRange;
+
 
 
 protected: // ¬ременные переменные
@@ -148,7 +154,13 @@ virtual bool ACalculate(void);
 // --------------------------
 public:
 // —оздает объект с желаемой структурой в соответствии с CreationMode
-virtual bool Create(void);
+// ≈сли full_recreate == true удал€ет все существующие управл€ющие элементы
+// »наче стремитс€ их сохранить
+virtual bool Create(bool full_recreate=true);
+
+/// ”дал€ет существующую структуру, не трога€ вспомогательные компоненты
+/// —охран€ет expected_num_motion_elements число управл€ющих элементов
+virtual bool ClearStructure(int expected_num_motion_elements);
 // --------------------------
 
 // --------------------------

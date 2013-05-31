@@ -21,6 +21,7 @@ NEngineMotionControl::NEngineMotionControl(void)
  : NumMotionElements("NumMotionElements",this,&NEngineMotionControl::SetNumMotionElements),
    CreationMode("CreationMode",this,&NEngineMotionControl::SetCreationMode),
    MotionElementClassName("MotionElementClassName",this),
+   AdaptiveStructureMode("AdaptiveStructureMode",this),
    IaMin("IaMin",this),
    IaMax("IaMax",this),
    IbMin("IbMin",this),
@@ -155,17 +156,18 @@ bool NEngineMotionControl::ADefault(void)
  CreationMode=5;
  IaMin=-2.0*M_PI;
  IaMax=2.0*M_PI;
- IbMin=-10;
- IbMax=10;
+ IbMin=-1;
+ IbMax=1;
  IIMin=-M_PI/2;
  IIMax=M_PI/2;
  IcMin=-10;
  IcMax=10;
- PacGain=100;
- AfferentRangeMode=0;
- PacRangeMode=0;
+ PacGain=300;
+ AfferentRangeMode=2;//0;
+ PacRangeMode=2;//0;
  MinAfferentRange=0.1;
  MotionElementClassName="NMotionElement";
+ AdaptiveStructureMode=0;
 
  return true;
 }
@@ -176,6 +178,8 @@ bool NEngineMotionControl::ADefault(void)
 // в случае успешной сборки
 bool NEngineMotionControl::ABuild(void)
 {
+ if(AdaptiveStructureMode)
+  Create(NumMotionElements);
  return true;
 }
 
@@ -272,10 +276,19 @@ bool NEngineMotionControl::ACalculate(void)
 // Методы управления счетом
 // --------------------------
 // Создает объект с желаемой структурой в соответствии с CreationMode
-bool NEngineMotionControl::Create(void)
+// Если full_recreate == true удаляет все существующие управляющие элементы
+// Иначе стремится их сохранить
+bool NEngineMotionControl::Create(bool full_recreate)
 {
+ // Удаляем все кроме интерфейсных компонент
+/* if(full_recreate)
+  ClearStructure(0);
+ else
+  ClearStructure(0);
+  */
  DelAllComponents();
-
+ Motions.clear();
+ receptors.clear();
  switch(CreationMode)
  {
  case 0:
@@ -322,6 +335,36 @@ bool NEngineMotionControl::Create(void)
 
  return true;
 }
+
+/// Удаляет существующую структуру, не трогая вспомогательные компоненты
+/// Сохраняет expected_num_motion_elements число управляющих элементов
+bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
+{
+ int i=0;
+ int found_motion_elements=0;
+ while(i<GetNumComponents())
+ {
+  if(PComponents[i]->GetName() == "IIPosAfferentGenerator" ||
+	 PComponents[i]->GetName() == "IINegAfferentGenerator" ||
+	 PComponents[i]->GetName() == "AfferentSource1" ||
+	 PComponents[i]->GetName() == "NManipulatorSource1" ||
+	 PComponents[i]->GetName() == "NManipulatorInput1")
+  {
+   ++i;
+   continue;
+  }
+  else
+  {
+   if(PComponents[i]->GetName().substr(0,std::string("MotionElement").size())
+		== "MotionElement" && found_motion_elements<expected_num_motion_elements)
+	++found_motion_elements;
+   else
+	DelComponent(PComponents[i],true);
+  }
+ }
+ return true;
+}
+
 // --------------------------
 
 // --------------------------
@@ -762,19 +805,19 @@ void NEngineMotionControl::PACSetup(UEPtr<UContainer> net,
   {
    // Усиление
    for(size_t i=0;i<values.size()/2;i++)
-	values[i].assign(1,gain_value/Motions.size());
+	values[i].assign(1,-gain_value/Motions.size());
 
    for(size_t i=values.size()/2;i<values.size();i++)
-	values[i].assign(1,-gain_value/Motions.size());
+	values[i].assign(1,gain_value/Motions.size());
   }
   else
   {
    // Усиление
    for(size_t i=0;i<values.size()/2;i++)
-	values[i].assign(1,gain_value);
+	values[i].assign(1,-gain_value);
 
    for(size_t i=values.size()/2;i<values.size();i++)
-	values[i].assign(1,-gain_value);
+	values[i].assign(1,gain_value);
   }
 
  ((NPac*)cont)->Gain=values;
@@ -1155,101 +1198,56 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UContainer> net)
  if(!storage)
   return;
 
- cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NPGenerator"));
- if(!cont)
-  return;
- cont->SetName("IIPosAfferentGenerator");
- ((NPulseGenerator*)cont)->Amplitude=1;
- ((NPulseGenerator*)cont)->Frequency=0;
- res=net->AddComponent(cont);
+ if(CheckName("IIPosAfferentGenerator"))
+ {
+  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NPGenerator"));
+  if(!cont)
+   return;
+  cont->SetName("IIPosAfferentGenerator");
+  ((NPulseGenerator*)cont)->Amplitude=1;
+  ((NPulseGenerator*)cont)->Frequency=0;
+  res=net->AddComponent(cont);
+ }
 
- cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NPGenerator"));
- if(!cont)
-  return;
- cont->SetName("IINegAfferentGenerator");
- ((NPulseGenerator*)cont)->Amplitude=1;
- ((NPulseGenerator*)cont)->Frequency=0;
- res=net->AddComponent(cont);
+ if(CheckName("IINegAfferentGenerator"))
+ {
+  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NPGenerator"));
+  if(!cont)
+   return;
+  cont->SetName("IINegAfferentGenerator");
+  ((NPulseGenerator*)cont)->Amplitude=1;
+  ((NPulseGenerator*)cont)->Frequency=0;
+  res=net->AddComponent(cont);
+ }
 
- cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NCGenerator"));
- if(!cont)
-  return;
- cont->SetName("AfferentSource1");
- ((NConstGenerator*)cont)->Amplitude=0;
- res=net->AddComponent(cont);
-/*
- cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NCGenerator"));
- if(!cont)
-  return;
- cont->SetName("AfferentSource2");
- ((NConstGenerator*)cont)->Amplitude=0;
- res=net->AddComponent(cont);
+ if(CheckName("AfferentSource1"))
+ {
+  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NCGenerator"));
+  if(!cont)
+   return;
+  cont->SetName("AfferentSource1");
+  ((NConstGenerator*)cont)->Amplitude=0;
+  res=net->AddComponent(cont);
+ }
 
- cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NCGenerator"));
- if(!cont)
-  return;
- cont->SetName("LengthSource1");
- ((NConstGenerator*)cont)->Amplitude=0;
- res=net->AddComponent(cont);
+ if(CheckName("NManipulatorSource"))
+ {
+  UEPtr<UADItem> cont2=0;
+  cont2=dynamic_pointer_cast<UADItem>(storage->TakeObject("NManipulatorSource"));
+  if(!cont2)
+   return;
+  cont2->SetName("NManipulatorSource1");
+  res=net->AddComponent(cont2);
+ }
 
- cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NPGenerator"));
- if(!cont)
-  return;
- cont->SetName("Renshow1ActivatorGenerator");
- ((NPulseGenerator*)cont)->Frequency=0;
- ((NPulseGenerator*)cont)->Amplitude=1;
- res=net->AddComponent(cont);
-
- cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NPGenerator"));
- if(!cont)
-  return;
- cont->SetName("Renshow2ActivatorGenerator");
- ((NPulseGenerator*)cont)->Frequency=0;
- ((NPulseGenerator*)cont)->Amplitude=1;
- res=net->AddComponent(cont);
-
- cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NPGenerator"));
- if(!cont)
-  return;
- cont->SetName("Renshow1DeactivatorGenerator");
- ((NPulseGenerator*)cont)->Frequency=0;
- ((NPulseGenerator*)cont)->Amplitude=1;
- res=net->AddComponent(cont);
-
- cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NPGenerator"));
- if(!cont)
-  return;
- cont->SetName("Renshow2DeactivatorGenerator");
- ((NPulseGenerator*)cont)->Frequency=0;
- ((NPulseGenerator*)cont)->Amplitude=1;
- res=net->AddComponent(cont);
-
- cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NFrequencyReceiver"));
- if(!cont)
-  return;
- cont->SetName("Motoneuron1FrequencyReceiver");
- res=net->AddComponent(cont);
-
- cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NFrequencyReceiver"));
- if(!cont)
-  return;
- cont->SetName("Motoneuron2FrequencyReceiver");
- res=net->AddComponent(cont);
-				  */
-
- UEPtr<UADItem> cont2=0;
- cont2=dynamic_pointer_cast<UADItem>(storage->TakeObject("NManipulatorSource"));
- if(!cont2)
-  return;
- cont2->SetName("NManipulatorSource1");
-// cont2->SetNumOutputs(4);
- res=net->AddComponent(cont2);
-
- cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NManipulatorInput"));
- if(!cont)
-  return;
- cont->SetName("NManipulatorInput1");
- res=net->AddComponent(cont);
+ if(CheckName("NManipulatorInput1"))
+ {
+  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NManipulatorInput"));
+  if(!cont)
+   return;
+  cont->SetName("NManipulatorInput1");
+  res=net->AddComponent(cont);
+ }
 
  if(res)
   return;
