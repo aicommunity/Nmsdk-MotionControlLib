@@ -234,6 +234,9 @@ bool NEngineMotionControl::AReset(void)
 // Execute math. computations of current object on current step
 bool NEngineMotionControl::ACalculate(void)
 {
+ if(AdaptiveStructureMode == 2)
+  AdaptiveTuning();
+
  int pos_angle=0,pos_speed=0,pos_moment=0;
  int neg_angle=0,neg_speed=0,neg_moment=0;
  // Receptors
@@ -365,6 +368,47 @@ bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
  return true;
 }
 
+
+/// Алгоритм адаптивной настройки
+void NEngineMotionControl::AdaptiveTuning(void)
+{
+ std::vector<double> current_contour_amplitude;
+ std::vector<bool> use_contour_data;
+ double current_transient_time;
+ std::vector<double> dest_contour_amplitude;
+ double dest_transient_time;
+
+ int num_motion_elements=NumMotionElements;
+ double control_grain=PacGain;
+
+ AdaptiveTuningSimple(current_contour_amplitude,
+		use_contour_data, current_transient_time, dest_contour_amplitude,
+		dest_transient_time, num_motion_elements, control_grain);
+
+ // Применяем настройки регулятора
+ NumMotionElements=num_motion_elements;
+ PacGain=control_grain;
+}
+
+/// Реализация алгоритмов адаптивной настройки
+/// current_contour_amplitude - текущая амплитуда по контурам управления
+/// use_contour_data - флаги, определающие данные каких контуров можно использовать
+/// current_transient_time - текущее время переходного процесса
+/// dest_contour_amplitude - желаемая амплитуда по контурам управления
+/// dest_transient_time - желаемое время переходного процесса
+/// num_motion_elements - расчетное число управляющих элементов
+/// control_grain - расчетное усиление сигнала управления
+///
+void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &current_contour_amplitude,
+								  const std::vector<bool> &use_contour_data,
+								  double current_transient_time,
+								  const std::vector<double> &dest_contour_amplitude,
+								  double dest_transient_time,
+								  int &num_motion_elements,
+								  double &control_grain)
+{
+
+}
 // --------------------------
 
 // --------------------------

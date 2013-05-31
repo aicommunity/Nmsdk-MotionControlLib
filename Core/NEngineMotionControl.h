@@ -41,7 +41,8 @@ RDK::ULProperty<NameT, NEngineMotionControl> MotionElementClassName;
 
 /// Режим включения адаптивной перестройки структуры
 /// 0 - нет адаптивности
-/// 1 - адаптивность включена
+/// 1 - адаптивность включена с полным сбрсом управления
+/// 2 - включена автоматическая адаптация c полным сбросом управления
 RDK::ULProperty<bool, NEngineMotionControl> AdaptiveStructureMode;
 
 // Диапазон афферентных нейронов по каналу Ia
@@ -161,6 +162,26 @@ virtual bool Create(bool full_recreate=true);
 /// Удаляет существующую структуру, не трогая вспомогательные компоненты
 /// Сохраняет expected_num_motion_elements число управляющих элементов
 virtual bool ClearStructure(int expected_num_motion_elements);
+
+/// Алгоритм адаптивной настройки
+virtual void AdaptiveTuning(void);
+
+/// Реализация алгоритмов адаптивной настройки
+/// current_contour_amplitude - текущая амплитуда по контурам управления
+/// use_contour_data - флаги, определающие данные каких контуров можно использовать
+/// current_transient_time - текущее время переходного процесса
+/// dest_contour_amplitude - желаемая амплитуда по контурам управления
+/// dest_transient_time - желаемое время переходного процесса
+/// num_motion_elements - расчетное число управляющих элементов
+/// control_grain - расчетное усиление сигнала управления
+///
+virtual void AdaptiveTuningSimple(const std::vector<double> &current_contour_amplitude,
+								  const std::vector<bool> &use_contour_data,
+								  double current_transient_time,
+								  const std::vector<double> &dest_contour_amplitude,
+								  double dest_transient_time,
+								  int &num_motion_elements,
+								  double &control_grain);
 // --------------------------
 
 // --------------------------
