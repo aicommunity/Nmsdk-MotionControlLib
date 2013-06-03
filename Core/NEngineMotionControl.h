@@ -43,7 +43,7 @@ RDK::ULProperty<NameT, NEngineMotionControl> MotionElementClassName;
 /// 0 - нет адаптивности
 /// 1 - адаптивность включена с полным сбрсом управлени€
 /// 2 - включена автоматическа€ адаптаци€ c полным сбросом управлени€
-RDK::ULProperty<bool, NEngineMotionControl> AdaptiveStructureMode;
+RDK::ULProperty<int, NEngineMotionControl> AdaptiveStructureMode;
 
 // ƒиапазон афферентных нейронов по каналу Ia
 RDK::ULProperty<real, NEngineMotionControl> IaMin;
@@ -121,6 +121,8 @@ vector<vector<double> > History;
 vector<double> TransientHistory;
 
 int HistorySize,TransientHistorySize;
+
+double LastAdaptiveTime;
 
 
 public: // ћетоды
@@ -205,7 +207,7 @@ virtual void AdaptiveTuning(void);
 /// dest_contour_amplitude - желаема€ амплитуда по контурам управлени€
 /// dest_transient_time - желаемое врем€ переходного процесса
 /// num_motion_elements - расчетное число управл€ющих элементов
-/// control_grain - расчетное усиление сигнала управлени€
+/// control_gain - расчетное усиление сигнала управлени€
 ///
 virtual void AdaptiveTuningSimple(const std::vector<double> &current_contour_amplitude,
 								  const std::vector<bool> &use_contour_data,
@@ -213,7 +215,7 @@ virtual void AdaptiveTuningSimple(const std::vector<double> &current_contour_amp
 								  const std::vector<double> &dest_contour_amplitude,
 								  double dest_transient_time,
 								  int &num_motion_elements,
-								  double &control_grain);
+								  double &control_gain);
 // --------------------------
 
 // --------------------------

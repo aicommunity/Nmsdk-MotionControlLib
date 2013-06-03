@@ -48,6 +48,7 @@ NEngineMotionControl::NEngineMotionControl(void)
 
 
 {
+  LastAdaptiveTime=0.0;
 }
 
 NEngineMotionControl::~NEngineMotionControl(void)
@@ -240,6 +241,8 @@ bool NEngineMotionControl::AReset(void)
   {
    continue;
   }
+
+//  LastAdaptiveTime=0.0;
 /*
   try {
    cont->GetComponentL("Afferent_Ic1.Receptor");
@@ -485,7 +488,7 @@ void NEngineMotionControl::AdaptiveTuning(void)
 /// dest_contour_amplitude - желаемая амплитуда по контурам управления
 /// dest_transient_time - желаемое время переходного процесса
 /// num_motion_elements - расчетное число управляющих элементов
-/// control_grain - расчетное усиление сигнала управления
+/// control_gain - расчетное усиление сигнала управления
 ///
 void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &current_contour_amplitude,
 								  const std::vector<bool> &use_contour_data,
@@ -493,9 +496,24 @@ void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &curre
 								  const std::vector<double> &dest_contour_amplitude,
 								  double dest_transient_time,
 								  int &num_motion_elements,
-								  double &control_grain)
+								  double &control_gain)
 {
+ if(LastAdaptiveTime>0 && GetDoubleTime()-LastAdaptiveTime<*TransientHistoryTime)
+  return;
 
+ LastAdaptiveTime=GetDoubleTime();
+
+ for(size_t i=0;i<use_contour_data.size();i++)
+ {
+  if(use_contour_data[i])
+  {
+   if(current_contour_amplitude[i]>dest_contour_amplitude[i])
+   {
+    ++num_motion_elements;
+   }
+   break; // Заглушка
+  }
+ }
 }
 // --------------------------
 
