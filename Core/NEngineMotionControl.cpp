@@ -39,6 +39,7 @@ NEngineMotionControl::NEngineMotionControl(void)
    CurrentContourAmplitude("CurrentContourAmplitude",this),
    CurrentContourAverage("CurrentContourAverage",this),
    CurrentTransientTime("CurrentTransientTime",this),
+   CurrentTransientState("CurrentTransientState",this),
    DestContourAmplitude("DestContourAmplitude",this),
    DestTransientTime("DestTransientTime",this),
    UseContourData("UseContourData",this),
@@ -64,7 +65,14 @@ bool NEngineMotionControl::SetNumMotionElements(const size_t &value)
 {
 // NumMotionElements.v=value;
 // Create();
- Ready=false;
+ if(AdaptiveStructureMode >0)
+ {
+  NumMotionElements.v=value;
+  Create(false);
+ }
+ else
+  Ready=false;
+
  return true;
 }
 
@@ -212,6 +220,9 @@ bool NEngineMotionControl::AReset(void)
  CurrentContourAmplitude->assign(4,0);
  CurrentContourAverage->assign(4,0);
  CurrentTransientTime=0;
+ CurrentTransientState=false;
+ TempTransientState=false;
+ OldTransientAverage=0;
 
  SetNumOutputs(6);
  for(int i=0;i<NumOutputs;i++)
@@ -269,10 +280,9 @@ bool NEngineMotionControl::ACalculate(void)
  // за ожидаемое время переходного процесса
  CurrentContourAmplitude->assign(4,0);
  CurrentContourAverage->assign(4,0);
- CurrentTransientTime=0;
 
  UEPtr<NManipulatorSource> source=dynamic_pointer_cast<NManipulatorSource>(GetComponent("NManipulatorSource1"));
- HistorySize=DestTransientTime*TimeStep;
+ HistorySize=TransientHistoryTime*TimeStep;
  vector<double> measure;
  measure.resize(source->GetNumOutputs());
  for(size_t i=0;i<measure.size();i++)
@@ -302,6 +312,28 @@ bool NEngineMotionControl::ACalculate(void)
   (*CurrentContourAverage)[i]=avg_val/History.size();
  }
 
+ bool old_transient_state=CurrentTransientState;
+ double delta=fabs((*CurrentContourAverage)[TransientObjectIndex]-OldTransientAverage)*TimeStep;
+ OldTransientAverage=(*CurrentContourAverage)[TransientObjectIndex];
+ if(delta>=TransientAverageThreshold && !CurrentTransientState)
+ {
+  CurrentTransientState=true;
+  TempTransientState=true;
+  TransientStartTime=GetDoubleTime();
+ }
+ else
+ if(delta<TransientAverageThreshold)
+ {
+  if(TempTransientState)
+  {
+   CurrentTransientTime=GetDoubleTime()-TransientStartTime;
+  }
+  TempTransientState=false;
+  if(GetDoubleTime()-TransientStartTime>TransientHistoryTime*3.0)
+   CurrentTransientState=false;
+ }
+
+	/*
  TransientHistorySize=TransientHistoryTime*TimeStep;
  if(TransientObjectIndex>=0 && TransientObjectIndex<measure.size())
  {
@@ -311,19 +343,32 @@ bool NEngineMotionControl::ACalculate(void)
   min_val=10000;
   max_val=-10000;
   double delta=10000;
-  CurrentTransientTime=TransientHistoryTime;
+//  CurrentTransientTime=TransientHistoryTime;
+  bool old_transient_state=CurrentTransientState;
   for(size_t j=1;j<TransientHistory.size()-1;j++)
   {
-   delta=(TransientHistory[j+1]-TransientHistory[j])*TimeStep;
+   delta=(TransientHistory[j]-TransientHistory[j-1])*TimeStep;
    if(fabs(delta)<TransientAverageThreshold)
    {
-	CurrentTransientTime=double(j)/TimeStep;
+	CurrentTransientState=false;
+
+	if(old_transient_state)
+	{
+	 CurrentTransientTime=GetDoubleTime()-TransientStartTime;
+    }
 	break;
    }
+   else
+   {
+	if(!CurrentTransientState)
+	{
+     TransientStartTime=GetDoubleTime();
+	}
+	CurrentTransientState=true;
+   }
   }
- }
- else
-  CurrentTransientTime=0;
+
+ }     */
 
  if(AdaptiveStructureMode == 2)
   AdaptiveTuning();
@@ -378,7 +423,7 @@ bool NEngineMotionControl::Create(bool full_recreate)
  if(full_recreate)
   ClearStructure(0);
  else
-  ClearStructure(0);
+  ClearStructure(NumMotionElements);
 
  //DelAllComponents();
  Motions.clear();
@@ -427,6 +472,7 @@ bool NEngineMotionControl::Create(bool full_recreate)
  break;
  };
 
+ SetupPacRange();
  return true;
 }
 
@@ -498,6 +544,9 @@ void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &curre
 								  int &num_motion_elements,
 								  double &control_gain)
 {
+ if(CurrentTransientState)
+  return;
+
  if(LastAdaptiveTime>0 && GetDoubleTime()-LastAdaptiveTime<*TransientHistoryTime)
   return;
 

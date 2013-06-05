@@ -62,6 +62,10 @@ RDK::ULProperty<real, NEngineMotionControl> IcMin;
 RDK::ULProperty<real, NEngineMotionControl> IcMax;
 
 // Максимальное усиление управляющего воздействия
+// 0 - Разбиение на диапазоны [Max/(i+1)] где i - индекс диапазона
+// 1 - Разбиение на диапазоны [Max/(i+1)] где i - индекс диапазона
+// 2 -
+// 3 - Max/(N-i), где i - индекс диапазона, а N - число диапазонов
 RDK::ULProperty<double, NEngineMotionControl> PacGain;
 
 // Режим настройки диапазонов афферентных нейронов
@@ -86,6 +90,9 @@ RDK::ULProperty<std::vector<double>, NEngineMotionControl,ptPubState> CurrentCon
 
 /// Текущее время переходного процесса
 RDK::ULProperty<double, NEngineMotionControl,ptPubState> CurrentTransientTime;
+
+/// Текущее состояние переходного процесса
+RDK::ULProperty<bool, NEngineMotionControl,ptPubState> CurrentTransientState;
 
 /// Желаемая амплитуда колебаний
 RDK::ULProperty<std::vector<double>, NEngineMotionControl> DestContourAmplitude;
@@ -123,6 +130,12 @@ vector<double> TransientHistory;
 int HistorySize,TransientHistorySize;
 
 double LastAdaptiveTime;
+
+double TransientStartTime;
+
+double OldTransientAverage;
+
+double TempTransientState;
 
 
 public: // Методы
