@@ -94,8 +94,11 @@ RDK::ULProperty<double, NEngineMotionControl,ptPubState> CurrentTransientTime;
 /// Текущее состояние переходного процесса
 RDK::ULProperty<bool, NEngineMotionControl,ptPubState> CurrentTransientState;
 
-/// Желаемая амплитуда колебаний
-RDK::ULProperty<std::vector<double>, NEngineMotionControl> DestContourAmplitude;
+/// Маскимально допустимая амплитуда колебаний
+RDK::ULProperty<std::vector<double>, NEngineMotionControl> DestContourMaxAmplitude;
+
+/// Минимально допустимая амплитуда колебаний
+RDK::ULProperty<std::vector<double>, NEngineMotionControl> DestContourMinAmplitude;
 
 /// Желаемое время переходного процесса
 RDK::ULProperty<double, NEngineMotionControl> DestTransientTime;
@@ -225,7 +228,8 @@ virtual void AdaptiveTuning(void);
 virtual void AdaptiveTuningSimple(const std::vector<double> &current_contour_amplitude,
 								  const std::vector<bool> &use_contour_data,
 								  double current_transient_time,
-								  const std::vector<double> &dest_contour_amplitude,
+								  const std::vector<double> &dest_contour_max_amplitude,
+								  const std::vector<double> &dest_contour_min_amplitude,
 								  double dest_transient_time,
 								  int &num_motion_elements,
 								  double &control_gain);

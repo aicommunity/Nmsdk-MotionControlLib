@@ -40,7 +40,8 @@ NEngineMotionControl::NEngineMotionControl(void)
    CurrentContourAverage("CurrentContourAverage",this),
    CurrentTransientTime("CurrentTransientTime",this),
    CurrentTransientState("CurrentTransientState",this),
-   DestContourAmplitude("DestContourAmplitude",this),
+   DestContourMaxAmplitude("DestContourMaxAmplitude",this),
+   DestContourMinAmplitude("DestContourMinAmplitude",this),
    DestTransientTime("DestTransientTime",this),
    UseContourData("UseContourData",this),
    TransientHistoryTime("TransientHistoryTime",this),
@@ -209,7 +210,8 @@ bool NEngineMotionControl::ABuild(void)
  CurrentContourAmplitude->resize(4);
  CurrentContourAverage->resize(4);
 
- DestContourAmplitude->resize(4);
+ DestContourMaxAmplitude->resize(4);
+ DestContourMinAmplitude->resize(4);
  UseContourData->resize(4);
  return true;
 }
@@ -512,15 +514,16 @@ void NEngineMotionControl::AdaptiveTuning(void)
  std::vector<double> &current_contour_amplitude=*CurrentContourAmplitude;
  std::vector<bool> &use_contour_data=*UseContourData;
  double &current_transient_time=*CurrentTransientTime;
- std::vector<double> &dest_contour_amplitude=*DestContourAmplitude;
+ std::vector<double> &dest_contour_max_amplitude=*DestContourMaxAmplitude;
+ std::vector<double> &dest_contour_min_amplitude=*DestContourMinAmplitude;
  double &dest_transient_time=*DestTransientTime;
 
  int num_motion_elements=NumMotionElements;
  double control_grain=PacGain;
 
  AdaptiveTuningSimple(current_contour_amplitude,
-		use_contour_data, current_transient_time, dest_contour_amplitude,
-		dest_transient_time, num_motion_elements, control_grain);
+		use_contour_data, current_transient_time, dest_contour_max_amplitude,
+		dest_contour_min_amplitude, dest_transient_time, num_motion_elements, control_grain);
 
  // Применяем настройки регулятора
  NumMotionElements=num_motion_elements;
@@ -539,7 +542,8 @@ void NEngineMotionControl::AdaptiveTuning(void)
 void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &current_contour_amplitude,
 								  const std::vector<bool> &use_contour_data,
 								  double current_transient_time,
-								  const std::vector<double> &dest_contour_amplitude,
+								  const std::vector<double> &dest_contour_max_amplitude,
+								  const std::vector<double> &dest_contour_min_amplitude,
 								  double dest_transient_time,
 								  int &num_motion_elements,
 								  double &control_gain)
@@ -556,11 +560,19 @@ void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &curre
  {
   if(use_contour_data[i])
   {
-   if(current_contour_amplitude[i]>dest_contour_amplitude[i])
+   if(current_contour_amplitude[i]>dest_contour_max_amplitude[i])
    {
-    ++num_motion_elements;
+	++num_motion_elements;
+	break; // Заглушка
    }
-   break; // Заглушка
+   else
+   if(current_contour_amplitude[i]<dest_contour_min_amplitude[i])
+   {
+	if(num_motion_elements>1)
+	 --num_motion_elements;
+    break; // Заглушка
+   }
+
   }
  }
 }
