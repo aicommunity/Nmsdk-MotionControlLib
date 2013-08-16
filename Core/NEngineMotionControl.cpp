@@ -321,17 +321,17 @@ bool NEngineMotionControl::ACalculate(void)
  {
   CurrentTransientState=true;
   TempTransientState=true;
-  TransientStartTime=GetDoubleTime();
+  TransientStartTime=Environment->GetTime().GetDoubleTime();
  }
  else
  if(delta<TransientAverageThreshold)
  {
   if(TempTransientState)
   {
-   CurrentTransientTime=GetDoubleTime()-TransientStartTime;
+   CurrentTransientTime=Environment->GetTime().GetDoubleTime()-TransientStartTime;
   }
   TempTransientState=false;
-  if(GetDoubleTime()-TransientStartTime>TransientHistoryTime*3.0)
+  if(Environment->GetTime().GetDoubleTime()-TransientStartTime>TransientHistoryTime*3.0)
    CurrentTransientState=false;
  }
 
@@ -551,10 +551,10 @@ void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &curre
  if(CurrentTransientState)
   return;
 
- if(LastAdaptiveTime>0 && GetDoubleTime()-LastAdaptiveTime<*TransientHistoryTime)
+ if(LastAdaptiveTime>0 && Environment->GetTime().GetDoubleTime()-LastAdaptiveTime<*TransientHistoryTime)
   return;
 
- LastAdaptiveTime=GetDoubleTime();
+ LastAdaptiveTime=Environment->GetTime().GetDoubleTime();
 
  for(size_t i=0;i<use_contour_data.size();i++)
  {
