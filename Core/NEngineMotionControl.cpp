@@ -602,9 +602,9 @@ int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, 
  {
   if(!(i % 2)) // четное
   {
-   real left_range=a_min,right_range=a_max;
-   real pos_range=(right_range-0)/real_ranges;
-   real neg_range=(0-left_range)/real_ranges;
+   double left_range=a_min,right_range=a_max;
+   double pos_range=(right_range-0)/real_ranges;
+   double neg_range=(0-left_range)/real_ranges;
 
    pos_ranges[i].first=rr_index*pos_range;
    pos_ranges[i].second=(rr_index+1)*pos_range;
@@ -613,9 +613,9 @@ int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, 
   }
   else // нечетное
   {
-   real left_range=a_min,right_range=a_max;
-   real pos_range=(right_range-0)/real_ranges;
-   real neg_range=(0-left_range)/real_ranges;
+   double left_range=a_min,right_range=a_max;
+   double pos_range=(right_range-0)/real_ranges;
+   double neg_range=(0-left_range)/real_ranges;
 
    pos_ranges[i].first=(rr_index+0.5)*pos_range;
    pos_ranges[i].second=(rr_index+1.5)*pos_range;
@@ -632,9 +632,9 @@ int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, 
   {
    for(int i=0;i<num_motions;i++)
    {
-	real left_range=a_min,right_range=a_max;
-	real pos_range=(right_range-0)/real_ranges;
-	real neg_range=(0-left_range)/real_ranges;
+	double left_range=a_min,right_range=a_max;
+	double pos_range=(right_range-0)/real_ranges;
+	double neg_range=(0-left_range)/real_ranges;
 
 	pos_ranges[i].first=rr_index*pos_range;
 	pos_ranges[i].second=(rr_index+1)*pos_range;
@@ -647,9 +647,9 @@ int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, 
   if(range_mode == 1)
   {
    MinAfferentRange=1./real_ranges;
-   real left_range=a_min*MinAfferentRange/real_ranges,right_range=a_max*MinAfferentRange/real_ranges;
-   real pos_range=(right_range-0)*(1);
-   real neg_range=(left_range-0)*(1);
+   double left_range=a_min*MinAfferentRange/real_ranges,right_range=a_max*MinAfferentRange/real_ranges;
+   double pos_range=(right_range-0)*(1);
+   double neg_range=(left_range-0)*(1);
    for(int i=0;i<num_motions;i++)
    {
 	if(i==0)
@@ -758,9 +758,9 @@ void NEngineMotionControl::SetupPacRange(void)
  {
    for(int i=0;i<num_motions;i++)
    {
-	real left_range=a_min,right_range=a_max;
-	real pos_range=(right_range-0)/NumMotionElements;
-	real neg_range=(0-left_range)/NumMotionElements;
+	double left_range=a_min,right_range=a_max;
+	double pos_range=(right_range-0)/NumMotionElements;
+	double neg_range=(0-left_range)/NumMotionElements;
 
 	values[i+values.size()/2].assign(1,(rr_index+1)*pos_range);
 //	pos_ranges[i].second=(rr_index+1)*pos_range;
@@ -772,10 +772,10 @@ void NEngineMotionControl::SetupPacRange(void)
  else
  if(PacRangeMode == 1)
  {
-   real min_afferent_range=1./NumMotionElements;
-   real left_range=a_min*min_afferent_range/NumMotionElements,right_range=a_max*min_afferent_range/NumMotionElements;
-   real pos_range=(right_range-0)*(1);
-   real neg_range=(left_range-0)*(1);
+   double min_afferent_range=1./NumMotionElements;
+   double left_range=a_min*min_afferent_range/NumMotionElements,right_range=a_max*min_afferent_range/NumMotionElements;
+   double pos_range=(right_range-0)*(1);
+   double neg_range=(left_range-0)*(1);
    for(int i=0;i<num_motions;i++)
    {
 	pos_range=(right_range-0)*(i+1);

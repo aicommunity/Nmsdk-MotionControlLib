@@ -46,20 +46,20 @@ RDK::ULProperty<NameT, NEngineMotionControl> MotionElementClassName;
 RDK::ULProperty<int, NEngineMotionControl> AdaptiveStructureMode;
 
 // Диапазон афферентных нейронов по каналу Ia
-RDK::ULProperty<real, NEngineMotionControl> IaMin;
-RDK::ULProperty<real, NEngineMotionControl> IaMax;
+RDK::ULProperty<double, NEngineMotionControl> IaMin;
+RDK::ULProperty<double, NEngineMotionControl> IaMax;
 
 // Диапазон афферентных нейронов по каналу Ib
-RDK::ULProperty<real, NEngineMotionControl> IbMin;
-RDK::ULProperty<real, NEngineMotionControl> IbMax;
+RDK::ULProperty<double, NEngineMotionControl> IbMin;
+RDK::ULProperty<double, NEngineMotionControl> IbMax;
 
 // Диапазон афферентных нейронов по каналу II
-RDK::ULProperty<real, NEngineMotionControl> IIMin;
-RDK::ULProperty<real, NEngineMotionControl> IIMax;
+RDK::ULProperty<double, NEngineMotionControl> IIMin;
+RDK::ULProperty<double, NEngineMotionControl> IIMax;
 
 // Диапазон афферентных нейронов по каналу Ic
-RDK::ULProperty<real, NEngineMotionControl> IcMin;
-RDK::ULProperty<real, NEngineMotionControl> IcMax;
+RDK::ULProperty<double, NEngineMotionControl> IcMin;
+RDK::ULProperty<double, NEngineMotionControl> IcMax;
 
 // Максимальное усиление управляющего воздействия
 // 0 - Разбиение на диапазоны [Max/(i+1)] где i - индекс диапазона

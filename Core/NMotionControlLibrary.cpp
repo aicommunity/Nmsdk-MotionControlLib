@@ -109,9 +109,9 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  UploadClass("NEngineMotionControl",cs);
 
 
-// pair<real,real> Ia(-2.0*M_PI,2.0*M_PI);
-// pair<real,real> Ib(-10,10);
-// pair<real,real> II(-M_PI/2,M_PI/2);
+// pair<double,double> Ia(-2.0*M_PI,2.0*M_PI);
+// pair<double,double> Ib(-10,10);
+// pair<double,double> II(-M_PI/2,M_PI/2);
  size_t max_number_of_mc=1;
 
  // Формируем сеть управления двигателем с разделением информационного потока с датчиков
