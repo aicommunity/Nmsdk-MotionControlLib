@@ -597,6 +597,60 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
  return res;
 }
 
+bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
+	const string &target_head, const string &target_tail, string &branch_bame)
+{
+ string tmpname;
+ UEPtr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
+ UEPtr<NPulseMembrane> branch;
+ UEPtr<NPulseChannel> channel;
+ UEPtr<UContainer> ltmembr;
+
+ try
+ {
+  ltmembr=neuron->GetComponent("LTMembrane");
+ }
+ catch(UContainer::EComponentNameNotExist &exc){}
+ if(ltmembr)
+  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
+ else
+  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
+
+ branch->GetLongName(neuron,branch_bame);
+ channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
+ bool res=net->CreateLink(source,0,
+				 channel->GetLongName(net,tmpname));
+ return res;
+}
+
+bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
+	const string &target_head, const string &target_tail, const string &branch_name)
+{
+ string tmpname;
+ UEPtr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
+ UEPtr<NPulseMembrane> branch;
+ UEPtr<NPulseChannel> channel;
+ UEPtr<UContainer> ltmembr;
+
+ try
+ {
+  ltmembr=neuron->GetComponent("LTMembrane");
+ }
+ catch(UContainer::EComponentNameNotExist &exc){}
+ try
+ {
+  branch=dynamic_pointer_cast<NPulseMembrane>(neuron->GetComponent(branch_name));
+ }
+ catch(UContainer::EComponentNameNotExist &exc)
+ {
+  return false;
+ }
+ channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
+ bool res=net->CreateLink(source,0,
+				 channel->GetLongName(net,tmpname));
+ return res;
+}
+
 // Формирует СУ двигательной единицей
 // Аналогично, но с развязкой по дендритам
 UEPtr<UNet> CreateBranchedMotionElement(UStorage *storage,
@@ -934,28 +988,31 @@ UEPtr<UNet> CreateSimplestBranchedMotionElement(UStorage *storage,
  NameT tmpname;
  res=true;
 
- res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron1", "PosChannel");
- res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron2", "NegChannel");
- res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron1", "NegChannel");
- res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron2", "PosChannel");
+ string branch_name1, branch_name2;
+ res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron1", "PosChannel",branch_name1);
+ res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron2", "PosChannel",branch_name2);
+ res=CreateNeuronExsitedBranchLink(net,"Afferent_II2.LTZone","Motoneuron1", "NegChannel",branch_name1);
+ res=CreateNeuronExsitedBranchLink(net,"Afferent_II1.LTZone","Motoneuron2", "NegChannel",branch_name2);
 
- res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron1", "PosChannel");
- res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron2", "NegChannel");
+ res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron1", "PosChannel",branch_name1);
+ res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron2", "PosChannel",branch_name2);
+ res=CreateNeuronExsitedBranchLink(net,"PostAfferent14.LTZone","Motoneuron2", "NegChannel",branch_name2);
+ res=CreateNeuronExsitedBranchLink(net,"PostAfferent24.LTZone","Motoneuron1", "NegChannel",branch_name1);
 
- res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron1", "NegChannel");
- res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron2", "PosChannel");
+ res=CreateNeuronExsitedBranchLink(net,"Motoneuron1.LTZone","Motoneuron2", "NegChannel",branch_name2);
+ res=CreateNeuronExsitedBranchLink(net,"Motoneuron2.LTZone","Motoneuron1", "NegChannel",branch_name1);
 
  if(use_speed_force)
  {
-  res=net->CreateLink("Afferent_Ia1.LTZone",0,"Motoneuron1.PNeuronMembrane.NegChannel");
-  res=net->CreateLink("Afferent_Ia1.LTZone",0,"Motoneuron2.PNeuronMembrane.PosChannel");
-  res=net->CreateLink("Afferent_Ia2.LTZone",0,"Motoneuron2.PNeuronMembrane.NegChannel");
   res=net->CreateLink("Afferent_Ia2.LTZone",0,"Motoneuron1.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ia1.LTZone",0,"Motoneuron2.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ia1.LTZone",0,"Motoneuron1.PNeuronMembrane.NegChannel");
+  res=net->CreateLink("Afferent_Ia2.LTZone",0,"Motoneuron2.PNeuronMembrane.NegChannel");
 
   res=net->CreateLink("Afferent_Ib1.LTZone",0,"Motoneuron1.PNeuronMembrane.PosChannel");
-  res=net->CreateLink("Afferent_Ib1.LTZone",0,"Motoneuron2.PNeuronMembrane.NegChannel");
   res=net->CreateLink("Afferent_Ib2.LTZone",0,"Motoneuron2.PNeuronMembrane.PosChannel");
   res=net->CreateLink("Afferent_Ib2.LTZone",0,"Motoneuron1.PNeuronMembrane.NegChannel");
+  res=net->CreateLink("Afferent_Ib1.LTZone",0,"Motoneuron2.PNeuronMembrane.NegChannel");
  }
 
  if(use_add_contours)
