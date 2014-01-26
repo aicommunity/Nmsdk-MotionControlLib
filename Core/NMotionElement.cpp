@@ -850,7 +850,25 @@ UEPtr<UNet> CreateSimplestBranchedMotionElement(UStorage *storage,
  UEPtr<UNet> net=dynamic_pointer_cast<UNet>(storage->TakeObject(netclassname));
  if(!net)
   return 0;
-/*
+
+ // Пейсмекерный нейрон 1
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PM1");
+ res=net->AddComponent(cont);
+ UEPtr<NConstGenerator> gen=dynamic_pointer_cast<NConstGenerator>(cont->GetComponentL("PNeuronNegCGenerator"));
+ gen->Amplitude=0.95;
+
+ // Пейсмекерный нейрон 2
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PM2");
+ res=net->AddComponent(cont);
+ gen=dynamic_pointer_cast<NConstGenerator>(cont->GetComponentL("PNeuronNegCGenerator"));
+ gen->Amplitude=0.95;
+ /*
  // Клетка реншоу 1
  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
@@ -994,10 +1012,16 @@ UEPtr<UNet> CreateSimplestBranchedMotionElement(UStorage *storage,
  res=CreateNeuronExsitedBranchLink(net,"Afferent_II2.LTZone","Motoneuron1", "NegChannel",branch_name1);
  res=CreateNeuronExsitedBranchLink(net,"Afferent_II1.LTZone","Motoneuron2", "NegChannel",branch_name2);
 
+ res=CreateNeuronExsitedBranchLink(net,"Afferent_II1.LTZone","PM1", "NegChannel","PNeuronMembrane");
+ res=CreateNeuronExsitedBranchLink(net,"Afferent_II2.LTZone","PM2", "NegChannel","PNeuronMembrane");
+
  res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron1", "PosChannel",branch_name1);
  res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron2", "PosChannel",branch_name2);
  res=CreateNeuronExsitedBranchLink(net,"PostAfferent14.LTZone","Motoneuron2", "NegChannel",branch_name2);
  res=CreateNeuronExsitedBranchLink(net,"PostAfferent24.LTZone","Motoneuron1", "NegChannel",branch_name1);
+
+ res=CreateNeuronExsitedBranchLink(net,"PM1.LTZone","Motoneuron1", "NegChannel",branch_name2);
+ res=CreateNeuronExsitedBranchLink(net,"PM2.LTZone","Motoneuron2", "NegChannel",branch_name1);
 
  res=CreateNeuronExsitedBranchLink(net,"Motoneuron1.LTZone","Motoneuron2", "NegChannel",branch_name2);
  res=CreateNeuronExsitedBranchLink(net,"Motoneuron2.LTZone","Motoneuron1", "NegChannel",branch_name1);
