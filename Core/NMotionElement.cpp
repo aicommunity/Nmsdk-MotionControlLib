@@ -850,6 +850,200 @@ UEPtr<UNet> CreateSimplestBranchedMotionElement(UStorage *storage,
  UEPtr<UNet> net=dynamic_pointer_cast<UNet>(storage->TakeObject(netclassname));
  if(!net)
   return 0;
+/*
+ // Клетка реншоу 1
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Renshow1");
+ res=net->AddComponent(cont);
+
+ // Клетка реншоу 2
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Renshow2");
+ res=net->AddComponent(cont);
+				*/
+ // Мотонейрон 1
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Motoneuron1");
+ res=net->AddComponent(cont);
+
+ // Мотонейрон 2
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Motoneuron2");
+ res=net->AddComponent(cont);
+  /*
+ // Постафферентные нейроны
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent11");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent12");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent13");
+ res=net->AddComponent(cont);
+			  */
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent14");
+ res=net->AddComponent(cont);
+	  /*
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent21");
+ res=net->AddComponent(cont);
+
+
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent22");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent23");
+ res=net->AddComponent(cont);
+              */
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("PostAfferent24");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(afferent_neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_II1");
+ res=net->AddComponent(cont);
+
+ cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(afferent_neuron_class_name));
+ if(!cont)
+  return 0;
+ cont->SetName("Afferent_II2");
+ res=net->AddComponent(cont);
+
+ if(use_speed_force)
+ {
+  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(afferent_neuron_class_name));
+  if(!cont)
+   return 0;
+  cont->SetName("Afferent_Ia1");
+  res=net->AddComponent(cont);
+
+  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(afferent_neuron_class_name));
+  if(!cont)
+   return 0;
+  cont->SetName("Afferent_Ia2");
+  res=net->AddComponent(cont);
+
+  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(afferent_neuron_class_name));
+  if(!cont)
+   return 0;
+  cont->SetName("Afferent_Ib1");
+  res=net->AddComponent(cont);
+
+  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(afferent_neuron_class_name));
+  if(!cont)
+   return 0;
+  cont->SetName("Afferent_Ib2");
+  res=net->AddComponent(cont);
+ }
+
+ if(use_add_contours)
+ {
+  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(afferent_neuron_class_name));
+  if(!cont)
+   return 0;
+  cont->SetName("Afferent_Ic1");
+  res=net->AddComponent(cont);
+
+  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(afferent_neuron_class_name));
+  if(!cont)
+   return 0;
+  cont->SetName("Afferent_Ic2");
+  res=net->AddComponent(cont);
+ }
+
+ // Установка связей
+ ULongId item,conn;
+ NameT tmpname;
+ res=true;
+
+ string branch_name1, branch_name2;
+ res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron1", "PosChannel",branch_name1);
+ res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron2", "PosChannel",branch_name2);
+ res=CreateNeuronExsitedBranchLink(net,"Afferent_II2.LTZone","Motoneuron1", "NegChannel",branch_name1);
+ res=CreateNeuronExsitedBranchLink(net,"Afferent_II1.LTZone","Motoneuron2", "NegChannel",branch_name2);
+
+ res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron1", "PosChannel",branch_name1);
+ res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron2", "PosChannel",branch_name2);
+ res=CreateNeuronExsitedBranchLink(net,"PostAfferent14.LTZone","Motoneuron2", "NegChannel",branch_name2);
+ res=CreateNeuronExsitedBranchLink(net,"PostAfferent24.LTZone","Motoneuron1", "NegChannel",branch_name1);
+
+ res=CreateNeuronExsitedBranchLink(net,"Motoneuron1.LTZone","Motoneuron2", "NegChannel",branch_name2);
+ res=CreateNeuronExsitedBranchLink(net,"Motoneuron2.LTZone","Motoneuron1", "NegChannel",branch_name1);
+
+ if(use_speed_force)
+ {
+  res=net->CreateLink("Afferent_Ia2.LTZone",0,"Motoneuron1.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ia1.LTZone",0,"Motoneuron2.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ia1.LTZone",0,"Motoneuron1.PNeuronMembrane.NegChannel");
+  res=net->CreateLink("Afferent_Ia2.LTZone",0,"Motoneuron2.PNeuronMembrane.NegChannel");
+
+  res=net->CreateLink("Afferent_Ib1.LTZone",0,"Motoneuron1.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ib2.LTZone",0,"Motoneuron2.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ib2.LTZone",0,"Motoneuron1.PNeuronMembrane.NegChannel");
+  res=net->CreateLink("Afferent_Ib1.LTZone",0,"Motoneuron2.PNeuronMembrane.NegChannel");
+ }
+
+ if(use_add_contours)
+ {
+  res=net->CreateLink("Afferent_Ic1.LTZone",0,"Motoneuron1.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ic1.LTZone",0,"Motoneuron2.PNeuronMembrane.NegChannel");
+  res=net->CreateLink("Afferent_Ic2.LTZone",0,"Motoneuron2.PNeuronMembrane.PosChannel");
+  res=net->CreateLink("Afferent_Ic2.LTZone",0,"Motoneuron1.PNeuronMembrane.NegChannel");
+ }
+
+
+ if(!res)
+  res=true;
+
+ return net;
+}
+
+
+
+// Формирует СУ двигательной единицей
+// Аналогично, но с развязкой по дендритам
+UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
+	const string &netclassname, const string &neuron_class_name,
+	const string &afferent_neuron_class_name, int mode, bool use_speed_force, bool use_add_contours)
+{
+ UEPtr<UContainer> cont;
+ bool res;
+
+ UEPtr<UNet> net=dynamic_pointer_cast<UNet>(storage->TakeObject(netclassname));
+ if(!net)
+  return 0;
 
  // Пейсмекерный нейрон 1
  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));

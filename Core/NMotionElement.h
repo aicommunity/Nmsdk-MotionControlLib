@@ -144,6 +144,7 @@ UEPtr<UNet> CreateBranchedMotionElement(UStorage *storage, const string &netclas
 // Формирует простейшую СУ двигательной единицей из двух мотонейронов
 UEPtr<UNet> CreateSimplestMotionElement(UStorage *storage, const string &netclassname, int mode);
 UEPtr<UNet> CreateSimplestBranchedMotionElement(UStorage *storage, const string &netclassname, int mode, bool use_speed_force=false, bool use_add_contours=false);
+UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage, const string &netclassname, int mode, bool use_speed_force=false, bool use_add_contours=false);
 
 bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
 	const string &target_head, const string &target_tail);
