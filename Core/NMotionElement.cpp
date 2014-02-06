@@ -27,6 +27,7 @@ NMotionElement::NMotionElement(void)
 NumControlLoops("NumControlLoops",this, &NMotionElement::SetNumControlLoops),
 EnableControlLoopFlags("EnableControlLoopFlags",this, &NMotionElement::SetEnableControlLoopFlags),
 InterneuronPresentMode("InterneuronPresentMode",this, &NMotionElement::SetInterneuronPresentMode),
+RenshowMode("RenshowMode",this),
 RecurrentInhibitionMode("RecurrentInhibitionMode",this, &NMotionElement::SetRecurrentInhibitionMode),
 RecurrentInhibitionBranchMode("RecurrentInhibitionBranchMode",this, &NMotionElement::SetRecurrentInhibitionBranchMode),
 MotoneuronBranchMode("MotoneuronBranchMode",this, &NMotionElement::SetMotoneuronBranchMode),
@@ -152,13 +153,18 @@ bool NMotionElement::ACalculate(void)
 // Если структура существует, то пытается модифицировать ее с минимальными изменениями
 void NMotionElement::CreateStructure(void)
 {
-
+  DelAllComponents();
+  if(!GetStorage())
+   return;
+  CreateMotoneurons();
+  CreateAfferents();
+  CreateInterneurons();
 }
 
 // Создает внутренние связи в соответствии с текущими значениями параметров
 void NMotionElement::CreateInternalLinks(void)
 {
-
+   LinkMotoneurons("AfferentL1", "AfferentR1", 3);
 }
 
 // Сохраняет и восстанавливает внешние связи
@@ -1134,7 +1140,7 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
   return 0;
  cont->SetName("PostAfferent23");
  res=net->AddComponent(cont);
-              */
+			  */
  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(neuron_class_name));
  if(!cont)
   return 0;
@@ -1247,6 +1253,218 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 
  return net;
 }
+
+
+// Создает пару мотонейронов
+ bool NMotionElement::CreateMotoneurons()
+ {
+
+   UEPtr<UContainer> cont;
+   UEPtr<UStorage> storage = GetStorage();
+   bool res;
+
+
+ // Мотонейрон 1
+   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynMotoneuron"));
+   if(!cont)
+	return 0;
+   cont->SetName("MotoneuronL");
+   res=AddComponent(cont);
+
+  // Мотонейрон 2
+   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynMotoneuron"));
+   if(!cont)
+	return 0;
+   cont->SetName("MotoneuronR");
+   res=AddComponent(cont);
+
+   if(RenshowMode)
+   {
+	// Клетка реншоу 1
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynRenshowCell"));
+	if(!cont)
+	 return 0;
+	cont->SetName("RenshowL");
+	res=AddComponent(cont);
+
+	// Клетка реншоу 2
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynRenshowCell"));
+	if(!cont)
+	 return 0;
+	cont->SetName("RenshowR");
+	res=AddComponent(cont);
+   }
+
+   return true;
+ }
+ // Создаёт связку афферентных нейронов
+ bool NMotionElement::CreateAfferents()
+ {
+   UEPtr<UContainer> cont;
+   UEPtr<UStorage> storage = GetStorage();
+   bool res;
+
+
+   if (NumControlLoops>0)
+   {
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
+	  if(!cont)
+	   return 0;
+	  cont->SetName("AfferentR1");
+	  res=AddComponent(cont);
+
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
+	  if(!cont)
+	   return 0;
+	  cont->SetName("AfferentL1");
+	  res=AddComponent(cont);
+   }
+
+   if (NumControlLoops>1)
+   {
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
+	  if(!cont)
+	   return 0;
+	  cont->SetName("AfferentR2");
+	  res=AddComponent(cont);
+
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
+	  if(!cont)
+	   return 0;
+	  cont->SetName("AfferentL2");
+	  res=AddComponent(cont);
+   }
+
+   if (NumControlLoops>2)
+   {
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
+	  if(!cont)
+	   return 0;
+	  cont->SetName("AfferentR3");
+	  res=AddComponent(cont);
+
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
+	  if(!cont)
+	   return 0;
+	  cont->SetName("AfferentL3");
+	  res=AddComponent(cont);
+   }
+
+   return true;
+ }
+ bool NMotionElement::CreateInterneurons()
+ {
+   if(InterneuronPresentMode!=1)
+    return 0;
+   UEPtr<UContainer> cont;
+   UEPtr<UStorage> storage = GetStorage();
+   bool res;
+
+   if (NumControlLoops>0)
+   {
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
+	if(!cont)
+	 return 0;
+	cont->SetName("PostAfferentL1");
+	res=AddComponent(cont);
+
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
+	if(!cont)
+	 return 0;
+	cont->SetName("PostAfferentR1");
+	res=AddComponent(cont);
+   }
+
+   if (NumControlLoops>1)
+   {
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
+	if(!cont)
+	 return 0;
+	cont->SetName("PostAfferentL2");
+	res=AddComponent(cont);
+
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
+	if(!cont)
+	 return 0;
+	cont->SetName("PostAfferentR2");
+	res=AddComponent(cont);
+   }
+
+   if (NumControlLoops>2)
+   {
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
+	if(!cont)
+	 return 0;
+	cont->SetName("PostAfferentL3");
+	res=AddComponent(cont);
+
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
+	if(!cont)
+	 return 0;
+	cont->SetName("PostAfferentR3");
+	res=AddComponent(cont);
+   }
+   return true;
+ }
+
+ // Создание связей
+ bool NMotionElement::LinkMotoneurons(const string &afferentL, const string afferentR, int mode)
+ {
+   if(!(CheckComponent(afferentL)&&CheckComponent(afferentR)&&CheckComponent("MotoneuronL")&&
+		CheckComponent("MotoneuronR")))
+		return false;
+   UEPtr<UContainer> cont;
+   UEPtr<UStorage> storage = GetStorage();
+   bool res = true;
+
+   ULongId item,conn;
+   NameT tmpname;
+   res=true;
+
+   switch(mode)
+   {
+	case 0:
+		res&=CreateLink(afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
+		res&=CreateLink(afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
+		res&=CreateLink(afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
+		res&=CreateLink(afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
+		break;
+
+	 case 1:
+		if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
+		  return false;
+		res&=CreateLink(afferentL+".LTZone",0,"Post"+afferentL+".PNeuronMembrane.PosChannel");
+		res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
+		res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
+		res&=CreateLink(afferentR+".LTZone",0,"Post"+afferentR+".PNeuronMembrane.PosChannel");
+		res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
+		res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
+		break;
+
+	 case 2:
+		if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
+		  return false;
+		res&=CreateLink(afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
+		res&=CreateLink(afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
+		res&=CreateLink(afferentL+".LTZone",0,"Post"+afferentL+".PNeuronMembrane.PosChannel");
+		res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
+		res&=CreateLink(afferentR+".LTZone",0,"Post"+afferentR+".PNeuronMembrane.PosChannel");
+		res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
+		break;
+
+	 case 3:
+		if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
+		  return false;
+        res&=CreateLink(afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
+		res&=CreateLink(afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
+		res&=CreateLink(afferentL+".LTZone",0,"Post"+afferentL+".PNeuronMembrane.PosChannel");
+		res&=CreateLink(afferentR+".LTZone",0,"Post"+afferentR+".PNeuronMembrane.PosChannel");
+		res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
+		res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
+		break;
+
+   }
+ }
 
 }
 //---------------------------------------------------------------------------

@@ -35,6 +35,11 @@ RDK::ULProperty<std::vector<int>, NMotionElement> EnableControlLoopFlags;
 // 1 - вставочные нейроны есть
 RDK::ULProperty<int, NMotionElement> InterneuronPresentMode;
 
+// Режим наличия клеток Реншоу
+// 0 - клеток Реншоу нет
+// 1 - клетки Реншоу есть
+RDK::ULProperty<int, NMotionElement> RenshowMode;
+
 // Режим наличия возвратного торможения
 // 0 - возвратного торможения нет
 // 1 - возвратное торможение только на выходном (мотонейроне)
@@ -71,6 +76,9 @@ UCPointer<NPulseGenerator, NMotionElement> ExternalControlGenerators;
 
 // Указатели на результирующие нейроны (мотонейроны)
 UCPointer<NPulseNeuron, NMotionElement> Motoneurons;
+
+string netclassname;
+string neuron_class_name;
 
 public: // Методы
 // --------------------------
@@ -130,6 +138,21 @@ void CreateInternalLinks(void);
 void BackupExternalLinks(void);
 void RestoreExternalLinks(void);
 // --------------------------
+// Методы создания элементов СУ
+// --------------------------
+// Создание пары мотонейронов
+bool CreateMotoneurons();
+// Создание связки афферентных нейронов
+bool CreateAfferents();
+// Создание интернейронов
+bool CreateInterneurons();
+// Создание связей между афферентными нейронами и мотонейронами
+// 0 - прямая связь (без интернейронов)
+// 1 - связь через интернейроны
+// 2 - связь через интернейроны(L-R) + прямая связь(L-L)
+// 3 - связь через интернейроны(L-L) + прямая связь(L-R)
+bool LinkMotoneurons(const string &afferentL, const string afferentR, int mode);
+
 };
 
 // Формирует СУ двигательной единицей

@@ -42,7 +42,13 @@ NMotionControlLibrary::NMotionControlLibrary(void)
 void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 {
  // Создаем СУ двигательной единицей
- UEPtr<UNet> net=CreateMotionElement(dynamic_cast<UStorage*>(storage), "NNet",0);
+ UEPtr<UNet> net=new NMotionElement;
+ net->SetName("MotionElement");
+ net->Default();
+ UploadClass("NNewMotionElement",net);
+
+ // Создаем СУ двигательной единицей
+ net=CreateMotionElement(dynamic_cast<UStorage*>(storage), "NNet",0);
  net->SetName("MotionElement");
  UploadClass("NMotionElement",net);
 
