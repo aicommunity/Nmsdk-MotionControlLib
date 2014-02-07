@@ -28,6 +28,13 @@ RDK::ULProperty<int, NMotionElement> NumControlLoops;
 // Массив флагов включения контуров управления
 RDK::ULProperty<std::vector<int>, NMotionElement> EnableControlLoopFlags;
 
+// Массив режимов связи между нейронами
+// 0 - прямая связь (без интернейронов)
+// 1 - связь через интернейроны
+// 2 - связь через интернейроны(L-R) + прямая связь(L-L)
+// 3 - связь через интернейроны(L-L) + прямая связь(L-R)
+RDK::ULProperty<std::vector<int>, NMotionElement> LinkModes;
+
 // Режим наличия вставочных нейронов
 // Внимание, этот режим аналогичен тому, при котором каждый контур имеет
 // свой мотонейрон
@@ -93,6 +100,8 @@ virtual ~NMotionElement(void);
 // --------------------------
 bool SetNumControlLoops(const int &value);
 bool SetEnableControlLoopFlags(const std::vector<int> &value);
+bool SetRenshowMode(const int &value);
+bool SetLinkModes(const std::vector<int> &value);
 bool SetInterneuronPresentMode(const int &value);
 bool SetRecurrentInhibitionMode(const int &value);
 bool SetRecurrentInhibitionBranchMode(const int &value);
@@ -152,6 +161,9 @@ bool CreateInterneurons();
 // 2 - связь через интернейроны(L-R) + прямая связь(L-L)
 // 3 - связь через интернейроны(L-L) + прямая связь(L-R)
 bool LinkMotoneurons(const string &afferentL, const string afferentR, int mode);
+
+// Создание связей с клетками Реншоу
+bool LinkRenshow();
 
 };
 

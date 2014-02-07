@@ -26,8 +26,9 @@ NMotionElement::NMotionElement(void)
 :
 NumControlLoops("NumControlLoops",this, &NMotionElement::SetNumControlLoops),
 EnableControlLoopFlags("EnableControlLoopFlags",this, &NMotionElement::SetEnableControlLoopFlags),
+LinkModes("LinkModes",this,&NMotionElement::SetLinkModes),
 InterneuronPresentMode("InterneuronPresentMode",this, &NMotionElement::SetInterneuronPresentMode),
-RenshowMode("RenshowMode",this),
+RenshowMode("RenshowMode",this, &NMotionElement::SetRenshowMode),
 RecurrentInhibitionMode("RecurrentInhibitionMode",this, &NMotionElement::SetRecurrentInhibitionMode),
 RecurrentInhibitionBranchMode("RecurrentInhibitionBranchMode",this, &NMotionElement::SetRecurrentInhibitionBranchMode),
 MotoneuronBranchMode("MotoneuronBranchMode",this, &NMotionElement::SetMotoneuronBranchMode),
@@ -54,6 +55,7 @@ bool NMotionElement::SetNumControlLoops(const int &value)
  if(value <=0)
   return false;
  Ready=false;
+ LinkModes->resize(value, 0); //добавить второй аргумент
  return true;
 }
 
@@ -62,10 +64,25 @@ bool NMotionElement::SetEnableControlLoopFlags(const std::vector<int> &value)
  return true;
 }
 
+bool NMotionElement::SetRenshowMode(const int &value)
+{
+ Ready=false;
+ return true;
+}
+
+bool NMotionElement::SetLinkModes(const std::vector<int> &value)
+{
+ Ready=false;
+ return true;
+}
+
 bool NMotionElement::SetInterneuronPresentMode(const int &value)
 {
- if(value <=0)
-  return false;
+ if(value==0)//Если интернейроны отсутствуют - сброс связи в режим 0 (без интернейронов)
+ {
+  LinkModes->clear();
+  LinkModes->resize(NumControlLoops, 0);
+ }
  Ready=false;
  return true;
 }
@@ -88,7 +105,7 @@ bool NMotionElement::SetRecurrentInhibitionBranchMode(const int &value)
 
 bool NMotionElement::SetMotoneuronBranchMode(const int &value)
 {
- if(value <=0)
+ if(value <0)
   return false;
  Ready=false;
  return true;
@@ -121,6 +138,10 @@ NMotionElement* NMotionElement::New(void)
 // Восстановление настроек по умолчанию и сброс процесса счета
 bool NMotionElement::ADefault(void)
 {
+  NumControlLoops = 1;
+  InterneuronPresentMode = 0;
+  RenshowMode = 0;
+
  return true;
 }
 
@@ -164,7 +185,12 @@ void NMotionElement::CreateStructure(void)
 // Создает внутренние связи в соответствии с текущими значениями параметров
 void NMotionElement::CreateInternalLinks(void)
 {
-   LinkMotoneurons("AfferentL1", "AfferentR1", 3);
+   for (int i=0; i<NumControlLoops; i++)
+   {
+	 LinkMotoneurons("AfferentL"+sntoa(i+1),"AfferentR"+sntoa(i+1),(*LinkModes)[i]);
+   }
+   if(RenshowMode)
+	 LinkRenshow();
 }
 
 // Сохраняет и восстанавливает внешние связи
@@ -1305,48 +1331,18 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
    bool res;
 
 
-   if (NumControlLoops>0)
+   for (int i=0; i<NumControlLoops; i++)
    {
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
 	  if(!cont)
 	   return 0;
-	  cont->SetName("AfferentR1");
+	  cont->SetName("AfferentR"+sntoa(i+1));
 	  res=AddComponent(cont);
 
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
 	  if(!cont)
 	   return 0;
-	  cont->SetName("AfferentL1");
-	  res=AddComponent(cont);
-   }
-
-   if (NumControlLoops>1)
-   {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
-	  if(!cont)
-	   return 0;
-	  cont->SetName("AfferentR2");
-	  res=AddComponent(cont);
-
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
-	  if(!cont)
-	   return 0;
-	  cont->SetName("AfferentL2");
-	  res=AddComponent(cont);
-   }
-
-   if (NumControlLoops>2)
-   {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
-	  if(!cont)
-	   return 0;
-	  cont->SetName("AfferentR3");
-	  res=AddComponent(cont);
-
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
-	  if(!cont)
-	   return 0;
-	  cont->SetName("AfferentL3");
+	  cont->SetName("AfferentL"+sntoa(i+1));
 	  res=AddComponent(cont);
    }
 
@@ -1360,50 +1356,21 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
    UEPtr<UStorage> storage = GetStorage();
    bool res;
 
-   if (NumControlLoops>0)
+   for (int i=0; i<NumControlLoops; i++)
    {
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
 	if(!cont)
 	 return 0;
-	cont->SetName("PostAfferentL1");
+	cont->SetName("PostAfferentL"+sntoa(i+1));
 	res=AddComponent(cont);
 
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
 	if(!cont)
 	 return 0;
-	cont->SetName("PostAfferentR1");
+	cont->SetName("PostAfferentR"+sntoa(i+1));
 	res=AddComponent(cont);
    }
 
-   if (NumControlLoops>1)
-   {
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
-	if(!cont)
-	 return 0;
-	cont->SetName("PostAfferentL2");
-	res=AddComponent(cont);
-
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
-	if(!cont)
-	 return 0;
-	cont->SetName("PostAfferentR2");
-	res=AddComponent(cont);
-   }
-
-   if (NumControlLoops>2)
-   {
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
-	if(!cont)
-	 return 0;
-	cont->SetName("PostAfferentL3");
-	res=AddComponent(cont);
-
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
-	if(!cont)
-	 return 0;
-	cont->SetName("PostAfferentR3");
-	res=AddComponent(cont);
-   }
    return true;
  }
 
@@ -1421,51 +1388,113 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
    NameT tmpname;
    res=true;
 
-   switch(mode)
+   if (!MotoneuronBranchMode)
    {
-	case 0:
-		res&=CreateLink(afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
-		res&=CreateLink(afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
-		res&=CreateLink(afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
-		res&=CreateLink(afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
-		break;
+	   switch(mode)
+	   {
+		case 0:
+			res&=CreateLink(afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
+			res&=CreateLink(afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
+			res&=CreateLink(afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
+			res&=CreateLink(afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
+			break;
 
-	 case 1:
-		if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
-		  return false;
-		res&=CreateLink(afferentL+".LTZone",0,"Post"+afferentL+".PNeuronMembrane.PosChannel");
-		res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
-		res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
-		res&=CreateLink(afferentR+".LTZone",0,"Post"+afferentR+".PNeuronMembrane.PosChannel");
-		res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
-		res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
-		break;
+		 case 1:
+			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
+			  return false;
+			res&=CreateLink(afferentL+".LTZone",0,"Post"+afferentL+".PNeuronMembrane.PosChannel");
+			res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
+			res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
+			res&=CreateLink(afferentR+".LTZone",0,"Post"+afferentR+".PNeuronMembrane.PosChannel");
+			res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
+			res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
+			break;
 
-	 case 2:
-		if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
-		  return false;
-		res&=CreateLink(afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
-		res&=CreateLink(afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
-		res&=CreateLink(afferentL+".LTZone",0,"Post"+afferentL+".PNeuronMembrane.PosChannel");
-		res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
-		res&=CreateLink(afferentR+".LTZone",0,"Post"+afferentR+".PNeuronMembrane.PosChannel");
-		res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
-		break;
+		 case 2:
+			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
+			  return false;
+			res&=CreateLink(afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
+			res&=CreateLink(afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
+			res&=CreateLink(afferentL+".LTZone",0,"Post"+afferentL+".PNeuronMembrane.PosChannel");
+			res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
+			res&=CreateLink(afferentR+".LTZone",0,"Post"+afferentR+".PNeuronMembrane.PosChannel");
+			res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
+			break;
 
-	 case 3:
-		if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
-		  return false;
-        res&=CreateLink(afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
-		res&=CreateLink(afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
-		res&=CreateLink(afferentL+".LTZone",0,"Post"+afferentL+".PNeuronMembrane.PosChannel");
-		res&=CreateLink(afferentR+".LTZone",0,"Post"+afferentR+".PNeuronMembrane.PosChannel");
-		res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
-		res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
-		break;
-
+		 case 3:
+			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
+			  return false;
+			res&=CreateLink(afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
+			res&=CreateLink(afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
+			res&=CreateLink(afferentL+".LTZone",0,"Post"+afferentL+".PNeuronMembrane.PosChannel");
+			res&=CreateLink(afferentR+".LTZone",0,"Post"+afferentR+".PNeuronMembrane.PosChannel");
+			res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
+			res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
+			break;
+	   }
    }
- }
 
+   else
+   {
+	   switch(mode)
+	   {
+		case 0:
+		 res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronL", "PosChannel");
+		 res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronR", "NegChannel");
+		 res&=CreateNeuronBranchLink(this,afferentR+".LTZone","MotoneuronR", "PosChannel");
+		 res&=CreateNeuronBranchLink(this,afferentR+".LTZone","MotoneuronL", "NegChannel");
+		 break;
+
+		 case 1:
+			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
+			  return false;
+			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"PosChannel");
+			res&=CreateNeuronBranchLink(this,"Post"+afferentL+".LTZone","MotoneuronR","NegChannel");
+			res&=CreateNeuronBranchLink(this,"Post"+afferentL+".LTZone","MotoneuronL","PosChannel");
+			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","Post"+afferentR,"PosChannel");
+			res&=CreateNeuronBranchLink(this,"Post"+afferentR+".LTZone","MotoneuronL","NegChannel");
+			res&=CreateNeuronBranchLink(this,"Post"+afferentR+".LTZone","MotoneuronR","PosChannel");
+			break;
+
+		 case 2:
+			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
+			  return false;
+			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronL","PosChannel");
+			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","MotoneuronR","PosChannel");
+			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"PosChannel");
+			res&=CreateNeuronBranchLink(this,"Post"+afferentL+".LTZone","MotoneuronR","NegChannel");
+			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","Post"+afferentR,"PosChannel");
+			res&=CreateNeuronBranchLink(this,"Post"+afferentR+".LTZone","MotoneuronL","NegChannel");
+			break;
+
+		 case 3:
+			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
+			  return false;
+			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronR","NegChannel");
+			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","MotoneuronL","NegChannel");
+			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"PosChannel");
+			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","Post"+afferentR,"PosChannel");
+			res&=CreateNeuronBranchLink(this,"Post"+afferentL+".LTZone","MotoneuronL","PosChannel");
+			res&=CreateNeuronBranchLink(this,"Post"+afferentR+".LTZone","MotoneuronR","PosChannel");
+			break;
+	   }
+   }
+
+   return res;
+ }
+ bool NMotionElement::LinkRenshow()
+ {
+   bool res = true;
+   if(!(CheckComponent("RenshowL")&&CheckComponent("RenshowR")))
+	 return false;
+   res&=CreateLink("MotoneuronL.LTZone",0,"RenshowL.PNeuronMembrane.PosChannel");
+   res&=CreateLink("RenshowL.LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
+
+   res&=CreateLink("MotoneuronR.LTZone",0,"RenshowR.PNeuronMembrane.PosChannel");
+   res&=CreateLink("RenshowR.LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
+
+   return res;
+ }
 }
 //---------------------------------------------------------------------------
 #endif
