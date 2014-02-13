@@ -45,6 +45,10 @@ RDK::ULProperty<NameT, NEngineMotionControl> MotionElementClassName;
 /// 2 - включена автоматическая адаптация c полным сбросом управления
 RDK::ULProperty<int, NEngineMotionControl> AdaptiveStructureMode;
 
+// Вектор диапазонов афферентных нейронов
+//RDK::ULProperty<std::vector<double>, NEngineMotionControl> IMin;
+//RDK::ULProperty<std::vector<double>, NEngineMotionControl> IMax;
+
 // Диапазон афферентных нейронов по каналу Ia
 RDK::ULProperty<double, NEngineMotionControl> IaMin;
 RDK::ULProperty<double, NEngineMotionControl> IaMax;
@@ -284,6 +288,30 @@ UNet* CreateEngineControlContinuesNeuronsSimple(bool crossranges=true);
 
 // Формируем сеть управления на 2 импульсных нейронах
 UNet* CreateEngineControl2NeuronsSimplest(bool use_speed_force=false, bool use_add_contours=false);
+
+//------------------------------
+//Новый способ формирования сети
+
+// Формируем сеть управления новым способом на 2 импульсных нейронах
+UNet* CreateNewEngineControl2NeuronsSimplest(bool use_speed_force);
+
+// Настройка рецепторов
+void NewMotionElementsSetup(UEPtr<UContainer> net, int inp_mode, int out_mode, double exp_coeff, double receptor_max_output, double receptor_gain, int real_ranges);
+
+// Настройка преобразователя импульс-аналог
+void NewPACSetup(UEPtr<UContainer> net, double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode);
+
+// Установка стандартных связей
+void NewStandardLinksSetup(UEPtr<UNet> net, const string &engine_integrator_name);
+
+// Настройка разделителей интервалов
+void NewIntervalSeparatorsSetup(UEPtr<UContainer> net, int mode_value, double pos_gain_value, double neg_gain_value);
+
+// Настройка разделителей интервалов
+void NewIntervalSeparatorsUpdate(UEPtr<UContainer> net, int mode_value);
+
+// Установка связей разделителей интервалов
+void NewIntervalSeparatorLinksSetup(UEPtr<UNet> net);
 // --------------------------
 
 };

@@ -89,7 +89,7 @@ bool NMotionElement::SetInterneuronPresentMode(const int &value)
 
 bool NMotionElement::SetRecurrentInhibitionMode(const int &value)
 {
- if(value <=0)
+ if(value <0)
   return false;
  Ready=false;
  return true;
@@ -97,7 +97,7 @@ bool NMotionElement::SetRecurrentInhibitionMode(const int &value)
 
 bool NMotionElement::SetRecurrentInhibitionBranchMode(const int &value)
 {
- if(value <=0)
+ if(value <0)
   return false;
  Ready=false;
  return true;
@@ -113,7 +113,7 @@ bool NMotionElement::SetMotoneuronBranchMode(const int &value)
 
 bool NMotionElement::SetExternalControlMode(const int &value)
 {
- if(value <=0)
+ if(value <0)
   return false;
  Ready=false;
  return true;
