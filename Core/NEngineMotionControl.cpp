@@ -188,7 +188,7 @@ bool NEngineMotionControl::ADefault(void)
  PacRangeMode=2;//0;
  MinAfferentRange=0.1;
  MotionElementClassName="NMotionElement";
- AdaptiveStructureMode=0;
+ AdaptiveStructureMode=1;
 
  DestTransientTime=0.1;
  TransientHistoryTime=1.0;
