@@ -204,6 +204,9 @@ bool NEngineMotionControl::ADefault(void)
 // в случае успешной сборки
 bool NEngineMotionControl::ABuild(void)
 {
+ if(!GetStorage())
+  return false;
+
  if(AdaptiveStructureMode)
   Create(NumMotionElements);
 
