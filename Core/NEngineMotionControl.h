@@ -134,6 +134,8 @@ vector<vector<double> > History;
 
 vector<double> TransientHistory;
 
+vector<bool> isAfferentLinked;
+
 int HistorySize,TransientHistorySize;
 
 double LastAdaptiveTime;
@@ -152,7 +154,9 @@ public: // Методы
 NEngineMotionControl(void);
 virtual ~NEngineMotionControl(void);
 // --------------------------
+bool SetIsAfferentLinked(const int &index, const bool &value);
 
+bool GetIsAfferentLinked(const int &index);
 // --------------------------
 // Методы управления параметрами
 // --------------------------
@@ -174,6 +178,8 @@ bool SetMinAfferentRange(const double &value);
 
 // Максимальное усиление управляющего воздействия
 bool SetPacGain(const double &value);
+
+
 // --------------------------
 
 // --------------------------
@@ -238,7 +244,7 @@ virtual void AdaptiveTuningSimple(const std::vector<double> &current_contour_amp
 								  int &num_motion_elements,
 								  double &control_gain);
 // --------------------------
-
+int GetNumControlLoops(void);
 // --------------------------
 // Вспомогательные методы
 // --------------------------
@@ -299,19 +305,20 @@ UNet* CreateNewEngineControl2NeuronsSimplest(bool use_speed_force);
 void NewMotionElementsSetup(UEPtr<UContainer> net, int inp_mode, int out_mode, double exp_coeff, double receptor_max_output, double receptor_gain, int real_ranges);
 
 // Настройка преобразователя импульс-аналог
-void NewPACSetup(UEPtr<UContainer> net, double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode);
+void NewPACSetup(double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode);
 
 // Установка стандартных связей
-void NewStandardLinksSetup(UEPtr<UNet> net, const string &engine_integrator_name);
+void NewStandardLinksSetup(const string &engine_integrator_name);
+
+public:
+// Настройка разделителей интервалов
+void NewIntervalSeparatorsSetup(int mode_value, double pos_gain_value, double neg_gain_value);
 
 // Настройка разделителей интервалов
-void NewIntervalSeparatorsSetup(UEPtr<UContainer> net, int mode_value, double pos_gain_value, double neg_gain_value);
-
-// Настройка разделителей интервалов
-void NewIntervalSeparatorsUpdate(UEPtr<UContainer> net, int mode_value);
+void NewIntervalSeparatorsUpdate(int mode_value);
 
 // Установка связей разделителей интервалов
-void NewIntervalSeparatorLinksSetup(UEPtr<UNet> net);
+void NewIntervalSeparatorLinksSetup(void);
 // --------------------------
 
 };

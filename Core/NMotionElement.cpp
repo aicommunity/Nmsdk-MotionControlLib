@@ -55,7 +55,7 @@ bool NMotionElement::SetNumControlLoops(const int &value)
  if(value <=0)
   return false;
  Ready=false;
- LinkModes->resize(value, 0); //добавить второй аргумент
+ LinkModes->resize(value, 0);
  return true;
 }
 
@@ -118,6 +118,7 @@ bool NMotionElement::SetExternalControlMode(const int &value)
  Ready=false;
  return true;
 }
+
 // --------------------------
 
 
@@ -1291,14 +1292,14 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 
 
  // Мотонейрон 1
-   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynMotoneuron"));
+   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NNewSynSPNeuron"));
    if(!cont)
 	return 0;
    cont->SetName("MotoneuronL");
    res=AddComponent(cont);
 
   // Мотонейрон 2
-   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynMotoneuron"));
+   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NNewSynSPNeuron"));
    if(!cont)
 	return 0;
    cont->SetName("MotoneuronR");
@@ -1307,14 +1308,14 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
    if(RenshowMode)
    {
 	// Клетка реншоу 1
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynRenshowCell"));
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NNewSynSPNeuron"));
 	if(!cont)
 	 return 0;
 	cont->SetName("RenshowL");
 	res=AddComponent(cont);
 
 	// Клетка реншоу 2
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynRenshowCell"));
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NNewSynSPNeuron"));
 	if(!cont)
 	 return 0;
 	cont->SetName("RenshowR");
@@ -1333,13 +1334,13 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 
    for (int i=0; i<NumControlLoops; i++)
    {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSimpleAfferentNeuron"));
 	  if(!cont)
 	   return 0;
 	  cont->SetName("AfferentR"+sntoa(i+1));
 	  res=AddComponent(cont);
 
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSAfferentNeuron"));
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSimpleAfferentNeuron"));
 	  if(!cont)
 	   return 0;
 	  cont->SetName("AfferentL"+sntoa(i+1));
@@ -1358,13 +1359,13 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 
    for (int i=0; i<NumControlLoops; i++)
    {
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NNewSynSPNeuron"));
 	if(!cont)
 	 return 0;
 	cont->SetName("PostAfferentL"+sntoa(i+1));
 	res=AddComponent(cont);
 
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NSynSPNeuron"));
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NNewSynSPNeuron"));
 	if(!cont)
 	 return 0;
 	cont->SetName("PostAfferentR"+sntoa(i+1));

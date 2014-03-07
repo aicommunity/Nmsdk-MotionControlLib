@@ -411,7 +411,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Формируем сеть управления двигателем c простейшей моделью СУ
  // и простейшими афферентами
  // Ветвление дендритов
- max_number_of_mc=10;
+ max_number_of_mc=1;
  for(size_t i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
@@ -432,7 +432,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // и простейшими афферентами
  // Ветвление дендритов
  // Новая модель нейрона с выделенной сомой
- max_number_of_mc=10;
+ max_number_of_mc=1;
  for(size_t i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
