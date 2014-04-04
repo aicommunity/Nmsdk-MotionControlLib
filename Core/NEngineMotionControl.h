@@ -120,6 +120,11 @@ RDK::ULProperty<int, NEngineMotionControl> TransientObjectIndex;
 /// принимаем решение о том, что переходный процесс завершен
 RDK::ULProperty<double, NEngineMotionControl> TransientAverageThreshold;
 
+// Имя объекта для нейронов
+RDK::ULProperty<string, NEngineMotionControl> MCNeuroObjectName;
+// Имя объекта для афферентных нейронов
+RDK::ULProperty<string, NEngineMotionControl> MCAfferentObjectName;
+
 protected: // Временные переменные
 vector<vector<UEPtr<NReceptor> > > receptors;
 
@@ -178,6 +183,9 @@ bool SetMinAfferentRange(const double &value);
 
 // Максимальное усиление управляющего воздействия
 bool SetPacGain(const double &value);
+
+bool SetMCNeuroObjectName(const string &value);
+bool SetMCAfferentObjectName(const string &value);
 
 
 // --------------------------

@@ -71,6 +71,10 @@ RDK::ULProperty<int, NMotionElement> MotoneuronBranchMode;
 // который принимает выход с афферента
 RDK::ULProperty<int, NMotionElement> ExternalControlMode;
 
+// Имя объекта для нейронов
+RDK::ULProperty<string, NMotionElement> NeuroObjectName;
+// Имя объекта для афферентных нейронов
+RDK::ULProperty<string, NMotionElement> AfferentObjectName;
 
 public: // Переменные состояния
 
@@ -107,6 +111,8 @@ bool SetRecurrentInhibitionMode(const int &value);
 bool SetRecurrentInhibitionBranchMode(const int &value);
 bool SetMotoneuronBranchMode(const int &value);
 bool SetExternalControlMode(const int &value);
+bool SetNeuroObjectName(const string &value);
+bool SetAfferentObjectName(const string &value);
 // --------------------------
 
 // --------------------------

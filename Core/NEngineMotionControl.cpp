@@ -46,7 +46,9 @@ NEngineMotionControl::NEngineMotionControl(void)
    UseContourData("UseContourData",this),
    TransientHistoryTime("TransientHistoryTime",this),
    TransientObjectIndex("TransientObjectIndex",this),
-   TransientAverageThreshold("TransientAverageThreshold",this)
+   TransientAverageThreshold("TransientAverageThreshold",this),
+   MCNeuroObjectName("MCNeuroObjectName",this,&NEngineMotionControl::SetMCNeuroObjectName),
+   MCAfferentObjectName("MCAfferentObjectName",this,&NEngineMotionControl::SetMCAfferentObjectName)
 
 
 {
@@ -155,7 +157,32 @@ bool NEngineMotionControl::SetPacGain(const double &value)
  return true;
 }
 // --------------------------
-
+bool NEngineMotionControl::SetMCNeuroObjectName(const string &value)
+{
+ if(!Motions.empty())
+ {
+  for(int i=0;i<NumMotionElements;i++)
+  {
+   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+   melem->NeuroObjectName = value;
+  }
+ }
+ Ready=false;
+ return true;
+}
+bool NEngineMotionControl::SetMCAfferentObjectName(const string &value)
+{
+ if(!Motions.empty())
+ {
+  for(int i=0;i<NumMotionElements;i++)
+  {
+   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+   melem->AfferentObjectName = value;
+  }
+ }
+ Ready=false;
+ return true;
+}
 
 // --------------------------
 // Системные методы управления объектом
@@ -194,6 +221,9 @@ bool NEngineMotionControl::ADefault(void)
  TransientHistoryTime=1.0;
  TransientObjectIndex=0;
  TransientAverageThreshold=0.05;
+
+ MCNeuroObjectName = "NNewSynSPNeuron";
+ MCAfferentObjectName = "NSimpleAfferentNeuron";
 
  return true;
 }
