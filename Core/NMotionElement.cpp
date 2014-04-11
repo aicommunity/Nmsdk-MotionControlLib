@@ -193,6 +193,8 @@ void NMotionElement::CreateStructure(void)
   DelAllComponents();
   if(!GetStorage())
    return;
+  if(NeuroObjectName->empty()||AfferentObjectName->empty())
+   return;
   CreateMotoneurons();
   CreateAfferents();
   CreateInterneurons();
