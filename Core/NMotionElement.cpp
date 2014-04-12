@@ -632,11 +632,15 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
  UEPtr<NPulseChannel> channel;
  UEPtr<UContainer> ltmembr;
 
- try
+ bool ltmembr_found=neuron->CheckComponent("LTMembrane");
+ if(ltmembr_found)
  {
-  ltmembr=neuron->GetComponent("LTMembrane");
+  try
+  {
+   ltmembr=neuron->GetComponent("LTMembrane");
+  }
+  catch(UContainer::EComponentNameNotExist &exc){}
  }
- catch(UContainer::EComponentNameNotExist &exc){}
  if(ltmembr)
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
  else
@@ -656,11 +660,15 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
  UEPtr<NPulseChannel> channel;
  UEPtr<UContainer> ltmembr;
 
- try
+ bool ltmembr_found=neuron->CheckComponent("LTMembrane");
+ if(ltmembr_found)
  {
-  ltmembr=neuron->GetComponent("LTMembrane");
+  try
+  {
+   ltmembr=neuron->GetComponent("LTMembrane");
+  }
+  catch(UContainer::EComponentNameNotExist &exc){}
  }
- catch(UContainer::EComponentNameNotExist &exc){}
  if(ltmembr)
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
  else
@@ -682,11 +690,15 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
  UEPtr<NPulseChannel> channel;
  UEPtr<UContainer> ltmembr;
 
- try
+ bool ltmembr_found=neuron->CheckComponent("LTMembrane");
+ if(ltmembr_found)
  {
-  ltmembr=neuron->GetComponent("LTMembrane");
+  try
+  {
+   ltmembr=neuron->GetComponent("LTMembrane");
+  }
+  catch(UContainer::EComponentNameNotExist &exc){}
  }
- catch(UContainer::EComponentNameNotExist &exc){}
  try
  {
   branch=dynamic_pointer_cast<NPulseMembrane>(neuron->GetComponent(branch_name));

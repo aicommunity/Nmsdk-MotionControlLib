@@ -122,8 +122,12 @@ RDK::ULProperty<double, NEngineMotionControl> TransientAverageThreshold;
 
 // Имя объекта для нейронов
 RDK::ULProperty<string, NEngineMotionControl> MCNeuroObjectName;
+
 // Имя объекта для афферентных нейронов
 RDK::ULProperty<string, NEngineMotionControl> MCAfferentObjectName;
+
+// Имя объекта для PAC
+RDK::ULProperty<string, NEngineMotionControl> PacObjectName;
 
 protected: // Временные переменные
 vector<vector<UEPtr<NReceptor> > > receptors;
@@ -186,8 +190,7 @@ bool SetPacGain(const double &value);
 
 bool SetMCNeuroObjectName(const string &value);
 bool SetMCAfferentObjectName(const string &value);
-
-
+bool SetPacObjectName(const string &value);
 // --------------------------
 
 // --------------------------
@@ -269,10 +272,10 @@ void MotionElementsSetup(UEPtr<UContainer> net, int inp_mode, int out_mode, doub
 
 // Настройка преобразователя импульс-аналог
 void PACSetup(UEPtr<UContainer> net,
-		double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode=true);
+		double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode, int tc_mode);
 
 // Настройка преобразователя аналог-аналог
-void AACSetup(UEPtr<UContainer> net, double gain_value);
+void AACSetup(UEPtr<UContainer> net, double gain_value, bool gain_div_mode);
 
 // Настройка разделителей интервалов
 void IntervalSeparatorsSetup(UEPtr<UContainer> net, int mode_value, double pos_gain_value, double neg_gain_value, bool II=true, bool Ia=true, bool Ib=true, bool Ic=false);
@@ -313,7 +316,7 @@ UNet* CreateNewEngineControl2NeuronsSimplest(bool use_speed_force);
 void NewMotionElementsSetup(UEPtr<UContainer> net, int inp_mode, int out_mode, double exp_coeff, double receptor_max_output, double receptor_gain, int real_ranges);
 
 // Настройка преобразователя импульс-аналог
-void NewPACSetup(double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode);
+void NewPACSetup(double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode, int tc_mode);
 
 // Установка стандартных связей
 void NewStandardLinksSetup(const string &engine_integrator_name);
