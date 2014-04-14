@@ -899,6 +899,14 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(MotionElementClassName));
   if(!cont)
    continue;
+  UEPtr<NMotionElement> melement=0;
+  melement=dynamic_pointer_cast<NMotionElement>(cont);
+  if(melement)
+  {
+   melement->NeuroObjectName = MCNeuroObjectName;
+   melement->AfferentObjectName = MCAfferentObjectName;
+   melement->Reset();
+  }
   cont->SetName(string("MotionElement")+RDK::sntoa(i));
   net->AddComponent(cont);
   Motions.push_back(static_pointer_cast<NNet>(cont));
@@ -1097,18 +1105,18 @@ void NEngineMotionControl::PACSetup(UEPtr<UContainer> net,
 // Настройка преобразователя аналог-аналог
 void NEngineMotionControl::AACSetup(UEPtr<UContainer> net, double gain_value)
 {
- NSum* cont=0;
+ NPac* cont=0;
  UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
 
  if(!storage)
   return;
 
- cont=dynamic_pointer_cast<NSum>(storage->TakeObject("NSum"));
+ cont=dynamic_pointer_cast<NPac>(storage->TakeObject(PacObjectName));
  if(!cont)
   return;
  cont->SetName("Pac");
- cont->Mode=1;
-// cont->TCMode=0;
+ cont->Mode=0;
+ cont->TCMode=0;
  net->AddComponent(cont);
  cont->SetOutputDataSize(0,Motions.size()*2);
 
@@ -2243,6 +2251,14 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
   cont->SetName(string("MotionElement")+RDK::sntoa(i));
   net->AddComponent(cont);
   Motions.push_back(static_pointer_cast<NNet>(cont));
+
+  UEPtr<NMotionElement> melement=dynamic_pointer_cast<NMotionElement>(cont);
+  if(melement)
+  {
+   melement->NeuroObjectName = MCNeuroObjectName;
+   melement->AfferentObjectName = MCAfferentObjectName;
+  }
+
   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
   melem->SetNumControlLoops(2);
   melem->Build();
@@ -2253,11 +2269,11 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
 	   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("AfferentL"+RDK::sntoa(j+1)+".Receptor"));
 	   receptor->MinInputRange=0;
 	   receptor->MaxInputRange=fabs(IaMin)/real_ranges;
-	   receptor->InputAdaptationMode=inp_mode;
-	   receptor->OutputAdaptationMode=out_mode;
-	   receptor->MaxOutputRange=receptor_max_output;
-	   receptor->Gain=receptor_gain;
-	   receptor->ExpCoeff=exp_coeff;
+//	   receptor->InputAdaptationMode=inp_mode;
+//	   receptor->OutputAdaptationMode=out_mode;
+//	   receptor->MaxOutputRange=receptor_max_output;
+//	   receptor->Gain=receptor_gain;
+//	   receptor->ExpCoeff=exp_coeff;
 	  }
 	  catch (EComponentNameNotExist &exc)
 	  {
@@ -2268,11 +2284,11 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
 	   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("AfferentR"+RDK::sntoa(j+1)+".Receptor"));
 	   receptor->MinInputRange=0;
 	   receptor->MaxInputRange=fabs(IaMax)/real_ranges;
-	   receptor->InputAdaptationMode=inp_mode;
-	   receptor->OutputAdaptationMode=out_mode;
-	   receptor->MaxOutputRange=receptor_max_output;
-	   receptor->Gain=receptor_gain;
-	   receptor->ExpCoeff=exp_coeff;
+//	   receptor->InputAdaptationMode=inp_mode;
+//	   receptor->OutputAdaptationMode=out_mode;
+//	   receptor->MaxOutputRange=receptor_max_output;
+//	   receptor->Gain=receptor_gain;
+//	   receptor->ExpCoeff=exp_coeff;
 	  }
 	  catch (EComponentNameNotExist &exc)
 	  {
