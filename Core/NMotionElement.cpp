@@ -152,7 +152,8 @@ NMotionElement* NMotionElement::New(void)
 // Восстановление настроек по умолчанию и сброс процесса счета
 bool NMotionElement::ADefault(void)
 {
-  NumControlLoops = 1;
+  if(!isNumControlLoopsInitialized)
+   NumControlLoops = 1;
   InterneuronPresentMode = 0;
   RenshowMode = 0;
   NeuroObjectName = "NNewSynSPNeuron";

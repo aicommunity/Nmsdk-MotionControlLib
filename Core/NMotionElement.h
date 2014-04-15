@@ -78,6 +78,9 @@ RDK::ULProperty<string, NMotionElement> AfferentObjectName;
 
 public: // Переменные состояния
 
+// Флаг первоначальной инициализации количества контуров управления
+bool  isNumControlLoopsInitialized;
+
 protected: // Временные переменные
 // Указатели на афферентные нейроны
 UCPointer<NAfferentNeuron, NMotionElement> Afferents;
