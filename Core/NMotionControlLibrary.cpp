@@ -15,6 +15,7 @@ See file license.txt for more information
 
 #include "NMotionElement.cpp"
 #include "NEngineMotionControl.cpp"
+#include "NPositionControlElement.cpp"
 
 namespace NMSDK {
 
@@ -556,6 +557,13 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 
 
 
+
+{
+ UEPtr<UContainer> generated_cont=new NPositionControlElement;
+ generated_cont->SetName("NPositionControlElement");
+ generated_cont->Default();
+ UploadClass("NPositionControlElement",generated_cont);
+}
 }
 // --------------------------
 

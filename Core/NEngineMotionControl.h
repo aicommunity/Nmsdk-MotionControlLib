@@ -15,12 +15,15 @@ See file license.txt for more information
 
 #include "../../Kernel/NSupport.h"
 #include "../PulseLib/NReceptor.h"
+#include "../BCL/NNet.h"
 
 namespace NMSDK {
 
 class NEngineMotionControl: public UNet
 {
 public: // Публичные свойства
+// Число контуров управления
+RDK::ULProperty<int, NEngineMotionControl> NumControlLoops;
 // Число управляющих элементов
 RDK::ULProperty<size_t, NEngineMotionControl> NumMotionElements;
 
@@ -162,6 +165,10 @@ public: // Методы
 // --------------------------
 NEngineMotionControl(void);
 virtual ~NEngineMotionControl(void);
+// --------------------------
+// Число контуров управления
+// --------------------------
+bool SetNumControlLoops(const int &value);
 // --------------------------
 bool SetIsAfferentLinked(const int &index, const bool &value);
 
@@ -333,6 +340,8 @@ void NewIntervalSeparatorsUpdate(int mode_value);
 // Установка связей разделителей интервалов
 void NewIntervalSeparatorLinksSetup(void);
 // --------------------------
+
+vector<NNet*> GetMotion(void);
 
 };
 

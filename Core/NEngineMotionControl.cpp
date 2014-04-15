@@ -18,7 +18,9 @@ namespace NMSDK {
 // Конструкторы и деструкторы
 // --------------------------
 NEngineMotionControl::NEngineMotionControl(void)
- : NumMotionElements("NumMotionElements",this,&NEngineMotionControl::SetNumMotionElements),
+ :
+   NumControlLoops("NumControlLoops",this, &NEngineMotionControl::SetNumControlLoops),
+   NumMotionElements("NumMotionElements",this,&NEngineMotionControl::SetNumMotionElements),
    CreationMode("CreationMode",this,&NEngineMotionControl::SetCreationMode),
    MotionElementClassName("MotionElementClassName",this),
    AdaptiveStructureMode("AdaptiveStructureMode",this),
@@ -64,6 +66,21 @@ NEngineMotionControl::~NEngineMotionControl(void)
 // --------------------------
 // Методы управления параметрами
 // --------------------------
+// Число контуров управления
+bool NEngineMotionControl::SetNumControlLoops(const int &value)
+{
+ if(value <=0)
+  return false;
+
+ for(int i=0; i<NumMotionElements; i++)
+ {
+  NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+  melem->isNumControlLoopsInitialized=true;
+  melem->NumControlLoops=value;
+ }
+// Ready=false;
+ return true;
+}
 // Число управляющих элементов
 bool NEngineMotionControl::SetNumMotionElements(const size_t &value)
 {
@@ -213,6 +230,7 @@ NEngineMotionControl* NEngineMotionControl::New(void)
 // Восстановление настроек по умолчанию и сброс процесса счета
 bool NEngineMotionControl::ADefault(void)
 {
+ NumControlLoops=1;
  NumMotionElements=1;
  CreationMode=5;
  IaMin=-2.0*M_PI;
@@ -2479,7 +2497,7 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value)
 		cont=GetComponent(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
        }
        catch (EComponentNameNotExist &exc)
-       {
+	   {
         continue;
        }
 
@@ -2562,6 +2580,11 @@ bool NEngineMotionControl::GetIsAfferentLinked(const int &index)
   if((index >=GetNumControlLoops())||(index <0))
    return false;
   return isAfferentLinked[index];
+}
+
+vector<NNet*> NEngineMotionControl::GetMotion(void)
+{
+  return Motions;
 }
 
 }
