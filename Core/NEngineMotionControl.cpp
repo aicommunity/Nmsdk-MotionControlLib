@@ -32,6 +32,8 @@ NEngineMotionControl::NEngineMotionControl(void)
    IIMax("IIMax",this),
    IcMin("IcMin",this),
    IcMax("IcMax",this),
+   AfferentMin("AfferentMin",this, &NEngineMotionControl::SetAfferentMin),
+   AfferentMax("AfferentMax",this, &NEngineMotionControl::SetAfferentMax),
    PacGain("PacGain",this,&NEngineMotionControl::SetPacGain),
    AfferentRangeMode("AfferentRangeMode",this,&NEngineMotionControl::SetAfferentRangeMode),
    PacRangeMode("PacRangeMode",this,&NEngineMotionControl::SetPacRangeMode),
@@ -78,7 +80,10 @@ bool NEngineMotionControl::SetNumControlLoops(const int &value)
   melem->isNumControlLoopsInitialized=true;
   melem->NumControlLoops=value;
  }
-// Ready=false;
+
+ AfferentMin->resize(value);
+ AfferentMax->resize(value);
+ Ready=false;
  return true;
 }
 // „исло управл€ющих элементов
@@ -126,7 +131,14 @@ if(Ready)
  real_ranges=CalcAfferentRange(NumMotionElements, crossranges, IcMin, IcMax,
 			Ic_ranges_pos, Ic_ranges_neg,value);
 
+ AfferentRangesPos.resize(NumControlLoops);
+ AfferentRangesNeg.resize(NumControlLoops);
+ for(int i=0;i<NumControlLoops;i++)
+  real_ranges=CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
+			AfferentRangesPos[i], AfferentRangesNeg[i],value);
+
  IntervalSeparatorsUpdate(this, 5);
+ NewIntervalSeparatorsUpdate(5);
 }
  return true;
 }
@@ -163,7 +175,14 @@ if(Ready)
  CalcAfferentRange(NumMotionElements, crossranges, IcMin, IcMax,
 			Ic_ranges_pos, Ic_ranges_neg,value);
 
+ AfferentRangesPos.resize(NumControlLoops);
+ AfferentRangesNeg.resize(NumControlLoops);
+ for(int i=0;i<NumControlLoops;i++)
+  CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
+			AfferentRangesPos[i], AfferentRangesNeg[i],value);
+
  IntervalSeparatorsUpdate(this, 5);
+ NewIntervalSeparatorsUpdate(5);
 }
  return true;
 }
@@ -214,6 +233,43 @@ bool NEngineMotionControl::SetPacObjectName(const string &value)
  return true;
 }
 
+
+/// ƒиапазон афферентных нейронов по каналам
+bool NEngineMotionControl::SetAfferentMin(const std::vector<double> &value)
+{
+ if(Ready)
+ {
+  bool crossranges=false;
+  AfferentRangesPos.resize(NumControlLoops);
+  AfferentRangesNeg.resize(NumControlLoops);
+  for(int i=0;i<NumControlLoops;i++)
+   CalcAfferentRange(NumMotionElements, crossranges, value[i], (*AfferentMax)[i],
+			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
+
+  NewIntervalSeparatorsUpdate(5);
+ }
+
+ return true;
+}
+
+bool NEngineMotionControl::SetAfferentMax(const std::vector<double> &value)
+{
+ if(Ready)
+ {
+  bool crossranges=false;
+  AfferentRangesPos.resize(NumControlLoops);
+  AfferentRangesNeg.resize(NumControlLoops);
+  for(int i=0;i<NumControlLoops;i++)
+   CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], value[i],
+			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
+
+  NewIntervalSeparatorsUpdate(5);
+ }
+
+ return true;
+}
+
+
 // --------------------------
 // —истемные методы управлени€ объектом
 // --------------------------
@@ -241,6 +297,8 @@ bool NEngineMotionControl::ADefault(void)
  IIMax=M_PI/2;
  IcMin=-10;
  IcMax=10;
+ AfferentMin->assign(1,-2.0*M_PI);
+ AfferentMax->assign(1,2.0*M_PI);
  PacGain=300;
  AfferentRangeMode=2;//0;
  PacRangeMode=2;//0;
@@ -923,6 +981,7 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
   {
    melement->NeuroObjectName = MCNeuroObjectName;
    melement->AfferentObjectName = MCAfferentObjectName;
+   melement->NumControlLoops=NumControlLoops;
    melement->Reset();
   }
   cont->SetName(string("MotionElement")+RDK::sntoa(i));
@@ -1955,6 +2014,12 @@ UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bo
  real_ranges=CalcAfferentRange(num_motions, crossranges, IIMin, IIMax,
 			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
+ AfferentRangesPos.resize(NumControlLoops);
+ AfferentRangesNeg.resize(NumControlLoops);
+ for(int i=0;i<NumControlLoops;i++)
+  real_ranges=CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
+			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
+
 
  UNet *net=this;//dynamic_cast<UNet*>(storage->TakeObject(netclassname));
  if(!net)
@@ -2046,6 +2111,13 @@ UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cross
  real_ranges=CalcAfferentRange(num_motions, crossranges, IIMin, IIMax,
 			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
+ AfferentRangesPos.resize(NumControlLoops);
+ AfferentRangesNeg.resize(NumControlLoops);
+ for(int i=0;i<NumControlLoops;i++)
+  real_ranges=CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
+			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
+
+
  UNet *net=this;
  if(!net)
   return 0;
@@ -2103,6 +2175,12 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
   real_ranges=CalcAfferentRange(num_motions, crossranges, IcMin, IcMax,
 			Ic_ranges_pos, Ic_ranges_neg,AfferentRangeMode);
  }
+
+ AfferentRangesPos.resize(NumControlLoops);
+ AfferentRangesNeg.resize(NumControlLoops);
+ for(int i=0;i<NumControlLoops;i++)
+  real_ranges=CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
+			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
 
 
  UNet *net=this;//dynamic_cast<UNet*>(storage->TakeObject(netclassname));
@@ -2199,6 +2277,12 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool use_spee
  real_ranges=CalcAfferentRange(num_motions, crossranges, IIMin, IIMax,
 			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
+ AfferentRangesPos.resize(NumControlLoops);
+ AfferentRangesNeg.resize(NumControlLoops);
+ for(int i=0;i<NumControlLoops;i++)
+  real_ranges=CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
+			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
+
 
 
  UNet *net=this;//dynamic_cast<UNet*>(storage->TakeObject(netclassname));
@@ -2275,6 +2359,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
   {
    melement->NeuroObjectName = MCNeuroObjectName;
    melement->AfferentObjectName = MCAfferentObjectName;
+   melement->NumControlLoops=NumControlLoops;
   }
 
   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
@@ -2432,8 +2517,8 @@ for (size_t j=0; j < NumMotionElements ; j++)
 	   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
 	   ((NIntervalSeparator*)cont)->Gain=neg_gain;
 
-	   left_value.assign(1,Ib_ranges_neg[i].first);
-	   right_value.assign(1,Ib_ranges_neg[i].second);
+	   left_value.assign(1,AfferentRangesNeg[i][j].first);
+	   right_value.assign(1,AfferentRangesNeg[i][j].second);
 	   ((NIntervalSeparator*)cont)->MinRange=left_value;
 	   ((NIntervalSeparator*)cont)->MaxRange=right_value;
 	   res=AddComponent(cont);
@@ -2447,8 +2532,8 @@ for (size_t j=0; j < NumMotionElements ; j++)
 	   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
 	   ((NIntervalSeparator*)cont)->Gain=pos_gain;
 
-	   left_value.assign(1,Ib_ranges_pos[i].first);
-	   right_value.assign(1,Ib_ranges_pos[i].second);
+	   left_value.assign(1,AfferentRangesPos[i][j].first);
+	   right_value.assign(1,AfferentRangesPos[i][j].second);
 	   ((NIntervalSeparator*)cont)->MinRange=left_value;
 	   ((NIntervalSeparator*)cont)->MaxRange=right_value;
 	   res=AddComponent(cont);
@@ -2475,6 +2560,7 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value)
   for (int j = 0; j < NumMotionElements; j++)
   {
 	 NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[j]);
+	 if(melem)
 	 for(size_t i=0;i<melem->NumControlLoops;i++)
 	  {
 	   try
@@ -2487,8 +2573,8 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value)
        }
        ((NIntervalSeparator*)cont)->Mode=mode;
 
-       left_value.assign(1,Ib_ranges_neg[i].first);
-       right_value.assign(1,Ib_ranges_neg[i].second);
+	   left_value.assign(1,AfferentRangesNeg[i][j].first);
+	   right_value.assign(1,AfferentRangesNeg[i][j].second);
        ((NIntervalSeparator*)cont)->MinRange=left_value;
        ((NIntervalSeparator*)cont)->MaxRange=right_value;
 
@@ -2503,8 +2589,8 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value)
 
        ((NIntervalSeparator*)cont)->Mode=mode;
 
-       left_value.assign(1,Ib_ranges_pos[i].first);
-       right_value.assign(1,Ib_ranges_pos[i].second);
+	   left_value.assign(1,AfferentRangesPos[i][j].first);
+       right_value.assign(1,AfferentRangesPos[i][j].second);
        ((NIntervalSeparator*)cont)->MinRange=left_value;
 	   ((NIntervalSeparator*)cont)->MaxRange=right_value;
 	  }

@@ -68,6 +68,12 @@ RDK::ULProperty<double, NEngineMotionControl> IIMax;
 RDK::ULProperty<double, NEngineMotionControl> IcMin;
 RDK::ULProperty<double, NEngineMotionControl> IcMax;
 
+/// Диапазон афферентных нейронов по каналам
+RDK::ULProperty<std::vector<double>, NEngineMotionControl> AfferentMin;
+RDK::ULProperty<std::vector<double>, NEngineMotionControl> AfferentMax;
+
+
+
 // Максимальное усиление управляющего воздействия
 // 0 - Разбиение на диапазоны [Max/(i+1)] где i - индекс диапазона
 // 1 - Разбиение на диапазоны [Max/(i+1)] где i - индекс диапазона
@@ -140,6 +146,8 @@ vector<pair<double,double> > Ib_ranges_pos,Ib_ranges_neg;
 vector<pair<double,double> > II_ranges_pos,II_ranges_neg;
 vector<pair<double,double> > Ic_ranges_pos,Ic_ranges_neg;
 
+vector<vector<pair<double,double> > > AfferentRangesPos, AfferentRangesNeg;
+
 vector<NNet*> Motions;
 
 vector<vector<double> > History;
@@ -199,7 +207,9 @@ bool SetMCNeuroObjectName(const string &value);
 bool SetMCAfferentObjectName(const string &value);
 bool SetPacObjectName(const string &value);
 
-
+/// Диапазон афферентных нейронов по каналам
+bool SetAfferentMin(const std::vector<double> &value);
+bool SetAfferentMax(const std::vector<double> &value);
 // --------------------------
 
 // --------------------------
