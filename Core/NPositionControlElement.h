@@ -23,6 +23,8 @@ class NPositionControlElement: public UNet
 {
 public: // Свойства
 RDK::UPropertyInput<NEngineMotionControl,NPositionControlElement> MotionControl;
+RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> CurrentPosition;
+RDK::ULProperty<MDMatrix<double>, NPositionControlElement> TargetPosition;
 
 protected: // Переменные состояния
 

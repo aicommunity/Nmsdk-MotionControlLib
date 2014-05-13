@@ -81,7 +81,7 @@ public: // Переменные состояния
 // Флаг первоначальной инициализации количества контуров управления
 bool  isNumControlLoopsInitialized;
 
-protected: // Временные переменные
+public: // Временные переменные
 // Указатели на афферентные нейроны
 UCPointer<NAfferentNeuron, NMotionElement> Afferents;
 
