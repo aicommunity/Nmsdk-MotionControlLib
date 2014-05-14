@@ -2650,6 +2650,8 @@ int NEngineMotionControl::GetNumControlLoops(void)
 	if(Motions.empty())
 	 return 0;
 	NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[0]);
+	if(!melem)
+	 return 0;
 	return melem->NumControlLoops;
 }
 // --------------------------

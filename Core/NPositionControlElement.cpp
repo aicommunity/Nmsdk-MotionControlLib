@@ -91,12 +91,23 @@ bool NPositionControlElement::ACalculate(void)
  for(int i=0;i<MotionControl->NumMotionElements;i++)
  {
   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+  if(!melem)
+   continue;
   for(int j=0;j<melem->NumControlLoops;j++)
   {
-   UEPtr<NPulseSimpleLTZone> ltzoneL=dynamic_pointer_cast<NPulseSimpleLTZone>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
-   UEPtr<NPulseSimpleLTZone> ltzoneR=dynamic_pointer_cast<NPulseSimpleLTZone>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
-   (*CurrentPosition)(j,2*i)= ltzoneL->GetOutputData(2).Double[0];
-   (*CurrentPosition)(j,2*i+1)= ltzoneR->GetOutputData(2).Double[0];
+   UEPtr<UADItem> ltzoneL=dynamic_pointer_cast<UADItem>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
+   UEPtr<UADItem> ltzoneR=dynamic_pointer_cast<UADItem>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
+   double temp=0;
+   if(ltzoneL->GetNumOutputs()>2)
+   {
+	temp=ltzoneL->GetOutputData(2).Double[0];
+	(*CurrentPosition)(j,2*i)=temp;
+   }
+   if(ltzoneR->GetNumOutputs()>2)
+   {
+	temp=ltzoneR->GetOutputData(2).Double[0];
+	(*CurrentPosition)(j,2*i+1)= temp;
+   }
   }
  }
  return true;
