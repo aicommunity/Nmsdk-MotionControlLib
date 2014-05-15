@@ -1408,7 +1408,7 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
  // Создание связей
  bool NMotionElement::LinkMotoneurons(const string &afferentL, const string afferentR, int mode)
  {
-   if(!(CheckComponent(afferentL)&&CheckComponent(afferentR)&&CheckComponent("MotoneuronL")&&
+   if(!(CheckComponent(afferentL) && CheckComponent(afferentR) && CheckComponent("MotoneuronL") &&
 		CheckComponent("MotoneuronR")))
 		return false;
    UEPtr<UContainer> cont;
