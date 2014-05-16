@@ -25,8 +25,12 @@ public: // Свойства
 RDK::UPropertyInput<NEngineMotionControl,NPositionControlElement> MotionControl;
 RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> CurrentPosition;
 RDK::ULProperty<MDMatrix<double>, NPositionControlElement> TargetPosition;
+RDK::ULProperty<string, NPositionControlElement> InputNeuronType;
+RDK::ULProperty<string, NPositionControlElement> ControlNeuronType;
 
 protected: // Переменные состояния
+vector<NNet*> InputNeurons;
+vector<NNet*> ControlNeurons;
 
 public: // Методы
 // --------------------------
@@ -39,6 +43,8 @@ virtual ~NPositionControlElement(void);
 // ---------------------
 // Методы управления параметрами
 // ---------------------
+bool SetInputNeuronType(const string &value);
+bool SetControlNeuronType(const string &value);
 // ---------------------
 
 // ---------------------
@@ -72,8 +78,9 @@ virtual bool AReset(void);
 // Выполняет расчет этого объекта
 virtual bool ACalculate(void);
 // --------------------------
+bool CreateNeurons(void);
+bool LinkNeurons(vector <NNet*> start, vector <NNet*> finish);
 };
-
 
 }
 
