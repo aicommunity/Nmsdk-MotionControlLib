@@ -47,6 +47,7 @@ NEngineMotionControl::NEngineMotionControl(void)
    DestContourMaxAmplitude("DestContourMaxAmplitude",this),
    DestContourMinAmplitude("DestContourMinAmplitude",this),
    DestTransientTime("DestTransientTime",this),
+   ActiveContours("ActiveContours",this,&NEngineMotionControl::SetActiveContours),
    UseContourData("UseContourData",this),
    TransientHistoryTime("TransientHistoryTime",this),
    TransientObjectIndex("TransientObjectIndex",this),
@@ -81,8 +82,18 @@ bool NEngineMotionControl::SetNumControlLoops(const int &value)
   melem->NumControlLoops=value;
  }
 
- AfferentMin->resize(value);
- AfferentMax->resize(value);
+ AfferentMin->resize(value,0);
+ AfferentMax->resize(value,0);
+ ActiveContours->resize(value,false);
+// isAfferentLinked.resize(value,false);
+ UseContourData->resize(value,false);
+ CurrentContourAmplitude->resize(value,0);
+ CurrentContourAverage->resize(value,0);
+
+ DestContourMaxAmplitude->resize(value,0);
+ DestContourMinAmplitude->resize(value,0);
+
+
  Ready=false;
  return true;
 }
@@ -199,7 +210,7 @@ bool NEngineMotionControl::SetPacGain(const double &value)
 
  return true;
 }
-// --------------------------
+
 bool NEngineMotionControl::SetMCNeuroObjectName(const string &value)
 {
  if(!Motions.empty())
@@ -270,6 +281,51 @@ bool NEngineMotionControl::SetAfferentMax(const std::vector<double> &value)
 }
 
 
+/// Управление списком активных контуров
+bool NEngineMotionControl::SetActiveContours(const std::vector<bool> &value)
+{
+ bool res=true;
+
+ int num_motions=NumMotionElements;
+ int num_controls=GetNumControlLoops();
+
+//   for(int i=0;i<num_motions;i++)
+//   {
+	for (int j = 0; j <num_controls; j++)
+	{
+	 SetIsAfferentLinked(j,value[j]);
+/*
+	  std::string motion=std::string("MotionElement")+RDK::sntoa(i);
+	  std::string pos_separator=std::string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1);
+	  std::string neg_separator=std::string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1);
+	  if (!Model_CheckComponent(pos_separator.c_str())||
+		 !Model_CheckComponent(neg_separator.c_str()))
+	  {
+		 NewIntervalSeparatorsSetup(5, 1, -1);
+		 NewIntervalSeparatorLinksSetup();
+	  }
+
+	  if(!Model_CheckComponent((motion+".AfferentL"+RDK::sntoa(j+1)+".Receptor").c_str()) ||
+		!Model_CheckComponent((motion+".AfferentR"+RDK::sntoa(j+1)+".Receptor").c_str()))
+	   break;
+
+	  if(value[j])
+	  {
+		SetIsAfferentLinked(j,true);
+	  }
+	  else
+	  {
+		SetIsAfferentLinked(j,false);
+	  }
+	}  */
+   }
+
+ return true;
+}
+// --------------------------
+
+
+
 // --------------------------
 // Системные методы управления объектом
 // --------------------------
@@ -337,7 +393,7 @@ bool NEngineMotionControl::ABuild(void)
  DestContourMaxAmplitude->resize(4);
  DestContourMinAmplitude->resize(4);
  UseContourData->resize(4);
- isAfferentLinked.resize(2, true);
+// isAfferentLinked.resize(2, false);
  return true;
 }
 
@@ -2661,15 +2717,51 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
   int NumControlLoops = GetNumControlLoops();
   if((index >=NumControlLoops)||(index <0))
    return false;
-  isAfferentLinked.resize(NumControlLoops, true);
-  isAfferentLinked[index] = value;
+
+  for(int i=0;i<NumMotionElements;i++)
+  {
+   std::string pos_separator=std::string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(index+1);
+   std::string neg_separator=std::string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(index+1);
+
+   if (!CheckComponent(pos_separator.c_str()) ||
+	  !CheckComponent(neg_separator.c_str()))
+	continue;
+   std::string motion_name=std::string("MotionElement")+RDK::sntoa(i);
+//   UEPtr<NNet> motion=Motions[i];
+//   if(!motion)
+//	continue;
+   if(!CheckComponent((motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor").c_str()) ||
+	 !CheckComponent((motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor").c_str()))
+	continue;
+
+   bool res=true;
+
+   if(value == true)
+   {
+	res&=BreakLink("AfferentSource1",0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
+	res&=BreakLink("AfferentSource1",0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
+	res&=CreateLink(pos_separator,0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
+	res&=CreateLink(neg_separator,0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
+   }
+   else
+   {
+	res&=BreakLink(pos_separator,0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
+	res&=BreakLink(neg_separator,0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
+	res&=CreateLink("AfferentSource1",0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
+	res&=CreateLink("AfferentSource1",0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
+   }
+
+//  isAfferentLinked.resize(NumControlLoops, true);
+//  isAfferentLinked[index] = value;
+  (*ActiveContours)[index] = value;
+  }
   return true;
 }
 bool NEngineMotionControl::GetIsAfferentLinked(const int &index)
 {
   if((index >=GetNumControlLoops())||(index <0))
    return false;
-  return isAfferentLinked[index];
+  return (*ActiveContours)[index];
 }
 
 vector<NNet*> NEngineMotionControl::GetMotion(void)

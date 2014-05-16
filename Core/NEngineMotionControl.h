@@ -116,6 +116,9 @@ RDK::ULProperty<std::vector<double>, NEngineMotionControl> DestContourMinAmplitu
 /// Желаемое время переходного процесса
 RDK::ULProperty<double, NEngineMotionControl> DestTransientTime;
 
+/// Используемые в работе контуры управления
+RDK::ULProperty<std::vector<bool>, NEngineMotionControl> ActiveContours;
+
 /// Используемые в адаптации контуры управления
 RDK::ULProperty<std::vector<bool>, NEngineMotionControl> UseContourData;
 
@@ -154,7 +157,7 @@ vector<vector<double> > History;
 
 vector<double> TransientHistory;
 
-vector<bool> isAfferentLinked;
+//vector<bool> isAfferentLinked;
 
 int HistorySize,TransientHistorySize;
 
@@ -174,17 +177,17 @@ public: // Методы
 NEngineMotionControl(void);
 virtual ~NEngineMotionControl(void);
 // --------------------------
-// Число контуров управления
-// --------------------------
-bool SetNumControlLoops(const int &value);
-// --------------------------
-bool SetIsAfferentLinked(const int &index, const bool &value);
-
-bool GetIsAfferentLinked(const int &index);
 // --------------------------
 // Методы управления параметрами
 // --------------------------
 protected:
+// Число контуров управления
+bool SetNumControlLoops(const int &value);
+
+bool SetIsAfferentLinked(const int &index, const bool &value);
+
+bool GetIsAfferentLinked(const int &index);
+
 // Число управляющих элементов
 bool SetNumMotionElements(const size_t &value);
 
@@ -210,6 +213,9 @@ bool SetPacObjectName(const string &value);
 /// Диапазон афферентных нейронов по каналам
 bool SetAfferentMin(const std::vector<double> &value);
 bool SetAfferentMax(const std::vector<double> &value);
+
+/// Управление списком активных контуров
+bool SetActiveContours(const std::vector<bool> &value);
 // --------------------------
 
 // --------------------------
