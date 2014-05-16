@@ -48,6 +48,11 @@ RDK::ULProperty<NameT, NEngineMotionControl> MotionElementClassName;
 /// 2 - включена автоматическая адаптация c полным сбросом управления
 RDK::ULProperty<int, NEngineMotionControl> AdaptiveStructureMode;
 
+// Режим наличия вставочных нейронов
+// 0 - вставочных нейронов нет
+// 1 - вставочные нейроны есть
+RDK::ULProperty<int, NEngineMotionControl> InterneuronPresentMode;
+
 // Вектор диапазонов афферентных нейронов
 //RDK::ULProperty<std::vector<double>, NEngineMotionControl> IMin;
 //RDK::ULProperty<std::vector<double>, NEngineMotionControl> IMax;
@@ -216,6 +221,9 @@ bool SetAfferentMax(const std::vector<double> &value);
 
 /// Управление списком активных контуров
 bool SetActiveContours(const std::vector<bool> &value);
+
+/// Режим наличия интернейронов
+bool SetInterneuronPresentMode(const int &value);
 // --------------------------
 
 // --------------------------

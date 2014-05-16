@@ -24,6 +24,7 @@ NEngineMotionControl::NEngineMotionControl(void)
    CreationMode("CreationMode",this,&NEngineMotionControl::SetCreationMode),
    MotionElementClassName("MotionElementClassName",this),
    AdaptiveStructureMode("AdaptiveStructureMode",this),
+   InterneuronPresentMode("InterneuronPresentMode",this, &NEngineMotionControl::SetInterneuronPresentMode),
    IaMin("IaMin",this),
    IaMax("IaMax",this),
    IbMin("IbMin",this),
@@ -322,6 +323,33 @@ bool NEngineMotionControl::SetActiveContours(const std::vector<bool> &value)
 
  return true;
 }
+
+
+/// Режим наличия интернейронов
+bool NEngineMotionControl::SetInterneuronPresentMode(const int &value)
+{
+ for(int i=0; i<NumMotionElements; i++)
+ {
+  NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+  melem->InterneuronPresentMode=value;
+  if(value == 0)
+  {
+   std::vector<int> modes;
+   modes.assign(melem->NumControlLoops,0);
+   melem->LinkModes=modes;
+  }
+  else
+  if(value == 1)
+  {
+   std::vector<int> modes;
+   modes.assign(melem->NumControlLoops,1);
+   melem->LinkModes=modes;
+  }
+ }
+
+ Ready=false;
+ return true;
+}
 // --------------------------
 
 
@@ -361,6 +389,7 @@ bool NEngineMotionControl::ADefault(void)
  MinAfferentRange=0.1;
  MotionElementClassName="NMotionElement";
  AdaptiveStructureMode=1;
+ InterneuronPresentMode=0;
 
  DestTransientTime=0.1;
  TransientHistoryTime=1.0;
@@ -2416,6 +2445,19 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
    melement->NeuroObjectName = MCNeuroObjectName;
    melement->AfferentObjectName = MCAfferentObjectName;
    melement->NumControlLoops=NumControlLoops;
+   melement->InterneuronPresentMode=InterneuronPresentMode;
+   if(InterneuronPresentMode == 0)
+   {
+	std::vector<int> modes;
+	modes.assign(melement->NumControlLoops,0);
+	melement->LinkModes=modes;
+   }
+   else
+   {
+	std::vector<int> modes;
+	modes.assign(melement->NumControlLoops,1);
+	melement->LinkModes=modes;
+   }
   }
 
   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
