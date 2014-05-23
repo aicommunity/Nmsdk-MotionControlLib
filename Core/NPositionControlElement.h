@@ -27,10 +27,13 @@ RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> CurrentPo
 RDK::ULProperty<MDMatrix<double>, NPositionControlElement> TargetPosition;
 RDK::ULProperty<string, NPositionControlElement> InputNeuronType;
 RDK::ULProperty<string, NPositionControlElement> ControlNeuronType;
+RDK::ULProperty<bool, NPositionControlElement> ExternalControl;
+RDK::ULProperty<bool, NPositionControlElement> RememberState;
 
 protected: // Переменные состояния
 vector<NNet*> InputNeurons;
 vector<NNet*> ControlNeurons;
+vector<UNet*> Generators;
 
 public: // Методы
 // --------------------------
@@ -79,7 +82,13 @@ virtual bool AReset(void);
 virtual bool ACalculate(void);
 // --------------------------
 bool CreateNeurons(void);
+bool CreateExternalControlElements(void);
 bool LinkNeurons(vector <NNet*> start, vector <NNet*> finish);
+bool UnlinkNeurons(vector <NNet*> start, vector <NNet*> finish);
+bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link);
+public:
+vector<NNet*> GetInputNeurons(void);
+vector<NNet*> GetControlNeurons(void);
 };
 
 }
