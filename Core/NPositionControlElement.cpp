@@ -277,10 +277,15 @@ bool NPositionControlElement::CreateNeurons()
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, controlRName);
 	 }
-	 owner->CreateLink(controlLName+".LTZone",0,postAfferentLName+".PNeuronMembrane.PosChannel");
+/*	 owner->CreateLink(controlLName+".LTZone",0,postAfferentLName+".PNeuronMembrane.PosChannel");
 	 owner->CreateLink(controlLName+".LTZone",0,postAfferentRName+".PNeuronMembrane.NegChannel");
 	 owner->CreateLink(controlRName+".LTZone",0,postAfferentLName+".PNeuronMembrane.NegChannel");
 	 owner->CreateLink(controlRName+".LTZone",0,postAfferentRName+".PNeuronMembrane.PosChannel");
+  */
+	 owner->CreateLink(controlLName+".LTZone",0,postAfferentRName+".PNeuronMembrane.PosChannel");
+	 owner->CreateLink(controlLName+".LTZone",0,postAfferentLName+".PNeuronMembrane.NegChannel");
+	 owner->CreateLink(controlRName+".LTZone",0,postAfferentRName+".PNeuronMembrane.NegChannel");
+	 owner->CreateLink(controlRName+".LTZone",0,postAfferentLName+".PNeuronMembrane.PosChannel");
 	}
    }
    CreateExternalControlElements();
