@@ -337,6 +337,7 @@ bool NPositionControlElement::CreateExternalControlElements(void)
 	 }
 	}
    }
+ return true;
 }
 
 bool NPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> finish)
