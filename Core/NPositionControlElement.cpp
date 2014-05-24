@@ -387,6 +387,7 @@ bool NPositionControlElement::UnlinkNeurons(vector <NNet*> start, vector <NNet*>
    }
   }
  }
+ return true;
 }
 
 bool NPositionControlElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link)
@@ -421,6 +422,7 @@ bool NPositionControlElement::LinkGenerators(vector <UNet*> generators, vector <
 	}
    }
   }
+ return true;
 }
 
 vector<NNet*> NPositionControlElement::GetInputNeurons(void)
