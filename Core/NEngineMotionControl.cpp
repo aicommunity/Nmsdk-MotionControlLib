@@ -99,7 +99,7 @@ bool NEngineMotionControl::SetNumControlLoops(const int &value)
  return true;
 }
 // „исло управл€ющих элементов
-bool NEngineMotionControl::SetNumMotionElements(const size_t &value)
+bool NEngineMotionControl::SetNumMotionElements(const int &value)
 {
 // NumMotionElements.v=value;
 // Create();
@@ -441,7 +441,7 @@ bool NEngineMotionControl::AReset(void)
   SetOutputDataSize(i,1);
 
  receptors.resize(NumMotionElements);
- for(size_t n=0;n<NumMotionElements;n++)
+ for(int n=0;n<NumMotionElements;n++)
  {
   receptors[n].resize(6);
   UContainer* cont=0;
@@ -503,7 +503,7 @@ bool NEngineMotionControl::ACalculate(void)
  }
 
  History.push_back(measure);
- if(History.size()>HistorySize)
+ if(int(History.size())>HistorySize)
   History.erase(History.begin());
 
  double min_val, max_val,avg_val;
@@ -588,7 +588,7 @@ bool NEngineMotionControl::ACalculate(void)
  int pos_angle=0,pos_speed=0,pos_moment=0;
  int neg_angle=0,neg_speed=0,neg_moment=0;
  // Receptors
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   try {
 /*  if(receptors[i][0] && receptors[i][0]->GetInputData(size_t(0))->Double[0] > 0)
@@ -1054,7 +1054,7 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
  if(!storage)
   return;
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   UEPtr<NReceptor> receptor=0;
   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(MotionElementClassName));
@@ -1321,7 +1321,7 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<UContainer> net, int mo
 
 if(Ib)
 {
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
@@ -1337,7 +1337,7 @@ if(Ib)
   res=net->AddComponent(cont);
  }
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
@@ -1356,7 +1356,7 @@ if(Ib)
 
 if(II)
 {
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
@@ -1372,7 +1372,7 @@ if(II)
   res=net->AddComponent(cont);
  }
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
@@ -1391,7 +1391,7 @@ if(II)
 
 if(Ia)
 {
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
@@ -1407,7 +1407,7 @@ if(Ia)
   res=net->AddComponent(cont);
  }
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
@@ -1426,7 +1426,7 @@ if(Ia)
 
 if(Ic)
 {
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
@@ -1442,7 +1442,7 @@ if(Ic)
   res=net->AddComponent(cont);
  }
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NIntervalSeparator"));
   if(!cont)
@@ -1474,7 +1474,7 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
  vector<int> mode;
  mode.assign(1,mode_value);
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   try
   {
@@ -1492,7 +1492,7 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
   ((NIntervalSeparator*)cont)->MaxRange=right_value;
  }
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   try
   {
@@ -1511,7 +1511,7 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
   ((NIntervalSeparator*)cont)->MaxRange=right_value;
  }
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   try
   {
@@ -1530,7 +1530,7 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
   ((NIntervalSeparator*)cont)->MaxRange=right_value;
  }
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   try
   {
@@ -1549,7 +1549,7 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
   ((NIntervalSeparator*)cont)->MaxRange=right_value;
  }
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   try
   {
@@ -1568,7 +1568,7 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
   ((NIntervalSeparator*)cont)->MaxRange=right_value;
  }
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   try
   {
@@ -1587,7 +1587,7 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
   ((NIntervalSeparator*)cont)->MaxRange=right_value;
  }
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   try
   {
@@ -1605,7 +1605,7 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
   ((NIntervalSeparator*)cont)->MaxRange=right_value;
  }
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   try
   {
@@ -1775,7 +1775,7 @@ if(Ia)
 {
  try{
   // —в€зи с моделью манипул€тора (по умолчанию)
-  for(size_t i=0;i<NumMotionElements;i++)
+  for(int i=0;i<NumMotionElements;i++)
   {
    res=net->CreateLink("NManipulatorSource1",2,
 				 string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1));
@@ -1789,7 +1789,7 @@ if(Ia)
 if(II)
 {
  try{
-  for(size_t i=0;i<NumMotionElements;i++)
+  for(int i=0;i<NumMotionElements;i++)
   {
    res=net->CreateLink("NManipulatorSource1",1,
 				 string("II_PosIntervalSeparator")+RDK::sntoa(i+1));
@@ -1803,7 +1803,7 @@ if(II)
 if(Ib)
 {
  try{
-  for(size_t i=0;i<NumMotionElements;i++)
+  for(int i=0;i<NumMotionElements;i++)
   {
    res=net->CreateLink("NManipulatorSource1",0,
 				 string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1));
@@ -1817,7 +1817,7 @@ if(Ib)
 if(Ic)
 {
  try{
-  for(size_t i=0;i<NumMotionElements;i++)
+  for(int i=0;i<NumMotionElements;i++)
   {
    res=net->CreateLink("NManipulatorSource1",3,
 				 string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1));
@@ -2429,7 +2429,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
  if(!storage)
   return;
 
- for(size_t i=0;i<NumMotionElements;i++)
+ for(int i=0;i<NumMotionElements;i++)
  {
   UEPtr<NReceptor> receptor=0;
   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(MotionElementClassName));
@@ -2601,7 +2601,7 @@ void NEngineMotionControl::NewIntervalSeparatorsSetup(int mode_value, double pos
  pos_gain.assign(1,pos_gain_value);
  neg_gain.assign(1,neg_gain_value);
 
-for (size_t j=0; j < NumMotionElements ; j++)
+for (int j=0; j < NumMotionElements ; j++)
 {
  NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[j]);
  for(int i=0; i < melem->NumControlLoops ; i++)
@@ -2659,7 +2659,7 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value)
   {
 	 NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[j]);
 	 if(melem)
-	 for(size_t i=0;i<melem->NumControlLoops;i++)
+	 for(int i=0;i<melem->NumControlLoops;i++)
 	  {
 	   try
        {
@@ -2703,7 +2703,7 @@ void NEngineMotionControl::NewIntervalSeparatorLinksSetup()
 {
  bool res=true;
 
-for(size_t i=0;i<NumMotionElements;i++)
+for(int i=0;i<NumMotionElements;i++)
 {
  NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
  try{

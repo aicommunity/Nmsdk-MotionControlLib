@@ -25,7 +25,7 @@ public: // ѕубличные свойства
 // „исло контуров управлени€
 RDK::ULProperty<int, NEngineMotionControl> NumControlLoops;
 // „исло управл€ющих элементов
-RDK::ULProperty<size_t, NEngineMotionControl> NumMotionElements;
+RDK::ULProperty<int, NEngineMotionControl> NumMotionElements;
 
 // –ежим формировани€ сети
 // 0 - Signum
@@ -194,7 +194,7 @@ bool SetIsAfferentLinked(const int &index, const bool &value);
 bool GetIsAfferentLinked(const int &index);
 
 // „исло управл€ющих элементов
-bool SetNumMotionElements(const size_t &value);
+bool SetNumMotionElements(const int &value);
 
 // –ежим формировани€ сети
 bool SetCreationMode(const int &value);

@@ -106,6 +106,13 @@ bool NPositionControlElement::AReset(void)
 // Выполняет расчет этого объекта
 bool NPositionControlElement::ACalculate(void)
 {
+ if(MotionControl->GetNumControlLoops() != CurrentPosition->GetRows() ||
+	2*MotionControl->NumMotionElements != CurrentPosition->GetCols())
+ {
+  Ready=false;
+  Reset();
+ }
+
  if(InputNeurons.empty())
   CreateNeurons();
 
@@ -138,13 +145,13 @@ bool NPositionControlElement::ACalculate(void)
   {
    RememberState = false;
    vector<NNet*> activeInputs, activeControls;
-   for(int i=0;i<InputNeurons.size();i++)
+   for(size_t i=0;i<InputNeurons.size();i++)
    {
 	UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(InputNeurons[i]->GetComponentL("LTZone"));
 	if(ltzone->GetOutputData(2).Double[0]>0)
 	 activeInputs.push_back(InputNeurons[i]);
    }
-   for(int c=0;c<ControlNeurons.size();c++)
+   for(size_t c=0;c<ControlNeurons.size();c++)
    {
 	UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(ControlNeurons[c]->GetComponentL("LTZone"));
 	if(ltzone->GetOutputData(2).Double[0]>0)
@@ -343,12 +350,12 @@ bool NPositionControlElement::CreateExternalControlElements(void)
 bool NPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> finish)
 {
 	//vector <NNet*>::iterator I,J;
-	for(int j=0;j<finish.size();j++)
+	for(size_t j=0;j<finish.size();j++)
 	{
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
 	  UEPtr<NPulseMembrane> branch;
 	  bool hasEmptyMembrane=false;
-	  for(int k=0;k<neuron->Membranes.size();k++)
+	  for(size_t k=0;k<neuron->Membranes.size();k++)
 	  {
 	   NPulseMembrane* membr = neuron->Membranes[k];
 	   if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
@@ -361,7 +368,7 @@ bool NPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> f
 	  if(!hasEmptyMembrane)
 	   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
 	  NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".PosChannel";
-	  for(int i=0;i<start.size();i++)
+	  for(size_t i=0;i<start.size();i++)
 	  {
 	   NameT startName = start[i]->GetName()+".LTZone";
 	   if(!CheckLink(startName,finishName))
@@ -374,13 +381,13 @@ bool NPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> f
 
 bool NPositionControlElement::UnlinkNeurons(vector <NNet*> start, vector <NNet*> finish)
 {
- for(int i=0;i<start.size();i++)
+ for(size_t i=0;i<start.size();i++)
  {
   NameT startName = start[i]->GetName()+".LTZone";
   NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[i]);
-  for(int j=0;j<finish.size();j++)
+  for(size_t j=0;j<finish.size();j++)
   {
-   for(int k=0;k<neuron->Membranes.size();k++)
+   for(size_t k=0;k<neuron->Membranes.size();k++)
    {
 	NameT finishName = finish[j]->GetName()+"."+neuron->Membranes[k]->GetName()+".PosChannel";
 	if(CheckLink(startName,finishName))
