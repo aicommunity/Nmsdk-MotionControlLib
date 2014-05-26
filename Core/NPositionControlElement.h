@@ -29,10 +29,12 @@ RDK::ULProperty<string, NPositionControlElement> InputNeuronType;
 RDK::ULProperty<string, NPositionControlElement> ControlNeuronType;
 RDK::ULProperty<bool, NPositionControlElement> ExternalControl;
 RDK::ULProperty<bool, NPositionControlElement> RememberState;
+RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> Delta;
 
 protected: // Переменные состояния
 vector<NNet*> InputNeurons;
 vector<NNet*> ControlNeurons;
+vector<NNet*> PreControlNeurons;
 vector<UNet*> Generators;
 
 public: // Методы
