@@ -108,12 +108,14 @@ bool NPositionControlElement::AReset(void)
 // Выполняет расчет этого объекта
 bool NPositionControlElement::ACalculate(void)
 {
- if(MotionControl->GetNumControlLoops() != CurrentPosition->GetRows() ||
-	2*MotionControl->NumMotionElements != CurrentPosition->GetCols())
- {
-  Ready=false;
-  Reset();
- }
+/*
+     if(MotionControl->GetNumControlLoops() != CurrentPosition->GetRows() ||
+    	2*MotionControl->NumMotionElements != CurrentPosition->GetCols())
+     {
+      Ready=false;
+      Reset();
+     }
+*/
 
  if(InputNeurons.empty())
   CreateNeurons();
@@ -168,14 +170,12 @@ bool NPositionControlElement::ACalculate(void)
    RememberState = false;
    vector<NNet*> activeInputs, activeControls;
    for(size_t i=0;i<InputNeurons.size();i++)
-   int numControls = PreControlNeurons.size();
-   for(int i=0;i<numInputs;i++)
    {
 	UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(InputNeurons[i]->GetComponentL("LTZone"));
 	if(ltzone->GetOutputData(2).Double[0]>0)
 	 activeInputs.push_back(InputNeurons[i]);
    }
-   for(size_t c=0;c<ControlNeurons.size();c++)
+   for(size_t c=0;c<PreControlNeurons.size();c++)
    {
 	UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(ControlNeurons[c]->GetComponentL("LTZone"));
 	if(ltzone->GetOutputData(2).Double[0]>0)
