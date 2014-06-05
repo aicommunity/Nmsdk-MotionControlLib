@@ -167,21 +167,28 @@ bool NNewPositionControlElement::ACalculate(void)
   if(RememberState)
   {
    RememberState = false;
-   vector<NNet*> activeInputs, activeControls;
+   vector<NNet*> activeInputs, postInputs, preControls, activeControls;
    for(size_t i=0;i<InputNeurons.size();i++)
    {
 	UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(InputNeurons[i]->GetComponentL("LTZone"));
 	if(ltzone->GetOutputData(2).Double[0]>0)
+	{
 	 activeInputs.push_back(InputNeurons[i]);
+	 preControls.push_back(PreControlNeurons[i]);
+	}
    }
    for(size_t c=0;c<PreControlNeurons.size();c++)
    {
 	UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(ControlNeurons[c]->GetComponentL("LTZone"));
 	if(ltzone->GetOutputData(2).Double[0]>0)
-	 activeControls.push_back(PreControlNeurons[c]);
+	{
+	 activeControls.push_back(ControlNeurons[c]);
+	 postInputs.push_back(PostInputNeurons[c]);
+	}
    }
-   LinkNegative(activeInputs, activeControls);
-   LinkNeurons(activeInputs, activeControls);
+   LinkNegative(activeInputs, postInputs);
+   LinkNeurons(activeInputs, postInputs);
+   LinkNeurons(preControls, activeControls);
   }
   if(ExternalControl)
   {
