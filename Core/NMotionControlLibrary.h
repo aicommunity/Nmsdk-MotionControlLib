@@ -18,6 +18,7 @@ See file license.txt for more information
 #include "../../Kernel/NSupport.h"
 #include "NMotionElement.h"
 #include "NPositionControlElement.h"
+#include "NNewPositionControlElement.h"
 
 namespace NMSDK {
 
