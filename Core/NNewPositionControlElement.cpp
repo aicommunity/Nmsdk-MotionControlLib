@@ -582,13 +582,13 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
 	for(size_t l=0;l<membrToConnectL.size();l++)
 	{
 	 string membrLName;
-	 membrToConnectL[l]->GetFullName(membrLName);
+	 membrToConnectL[l]->GetLongName(this,membrLName);
 	 CreateLink(start[c]->GetName()+".LTZone",0,membrLName+".NegChannel");
 	}
 	for(size_t k=0;k<membrToConnectR.size();k++)
 	{
 	 string membrRName;
-	 membrToConnectR[k]->GetFullName(membrRName);
+	 membrToConnectR[k]->GetLongName(this,membrRName);
 	 CreateLink(start[c]->GetName()+".LTZone",0,membrRName+".NegChannel");
 	}
    }

@@ -42,6 +42,9 @@ RDK::ULProperty<int, NEngineMotionControl> CreationMode;
 // Имя класса управляющего элемента
 RDK::ULProperty<NameT, NEngineMotionControl> MotionElementClassName;
 
+// Имя класса интерфейса с объектом управления
+RDK::ULProperty<NameT, NEngineMotionControl> ObjectControlInterfaceClassName;
+
 /// Режим включения адаптивной перестройки структуры
 /// 0 - нет адаптивности
 /// 1 - адаптивность включена с полным сбрсом управления
@@ -214,6 +217,8 @@ bool SetPacGain(const double &value);
 bool SetMCNeuroObjectName(const string &value);
 bool SetMCAfferentObjectName(const string &value);
 bool SetPacObjectName(const string &value);
+bool SetObjectControlInterfaceClassName(const string &value);
+
 
 /// Диапазон афферентных нейронов по каналам
 bool SetAfferentMin(const std::vector<double> &value);

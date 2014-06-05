@@ -23,6 +23,7 @@ NEngineMotionControl::NEngineMotionControl(void)
    NumMotionElements("NumMotionElements",this,&NEngineMotionControl::SetNumMotionElements),
    CreationMode("CreationMode",this,&NEngineMotionControl::SetCreationMode),
    MotionElementClassName("MotionElementClassName",this),
+   ObjectControlInterfaceClassName("ObjectControlInterfaceClassName",this,&NEngineMotionControl::SetObjectControlInterfaceClassName),
    AdaptiveStructureMode("AdaptiveStructureMode",this),
    InterneuronPresentMode("InterneuronPresentMode",this, &NEngineMotionControl::SetInterneuronPresentMode),
    IaMin("IaMin",this),
@@ -245,6 +246,11 @@ bool NEngineMotionControl::SetPacObjectName(const string &value)
  return true;
 }
 
+bool NEngineMotionControl::SetObjectControlInterfaceClassName(const string &value)
+{
+ Ready=false;
+ return true;
+}
 
 /// Диапазон афферентных нейронов по каналам
 bool NEngineMotionControl::SetAfferentMin(const std::vector<double> &value)
@@ -388,6 +394,7 @@ bool NEngineMotionControl::ADefault(void)
  PacRangeMode=2;//0;
  MinAfferentRange=0.1;
  MotionElementClassName="NMotionElement";
+ ObjectControlInterfaceClassName="NManipulatorSource";
  AdaptiveStructureMode=1;
  InterneuronPresentMode=0;
 
@@ -493,13 +500,17 @@ bool NEngineMotionControl::ACalculate(void)
  CurrentContourAmplitude->assign(4,0);
  CurrentContourAverage->assign(4,0);
 
- UEPtr<NManipulatorSource> source=dynamic_pointer_cast<NManipulatorSource>(GetComponent("NManipulatorSource1"));
+ UEPtr<UNet> source=dynamic_pointer_cast<UNet>(GetComponent("NManipulatorSource1"));
  HistorySize=TransientHistoryTime*TimeStep;
  vector<double> measure;
+
  measure.resize(source->GetNumOutputs());
  for(size_t i=0;i<measure.size();i++)
  {
-  measure[i]=source->GetOutputData(i).Double[0];
+  if(source->GetOutputDataSize(i)>0)
+   measure[i]=source->GetOutputData(i).Double[0];
+  else
+   measure[i]=0;
  }
 
  History.push_back(measure);
@@ -703,7 +714,7 @@ bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
   if(PComponents[i]->GetName() == "IIPosAfferentGenerator" ||
 	 PComponents[i]->GetName() == "IINegAfferentGenerator" ||
 	 PComponents[i]->GetName() == "AfferentSource1" ||
-	 PComponents[i]->GetName() == "NManipulatorSource1" ||
+	 (PComponents[i]->GetName() == "NManipulatorSource1" && PComponents[i]->GetCompClassName() == *ObjectControlInterfaceClassName) ||
 	 PComponents[i]->GetName() == "NManipulatorInput1")
   {
    ++i;
@@ -1671,10 +1682,10 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UContainer> net)
   res=net->AddComponent(cont);
  }
 
- if(CheckName("NManipulatorSource"))
+ if(CheckName("NManipulatorSource1"))
  {
   UEPtr<UADItem> cont2=0;
-  cont2=dynamic_pointer_cast<UADItem>(storage->TakeObject("NManipulatorSource"));
+  cont2=dynamic_pointer_cast<UADItem>(storage->TakeObject(ObjectControlInterfaceClassName));
   if(!cont2)
    return;
   cont2->SetName("NManipulatorSource1");

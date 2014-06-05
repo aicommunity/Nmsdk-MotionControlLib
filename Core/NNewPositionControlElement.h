@@ -31,7 +31,7 @@ RDK::ULProperty<bool, NNewPositionControlElement> ExternalControl;
 RDK::ULProperty<bool, NNewPositionControlElement> RememberState;
 RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> Delta;
 
-protected: // Переменные состояния
+public: // Переменные состояния
 vector<NNet*> InputNeurons;
 vector<NNet*> ControlNeurons;
 vector<NNet*> PreControlNeurons;
