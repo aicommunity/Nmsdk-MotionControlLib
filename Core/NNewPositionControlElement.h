@@ -28,15 +28,38 @@ RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement> TargetPosition;
 RDK::ULProperty<string, NNewPositionControlElement> InputNeuronType;
 RDK::ULProperty<string, NNewPositionControlElement> ControlNeuronType;
 RDK::ULProperty<bool, NNewPositionControlElement> ExternalControl;
-RDK::ULProperty<bool, NNewPositionControlElement> RememberState;
+RDK::ULProperty<bool, NNewPositionControlElement, ptPubState> RememberState;
 RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> Delta;
 
 public: // Переменные состояния
 vector<NNet*> InputNeurons;
 vector<NNet*> ControlNeurons;
 vector<NNet*> PreControlNeurons;
+
 vector<NNet*> PostInputNeurons;
+
+// Нейроны обученные распознавать положения левых контуров в порядке
+// PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
+// PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
+vector<vector<NNet*> > LeftPostInputNeurons;
+
+// Нейроны обученные распознавать положения правых контуров в порядке
+// PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
+// PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
+vector<vector<NNet*> > RightPostInputNeurons;
+
+
 vector<UNet*> Generators;
+
+// Генераторы левых контуров в порядке
+// G(0,0) G(0,1), ..., G(0,M) - генераторы всех УЭ 0 контура
+// G(1,0) G(1,1), ..., G(1,M) - генераторы всех УЭ 1 контура
+vector<vector<UNet*> > LeftGenerators;
+
+// Генераторы правых контуров в порядке
+// G(0,0) G(0,1), ..., G(0,M) - генераторы всех УЭ 0 контура
+// G(1,0) G(1,1), ..., G(1,M) - генераторы всех УЭ 1 контура
+vector<vector<UNet*> > RightGenerators;
 
 public: // Методы
 // --------------------------
