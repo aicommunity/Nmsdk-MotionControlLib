@@ -19,6 +19,7 @@ See file license.txt for more information
 #include "NMotionElement.h"
 #include "NPositionControlElement.h"
 #include "NNewPositionControlElement.h"
+#include "NMultiPositionControl.h"
 
 namespace NMSDK {
 

@@ -15,28 +15,24 @@ See file license.txt for more information
 #include "..\..\RDK\Core\Engine\UNet.h"
 #include "NEngineMotionControl.h"
 #include "NMotionElement.h"
+#include "NPositionControlElement.h"
 
 namespace NMSDK {
 
 //class NEngineMotionControl;
-class NNewPositionControlElement: public UNet
+class NNewPositionControlElement: public NPositionControlElement
 {
 public: // Свойства
 RDK::UPropertyInput<NEngineMotionControl,NNewPositionControlElement> MotionControl;
-RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> CurrentPosition;
-RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement> TargetPosition;
-RDK::ULProperty<string, NNewPositionControlElement> InputNeuronType;
-RDK::ULProperty<string, NNewPositionControlElement> ControlNeuronType;
-RDK::ULProperty<bool, NNewPositionControlElement> ExternalControl;
-RDK::ULProperty<bool, NNewPositionControlElement, ptPubState> RememberState;
-RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> Delta;
+//RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> CurrentPosition;
+//RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement> TargetPosition;
+//RDK::ULProperty<string, NNewPositionControlElement> InputNeuronType;
+//RDK::ULProperty<string, NNewPositionControlElement> ControlNeuronType;
+//RDK::ULProperty<bool, NNewPositionControlElement> ExternalControl;
+//RDK::ULProperty<bool, NNewPositionControlElement, ptPubState> RememberState;
+//RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> Delta;
 
 public: // Переменные состояния
-vector<NNet*> InputNeurons;
-vector<NNet*> ControlNeurons;
-vector<NNet*> PreControlNeurons;
-
-vector<NNet*> PostInputNeurons;
 
 // Нейроны обученные распознавать положения левых контуров в порядке
 // PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура

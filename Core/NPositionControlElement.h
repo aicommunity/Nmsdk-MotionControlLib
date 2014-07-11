@@ -22,19 +22,21 @@ namespace NMSDK {
 class NPositionControlElement: public UNet
 {
 public: // Свойства
-RDK::UPropertyInput<NEngineMotionControl,NPositionControlElement> MotionControl;
 RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> CurrentPosition;
 RDK::ULProperty<MDMatrix<double>, NPositionControlElement> TargetPosition;
 RDK::ULProperty<string, NPositionControlElement> InputNeuronType;
 RDK::ULProperty<string, NPositionControlElement> ControlNeuronType;
 RDK::ULProperty<bool, NPositionControlElement> ExternalControl;
-RDK::ULProperty<bool, NPositionControlElement> RememberState;
+RDK::ULProperty<bool, NPositionControlElement, ptPubState> RememberState;
 RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> Delta;
 
-protected: // Переменные состояния
+public: // Переменные состояния
 vector<NNet*> InputNeurons;
 vector<NNet*> ControlNeurons;
 vector<NNet*> PreControlNeurons;
+
+vector<NNet*> PostInputNeurons;
+
 vector<UNet*> Generators;
 
 public: // Методы
@@ -65,7 +67,7 @@ virtual NPositionControlElement* New(void);
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом 
+// Скрытые методы управления счетом
 // --------------------------
 protected:
 // Восстановление настроек по умолчанию и сброс процесса счета
@@ -83,12 +85,13 @@ virtual bool AReset(void);
 // Выполняет расчет этого объекта
 virtual bool ACalculate(void);
 // --------------------------
+public:
 bool CreateNeurons(void);
 bool CreateExternalControlElements(void);
 bool LinkNeurons(vector <NNet*> start, vector <NNet*> finish);
 bool UnlinkNeurons(vector <NNet*> start, vector <NNet*> finish);
 bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link);
-public:
+bool LinkNegative(vector <NNet*> start, vector <NNet*> finish);
 vector<NNet*> GetInputNeurons(void);
 vector<NNet*> GetControlNeurons(void);
 };

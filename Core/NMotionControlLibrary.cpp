@@ -17,6 +17,7 @@ See file license.txt for more information
 #include "NEngineMotionControl.cpp"
 #include "NPositionControlElement.cpp"
 #include "NNewPositionControlElement.cpp"
+#include "NMultiPositionControl.cpp"
 
 namespace NMSDK {
 
@@ -570,6 +571,13 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  generated_cont->SetName("NNewPositionControlElement");
  generated_cont->Default();
  UploadClass("NNewPositionControlElement",generated_cont);
+}
+
+{
+ UEPtr<UContainer> generated_cont=new NMultiPositionControl;
+ generated_cont->SetName("NMultiPositionControl");
+ generated_cont->Default();
+ UploadClass("NMultiPositionControl",generated_cont);
 }
 }
 // --------------------------

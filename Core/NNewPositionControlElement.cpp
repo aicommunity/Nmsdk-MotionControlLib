@@ -22,14 +22,14 @@ namespace NMSDK {
 // Конструкторы и деструкторы
 // --------------------------
 NNewPositionControlElement::NNewPositionControlElement(void)
-:   MotionControl("MotionControl",this,0),
-	CurrentPosition("CurrentPosition",this),
-	TargetPosition("TargetPosition",this),
-	InputNeuronType("InputNeuronType",this, &NNewPositionControlElement::SetInputNeuronType),
-	ControlNeuronType("ControlNeuronType",this, &NNewPositionControlElement::SetControlNeuronType),
-	ExternalControl("ExternalControl", this),
-	RememberState("RememberState", this),
-	Delta("Delta",this)
+:   MotionControl("MotionControl",this,0)//,
+	//CurrentPosition("CurrentPosition",this),
+	//TargetPosition("TargetPosition",this),
+	//InputNeuronType("InputNeuronType",this, &NNewPositionControlElement::SetInputNeuronType),
+	//ControlNeuronType("ControlNeuronType",this, &NNewPositionControlElement::SetControlNeuronType),
+	//ExternalControl("ExternalControl", this),
+	//RememberState("RememberState", this),
+	//Delta("Delta",this)
 {
 }
 
@@ -76,9 +76,7 @@ NNewPositionControlElement* NNewPositionControlElement::New(void)
 // Восстановление настроек по умолчанию и сброс процесса счета
 bool NNewPositionControlElement::ADefault(void)
 {
- InputNeuronType = "NNewSynSPNeuron";
- ControlNeuronType = "NNewSynSPNeuron";
- ExternalControl = false;
+ NPositionControlElement::ADefault();
  return true;
 }
 
@@ -608,6 +606,7 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
 	 CreateLink(start[c]->GetName()+".LTZone",0,membrRName+".NegChannel");
 	}
    }
+   return true;
 }
 
 vector<NNet*> NNewPositionControlElement::GetInputNeurons(void)
