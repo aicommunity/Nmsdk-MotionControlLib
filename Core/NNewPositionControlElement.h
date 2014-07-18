@@ -20,7 +20,7 @@ See file license.txt for more information
 namespace NMSDK {
 
 //class NEngineMotionControl;
-class NNewPositionControlElement: public NPositionControlElement
+class RDK_LIB_TYPE NNewPositionControlElement: public NPositionControlElement
 {
 public: // Свойства
 RDK::UPropertyInput<NEngineMotionControl,NNewPositionControlElement> MotionControl;

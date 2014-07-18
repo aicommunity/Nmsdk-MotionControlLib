@@ -19,7 +19,7 @@ See file license.txt for more information
 namespace NMSDK {
 
 //class NEngineMotionControl;
-class NPositionControlElement: public UNet
+class RDK_LIB_TYPE NPositionControlElement: public UNet
 {
 public: // Свойства
 RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> CurrentPosition;

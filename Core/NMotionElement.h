@@ -19,7 +19,7 @@ See file license.txt for more information
 //---------------------------------------------------------------------------
 namespace NMSDK {
 
-class NMotionElement: public UNet
+class RDK_LIB_TYPE NMotionElement: public UNet
 {
 public: // Параметры
 // Число контуров управления

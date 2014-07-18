@@ -19,7 +19,7 @@ See file license.txt for more information
 
 namespace NMSDK {
 
-class NEngineMotionControl: public UNet
+class RDK_LIB_TYPE NEngineMotionControl: public UNet
 {
 public: // Публичные свойства
 // Число контуров управления
