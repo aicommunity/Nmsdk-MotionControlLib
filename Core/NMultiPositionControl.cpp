@@ -120,7 +120,7 @@ bool NMultiPositionControl::ACalculate(void)
 	 }
 	}
    }
-   for(size_t c=0;c<PreControlNeurons.size();c++)
+   for(size_t c=0;c<ControlNeurons.size();c++)
    {
 	UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(ControlNeurons[c]->GetComponentL("LTZone"));
 	if(ltzone->GetOutputData(2).Double[0]>0)
