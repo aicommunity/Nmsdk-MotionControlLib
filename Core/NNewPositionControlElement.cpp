@@ -22,7 +22,7 @@ namespace NMSDK {
 // Конструкторы и деструкторы
 // --------------------------
 NNewPositionControlElement::NNewPositionControlElement(void)
-:   MotionControl("MotionControl",this,0)//,
+:   MotionControl("MotionControl",this)//,
 	//CurrentPosition("CurrentPosition",this),
 	//TargetPosition("TargetPosition",this),
 	//InputNeuronType("InputNeuronType",this, &NNewPositionControlElement::SetInputNeuronType),

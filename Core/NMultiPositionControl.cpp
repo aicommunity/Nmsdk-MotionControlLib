@@ -23,7 +23,7 @@ namespace NMSDK {
 // --------------------------
 NMultiPositionControl::NMultiPositionControl(void)
 :
- PositionControl("PositionControl", this, 0)
+ PositionControl("PositionControl", this)
 {
 }
 
