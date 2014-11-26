@@ -24,6 +24,7 @@ class RDK_LIB_TYPE NNewPositionControlElement: public NPositionControlElement
 {
 public: // Свойства
 RDK::UPropertyInput<NEngineMotionControl,NNewPositionControlElement> MotionControl;
+RDK::ULProperty<bool, NNewPositionControlElement> SimControl;
 //RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> CurrentPosition;
 //RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement> TargetPosition;
 //RDK::ULProperty<string, NNewPositionControlElement> InputNeuronType;
@@ -107,7 +108,7 @@ bool CreateNeurons(void);
 bool CreateExternalControlElements(void);
 bool LinkNeurons(vector <NNet*> start, vector <NNet*> finish);
 bool UnlinkNeurons(vector <NNet*> start, vector <NNet*> finish);
-bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link);
+bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim);
 bool LinkNegative(vector <NNet*> start, vector <NNet*> finish);
 public:
 vector<NNet*> GetInputNeurons(void);

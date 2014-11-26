@@ -22,7 +22,8 @@ namespace NMSDK {
 // Конструкторы и деструкторы
 // --------------------------
 NNewPositionControlElement::NNewPositionControlElement(void)
-:   MotionControl("MotionControl",this)//,
+:   MotionControl("MotionControl",this),
+	SimControl("SimControl", this)//,
 	//CurrentPosition("CurrentPosition",this),
 	//TargetPosition("TargetPosition",this),
 	//InputNeuronType("InputNeuronType",this, &NNewPositionControlElement::SetInputNeuronType),
@@ -193,11 +194,11 @@ bool NNewPositionControlElement::ACalculate(void)
   if(ExternalControl)
   {
    //UnlinkNeurons(InputNeurons, ControlNeurons);
-   LinkGenerators(Generators, PreControlNeurons, true);
+   LinkGenerators(Generators, PreControlNeurons, true, SimControl);
   }
   else
   {
-   LinkGenerators(Generators, PreControlNeurons, false);
+   LinkGenerators(Generators, PreControlNeurons, false, SimControl);
   }
 
  return true;
@@ -525,7 +526,7 @@ bool NNewPositionControlElement::UnlinkNeurons(vector <NNet*> start, vector <NNe
  return true;
 }
 
-bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link)
+bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim)
 {
   vector<NNet*> Motions = MotionControl->GetMotion();
 
@@ -540,20 +541,46 @@ bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vecto
 	string generatorRName = "NPGeneratorR"+sntoa(i+1)+sntoa(j+1);
 	string controlNeuronLName = "ControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".PNeuronMembrane.PosChannel";
 	string controlNeuronRName = "ControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".PNeuronMembrane.PosChannel";
+	string preControlNeuronLName = "PreControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".PNeuronMembrane.PosChannel";
+	string preControlNeuronRName = "PreControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".PNeuronMembrane.PosChannel";
 
 	if(link)
 	{
-	 if(!CheckLink(generatorLName,controlNeuronLName))
-		CreateLink(generatorLName, 0, controlNeuronLName);
-	 if(!CheckLink(generatorRName,controlNeuronRName))
-		CreateLink(generatorRName, 0, controlNeuronRName);
+	 if(is_sim)
+	 {
+	  if(CheckLink(generatorLName,controlNeuronLName))
+		 BreakLink(generatorLName,controlNeuronLName);
+	  if(CheckLink(generatorRName,controlNeuronRName))
+		 BreakLink(generatorRName,controlNeuronRName);
+
+	  if(!CheckLink(generatorLName,preControlNeuronLName))
+		 CreateLink(generatorLName, 0, preControlNeuronLName);
+	  if(!CheckLink(generatorRName,preControlNeuronRName))
+		 CreateLink(generatorRName, 0, preControlNeuronRName);
+	 }
+	 else
+	 {
+	  if(CheckLink(generatorLName,preControlNeuronLName))
+		 BreakLink(generatorLName,preControlNeuronLName);
+	  if(CheckLink(generatorRName,preControlNeuronRName))
+		 BreakLink(generatorRName,preControlNeuronRName);
+
+	  if(!CheckLink(generatorLName,controlNeuronLName))
+		 CreateLink(generatorLName, 0, controlNeuronLName);
+	  if(!CheckLink(generatorRName,controlNeuronRName))
+		 CreateLink(generatorRName, 0, controlNeuronRName);
+	 }
 	}
 	else
 	{
 	 if(CheckLink(generatorLName,controlNeuronLName))
-	   BreakLink(generatorLName,controlNeuronLName);
+		BreakLink(generatorLName,controlNeuronLName);
 	 if(CheckLink(generatorRName,controlNeuronRName))
-	   BreakLink(generatorRName,controlNeuronRName);
+		BreakLink(generatorRName,controlNeuronRName);
+	 if(CheckLink(generatorLName,preControlNeuronLName))
+		BreakLink(generatorLName,preControlNeuronLName);
+	 if(CheckLink(generatorRName,preControlNeuronRName))
+		BreakLink(generatorRName,preControlNeuronRName);
 	}
    }
   }
