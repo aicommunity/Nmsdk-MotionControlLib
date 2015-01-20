@@ -149,6 +149,9 @@ RDK::ULProperty<string, NEngineMotionControl> MCAfferentObjectName;
 // Имя объекта для PAC
 RDK::ULProperty<string, NEngineMotionControl> PacObjectName;
 
+// Максимальная зафиксированная амплитуда колебаний
+RDK::ULProperty<std::vector<double>, NEngineMotionControl,ptPubState> MaxContourAmplitude;
+
 protected: // Временные переменные
 vector<vector<UEPtr<NReceptor> > > receptors;
 
