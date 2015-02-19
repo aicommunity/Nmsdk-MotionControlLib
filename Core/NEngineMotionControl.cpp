@@ -56,7 +56,9 @@ NEngineMotionControl::NEngineMotionControl(void)
    TransientAverageThreshold("TransientAverageThreshold",this),
    MCNeuroObjectName("MCNeuroObjectName",this,&NEngineMotionControl::SetMCNeuroObjectName),
    MCAfferentObjectName("MCAfferentObjectName",this,&NEngineMotionControl::SetMCAfferentObjectName),
-   PacObjectName("PacObjectName",this,&NEngineMotionControl::SetPacObjectName)
+   PacObjectName("PacObjectName",this,&NEngineMotionControl::SetPacObjectName),
+
+   MaxContourAmplitude("MaxContourAmplitude",this)
 
 
 {
@@ -91,6 +93,7 @@ bool NEngineMotionControl::SetNumControlLoops(const int &value)
  UseContourData->resize(value,false);
  CurrentContourAmplitude->resize(value,0);
  CurrentContourAverage->resize(value,0);
+ MaxContourAmplitude->resize(value,0);
 
  DestContourMaxAmplitude->resize(value,0);
  DestContourMinAmplitude->resize(value,0);
@@ -425,6 +428,7 @@ bool NEngineMotionControl::ABuild(void)
 
  CurrentContourAmplitude->resize(4);
  CurrentContourAverage->resize(4);
+ MaxContourAmplitude->resize(4);
 
  DestContourMaxAmplitude->resize(4);
  DestContourMinAmplitude->resize(4);
@@ -438,6 +442,7 @@ bool NEngineMotionControl::AReset(void)
 {
  CurrentContourAmplitude->assign(4,0);
  CurrentContourAverage->assign(4,0);
+ MaxContourAmplitude->assign(4,0);
  CurrentTransientTime=0;
  CurrentTransientState=false;
  TempTransientState=false;
@@ -533,6 +538,9 @@ bool NEngineMotionControl::ACalculate(void)
   }
   (*CurrentContourAmplitude)[i]=max_val-min_val;
   (*CurrentContourAverage)[i]=avg_val/History.size();
+  double max_min=max_val-min_val;
+  if(((*MaxContourAmplitude)[i])<max_min)
+   (*MaxContourAmplitude)[i]=max_min;
  }
 
  bool old_transient_state=CurrentTransientState;
