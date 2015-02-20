@@ -23,7 +23,7 @@ See file license.txt for more information
 
 namespace NMSDK {
 
-class NMotionControlLibrary: public ULibrary
+class RDK_LIB_TYPE NMotionControlLibrary: public ULibrary
 {
 public: // Ìועמהû
 // --------------------------
@@ -47,7 +47,7 @@ virtual void CreateClassSamples(UStorage *storage);
 // --------------------------
 };     
 
-extern NMotionControlLibrary MotionControlLibrary;
+extern RDK_LIB_TYPE NMotionControlLibrary MotionControlLibrary;
 
 }
 

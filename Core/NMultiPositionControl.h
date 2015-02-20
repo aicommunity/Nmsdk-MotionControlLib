@@ -16,7 +16,7 @@ See file license.txt for more information
 
 namespace NMSDK {
 
-class NMultiPositionControl: public NPositionControlElement
+class RDK_LIB_TYPE NMultiPositionControl: public NPositionControlElement
 {
 protected: // Свойства
 RDK::UPropertyInputC<NPositionControlElement,NMultiPositionControl> PositionControl;
