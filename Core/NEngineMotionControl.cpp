@@ -1092,9 +1092,9 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
   net->AddComponent(cont);
   Motions.push_back(static_pointer_cast<NNet>(cont));
 
-  try
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ia1.Receptor",true));
+  if(receptor)
   {
-   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ia1.Receptor"));
    receptor->MinInputRange=0;
    receptor->MaxInputRange=fabs(IaMin)/real_ranges;
    receptor->InputAdaptationMode=inp_mode;
@@ -1103,13 +1103,10 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
    receptor->Gain=receptor_gain;
    receptor->ExpCoeff=exp_coeff;
   }
-  catch (EComponentNameNotExist &exc)
-  {
-  }
 
-  try
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ia2.Receptor",true));
+  if(receptor)
   {
-   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ia2.Receptor"));
    receptor->MinInputRange=0;
    receptor->MaxInputRange=fabs(IaMax)/real_ranges;
    receptor->InputAdaptationMode=inp_mode;
@@ -1118,13 +1115,11 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
    receptor->Gain=receptor_gain;
    receptor->ExpCoeff=exp_coeff;
   }
-  catch (EComponentNameNotExist &exc)
-  {
-  }
 
-  try
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ib1.Receptor",true));
+
+  if(receptor)
   {
-   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ib1.Receptor"));
    receptor->MinInputRange=0;
    receptor->MaxInputRange=fabs(IbMin)/real_ranges;
    receptor->InputAdaptationMode=inp_mode;
@@ -1133,13 +1128,10 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
    receptor->Gain=receptor_gain;
    receptor->ExpCoeff=exp_coeff;
   }
-  catch (EComponentNameNotExist &exc)
-  {
-  }
 
-  try
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ib2.Receptor",true));
+  if(receptor)
   {
-   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ib2.Receptor"));
    receptor->MinInputRange=0;
    receptor->MaxInputRange=fabs(IbMax)/real_ranges;
    receptor->InputAdaptationMode=inp_mode;
@@ -1148,13 +1140,10 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
    receptor->Gain=receptor_gain;
    receptor->ExpCoeff=exp_coeff;
   }
-  catch (EComponentNameNotExist &exc)
-  {
-  }
 
-  try
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_II1.Receptor",true));
+  if(receptor)
   {
-   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_II1.Receptor"));
    receptor->MinInputRange=0;
    receptor->MaxInputRange=fabs(IIMin)/real_ranges;
    receptor->InputAdaptationMode=inp_mode;
@@ -1163,14 +1152,11 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
    receptor->Gain=receptor_gain;
    receptor->ExpCoeff=exp_coeff;
   }
-  catch (EComponentNameNotExist &exc)
-  {
-  }
 
 
-  try
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_II2.Receptor",true));
+  if(receptor)
   {
-   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_II2.Receptor"));
    receptor->MinInputRange=0;
    receptor->MaxInputRange=fabs(IIMax)/real_ranges;
    receptor->InputAdaptationMode=inp_mode;
@@ -1179,13 +1165,10 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
    receptor->Gain=receptor_gain;
    receptor->ExpCoeff=exp_coeff;
   }
-  catch (EComponentNameNotExist &exc)
-  {
-  }
 
-  try
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ic1.Receptor",true));
+  if(receptor)
   {
-   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ic1.Receptor"));
    receptor->MinInputRange=0;
    receptor->MaxInputRange=fabs(IcMin)/real_ranges;
    receptor->InputAdaptationMode=inp_mode;
@@ -1194,13 +1177,10 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
    receptor->Gain=receptor_gain;
    receptor->ExpCoeff=exp_coeff;
   }
-  catch (EComponentNameNotExist &exc)
-  {
-  }
 
-  try
+   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ic2.Receptor",true));
+  if(receptor)
   {
-   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("Afferent_Ic2.Receptor"));
    receptor->MinInputRange=0;
    receptor->MaxInputRange=fabs(IcMax)/real_ranges;
    receptor->InputAdaptationMode=inp_mode;
@@ -1209,10 +1189,6 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
    receptor->Gain=receptor_gain;
    receptor->ExpCoeff=exp_coeff;
   }
-  catch (EComponentNameNotExist &exc)
-  {
-  }
-
 
  }
 
@@ -1495,14 +1471,9 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
 
  for(int i=0;i<NumMotionElements;i++)
  {
-  try
-  {
-   cont=net->GetComponent(string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1));
-  }
-  catch (EComponentNameNotExist &exc)
-  {
-   continue;
-  }
+   cont=net->GetComponent(string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),true);
+   if(!cont)
+	continue;
   ((NIntervalSeparator*)cont)->Mode=mode;
 
   left_value.assign(1,Ib_ranges_neg[i].first);
@@ -1513,14 +1484,9 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
 
  for(int i=0;i<NumMotionElements;i++)
  {
-  try
-  {
-   cont=net->GetComponent(string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1));
-  }
-  catch (EComponentNameNotExist &exc)
-  {
-   continue;
-  }
+   cont=net->GetComponent(string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),true);
+   if(!cont)
+	continue;
 
   ((NIntervalSeparator*)cont)->Mode=mode;
 
@@ -1532,14 +1498,9 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
 
  for(int i=0;i<NumMotionElements;i++)
  {
-  try
-  {
-   cont=net->GetComponent(string("II_NegIntervalSeparator")+RDK::sntoa(i+1));
-  }
-  catch (EComponentNameNotExist &exc)
-  {
-   continue;
-  }
+   cont=net->GetComponent(string("II_NegIntervalSeparator")+RDK::sntoa(i+1),true);
+   if(!cont)
+	continue;
 
   ((NIntervalSeparator*)cont)->Mode=mode;
 
@@ -1551,14 +1512,9 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
 
  for(int i=0;i<NumMotionElements;i++)
  {
-  try
-  {
-   cont=net->GetComponent(string("II_PosIntervalSeparator")+RDK::sntoa(i+1));
-  }
-  catch (EComponentNameNotExist &exc)
-  {
-   continue;
-  }
+   cont=net->GetComponent(string("II_PosIntervalSeparator")+RDK::sntoa(i+1),true);
+   if(!cont)
+	continue;
 
   ((NIntervalSeparator*)cont)->Mode=mode;
 
@@ -1570,14 +1526,9 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
 
  for(int i=0;i<NumMotionElements;i++)
  {
-  try
-  {
-   cont=net->GetComponent(string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1));
-  }
-  catch (EComponentNameNotExist &exc)
-  {
-   continue;
-  }
+   cont=net->GetComponent(string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),true);
+   if(!cont)
+	continue;
 
   ((NIntervalSeparator*)cont)->Mode=mode;
 
@@ -1589,14 +1540,9 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
 
  for(int i=0;i<NumMotionElements;i++)
  {
-  try
-  {
-   cont=net->GetComponent(string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1));
-  }
-  catch (EComponentNameNotExist &exc)
-  {
-   continue;
-  }
+   cont=net->GetComponent(string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),true);
+   if(!cont)
+	continue;
 
   ((NIntervalSeparator*)cont)->Mode=mode;
 
@@ -1608,14 +1554,9 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
 
  for(int i=0;i<NumMotionElements;i++)
  {
-  try
-  {
-   cont=net->GetComponent(string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1));
-  }
-  catch (EComponentNameNotExist &exc)
-  {
-   continue;
-  }
+   cont=net->GetComponent(string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),true);
+   if(!cont)
+	continue;
   ((NIntervalSeparator*)cont)->Mode=mode;
 
   left_value.assign(1,Ic_ranges_neg[i].first);
@@ -1626,14 +1567,9 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
 
  for(int i=0;i<NumMotionElements;i++)
  {
-  try
-  {
-   cont=net->GetComponent(string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1));
-  }
-  catch (EComponentNameNotExist &exc)
-  {
-   continue;
-  }
+   cont=net->GetComponent(string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),true);
+   if(!cont)
+	continue;
 
   ((NIntervalSeparator*)cont)->Mode=mode;
 
