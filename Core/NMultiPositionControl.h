@@ -1,6 +1,6 @@
 /* ***********************************************************
 
-E-mail:        
+E-mail:
 Url:           
 
 This file is part of the project: 
@@ -20,6 +20,7 @@ class RDK_LIB_TYPE NMultiPositionControl: public NPositionControlElement
 {
 protected: // Свойства
 RDK::UPropertyInputC<NPositionControlElement,NMultiPositionControl> PositionControl;
+RDK::ULProperty<int, NPositionControlElement> NumOfPositions;
 
 public: // Переменные состояния
 // Входные нейроны, разделённые по нижним уровням
@@ -77,6 +78,8 @@ virtual bool ACalculate(void);
 // --------------------------
 public:
 bool CreateNeurons(void);
+bool LinkGenerators(const bool &value);
+bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link);
 
 };
 

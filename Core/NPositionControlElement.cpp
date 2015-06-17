@@ -27,7 +27,7 @@ NPositionControlElement::NPositionControlElement(void)
 	TargetPosition("TargetPosition",this),
 	InputNeuronType("InputNeuronType",this, &NPositionControlElement::SetInputNeuronType),
 	ControlNeuronType("ControlNeuronType",this, &NPositionControlElement::SetControlNeuronType),
-	ExternalControl("ExternalControl", this),
+	ExternalControl("ExternalControl", this, &NPositionControlElement::SetExternalControl),
 	RememberState("RememberState", this),
 	Delta("Delta",this)
 {
@@ -49,6 +49,12 @@ bool NPositionControlElement::SetInputNeuronType(const string &value)
 }
 bool NPositionControlElement::SetControlNeuronType(const string &value)
 {
+ Ready=false;
+ return true;
+}
+bool NPositionControlElement::SetExternalControl(const bool &value)
+{
+ LinkGenerators(value);
  Ready=false;
  return true;
 }
@@ -172,7 +178,10 @@ bool NPositionControlElement::UnlinkNeurons(vector <NNet*> start, vector <NNet*>
  }
  return true;
 }
-
+bool NPositionControlElement::LinkGenerators(const bool &value)
+{
+ return true;
+}
 bool NPositionControlElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link)
 {
  return true;

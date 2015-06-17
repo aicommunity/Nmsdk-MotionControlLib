@@ -52,6 +52,7 @@ virtual ~NPositionControlElement(void);
 // ---------------------
 bool SetInputNeuronType(const string &value);
 bool SetControlNeuronType(const string &value);
+bool SetExternalControl(const bool &value);
 // ---------------------
 
 // ---------------------
@@ -90,6 +91,7 @@ bool CreateNeurons(void);
 bool CreateExternalControlElements(void);
 bool LinkNeurons(vector <NNet*> start, vector <NNet*> finish);
 bool UnlinkNeurons(vector <NNet*> start, vector <NNet*> finish);
+virtual bool LinkGenerators(const bool &value);
 bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link);
 bool LinkNegative(vector <NNet*> start, vector <NNet*> finish);
 vector<NNet*> GetInputNeurons(void);
