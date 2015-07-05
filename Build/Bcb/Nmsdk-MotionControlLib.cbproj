@@ -1,6 +1,6 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{64A779EA-5B79-47F4-8349-B6420E37E2BD}</ProjectGuid>
+        <ProjectGuid>{A3B9C030-3A8D-465E-93DF-567748F8A3AF}</ProjectGuid>
         <ProjectVersion>17.2</ProjectVersion>
         <FrameworkType>None</FrameworkType>
         <Base>True</Base>
@@ -57,7 +57,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <SanitizedProjectName>Rdk-BasicLib</SanitizedProjectName>
+        <SanitizedProjectName>Nmsdk-MotionControlLib</SanitizedProjectName>
         <ProjectType>CppStaticLibrary</ProjectType>
         <PackageImports>DataSnapIndy10ServerTransport;bindcompfmx;fmx;rtl;dbrtl;IndySystem;DbxClientDriver;bindcomp;inetdb;DBXInterBaseDriver;DataSnapCommon;DataSnapClient;DataSnapServer;DataSnapProviderClient;xmlrtl;ibxpress;DbxCommonDriver;IndyProtocols;DBXMySQLDriver;dbxcds;soaprtl;bindengine;DBXOracleDriver;CustomIPTransport;dsnap;DBXInformixDriver;fmxase;IndyCore;DBXFirebirdDriver;inet;fmxobj;inetdbxpress;DBXSybaseASADriver;fmxdae;IPIndyImpl;dbexpress;$(PackageImports)</PackageImports>
         <_TCHARMapping>char</_TCHARMapping>
@@ -117,12 +117,26 @@
         <Defines>NDEBUG;$(Defines)</Defines>
     </PropertyGroup>
     <ItemGroup>
-        <CppCompile Include="..\..\Core\UBCLLibrary.cpp">
-            <DependentOn>..\..\Core\UBCLLibrary.h</DependentOn>
+        <CppCompile Include="..\..\Core\NEngineMotionControl.cpp">
+            <DependentOn>..\..\Core\NEngineMotionControl.h</DependentOn>
             <BuildOrder>0</BuildOrder>
         </CppCompile>
-        <CppCompile Include="..\..\Core\UModel.cpp">
+        <CppCompile Include="..\..\Core\NMotionControlLibrary.cpp">
+            <DependentOn>..\..\Core\NMotionControlLibrary.h</DependentOn>
             <BuildOrder>1</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Core\NMotionElement.cpp">
+            <DependentOn>..\..\Core\NMotionElement.h</DependentOn>
+            <BuildOrder>2</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Core\NMultiPositionControl.cpp">
+            <BuildOrder>3</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Core\NNewPositionControlElement.cpp">
+            <BuildOrder>4</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="..\..\Core\NPositionControlElement.cpp">
+            <BuildOrder>5</BuildOrder>
         </CppCompile>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
@@ -229,6 +243,18 @@
                 </DeployFile>
                 <DeployFile Condition="'$(UsingDelphiRTL)'=='true'" LocalName="$(BDS)\bin\borlndmm.dll" Class="DependencyModule">
                     <Platform Name="Win32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName=".\..\..\Bin\Bcb\Nmsdk-MotionControlLib.lib" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>Nmsdk-MotionControlLib.lib</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName=".\..\..\Bin\Bcb\Nmsdk-MotionControlLib.tds" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win32">
+                        <RemoteName>Nmsdk-MotionControlLib.tds</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -550,12 +576,12 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME)"/>
-                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
+                <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
             </Deployment>
             <Platforms>

@@ -14,8 +14,7 @@ See file license.txt for more information
 #define NMotionElementCPP
 
 #include "NMotionElement.h"
-#include "../PulseLib/NPulseNeuron.h"
-//#include "../../Kernel/NStorage.h"
+#include "../../Nmsdk-PulseLib/Core/NPulseNeuron.h"
 //---------------------------------------------------------------------------
 namespace NMSDK {
 

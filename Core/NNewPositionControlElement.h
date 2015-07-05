@@ -12,7 +12,6 @@ See file license.txt for more information
 #ifndef NNewPositionControlElement_H
 #define NNewPositionControlElement_H
 
-#include "..\..\RDK\Core\Engine\UNet.h"
 #include "NEngineMotionControl.h"
 #include "NMotionElement.h"
 #include "NPositionControlElement.h"

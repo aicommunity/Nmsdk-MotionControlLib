@@ -13,8 +13,8 @@ See file license.txt for more information
 #ifndef NMotionElementH
 #define NMotionElementH
 
-#include "../../Kernel/NSupport.h"
-#include "../PulseLib/NAfferentNeuron.h"
+#include "../../Nmsdk-BasicLib/Core/NSupport.h"
+#include "../../Nmsdk-PulseLib/Core/NAfferentNeuron.h"
 
 //---------------------------------------------------------------------------
 namespace NMSDK {

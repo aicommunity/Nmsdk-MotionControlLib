@@ -12,7 +12,6 @@ See file license.txt for more information
 #ifndef NPositionControlElement_H
 #define NPositionControlElement_H
 
-#include "..\..\RDK\Core\Engine\UNet.h"
 #include "NEngineMotionControl.h"
 #include "NMotionElement.h"
 

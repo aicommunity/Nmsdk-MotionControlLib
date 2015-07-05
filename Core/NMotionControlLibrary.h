@@ -15,7 +15,6 @@ See file license.txt for more information
 #define NMotionControlLibraryH
 
 #include "NEngineMotionControl.h"
-#include "../../Kernel/NSupport.h"
 #include "NMotionElement.h"
 #include "NPositionControlElement.h"
 #include "NNewPositionControlElement.h"
