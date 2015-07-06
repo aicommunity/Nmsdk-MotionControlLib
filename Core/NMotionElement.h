@@ -180,18 +180,30 @@ bool LinkRenshow();
 // Формирует СУ двигательной единицей
 // Если mode == 0 - формируется полная модель
 // 	    mode == 1 - модель без вставочных интернейронов
-UEPtr<UNet> CreateMotionElement(UStorage *storage, const string &netclassname, int mode);
+UEPtr<UNet> RDK_LIB_TYPE CreateMotionElement(UStorage *storage, const string &netclassname, int mode);
 
 // Аналогично, но с развязкой по дендритам
-UEPtr<UNet> CreateBranchedMotionElement(UStorage *storage, const string &netclassname,
+UEPtr<UNet> RDK_LIB_TYPE CreateBranchedMotionElement(UStorage *storage, const string &netclassname,
 	const string &neuron_class_name, const string &afferent_neuron_class_name, int mode);
 
 // Формирует простейшую СУ двигательной единицей из двух мотонейронов
-UEPtr<UNet> CreateSimplestMotionElement(UStorage *storage, const string &netclassname, int mode);
-UEPtr<UNet> CreateSimplestBranchedMotionElement(UStorage *storage, const string &netclassname, int mode, bool use_speed_force=false, bool use_add_contours=false);
-UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage, const string &netclassname, int mode, bool use_speed_force=false, bool use_add_contours=false);
+UEPtr<UNet> RDK_LIB_TYPE CreateSimplestMotionElement(UStorage *storage, const string &netclassname, int mode);
+UEPtr<UNet> RDK_LIB_TYPE CreateSimplestBranchedMotionElement(UStorage *storage, const string &netclassname, int mode, bool use_speed_force=false, bool use_add_contours=false);
+UEPtr<UNet> RDK_LIB_TYPE CreateSimplestBranchedMotionElementPM(UStorage *storage, const string &netclassname, int mode, bool use_speed_force=false, bool use_add_contours=false);
+// Формирует СУ двигательной единицей
 
-bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
+// Аналогично, но с развязкой по дендритам
+UEPtr<UNet> RDK_LIB_TYPE CreateSimplestBranchedMotionElement(UStorage *storage,
+	const string &netclassname, const string &neuron_class_name,
+	const string &afferent_neuron_class_name, int mode, bool use_speed_force, bool use_add_contours);
+
+// Формирует СУ двигательной единицей
+// Аналогично, но с развязкой по дендритам
+UEPtr<UNet> RDK_LIB_TYPE CreateSimplestBranchedMotionElementPM(UStorage *storage,
+	const string &netclassname, const string &neuron_class_name,
+	const string &afferent_neuron_class_name, int mode, bool use_speed_force, bool use_add_contours);
+
+bool RDK_LIB_TYPE CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
 	const string &target_head, const string &target_tail);
 
 }

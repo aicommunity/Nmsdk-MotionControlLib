@@ -12,13 +12,13 @@ See file license.txt for more information
 *********************************************************** */
 
 #include "NMotionControlLibrary.h"
-
+/*
 #include "NMotionElement.cpp"
 #include "NEngineMotionControl.cpp"
 #include "NPositionControlElement.cpp"
 #include "NNewPositionControlElement.cpp"
 #include "NMultiPositionControl.cpp"
-
+*/
 namespace NMSDK {
 
 NMotionControlLibrary MotionControlLibrary;
