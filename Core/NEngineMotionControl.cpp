@@ -450,7 +450,7 @@ bool NEngineMotionControl::AReset(void)
 
  SetNumOutputs(6);
  for(int i=0;i<NumOutputs;i++)
-  SetOutputDataSize(i,1);
+  SetOutputDataSize(i,MMatrixSize(1,1));
 
  receptors.resize(NumMotionElements);
  for(int n=0;n<NumMotionElements;n++)
@@ -512,7 +512,7 @@ bool NEngineMotionControl::ACalculate(void)
  measure.resize(source->GetNumOutputs());
  for(size_t i=0;i<measure.size();i++)
  {
-  if(source->GetOutputDataSize(i)>0)
+  if(source->GetOutputDataSize(i)>MMatrixSize(1,0))
    measure[i]=source->GetOutputData(i).Double[0];
   else
    measure[i]=0;
@@ -1212,7 +1212,7 @@ void NEngineMotionControl::PACSetup(UEPtr<UContainer> net,
   return;
  cont->SetName("Pac");
  net->AddComponent(cont);
- ((NPac*)cont)->SetOutputDataSize(0,Motions.size()*2);
+ ((NPac*)cont)->SetOutputDataSize(0,MMatrixSize(1,Motions.size()*2));
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
@@ -1275,7 +1275,7 @@ void NEngineMotionControl::AACSetup(UEPtr<UContainer> net, double gain_value)
  cont->Mode=0;
  cont->TCMode=0;
  net->AddComponent(cont);
- cont->SetOutputDataSize(0,Motions.size()*2);
+ cont->SetOutputDataSize(0,MMatrixSize(1,Motions.size()*2));
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
@@ -2472,7 +2472,7 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
   return;
  cont->SetName("Pac");
  AddComponent(cont);
- ((NPac*)cont)->SetOutputDataSize(0,Motions.size()*2);
+ ((NPac*)cont)->SetOutputDataSize(0,MMatrixSize(1,Motions.size()*2));
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
