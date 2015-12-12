@@ -79,7 +79,7 @@ bool NEngineMotionControl::SetNumControlLoops(const int &value)
  if(value <=0)
   return false;
 
- for(int i=0; i<NumMotionElements; i++)
+ for(size_t i=0; i<Motions.size(); i++)
  {
   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
   melem->isNumControlLoopsInitialized=true;
@@ -235,7 +235,10 @@ bool NEngineMotionControl::SetMCAfferentObjectName(const string &value)
  {
   for(int i=0;i<NumMotionElements;i++)
   {
+   NNet* net=Motions[i];
    NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+   if(!melem)
+    continue;
    melem->AfferentObjectName = value;
   }
  }
@@ -337,9 +340,11 @@ bool NEngineMotionControl::SetActiveContours(const std::vector<bool> &value)
 /// Режим наличия интернейронов
 bool NEngineMotionControl::SetInterneuronPresentMode(const int &value)
 {
- for(int i=0; i<NumMotionElements; i++)
+ for(size_t i=0; i<Motions.size(); i++)
  {
   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+  if(!melem)
+   continue;
   melem->InterneuronPresentMode=value;
   if(value == 0)
   {
