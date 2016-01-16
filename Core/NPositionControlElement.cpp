@@ -135,12 +135,12 @@ bool NPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> f
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
 	  UEPtr<NPulseMembrane> branch;
 	  bool hasEmptyMembrane=false;
-	  for(size_t k=0;k<neuron->Membranes.size();k++)
+	  for(size_t k=0;k<neuron->GetNumMembranes();k++)
 	  {
-	   NPulseMembrane* membr = neuron->Membranes[k];
+	   NPulseMembrane* membr = neuron->GetMembrane(k);
 	   if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
 	   {
-		 branch=neuron->Membranes[k];
+		 branch=neuron->GetMembrane(k);
 		 hasEmptyMembrane=true;
 		 break;
 	   }

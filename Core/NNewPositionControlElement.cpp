@@ -482,12 +482,12 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
 	  UEPtr<NPulseMembrane> branch;
 	  bool hasEmptyMembrane=false;
-	  for(size_t k=0;k<neuron->Membranes.size();k++)
+	  for(size_t k=0;k<neuron->GetNumMembranes();k++)
 	  {
-	   NPulseMembrane* membr = neuron->Membranes[k];
+	   NPulseMembrane* membr = neuron->GetMembrane(k);
 	   if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
 	   {
-		 branch=neuron->Membranes[k];
+		 branch=neuron->GetMembrane(k);
 		 hasEmptyMembrane=true;
 		 break;
 	   }
@@ -609,15 +609,15 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
 	 string postInputNeuronRName = "PostInputNeuronR"+sntoa(i+1)+sntoa(j+1);
 	 UEPtr<NPulseNeuron> neuronL=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronLName));
 	 UEPtr<NPulseNeuron> neuronR=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronRName));
-	 for(size_t m=0;m<neuronL->Membranes.size();m++)
+	 for(size_t m=0;m<neuronL->GetNumMembranes();m++)
 	 {
-	  NPulseMembrane* membr = neuronL->Membranes[m];
+	  NPulseMembrane* membr = neuronL->GetMembrane(m);
 	  if(CheckLink(inputNeuronLName,postInputNeuronLName+"."+membr->GetName()+".PosChannel"))
 		membrToConnectL.push_back(membr);
 	 }
-	 for(size_t n=0;n<neuronR->Membranes.size();n++)
+	 for(size_t n=0;n<neuronR->GetNumMembranes();n++)
 	 {
-	  NPulseMembrane* membr = neuronR->Membranes[n];
+	  NPulseMembrane* membr = neuronR->GetMembrane(n);
 	  if(CheckLink(inputNeuronRName,postInputNeuronRName+"."+membr->GetName()+".PosChannel"))
 		membrToConnectR.push_back(membr);
 	 }
