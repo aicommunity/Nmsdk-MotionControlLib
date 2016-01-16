@@ -86,13 +86,13 @@ virtual bool AReset(void);
 virtual bool ACalculate(void);
 // --------------------------
 public:
-bool CreateNeurons(void);
-bool CreateExternalControlElements(void);
-bool LinkNeurons(vector <NNet*> start, vector <NNet*> finish);
-bool UnlinkNeurons(vector <NNet*> start, vector <NNet*> finish);
+virtual bool CreateNeurons(void);
+virtual bool CreateExternalControlElements(void);
+virtual bool LinkNeurons(vector <NNet*> start, vector <NNet*> finish);
+virtual bool UnlinkNeurons(vector <NNet*> start, vector <NNet*> finish);
 virtual bool LinkGenerators(const bool &value);
-bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link);
-bool LinkNegative(vector <NNet*> start, vector <NNet*> finish);
+virtual bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim);
+virtual bool LinkNegative(vector <NNet*> start, vector <NNet*> finish);
 vector<NNet*> GetInputNeurons(void);
 vector<NNet*> GetControlNeurons(void);
 };

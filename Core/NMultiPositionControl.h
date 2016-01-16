@@ -79,7 +79,7 @@ virtual bool ACalculate(void);
 public:
 bool CreateNeurons(void);
 bool LinkGenerators(const bool &value);
-bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link);
+bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim);
 
 };
 

@@ -186,7 +186,7 @@ bool NMultiPositionControl::ACalculate(void)
    LinkNeurons(preControls, activeControls);
    if(ExternalControl)
    {
-	LinkGenerators(Generators,PreControlNeurons,true);
+	LinkGenerators(Generators,PreControlNeurons,true,false);
    }
    (*NumOfPositions)++;
   }
@@ -317,11 +317,11 @@ bool NMultiPositionControl::CreateNeurons(void)
 
 bool NMultiPositionControl::LinkGenerators(const bool &value)
 {
- LinkGenerators(Generators,PreControlNeurons,value);
+ LinkGenerators(Generators,PreControlNeurons,value,false);
  return true;
 }
 
-bool NMultiPositionControl::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link)
+bool NMultiPositionControl::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim)
 {
 
   for(size_t i=0;i<generators.size();i++)

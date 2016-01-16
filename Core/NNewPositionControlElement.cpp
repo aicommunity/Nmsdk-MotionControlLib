@@ -526,6 +526,11 @@ bool NNewPositionControlElement::UnlinkNeurons(vector <NNet*> start, vector <NNe
  return true;
 }
 
+bool NNewPositionControlElement::LinkGenerators(const bool &value)
+{
+ return NPositionControlElement::LinkGenerators(value);
+}
+
 bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim)
 {
   vector<NNet*> Motions = MotionControl->GetMotion();

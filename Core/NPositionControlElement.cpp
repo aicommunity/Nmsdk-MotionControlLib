@@ -182,7 +182,7 @@ bool NPositionControlElement::LinkGenerators(const bool &value)
 {
  return true;
 }
-bool NPositionControlElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link)
+bool NPositionControlElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim)
 {
  return true;
 }
