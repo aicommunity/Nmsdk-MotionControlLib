@@ -511,7 +511,7 @@ bool NEngineMotionControl::ACalculate(void)
  CurrentContourAverage->assign(4,0);
 
  UEPtr<UNet> source=dynamic_pointer_cast<UNet>(GetComponent("NManipulatorSource1"));
- HistorySize=TransientHistoryTime*TimeStep;
+ HistorySize=int(TransientHistoryTime*TimeStep);
  vector<double> measure;
 
  measure.resize(source->GetNumOutputs());
@@ -2141,8 +2141,7 @@ UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bo
 // Формируем сеть управления на нейронах с непрерывной генераторной функцией нейронов
 UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool crossranges)
 {
- UContainer *cont;
- bool res;
+ bool res(false);
  UEPtr<UStorage> storage=static_pointer_cast<UStorage>(Storage);
  size_t num_motions=NumMotionElements;
 
@@ -2197,8 +2196,7 @@ UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cross
 // Формируем сеть управления на 2 импульсных нейронах
 UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_force, bool use_add_contours)
 {
- UContainer *cont;
- bool res;
+ bool res(false);
  UEPtr<UStorage> storage=static_pointer_cast<UStorage>(Storage);
  size_t num_motions=NumMotionElements;
 
@@ -2304,8 +2302,7 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
 // Формируем сеть управления новым способом на 2 импульсных нейронах
 UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool use_speed_force)
 {
- UContainer *cont;
- bool res;
+ bool res(false);
  UEPtr<UStorage> storage=static_pointer_cast<UStorage>(Storage);
  size_t num_motions=NumMotionElements;
 
