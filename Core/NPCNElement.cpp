@@ -1,19 +1,11 @@
-/* ***********************************************************
+//---------------------------------------------------------------------------
 
-E-mail:        
-Url:           
+#pragma hdrstop
 
-This file is part of the project: 
+#include "NPCNElement.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
 
-File License:       New BSD License
-Project License:    New BSD License
-See file license.txt for more information
-*********************************************************** */
-
-#ifndef NNewPositionControlElement_CPP
-#define NNewPositionControlElement_CPP
-
-#include "NNewPositionControlElement.h"
 
 namespace NMSDK {
 
@@ -21,20 +13,13 @@ namespace NMSDK {
 // --------------------------
 // Конструкторы и деструкторы
 // --------------------------
-NNewPositionControlElement::NNewPositionControlElement(void)
+NPCNElement::NPCNElement(void)
 :   MotionControl("MotionControl",this),
-	SimControl("SimControl", this)//,
-	//CurrentPosition("CurrentPosition",this),
-	//TargetPosition("TargetPosition",this),
-	//InputNeuronType("InputNeuronType",this, &NNewPositionControlElement::SetInputNeuronType),
-	//ControlNeuronType("ControlNeuronType",this, &NNewPositionControlElement::SetControlNeuronType),
-	//ExternalControl("ExternalControl", this),
-	//RememberState("RememberState", this),
-	//Delta("Delta",this)
+	SimControl("SimControl", this)
 {
 }
 
-NNewPositionControlElement::~NNewPositionControlElement(void)
+NPCNElement::~NPCNElement(void)
 {
 }
 // --------------------------
@@ -43,12 +28,12 @@ NNewPositionControlElement::~NNewPositionControlElement(void)
 // ---------------------
 // Методы управления параметрами
 // ---------------------
-bool NNewPositionControlElement::SetInputNeuronType(const string &value)
+bool NPCNElement::SetInputNeuronType(const string &value)
 {
  Ready=false;
  return true;
 }
-bool NNewPositionControlElement::SetControlNeuronType(const string &value)
+bool NPCNElement::SetControlNeuronType(const string &value)
 {
  Ready=false;
  return true;
@@ -64,9 +49,9 @@ bool NNewPositionControlElement::SetControlNeuronType(const string &value)
 // Системные методы управления объектом
 // --------------------------
 // Выделяет память для новой чистой копии объекта этого класса
-NNewPositionControlElement* NNewPositionControlElement::New(void)
+NPCNElement* NPCNElement::New(void)
 {
- return new NNewPositionControlElement;
+ return new NPCNElement;
 }
 // --------------------------
 
@@ -75,7 +60,7 @@ NNewPositionControlElement* NNewPositionControlElement::New(void)
 // Скрытые методы управления счетом
 // --------------------------
 // Восстановление настроек по умолчанию и сброс процесса счета
-bool NNewPositionControlElement::ADefault(void)
+bool NPCNElement::ADefault(void)
 {
  NPositionControlElement::ADefault();
  return true;
@@ -85,7 +70,7 @@ bool NNewPositionControlElement::ADefault(void)
 // после настройки параметров
 // Автоматически вызывает метод Reset() и выставляет Ready в true
 // в случае успешной сборки
-bool NNewPositionControlElement::ABuild(void)
+bool NPCNElement::ABuild(void)
 {
  CurrentPosition->Assign(2,1,0.0);
  TargetPosition->Assign(MotionControl->GetNumControlLoops(),2*MotionControl->NumMotionElements,0.0);
@@ -100,14 +85,14 @@ bool NNewPositionControlElement::ABuild(void)
 }
 
 // Сброс процесса счета без потери настроек
-bool NNewPositionControlElement::AReset(void)
+bool NPCNElement::AReset(void)
 {
  RememberState = false;
  return true;
 }
 
 // Выполняет расчет этого объекта
-bool NNewPositionControlElement::ACalculate(void)
+bool NPCNElement::ACalculate(void)
 {
 
 	 if(MotionControl->GetNumControlLoops() != CurrentPosition->GetRows() ||
@@ -118,12 +103,11 @@ bool NNewPositionControlElement::ACalculate(void)
 	 }
 
 
-  if(InputNeurons.empty()||ControlNeurons.empty()||PreControlNeurons.empty()||PostInputNeurons.empty())
+  if(InputNeurons.empty()||ControlNeurons.empty())
    CreateNeurons();
   CurrentPosition->Assign(1,1,0.0);
   vector<NNet*> Motions = MotionControl->GetMotion();
   CurrentPosition->Assign(MotionControl->GetNumControlLoops(),2*MotionControl->NumMotionElements,0.0);
-  Delta->Assign(MotionControl->GetNumControlLoops(),2*MotionControl->NumMotionElements,0.0);
   //CurrentPosition Calculation
   for(int i=0;i<MotionControl->NumMotionElements;i++)
   {
@@ -147,69 +131,26 @@ bool NNewPositionControlElement::ACalculate(void)
 	}
    }
   }
-  //Delta Calculation
-  for(int i=0;i<MotionControl->NumMotionElements;i++)
-  {
-   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
-   if(!melem)
-	continue;
-   for(int j=0;j<melem->NumControlLoops;j++)
-   {
-	UEPtr<UADItem> controlLTZoneL=dynamic_pointer_cast<UADItem>(GetComponentL("ControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
-	UEPtr<UADItem> controlLTZoneR=dynamic_pointer_cast<UADItem>(GetComponentL("ControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
-	UEPtr<UADItem> preControlLTZoneL=dynamic_pointer_cast<UADItem>(GetComponentL("PreControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
-	UEPtr<UADItem> preControlLTZoneR=dynamic_pointer_cast<UADItem>(GetComponentL("PreControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
 
-	(*Delta)(j,2*i)= controlLTZoneL->GetOutputData(2).Double[0]-preControlLTZoneL->GetOutputData(2).Double[0];
-	(*Delta)(j,2*i+1)= controlLTZoneR->GetOutputData(2).Double[0]-preControlLTZoneR->GetOutputData(2).Double[0];
-   }
-  }
-
-  if(RememberState)
-  {
-   RememberState = false;
-   vector<NNet*> activeInputs, postInputs, preControls, activeControls;
-   for(size_t i=0;i<InputNeurons.size();i++)
-   {
-	UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(InputNeurons[i]->GetComponentL("LTZone"));
-	if(ltzone->GetOutputData(2).Double[0]>0)
-	{
-	 activeInputs.push_back(InputNeurons[i]);
-	 preControls.push_back(PreControlNeurons[i]);
-	}
-   }
-   for(size_t c=0;c<PreControlNeurons.size();c++)
-   {
-	UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(ControlNeurons[c]->GetComponentL("LTZone"));
-	if(ltzone->GetOutputData(2).Double[0]>0)
-	{
-	 activeControls.push_back(ControlNeurons[c]);
-	 postInputs.push_back(PostInputNeurons[c]);
-	}
-   }
-   LinkNegative(activeInputs, postInputs);
-   LinkNeurons(activeInputs, postInputs);
-   LinkNeurons(preControls, activeControls);
-  }
   if(ExternalControl)
   {
    //UnlinkNeurons(InputNeurons, ControlNeurons);
-   LinkGenerators(Generators, PreControlNeurons, true, SimControl);
+   LinkGenerators(Generators, ControlNeurons, true, SimControl);
   }
   else
   {
-   LinkGenerators(Generators, PreControlNeurons, false, SimControl);
+   LinkGenerators(Generators, ControlNeurons, false, SimControl);
   }
 
  return true;
 }
 // --------------------------
-bool NNewPositionControlElement::CreateNeurons()
+bool NPCNElement::CreateNeurons()
 {
    UEPtr<UContainer> cont;
    UEPtr<UStorage> storage = GetStorage();
    bool res;
-   vector<NNet*> Motions = MotionControl->GetMotion();
+    vector<NNet*> Motions = MotionControl->GetMotion();
    //Creating InputNeurons
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
@@ -218,14 +159,22 @@ bool NNewPositionControlElement::CreateNeurons()
 	 continue;
 	LeftInputNeurons.resize(melem->NumControlLoops);
 	RightInputNeurons.resize(melem->NumControlLoops);
+	LeftAfferentNeurons.resize(melem->NumControlLoops);
+	RightAfferentNeurons.resize(melem->NumControlLoops);
 	for(int j=0;j<melem->NumControlLoops;j++)
 	{
 	 UEPtr<UADItem> ltzoneL=dynamic_pointer_cast<UADItem>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
-	UEPtr<UADItem> ltzoneR=dynamic_pointer_cast<UADItem>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
+	 UEPtr<UADItem> ltzoneR=dynamic_pointer_cast<UADItem>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
+	 //
+	 UEPtr<NNet> afferentL=dynamic_pointer_cast<NNet>(melem->GetComponentL("AfferentL"+sntoa(j+1)));
+	 UEPtr<NNet> afferentR=dynamic_pointer_cast<NNet>(melem->GetComponentL("AfferentR"+sntoa(j+1)));
+	 //
 	 UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
 	 string ltzoneLName,ltzoneRName;
 	 ltzoneL->GetLongName(owner, ltzoneLName);
+	 LeftAfferentNeurons[j].push_back(static_pointer_cast<NNet>(afferentL));
 	 ltzoneR->GetLongName(owner, ltzoneRName);
+	 RightAfferentNeurons[j].push_back(static_pointer_cast<NNet>(afferentR));
 	 string inputNeuronLName = "InputNeuronL"+sntoa(i+1)+sntoa(j+1);
 	 string inputNeuronRName = "InputNeuronR"+sntoa(i+1)+sntoa(j+1);
 	 string inputLName,inputRName;
@@ -235,7 +184,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronLName));
 	  InputNeurons.push_back(inputNeuron);
 	  inputNeuron->GetLongName(owner, inputLName);
-	  LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronLName)));
+	  LeftInputNeurons[j].push_back(inputNeuron);
 	 }
 	 else
 	 {
@@ -246,7 +195,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  res=AddComponent(cont);
 	  InputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, inputLName);
-	  LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronLName)));
+	  LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
 
 	 if(CheckComponent(inputNeuronRName))
@@ -254,7 +203,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronRName));
 	  InputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
 	  inputNeuron->GetLongName(owner, inputRName);
-	  RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
+	  RightInputNeurons[j].push_back(inputNeuron);
 	 }
 	 else
 	 {
@@ -265,15 +214,20 @@ bool NNewPositionControlElement::CreateNeurons()
 	  res=AddComponent(cont);
 	  InputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, inputRName);
-	  RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
+	  RightInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
 
 	 owner->CreateLink(ltzoneLName,0,inputLName+".PNeuronMembrane.PosChannel");
-	 owner->CreateLink(ltzoneLName,0,inputRName+".PNeuronMembrane.NegChannel");
-	 owner->CreateLink(ltzoneRName,0,inputLName+".PNeuronMembrane.NegChannel");
 	 owner->CreateLink(ltzoneRName,0,inputRName+".PNeuronMembrane.PosChannel");
+	 if(i==0)
+	 {
+	  owner->CreateLink(ltzoneLName,0,inputRName+".PNeuronMembrane.NegChannel");
+	  owner->CreateLink(ltzoneRName,0,inputLName+".PNeuronMembrane.NegChannel");
+	 }
 	}
    }
+
+
    //Creating ControlNeurons
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
@@ -282,14 +236,24 @@ bool NNewPositionControlElement::CreateNeurons()
 	 continue;
 	LeftControlNeurons.resize(melem->NumControlLoops);
 	RightControlNeurons.resize(melem->NumControlLoops);
+	LeftPostAfferentNeurons.resize(melem->NumControlLoops);
+	RightPostAfferentNeurons.resize(melem->NumControlLoops);
 	for(int j=0;j<melem->NumControlLoops;j++)
 	{
 	 UEPtr<UADItem> postAfferentL=dynamic_pointer_cast<UADItem>(melem->GetComponentL("PostAfferentL"+sntoa(j+1)));
 	 UEPtr<UADItem> postAfferentR=dynamic_pointer_cast<UADItem>(melem->GetComponentL("PostAfferentR"+sntoa(j+1)));
+	 //
+	 UEPtr<NNet> postafferentL=dynamic_pointer_cast<NNet>(melem->GetComponentL("PostAfferentL"+sntoa(j+1)));
+	 UEPtr<NNet> postafferentR=dynamic_pointer_cast<NNet>(melem->GetComponentL("PostAfferentR"+sntoa(j+1)));
+	 //
 	 UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
 	 string postAfferentLName,postAfferentRName;
+
 	 postAfferentL->GetLongName(owner, postAfferentLName);
+	 LeftPostAfferentNeurons[j].push_back(static_pointer_cast<NNet>(postafferentL));
 	 postAfferentR->GetLongName(owner, postAfferentRName);
+	 RightPostAfferentNeurons[j].push_back(static_pointer_cast<NNet>(postafferentR));
+
 	 string controlNeuronLName = "ControlNeuronL"+sntoa(i+1)+sntoa(j+1);
 	 string controlNeuronRName = "ControlNeuronR"+sntoa(i+1)+sntoa(j+1);
 	 string controlLName,controlRName;
@@ -299,7 +263,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronLName));
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
 	  controlNeuron->GetLongName(owner, controlLName);
-	  LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
+	  LeftControlNeurons[j].push_back(controlNeuron);
 	 }
 	 else
 	 {
@@ -310,14 +274,14 @@ bool NNewPositionControlElement::CreateNeurons()
 	  res=AddComponent(cont);
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, controlLName);
-      LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
+	  LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
 	 if(CheckComponent(controlNeuronRName))
 	 {
 	  NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronRName));
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
 	  controlNeuron->GetLongName(owner, controlRName);
-	  RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
+	  RightControlNeurons[j].push_back(controlNeuron);
 	 }
 	 else
 	 {
@@ -328,109 +292,17 @@ bool NNewPositionControlElement::CreateNeurons()
 	  res=AddComponent(cont);
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, controlRName);
-	  RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
+	  RightControlNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
 	 owner->CreateLink(controlLName+".LTZone",0,postAfferentLName+".PNeuronMembrane.PosChannel");
 	 owner->CreateLink(controlLName+".LTZone",0,postAfferentRName+".PNeuronMembrane.NegChannel");
 	 owner->CreateLink(controlRName+".LTZone",0,postAfferentLName+".PNeuronMembrane.NegChannel");
 	 owner->CreateLink(controlRName+".LTZone",0,postAfferentRName+".PNeuronMembrane.PosChannel");
-	/*
+	 /*
 	 owner->CreateLink(controlLName+".LTZone",0,postAfferentRName+".PNeuronMembrane.PosChannel");
 	 owner->CreateLink(controlLName+".LTZone",0,postAfferentLName+".PNeuronMembrane.NegChannel");
 	 owner->CreateLink(controlRName+".LTZone",0,postAfferentRName+".PNeuronMembrane.NegChannel");
-	 owner->CreateLink(controlRName+".LTZone",0,postAfferentLName+".PNeuronMembrane.PosChannel");  */
-	}
-   }
-   //Creating PreControlNeurons
-   for(int i=0;i<MotionControl->NumMotionElements;i++)
-   {
-	NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
-	if(!melem)
-	 continue;
-	LeftPreControlNeurons.resize(melem->NumControlLoops);
-	RightPreControlNeurons.resize(melem->NumControlLoops);
-	for(int j=0;j<melem->NumControlLoops;j++)
-	{
-	 string preControlNeuronLName = "PreControlNeuronL"+sntoa(i+1)+sntoa(j+1);
-	 string preControlNeuronRName = "PreControlNeuronR"+sntoa(i+1)+sntoa(j+1);
-
-	 if(CheckComponent(preControlNeuronLName))
-	 {
-	  PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
-	  LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
-	 }
-	 else
-	 {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
-	  if(!cont)
-	   return 0;
-	  cont->SetName(preControlNeuronLName);
-	  res=AddComponent(cont);
-	  PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
-	  LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
-	 }
-	 if(CheckComponent(preControlNeuronRName))
-	 {
-	  PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
-	  RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
-	 }
-	 else
-	 {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
-	  if(!cont)
-	   return 0;
-	  cont->SetName(preControlNeuronRName);
-	  res=AddComponent(cont);
-	  PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
-	  RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
-	 }
-	}
-   }
-   //Creating PostInputNeurons
-   LeftPostInputNeurons.clear();
-   RightPostInputNeurons.clear();
-   for(int i=0;i<MotionControl->NumMotionElements;i++)
-   {
-	NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
-	if(!melem)
-	 continue;
-	LeftPostInputNeurons.resize(melem->NumControlLoops);
-	RightPostInputNeurons.resize(melem->NumControlLoops);
-	for(int j=0;j<melem->NumControlLoops;j++)
-	{
-	 string postInputNeuronLName = "PostInputNeuronL"+sntoa(i+1)+sntoa(j+1);
-	 string postInputNeuronRName = "PostInputNeuronR"+sntoa(i+1)+sntoa(j+1);
-
-	 if(CheckComponent(postInputNeuronLName))
-	 {
-	  PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)));
-	  LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)));
-	 }
-	 else
-	 {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
-	  if(!cont)
-	   return 0;
-	  cont->SetName(postInputNeuronLName);
-	  res=AddComponent(cont);
-	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
-	  LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
-	 }
-	 if(CheckComponent(postInputNeuronRName))
-	 {
-	  PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)));
-	  RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)));
-	 }
-	 else
-	 {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
-	  if(!cont)
-	   return 0;
-	  cont->SetName(postInputNeuronRName);
-	  res=AddComponent(cont);
-	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
-	  RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
-	 }
+	 owner->CreateLink(controlRName+".LTZone",0,postAfferentLName+".PNeuronMembrane.PosChannel");     */
 	}
    }
    //Creating downward links
@@ -442,72 +314,59 @@ bool NNewPositionControlElement::CreateNeurons()
 	for(int j=0;j<melem->NumControlLoops;j++)
 	{
 	 vector <NNet*> start, finish;
-	 if(i==0)
-	 {
-	  start.push_back(LeftInputNeurons[j][0]);
-	  finish.push_back(RightPostInputNeurons[j][0]);
-	  LinkNeuronsNeg(start,finish);
-	  start.clear();
-	  finish.clear();
-	  start.push_back(RightInputNeurons[j][0]);
-	  finish.push_back(LeftPostInputNeurons[j][0]);
-	  LinkNeuronsNeg(start,finish);
-	  start.clear();
-	  finish.clear();
-	 }
 
-	 start.push_back(LeftInputNeurons[j][i]);
-	 finish.push_back(LeftPostInputNeurons[j][i]);
+	 start.push_back(LeftAfferentNeurons[j][i]);
+	 finish.push_back(LeftInputNeurons[j][i]);
 	 LinkNeurons(start,finish);
 	 start.clear();
 	 finish.clear();
 
-	 start.push_back(RightInputNeurons[j][i]);
-	 finish.push_back(RightPostInputNeurons[j][i]);
+	 start.push_back(RightAfferentNeurons[j][i]);
+	 finish.push_back(RightInputNeurons[j][i]);
 	 LinkNeurons(start,finish);
 	 start.clear();
 	 finish.clear();
 
-	 start.push_back(LeftInputNeurons[j][i]);
+	 start.push_back(LeftAfferentNeurons[j][i]);
 	 for(int k=0;k<i;k++)
 	 {
-	  finish.push_back(LeftPostInputNeurons[j][k]);
+	  finish.push_back(LeftInputNeurons[j][k]);
 	 }
 	 LinkNeuronsNeg(start,finish);
 	 start.clear();
 	 finish.clear();
 
-	 start.push_back(RightInputNeurons[j][i]);
+	 start.push_back(RightAfferentNeurons[j][i]);
 	 for(int k=0;k<i;k++)
 	 {
-	  finish.push_back(RightPostInputNeurons[j][k]);
+	  finish.push_back(RightInputNeurons[j][k]);
 	 }
 	 LinkNeuronsNeg(start,finish);
 	 start.clear();
 	 finish.clear();
 
-	 start.push_back(RightInputNeurons[j][i]);
+	 start.push_back(RightAfferentNeurons[j][i]);
 	 for(int k=0;k<i;k++)
 	 {
-	  finish.push_back(RightPostInputNeurons[j][k]);
+	  finish.push_back(RightInputNeurons[j][k]);
 	 }
 	 LinkNeuronsNeg(start,finish);
 	 start.clear();
 	 finish.clear();
 
-	 start.push_back(LeftPreControlNeurons[j][i]);
+	 start.push_back(LeftControlNeurons[j][i]);
 	 for(int k=0;k<=i;k++)
 	 {
-	  finish.push_back(LeftControlNeurons[j][k]);
+	  finish.push_back(LeftPostAfferentNeurons[j][k]);
 	 }
 	 LinkNeurons(start,finish);
 	 start.clear();
 	 finish.clear();
 
-	 start.push_back(RightPreControlNeurons[j][i]);
+	 start.push_back(RightControlNeurons[j][i]);
 	 for(int k=0;k<=i;k++)
 	 {
-	  finish.push_back(RightControlNeurons[j][k]);
+	  finish.push_back(RightPostAfferentNeurons[j][k]);
 	 }
 	 LinkNeurons(start,finish);
 	}
@@ -517,7 +376,7 @@ bool NNewPositionControlElement::CreateNeurons()
    return true;
 }
 
-bool NNewPositionControlElement::CreateExternalControlElements(void)
+bool NPCNElement::CreateExternalControlElements(void)
 {
    UEPtr<UContainer> cont;
    UEPtr<UStorage> storage = GetStorage();
@@ -571,9 +430,11 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
  return true;
 }
 
-bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> finish)
+bool NPCNElement::LinkNeurons(vector <NNet*> start, vector <NNet*> finish)
 {
 	//vector <NNet*>::iterator I,J;
+
+	UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
 	for(size_t j=0;j<finish.size();j++)
 	{
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
@@ -591,21 +452,28 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
 	  }
 	  if(!hasEmptyMembrane)
 	   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
-	  NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".PosChannel";
+	  NameT finishName;
+	  branch->GetLongName(owner, finishName);
+	  finishName += ".PosChannel";
 	  for(size_t i=0;i<start.size();i++)
 	  {
-	   NameT startName = start[i]->GetName()+".LTZone";
-	   if(!CheckLink(startName,finishName))
-		CreateLink(startName, 0, finishName);
+	   NameT startName;
+	   start[i]->GetLongName(owner, startName);
+	   startName += ".LTZone";
+	   if(!owner->CheckLink(startName,finishName))
+		owner->CreateLink(startName, 0, finishName);
 //	   ExternalControl=false;
 	  }
 	}
 
 	return true;
 }
-bool NNewPositionControlElement::LinkNeuronsNeg(vector <NNet*> start, vector <NNet*> finish)
+
+bool NPCNElement::LinkNeuronsNeg(vector <NNet*> start, vector <NNet*> finish)
 {
 	//vector <NNet*>::iterator I,J;
+
+	UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
 	for(size_t j=0;j<finish.size();j++)
 	{
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
@@ -623,12 +491,16 @@ bool NNewPositionControlElement::LinkNeuronsNeg(vector <NNet*> start, vector <NN
 	  }
 	  if(!hasEmptyMembrane)
 	   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
-	  NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".NegChannel";
+	  NameT finishName;
+	  branch->GetLongName(owner, finishName);
+	  finishName += ".PosChannel";
 	  for(size_t i=0;i<start.size();i++)
 	  {
-	   NameT startName = start[i]->GetName()+".LTZone";
-	   if(!CheckLink(startName,finishName))
-		CreateLink(startName, 0, finishName);
+	   NameT startName;
+	   start[i]->GetLongName(owner, startName);
+	   startName += ".LTZone";
+	   if(!owner->CheckLink(startName,finishName))
+		owner->CreateLink(startName, 0, finishName);
 //	   ExternalControl=false;
 	  }
 	}
@@ -636,8 +508,9 @@ bool NNewPositionControlElement::LinkNeuronsNeg(vector <NNet*> start, vector <NN
 	return true;
 }
 
-bool NNewPositionControlElement::UnlinkNeurons(vector <NNet*> start, vector <NNet*> finish)
+bool NPCNElement::UnlinkNeurons(vector <NNet*> start, vector <NNet*> finish)
 {
+ UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
  for(size_t i=0;i<start.size();i++)
  {
   NameT startName = start[i]->GetName()+".LTZone";
@@ -647,20 +520,20 @@ bool NNewPositionControlElement::UnlinkNeurons(vector <NNet*> start, vector <NNe
    for(size_t k=0;k<neuron->Membranes.size();k++)
    {
 	NameT finishName = finish[j]->GetName()+"."+neuron->Membranes[k]->GetName()+".PosChannel";
-	if(CheckLink(startName,finishName))
-	   BreakLink(startName,finishName);
+	if(owner->CheckLink(startName,finishName))
+	   owner->BreakLink(startName,finishName);
    }
   }
  }
  return true;
 }
 
-bool NNewPositionControlElement::LinkGenerators(const bool &value)
+bool NPCNElement::LinkGenerators(const bool &value)
 {
  return NPositionControlElement::LinkGenerators(value);
 }
 
-bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim)
+bool NPCNElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim)
 {
   vector<NNet*> Motions = MotionControl->GetMotion();
 
@@ -675,35 +548,13 @@ bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vecto
 	string generatorRName = "NPGeneratorR"+sntoa(i+1)+sntoa(j+1);
 	string controlNeuronLName = "ControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".PNeuronMembrane.PosChannel";
 	string controlNeuronRName = "ControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".PNeuronMembrane.PosChannel";
-	string preControlNeuronLName = "PreControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".PNeuronMembrane.PosChannel";
-	string preControlNeuronRName = "PreControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".PNeuronMembrane.PosChannel";
 
 	if(link)
 	{
-	 if(is_sim)
-	 {
-	  if(CheckLink(generatorLName,controlNeuronLName))
-		 BreakLink(generatorLName,controlNeuronLName);
-	  if(CheckLink(generatorRName,controlNeuronRName))
-		 BreakLink(generatorRName,controlNeuronRName);
-
-	  if(!CheckLink(generatorLName,preControlNeuronLName))
-		 CreateLink(generatorLName, 0, preControlNeuronLName);
-	  if(!CheckLink(generatorRName,preControlNeuronRName))
-		 CreateLink(generatorRName, 0, preControlNeuronRName);
-	 }
-	 else
-	 {
-	  if(CheckLink(generatorLName,preControlNeuronLName))
-		 BreakLink(generatorLName,preControlNeuronLName);
-	  if(CheckLink(generatorRName,preControlNeuronRName))
-		 BreakLink(generatorRName,preControlNeuronRName);
-
-	  if(!CheckLink(generatorLName,controlNeuronLName))
-		 CreateLink(generatorLName, 0, controlNeuronLName);
-	  if(!CheckLink(generatorRName,controlNeuronRName))
-		 CreateLink(generatorRName, 0, controlNeuronRName);
-	 }
+	 if(!CheckLink(generatorLName,controlNeuronLName))
+	  CreateLink(generatorLName, 0, controlNeuronLName);
+	 if(!CheckLink(generatorRName,controlNeuronRName))
+	  CreateLink(generatorRName, 0, controlNeuronRName);
 	}
 	else
 	{
@@ -711,16 +562,12 @@ bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vecto
 		BreakLink(generatorLName,controlNeuronLName);
 	 if(CheckLink(generatorRName,controlNeuronRName))
 		BreakLink(generatorRName,controlNeuronRName);
-	 if(CheckLink(generatorLName,preControlNeuronLName))
-		BreakLink(generatorLName,preControlNeuronLName);
-	 if(CheckLink(generatorRName,preControlNeuronRName))
-		BreakLink(generatorRName,preControlNeuronRName);
 	}
    }
   }
  return true;
 }
-bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet*> finish)
+bool NPCNElement::LinkNegative(vector <NNet*> start, vector <NNet*> finish)
 {
    vector<NNet*> Motions = MotionControl->GetMotion();
    vector<NPulseMembrane*> membrToConnectL;
@@ -770,18 +617,14 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
    return true;
 }
 
-vector<NNet*> NNewPositionControlElement::GetInputNeurons(void)
+vector<NNet*> NPCNElement::GetInputNeurons(void)
 {
  return InputNeurons;
 }
 
-vector<NNet*> NNewPositionControlElement::GetControlNeurons(void)
+vector<NNet*> NPCNElement::GetControlNeurons(void)
 {
  return ControlNeurons;
 }
 
 }
-#endif
-
-
-

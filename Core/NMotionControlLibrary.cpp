@@ -579,6 +579,13 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  generated_cont->Default();
  UploadClass("NMultiPositionControl",generated_cont);
 }
+
+{
+ UEPtr<UContainer> generated_cont=new NPCNElement;
+ generated_cont->SetName("NPCN");
+ generated_cont->Default();
+ UploadClass("NPCN",generated_cont);
+}
 }
 // --------------------------
 

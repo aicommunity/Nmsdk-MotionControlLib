@@ -1,17 +1,8 @@
-/* ***********************************************************
+//---------------------------------------------------------------------------
 
-E-mail:        
-Url:           
-
-This file is part of the project: 
-
-File License:       New BSD License
-Project License:    New BSD License
-See file license.txt for more information
-*********************************************************** */
-#ifndef NNewPositionControlElement_H
-#define NNewPositionControlElement_H
-
+#ifndef NPCNElementH
+#define NPCNElementH
+//---------------------------------------------------------------------------
 #include "NEngineMotionControl.h"
 #include "NMotionElement.h"
 #include "NPositionControlElement.h"
@@ -19,20 +10,15 @@ See file license.txt for more information
 namespace NMSDK {
 
 //class NEngineMotionControl;
-class RDK_LIB_TYPE NNewPositionControlElement: public NPositionControlElement
+class RDK_LIB_TYPE NPCNElement: public NPositionControlElement
 {
 public: // Свойства
-RDK::UPropertyInput<NEngineMotionControl,NNewPositionControlElement> MotionControl;
-RDK::ULProperty<bool, NNewPositionControlElement> SimControl;
-//RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> CurrentPosition;
-//RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement> TargetPosition;
-//RDK::ULProperty<string, NNewPositionControlElement> InputNeuronType;
-//RDK::ULProperty<string, NNewPositionControlElement> ControlNeuronType;
-//RDK::ULProperty<bool, NNewPositionControlElement> ExternalControl;
-//RDK::ULProperty<bool, NNewPositionControlElement, ptPubState> RememberState;
-//RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> Delta;
+RDK::UPropertyInput<NEngineMotionControl,NPCNElement> MotionControl;
+RDK::ULProperty<bool, NPCNElement> SimControl;
 
 public: // Переменные состояния
+
+vector<UNet*> Generators;
 // Нейроны обученные распознавать положения левых контуров в порядке
 // PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
 // PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
@@ -56,25 +42,22 @@ vector<vector<NNet*> > RightControlNeurons;
 // Нейроны обученные распознавать положения левых контуров в порядке
 // PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
 // PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
-vector<vector<NNet*> > LeftPostInputNeurons;
+vector<vector<NNet*> > LeftAfferentNeurons;
 
 // Нейроны обученные распознавать положения правых контуров в порядке
 // PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
 // PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
-vector<vector<NNet*> > RightPostInputNeurons;
+vector<vector<NNet*> > RightAfferentNeurons;
 
 // Нейроны обученные распознавать положения левых контуров в порядке
 // PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
 // PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
-vector<vector<NNet*> > LeftPreControlNeurons;
+vector<vector<NNet*> > LeftPostAfferentNeurons;
 
 // Нейроны обученные распознавать положения правых контуров в порядке
 // PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
 // PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
-vector<vector<NNet*> > RightPreControlNeurons;
-
-
-vector<UNet*> Generators;
+vector<vector<NNet*> > RightPostAfferentNeurons;
 
 // Генераторы левых контуров в порядке
 // G(0,0) G(0,1), ..., G(0,M) - генераторы всех УЭ 0 контура
@@ -90,8 +73,8 @@ public: // Методы
 // --------------------------
 // Конструкторы и деструкторы
 // --------------------------
-NNewPositionControlElement(void);
-virtual ~NNewPositionControlElement(void);
+NPCNElement(void);
+virtual ~NPCNElement(void);
 // --------------------------
 
 // ---------------------
@@ -110,11 +93,11 @@ bool SetControlNeuronType(const string &value);
 // Системные методы управления объектом
 // --------------------------
 // Выделяет память для новой чистой копии объекта этого класса
-virtual NNewPositionControlElement* New(void);
+virtual NPCNElement* New(void);
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом 
+// Скрытые методы управления счетом
 // --------------------------
 protected:
 // Восстановление настроек по умолчанию и сброс процесса счета

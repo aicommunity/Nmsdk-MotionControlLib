@@ -137,6 +137,10 @@
         <CppCompile Include="..\..\Core\NNewPositionControlElement.cpp">
             <BuildOrder>4</BuildOrder>
         </CppCompile>
+        <CppCompile Include="..\..\Core\NPCNElement.cpp">
+            <DependentOn>..\..\Core\NPCNElement.h</DependentOn>
+            <BuildOrder>6</BuildOrder>
+        </CppCompile>
         <CppCompile Include="..\..\Core\NPositionControlElement.cpp">
             <BuildOrder>5</BuildOrder>
         </CppCompile>
@@ -197,7 +201,7 @@
                     <ProjectProperties Name="IndexFiles">False</ProjectProperties>
                 </ProjectProperties>
             </CPlusPlusBuilder.Personality>
-            <Deployment Version="2">
+            <Deployment Version="1">
                 <DeployFile LocalName="$(BDS)\Redist\iossimulator\libPCRE.dylib" Class="DependencyModule">
                     <Platform Name="iOSSimulator">
                         <Overwrite>true</Overwrite>
@@ -218,7 +222,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\..\..\Bin\Bcb\Nmsdk-MotionControlLib.tds" Configuration="Debug" Class="DebugSymbols">
+                <DeployFile LocalName=".\..\..\..\..\Bin\Platform\Win\Lib.Bcb\Nmsdk-MotionControlLib.tds" Configuration="Debug" Class="DebugSymbols">
                     <Platform Name="Win32">
                         <RemoteName>Nmsdk-MotionControlLib.tds</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -249,7 +253,7 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\..\..\Bin\Bcb\Nmsdk-MotionControlLib.lib" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName=".\..\..\..\..\Bin\Platform\Win\Lib.Bcb\Nmsdk-MotionControlLib.lib" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>Nmsdk-MotionControlLib.lib</RemoteName>
                         <Overwrite>true</Overwrite>
@@ -588,13 +592,13 @@
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME)"/>
-                <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
             </Deployment>
             <Platforms>
                 <Platform value="OSX32">False</Platform>
