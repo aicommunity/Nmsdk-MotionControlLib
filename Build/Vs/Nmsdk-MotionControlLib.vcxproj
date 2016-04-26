@@ -102,6 +102,7 @@
     <ClCompile Include="..\..\Core\NMotionElement.cpp" />
     <ClCompile Include="..\..\Core\NMultiPositionControl.cpp" />
     <ClCompile Include="..\..\Core\NNewPositionControlElement.cpp" />
+    <ClCompile Include="..\..\Core\NPCNElement.cpp" />
     <ClCompile Include="..\..\Core\NPositionControlElement.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +111,7 @@
     <ClInclude Include="..\..\Core\NMotionElement.h" />
     <ClInclude Include="..\..\Core\NMultiPositionControl.h" />
     <ClInclude Include="..\..\Core\NNewPositionControlElement.h" />
+    <ClInclude Include="..\..\Core\NPCNElement.h" />
     <ClInclude Include="..\..\Core\NPositionControlElement.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
