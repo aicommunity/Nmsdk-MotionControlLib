@@ -16,6 +16,7 @@ See file license.txt for more information
 #include "../../Nmsdk-BasicLib/Core/NSupport.h"
 #include "../../Nmsdk-PulseLib/Core/NReceptor.h"
 #include "../../Nmsdk-BasicLib/Core/NNet.h"
+#include "../../Nmsdk-SourceLib/Core/NPulseGenerator.h"
 
 namespace NMSDK {
 
@@ -163,6 +164,9 @@ vector<pair<double,double> > Ic_ranges_pos,Ic_ranges_neg;
 vector<vector<pair<double,double> > > AfferentRangesPos, AfferentRangesNeg;
 
 vector<NNet*> Motions;
+
+/// Генераторы принудительной коррекции регулятора
+UEPtr<NPulseGenerator> InternalGenerator;
 
 vector<vector<double> > History;
 
@@ -371,6 +375,13 @@ void NewIntervalSeparatorsUpdate(int mode_value);
 
 // Установка связей разделителей интервалов
 void NewIntervalSeparatorLinksSetup(void);
+
+/// Подключает внутренние генераторы к вставочным нейронам нужного числа управляющих эдементов
+/// direction 0 - налево, direction 1 - направо
+void ConnectInternalGenerators(int direction, int num_motion_elements, int control_loop_index);
+
+/// Задает частоту работы внутреннего генератора
+void SetInternalGeneratorFrequency(int control_loop_index, double value);
 // --------------------------
 
 vector<NNet*> GetMotion(void);

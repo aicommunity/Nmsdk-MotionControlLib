@@ -2386,6 +2386,18 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
  if(!storage)
   return;
 
+ InternalGenerator=0;
+ try
+ {
+  InternalGenerator=dynamic_pointer_cast<NPulseGenerator>(storage->TakeObject("NPGenerator"));
+  InternalGenerator->SetName("InternalGenerator");
+  net->AddComponent(InternalGenerator);
+ }
+ catch (EComponentNameNotExist &exc)
+ {
+ }
+
+
  for(int i=0;i<NumMotionElements;i++)
  {
   UEPtr<NReceptor> receptor=0;
@@ -2761,6 +2773,51 @@ bool NEngineMotionControl::GetIsAfferentLinked(const int &index)
   if((index >=GetNumControlLoops())||(index <0))
    return false;
   return (*ActiveContours)[index];
+}
+
+
+/// Подключает внутренние генераторы к вставочным нейронам нужного числа управляющих эдементов
+/// direction 0 - налево, direction 1 - направо
+void NEngineMotionControl::ConnectInternalGenerators(int direction, int num_motion_elements, int control_loop_index)
+{
+ if(control_loop_index<0 || control_loop_index>=NumControlLoops)
+  return;
+
+ if(!InternalGenerator)
+  return;
+
+ InternalGenerator->DisconnectAll();
+ bool res=false;
+
+ int num_elements=(num_motion_elements<NumMotionElements)?num_motion_elements:NumMotionElements;
+ for(int i=0;i<num_elements;i++)
+ {
+  std::string post_afferent_R_name="PostAfferentL"+sntoa(control_loop_index+1);
+  std::string post_afferent_L_name="PostAfferentR"+sntoa(control_loop_index+1);
+  if(direction == 0)
+  {
+   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".PNeuronMembrane.PosChannel");
+   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".PNeuronMembrane.NegChannel");
+  }
+  else
+  {
+   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".PNeuronMembrane.PosChannel");
+   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".PNeuronMembrane.NegChannel");
+  }
+ }
+
+}
+
+/// Задает частоту работы внутреннего генератора
+void NEngineMotionControl::SetInternalGeneratorFrequency(int control_loop_index, double value)
+{
+ if(!InternalGenerator)
+  return;
+
+ if(value<0)
+  return;
+
+ InternalGenerator->Frequency=value;
 }
 
 vector<NNet*> NEngineMotionControl::GetMotion(void)
