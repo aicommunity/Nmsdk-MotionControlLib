@@ -2427,12 +2427,11 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
 	modes.assign(melement->NumControlLoops,1);
 	melement->LinkModes=modes;
    }
-  }
 
-  NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
-  melem->SetNumControlLoops(2);
-  melem->Build();
-	for (int j = 0; j < melem->NumControlLoops; j++)
+  //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+  melement->SetNumControlLoops(2);
+  melement->Build();
+	for (int j = 0; j < melement->NumControlLoops; j++)
 	{
 	  try
 	  {
@@ -2464,7 +2463,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
 	  {
 	  }
 	}
-
+  }
  }
 
 }
@@ -2573,6 +2572,8 @@ void NEngineMotionControl::NewIntervalSeparatorsSetup(int mode_value, double pos
 for (int j=0; j < NumMotionElements ; j++)
 {
  NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[j]);
+ if(!melem)
+	 continue;
  for(int i=0; i < melem->NumControlLoops ; i++)
  {
   if (!CheckComponent((std::string("NegIntervalSeparator")+sntoa(j+1)+sntoa(i+1)).c_str()))
@@ -2675,6 +2676,8 @@ void NEngineMotionControl::NewIntervalSeparatorLinksSetup()
 for(int i=0;i<NumMotionElements;i++)
 {
  NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+ if(!melem)
+	 continue;
  try{
   // Связи с моделью манипулятора (по умолчанию)
   for(int j=0;j<melem->NumControlLoops;j++)
@@ -2698,6 +2701,8 @@ for(int i=0;i<NumMotionElements;i++)
  for(size_t k=0;k<Motions.size();k++)
  {
  	NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[k]);
+	if(!melem)
+	 continue;
 	for (int l = 0; l < melem->NumControlLoops; l++) {
       try{
 		 res=CreateLink(string("PosIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),0,Motions[k]->GetName()+".AfferentL"+sntoa(l+1)+".Receptor",0);

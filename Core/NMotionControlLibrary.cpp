@@ -538,27 +538,23 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
   else
    UploadClass("NAslsNewSimplestAfferentBranchedEngineControlPM",net);
  }
+ 
 
+for(size_t i=0;i<1;i++)
+{
+ cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
+ cs->NumMotionElements=i+1;
+ cs->CreationMode=14;
+ cs->MotionElementClassName="NNewMotionElement";
+ cs->Create();
+ net=cs;
 
-
-    	 for(size_t i=0;i<1;i++)
-         {
-          cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
-          cs->NumMotionElements=i+1;
-          cs->CreationMode=14;
-          cs->MotionElementClassName="NNewMotionElement";
-          cs->Create();
-          net=cs;
-
-          net->SetName("EngineControlRangeAfferent");
-          if(i>0)
-           UploadClass(string("N2AsfNewSimplestAfferentBranchedEngineControl")+RDK::sntoa(i+1),net);
-          else
-           UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl",net);
-		 }
-
-
-
+ net->SetName("EngineControlRangeAfferent");
+ if(i>0)
+  UploadClass(string("N2AsfNewSimplestAfferentBranchedEngineControl")+RDK::sntoa(i+1),net);
+ else
+  UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl",net);
+}
 
 {
  UEPtr<UContainer> generated_cont=new NPositionControlElement;
