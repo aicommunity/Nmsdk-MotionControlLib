@@ -458,6 +458,8 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Ветвление дендритов
  // Новая модель нейрона с выделенной сомой
  // 3 афферентных канала
+ int temp=max_number_of_mc;
+ max_number_of_mc=3;
  for(size_t i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
@@ -473,6 +475,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
   else
    UploadClass("NAsfNewSimplestAfferentBranchedEngineControl",net);
  }
+ max_number_of_mc=temp;
 
  // Формируем сеть управления двигателем c простейшей моделью СУ
  // и простейшими афферентами

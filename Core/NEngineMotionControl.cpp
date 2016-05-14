@@ -63,6 +63,7 @@ NEngineMotionControl::NEngineMotionControl(void)
 
 {
   LastAdaptiveTime=0.0;
+  ControlMode=0;
 }
 
 NEngineMotionControl::~NEngineMotionControl(void)
@@ -79,27 +80,27 @@ bool NEngineMotionControl::SetNumControlLoops(const int &value)
  if(value <=0)
   return false;
 
- for(size_t i=0; i<Motions.size(); i++)
+ if(ControlMode == 1)
  {
-  NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
-  melem->isNumControlLoopsInitialized=true;
-  melem->NumControlLoops=value;
+  for(size_t i=0; i<Motions.size(); i++)
+  {
+   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+   melem->isNumControlLoopsInitialized=true;
+   melem->NumControlLoops=value;
+  }
+
+  AfferentMin->resize(value,0);
+  AfferentMax->resize(value,0);
+  ActiveContours->resize(value,false);
+  UseContourData->resize(value,false);
+  CurrentContourAmplitude->resize(value,0);
+  CurrentContourAverage->resize(value,0);
+  MaxContourAmplitude->resize(value,0);
+
+  DestContourMaxAmplitude->resize(value,0);
+  DestContourMinAmplitude->resize(value,0);
+  Ready=false;
  }
-
- AfferentMin->resize(value,0);
- AfferentMax->resize(value,0);
- ActiveContours->resize(value,false);
-// isAfferentLinked.resize(value,false);
- UseContourData->resize(value,false);
- CurrentContourAmplitude->resize(value,0);
- CurrentContourAverage->resize(value,0);
- MaxContourAmplitude->resize(value,0);
-
- DestContourMaxAmplitude->resize(value,0);
- DestContourMinAmplitude->resize(value,0);
-
-
- Ready=false;
  return true;
 }
 // Число управляющих элементов
@@ -223,6 +224,8 @@ bool NEngineMotionControl::SetMCNeuroObjectName(const string &value)
   for(int i=0;i<NumMotionElements;i++)
   {
    NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+   if(!melem)
+	continue;
    melem->NeuroObjectName = value;
   }
  }
@@ -431,23 +434,23 @@ bool NEngineMotionControl::ABuild(void)
  if(AdaptiveStructureMode)
   Create(NumMotionElements);
 
- CurrentContourAmplitude->resize(4);
- CurrentContourAverage->resize(4);
- MaxContourAmplitude->resize(4);
 
- DestContourMaxAmplitude->resize(4);
- DestContourMinAmplitude->resize(4);
- UseContourData->resize(4);
-// isAfferentLinked.resize(2, false);
+ CurrentContourAmplitude->resize(NumControlLoops);
+ CurrentContourAverage->resize(NumControlLoops);
+ MaxContourAmplitude->resize(NumControlLoops);
+
+ DestContourMaxAmplitude->resize(NumControlLoops);
+ DestContourMinAmplitude->resize(NumControlLoops);
+ UseContourData->resize(NumControlLoops);
  return true;
 }
 
 // Reset computation
 bool NEngineMotionControl::AReset(void)
 {
- CurrentContourAmplitude->assign(4,0);
- CurrentContourAverage->assign(4,0);
- MaxContourAmplitude->assign(4,0);
+ CurrentContourAmplitude->assign(NumControlLoops,0);
+ CurrentContourAverage->assign(NumControlLoops,0);
+ MaxContourAmplitude->assign(NumControlLoops,0);
  CurrentTransientTime=0;
  CurrentTransientState=false;
  TempTransientState=false;
@@ -507,8 +510,8 @@ bool NEngineMotionControl::ACalculate(void)
 {
  // Считаем статистику
  // за ожидаемое время переходного процесса
- CurrentContourAmplitude->assign(4,0);
- CurrentContourAverage->assign(4,0);
+ CurrentContourAmplitude->assign(NumControlLoops,0);
+ CurrentContourAverage->assign(NumControlLoops,0);
 
  UEPtr<UNet> source=dynamic_pointer_cast<UNet>(GetComponent("NManipulatorSource1"));
  HistorySize=int(TransientHistoryTime*TimeStep);
@@ -664,6 +667,7 @@ bool NEngineMotionControl::Create(bool full_recreate)
  //DelAllComponents();
  Motions.clear();
  receptors.clear();
+ ControlMode=0;
  switch(CreationMode)
  {
  case 0:
@@ -708,7 +712,7 @@ bool NEngineMotionControl::Create(bool full_recreate)
  break;
 
  case 14:
-  CreateNewEngineControl2NeuronsSimplest(true);
+  CreateNewEngineControl2NeuronsSimplest();
  break;
  };
 
@@ -1088,11 +1092,31 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
   melement=dynamic_pointer_cast<NMotionElement>(cont);
   if(melement)
   {
+   ChangeLookupPropertyType("InterneuronPresentMode",ptPubParameter);
    melement->NeuroObjectName = MCNeuroObjectName;
    melement->AfferentObjectName = MCAfferentObjectName;
    melement->NumControlLoops=NumControlLoops;
+   melement->InterneuronPresentMode=InterneuronPresentMode;
+   if(InterneuronPresentMode == 0)
+   {
+	std::vector<int> modes;
+	modes.assign(melement->NumControlLoops,0);
+	melement->LinkModes=modes;
+   }
+   else
+   if(InterneuronPresentMode == 1)
+   {
+	std::vector<int> modes;
+	modes.assign(melement->NumControlLoops,1);
+	melement->LinkModes=modes;
+   }
+
    melement->Reset();
   }
+  else
+   ChangeLookupPropertyType("InterneuronPresentMode",ptPubState);
+
+
   cont->SetName(string("MotionElement")+RDK::sntoa(i));
   net->AddComponent(cont);
   Motions.push_back(static_pointer_cast<NNet>(cont));
@@ -1826,6 +1850,30 @@ if(Ic)
 // на две полосы по знаку
 UNet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
 {
+ // Отключаем ненужные параметры и состояния
+ ChangeLookupPropertyType("IaMin",ptPubParameter);
+ ChangeLookupPropertyType("IaMax",ptPubParameter);
+
+ // Диапазон афферентных нейронов по каналу Ib
+ ChangeLookupPropertyType("IbMin",ptPubParameter);
+ ChangeLookupPropertyType("IbMax",ptPubParameter);
+
+ // Диапазон афферентных нейронов по каналу II
+ ChangeLookupPropertyType("IIMin",ptPubParameter);
+ ChangeLookupPropertyType("IIMax",ptPubParameter);
+
+ // Диапазон афферентных нейронов по каналу Ic
+ ChangeLookupPropertyType("IcMin",ptParameter);
+ ChangeLookupPropertyType("IcMax",ptParameter);
+
+ ChangeLookupPropertyType("AfferentMin",ptParameter);
+ ChangeLookupPropertyType("AfferentMax",ptParameter);
+
+ ChangeLookupPropertyType("MCNeuroObjectName",ptPubState);
+ ChangeLookupPropertyType("MCAfferentObjectName",ptPubState);
+
+ ChangeLookupPropertyType("NumControlLoops", ptPubState);
+
  UEPtr<UContainer> cont;
  bool res;
 
@@ -1847,6 +1895,7 @@ UNet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
  int inp_mode=1;  // Заглушка!! что здесь, надо восстанавливать по старому коду
  int out_mode=0;
 
+ NumControlLoops=3;
  MotionElementsSetup(net, inp_mode, out_mode, exp_coeff, 0.01, 1, 1);
 
  AdditionalComponentsSetup(net);
@@ -2041,6 +2090,30 @@ UNet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
 UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bool crossranges)
 
 {
+ // Отключаем ненужные параметры и состояния
+ ChangeLookupPropertyType("IaMin",ptPubParameter);
+ ChangeLookupPropertyType("IaMax",ptPubParameter);
+
+ // Диапазон афферентных нейронов по каналу Ib
+ ChangeLookupPropertyType("IbMin",ptPubParameter);
+ ChangeLookupPropertyType("IbMax",ptPubParameter);
+
+ // Диапазон афферентных нейронов по каналу II
+ ChangeLookupPropertyType("IIMin",ptPubParameter);
+ ChangeLookupPropertyType("IIMax",ptPubParameter);
+
+ // Диапазон афферентных нейронов по каналу Ic
+ ChangeLookupPropertyType("IcMin",ptParameter);
+ ChangeLookupPropertyType("IcMax",ptParameter);
+
+ ChangeLookupPropertyType("AfferentMin",ptParameter);
+ ChangeLookupPropertyType("AfferentMax",ptParameter);
+
+ ChangeLookupPropertyType("MCNeuroObjectName",ptPubState);
+ ChangeLookupPropertyType("MCAfferentObjectName",ptPubState);
+
+ ChangeLookupPropertyType("NumControlLoops", ptPubState);
+
  UContainer *cont;
  bool res;
  UEPtr<UStorage> storage=static_pointer_cast<UStorage>(Storage);
@@ -2049,6 +2122,7 @@ UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bo
  if(!storage)
   return 0;
 
+ NumControlLoops=3;
  // Число неперекрывающихся диапазонов
  int real_ranges=0;
 
@@ -2141,10 +2215,35 @@ UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bo
 // Формируем сеть управления на нейронах с непрерывной генераторной функцией нейронов
 UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool crossranges)
 {
+ // Отключаем ненужные параметры и состояния
+ ChangeLookupPropertyType("IaMin",ptPubParameter);
+ ChangeLookupPropertyType("IaMax",ptPubParameter);
+
+ // Диапазон афферентных нейронов по каналу Ib
+ ChangeLookupPropertyType("IbMin",ptPubParameter);
+ ChangeLookupPropertyType("IbMax",ptPubParameter);
+
+ // Диапазон афферентных нейронов по каналу II
+ ChangeLookupPropertyType("IIMin",ptPubParameter);
+ ChangeLookupPropertyType("IIMax",ptPubParameter);
+
+ // Диапазон афферентных нейронов по каналу Ic
+ ChangeLookupPropertyType("IcMin",ptParameter);
+ ChangeLookupPropertyType("IcMax",ptParameter);
+
+ ChangeLookupPropertyType("AfferentMin",ptParameter);
+ ChangeLookupPropertyType("AfferentMax",ptParameter);
+
+ ChangeLookupPropertyType("MCNeuroObjectName",ptPubState);
+ ChangeLookupPropertyType("MCAfferentObjectName",ptPubState);
+
+ ChangeLookupPropertyType("NumControlLoops", ptPubState);
+
  bool res(false);
  UEPtr<UStorage> storage=static_pointer_cast<UStorage>(Storage);
  size_t num_motions=NumMotionElements;
 
+ NumControlLoops=3;
  // Число неперекрывающихся диапазонов
  int real_ranges=0;
 
@@ -2196,6 +2295,26 @@ UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cross
 // Формируем сеть управления на 2 импульсных нейронах
 UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_force, bool use_add_contours)
 {
+ // Отключаем ненужные параметры и состояния
+ ChangeLookupPropertyType("IaMin",ptPubParameter);
+ ChangeLookupPropertyType("IaMax",ptPubParameter);
+
+ // Диапазон афферентных нейронов по каналу Ib
+ ChangeLookupPropertyType("IbMin",ptPubParameter);
+ ChangeLookupPropertyType("IbMax",ptPubParameter);
+
+ // Диапазон афферентных нейронов по каналу II
+ ChangeLookupPropertyType("IIMin",ptPubParameter);
+ ChangeLookupPropertyType("IIMax",ptPubParameter);
+
+ ChangeLookupPropertyType("AfferentMin",ptParameter);
+ ChangeLookupPropertyType("AfferentMax",ptParameter);
+
+ ChangeLookupPropertyType("MCNeuroObjectName",ptPubState);
+ ChangeLookupPropertyType("MCAfferentObjectName",ptPubState);
+
+ ChangeLookupPropertyType("NumControlLoops", ptPubState);
+
  bool res(false);
  UEPtr<UStorage> storage=static_pointer_cast<UStorage>(Storage);
  size_t num_motions=NumMotionElements;
@@ -2217,6 +2336,15 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
  {
   real_ranges=CalcAfferentRange(num_motions, crossranges, IcMin, IcMax,
 			Ic_ranges_pos, Ic_ranges_neg,AfferentRangeMode);
+  NumControlLoops=4;
+  ChangeLookupPropertyType("IcMin",ptPubParameter);
+  ChangeLookupPropertyType("IcMax",ptPubParameter);
+ }
+ else
+ {
+  NumControlLoops=3;
+  ChangeLookupPropertyType("IcMin",ptParameter);
+  ChangeLookupPropertyType("IcMax",ptParameter);
  }
 
  AfferentRangesPos.resize(NumControlLoops);
@@ -2300,8 +2428,34 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
 
 
 // Формируем сеть управления новым способом на 2 импульсных нейронах
-UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool use_speed_force)
+UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(void)
 {
+ ControlMode=1;
+
+ // Отключаем ненужные параметры и состояния
+ ChangeLookupPropertyType("IaMin",ptParameter);
+ ChangeLookupPropertyType("IaMax",ptParameter);
+
+ // Диапазон афферентных нейронов по каналу Ib
+ ChangeLookupPropertyType("IbMin",ptParameter);
+ ChangeLookupPropertyType("IbMax",ptParameter);
+
+ // Диапазон афферентных нейронов по каналу II
+ ChangeLookupPropertyType("IIMin",ptParameter);
+ ChangeLookupPropertyType("IIMax",ptParameter);
+
+ // Диапазон афферентных нейронов по каналу Ic
+ ChangeLookupPropertyType("IcMin",ptParameter);
+ ChangeLookupPropertyType("IcMax",ptParameter);
+
+ ChangeLookupPropertyType("MCNeuroObjectName",ptPubParameter);
+ ChangeLookupPropertyType("MCAfferentObjectName",ptPubParameter);
+
+ ChangeLookupPropertyType("AfferentMin",ptPubParameter);
+ ChangeLookupPropertyType("AfferentMax",ptPubParameter);
+
+ ChangeLookupPropertyType("NumControlLoops", ptPubParameter);
+
  bool res(false);
  UEPtr<UStorage> storage=static_pointer_cast<UStorage>(Storage);
  size_t num_motions=NumMotionElements;
@@ -2343,32 +2497,14 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool use_spee
  AdditionalComponentsSetup(net);
 
  NewPACSetup(1, 0.001, 0.001, 100,false);
-
- if(use_speed_force)
- {
-   NewIntervalSeparatorsSetup(5, 1, -1);
- }
- else
-  NewIntervalSeparatorsSetup(5, 1, -1);
+ NewIntervalSeparatorsSetup(5, 1, -1);
 
  // Установка связей
  ULongId item,conn;
 
  NewStandardLinksSetup("Pac");
 
- if(use_speed_force)
- {
-   NewIntervalSeparatorLinksSetup();
- }
- else
-  NewIntervalSeparatorLinksSetup();
-
-	/*
- for(size_t k=0;k<Motions.size();k++)
- {
-  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron1.LTZone",0,string("PosMNFrequencyReceiver")+RDK::sntoa(k+1));
-  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron2.LTZone",0,string("NegMNFrequencyReceiver")+RDK::sntoa(k+1));
- }    */
+ NewIntervalSeparatorLinksSetup();
 
  if(!res)
   return 0;
@@ -2803,24 +2939,26 @@ void NEngineMotionControl::ConnectInternalGenerators(int direction, int num_moti
   {
    res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".PNeuronMembrane.PosChannel");
    res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".PNeuronMembrane.NegChannel");
+   InternalGeneratorDirection=0;
   }
   else
   {
    res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".PNeuronMembrane.PosChannel");
    res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".PNeuronMembrane.NegChannel");
+   InternalGeneratorDirection=1;
   }
  }
 
 }
 
 /// Задает частоту работы внутреннего генератора
-void NEngineMotionControl::SetInternalGeneratorFrequency(int control_loop_index, double value)
+void NEngineMotionControl::SetInternalGeneratorFrequency(int direction, int num_motion_elements, int control_loop_index, double value)
 {
  if(!InternalGenerator)
   return;
 
- if(value<0)
-  return;
+ if(InternalGeneratorDirection != direction)
+  ConnectInternalGenerators(direction, num_motion_elements, control_loop_index);
 
  InternalGenerator->Frequency=value;
 }

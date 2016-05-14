@@ -59,10 +59,6 @@ RDK::ULProperty<int, NEngineMotionControl> AdaptiveStructureMode;
 // 1 - вставочные нейроны есть
 RDK::ULProperty<int, NEngineMotionControl> InterneuronPresentMode;
 
-// Вектор диапазонов афферентных нейронов
-//RDK::ULProperty<std::vector<double>, NEngineMotionControl> IMin;
-//RDK::ULProperty<std::vector<double>, NEngineMotionControl> IMax;
-
 // Диапазон афферентных нейронов по каналу Ia
 RDK::ULProperty<double, NEngineMotionControl> IaMin;
 RDK::ULProperty<double, NEngineMotionControl> IaMax;
@@ -185,6 +181,18 @@ double TransientStartTime;
 double OldTransientAverage;
 
 double TempTransientState;
+
+/// Признак, индицирующий, какой режим системы управления сейчас ипользуется
+/// 0 - старый режим, в котором число контуров фиксировано при создании
+/// 1 - новый режим, в котором число контуров может динамически изменяться
+int ControlMode;
+
+/// Временная переменная, отражающая текущий режим внутреннего генератора
+/// -1 - не опредлено
+/// 0 -
+/// 1 -
+int InternalGeneratorDirection;
+
 
 
 public: // Методы
@@ -357,7 +365,7 @@ UNet* CreateEngineControl2NeuronsSimplest(bool use_speed_force=false, bool use_a
 //Новый способ формирования сети
 
 // Формируем сеть управления новым способом на 2 импульсных нейронах
-UNet* CreateNewEngineControl2NeuronsSimplest(bool use_speed_force);
+UNet* CreateNewEngineControl2NeuronsSimplest(void);
 
 // Настройка рецепторов
 void NewMotionElementsSetup(UEPtr<UContainer> net, int inp_mode, int out_mode, double exp_coeff, double receptor_max_output, double receptor_gain, int real_ranges);
@@ -383,7 +391,7 @@ void NewIntervalSeparatorLinksSetup(void);
 void ConnectInternalGenerators(int direction, int num_motion_elements, int control_loop_index);
 
 /// Задает частоту работы внутреннего генератора
-void SetInternalGeneratorFrequency(int control_loop_index, double value);
+void SetInternalGeneratorFrequency(int direction, int num_motion_elements, int control_loop_index, double value);
 // --------------------------
 
 vector<NNet*> GetMotion(void);
