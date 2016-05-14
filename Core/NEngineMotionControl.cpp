@@ -1669,7 +1669,7 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
 				 engine_integrator_name);
 
  res=net->CreateLink(engine_integrator_name,0,"NManipulatorInput1");
-  /*
+
  try {
   for(size_t i=0;i<Motions.size();i++)
   {
@@ -1721,7 +1721,7 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
  catch (EComponentNameNotExist &exc)
  {
  }
-     */
+
  if(res)
   return;
 }
@@ -1738,9 +1738,9 @@ if(Ia)
   for(int i=0;i<NumMotionElements;i++)
   {
    res=net->CreateLink("NManipulatorSource1",2,
-				 string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1));
+				 string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),0);
    res=net->CreateLink("NManipulatorSource1",2,
-				 string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1));
+				 string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),0);
   }
  }
  catch (EComponentNameNotExist &exc) {  }
@@ -1752,9 +1752,9 @@ if(II)
   for(int i=0;i<NumMotionElements;i++)
   {
    res=net->CreateLink("NManipulatorSource1",1,
-				 string("II_PosIntervalSeparator")+RDK::sntoa(i+1));
+				 string("II_PosIntervalSeparator")+RDK::sntoa(i+1),0);
    res=net->CreateLink("NManipulatorSource1",1,
-				 string("II_NegIntervalSeparator")+RDK::sntoa(i+1));
+				 string("II_NegIntervalSeparator")+RDK::sntoa(i+1),0);
   }
  }
  catch (EComponentNameNotExist &exc) {  }
@@ -1766,9 +1766,9 @@ if(Ib)
   for(int i=0;i<NumMotionElements;i++)
   {
    res=net->CreateLink("NManipulatorSource1",0,
-				 string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1));
+				 string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),0);
    res=net->CreateLink("NManipulatorSource1",0,
-				 string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1));
+				 string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),0);
   }
  }
  catch (EComponentNameNotExist &exc) {  }
@@ -1780,9 +1780,9 @@ if(Ic)
   for(int i=0;i<NumMotionElements;i++)
   {
    res=net->CreateLink("NManipulatorSource1",3,
-				 string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1));
+				 string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),0);
    res=net->CreateLink("NManipulatorSource1",3,
-				 string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1));
+				 string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),0);
   }
  }
  catch (EComponentNameNotExist &exc) {  }
@@ -2685,12 +2685,12 @@ for(int i=0;i<NumMotionElements;i++)
 //    if (!CheckLink("NManipulatorSource1","PosIntervalSeparator"+RDK::sntoa(i+1)+RDK::sntoa(j+1)))
 	{
 	   res=CreateLink("NManipulatorSource1",j,
-					 string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1));
+					 string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1),0);
 	}
 //	if (!CheckLink("NManipulatorSource1",string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1)))
 	{
 	   res=CreateLink("NManipulatorSource1",j,
-					 string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1));
+					 string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1),0);
 	}
   }
  }

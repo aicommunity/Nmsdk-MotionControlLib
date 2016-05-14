@@ -38,6 +38,8 @@ RDK::ULProperty<int, NEngineMotionControl> NumMotionElements;
 // 10 - Branched Ind. Range Continues LTZone neurons
 // 11 - Simplest 2 neuron model
 // 12 - As 11 but speed and force control added
+// 13 - As 12 but additional control contour added
+// 14 - New net with parametric structure control
 RDK::ULProperty<int, NEngineMotionControl> CreationMode;
 
 // »м€ класса управл€ющего элемента
