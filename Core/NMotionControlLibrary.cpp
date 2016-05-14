@@ -414,7 +414,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Формируем сеть управления двигателем c простейшей моделью СУ
  // и простейшими афферентами
  // Ветвление дендритов
- max_number_of_mc=1;
+// max_number_of_mc=1;
  for(size_t i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
@@ -435,7 +435,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // и простейшими афферентами
  // Ветвление дендритов
  // Новая модель нейрона с выделенной сомой
- max_number_of_mc=1;
+// max_number_of_mc=1;
  for(size_t i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
@@ -538,23 +538,27 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
   else
    UploadClass("NAslsNewSimplestAfferentBranchedEngineControlPM",net);
  }
- 
 
-for(size_t i=0;i<1;i++)
-{
- cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
- cs->NumMotionElements=i+1;
- cs->CreationMode=14;
- cs->MotionElementClassName="NNewMotionElement";
- cs->Create();
- net=cs;
 
- net->SetName("EngineControlRangeAfferent");
- if(i>0)
-  UploadClass(string("N2AsfNewSimplestAfferentBranchedEngineControl")+RDK::sntoa(i+1),net);
- else
-  UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl",net);
-}
+
+		 for(size_t i=0;i<max_number_of_mc;i++)
+         {
+          cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
+          cs->NumMotionElements=i+1;
+          cs->CreationMode=14;
+          cs->MotionElementClassName="NNewMotionElement";
+          cs->Create();
+          net=cs;
+
+          net->SetName("EngineControlRangeAfferent");
+          if(i>0)
+           UploadClass(string("N2AsfNewSimplestAfferentBranchedEngineControl")+RDK::sntoa(i+1),net);
+          else
+           UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl",net);
+		 }
+
+
+
 
 {
  UEPtr<UContainer> generated_cont=new NPositionControlElement;
