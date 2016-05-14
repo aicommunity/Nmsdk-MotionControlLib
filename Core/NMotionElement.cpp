@@ -1061,8 +1061,8 @@ UEPtr<UNet> CreateSimplestBranchedMotionElement(UStorage *storage,
  res=CreateNeuronExsitedBranchLink(net,"PostAfferent14.LTZone","Motoneuron2", "NegChannel",branch_name2);
  res=CreateNeuronExsitedBranchLink(net,"PostAfferent24.LTZone","Motoneuron1", "NegChannel",branch_name1);
 
- res=CreateNeuronExsitedBranchLink(net,"Motoneuron1.LTZone","Motoneuron2", "NegChannel",branch_name2);
- res=CreateNeuronExsitedBranchLink(net,"Motoneuron2.LTZone","Motoneuron1", "NegChannel",branch_name1);
+// res=CreateNeuronExsitedBranchLink(net,"Motoneuron1.LTZone","Motoneuron2", "NegChannel",branch_name2);
+// res=CreateNeuronExsitedBranchLink(net,"Motoneuron2.LTZone","Motoneuron1", "NegChannel",branch_name1);
 
  if(use_speed_force)
  {
@@ -1279,8 +1279,8 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
  res=CreateNeuronExsitedBranchLink(net,"PM1.LTZone","Motoneuron1", "NegChannel",branch_name2);
  res=CreateNeuronExsitedBranchLink(net,"PM2.LTZone","Motoneuron2", "NegChannel",branch_name1);
 
- res=CreateNeuronExsitedBranchLink(net,"Motoneuron1.LTZone","Motoneuron2", "NegChannel",branch_name2);
- res=CreateNeuronExsitedBranchLink(net,"Motoneuron2.LTZone","Motoneuron1", "NegChannel",branch_name1);
+// res=CreateNeuronExsitedBranchLink(net,"Motoneuron1.LTZone","Motoneuron2", "NegChannel",branch_name2);
+// res=CreateNeuronExsitedBranchLink(net,"Motoneuron2.LTZone","Motoneuron1", "NegChannel",branch_name1);
 
  if(use_speed_force)
  {
