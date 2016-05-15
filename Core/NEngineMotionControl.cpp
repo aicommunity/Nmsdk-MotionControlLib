@@ -1090,9 +1090,10 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
    continue;
   UEPtr<NMotionElement> melement=0;
   melement=dynamic_pointer_cast<NMotionElement>(cont);
+  ChangeLookupPropertyType("InterneuronPresentMode",ptPubParameter);
   if(melement)
   {
-   ChangeLookupPropertyType("InterneuronPresentMode",ptPubParameter);
+//   ChangeLookupPropertyType("InterneuronPresentMode",ptPubParameter);
    melement->NeuroObjectName = MCNeuroObjectName;
    melement->AfferentObjectName = MCAfferentObjectName;
    melement->NumControlLoops=NumControlLoops;
@@ -1113,8 +1114,8 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
 
    melement->Reset();
   }
-  else
-   ChangeLookupPropertyType("InterneuronPresentMode",ptPubState);
+//  else
+//   ChangeLookupPropertyType("InterneuronPresentMode",ptPubState);
 
 
   cont->SetName(string("MotionElement")+RDK::sntoa(i));
