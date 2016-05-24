@@ -305,9 +305,11 @@ bool NEngineMotionControl::SetActiveContours(const std::vector<bool> &value)
  int num_motions=NumMotionElements;
  int num_controls=GetNumControlLoops();
 
+ int count=(int(value.size())<num_controls)?int(value.size()):num_controls;
+
 //   for(int i=0;i<num_motions;i++)
 //   {
-	for (int j = 0; j <num_controls; j++)
+	for (int j = 0; j <count; j++)
 	{
 	 SetIsAfferentLinked(j,value[j]);
 /*
@@ -387,8 +389,8 @@ NEngineMotionControl* NEngineMotionControl::New(void)
 // Восстановление настроек по умолчанию и сброс процесса счета
 bool NEngineMotionControl::ADefault(void)
 {
- NumControlLoops=1;
  NumMotionElements=1;
+ NumControlLoops=1;
  CreationMode=5;
  IaMin=-2.0*M_PI;
  IaMax=2.0*M_PI;
