@@ -179,7 +179,7 @@ bool NPCNElement::CreateNeurons()
 	 string inputNeuronRName = "InputNeuronR"+sntoa(i+1)+sntoa(j+1);
 	 string inputLName,inputRName;
 
-	 if(CheckComponent(inputNeuronLName))
+	 if(CheckComponentL(inputNeuronLName))
 	 {
 	  NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronLName));
 	  InputNeurons.push_back(inputNeuron);
@@ -198,7 +198,7 @@ bool NPCNElement::CreateNeurons()
 	  LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
 
-	 if(CheckComponent(inputNeuronRName))
+	 if(CheckComponentL(inputNeuronRName))
 	 {
 	  NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronRName));
 	  InputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
@@ -258,7 +258,7 @@ bool NPCNElement::CreateNeurons()
 	 string controlNeuronRName = "ControlNeuronR"+sntoa(i+1)+sntoa(j+1);
 	 string controlLName,controlRName;
 
-	 if(CheckComponent(controlNeuronLName))
+	 if(CheckComponentL(controlNeuronLName))
 	 {
 	  NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronLName));
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
@@ -276,7 +276,7 @@ bool NPCNElement::CreateNeurons()
 	  cont->GetLongName(owner, controlLName);
 	  LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
-	 if(CheckComponent(controlNeuronRName))
+	 if(CheckComponentL(controlNeuronRName))
 	 {
 	  NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronRName));
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
@@ -395,7 +395,7 @@ bool NPCNElement::CreateExternalControlElements(void)
 	 string generatorLName = "NPGeneratorL"+sntoa(i+1)+sntoa(j+1);
 	 string generatorRName = "NPGeneratorR"+sntoa(i+1)+sntoa(j+1);
 
-	 if(CheckComponent(generatorLName))
+	 if(CheckComponentL(generatorLName))
 	 {
 	  Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)));
 	  LeftGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)));
@@ -410,7 +410,7 @@ bool NPCNElement::CreateExternalControlElements(void)
 	  Generators.push_back(static_pointer_cast<NNet>(cont));
 	  LeftGenerators[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
-	 if(CheckComponent(generatorRName))
+	 if(CheckComponentL(generatorRName))
 	 {
 	  Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)));
 	  RightGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)));

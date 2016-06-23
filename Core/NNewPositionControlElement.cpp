@@ -230,7 +230,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	 string inputNeuronRName = "InputNeuronR"+sntoa(i+1)+sntoa(j+1);
 	 string inputLName,inputRName;
 
-	 if(CheckComponent(inputNeuronLName))
+	 if(CheckComponentL(inputNeuronLName))
 	 {
 	  NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronLName));
 	  InputNeurons.push_back(inputNeuron);
@@ -249,7 +249,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronLName)));
 	 }
 
-	 if(CheckComponent(inputNeuronRName))
+	 if(CheckComponentL(inputNeuronRName))
 	 {
 	  NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronRName));
 	  InputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
@@ -294,7 +294,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	 string controlNeuronRName = "ControlNeuronR"+sntoa(i+1)+sntoa(j+1);
 	 string controlLName,controlRName;
 
-	 if(CheckComponent(controlNeuronLName))
+	 if(CheckComponentL(controlNeuronLName))
 	 {
 	  NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronLName));
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
@@ -312,7 +312,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  cont->GetLongName(owner, controlLName);
       LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
 	 }
-	 if(CheckComponent(controlNeuronRName))
+	 if(CheckComponentL(controlNeuronRName))
 	 {
 	  NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronRName));
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
@@ -354,7 +354,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	 string preControlNeuronLName = "PreControlNeuronL"+sntoa(i+1)+sntoa(j+1);
 	 string preControlNeuronRName = "PreControlNeuronR"+sntoa(i+1)+sntoa(j+1);
 
-	 if(CheckComponent(preControlNeuronLName))
+	 if(CheckComponentL(preControlNeuronLName))
 	 {
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
 	  LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
@@ -369,7 +369,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
 	 }
-	 if(CheckComponent(preControlNeuronRName))
+	 if(CheckComponentL(preControlNeuronRName))
 	 {
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
 	  RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
@@ -401,7 +401,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	 string postInputNeuronLName = "PostInputNeuronL"+sntoa(i+1)+sntoa(j+1);
 	 string postInputNeuronRName = "PostInputNeuronR"+sntoa(i+1)+sntoa(j+1);
 
-	 if(CheckComponent(postInputNeuronLName))
+	 if(CheckComponentL(postInputNeuronLName))
 	 {
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)));
 	  LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)));
@@ -416,7 +416,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
-	 if(CheckComponent(postInputNeuronRName))
+	 if(CheckComponentL(postInputNeuronRName))
 	 {
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)));
 	  RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)));
@@ -536,7 +536,7 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
 	 string generatorLName = "NPGeneratorL"+sntoa(i+1)+sntoa(j+1);
 	 string generatorRName = "NPGeneratorR"+sntoa(i+1)+sntoa(j+1);
 
-	 if(CheckComponent(generatorLName))
+	 if(CheckComponentL(generatorLName))
 	 {
 	  Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)));
 	  LeftGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)));
@@ -551,7 +551,7 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
 	  Generators.push_back(static_pointer_cast<NNet>(cont));
 	  LeftGenerators[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
-	 if(CheckComponent(generatorRName))
+	 if(CheckComponentL(generatorRName))
 	 {
 	  Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)));
 	  RightGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)));

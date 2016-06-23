@@ -719,6 +719,8 @@ bool NEngineMotionControl::Create(bool full_recreate)
  };
 
  SetupPacRange();
+
+ SetActiveContours(*ActiveContours);
  return true;
 }
 
@@ -795,7 +797,10 @@ void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &curre
  if(CurrentTransientState)
   return;
 
- if(LastAdaptiveTime>0 && Environment->GetTime().GetDoubleTime()-LastAdaptiveTime<*TransientHistoryTime)
+ double current_double_time=Environment->GetTime().GetDoubleTime();
+ double last_adaptive_time=LastAdaptiveTime;
+ double transient_hist_time=*TransientHistoryTime;
+ if(LastAdaptiveTime>0 && current_double_time-last_adaptive_time<transient_hist_time)
   return;
 
  LastAdaptiveTime=Environment->GetTime().GetDoubleTime();
@@ -1869,6 +1874,8 @@ UNet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
  ChangeLookupPropertyType("IcMin",ptParameter);
  ChangeLookupPropertyType("IcMax",ptParameter);
 
+ ActiveContours->resize(4,0);
+
  ChangeLookupPropertyType("AfferentMin",ptParameter);
  ChangeLookupPropertyType("AfferentMax",ptParameter);
 
@@ -2109,6 +2116,8 @@ UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bo
  ChangeLookupPropertyType("IcMin",ptParameter);
  ChangeLookupPropertyType("IcMax",ptParameter);
 
+ ActiveContours->resize(4,0);
+
  ChangeLookupPropertyType("AfferentMin",ptParameter);
  ChangeLookupPropertyType("AfferentMax",ptParameter);
 
@@ -2234,6 +2243,8 @@ UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cross
  ChangeLookupPropertyType("IcMin",ptParameter);
  ChangeLookupPropertyType("IcMax",ptParameter);
 
+ ActiveContours->resize(4,0);
+
  ChangeLookupPropertyType("AfferentMin",ptParameter);
  ChangeLookupPropertyType("AfferentMax",ptParameter);
 
@@ -2309,6 +2320,8 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
  // Диапазон афферентных нейронов по каналу II
  ChangeLookupPropertyType("IIMin",ptPubParameter);
  ChangeLookupPropertyType("IIMax",ptPubParameter);
+
+ ActiveContours->resize(3,0);
 
  ChangeLookupPropertyType("AfferentMin",ptParameter);
  ChangeLookupPropertyType("AfferentMax",ptParameter);
@@ -2450,6 +2463,8 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(void)
  // Диапазон афферентных нейронов по каналу Ic
  ChangeLookupPropertyType("IcMin",ptParameter);
  ChangeLookupPropertyType("IcMax",ptParameter);
+
+ ActiveContours->resize(4,0);
 
  ChangeLookupPropertyType("MCNeuroObjectName",ptPubParameter);
  ChangeLookupPropertyType("MCAfferentObjectName",ptPubParameter);
@@ -2715,7 +2730,7 @@ for (int j=0; j < NumMotionElements ; j++)
 	 continue;
  for(int i=0; i < melem->NumControlLoops ; i++)
  {
-  if (!CheckComponent((std::string("NegIntervalSeparator")+sntoa(j+1)+sntoa(i+1)).c_str()))
+  if (!CheckComponentL((std::string("NegIntervalSeparator")+sntoa(j+1)+sntoa(i+1)).c_str()))
   {
 	   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NIntervalSeparator"));
 	   if(!cont)
@@ -2730,7 +2745,7 @@ for (int j=0; j < NumMotionElements ; j++)
 	   ((NIntervalSeparator*)cont)->MaxRange=right_value;
 	   res=AddComponent(cont);
   }
-  if (!CheckComponent((std::string("PosIntervalSeparator")+sntoa(j+1)+sntoa(i+1)).c_str()))
+  if (!CheckComponentL((std::string("PosIntervalSeparator")+sntoa(j+1)+sntoa(i+1)).c_str()))
   {
 	   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NIntervalSeparator"));
 	   if(!cont)
@@ -2873,20 +2888,21 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
   if((index >=NumControlLoops)||(index <0))
    return false;
 
+  ActiveContours->resize(NumMotionElements,0);
   for(int i=0;i<NumMotionElements;i++)
   {
    std::string pos_separator=std::string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(index+1);
    std::string neg_separator=std::string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(index+1);
 
-   if (!CheckComponent(pos_separator.c_str()) ||
-	  !CheckComponent(neg_separator.c_str()))
+   if (!CheckComponentL(pos_separator.c_str()) ||
+	  !CheckComponentL(neg_separator.c_str()))
 	continue;
    std::string motion_name=std::string("MotionElement")+RDK::sntoa(i);
 //   UEPtr<NNet> motion=Motions[i];
 //   if(!motion)
 //	continue;
-   if(!CheckComponent((motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor").c_str()) ||
-	 !CheckComponent((motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor").c_str()))
+   if(!CheckComponentL((motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor").c_str()) ||
+	 !CheckComponentL((motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor").c_str()))
 	continue;
 
    bool res=true;

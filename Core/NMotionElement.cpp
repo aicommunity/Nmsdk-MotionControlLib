@@ -574,17 +574,17 @@ UEPtr<UNet> CreateMotionElement(UStorage *storage, const string &netclassname, i
 				 "PostAfferent14.PNeuronMembrane.PosChannel");
 
   res=net->CreateLink("PostAfferent14.LTZone",0,
-				 "Motoneuron1.PNeuronMembrane.NegChannel");
+				 "Motoneuron1.PNeuronMembrane.PosChannel");
   res=net->CreateLink("PostAfferent14.LTZone",0,
-				 "Motoneuron2.PNeuronMembrane.PosChannel");
+				 "Motoneuron2.PNeuronMembrane.NegChannel");
 
   res=net->CreateLink("Afferent_II2.LTZone",0,
 				 "PostAfferent24.PNeuronMembrane.PosChannel");
 
   res=net->CreateLink("PostAfferent24.LTZone",0,
-				 "Motoneuron2.PNeuronMembrane.NegChannel");
+				 "Motoneuron2.PNeuronMembrane.PosChannel");
   res=net->CreateLink("PostAfferent24.LTZone",0,
-				 "Motoneuron1.PNeuronMembrane.PosChannel");
+				 "Motoneuron1.PNeuronMembrane.NegChannel");
  break;
 
  case 1:
@@ -603,16 +603,16 @@ UEPtr<UNet> CreateMotionElement(UStorage *storage, const string &netclassname, i
 
   // Варинат канала II без промежуточных нейронов
   res=net->CreateLink("Afferent_II1.LTZone",0,
-				 "Motoneuron1.PNeuronMembrane.NegChannel");
+				 "Motoneuron1.PNeuronMembrane.PosChannel");
 
   res=net->CreateLink("Afferent_II1.LTZone",0,
-				 "Motoneuron2.PNeuronMembrane.PosChannel");
-
-  res=net->CreateLink("Afferent_II2.LTZone",0,
 				 "Motoneuron2.PNeuronMembrane.NegChannel");
 
   res=net->CreateLink("Afferent_II2.LTZone",0,
-				 "Motoneuron1.PNeuronMembrane.PosChannel");
+				 "Motoneuron2.PNeuronMembrane.PosChannel");
+
+  res=net->CreateLink("Afferent_II2.LTZone",0,
+				 "Motoneuron1.PNeuronMembrane.NegChannel");
  break;
  }
 
@@ -872,11 +872,11 @@ UEPtr<UNet> CreateBranchedMotionElement(UStorage *storage,
 
   // Канал II
   res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","PostAfferent14", "PosChannel");
-  res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron1", "NegChannel");
-  res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron2", "PosChannel");
+  res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron1", "PosChannel");
+  res=CreateNeuronBranchLink(net,"PostAfferent14.LTZone","Motoneuron2", "NegChannel");
   res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","PostAfferent24", "PosChannel");
-  res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron2", "NegChannel");
-  res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron1", "PosChannel");
+  res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron2", "PosChannel");
+  res=CreateNeuronBranchLink(net,"PostAfferent24.LTZone","Motoneuron1", "NegChannel");
  break;
 
  case 1:
@@ -887,10 +887,10 @@ UEPtr<UNet> CreateBranchedMotionElement(UStorage *storage,
   res=CreateNeuronBranchLink(net,"Afferent_Ib2.LTZone","Motoneuron2", "NegChannel");
 
   // Варинат канала II без промежуточных нейронов
-  res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron1", "NegChannel");
-  res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron2", "PosChannel");
-  res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron2", "NegChannel");
-  res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron1", "PosChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron1", "PosChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_II1.LTZone","Motoneuron2", "NegChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron2", "PosChannel");
+  res=CreateNeuronBranchLink(net,"Afferent_II2.LTZone","Motoneuron1", "NegChannel");
  break;
  }
 

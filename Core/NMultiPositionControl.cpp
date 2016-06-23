@@ -99,7 +99,7 @@ bool NMultiPositionControl::ACalculate(void)
    vector<NNet*> activeInputs, postInputs, preControls, activeControls;
    size_t preControlSize = PreControlNeurons.size();
 	 string preControlNeuronName = "PreControlNeuron"+sntoa(preControlSize+1);
-	 if(CheckComponent(preControlNeuronName))
+	 if(CheckComponentL(preControlNeuronName))
 	 {
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
 	  preControls.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
@@ -116,7 +116,7 @@ bool NMultiPositionControl::ACalculate(void)
 	 }
 	 size_t postInputSize = PostInputNeurons.size();
 	 string postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
-	 if(CheckComponent(postInputNeuronName))
+	 if(CheckComponentL(postInputNeuronName))
 	 {
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
 	  postInputs.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
@@ -133,7 +133,7 @@ bool NMultiPositionControl::ACalculate(void)
 	 }
 	 size_t generatorSize = Generators.size();
 	 string generatorName = "PGenerator"+sntoa(generatorSize+1);
-	 if(CheckComponent(generatorName))
+	 if(CheckComponentL(generatorName))
 	 {
 	  Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorName)));
 	 }
@@ -163,7 +163,7 @@ bool NMultiPositionControl::ACalculate(void)
 	 activeControls.push_back(ControlNeurons[c]);
 	 size_t postInputSize = PostInputNeurons.size();
 	 string postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
-	 if(CheckComponent(postInputNeuronName))
+	 if(CheckComponentL(postInputNeuronName))
 	 {
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
 	  postInputs.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
@@ -212,7 +212,7 @@ bool NMultiPositionControl::CreateNeurons(void)
    //UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(PositionControl[i]->PostInputNeurons[j]->GetComponentL(".LTZone"));
    PositionControl[i]->PostInputNeurons[j]->GetLongName(owner, ltzoneName);
    
-   if(CheckComponent(inputNeuronName))
+   if(CheckComponentL(inputNeuronName))
    {
 	NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronName));
 	InputNeurons.push_back(inputNeuron);
@@ -245,7 +245,7 @@ bool NMultiPositionControl::CreateNeurons(void)
    string outputName, controlName;
    //UEPtr<UADItem> output=dynamic_pointer_cast<UADItem>(PositionControl[i]->PreControlNeurons[j]->GetComponentL(".PNeuronMembrane.PosChannel"));
    PositionControl[i]->PreControlNeurons[j]->GetLongName(owner, outputName);
-   if(CheckComponent(controlNeuronName))
+   if(CheckComponentL(controlNeuronName))
    {
 	NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronName));
 	ControlNeurons.push_back(controlNeuron);
@@ -270,7 +270,7 @@ bool NMultiPositionControl::CreateNeurons(void)
  for(int i=0;i<(*NumOfPositions);i++)
  {
   string preControlNeuronName = "PreControlNeuron"+sntoa(i+1);
-	 if(CheckComponent(preControlNeuronName))
+	 if(CheckComponentL(preControlNeuronName))
 	 {
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
 	 }
@@ -284,7 +284,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	 }
 	 string postInputNeuronName = "PostInputNeuron"+sntoa(i+1);
-	 if(CheckComponent(postInputNeuronName))
+	 if(CheckComponentL(postInputNeuronName))
 	 {
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
 	 }
@@ -298,7 +298,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	 }
 	 string generatorName = "PGenerator"+sntoa(i+1);
-	 if(CheckComponent(generatorName))
+	 if(CheckComponentL(generatorName))
 	 {
 	  Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorName)));
 	 }
