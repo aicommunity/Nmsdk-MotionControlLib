@@ -2888,7 +2888,7 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
   if((index >=NumControlLoops)||(index <0))
    return false;
 
-  ActiveContours->resize(NumMotionElements,0);
+  ActiveContours->resize(NumControlLoops,0);
   for(int i=0;i<NumMotionElements;i++)
   {
    std::string pos_separator=std::string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(index+1);
