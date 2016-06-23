@@ -264,16 +264,36 @@ bool NEngineMotionControl::SetObjectControlInterfaceClassName(const string &valu
 /// ƒиапазон афферентных нейронов по каналам
 bool NEngineMotionControl::SetAfferentMin(const std::vector<double> &value)
 {
+ if(ControlMode == 0)
+ {
+  IIMin=value[0];
+  IaMin=value[1];
+  IbMin=value[2];
+  if(value.size()>3)
+  {
+   IcMin=value[3];
+  }
+ }
+
  if(Ready)
  {
-  bool crossranges=false;
-  AfferentRangesPos.resize(NumControlLoops);
-  AfferentRangesNeg.resize(NumControlLoops);
-  for(int i=0;i<NumControlLoops;i++)
-   CalcAfferentRange(NumMotionElements, crossranges, value[i], (*AfferentMax)[i],
+  SetAfferentRangeMode(AfferentRangeMode.v);
+/*  if(ControlMode == 0)
+  {
+
+  }
+  else
+  if(ControlMode == 1)
+  {
+   bool crossranges=false;
+   AfferentRangesPos.resize(NumControlLoops);
+   AfferentRangesNeg.resize(NumControlLoops);
+   for(int i=0;i<NumControlLoops;i++)
+	CalcAfferentRange(NumMotionElements, crossranges, value[i], (*AfferentMax)[i],
 			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
 
-  NewIntervalSeparatorsUpdate(5);
+   NewIntervalSeparatorsUpdate(5);
+  }*/
  }
 
  return true;
@@ -281,8 +301,21 @@ bool NEngineMotionControl::SetAfferentMin(const std::vector<double> &value)
 
 bool NEngineMotionControl::SetAfferentMax(const std::vector<double> &value)
 {
+ if(ControlMode == 0)
+ {
+  IIMax=value[0];
+  IaMax=value[1];
+  IbMax=value[2];
+  if(value.size()>3)
+  {
+   IcMax=value[3];
+  }
+ }
+
  if(Ready)
  {
+  SetAfferentRangeMode(AfferentRangeMode.v);
+/*
   bool crossranges=false;
   AfferentRangesPos.resize(NumControlLoops);
   AfferentRangesNeg.resize(NumControlLoops);
@@ -291,6 +324,7 @@ bool NEngineMotionControl::SetAfferentMax(const std::vector<double> &value)
 			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
 
   NewIntervalSeparatorsUpdate(5);
+  */
  }
 
  return true;
@@ -307,36 +341,10 @@ bool NEngineMotionControl::SetActiveContours(const std::vector<bool> &value)
 
  int count=(int(value.size())<num_controls)?int(value.size()):num_controls;
 
-//   for(int i=0;i<num_motions;i++)
-//   {
-	for (int j = 0; j <count; j++)
-	{
-	 SetIsAfferentLinked(j,value[j]);
-/*
-	  std::string motion=std::string("MotionElement")+RDK::sntoa(i);
-	  std::string pos_separator=std::string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1);
-	  std::string neg_separator=std::string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1);
-	  if (!Model_CheckComponent(pos_separator.c_str())||
-		 !Model_CheckComponent(neg_separator.c_str()))
-	  {
-		 NewIntervalSeparatorsSetup(5, 1, -1);
-		 NewIntervalSeparatorLinksSetup();
-	  }
-
-	  if(!Model_CheckComponent((motion+".AfferentL"+RDK::sntoa(j+1)+".Receptor").c_str()) ||
-		!Model_CheckComponent((motion+".AfferentR"+RDK::sntoa(j+1)+".Receptor").c_str()))
-	   break;
-
-	  if(value[j])
-	  {
-		SetIsAfferentLinked(j,true);
-	  }
-	  else
-	  {
-		SetIsAfferentLinked(j,false);
-	  }
-	}  */
-   }
+ for (int j = 0; j <count; j++)
+ {
+  SetIsAfferentLinked(j,value[j]);
+ }
 
  return true;
 }
@@ -1824,23 +1832,30 @@ if(Ic)
 
  for(size_t k=0;k<Motions.size();k++)
  {
-  try{
-   res=net->CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia2.Receptor",0);
-   res=net->CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia1.Receptor",0);
-  }
-  catch (EComponentNameNotExist &exc) {  }
-  try{
-   res=net->CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II1.Receptor",0);
-   res=net->CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II2.Receptor",0);
-  }
-  catch (EComponentNameNotExist &exc) {  }
+  if(ActiveContours->size()>1 && (*ActiveContours)[1])
+   try
+   {
+	res=net->CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia2.Receptor",0);
+	res=net->CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia1.Receptor",0);
+   }
+   catch (EComponentNameNotExist &exc) {  }
 
+  if(ActiveContours->size()>0 && (*ActiveContours)[0])
+   try
+   {
+	res=net->CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II1.Receptor",0);
+	res=net->CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II2.Receptor",0);
+   }
+   catch (EComponentNameNotExist &exc) {  }
+
+  if(ActiveContours->size()>2 && (*ActiveContours)[2])
   try{
    res=net->BreakLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib2.Receptor",0);
    res=net->BreakLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib1.Receptor",0);
   }
   catch (EComponentNameNotExist &exc) {  }
 
+  if(ActiveContours->size()>3 && (*ActiveContours)[3])
   try{
    res=net->CreateLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ic2.Receptor",0);
    res=net->CreateLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ic1.Receptor",0);
@@ -1876,8 +1891,18 @@ UNet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
 
  ActiveContours->resize(4,0);
 
- ChangeLookupPropertyType("AfferentMin",ptParameter);
- ChangeLookupPropertyType("AfferentMax",ptParameter);
+// ChangeLookupPropertyType("AfferentMin",ptParameter);
+// ChangeLookupPropertyType("AfferentMax",ptParameter);
+ AfferentMin->resize(4,0);
+ AfferentMax->resize(4,0);
+ (*AfferentMin)[0]=IIMin;
+ (*AfferentMax)[0]=IIMax;
+ (*AfferentMin)[1]=IaMin;
+ (*AfferentMax)[1]=IaMax;
+ (*AfferentMin)[2]=IbMin;
+ (*AfferentMax)[2]=IbMax;
+ (*AfferentMin)[3]=IcMin;
+ (*AfferentMax)[3]=IcMax;
 
  ChangeLookupPropertyType("MCNeuroObjectName",ptPubState);
  ChangeLookupPropertyType("MCAfferentObjectName",ptPubState);
@@ -2118,8 +2143,18 @@ UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bo
 
  ActiveContours->resize(4,0);
 
- ChangeLookupPropertyType("AfferentMin",ptParameter);
- ChangeLookupPropertyType("AfferentMax",ptParameter);
+// ChangeLookupPropertyType("AfferentMin",ptParameter);
+// ChangeLookupPropertyType("AfferentMax",ptParameter);
+ AfferentMin->resize(4,0);
+ AfferentMax->resize(4,0);
+ (*AfferentMin)[0]=IIMin;
+ (*AfferentMax)[0]=IIMax;
+ (*AfferentMin)[1]=IaMin;
+ (*AfferentMax)[1]=IaMax;
+ (*AfferentMin)[2]=IbMin;
+ (*AfferentMax)[2]=IbMax;
+ (*AfferentMin)[3]=IcMin;
+ (*AfferentMax)[3]=IcMax;
 
  ChangeLookupPropertyType("MCNeuroObjectName",ptPubState);
  ChangeLookupPropertyType("MCAfferentObjectName",ptPubState);
@@ -2245,8 +2280,18 @@ UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cross
 
  ActiveContours->resize(4,0);
 
- ChangeLookupPropertyType("AfferentMin",ptParameter);
- ChangeLookupPropertyType("AfferentMax",ptParameter);
+// ChangeLookupPropertyType("AfferentMin",ptParameter);
+// ChangeLookupPropertyType("AfferentMax",ptParameter);
+ AfferentMin->resize(4,0);
+ AfferentMax->resize(4,0);
+ (*AfferentMin)[0]=IIMin;
+ (*AfferentMax)[0]=IIMax;
+ (*AfferentMin)[1]=IaMin;
+ (*AfferentMax)[1]=IaMax;
+ (*AfferentMin)[2]=IbMin;
+ (*AfferentMax)[2]=IbMax;
+ (*AfferentMin)[3]=IcMin;
+ (*AfferentMax)[3]=IcMax;
 
  ChangeLookupPropertyType("MCNeuroObjectName",ptPubState);
  ChangeLookupPropertyType("MCAfferentObjectName",ptPubState);
@@ -2323,8 +2368,16 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
 
  ActiveContours->resize(3,0);
 
- ChangeLookupPropertyType("AfferentMin",ptParameter);
- ChangeLookupPropertyType("AfferentMax",ptParameter);
+// ChangeLookupPropertyType("AfferentMin",ptParameter);
+// ChangeLookupPropertyType("AfferentMax",ptParameter);
+ AfferentMin->resize(3,0);
+ AfferentMax->resize(3,0);
+ (*AfferentMin)[0]=IIMin;
+ (*AfferentMax)[0]=IIMax;
+ (*AfferentMin)[1]=IaMin;
+ (*AfferentMax)[1]=IaMax;
+ (*AfferentMin)[2]=IbMin;
+ (*AfferentMax)[2]=IbMax;
 
  ChangeLookupPropertyType("MCNeuroObjectName",ptPubState);
  ChangeLookupPropertyType("MCAfferentObjectName",ptPubState);
@@ -2873,12 +2926,21 @@ for(int i=0;i<NumMotionElements;i++)
 
 int NEngineMotionControl::GetNumControlLoops(void)
 {
-	if(Motions.empty())
-	 return 0;
-	NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[0]);
-	if(!melem)
-	 return 0;
-	return melem->NumControlLoops;
+ if(Motions.empty())
+  return 0;
+
+ NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[0]);
+ if(!melem && Motions[0]) // старый вариант управл€ющего элемента
+ {
+  if(Motions[0]->CheckComponentL("Afferent_Ic1"))
+   return 4;
+  else
+   return 3;
+ }
+ else
+  return 0;
+
+ return melem->NumControlLoops;
 }
 // --------------------------
 
@@ -2888,51 +2950,164 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
   if((index >=NumControlLoops)||(index <0))
    return false;
 
-  ActiveContours->resize(NumControlLoops,0);
+  bool res=true;
   for(int i=0;i<NumMotionElements;i++)
   {
-   std::string pos_separator=std::string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(index+1);
-   std::string neg_separator=std::string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(index+1);
-
-   if (!CheckComponentL(pos_separator.c_str()) ||
-	  !CheckComponentL(neg_separator.c_str()))
-	continue;
-   std::string motion_name=std::string("MotionElement")+RDK::sntoa(i);
-//   UEPtr<NNet> motion=Motions[i];
-//   if(!motion)
-//	continue;
-   if(!CheckComponentL((motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor").c_str()) ||
-	 !CheckComponentL((motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor").c_str()))
-	continue;
-
-   bool res=true;
-
-   if(value == true)
+   std::string motion=Motions[i]->GetName();
+   if(ControlMode ==0)
    {
-	res&=BreakLink("AfferentSource1",0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
-	res&=BreakLink("AfferentSource1",0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
-	res&=CreateLink(pos_separator,0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
-	res&=CreateLink(neg_separator,0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
+   if(index == 1)
+   try
+   {
+	if(value)
+	{
+	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_Ia2.Receptor",0);
+	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_Ia1.Receptor",0);
+	 res&=CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ia2.Receptor",0);
+	 res&=CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ia1.Receptor",0);
+	}
+	else
+	{
+	 res&=BreakLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ia2.Receptor",0);
+	 res&=BreakLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ia1.Receptor",0);
+	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ia2.Receptor",0);
+	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ia1.Receptor",0);
+    }
+   }
+   catch (EComponentNameNotExist &exc) {  }
+
+   if(index == 0)
+   try
+   {
+	if(value)
+	{
+	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_II2.Receptor",0);
+	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_II1.Receptor",0);
+
+	 res&=CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_II1.Receptor",0);
+	 res&=CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_II2.Receptor",0);
+	}
+	else
+	{
+	 res&=BreakLink(string("II_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_II1.Receptor",0);
+	 res&=BreakLink(string("II_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_II2.Receptor",0);
+
+	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_II2.Receptor",0);
+	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_II1.Receptor",0);
+    }
+   }
+   catch (EComponentNameNotExist &exc) {  }
+
+  if(index == 2)
+   try
+   {
+	if(value)
+	{
+	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_Ib2.Receptor",0);
+	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_Ib1.Receptor",0);
+
+	 res&=CreateLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ib1.Receptor",0);
+	 res&=CreateLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ib2.Receptor",0);
+	}
+	else
+	{
+	 res&=BreakLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ib1.Receptor",0);
+	 res&=BreakLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ib2.Receptor",0);
+
+	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ib1.Receptor",0);
+	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ib2.Receptor",0);
+	}
+   }
+   catch (EComponentNameNotExist &exc) {  }
+
+  if(index == 3)
+   try
+   {
+	if(value)
+	{
+	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_Ic2.Receptor",0);
+	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_Ic1.Receptor",0);
+
+	 res&=CreateLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ic1.Receptor",0);
+	 res&=CreateLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ic2.Receptor",0);
+	}
+	else
+	{
+	 res&=BreakLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ic1.Receptor",0);
+	 res&=BreakLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ic2.Receptor",0);
+
+	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ic2.Receptor",0);
+	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ic1.Receptor",0);
+    }
+   }
+   catch (EComponentNameNotExist &exc) {  }
+
+	if(res)
+	{
+	 ActiveContours->resize(NumControlLoops,0);
+	 (*ActiveContours)[index] = value;
+    }
    }
    else
+   if(ControlMode == 1)
    {
-	res&=BreakLink(pos_separator,0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
-	res&=BreakLink(neg_separator,0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
-	res&=CreateLink("AfferentSource1",0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
-	res&=CreateLink("AfferentSource1",0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
-   }
+    ActiveContours->resize(NumControlLoops,0);
+	std::string pos_separator=std::string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(index+1);
+	std::string neg_separator=std::string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(index+1);
 
-//  isAfferentLinked.resize(NumControlLoops, true);
-//  isAfferentLinked[index] = value;
-  (*ActiveContours)[index] = value;
+	if (!CheckComponentL(pos_separator.c_str()) ||
+	  !CheckComponentL(neg_separator.c_str()))
+	 continue;
+	std::string motion_name=std::string("MotionElement")+RDK::sntoa(i);
+	if(!CheckComponentL((motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor").c_str()) ||
+	 !CheckComponentL((motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor").c_str()))
+	 continue;
+
+	bool res=true;
+
+	if(value == true)
+	{
+	 res&=BreakLink("AfferentSource1",0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
+	 res&=BreakLink("AfferentSource1",0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
+	 res&=CreateLink(pos_separator,0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
+	 res&=CreateLink(neg_separator,0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
+	}
+	else
+	{
+	 res&=BreakLink(pos_separator,0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
+	 res&=BreakLink(neg_separator,0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
+	 res&=CreateLink("AfferentSource1",0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
+	 res&=CreateLink("AfferentSource1",0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
+	}
+    (*ActiveContours)[index] = value;
+   }
   }
   return true;
 }
 bool NEngineMotionControl::GetIsAfferentLinked(const int &index)
 {
+ if(ControlMode == 0)
+ {
+  switch(index)
+  {
+  case 0:
+   return CheckLink("II_PosIntervalSeparator1",0,"MotionElement0.Afferent_II1.Receptor",0);
+  case 1:
+   return CheckLink("Ia_PosIntervalSeparator1",0,"MotionElement0.Afferent_Ia2.Receptor",0);
+  case 2:
+   return CheckLink("Ib_PosIntervalSeparator1",0,"MotionElement0.Afferent_Ib1.Receptor",0);
+  case 3:
+   return CheckLink("Ic_PosIntervalSeparator1",0,"MotionElement0.Afferent_Ic1.Receptor",0);
+  }
+ }
+ else
+ if(ControlMode == 1)
+ {
   if((index >=GetNumControlLoops())||(index <0))
    return false;
   return (*ActiveContours)[index];
+ }
+ return false;
 }
 
 

@@ -60,20 +60,20 @@ RDK::ULProperty<int, NEngineMotionControl> AdaptiveStructureMode;
 RDK::ULProperty<int, NEngineMotionControl> InterneuronPresentMode;
 
 // Диапазон афферентных нейронов по каналу Ia
-RDK::ULProperty<double, NEngineMotionControl> IaMin;
-RDK::ULProperty<double, NEngineMotionControl> IaMax;
+RDK::ULProperty<double, NEngineMotionControl,ptParameter> IaMin;
+RDK::ULProperty<double, NEngineMotionControl,ptParameter> IaMax;
 
 // Диапазон афферентных нейронов по каналу Ib
-RDK::ULProperty<double, NEngineMotionControl> IbMin;
-RDK::ULProperty<double, NEngineMotionControl> IbMax;
+RDK::ULProperty<double, NEngineMotionControl,ptParameter> IbMin;
+RDK::ULProperty<double, NEngineMotionControl,ptParameter> IbMax;
 
 // Диапазон афферентных нейронов по каналу II
-RDK::ULProperty<double, NEngineMotionControl> IIMin;
-RDK::ULProperty<double, NEngineMotionControl> IIMax;
+RDK::ULProperty<double, NEngineMotionControl,ptParameter> IIMin;
+RDK::ULProperty<double, NEngineMotionControl,ptParameter> IIMax;
 
 // Диапазон афферентных нейронов по каналу Ic
-RDK::ULProperty<double, NEngineMotionControl> IcMin;
-RDK::ULProperty<double, NEngineMotionControl> IcMax;
+RDK::ULProperty<double, NEngineMotionControl,ptParameter> IcMin;
+RDK::ULProperty<double, NEngineMotionControl,ptParameter> IcMax;
 
 /// Диапазон афферентных нейронов по каналам
 RDK::ULProperty<std::vector<double>, NEngineMotionControl> AfferentMin;
@@ -83,9 +83,9 @@ RDK::ULProperty<std::vector<double>, NEngineMotionControl> AfferentMax;
 
 // Максимальное усиление управляющего воздействия
 // 0 - Разбиение на диапазоны [Max/(i+1)] где i - индекс диапазона
-// 1 - Разбиение на диапазоны [Max/(i+1)] где i - индекс диапазона
-// 2 -
-// 3 - Max/(N-i), где i - индекс диапазона, а N - число диапазонов
+// 1 - Разбиение на диапазоны [Max/N^2]*(i+1)^2 где i - индекс диапазона
+// 2 - по формуле (3.4)
+// 3 - по формуле (3.3) Max/(N-i), где i - индекс диапазона, а N - число диапазонов
 RDK::ULProperty<double, NEngineMotionControl> PacGain;
 
 // Режим настройки диапазонов афферентных нейронов
@@ -124,6 +124,11 @@ RDK::ULProperty<std::vector<double>, NEngineMotionControl> DestContourMinAmplitu
 RDK::ULProperty<double, NEngineMotionControl> DestTransientTime;
 
 /// Используемые в работе контуры управления
+/// В случае старого MotionControl порядок таков:
+/// 0=II
+/// 1=Ia
+/// 2=Ib
+/// 3=Ic
 RDK::ULProperty<std::vector<bool>, NEngineMotionControl> ActiveContours;
 
 /// Используемые в адаптации контуры управления
