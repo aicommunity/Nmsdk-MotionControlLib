@@ -2930,15 +2930,18 @@ int NEngineMotionControl::GetNumControlLoops(void)
   return 0;
 
  NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[0]);
- if(!melem && Motions[0]) // старый вариант управл€ющего элемента
+ if(!melem) // старый вариант управл€ющего элемента
  {
-  if(Motions[0]->CheckComponentL("Afferent_Ic1"))
-   return 4;
+  if(Motions[0])
+  {
+   if(Motions[0]->CheckComponentL("Afferent_Ic1"))
+	return 4;
+   else
+    return 3;
+  }
   else
-   return 3;
+   return 0;
  }
- else
-  return 0;
 
  return melem->NumControlLoops;
 }

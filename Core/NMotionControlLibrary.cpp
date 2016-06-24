@@ -652,6 +652,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 		  cs->NumMotionElements=i+1;
 		  cs->CreationMode=14;
 		  cs->MotionElementClassName="NNewMotionElement";
+		  cs->ObjectControlInterfaceClassName="NControlObjectSource";
 		  cs->Create();
 		  net=cs;
 
@@ -669,6 +670,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 		  cs->CreationMode=14;
 		  cs->MotionElementClassName="NNewMotionElement";
 		  cs->MCNeuroObjectName="NSynSPNeuron";
+		  cs->ObjectControlInterfaceClassName="NControlObjectSource";
 		  cs->Create();
 		  net=cs;
 
