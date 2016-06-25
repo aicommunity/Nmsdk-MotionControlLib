@@ -26,6 +26,7 @@ NEngineMotionControl::NEngineMotionControl(void)
    ObjectControlInterfaceClassName("ObjectControlInterfaceClassName",this,&NEngineMotionControl::SetObjectControlInterfaceClassName),
    AdaptiveStructureMode("AdaptiveStructureMode",this),
    InterneuronPresentMode("InterneuronPresentMode",this, &NEngineMotionControl::SetInterneuronPresentMode),
+   LinkModes("LinkModes",this,&NEngineMotionControl::SetLinkModes),
    IaMin("IaMin",this),
    IaMax("IaMax",this),
    IbMin("IbMin",this),
@@ -99,6 +100,7 @@ bool NEngineMotionControl::SetNumControlLoops(const int &value)
 
   DestContourMaxAmplitude->resize(value,0);
   DestContourMinAmplitude->resize(value,0);
+  LinkModes->resize(value,1);
   Ready=false;
  }
  return true;
@@ -359,19 +361,33 @@ bool NEngineMotionControl::SetInterneuronPresentMode(const int &value)
   if(!melem)
    continue;
   melem->InterneuronPresentMode=value;
-  if(value == 0)
-  {
-   std::vector<int> modes;
-   modes.assign(melem->NumControlLoops,0);
-   melem->LinkModes=modes;
-  }
-  else
-  if(value == 1)
-  {
-   std::vector<int> modes;
-   modes.assign(melem->NumControlLoops,1);
-   melem->LinkModes=modes;
-  }
+//  if(value == 0)
+//  {
+//   std::vector<int> modes;
+//   modes.assign(melem->NumControlLoops,0);
+//   melem->LinkModes=modes;
+//  }
+//  else
+//  if(value == 1)
+//  {
+//   std::vector<int> modes;
+//   modes.assign(melem->NumControlLoops,1);
+//   melem->LinkModes=modes;
+//  }
+ }
+
+ Ready=false;
+ return true;
+}
+
+bool NEngineMotionControl::SetLinkModes(const std::vector<int> &value)
+{
+ for(size_t i=0; i<Motions.size(); i++)
+ {
+  NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+  if(!melem)
+   continue;
+  melem->LinkModes=value;
  }
 
  Ready=false;
@@ -408,9 +424,9 @@ bool NEngineMotionControl::ADefault(void)
  IIMax=M_PI/2;
  IcMin=-10;
  IcMax=10;
- AfferentMin->assign(1,-2.0*M_PI);
- AfferentMax->assign(1,2.0*M_PI);
- PacGain=300;
+ AfferentMin->assign(1,-M_PI/2);
+ AfferentMax->assign(1,M_PI/2);
+ PacGain=100;
  AfferentRangeMode=2;//0;
  PacRangeMode=2;//0;
  MinAfferentRange=0.1;
@@ -418,6 +434,7 @@ bool NEngineMotionControl::ADefault(void)
  ObjectControlInterfaceClassName="NManipulatorSource";
  AdaptiveStructureMode=1;
  InterneuronPresentMode=0;
+ LinkModes->assign(1,1);
 
  DestTransientTime=0.1;
  TransientHistoryTime=1.0;
@@ -1012,6 +1029,10 @@ void NEngineMotionControl::SetupPacRange(void)
  double a_max=PacGain;
  int num_motions=NumMotionElements;
  vector<Real> values=cont->Gain;
+
+ if(num_motions*2 != values.size())
+  return; // TODO: Это аномалия, которую нужно разрешить
+
 // values.resize(num_motions*2);
  int rr_index=0;
  if(PacRangeMode == 0)
@@ -3125,7 +3146,7 @@ void NEngineMotionControl::ConnectInternalGenerators(int direction, int num_moti
   return;
 
  InternalGenerator->DisconnectAll();
- bool res=false;
+ bool res=true;
 
  int num_elements=(num_motion_elements<NumMotionElements)?num_motion_elements:NumMotionElements;
  for(int i=0;i<num_elements;i++)
@@ -3135,13 +3156,13 @@ void NEngineMotionControl::ConnectInternalGenerators(int direction, int num_moti
   if(direction == 0)
   {
    res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".PNeuronMembrane.PosChannel");
-   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".PNeuronMembrane.NegChannel");
+//   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".PNeuronMembrane.NegChannel");
    InternalGeneratorDirection=0;
   }
   else
   {
    res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".PNeuronMembrane.PosChannel");
-   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".PNeuronMembrane.NegChannel");
+//   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".PNeuronMembrane.NegChannel");
    InternalGeneratorDirection=1;
   }
  }

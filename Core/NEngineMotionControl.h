@@ -59,6 +59,9 @@ RDK::ULProperty<int, NEngineMotionControl> AdaptiveStructureMode;
 // 1 - вставочные нейроны есть
 RDK::ULProperty<int, NEngineMotionControl> InterneuronPresentMode;
 
+// –ежим св€зывани€ мотонейронов (см. описание в управл€ющем элементе)
+RDK::ULProperty<std::vector<int>, NEngineMotionControl> LinkModes;
+
 // ƒиапазон афферентных нейронов по каналу Ia
 RDK::ULProperty<double, NEngineMotionControl,ptParameter> IaMin;
 RDK::ULProperty<double, NEngineMotionControl,ptParameter> IaMax;
@@ -251,6 +254,8 @@ bool SetActiveContours(const std::vector<bool> &value);
 
 /// –ежим наличи€ интернейронов
 bool SetInterneuronPresentMode(const int &value);
+
+bool SetLinkModes(const std::vector<int> &value);
 // --------------------------
 
 // --------------------------

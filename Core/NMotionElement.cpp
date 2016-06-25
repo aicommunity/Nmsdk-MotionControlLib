@@ -153,7 +153,8 @@ bool NMotionElement::ADefault(void)
 {
   if(!isNumControlLoopsInitialized)
    NumControlLoops = 1;
-  InterneuronPresentMode = 0;
+  InterneuronPresentMode = 1;
+  LinkModes->assign(NumControlLoops,1);
   RenshowMode = 0;
   NeuroObjectName = "NNewSynSPNeuron";
   AfferentObjectName = "NSimpleAfferentNeuron";
@@ -1461,6 +1462,18 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 			res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
 			res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
 			break;
+
+		 case 4:
+			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
+			  return false;
+			res&=CreateLink(afferentL+".LTZone",0,"Post"+afferentL+".PNeuronMembrane.PosChannel");
+//			res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronR.PNeuronMembrane.NegChannel");
+			res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronL.PNeuronMembrane.PosChannel");
+			res&=CreateLink(afferentR+".LTZone",0,"Post"+afferentR+".PNeuronMembrane.PosChannel");
+ //			res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronL.PNeuronMembrane.NegChannel");
+			res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronR.PNeuronMembrane.PosChannel");
+			break;
+
 	   }
    }
 
@@ -1507,6 +1520,18 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 			res&=CreateNeuronBranchLink(this,"Post"+afferentL+".LTZone","MotoneuronL","PosChannel");
 			res&=CreateNeuronBranchLink(this,"Post"+afferentR+".LTZone","MotoneuronR","PosChannel");
 			break;
+
+		 case 4:
+			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
+			  return false;
+			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"PosChannel");
+//			res&=CreateNeuronBranchLink(this,"Post"+afferentL+".LTZone","MotoneuronR","NegChannel");
+			res&=CreateNeuronBranchLink(this,"Post"+afferentL+".LTZone","MotoneuronL","PosChannel");
+			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","Post"+afferentR,"PosChannel");
+//			res&=CreateNeuronBranchLink(this,"Post"+afferentR+".LTZone","MotoneuronL","NegChannel");
+			res&=CreateNeuronBranchLink(this,"Post"+afferentR+".LTZone","MotoneuronR","PosChannel");
+			break;
+
 	   }
    }
 

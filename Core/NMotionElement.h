@@ -33,6 +33,7 @@ RDK::ULProperty<std::vector<int>, NMotionElement> EnableControlLoopFlags;
 // 1 - связь через интернейроны
 // 2 - связь через интернейроны(L-R) + прямая связь(L-L)
 // 3 - связь через интернейроны(L-L) + прямая связь(L-R)
+// 4 - как 1, но нет перекрестного влияния на мотонейроны
 RDK::ULProperty<std::vector<int>, NMotionElement> LinkModes;
 
 // Режим наличия вставочных нейронов
