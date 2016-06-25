@@ -160,6 +160,16 @@ RDK::ULProperty<string, NEngineMotionControl> PacObjectName;
 // Максимальная зафиксированная амплитуда колебаний
 RDK::ULProperty<std::vector<double>, NEngineMotionControl,ptPubState> MaxContourAmplitude;
 
+// Режим ветвления мотонейрона при подключении контуров управления
+// 0 - все контура подключаются к одному участку мембраны
+// 1 - каждый контур имеет свой участок мембраны
+RDK::ULProperty<int, NEngineMotionControl> MotoneuronBranchMode;
+
+// Режим наличия клеток Реншоу
+// 0 - клеток Реншоу нет
+// 1 - клетки Реншоу есть
+RDK::ULProperty<int, NEngineMotionControl> RenshowMode;
+
 /// Выход для сбора статистики. В каждой строке содержатся данные в следующем порядке:
 //
 //UPropertyOutputData<MDMatrix<double>, NEngineMotionControl, ptPubState> Statistic;
@@ -254,6 +264,9 @@ bool SetObjectControlInterfaceClassName(const string &value);
 /// Диапазон афферентных нейронов по каналам
 bool SetAfferentMin(const std::vector<double> &value);
 bool SetAfferentMax(const std::vector<double> &value);
+
+bool SetMotoneuronBranchMode(const int &value);
+bool SetRenshowMode(const int &value);
 
 /// Управление списком активных контуров
 bool SetActiveContours(const std::vector<bool> &value);

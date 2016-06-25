@@ -60,6 +60,8 @@ NEngineMotionControl::NEngineMotionControl(void)
    PacObjectName("PacObjectName",this,&NEngineMotionControl::SetPacObjectName),
 
    MaxContourAmplitude("MaxContourAmplitude",this),
+   MotoneuronBranchMode("MotoneuronBranchMode",this,&NEngineMotionControl::SetMotoneuronBranchMode),
+   RenshowMode("RenshowMode",this,&NEngineMotionControl::SetRenshowMode),
    Statistic("Statistic",this)
 
 
@@ -333,6 +335,35 @@ bool NEngineMotionControl::SetAfferentMax(const std::vector<double> &value)
  return true;
 }
 
+bool NEngineMotionControl::SetMotoneuronBranchMode(const int &value)
+{
+ if(ControlMode == 1)
+ {
+  if(Ready && AdaptiveStructureMode >0)
+  {
+   MotoneuronBranchMode.v=value;
+   Create(false);
+  }
+  else
+   Ready=false;
+ }
+ return true;
+}
+
+bool NEngineMotionControl::SetRenshowMode(const int &value)
+{
+ if(ControlMode == 1)
+ {
+  if(Ready && AdaptiveStructureMode >0)
+  {
+   RenshowMode.v=value;
+   Create(false);
+  }
+  else
+   Ready=false;
+ }
+ return true;
+}
 
 /// Управление списком активных контуров
 bool NEngineMotionControl::SetActiveContours(const std::vector<bool> &value)
@@ -416,6 +447,8 @@ bool NEngineMotionControl::ADefault(void)
 {
  NumMotionElements=1;
  NumControlLoops=1;
+ MotoneuronBranchMode=0;
+ RenshowMode=0;
  CreationMode=5;
  IaMin=-2.0*M_PI;
  IaMax=2.0*M_PI;
@@ -1936,21 +1969,21 @@ if(Ic)
 // на две полосы по знаку
 UNet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
 {
- // Отключаем ненужные параметры и состояния
- ChangeLookupPropertyType("IaMin",ptPubParameter);
- ChangeLookupPropertyType("IaMax",ptPubParameter);
-
- // Диапазон афферентных нейронов по каналу Ib
- ChangeLookupPropertyType("IbMin",ptPubParameter);
- ChangeLookupPropertyType("IbMax",ptPubParameter);
-
- // Диапазон афферентных нейронов по каналу II
- ChangeLookupPropertyType("IIMin",ptPubParameter);
- ChangeLookupPropertyType("IIMax",ptPubParameter);
-
- // Диапазон афферентных нейронов по каналу Ic
- ChangeLookupPropertyType("IcMin",ptParameter);
- ChangeLookupPropertyType("IcMax",ptParameter);
+// // Отключаем ненужные параметры и состояния
+// ChangeLookupPropertyType("IaMin",ptPubParameter);
+// ChangeLookupPropertyType("IaMax",ptPubParameter);
+//
+// // Диапазон афферентных нейронов по каналу Ib
+// ChangeLookupPropertyType("IbMin",ptPubParameter);
+// ChangeLookupPropertyType("IbMax",ptPubParameter);
+//
+// // Диапазон афферентных нейронов по каналу II
+// ChangeLookupPropertyType("IIMin",ptPubParameter);
+// ChangeLookupPropertyType("IIMax",ptPubParameter);
+//
+// // Диапазон афферентных нейронов по каналу Ic
+// ChangeLookupPropertyType("IcMin",ptParameter);
+// ChangeLookupPropertyType("IcMax",ptParameter);
 
  ActiveContours->resize(4,0);
 
@@ -2188,21 +2221,21 @@ UNet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
 UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bool crossranges)
 
 {
- // Отключаем ненужные параметры и состояния
- ChangeLookupPropertyType("IaMin",ptPubParameter);
- ChangeLookupPropertyType("IaMax",ptPubParameter);
-
- // Диапазон афферентных нейронов по каналу Ib
- ChangeLookupPropertyType("IbMin",ptPubParameter);
- ChangeLookupPropertyType("IbMax",ptPubParameter);
-
- // Диапазон афферентных нейронов по каналу II
- ChangeLookupPropertyType("IIMin",ptPubParameter);
- ChangeLookupPropertyType("IIMax",ptPubParameter);
-
- // Диапазон афферентных нейронов по каналу Ic
- ChangeLookupPropertyType("IcMin",ptParameter);
- ChangeLookupPropertyType("IcMax",ptParameter);
+// // Отключаем ненужные параметры и состояния
+// ChangeLookupPropertyType("IaMin",ptPubParameter);
+// ChangeLookupPropertyType("IaMax",ptPubParameter);
+//
+// // Диапазон афферентных нейронов по каналу Ib
+// ChangeLookupPropertyType("IbMin",ptPubParameter);
+// ChangeLookupPropertyType("IbMax",ptPubParameter);
+//
+// // Диапазон афферентных нейронов по каналу II
+// ChangeLookupPropertyType("IIMin",ptPubParameter);
+// ChangeLookupPropertyType("IIMax",ptPubParameter);
+//
+// // Диапазон афферентных нейронов по каналу Ic
+// ChangeLookupPropertyType("IcMin",ptParameter);
+// ChangeLookupPropertyType("IcMax",ptParameter);
 
  ActiveContours->resize(4,0);
 
@@ -2325,21 +2358,21 @@ UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bo
 // Формируем сеть управления на нейронах с непрерывной генераторной функцией нейронов
 UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool crossranges)
 {
- // Отключаем ненужные параметры и состояния
- ChangeLookupPropertyType("IaMin",ptPubParameter);
- ChangeLookupPropertyType("IaMax",ptPubParameter);
-
- // Диапазон афферентных нейронов по каналу Ib
- ChangeLookupPropertyType("IbMin",ptPubParameter);
- ChangeLookupPropertyType("IbMax",ptPubParameter);
-
- // Диапазон афферентных нейронов по каналу II
- ChangeLookupPropertyType("IIMin",ptPubParameter);
- ChangeLookupPropertyType("IIMax",ptPubParameter);
-
- // Диапазон афферентных нейронов по каналу Ic
- ChangeLookupPropertyType("IcMin",ptParameter);
- ChangeLookupPropertyType("IcMax",ptParameter);
+// // Отключаем ненужные параметры и состояния
+// ChangeLookupPropertyType("IaMin",ptPubParameter);
+// ChangeLookupPropertyType("IaMax",ptPubParameter);
+//
+// // Диапазон афферентных нейронов по каналу Ib
+// ChangeLookupPropertyType("IbMin",ptPubParameter);
+// ChangeLookupPropertyType("IbMax",ptPubParameter);
+//
+// // Диапазон афферентных нейронов по каналу II
+// ChangeLookupPropertyType("IIMin",ptPubParameter);
+// ChangeLookupPropertyType("IIMax",ptPubParameter);
+//
+// // Диапазон афферентных нейронов по каналу Ic
+// ChangeLookupPropertyType("IcMin",ptParameter);
+// ChangeLookupPropertyType("IcMax",ptParameter);
 
  ActiveContours->resize(4,0);
 
@@ -2417,17 +2450,17 @@ UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cross
 // Формируем сеть управления на 2 импульсных нейронах
 UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_force, bool use_add_contours)
 {
- // Отключаем ненужные параметры и состояния
- ChangeLookupPropertyType("IaMin",ptPubParameter);
- ChangeLookupPropertyType("IaMax",ptPubParameter);
-
- // Диапазон афферентных нейронов по каналу Ib
- ChangeLookupPropertyType("IbMin",ptPubParameter);
- ChangeLookupPropertyType("IbMax",ptPubParameter);
-
- // Диапазон афферентных нейронов по каналу II
- ChangeLookupPropertyType("IIMin",ptPubParameter);
- ChangeLookupPropertyType("IIMax",ptPubParameter);
+// // Отключаем ненужные параметры и состояния
+// ChangeLookupPropertyType("IaMin",ptPubParameter);
+// ChangeLookupPropertyType("IaMax",ptPubParameter);
+//
+// // Диапазон афферентных нейронов по каналу Ib
+// ChangeLookupPropertyType("IbMin",ptPubParameter);
+// ChangeLookupPropertyType("IbMax",ptPubParameter);
+//
+// // Диапазон афферентных нейронов по каналу II
+// ChangeLookupPropertyType("IIMin",ptPubParameter);
+// ChangeLookupPropertyType("IIMax",ptPubParameter);
 
  ActiveContours->resize(3,0);
 
@@ -2564,21 +2597,21 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(void)
 {
  ControlMode=1;
 
- // Отключаем ненужные параметры и состояния
- ChangeLookupPropertyType("IaMin",ptParameter);
- ChangeLookupPropertyType("IaMax",ptParameter);
-
- // Диапазон афферентных нейронов по каналу Ib
- ChangeLookupPropertyType("IbMin",ptParameter);
- ChangeLookupPropertyType("IbMax",ptParameter);
-
- // Диапазон афферентных нейронов по каналу II
- ChangeLookupPropertyType("IIMin",ptParameter);
- ChangeLookupPropertyType("IIMax",ptParameter);
-
- // Диапазон афферентных нейронов по каналу Ic
- ChangeLookupPropertyType("IcMin",ptParameter);
- ChangeLookupPropertyType("IcMax",ptParameter);
+// // Отключаем ненужные параметры и состояния
+// ChangeLookupPropertyType("IaMin",ptParameter);
+// ChangeLookupPropertyType("IaMax",ptParameter);
+//
+// // Диапазон афферентных нейронов по каналу Ib
+// ChangeLookupPropertyType("IbMin",ptParameter);
+// ChangeLookupPropertyType("IbMax",ptParameter);
+//
+// // Диапазон афферентных нейронов по каналу II
+// ChangeLookupPropertyType("IIMin",ptParameter);
+// ChangeLookupPropertyType("IIMax",ptParameter);
+//
+// // Диапазон афферентных нейронов по каналу Ic
+// ChangeLookupPropertyType("IcMin",ptParameter);
+// ChangeLookupPropertyType("IcMax",ptParameter);
 
  ActiveContours->resize(4,0);
 
@@ -2685,6 +2718,10 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
    melement->AfferentObjectName = MCAfferentObjectName;
    melement->NumControlLoops=NumControlLoops;
    melement->InterneuronPresentMode=InterneuronPresentMode;
+   melement->MotoneuronBranchMode=MotoneuronBranchMode;
+
+   melement->RenshowMode=!RenshowMode; // TODO: Заглушка, чтобы обойти невозможность выполнить Build, т.к. Ready в melement уже взведен.
+   melement->RenshowMode=RenshowMode;
    if(InterneuronPresentMode == 0)
    {
 	std::vector<int> modes;
@@ -2699,8 +2736,8 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
    }
 
   //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
-  melement->SetNumControlLoops(2);
-  melement->Build();
+//  melement->SetNumControlLoops(2);
+   melement->Build();
 	for (int j = 0; j < melement->NumControlLoops; j++)
 	{
 	  try
