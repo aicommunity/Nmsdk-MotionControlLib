@@ -59,12 +59,13 @@ NEngineMotionControl::NEngineMotionControl(void)
    MCAfferentObjectName("MCAfferentObjectName",this,&NEngineMotionControl::SetMCAfferentObjectName),
    PacObjectName("PacObjectName",this,&NEngineMotionControl::SetPacObjectName),
 
-   MaxContourAmplitude("MaxContourAmplitude",this)
+   MaxContourAmplitude("MaxContourAmplitude",this),
+   Statistic("Statistic",this)
 
 
 {
-  LastAdaptiveTime=0.0;
-  ControlMode=0;
+ LastAdaptiveTime=0.0;
+ ControlMode=0;
 }
 
 NEngineMotionControl::~NEngineMotionControl(void)
@@ -445,6 +446,9 @@ bool NEngineMotionControl::ADefault(void)
  MCAfferentObjectName = "NSimpleAfferentNeuron";
  PacObjectName="NPac";
 
+// StatisticDoubleMatrix.Default();
+// StatisticDoubleMatrix.SetActivity(true);
+// StatisticDoubleMatrix.Init();
 
  return true;
 }
@@ -469,12 +473,16 @@ bool NEngineMotionControl::ABuild(void)
  DestContourMaxAmplitude->resize(NumControlLoops);
  DestContourMinAmplitude->resize(NumControlLoops);
  UseContourData->resize(NumControlLoops);
+
+// StatisticDoubleMatrix.Build();
  return true;
 }
 
 // Reset computation
 bool NEngineMotionControl::AReset(void)
 {
+// StatisticDoubleMatrix.Reset();
+
  CurrentContourAmplitude->assign(NumControlLoops,0);
  CurrentContourAverage->assign(NumControlLoops,0);
  MaxContourAmplitude->assign(NumControlLoops,0);
@@ -483,9 +491,9 @@ bool NEngineMotionControl::AReset(void)
  TempTransientState=false;
  OldTransientAverage=0;
 
- SetNumOutputs(6);
- for(int i=0;i<NumOutputs;i++)
-  SetOutputDataSize(i,MMatrixSize(1,1));
+// SetNumOutputs(6);
+// for(int i=0;i<NumOutputs;i++)
+//  SetOutputDataSize(i,MMatrixSize(1,1));
 
  receptors.resize(NumMotionElements);
  for(int n=0;n<NumMotionElements;n++)
@@ -525,6 +533,9 @@ bool NEngineMotionControl::AReset(void)
   {
    continue;
   }     */
+
+  Statistic->Assign(1,11+NumControlLoops*2,0.0);
+//  StatisticDoubleMatrix.Calculate();
  }
 
 
@@ -535,6 +546,7 @@ bool NEngineMotionControl::AReset(void)
 // Execute math. computations of current object on current step
 bool NEngineMotionControl::ACalculate(void)
 {
+ CreateLink("","Statistic","StatisticDoubleMatrix","InputMatrixData");
  // —читаем статистику
  // за ожидаемое врем€ переходного процесса
  CurrentContourAmplitude->assign(NumControlLoops,0);
@@ -667,12 +679,36 @@ bool NEngineMotionControl::ACalculate(void)
 
  }
 
- POutputData[0].Double[0]=pos_angle;
- POutputData[1].Double[0]=neg_angle;
- POutputData[2].Double[0]=pos_speed;
- POutputData[3].Double[0]=neg_speed;
- POutputData[4].Double[0]=pos_moment;
- POutputData[5].Double[0]=neg_moment;
+// POutputData[0].Double[0]=pos_angle;
+// POutputData[1].Double[0]=neg_angle;
+// POutputData[2].Double[0]=pos_speed;
+// POutputData[3].Double[0]=neg_speed;
+// POutputData[4].Double[0]=pos_moment;
+// POutputData[5].Double[0]=neg_moment;
+
+ std::vector<double> stats;
+
+ stats.push_back(NumMotionElements);
+ stats.push_back(NumControlLoops);
+ stats.push_back(AfferentRangeMode);
+ stats.push_back(PacRangeMode);
+ stats.push_back(PacGain);
+ stats.push_back(TransientHistoryTime);
+ stats.push_back(TransientAverageThreshold);
+ stats.push_back(TransientAverageThreshold);
+ for(int i=0;i<NumControlLoops;i++)
+  stats.push_back((*CurrentContourAmplitude)[i]);
+ for(int i=0;i<NumControlLoops;i++)
+  stats.push_back((*CurrentContourAverage)[i]);
+ stats.push_back(CurrentTransientTime);
+ stats.push_back(CurrentTransientTime);
+ stats.push_back(CurrentTransientState);
+
+ Statistic->Assign(1,stats.size(),0.0);
+ for(size_t i=0;i<stats.size();i++)
+  (*Statistic)(0,i)=stats[i];
+
+
  return true;
 }
 // --------------------------
@@ -746,6 +782,11 @@ bool NEngineMotionControl::Create(bool full_recreate)
  SetupPacRange();
 
  SetActiveContours(*ActiveContours);
+
+
+ UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
+ UEPtr<UStatisticMatrix<double> > stats=AddMissingComponent<UStatisticMatrix<double> >("StatisticDoubleMatrix", "UStatisticDoubleMatrix");
+ stats->ManualModeEnabled=true;
  return true;
 }
 
@@ -761,7 +802,8 @@ bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
 	 PComponents[i]->GetName() == "IINegAfferentGenerator" ||
 	 PComponents[i]->GetName() == "AfferentSource1" ||
 	 (PComponents[i]->GetName() == "NManipulatorSource1" && PComponents[i]->GetCompClassName() == *ObjectControlInterfaceClassName) ||
-	 PComponents[i]->GetName() == "NManipulatorInput1")
+	 PComponents[i]->GetName() == "NManipulatorInput1" ||
+	 PComponents[i]->GetName() == "StatisticDoubleMatrix")
   {
    ++i;
    continue;

@@ -17,6 +17,7 @@ See file license.txt for more information
 #include "../../Nmsdk-PulseLib/Core/NReceptor.h"
 #include "../../Nmsdk-BasicLib/Core/NNet.h"
 #include "../../Nmsdk-SourceLib/Core/NPulseGenerator.h"
+#include "../../Rdk-BasicStatisticLib/Core/UStatisticLibrary.h"
 
 namespace NMSDK {
 
@@ -159,6 +160,11 @@ RDK::ULProperty<string, NEngineMotionControl> PacObjectName;
 // Максимальная зафиксированная амплитуда колебаний
 RDK::ULProperty<std::vector<double>, NEngineMotionControl,ptPubState> MaxContourAmplitude;
 
+/// Выход для сбора статистики. В каждой строке содержатся данные в следующем порядке:
+//
+//UPropertyOutputData<MDMatrix<double>, NEngineMotionControl, ptPubState> Statistic;
+UPropertyOutputData<MDMatrix<double>, NEngineMotionControl> Statistic;
+
 protected: // Временные переменные
 vector<vector<UEPtr<NReceptor> > > receptors;
 
@@ -201,7 +207,7 @@ int ControlMode;
 /// 1 -
 int InternalGeneratorDirection;
 
-
+//UStatisticMatrix<double> StatisticDoubleMatrix;
 
 public: // Методы
 // --------------------------
