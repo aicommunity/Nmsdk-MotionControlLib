@@ -83,6 +83,8 @@ RDK::ULProperty<double, NEngineMotionControl,ptParameter> IcMax;
 RDK::ULProperty<std::vector<double>, NEngineMotionControl> AfferentMin;
 RDK::ULProperty<std::vector<double>, NEngineMotionControl> AfferentMax;
 
+/// Режим разбиения сепараторов
+RDK::ULProperty<int, NEngineMotionControl> IntervalSeparatorMode;
 
 
 // Максимальное усиление управляющего воздействия
@@ -265,6 +267,8 @@ bool SetObjectControlInterfaceClassName(const string &value);
 bool SetAfferentMin(const std::vector<double> &value);
 bool SetAfferentMax(const std::vector<double> &value);
 
+bool SetIntervalSeparatorMode(const int &value);
+
 bool SetMotoneuronBranchMode(const int &value);
 bool SetRenshowMode(const int &value);
 
@@ -407,10 +411,10 @@ void NewStandardLinksSetup(const string &engine_integrator_name);
 
 public:
 // Настройка разделителей интервалов
-void NewIntervalSeparatorsSetup(int mode_value, double pos_gain_value, double neg_gain_value);
+void NewIntervalSeparatorsSetup(int mode_value, int last_mode_value, double pos_gain_value, double neg_gain_value);
 
 // Настройка разделителей интервалов
-void NewIntervalSeparatorsUpdate(int mode_value);
+void NewIntervalSeparatorsUpdate(int mode_value, int last_mode_value);
 
 // Установка связей разделителей интервалов
 void NewIntervalSeparatorLinksSetup(void);

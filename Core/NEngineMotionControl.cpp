@@ -37,6 +37,7 @@ NEngineMotionControl::NEngineMotionControl(void)
    IcMax("IcMax",this),
    AfferentMin("AfferentMin",this, &NEngineMotionControl::SetAfferentMin),
    AfferentMax("AfferentMax",this, &NEngineMotionControl::SetAfferentMax),
+   IntervalSeparatorMode("IntervalSeparatorMode",this, &NEngineMotionControl::SetIntervalSeparatorMode),
    PacGain("PacGain",this,&NEngineMotionControl::SetPacGain),
    AfferentRangeMode("AfferentRangeMode",this,&NEngineMotionControl::SetAfferentRangeMode),
    PacRangeMode("PacRangeMode",this,&NEngineMotionControl::SetPacRangeMode),
@@ -160,7 +161,7 @@ if(Ready)
 			AfferentRangesPos[i], AfferentRangesNeg[i],value);
 
  IntervalSeparatorsUpdate(this, 5);
- NewIntervalSeparatorsUpdate(5);
+ NewIntervalSeparatorsUpdate(IntervalSeparatorMode,6);
 }
  return true;
 }
@@ -204,7 +205,7 @@ if(Ready)
 			AfferentRangesPos[i], AfferentRangesNeg[i],value);
 
  IntervalSeparatorsUpdate(this, 5);
- NewIntervalSeparatorsUpdate(5);
+ NewIntervalSeparatorsUpdate(IntervalSeparatorMode,6);
 }
  return true;
 }
@@ -297,7 +298,7 @@ bool NEngineMotionControl::SetAfferentMin(const std::vector<double> &value)
 	CalcAfferentRange(NumMotionElements, crossranges, value[i], (*AfferentMax)[i],
 			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
 
-   NewIntervalSeparatorsUpdate(5);
+   NewIntervalSeparatorsUpdate(IntervalSeparatorMode,6);
   }*/
  }
 
@@ -328,10 +329,17 @@ bool NEngineMotionControl::SetAfferentMax(const std::vector<double> &value)
    CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], value[i],
 			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
 
-  NewIntervalSeparatorsUpdate(5);
+  NewIntervalSeparatorsUpdate(IntervalSeparatorMode,6);
   */
  }
 
+ return true;
+}
+
+bool NEngineMotionControl::SetIntervalSeparatorMode(const int &value)
+{
+ if(ControlMode == 1)
+  Ready=false;
  return true;
 }
 
@@ -448,6 +456,7 @@ bool NEngineMotionControl::ADefault(void)
  NumMotionElements=1;
  NumControlLoops=1;
  MotoneuronBranchMode=0;
+ IntervalSeparatorMode=6;
  RenshowMode=0;
  CreationMode=5;
  IaMin=-2.0*M_PI;
@@ -466,7 +475,7 @@ bool NEngineMotionControl::ADefault(void)
  MinAfferentRange=0.1;
  MotionElementClassName="NMotionElement";
  ObjectControlInterfaceClassName="NManipulatorSource";
- AdaptiveStructureMode=1;
+ AdaptiveStructureMode=2;
  InterneuronPresentMode=0;
  LinkModes->assign(1,1);
 
@@ -2664,7 +2673,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(void)
  AdditionalComponentsSetup(net);
 
  NewPACSetup(1, 0.001, 0.001, 100,false);
- NewIntervalSeparatorsSetup(5, 1, -1);
+ NewIntervalSeparatorsSetup(IntervalSeparatorMode, 6, 1, -1);
 
  // Установка связей
  ULongId item,conn;
@@ -2859,7 +2868,7 @@ void NEngineMotionControl::NewStandardLinksSetup(const string &engine_integrator
 }
 
 // Настройка разделителей интервалов
-void NEngineMotionControl::NewIntervalSeparatorsSetup(int mode_value, double pos_gain_value, double neg_gain_value)
+void NEngineMotionControl::NewIntervalSeparatorsSetup(int mode_value, int last_mode_value, double pos_gain_value, double neg_gain_value)
 {
  UContainer* cont=0;
  UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
@@ -2917,13 +2926,13 @@ for (int j=0; j < NumMotionElements ; j++)
 }
 
 
- NewIntervalSeparatorsUpdate(mode_value);
+ NewIntervalSeparatorsUpdate(mode_value, last_mode_value);
  if(res)
   return;
 }
 
 // Настройка разделителей интервалов
-void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value)
+void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_mode_value)
 {
  UContainer* cont=0;
  bool res=true;
@@ -2934,6 +2943,11 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value)
 
   for (int j = 0; j < NumMotionElements; j++)
   {
+   if(j == NumMotionElements-1)
+   {
+    mode.assign(1,last_mode_value);
+   }
+
 	 NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[j]);
 	 if(melem)
 	 for(int i=0;i<melem->NumControlLoops;i++)
