@@ -94,6 +94,9 @@ RDK::ULProperty<int, NEngineMotionControl> IntervalSeparatorMode;
 // 3 - по формуле (3.3) Max/(N-i), где i - индекс диапазона, а N - число диапазонов
 RDK::ULProperty<double, NEngineMotionControl> PacGain;
 
+RDK::ULProperty<double, NEngineMotionControl> PacSecretionTC;
+RDK::ULProperty<double, NEngineMotionControl> PacDissociationTC;
+
 // Режим настройки диапазонов афферентных нейронов
 // 0 - диапазоны одинаковой длины
 // 1 - диапазоны с удвоением длины, и минимальной шириной в процентах
@@ -256,6 +259,8 @@ bool SetMinAfferentRange(const double &value);
 
 // Максимальное усиление управляющего воздействия
 bool SetPacGain(const double &value);
+bool SetPacSecretionTC(const double &value);
+bool SetPacDissociationTC(const double &value);
 
 bool SetMCNeuroObjectName(const string &value);
 bool SetMCAfferentObjectName(const string &value);
@@ -405,6 +410,9 @@ void NewMotionElementsSetup(UEPtr<UContainer> net, int inp_mode, int out_mode, d
 
 // Настройка преобразователя импульс-аналог
 void NewPACSetup(double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode);
+
+/// Обновляет параметры постоянных времени Pac
+void UpdatePacTCParameters(void);
 
 // Установка стандартных связей
 void NewStandardLinksSetup(const string &engine_integrator_name);
