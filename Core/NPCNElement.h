@@ -18,7 +18,7 @@ RDK::ULProperty<bool, NPCNElement> SimControl;
 
 public: // Переменные состояния
 
-vector<UNet*> Generators;
+//vector<UNet*> Generators;
 // Нейроны обученные распознавать положения левых контуров в порядке
 // PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
 // PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура

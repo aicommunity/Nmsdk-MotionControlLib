@@ -39,7 +39,7 @@ Motoneurons("Motoneurons",this),
 NeuroObjectName("NeuroObjectName",this, &NMotionElement::SetNeuroObjectName),
 AfferentObjectName("AfferentObjectName",this, &NMotionElement::SetAfferentObjectName)
 {
-
+ isNumControlLoopsInitialized=false;
 }
 
 NMotionElement::~NMotionElement(void)

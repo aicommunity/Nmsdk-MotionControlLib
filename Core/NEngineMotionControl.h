@@ -199,8 +199,6 @@ vector<vector<double> > History;
 
 vector<double> TransientHistory;
 
-//vector<bool> isAfferentLinked;
-
 int HistorySize,TransientHistorySize;
 
 double LastAdaptiveTime;

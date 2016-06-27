@@ -71,6 +71,14 @@ NEngineMotionControl::NEngineMotionControl(void)
 {
  LastAdaptiveTime=0.0;
  ControlMode=0;
+
+ HistorySize=0;
+ TransientHistorySize=0;
+ TransientStartTime=0;
+ OldTransientAverage=0;
+ TempTransientState=0;
+ InternalGeneratorDirection=-1;
+
 }
 
 NEngineMotionControl::~NEngineMotionControl(void)

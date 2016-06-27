@@ -74,7 +74,7 @@ vector<vector<NNet*> > LeftPreControlNeurons;
 vector<vector<NNet*> > RightPreControlNeurons;
 
 
-vector<UNet*> Generators;
+//vector<UNet*> Generators;
 
 // √енераторы левых контуров в пор€дке
 // G(0,0) G(0,1), ..., G(0,M) - генераторы всех ”Ё 0 контура
