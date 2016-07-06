@@ -49,6 +49,7 @@ NEngineMotionControl::NEngineMotionControl(void)
    CurrentContourAmplitude("CurrentContourAmplitude",this),
    CurrentContourAverage("CurrentContourAverage",this),
    CurrentTransientTime("CurrentTransientTime",this),
+   InstantAvgSpeed("InstantAvgSpeed",this),
    CurrentTransientState("CurrentTransientState",this),
    DestContourMaxAmplitude("DestContourMaxAmplitude",this),
    DestContourMinAmplitude("DestContourMinAmplitude",this),
@@ -598,6 +599,7 @@ bool NEngineMotionControl::AReset(void)
  CurrentTransientState=false;
  TempTransientState=false;
  OldTransientAverage=0;
+ InstantAvgSpeed=0;
 
 // SetNumOutputs(6);
 // for(int i=0;i<NumOutputs;i++)
@@ -699,23 +701,28 @@ bool NEngineMotionControl::ACalculate(void)
  }
 
  bool old_transient_state=CurrentTransientState;
- double delta=fabs((*CurrentContourAverage)[TransientObjectIndex]-OldTransientAverage)*TimeStep;
+ InstantAvgSpeed=((*CurrentContourAverage)[TransientObjectIndex]-OldTransientAverage)*TimeStep;
  OldTransientAverage=(*CurrentContourAverage)[TransientObjectIndex];
- if(delta>=TransientAverageThreshold && !CurrentTransientState)
+// double transient_precentage(0.0);
+// if((*CurrentContourAverage)[TransientObjectIndex]>1e-5)
+// {
+//  transient_precentage=delta/(*CurrentContourAverage)[TransientObjectIndex];
+// }
+ if(fabs(InstantAvgSpeed)>=TransientAverageThreshold && !CurrentTransientState)
  {
   CurrentTransientState=true;
   TempTransientState=true;
   TransientStartTime=Environment->GetTime().GetDoubleTime();
  }
  else
- if(delta<TransientAverageThreshold)
+ if(fabs(InstantAvgSpeed)<TransientAverageThreshold && CurrentTransientState)
  {
   if(TempTransientState)
   {
    CurrentTransientTime=Environment->GetTime().GetDoubleTime()-TransientStartTime;
   }
   TempTransientState=false;
-  if(Environment->GetTime().GetDoubleTime()-TransientStartTime>TransientHistoryTime*3.0)
+//  if(Environment->GetTime().GetDoubleTime()-TransientStartTime>TransientHistoryTime*3.0)
    CurrentTransientState=false;
  }
 

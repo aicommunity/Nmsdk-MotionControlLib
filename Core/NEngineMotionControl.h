@@ -120,6 +120,9 @@ RDK::ULProperty<std::vector<double>, NEngineMotionControl,ptPubState> CurrentCon
 /// Текущее время переходного процесса
 RDK::ULProperty<double, NEngineMotionControl,ptPubState> CurrentTransientTime;
 
+/// Мгновенная скорость вычисленная по среднему положению выбранного контура
+RDK::ULProperty<double, NEngineMotionControl,ptPubState> InstantAvgSpeed;
+
 /// Текущее состояние переходного процесса
 RDK::ULProperty<bool, NEngineMotionControl,ptPubState> CurrentTransientState;
 
