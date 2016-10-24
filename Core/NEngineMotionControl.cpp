@@ -310,7 +310,7 @@ bool NEngineMotionControl::SetMCAfferentObjectName(const string &value)
   for(int i=0;i<NumMotionElements;i++)
   {
    NNet* net=Motions[i];
-   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+   NMotionElement *melem=dynamic_cast<NMotionElement *>(net);
    if(!melem)
     continue;
    melem->AfferentObjectName = value;
@@ -441,9 +441,6 @@ bool NEngineMotionControl::SetRenshowMode(const int &value)
 /// Управление списком активных контуров
 bool NEngineMotionControl::SetActiveContours(const std::vector<bool> &value)
 {
- bool res=true;
-
- int num_motions=NumMotionElements;
  int num_controls=GetNumControlLoops();
 
  int count=(int(value.size())<num_controls)?int(value.size()):num_controls;
@@ -700,7 +697,7 @@ bool NEngineMotionControl::ACalculate(void)
    (*MaxContourAmplitude)[i]=max_min;
  }
 
- bool old_transient_state=CurrentTransientState;
+// bool old_transient_state=CurrentTransientState;
  InstantAvgSpeed=((*CurrentContourAverage)[TransientObjectIndex]-OldTransientAverage)*TimeStep;
  OldTransientAverage=(*CurrentContourAverage)[TransientObjectIndex];
 // double transient_precentage(0.0);
@@ -1181,7 +1178,7 @@ void NEngineMotionControl::SetupPacRange(void)
  int num_motions=NumMotionElements;
  vector<Real> values=cont->Gain;
 
- if(num_motions*2 != values.size())
+ if(num_motions*2 != int(values.size()))
   return; // TODO: Это аномалия, которую нужно разрешить
 
 // values.resize(num_motions*2);
@@ -2576,7 +2573,7 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
  // Число неперекрывающихся диапазонов
  int real_ranges=0;
  bool crossranges=false;
- bool crosslinks=false;
+// bool crosslinks=false;
 
 
  real_ranges=CalcAfferentRange(num_motions, crossranges, IaMin, IaMax,
@@ -2721,7 +2718,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(void)
  // Число неперекрывающихся диапазонов
  int real_ranges=0;
  bool crossranges=false;
- bool crosslinks=false;
+// bool crosslinks=false;
 
 
  real_ranges=CalcAfferentRange(num_motions, crossranges, IaMin, IaMax,

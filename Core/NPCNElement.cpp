@@ -1,10 +1,10 @@
 //---------------------------------------------------------------------------
 
-#pragma hdrstop
+//#pragma hdrstop
 
 #include "NPCNElement.h"
 //---------------------------------------------------------------------------
-#pragma package(smart_init)
+//#pragma package(smart_init)
 
 
 namespace NMSDK {

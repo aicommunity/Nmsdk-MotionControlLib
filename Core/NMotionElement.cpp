@@ -33,11 +33,11 @@ RecurrentInhibitionBranchMode("RecurrentInhibitionBranchMode",this, &NMotionElem
 MotoneuronBranchMode("MotoneuronBranchMode",this, &NMotionElement::SetMotoneuronBranchMode),
 ExternalControlMode("ExternalControlMode",this, &NMotionElement::SetExternalControlMode),
 
+NeuroObjectName("NeuroObjectName",this, &NMotionElement::SetNeuroObjectName),
+AfferentObjectName("AfferentObjectName",this, &NMotionElement::SetAfferentObjectName),
 Afferents("Afferents",this),
 ExternalControlGenerators("ExternalControlGenerators",this),
-Motoneurons("Motoneurons",this),
-NeuroObjectName("NeuroObjectName",this, &NMotionElement::SetNeuroObjectName),
-AfferentObjectName("AfferentObjectName",this, &NMotionElement::SetAfferentObjectName)
+Motoneurons("Motoneurons",this)
 {
  isNumControlLoopsInitialized=false;
 }
@@ -1331,7 +1331,7 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
   // Мотонейрон 2
    cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
    if(!cont)
-	return 0;
+	return false;
    cont->SetName("MotoneuronR");
    res=AddComponent(cont);
 
@@ -1340,14 +1340,14 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 	// Клетка реншоу 1
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
 	if(!cont)
-	 return 0;
+	 return false;
 	cont->SetName("RenshowL");
 	res=AddComponent(cont);
 
 	// Клетка реншоу 2
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
 	if(!cont)
-	 return 0;
+	 return false;
 	cont->SetName("RenshowR");
 	res=AddComponent(cont);
    }
