@@ -168,8 +168,20 @@ if(Ready)
  AfferentRangesPos.resize(NumControlLoops);
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
+ {
+  if(AfferentMin->size()<=i)
+  {
+   LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
+   break;
+  }
+  if(AfferentMax->size()<=i)
+  {
+   LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
+   break;
+  }
   real_ranges=CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
 			AfferentRangesPos[i], AfferentRangesNeg[i],value);
+ }
 
  IntervalSeparatorsUpdate(this, 5);
  NewIntervalSeparatorsUpdate(IntervalSeparatorMode,6);
@@ -212,8 +224,20 @@ if(Ready)
  AfferentRangesPos.resize(NumControlLoops);
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
+ {
+     if(AfferentMin->size()<=i)
+     {
+      LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
+      break;
+     }
+     if(AfferentMax->size()<=i)
+     {
+      LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
+      break;
+     }
   CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
 			AfferentRangesPos[i], AfferentRangesNeg[i],value);
+ }
 
  IntervalSeparatorsUpdate(this, 5);
  NewIntervalSeparatorsUpdate(IntervalSeparatorMode,6);
@@ -337,13 +361,14 @@ bool NEngineMotionControl::SetAfferentMin(const std::vector<double> &value)
 {
  if(ControlMode == 0)
  {
-  IIMin=value[0];
-  IaMin=value[1];
-  IbMin=value[2];
+  if(value.size()>0)
+   IIMin=value[0];
+  if(value.size()>1)
+   IaMin=value[1];
+  if(value.size()>2)
+   IbMin=value[2];
   if(value.size()>3)
-  {
    IcMin=value[3];
-  }
  }
 
  if(Ready)
@@ -374,13 +399,14 @@ bool NEngineMotionControl::SetAfferentMax(const std::vector<double> &value)
 {
  if(ControlMode == 0)
  {
-  IIMax=value[0];
-  IaMax=value[1];
-  IbMax=value[2];
+  if(value.size()>0)
+   IIMax=value[0];
+  if(value.size()>1)
+   IaMax=value[1];
+  if(value.size()>2)
+   IbMax=value[2];
   if(value.size()>3)
-  {
    IcMax=value[3];
-  }
  }
 
  if(Ready)
@@ -690,11 +716,14 @@ bool NEngineMotionControl::ACalculate(void)
 	max_val=History[j][i];
    avg_val+=History[j][i];
   }
-  (*CurrentContourAmplitude)[i]=max_val-min_val;
-  (*CurrentContourAverage)[i]=avg_val/History.size();
-  double max_min=max_val-min_val;
-  if(((*MaxContourAmplitude)[i])<max_min)
-   (*MaxContourAmplitude)[i]=max_min;
+  if(CurrentContourAmplitude->size()>i)
+  {
+   (*CurrentContourAmplitude)[i]=max_val-min_val;
+   (*CurrentContourAverage)[i]=avg_val/History.size();
+   double max_min=max_val-min_val;
+   if(((*MaxContourAmplitude)[i])<max_min)
+    (*MaxContourAmplitude)[i]=max_min;
+  }
  }
 
 // bool old_transient_state=CurrentTransientState;
@@ -2498,8 +2527,21 @@ UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cross
  AfferentRangesPos.resize(NumControlLoops);
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
-  real_ranges=CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
+ {
+     if(AfferentMin->size()<=i)
+     {
+      LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
+      break;
+     }
+     if(AfferentMax->size()<=i)
+     {
+      LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
+      break;
+     }
+
+     real_ranges=CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
 			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
+ }
 
 
  UNet *net=this;
@@ -2601,8 +2643,20 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
  AfferentRangesPos.resize(NumControlLoops);
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
+ {
+     if(AfferentMin->size()<=i)
+     {
+      LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
+      break;
+     }
+     if(AfferentMax->size()<=i)
+     {
+      LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
+      break;
+     }
   real_ranges=CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
 			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
+ }
 
 
  UNet *net=this;//dynamic_cast<UNet*>(storage->TakeObject(netclassname));
@@ -2731,8 +2785,20 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(void)
  AfferentRangesPos.resize(NumControlLoops);
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
+ {
+     if(AfferentMin->size()<=i)
+     {
+      LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
+      break;
+     }
+     if(AfferentMax->size()<=i)
+     {
+      LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
+      break;
+     }
   real_ranges=CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
 			AfferentRangesPos[i], AfferentRangesNeg[i],AfferentRangeMode);
+ }
 
 
 
