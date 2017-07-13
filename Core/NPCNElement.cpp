@@ -217,12 +217,12 @@ bool NPCNElement::CreateNeurons()
 	  RightInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
 
-	 owner->CreateLink(ltzoneLName,0,inputLName+".PNeuronMembrane.PosChannel");
-	 owner->CreateLink(ltzoneRName,0,inputRName+".PNeuronMembrane.PosChannel");
+	 owner->CreateLink(ltzoneLName,"DataOutput0",inputLName+".PNeuronMembrane.PosChannel","");
+	 owner->CreateLink(ltzoneRName,"DataOutput0",inputRName+".PNeuronMembrane.PosChannel","");
 	 if(i==0)
 	 {
-	  owner->CreateLink(ltzoneLName,0,inputRName+".PNeuronMembrane.NegChannel");
-	  owner->CreateLink(ltzoneRName,0,inputLName+".PNeuronMembrane.NegChannel");
+	  owner->CreateLink(ltzoneLName,"DataOutput0",inputRName+".PNeuronMembrane.NegChannel","");
+	  owner->CreateLink(ltzoneRName,"DataOutput0",inputLName+".PNeuronMembrane.NegChannel","");
 	 }
 	}
    }
@@ -294,10 +294,10 @@ bool NPCNElement::CreateNeurons()
 	  cont->GetLongName(owner, controlRName);
 	  RightControlNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
-	 owner->CreateLink(controlLName+".LTZone",0,postAfferentLName+".PNeuronMembrane.PosChannel");
-	 owner->CreateLink(controlLName+".LTZone",0,postAfferentRName+".PNeuronMembrane.NegChannel");
-	 owner->CreateLink(controlRName+".LTZone",0,postAfferentLName+".PNeuronMembrane.NegChannel");
-	 owner->CreateLink(controlRName+".LTZone",0,postAfferentRName+".PNeuronMembrane.PosChannel");
+	 owner->CreateLink(controlLName+".LTZone","DataOutput0",postAfferentLName+".PNeuronMembrane.PosChannel","");
+	 owner->CreateLink(controlLName+".LTZone","DataOutput0",postAfferentRName+".PNeuronMembrane.NegChannel","");
+	 owner->CreateLink(controlRName+".LTZone","DataOutput0",postAfferentLName+".PNeuronMembrane.NegChannel","");
+	 owner->CreateLink(controlRName+".LTZone","DataOutput0",postAfferentRName+".PNeuronMembrane.PosChannel","");
 	 /*
 	 owner->CreateLink(controlLName+".LTZone",0,postAfferentRName+".PNeuronMembrane.PosChannel");
 	 owner->CreateLink(controlLName+".LTZone",0,postAfferentLName+".PNeuronMembrane.NegChannel");
@@ -461,7 +461,7 @@ bool NPCNElement::LinkNeurons(vector <NNet*> start, vector <NNet*> finish)
 	   start[i]->GetLongName(owner, startName);
 	   startName += ".LTZone";
 	   if(!owner->CheckLink(startName,finishName))
-		owner->CreateLink(startName, 0, finishName);
+		owner->CreateLink(startName, "DataOutput0", finishName,"");
 //	   ExternalControl=false;
 	  }
 	}
@@ -500,7 +500,7 @@ bool NPCNElement::LinkNeuronsNeg(vector <NNet*> start, vector <NNet*> finish)
 	   start[i]->GetLongName(owner, startName);
 	   startName += ".LTZone";
 	   if(!owner->CheckLink(startName,finishName))
-		owner->CreateLink(startName, 0, finishName);
+		owner->CreateLink(startName, "DataOutput0", finishName,"");
 //	   ExternalControl=false;
 	  }
 	}
@@ -552,9 +552,9 @@ bool NPCNElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neuro
 	if(link)
 	{
 	 if(!CheckLink(generatorLName,controlNeuronLName))
-	  CreateLink(generatorLName, 0, controlNeuronLName);
+	  CreateLink(generatorLName, "DataOutput0", controlNeuronLName,"");
 	 if(!CheckLink(generatorRName,controlNeuronRName))
-	  CreateLink(generatorRName, 0, controlNeuronRName);
+	  CreateLink(generatorRName, "DataOutput0", controlNeuronRName,"");
 	}
 	else
 	{
@@ -605,13 +605,13 @@ bool NPCNElement::LinkNegative(vector <NNet*> start, vector <NNet*> finish)
 	{
 	 string membrLName;
 	 membrToConnectL[l]->GetLongName(this,membrLName);
-	 CreateLink(start[c]->GetName()+".LTZone",0,membrLName+".NegChannel");
+	 CreateLink(start[c]->GetName()+".LTZone","DataOutput0",membrLName+".NegChannel","");
 	}
 	for(size_t k=0;k<membrToConnectR.size();k++)
 	{
 	 string membrRName;
 	 membrToConnectR[k]->GetLongName(this,membrRName);
-	 CreateLink(start[c]->GetName()+".LTZone",0,membrRName+".NegChannel");
+	 CreateLink(start[c]->GetName()+".LTZone","DataOutput0",membrRName+".NegChannel","");
 	}
    }
    return true;

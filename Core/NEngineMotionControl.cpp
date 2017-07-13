@@ -1909,22 +1909,22 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
  bool res=true;
 
  for(size_t k=0;k<Motions.size();k++)
-  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron1.LTZone",0,
-				 engine_integrator_name);
+  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron1.LTZone","DataOutput0",
+				 engine_integrator_name,"");
 
  for(size_t k=0;k<Motions.size();k++)
-  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron2.LTZone",0,
-				 engine_integrator_name);
+  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron2.LTZone","DataOutput0",
+				 engine_integrator_name,"");
 
- res=net->CreateLink(engine_integrator_name,0,"NManipulatorInput1");
+ res=net->CreateLink(engine_integrator_name,"DataOutput0","NManipulatorInput1","");
 
  try {
   for(size_t i=0;i<Motions.size();i++)
   {
-   res&=net->CreateLink("NManipulatorSource1",2,
-				 std::string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),0);
-   res&=net->CreateLink("NManipulatorSource1",2,
-				 std::string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),0);
+   res&=net->CreateLink("NManipulatorSource1","DataOutput2",
+				 std::string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
+   res&=net->CreateLink("NManipulatorSource1","DataOutput2",
+				 std::string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
  catch (EComponentNameNotExist &exc)
@@ -1934,10 +1934,10 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
  try {
   for(size_t i=0;i<Motions.size();i++)
   {
-   res&=net->CreateLink("NManipulatorSource1",1,
-				 std::string("II_PosIntervalSeparator")+RDK::sntoa(i+1),0);
-   res&=net->CreateLink("NManipulatorSource1",1,
-				 std::string("II_NegIntervalSeparator")+RDK::sntoa(i+1),0);
+   res&=net->CreateLink("NManipulatorSource1","DataOutput1",
+				 std::string("II_PosIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
+   res&=net->CreateLink("NManipulatorSource1","DataOutput1",
+				 std::string("II_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
  catch (EComponentNameNotExist &exc)
@@ -1947,10 +1947,10 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
  try {
   for(size_t i=0;i<Motions.size();i++)
   {
-   res&=net->CreateLink("NManipulatorSource1",0,
-				 std::string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),0);
-   res&=net->CreateLink("NManipulatorSource1",0,
-				 std::string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),0);
+   res&=net->CreateLink("NManipulatorSource1","DataOutput0",
+				 std::string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
+   res&=net->CreateLink("NManipulatorSource1","DataOutput0",
+				 std::string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
  catch (EComponentNameNotExist &exc)
@@ -1960,10 +1960,10 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
  try {
   for(size_t i=0;i<Motions.size();i++)
   {
-   res&=net->CreateLink("NManipulatorSource1",3,
-				 std::string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),0);
-   res&=net->CreateLink("NManipulatorSource1",3,
-				 std::string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),0);
+   res&=net->CreateLink("NManipulatorSource1","DataOutput3",
+				 std::string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
+   res&=net->CreateLink("NManipulatorSource1","DataOutput3",
+				 std::string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
  catch (EComponentNameNotExist &exc)
@@ -1985,10 +1985,10 @@ if(Ia)
   // Связи с моделью манипулятора (по умолчанию)
   for(int i=0;i<NumMotionElements;i++)
   {
-   res=net->CreateLink("NManipulatorSource1",2,
-				 string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),0);
-   res=net->CreateLink("NManipulatorSource1",2,
-				 string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),0);
+   res=net->CreateLink("NManipulatorSource1","DataOutput2",
+				 string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
+   res=net->CreateLink("NManipulatorSource1","DataOutput2",
+				 string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
  catch (EComponentNameNotExist &exc) {  }
@@ -1999,10 +1999,10 @@ if(II)
  try{
   for(int i=0;i<NumMotionElements;i++)
   {
-   res=net->CreateLink("NManipulatorSource1",1,
-				 string("II_PosIntervalSeparator")+RDK::sntoa(i+1),0);
-   res=net->CreateLink("NManipulatorSource1",1,
-				 string("II_NegIntervalSeparator")+RDK::sntoa(i+1),0);
+   res=net->CreateLink("NManipulatorSource1","DataOutput1",
+				 string("II_PosIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
+   res=net->CreateLink("NManipulatorSource1","DataOutput1",
+				 string("II_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
  catch (EComponentNameNotExist &exc) {  }
@@ -2013,10 +2013,10 @@ if(Ib)
  try{
   for(int i=0;i<NumMotionElements;i++)
   {
-   res=net->CreateLink("NManipulatorSource1",0,
-				 string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),0);
-   res=net->CreateLink("NManipulatorSource1",0,
-				 string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),0);
+   res=net->CreateLink("NManipulatorSource1","DataOutput0",
+				 string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
+   res=net->CreateLink("NManipulatorSource1","DataOutput0",
+				 string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
  catch (EComponentNameNotExist &exc) {  }
@@ -2027,10 +2027,10 @@ if(Ic)
  try{
   for(int i=0;i<NumMotionElements;i++)
   {
-   res=net->CreateLink("NManipulatorSource1",3,
-				 string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),0);
-   res=net->CreateLink("NManipulatorSource1",3,
-				 string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),0);
+   res=net->CreateLink("NManipulatorSource1","DataOutput3",
+				 string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
+   res=net->CreateLink("NManipulatorSource1","DataOutput3",
+				 string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
  catch (EComponentNameNotExist &exc) {  }
@@ -2043,30 +2043,30 @@ if(Ic)
   if(ActiveContours->size()>1 && (*ActiveContours)[1])
    try
    {
-	res=net->CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia2.Receptor",0);
-	res=net->CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia1.Receptor",0);
+	res=net->CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_Ia2.Receptor","DataInput0");
+	res=net->CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_Ia1.Receptor","DataInput0");
    }
    catch (EComponentNameNotExist &exc) {  }
 
   if(ActiveContours->size()>0 && (*ActiveContours)[0])
    try
    {
-	res=net->CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II1.Receptor",0);
-	res=net->CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II2.Receptor",0);
+	res=net->CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_II1.Receptor","DataInput0");
+	res=net->CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_II2.Receptor","DataInput0");
    }
    catch (EComponentNameNotExist &exc) {  }
 
   if(ActiveContours->size()>2 && (*ActiveContours)[2])
   try{
-   res=net->BreakLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib2.Receptor",0);
-   res=net->BreakLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib1.Receptor",0);
+   res=net->BreakLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_Ib2.Receptor","DataInput0");
+   res=net->BreakLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_Ib1.Receptor","DataInput0");
   }
   catch (EComponentNameNotExist &exc) {  }
 
   if(ActiveContours->size()>3 && (*ActiveContours)[3])
   try{
-   res=net->CreateLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ic2.Receptor",0);
-   res=net->CreateLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ic1.Receptor",0);
+   res=net->CreateLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_Ic2.Receptor","DataInput0");
+   res=net->CreateLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_Ic1.Receptor","DataInput0");
   }
   catch (EComponentNameNotExist &exc) {  }
  }
@@ -2257,67 +2257,67 @@ UNet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
 
  for(size_t k=0;k<Motions.size();k++)
  {
-  res=net->CreateLink("Ia_PosSignumSeparator",0,Motions[k]->GetName()+".Afferent_Ia2.Receptor");
+  res=net->CreateLink("Ia_PosSignumSeparator","DataOutput0",Motions[k]->GetName()+".Afferent_Ia2.Receptor","");
   if(!res)
   {
    delete net;
    return 0;
   }
-  res=net->CreateLink("Ia_NegSignumSeparator",0,Motions[k]->GetName()+".Afferent_Ia1.Receptor");
-  if(!res)
-  {
-   delete net;
-   return 0;
-  }
-
-  res=net->CreateLink("II_PosSignumSeparator",0,Motions[k]->GetName()+".Afferent_II1.Receptor");
-  if(!res)
-  {
-   delete net;
-   return 0;
-  }
-  res=net->CreateLink("II_NegSignumSeparator",0,Motions[k]->GetName()+".Afferent_II2.Receptor");
+  res=net->CreateLink("Ia_NegSignumSeparator","DataOutput0",Motions[k]->GetName()+".Afferent_Ia1.Receptor","");
   if(!res)
   {
    delete net;
    return 0;
   }
 
-  res=net->CreateLink("Ib_NegSignumSeparator",0,Motions[k]->GetName()+".Afferent_Ib1.Receptor");
+  res=net->CreateLink("II_PosSignumSeparator","DataOutput0",Motions[k]->GetName()+".Afferent_II1.Receptor","");
   if(!res)
   {
    delete net;
    return 0;
   }
-  res=net->CreateLink("Ib_PosSignumSeparator",0,Motions[k]->GetName()+".Afferent_Ib2.Receptor");
-  if(!res)
-  {
-   delete net;
-   return 0;
-  }
-
-  res=net->CreateLink("Renshow1ActivatorGenerator",0,Motions[k]->GetName()+".Motoneuron1.PNeuronMembrane2.PosChannel");
+  res=net->CreateLink("II_NegSignumSeparator","DataOutput0",Motions[k]->GetName()+".Afferent_II2.Receptor","");
   if(!res)
   {
    delete net;
    return 0;
   }
 
-  res=net->CreateLink("Renshow1DeactivatorGenerator",0,Motions[k]->GetName()+".Motoneuron1.PNeuronMembrane2.NegChannel");
+  res=net->CreateLink("Ib_NegSignumSeparator","DataOutput0",Motions[k]->GetName()+".Afferent_Ib1.Receptor","");
+  if(!res)
+  {
+   delete net;
+   return 0;
+  }
+  res=net->CreateLink("Ib_PosSignumSeparator","DataOutput0",Motions[k]->GetName()+".Afferent_Ib2.Receptor","");
   if(!res)
   {
    delete net;
    return 0;
   }
 
-  res=net->CreateLink("Renshow1ActivatorGenerator",0,Motions[k]->GetName()+".Motoneuron2.PNeuronMembrane2.NegChannel");
+  res=net->CreateLink("Renshow1ActivatorGenerator","DataOutput0",Motions[k]->GetName()+".Motoneuron1.PNeuronMembrane2.PosChannel","");
   if(!res)
   {
    delete net;
    return 0;
   }
 
-  res=net->CreateLink("Renshow1DeactivatorGenerator",0,Motions[k]->GetName()+".Motoneuron2.PNeuronMembrane2.PosChannel");
+  res=net->CreateLink("Renshow1DeactivatorGenerator","DataOutput0",Motions[k]->GetName()+".Motoneuron1.PNeuronMembrane2.NegChannel","");
+  if(!res)
+  {
+   delete net;
+   return 0;
+  }
+
+  res=net->CreateLink("Renshow1ActivatorGenerator","DataOutput0",Motions[k]->GetName()+".Motoneuron2.PNeuronMembrane2.NegChannel","");
+  if(!res)
+  {
+   delete net;
+   return 0;
+  }
+
+  res=net->CreateLink("Renshow1DeactivatorGenerator","DataOutput0",Motions[k]->GetName()+".Motoneuron2.PNeuronMembrane2.PosChannel","");
   if(!res)
   {
    delete net;
@@ -2445,23 +2445,23 @@ UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bo
  {
   for(size_t k=1;k<Motions.size()-1;k++)
   {
-   res=net->CreateLink(Motions[k]->GetName()+".Renshow1.LTZone",0,Motions[k-1]->GetName()+".Motoneuron1.PNeuronMembrane.NegChannel");
-   res=net->CreateLink(Motions[k]->GetName()+".Renshow1.LTZone",0,Motions[k+1]->GetName()+".Motoneuron1.PNeuronMembrane.NegChannel");
-   res=net->CreateLink(Motions[k]->GetName()+".Renshow2.LTZone",0,Motions[k-1]->GetName()+".Motoneuron2.PNeuronMembrane.NegChannel");
-   res=net->CreateLink(Motions[k]->GetName()+".Renshow2.LTZone",0,Motions[k+1]->GetName()+".Motoneuron2.PNeuronMembrane.NegChannel");
+   res=net->CreateLink(Motions[k]->GetName()+".Renshow1.LTZone","DataOutput0",Motions[k-1]->GetName()+".Motoneuron1.PNeuronMembrane.NegChannel","");
+   res=net->CreateLink(Motions[k]->GetName()+".Renshow1.LTZone","DataOutput0",Motions[k+1]->GetName()+".Motoneuron1.PNeuronMembrane.NegChannel","");
+   res=net->CreateLink(Motions[k]->GetName()+".Renshow2.LTZone","DataOutput0",Motions[k-1]->GetName()+".Motoneuron2.PNeuronMembrane.NegChannel","");
+   res=net->CreateLink(Motions[k]->GetName()+".Renshow2.LTZone","DataOutput0",Motions[k+1]->GetName()+".Motoneuron2.PNeuronMembrane.NegChannel","");
 
-   res=net->CreateLink(Motions[k]->GetName()+".Renshow1.LTZone",0,Motions[k-1]->GetName()+".Motoneuron1.PNeuronMembrane.NegChannel");
-   res=net->CreateLink(Motions[k]->GetName()+".Renshow1.LTZone",0,Motions[k+1]->GetName()+".Motoneuron1.PNeuronMembrane.NegChannel");
-   res=net->CreateLink(Motions[k]->GetName()+".Renshow2.LTZone",0,Motions[k-1]->GetName()+".Motoneuron2.PNeuronMembrane.NegChannel");
-   res=net->CreateLink(Motions[k]->GetName()+".Renshow2.LTZone",0,Motions[k+1]->GetName()+".Motoneuron2.PNeuronMembrane.NegChannel");
+   res=net->CreateLink(Motions[k]->GetName()+".Renshow1.LTZone","DataOutput0",Motions[k-1]->GetName()+".Motoneuron1.PNeuronMembrane.NegChannel","");
+   res=net->CreateLink(Motions[k]->GetName()+".Renshow1.LTZone","DataOutput0",Motions[k+1]->GetName()+".Motoneuron1.PNeuronMembrane.NegChannel","");
+   res=net->CreateLink(Motions[k]->GetName()+".Renshow2.LTZone","DataOutput0",Motions[k-1]->GetName()+".Motoneuron2.PNeuronMembrane.NegChannel","");
+   res=net->CreateLink(Motions[k]->GetName()+".Renshow2.LTZone","DataOutput0",Motions[k+1]->GetName()+".Motoneuron2.PNeuronMembrane.NegChannel","");
   }
 
  }
 
  for(size_t k=0;k<Motions.size();k++)
  {
-  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron1.LTZone",0,string("PosMNFrequencyReceiver")+RDK::sntoa(k+1));
-  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron2.LTZone",0,string("NegMNFrequencyReceiver")+RDK::sntoa(k+1));
+  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron1.LTZone","DataOutput0",string("PosMNFrequencyReceiver")+RDK::sntoa(k+1),"");
+  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron2.LTZone","DataOutput0",string("NegMNFrequencyReceiver")+RDK::sntoa(k+1),"");
  }
 
  if(!res)
@@ -3033,14 +3033,14 @@ void NEngineMotionControl::NewStandardLinksSetup(const string &engine_integrator
  bool res=true;
 
  for(size_t k=0;k<Motions.size();k++)
-  res&=CreateLink(Motions[k]->GetName()+".MotoneuronL.LTZone",0,
-				 engine_integrator_name);
+  res&=CreateLink(Motions[k]->GetName()+".MotoneuronL.LTZone","DataOutput0",
+				 engine_integrator_name,"");
 
  for(size_t k=0;k<Motions.size();k++)
-  res&=CreateLink(Motions[k]->GetName()+".MotoneuronR.LTZone",0,
-				 engine_integrator_name);
+  res&=CreateLink(Motions[k]->GetName()+".MotoneuronR.LTZone","DataOutput0",
+				 engine_integrator_name,"");
 
- res&=CreateLink(engine_integrator_name,0,"NManipulatorInput1");
+ res&=CreateLink(engine_integrator_name,"DataOutput0","NManipulatorInput1","");
 
  if(res)
   return;
@@ -3182,15 +3182,17 @@ for(int i=0;i<NumMotionElements;i++)
   // Связи с моделью манипулятора (по умолчанию)
   for(int j=0;j<melem->NumControlLoops;j++)
   {
+   std::string item_name("DataOutput");
+   item_name+=RDK::sntoa(j);
 //    if (!CheckLink("NManipulatorSource1","PosIntervalSeparator"+RDK::sntoa(i+1)+RDK::sntoa(j+1)))
 	{
-	   res=CreateLink("NManipulatorSource1",j,
-					 string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1),0);
+	   res=CreateLink("NManipulatorSource1",item_name,
+					 string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1),"DataInput0");
 	}
 //	if (!CheckLink("NManipulatorSource1",string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1)))
 	{
-	   res=CreateLink("NManipulatorSource1",j,
-					 string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1),0);
+	   res=CreateLink("NManipulatorSource1",item_name,
+					 string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1),"DataInput0");
 	}
   }
  }
@@ -3205,8 +3207,8 @@ for(int i=0;i<NumMotionElements;i++)
 	 continue;
 	for (int l = 0; l < melem->NumControlLoops; l++) {
       try{
-		 res=CreateLink(string("PosIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),0,Motions[k]->GetName()+".AfferentL"+sntoa(l+1)+".Receptor",0);
-		 res=CreateLink(string("NegIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),0,Motions[k]->GetName()+".AfferentR"+sntoa(l+1)+".Receptor",0);
+		 res=CreateLink(string("PosIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),"DataOutput0",Motions[k]->GetName()+".AfferentL"+sntoa(l+1)+".Receptor","DataInput0");
+		 res=CreateLink(string("NegIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),"DataOutput0",Motions[k]->GetName()+".AfferentR"+sntoa(l+1)+".Receptor","DataInput0");
 		}
         catch (EComponentNameNotExist &exc) {  }
   }
@@ -3257,17 +3259,17 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
    {
 	if(value)
 	{
-	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_Ia2.Receptor",0);
-	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_Ia1.Receptor",0);
-	 res&=CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ia2.Receptor",0);
-	 res&=CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ia1.Receptor",0);
+	 res&=BreakLink("AfferentSource1","DataOutput0",motion+".Afferent_Ia2.Receptor","DataInput0");
+	 res&=BreakLink("AfferentSource1","DataOutput0",motion+".Afferent_Ia1.Receptor","DataInput0");
+	 res&=CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_Ia2.Receptor","DataInput0");
+	 res&=CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_Ia1.Receptor","DataInput0");
 	}
 	else
 	{
-	 res&=BreakLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ia2.Receptor",0);
-	 res&=BreakLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ia1.Receptor",0);
-	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ia2.Receptor",0);
-	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ia1.Receptor",0);
+	 res&=BreakLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_Ia2.Receptor","DataInput0");
+	 res&=BreakLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_Ia1.Receptor","DataInput0");
+	 res&=CreateLink("AfferentSource1","DataOutput0",motion+".Afferent_Ia2.Receptor","DataInput0");
+	 res&=CreateLink("AfferentSource1","DataOutput0",motion+".Afferent_Ia1.Receptor","DataInput0");
     }
    }
    catch (EComponentNameNotExist &exc) {  }
@@ -3277,19 +3279,19 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
    {
 	if(value)
 	{
-	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_II2.Receptor",0);
-	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_II1.Receptor",0);
+	 res&=BreakLink("AfferentSource1","DataOutput0",motion+".Afferent_II2.Receptor","DataInput0");
+	 res&=BreakLink("AfferentSource1","DataOutput0",motion+".Afferent_II1.Receptor","DataInput0");
 
-	 res&=CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_II1.Receptor",0);
-	 res&=CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_II2.Receptor",0);
+	 res&=CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_II1.Receptor","DataInput0");
+	 res&=CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_II2.Receptor","DataInput0");
 	}
 	else
 	{
-	 res&=BreakLink(string("II_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_II1.Receptor",0);
-	 res&=BreakLink(string("II_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_II2.Receptor",0);
+	 res&=BreakLink(string("II_PosIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_II1.Receptor","DataInput0");
+	 res&=BreakLink(string("II_NegIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_II2.Receptor","DataInput0");
 
-	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_II2.Receptor",0);
-	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_II1.Receptor",0);
+	 res&=CreateLink("AfferentSource1","DataOutput0",motion+".Afferent_II2.Receptor","DataInput0");
+	 res&=CreateLink("AfferentSource1","DataOutput0",motion+".Afferent_II1.Receptor","DataInput0");
     }
    }
    catch (EComponentNameNotExist &exc) {  }
@@ -3299,19 +3301,19 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
    {
 	if(value)
 	{
-	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_Ib2.Receptor",0);
-	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_Ib1.Receptor",0);
+	 res&=BreakLink("AfferentSource1","DataOutput0",motion+".Afferent_Ib2.Receptor","DataInput0");
+	 res&=BreakLink("AfferentSource1","DataOutput0",motion+".Afferent_Ib1.Receptor","DataInput0");
 
-	 res&=CreateLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ib1.Receptor",0);
-	 res&=CreateLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ib2.Receptor",0);
+	 res&=CreateLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_Ib1.Receptor","DataInput0");
+	 res&=CreateLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_Ib2.Receptor","DataInput0");
 	}
 	else
 	{
-	 res&=BreakLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ib1.Receptor",0);
-	 res&=BreakLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ib2.Receptor",0);
+	 res&=BreakLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_Ib1.Receptor","DataInput0");
+	 res&=BreakLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_Ib2.Receptor","DataInput0");
 
-	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ib1.Receptor",0);
-	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ib2.Receptor",0);
+	 res&=CreateLink("AfferentSource1","DataOutput0",motion+".Afferent_Ib1.Receptor","DataInput0");
+	 res&=CreateLink("AfferentSource1","DataOutput0",motion+".Afferent_Ib2.Receptor","DataInput0");
 	}
    }
    catch (EComponentNameNotExist &exc) {  }
@@ -3321,19 +3323,19 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
    {
 	if(value)
 	{
-	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_Ic2.Receptor",0);
-	 res&=BreakLink("AfferentSource1",0,motion+".Afferent_Ic1.Receptor",0);
+	 res&=BreakLink("AfferentSource1","DataOutput0",motion+".Afferent_Ic2.Receptor","DataInput0");
+	 res&=BreakLink("AfferentSource1","DataOutput0",motion+".Afferent_Ic1.Receptor","DataInput0");
 
-	 res&=CreateLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ic1.Receptor",0);
-	 res&=CreateLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ic2.Receptor",0);
+	 res&=CreateLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_Ic1.Receptor","DataInput0");
+	 res&=CreateLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_Ic2.Receptor","DataInput0");
 	}
 	else
 	{
-	 res&=BreakLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ic1.Receptor",0);
-	 res&=BreakLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),0,motion+".Afferent_Ic2.Receptor",0);
+	 res&=BreakLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_Ic1.Receptor","DataInput0");
+	 res&=BreakLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),"DataOutput0",motion+".Afferent_Ic2.Receptor","DataInput0");
 
-	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ic2.Receptor",0);
-	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ic1.Receptor",0);
+	 res&=CreateLink("AfferentSource1","DataOutput0",motion+".Afferent_Ic2.Receptor","DataInput0");
+	 res&=CreateLink("AfferentSource1","DataOutput0",motion+".Afferent_Ic1.Receptor","DataInput0");
     }
    }
    catch (EComponentNameNotExist &exc) {  }
@@ -3363,17 +3365,17 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
 
 	if(value == true)
 	{
-	 res&=BreakLink("AfferentSource1",0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
-	 res&=BreakLink("AfferentSource1",0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
-	 res&=CreateLink(pos_separator,0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
-	 res&=CreateLink(neg_separator,0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
+	 res&=BreakLink("AfferentSource1","DataOutput0",motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor","DataInput0");
+	 res&=BreakLink("AfferentSource1","DataOutput0",motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor","DataInput0");
+	 res&=CreateLink(pos_separator,"DataOutput0",motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor","DataInput0");
+	 res&=CreateLink(neg_separator,"DataOutput0",motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor","DataInput0");
 	}
 	else
 	{
-	 res&=BreakLink(pos_separator,0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
-	 res&=BreakLink(neg_separator,0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
-	 res&=CreateLink("AfferentSource1",0,motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor",0);
-	 res&=CreateLink("AfferentSource1",0,motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor",0);
+	 res&=BreakLink(pos_separator,"DataOutput0",motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor","DataInput0");
+	 res&=BreakLink(neg_separator,"DataOutput0",motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor","DataInput0");
+	 res&=CreateLink("AfferentSource1","DataOutput0",motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor","DataInput0");
+	 res&=CreateLink("AfferentSource1","DataOutput0",motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor","DataInput0");
 	}
     (*ActiveContours)[index] = value;
    }
@@ -3387,13 +3389,13 @@ bool NEngineMotionControl::GetIsAfferentLinked(const int &index)
   switch(index)
   {
   case 0:
-   return CheckLink("II_PosIntervalSeparator1",0,"MotionElement0.Afferent_II1.Receptor",0);
+   return CheckLink("II_PosIntervalSeparator1","DataOutput0","MotionElement0.Afferent_II1.Receptor","DataInput0");
   case 1:
-   return CheckLink("Ia_PosIntervalSeparator1",0,"MotionElement0.Afferent_Ia2.Receptor",0);
+   return CheckLink("Ia_PosIntervalSeparator1","DataOutput0","MotionElement0.Afferent_Ia2.Receptor","DataInput0");
   case 2:
-   return CheckLink("Ib_PosIntervalSeparator1",0,"MotionElement0.Afferent_Ib1.Receptor",0);
+   return CheckLink("Ib_PosIntervalSeparator1","DataOutput0","MotionElement0.Afferent_Ib1.Receptor","DataInput0");
   case 3:
-   return CheckLink("Ic_PosIntervalSeparator1",0,"MotionElement0.Afferent_Ic1.Receptor",0);
+   return CheckLink("Ic_PosIntervalSeparator1","DataOutput0","MotionElement0.Afferent_Ic1.Receptor","DataInput0");
   }
  }
  else
@@ -3427,13 +3429,13 @@ void NEngineMotionControl::ConnectInternalGenerators(int direction, int num_moti
   std::string post_afferent_L_name="PostAfferentR"+sntoa(control_loop_index+1);
   if(direction == 0)
   {
-   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".PNeuronMembrane.PosChannel");
+   res&=CreateLink("InternalGenerator","DataOutput0",std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".PNeuronMembrane.PosChannel","");
 //   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".PNeuronMembrane.NegChannel");
    InternalGeneratorDirection=0;
   }
   else
   {
-   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".PNeuronMembrane.PosChannel");
+   res&=CreateLink("InternalGenerator","DataOutput0",std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".PNeuronMembrane.PosChannel","");
 //   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".PNeuronMembrane.NegChannel");
    InternalGeneratorDirection=1;
   }

@@ -231,7 +231,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
 	cont->GetLongName(owner, inputName);
    }
-   owner->CreateLink(ltzoneName+".LTZone",0,inputName+".PNeuronMembrane.PosChannel");
+   owner->CreateLink(ltzoneName+".LTZone","DataOutput0",inputName+".PNeuronMembrane.PosChannel","");
   }
  }
  //Creating ControlNeurons 0
@@ -264,7 +264,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	ControlNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
 	cont->GetLongName(owner, controlName);
    }
-   owner->CreateLink(controlName+".LTZone",0,outputName+".PNeuronMembrane.PosChannel");
+   owner->CreateLink(controlName+".LTZone","DataOutput0",outputName+".PNeuronMembrane.PosChannel","");
   }
  }
  for(int i=0;i<(*NumOfPositions);i++)
@@ -336,7 +336,7 @@ bool NMultiPositionControl::LinkGenerators(vector <UNet*> generators, vector <NN
 	 if(link)
 	 {
 	  if(!CheckLink(generatorName,controlNeuronName))
-		 CreateLink(generatorName, 0, controlNeuronName);
+		 CreateLink(generatorName, "DataOutput0", controlNeuronName,"");
 	 }
 	 else
 	 {

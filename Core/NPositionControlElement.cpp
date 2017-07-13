@@ -152,7 +152,7 @@ bool NPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> f
 	  {
 	   NameT startName = start[i]->GetName()+".LTZone";
 	   if(!CheckLink(startName,finishName))
-		CreateLink(startName, 0, finishName);
+		CreateLink(startName, "DataOutput0", finishName,"");
 //	   ExternalControl=false;
 	  }
 	}
