@@ -93,7 +93,7 @@ bool NMultiPositionControl::ACalculate(void)
  if(InputNeurons.empty()||ControlNeurons.empty())
 	CreateNeurons();
 
- if(RememberState)
+ if(*RememberState)
   {
    RememberState = false;
    vector<NNet*> activeInputs, postInputs, preControls, activeControls;
@@ -106,7 +106,7 @@ bool NMultiPositionControl::ACalculate(void)
 	 }
 	 else
 	 {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*ControlNeuronType));
 	  if(!cont)
 	   return 0;
 	  cont->SetName(preControlNeuronName);
@@ -123,7 +123,7 @@ bool NMultiPositionControl::ACalculate(void)
 	 }
 	 else
 	 {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*ControlNeuronType));
 	  if(!cont)
 	   return 0;
 	  cont->SetName(postInputNeuronName);
@@ -148,7 +148,7 @@ bool NMultiPositionControl::ACalculate(void)
 	 }
    for(size_t i=0;i<InputNeurons.size();i++)
    {
-	UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(InputNeurons[i]->GetComponentL("LTZone"));
+	UEPtr<UDynamicMatNet> ltzone=dynamic_pointer_cast<UDynamicMatNet>(InputNeurons[i]->GetComponentL("LTZone"));
 	if(ltzone->GetOutputData(2).Double[0]>0)
 	{
 	 activeInputs.push_back(InputNeurons[i]);
@@ -184,11 +184,11 @@ bool NMultiPositionControl::ACalculate(void)
    //LinkNegative(activeInputs, postInputs);
    LinkNeurons(activeInputs, postInputs);
    LinkNeurons(preControls, activeControls);
-   if(ExternalControl)
+   if(*ExternalControl)
    {
 	LinkGenerators(Generators,PreControlNeurons,true,false);
    }
-   (*NumOfPositions)++;
+   NumOfPositions=NumOfPositions+1;
   }
 
  return true;
@@ -200,7 +200,7 @@ bool NMultiPositionControl::CreateNeurons(void)
  UEPtr<UContainer> cont;
  UEPtr<UStorage> storage = GetStorage();
  //Creating InputNeurons
- size_t positionControlSize = PositionControl->size();
+ size_t positionControlSize = PositionControl.size();
  InputNeuronsByContours.resize(positionControlSize);
  for(size_t i=0; i<positionControlSize; i++)
  {
@@ -222,7 +222,7 @@ bool NMultiPositionControl::CreateNeurons(void)
    else
    {
 	InputNeuronType = "NNewSynSPNeuron";
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(InputNeuronType));
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*InputNeuronType));
 	if(!cont)
 	 return 0;
 	cont->SetName(inputNeuronName);
@@ -255,7 +255,7 @@ bool NMultiPositionControl::CreateNeurons(void)
    else
    {
     ControlNeuronType = "NNewSynSPNeuron";
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*ControlNeuronType));
 	if(!cont)
 	 return 0;
 	cont->SetName(controlNeuronName);
@@ -276,7 +276,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	 }
 	 else
 	 {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*ControlNeuronType));
 	  if(!cont)
 	   return 0;
 	  cont->SetName(preControlNeuronName);
@@ -290,7 +290,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	 }
 	 else
 	 {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*ControlNeuronType));
 	  if(!cont)
 	   return 0;
 	  cont->SetName(postInputNeuronName);
@@ -335,12 +335,12 @@ bool NMultiPositionControl::LinkGenerators(vector <UNet*> generators, vector <NN
 
 	 if(link)
 	 {
-	  if(!CheckLink(generatorName,controlNeuronName))
+	  if(!IsLinkExists(generatorName,controlNeuronName))
 		 CreateLink(generatorName, "DataOutput0", controlNeuronName,"");
 	 }
 	 else
 	 {
-	  if(CheckLink(generatorName,controlNeuronName))
+	  if(IsLinkExists(generatorName,controlNeuronName))
 		BreakLink(generatorName,controlNeuronName);
 	 }
 	}

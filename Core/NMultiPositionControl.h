@@ -19,8 +19,8 @@ namespace NMSDK {
 class RDK_LIB_TYPE NMultiPositionControl: public NPositionControlElement
 {
 protected: // Свойства
-RDK::UPropertyInputC<NPositionControlElement,NMultiPositionControl> PositionControl;
-RDK::ULProperty<int, NPositionControlElement> NumOfPositions;
+RDK::UPropertyInput<NPositionControlElement,NMultiPositionControl> PositionControl;
+RDK::UProperty<int, NPositionControlElement,ptPubParameter> NumOfPositions;
 
 public: // Переменные состояния
 // Входные нейроны, разделённые по нижним уровням

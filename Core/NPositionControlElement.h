@@ -21,13 +21,13 @@ namespace NMSDK {
 class RDK_LIB_TYPE NPositionControlElement: public UNet
 {
 public: // Свойства
-RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> CurrentPosition;
-RDK::ULProperty<MDMatrix<double>, NPositionControlElement> TargetPosition;
-RDK::ULProperty<string, NPositionControlElement> InputNeuronType;
-RDK::ULProperty<string, NPositionControlElement> ControlNeuronType;
-RDK::ULProperty<bool, NPositionControlElement> ExternalControl;
-RDK::ULProperty<bool, NPositionControlElement, ptPubState> RememberState;
-RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> Delta;
+RDK::UProperty<MDMatrix<double>, NPositionControlElement, ptPubState> CurrentPosition;
+RDK::UProperty<MDMatrix<double>, NPositionControlElement, ptPubParameter> TargetPosition;
+RDK::UProperty<string, NPositionControlElement, ptPubParameter> InputNeuronType;
+RDK::UProperty<string, NPositionControlElement, ptPubParameter> ControlNeuronType;
+RDK::UProperty<bool, NPositionControlElement, ptPubParameter> ExternalControl;
+RDK::UProperty<bool, NPositionControlElement, ptPubState> RememberState;
+RDK::UProperty<MDMatrix<double>, NPositionControlElement, ptPubState> Delta;
 
 public: // Переменные состояния
 vector<NNet*> InputNeurons;

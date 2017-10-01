@@ -56,7 +56,7 @@ bool NMotionElement::SetNumControlLoops(const int &value)
  if(value <=0)
   return false;
  Ready=false;
- LinkModes->resize(value, 0);
+ LinkModes.resize(value, 0);
  return true;
 }
 
@@ -81,8 +81,8 @@ bool NMotionElement::SetInterneuronPresentMode(const int &value)
 {
  if(value==0)//Если интернейроны отсутствуют - сброс связи в режим 0 (без интернейронов)
  {
-  LinkModes->clear();
-  LinkModes->resize(NumControlLoops, 0);
+//  LinkModes.clear();
+  LinkModes.resize(NumControlLoops, 0);
  }
  Ready=false;
  return true;
@@ -154,7 +154,7 @@ bool NMotionElement::ADefault(void)
   if(!isNumControlLoopsInitialized)
    NumControlLoops = 1;
   InterneuronPresentMode = 1;
-  LinkModes->assign(NumControlLoops,1);
+  LinkModes.assign(NumControlLoops,1);
   RenshowMode = 0;
   NeuroObjectName = "NNewSynSPNeuron";
   AfferentObjectName = "NSimpleAfferentNeuron";
@@ -349,7 +349,7 @@ UEPtr<UNet> CreateSimplestMotionElement(UStorage *storage, const string &netclas
  res=net->AddComponent(cont);
 
  // Установка связей
- ULongId item,conn;
+// ULongId item,conn;
 
  res=net->CreateLink("Afferent_II1.LTZone","DataOutput0",
 				 "Motoneuron1.PNeuronMembrane.PosChannel","");
@@ -504,7 +504,7 @@ UEPtr<UNet> CreateMotionElement(UStorage *storage, const string &netclassname, i
  res=net->AddComponent(cont);
 
  // Установка связей
- ULongId item,conn;
+// ULongId item,conn;
 
  res=net->CreateLink("Afferent_Ia1.LTZone","DataOutput0",
 				 "Motoneuron1.PNeuronMembrane.PosChannel","DataInput0");
@@ -841,7 +841,7 @@ UEPtr<UNet> CreateBranchedMotionElement(UStorage *storage,
  res=net->AddComponent(cont);
 
  // Установка связей
- ULongId item,conn;
+// ULongId item,conn;
  NameT tmpname;
  res=true;
 
@@ -1047,7 +1047,7 @@ UEPtr<UNet> CreateSimplestBranchedMotionElement(UStorage *storage,
  }
 
  // Установка связей
- ULongId item,conn;
+// ULongId item,conn;
  NameT tmpname;
  res=true;
 
@@ -1259,7 +1259,7 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
  }
 
  // Установка связей
- ULongId item,conn;
+// ULongId item,conn;
  NameT tmpname;
  res=true;
 
@@ -1322,14 +1322,14 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 
 
  // Мотонейрон 1
-   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
+   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*NeuroObjectName));
    if(!cont)
 	return 0;
    cont->SetName("MotoneuronL");
    res=AddComponent(cont);
 
   // Мотонейрон 2
-   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
+   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*NeuroObjectName));
    if(!cont)
 	return false;
    cont->SetName("MotoneuronR");
@@ -1338,14 +1338,14 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
    if(RenshowMode)
    {
 	// Клетка реншоу 1
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*NeuroObjectName));
 	if(!cont)
 	 return false;
 	cont->SetName("RenshowL");
 	res=AddComponent(cont);
 
 	// Клетка реншоу 2
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*NeuroObjectName));
 	if(!cont)
 	 return false;
 	cont->SetName("RenshowR");
@@ -1364,13 +1364,13 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 
    for (int i=0; i<NumControlLoops; i++)
    {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(AfferentObjectName));
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*AfferentObjectName));
 	  if(!cont)
 	   return 0;
 	  cont->SetName("AfferentR"+sntoa(i+1));
 	  res=AddComponent(cont);
 
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(AfferentObjectName));
+	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*AfferentObjectName));
 	  if(!cont)
 	   return 0;
 	  cont->SetName("AfferentL"+sntoa(i+1));
@@ -1382,20 +1382,20 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
  bool NMotionElement::CreateInterneurons()
  {
    if(InterneuronPresentMode!=1)
-    return 0;
+	return 0;
    UEPtr<UContainer> cont;
    UEPtr<UStorage> storage = GetStorage();
    bool res;
 
    for (int i=0; i<NumControlLoops; i++)
    {
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*NeuroObjectName));
 	if(!cont)
 	 return 0;
 	cont->SetName("PostAfferentL"+sntoa(i+1));
 	res=AddComponent(cont);
 
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
+	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*NeuroObjectName));
 	if(!cont)
 	 return 0;
 	cont->SetName("PostAfferentR"+sntoa(i+1));
@@ -1415,7 +1415,7 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
    UEPtr<UStorage> storage = GetStorage();
    bool res = true;
 
-   ULongId item,conn;
+   //ULongId item,conn;
    NameT tmpname;
    res=true;
 
