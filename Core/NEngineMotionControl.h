@@ -25,9 +25,9 @@ class RDK_LIB_TYPE NEngineMotionControl: public UNet
 {
 public: // Публичные свойства
 // Число контуров управления
-RDK::ULProperty<int, NEngineMotionControl> NumControlLoops;
+RDK::UProperty<int, NEngineMotionControl, ptPubParameter> NumControlLoops;
 // Число управляющих элементов
-RDK::ULProperty<int, NEngineMotionControl> NumMotionElements;
+RDK::UProperty<int, NEngineMotionControl, ptPubParameter> NumMotionElements;
 
 // Режим формирования сети
 // 0 - Signum
@@ -41,50 +41,50 @@ RDK::ULProperty<int, NEngineMotionControl> NumMotionElements;
 // 12 - As 11 but speed and force control added
 // 13 - As 12 but additional control contour added
 // 14 - New net with parametric structure control
-RDK::ULProperty<int, NEngineMotionControl> CreationMode;
+RDK::UProperty<int, NEngineMotionControl, ptPubParameter> CreationMode;
 
 // Имя класса управляющего элемента
-RDK::ULProperty<NameT, NEngineMotionControl> MotionElementClassName;
+RDK::UProperty<NameT, NEngineMotionControl, ptPubParameter> MotionElementClassName;
 
 // Имя класса интерфейса с объектом управления
-RDK::ULProperty<NameT, NEngineMotionControl> ObjectControlInterfaceClassName;
+RDK::UProperty<NameT, NEngineMotionControl, ptPubParameter> ObjectControlInterfaceClassName;
 
 /// Режим включения адаптивной перестройки структуры
 /// 0 - нет адаптивности
 /// 1 - адаптивность включена с полным сбрсом управления
 /// 2 - включена автоматическая адаптация c полным сбросом управления
-RDK::ULProperty<int, NEngineMotionControl> AdaptiveStructureMode;
+RDK::UProperty<int, NEngineMotionControl, ptPubParameter> AdaptiveStructureMode;
 
 // Режим наличия вставочных нейронов
 // 0 - вставочных нейронов нет
 // 1 - вставочные нейроны есть
-RDK::ULProperty<int, NEngineMotionControl> InterneuronPresentMode;
+RDK::UProperty<int, NEngineMotionControl, ptPubParameter> InterneuronPresentMode;
 
 // Режим связывания мотонейронов (см. описание в управляющем элементе)
-RDK::ULProperty<std::vector<int>, NEngineMotionControl> LinkModes;
+RDK::UProperty<std::vector<int>, NEngineMotionControl, ptPubParameter> LinkModes;
 
 // Диапазон афферентных нейронов по каналу Ia
-RDK::ULProperty<double, NEngineMotionControl,ptParameter> IaMin;
-RDK::ULProperty<double, NEngineMotionControl,ptParameter> IaMax;
+RDK::UProperty<double, NEngineMotionControl,ptParameter> IaMin;
+RDK::UProperty<double, NEngineMotionControl,ptParameter> IaMax;
 
 // Диапазон афферентных нейронов по каналу Ib
-RDK::ULProperty<double, NEngineMotionControl,ptParameter> IbMin;
-RDK::ULProperty<double, NEngineMotionControl,ptParameter> IbMax;
+RDK::UProperty<double, NEngineMotionControl,ptParameter> IbMin;
+RDK::UProperty<double, NEngineMotionControl,ptParameter> IbMax;
 
 // Диапазон афферентных нейронов по каналу II
-RDK::ULProperty<double, NEngineMotionControl,ptParameter> IIMin;
-RDK::ULProperty<double, NEngineMotionControl,ptParameter> IIMax;
+RDK::UProperty<double, NEngineMotionControl,ptParameter> IIMin;
+RDK::UProperty<double, NEngineMotionControl,ptParameter> IIMax;
 
 // Диапазон афферентных нейронов по каналу Ic
-RDK::ULProperty<double, NEngineMotionControl,ptParameter> IcMin;
-RDK::ULProperty<double, NEngineMotionControl,ptParameter> IcMax;
+RDK::UProperty<double, NEngineMotionControl,ptParameter> IcMin;
+RDK::UProperty<double, NEngineMotionControl,ptParameter> IcMax;
 
 /// Диапазон афферентных нейронов по каналам
-RDK::ULProperty<std::vector<double>, NEngineMotionControl> AfferentMin;
-RDK::ULProperty<std::vector<double>, NEngineMotionControl> AfferentMax;
+RDK::UProperty<std::vector<double>, NEngineMotionControl, ptPubParameter> AfferentMin;
+RDK::UProperty<std::vector<double>, NEngineMotionControl, ptPubParameter> AfferentMax;
 
 /// Режим разбиения сепараторов
-RDK::ULProperty<int, NEngineMotionControl> IntervalSeparatorMode;
+RDK::UProperty<int, NEngineMotionControl, ptPubParameter> IntervalSeparatorMode;
 
 
 // Максимальное усиление управляющего воздействия
@@ -92,48 +92,48 @@ RDK::ULProperty<int, NEngineMotionControl> IntervalSeparatorMode;
 // 1 - Разбиение на диапазоны [Max/N^2]*(i+1)^2 где i - индекс диапазона
 // 2 - по формуле (3.4)
 // 3 - по формуле (3.3) Max/(N-i), где i - индекс диапазона, а N - число диапазонов
-RDK::ULProperty<double, NEngineMotionControl> PacGain;
+RDK::UProperty<double, NEngineMotionControl, ptPubParameter> PacGain;
 
-RDK::ULProperty<double, NEngineMotionControl> PacSecretionTC;
-RDK::ULProperty<double, NEngineMotionControl> PacDissociationTC;
+RDK::UProperty<double, NEngineMotionControl, ptPubParameter> PacSecretionTC;
+RDK::UProperty<double, NEngineMotionControl, ptPubParameter> PacDissociationTC;
 
 // Режим настройки диапазонов афферентных нейронов
 // 0 - диапазоны одинаковой длины
 // 1 - диапазоны с удвоением длины, и минимальной шириной в процентах
 // MinAfferentRange от соответствующей разницы *Max-*Min
-RDK::ULProperty<int, NEngineMotionControl> AfferentRangeMode;
+RDK::UProperty<int, NEngineMotionControl, ptPubParameter> AfferentRangeMode;
 
 // Режим настрйоки диапазонов pac
-RDK::ULProperty<int, NEngineMotionControl> PacRangeMode;
+RDK::UProperty<int, NEngineMotionControl, ptPubParameter> PacRangeMode;
 
 // Процентная величина от соответствующей разницы *Max-*Min
 // определяющая минимальную ширину диапазона афферетных нейронов
 // изменяяется в интервале [0;1]
-RDK::ULProperty<double, NEngineMotionControl,ptPubState> MinAfferentRange;
+RDK::UProperty<double, NEngineMotionControl,ptPubState> MinAfferentRange;
 
 /// Текущая амплитуда колебаний
-RDK::ULProperty<std::vector<double>, NEngineMotionControl,ptPubState> CurrentContourAmplitude;
+RDK::UProperty<std::vector<double>, NEngineMotionControl,ptPubState> CurrentContourAmplitude;
 
 /// Текущее среднее колебаний
-RDK::ULProperty<std::vector<double>, NEngineMotionControl,ptPubState> CurrentContourAverage;
+RDK::UProperty<std::vector<double>, NEngineMotionControl,ptPubState> CurrentContourAverage;
 
 /// Текущее время переходного процесса
-RDK::ULProperty<double, NEngineMotionControl,ptPubState> CurrentTransientTime;
+RDK::UProperty<double, NEngineMotionControl,ptPubState> CurrentTransientTime;
 
 /// Мгновенная скорость вычисленная по среднему положению выбранного контура
-RDK::ULProperty<double, NEngineMotionControl,ptPubState> InstantAvgSpeed;
+RDK::UProperty<double, NEngineMotionControl,ptPubState> InstantAvgSpeed;
 
 /// Текущее состояние переходного процесса
-RDK::ULProperty<bool, NEngineMotionControl,ptPubState> CurrentTransientState;
+RDK::UProperty<bool, NEngineMotionControl,ptPubState> CurrentTransientState;
 
 /// Маскимально допустимая амплитуда колебаний
-RDK::ULProperty<std::vector<double>, NEngineMotionControl> DestContourMaxAmplitude;
+RDK::UProperty<std::vector<double>, NEngineMotionControl, ptPubParameter> DestContourMaxAmplitude;
 
 /// Минимально допустимая амплитуда колебаний
-RDK::ULProperty<std::vector<double>, NEngineMotionControl> DestContourMinAmplitude;
+RDK::UProperty<std::vector<double>, NEngineMotionControl, ptPubParameter> DestContourMinAmplitude;
 
 /// Желаемое время переходного процесса
-RDK::ULProperty<double, NEngineMotionControl> DestTransientTime;
+RDK::UProperty<double, NEngineMotionControl, ptPubParameter> DestTransientTime;
 
 /// Используемые в работе контуры управления
 /// В случае старого MotionControl порядок таков:
@@ -141,47 +141,47 @@ RDK::ULProperty<double, NEngineMotionControl> DestTransientTime;
 /// 1=Ia
 /// 2=Ib
 /// 3=Ic
-RDK::ULProperty<std::vector<bool>, NEngineMotionControl> ActiveContours;
+RDK::UProperty<std::vector<bool>, NEngineMotionControl, ptPubParameter> ActiveContours;
 
 /// Используемые в адаптации контуры управления
-RDK::ULProperty<std::vector<bool>, NEngineMotionControl> UseContourData;
+RDK::UProperty<std::vector<bool>, NEngineMotionControl, ptPubParameter> UseContourData;
 
 /// Интервал времени на котором анализируем переходный процесс
-RDK::ULProperty<double, NEngineMotionControl> TransientHistoryTime;
+RDK::UProperty<double, NEngineMotionControl, ptPubParameter> TransientHistoryTime;
 
 /// Индекс выхода источника сигнала (объекта) по которому анализируем переходный процесс
-RDK::ULProperty<int, NEngineMotionControl> TransientObjectIndex;
+RDK::UProperty<int, NEngineMotionControl, ptPubParameter> TransientObjectIndex;
 
  /// Максимально допустимая скорость изменения среднего значения сигнала за интервал времени, по которой
 /// принимаем решение о том, что переходный процесс завершен
-RDK::ULProperty<double, NEngineMotionControl> TransientAverageThreshold;
+RDK::UProperty<double, NEngineMotionControl, ptPubParameter> TransientAverageThreshold;
 
 // Имя объекта для нейронов
-RDK::ULProperty<string, NEngineMotionControl> MCNeuroObjectName;
+RDK::UProperty<string, NEngineMotionControl, ptPubParameter> MCNeuroObjectName;
 
 // Имя объекта для афферентных нейронов
-RDK::ULProperty<string, NEngineMotionControl> MCAfferentObjectName;
+RDK::UProperty<string, NEngineMotionControl, ptPubParameter> MCAfferentObjectName;
 
 // Имя объекта для PAC
-RDK::ULProperty<string, NEngineMotionControl> PacObjectName;
+RDK::UProperty<string, NEngineMotionControl, ptPubParameter> PacObjectName;
 
 // Максимальная зафиксированная амплитуда колебаний
-RDK::ULProperty<std::vector<double>, NEngineMotionControl,ptPubState> MaxContourAmplitude;
+RDK::UProperty<std::vector<double>, NEngineMotionControl,ptPubState> MaxContourAmplitude;
 
 // Режим ветвления мотонейрона при подключении контуров управления
 // 0 - все контура подключаются к одному участку мембраны
 // 1 - каждый контур имеет свой участок мембраны
-RDK::ULProperty<int, NEngineMotionControl> MotoneuronBranchMode;
+RDK::UProperty<int, NEngineMotionControl, ptPubParameter> MotoneuronBranchMode;
 
 // Режим наличия клеток Реншоу
 // 0 - клеток Реншоу нет
 // 1 - клетки Реншоу есть
-RDK::ULProperty<int, NEngineMotionControl> RenshowMode;
+RDK::UProperty<int, NEngineMotionControl, ptPubParameter> RenshowMode;
 
 /// Выход для сбора статистики. В каждой строке содержатся данные в следующем порядке:
 //
 //UPropertyOutputData<MDMatrix<double>, NEngineMotionControl, ptPubState> Statistic;
-UPropertyOutputData<MDMatrix<double>, NEngineMotionControl> Statistic;
+UProperty<MDMatrix<double>, NEngineMotionControl, ptPubOutput> Statistic;
 
 protected: // Временные переменные
 vector<vector<UEPtr<NReceptor> > > receptors;

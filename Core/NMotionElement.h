@@ -23,10 +23,10 @@ class RDK_LIB_TYPE NMotionElement: public UNet
 {
 public: // Параметры
 // Число контуров управления
-RDK::ULProperty<int, NMotionElement> NumControlLoops;
+RDK::UProperty<int, NMotionElement, ptPubParameter> NumControlLoops;
 
 // Массив флагов включения контуров управления
-RDK::ULProperty<std::vector<int>, NMotionElement> EnableControlLoopFlags;
+RDK::UProperty<std::vector<int>, NMotionElement, ptPubParameter> EnableControlLoopFlags;
 
 // Массив режимов связи между нейронами
 // 0 - прямая связь (без интернейронов)
@@ -34,48 +34,48 @@ RDK::ULProperty<std::vector<int>, NMotionElement> EnableControlLoopFlags;
 // 2 - тормозная связь через интернейроны(L-R) + прямая возб. связь(L-L)
 // 3 - возб. связь через интернейроны(L-L) + прямая тормозная связь(L-R)
 // 4 - как 1, но нет перекрестного влияния на мотонейроны
-RDK::ULProperty<std::vector<int>, NMotionElement> LinkModes;
+RDK::UProperty<std::vector<int>, NMotionElement, ptPubParameter> LinkModes;
 
 // Режим наличия вставочных нейронов
 // Внимание, этот режим аналогичен тому, при котором каждый контур имеет
 // свой мотонейрон
 // 0 - вставочных нейронов нет
 // 1 - вставочные нейроны есть
-RDK::ULProperty<int, NMotionElement> InterneuronPresentMode;
+RDK::UProperty<int, NMotionElement, ptPubParameter> InterneuronPresentMode;
 
 // Режим наличия клеток Реншоу
 // 0 - клеток Реншоу нет
 // 1 - клетки Реншоу есть
-RDK::ULProperty<int, NMotionElement> RenshowMode;
+RDK::UProperty<int, NMotionElement, ptPubParameter> RenshowMode;
 
 // Режим наличия возвратного торможения
 // 0 - возвратного торможения нет
 // 1 - возвратное торможение только на выходном (мотонейроне)
 // 2 - возвратное торможение индвидуально на каждом нейроне контура
-RDK::ULProperty<int, NMotionElement> RecurrentInhibitionMode;
+RDK::UProperty<int, NMotionElement, ptPubParameter> RecurrentInhibitionMode;
 
 // Режим ветвления мотонейрона при подключении возвратного торможения
 // 0 - возвратный тормозный вход на том же дендрите, что и контур управления
 // (если контуров N, то на каждый контур свой тормозный вход).
 // 1 - возвратный тормозный вход на отдельном дендрите нейрона
-RDK::ULProperty<int, NMotionElement> RecurrentInhibitionBranchMode;
+RDK::UProperty<int, NMotionElement, ptPubParameter> RecurrentInhibitionBranchMode;
 
 // Режим ветвления мотонейрона при подключении контуров управления
 // 0 - все контура подключаются к одному участку мембраны
 // 1 - каждый контур имеет свой участок мембраны
-RDK::ULProperty<int, NMotionElement> MotoneuronBranchMode;
+RDK::UProperty<int, NMotionElement, ptPubParameter> MotoneuronBranchMode;
 
 // Режим подключения управления с верхних уровней
 // 0 - управление по контуру подключается соседним синапсом туда же куда идет
 // выход с афферента.
 // 1 - управление по контуру подключается на отдельный дендрит к тому же нейрону
 // который принимает выход с афферента
-RDK::ULProperty<int, NMotionElement> ExternalControlMode;
+RDK::UProperty<int, NMotionElement, ptPubParameter> ExternalControlMode;
 
 // Имя объекта для нейронов
-RDK::ULProperty<string, NMotionElement> NeuroObjectName;
+RDK::UProperty<string, NMotionElement, ptPubParameter> NeuroObjectName;
 // Имя объекта для афферентных нейронов
-RDK::ULProperty<string, NMotionElement> AfferentObjectName;
+RDK::UProperty<string, NMotionElement, ptPubParameter> AfferentObjectName;
 
 public: // Переменные состояния
 

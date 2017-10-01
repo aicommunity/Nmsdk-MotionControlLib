@@ -105,17 +105,17 @@ bool NEngineMotionControl::SetNumControlLoops(const int &value)
    melem->NumControlLoops=value;
   }
 
-  AfferentMin->resize(value,0);
-  AfferentMax->resize(value,0);
-  ActiveContours->resize(value,false);
-  UseContourData->resize(value,false);
-  CurrentContourAmplitude->resize(value,0);
-  CurrentContourAverage->resize(value,0);
-  MaxContourAmplitude->resize(value,0);
+  AfferentMin.resize(value,0);
+  AfferentMax.resize(value,0);
+  ActiveContours.resize(value,false);
+  UseContourData.resize(value,false);
+  CurrentContourAmplitude.resize(value,0);
+  CurrentContourAverage.resize(value,0);
+  MaxContourAmplitude.resize(value,0);
 
-  DestContourMaxAmplitude->resize(value,0);
-  DestContourMinAmplitude->resize(value,0);
-  LinkModes->resize(value,1);
+  DestContourMaxAmplitude.resize(value,0);
+  DestContourMinAmplitude.resize(value,0);
+  LinkModes.resize(value,1);
   Ready=false;
  }
  return true;
@@ -127,7 +127,7 @@ bool NEngineMotionControl::SetNumMotionElements(const int &value)
 // Create();
  if(Ready && AdaptiveStructureMode >0)
  {
-  NumMotionElements.v=value;
+  NumMotionElements.v()=value;
   Create(false);
  }
  else
@@ -169,12 +169,12 @@ if(Ready)
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
  {
-  if(AfferentMin->size()<=i)
+  if(AfferentMin.size()<=size_t(i))
   {
    LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
    break;
   }
-  if(AfferentMax->size()<=i)
+  if(AfferentMax.size()<=size_t(i))
   {
    LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
    break;
@@ -195,7 +195,7 @@ bool NEngineMotionControl::SetPacRangeMode(const int &value)
  if(value < 0 || value > 3)
   return false;
 
- PacRangeMode.v=value;
+ PacRangeMode.v()=value;
  if(Ready)
   SetupPacRange();
 
@@ -225,12 +225,12 @@ if(Ready)
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
  {
-     if(AfferentMin->size()<=i)
-     {
-      LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
-      break;
-     }
-     if(AfferentMax->size()<=i)
+	 if(AfferentMin->size()<=size_t(i))
+	 {
+	  LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
+	  break;
+	 }
+	 if(AfferentMax->size()<=size_t(i))
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
       break;
@@ -251,7 +251,7 @@ bool NEngineMotionControl::SetPacGain(const double &value)
  if(value <0)
   return false;
 
- PacGain.v=value;
+ PacGain.v()=value;
  if(Ready)
   SetupPacRange();
 
@@ -263,7 +263,7 @@ bool NEngineMotionControl::SetPacSecretionTC(const double &value)
  if(value <0)
   return false;
 
- PacSecretionTC.v=value;
+ PacSecretionTC.v()=value;
  UpdatePacTCParameters();
 	  /*
  if(Ready)
@@ -290,7 +290,7 @@ bool NEngineMotionControl::SetPacDissociationTC(const double &value)
  if(value <0)
   return false;
 
- PacDissociationTC.v=value;
+ PacDissociationTC.v()=value;
  UpdatePacTCParameters();
 			 /*
  if(Ready)
@@ -373,7 +373,7 @@ bool NEngineMotionControl::SetAfferentMin(const std::vector<double> &value)
 
  if(Ready)
  {
-  SetAfferentRangeMode(AfferentRangeMode.v);
+  SetAfferentRangeMode(AfferentRangeMode.v());
 /*  if(ControlMode == 0)
   {
 
@@ -411,7 +411,7 @@ bool NEngineMotionControl::SetAfferentMax(const std::vector<double> &value)
 
  if(Ready)
  {
-  SetAfferentRangeMode(AfferentRangeMode.v);
+  SetAfferentRangeMode(AfferentRangeMode.v());
 /*
   bool crossranges=false;
   AfferentRangesPos.resize(NumControlLoops);
@@ -440,7 +440,7 @@ bool NEngineMotionControl::SetMotoneuronBranchMode(const int &value)
  {
   if(Ready && AdaptiveStructureMode >0)
   {
-   MotoneuronBranchMode.v=value;
+   MotoneuronBranchMode.v()=value;
    Create(false);
   }
   else
@@ -455,7 +455,7 @@ bool NEngineMotionControl::SetRenshowMode(const int &value)
  {
   if(Ready && AdaptiveStructureMode >0)
   {
-   RenshowMode.v=value;
+   RenshowMode.v()=value;
    Create(false);
   }
   else
@@ -555,8 +555,8 @@ bool NEngineMotionControl::ADefault(void)
  IIMax=M_PI/2;
  IcMin=-10;
  IcMax=10;
- AfferentMin->assign(1,-M_PI/2);
- AfferentMax->assign(1,M_PI/2);
+ AfferentMin.assign(1,-M_PI/2);
+ AfferentMax.assign(1,M_PI/2);
  PacGain=100;
  PacDissociationTC=0.001;
  PacSecretionTC=0.001;
@@ -567,7 +567,7 @@ bool NEngineMotionControl::ADefault(void)
  ObjectControlInterfaceClassName="NManipulatorSource";
  AdaptiveStructureMode=2;
  InterneuronPresentMode=0;
- LinkModes->assign(1,1);
+ LinkModes.assign(1,1);
 
  DestTransientTime=0.1;
  TransientHistoryTime=1.0;
@@ -598,13 +598,13 @@ bool NEngineMotionControl::ABuild(void)
   Create(NumMotionElements);
 
 
- CurrentContourAmplitude->resize(NumControlLoops);
- CurrentContourAverage->resize(NumControlLoops);
- MaxContourAmplitude->resize(NumControlLoops);
+ CurrentContourAmplitude.resize(NumControlLoops);
+ CurrentContourAverage.resize(NumControlLoops);
+ MaxContourAmplitude.resize(NumControlLoops);
 
- DestContourMaxAmplitude->resize(NumControlLoops);
- DestContourMinAmplitude->resize(NumControlLoops);
- UseContourData->resize(NumControlLoops);
+ DestContourMaxAmplitude.resize(NumControlLoops);
+ DestContourMinAmplitude.resize(NumControlLoops);
+ UseContourData.resize(NumControlLoops);
 
 // StatisticDoubleMatrix.Build();
  return true;
@@ -615,9 +615,9 @@ bool NEngineMotionControl::AReset(void)
 {
 // StatisticDoubleMatrix.Reset();
 
- CurrentContourAmplitude->assign(NumControlLoops,0);
- CurrentContourAverage->assign(NumControlLoops,0);
- MaxContourAmplitude->assign(NumControlLoops,0);
+ CurrentContourAmplitude.assign(NumControlLoops,0);
+ CurrentContourAverage.assign(NumControlLoops,0);
+ MaxContourAmplitude.assign(NumControlLoops,0);
  CurrentTransientTime=0;
  CurrentTransientState=false;
  TempTransientState=false;
@@ -667,7 +667,7 @@ bool NEngineMotionControl::AReset(void)
    continue;
   }     */
 
-  Statistic->Assign(1,11+NumControlLoops*2,0.0);
+  Statistic.Assign(1,11+NumControlLoops*2,0.0);
 //  StatisticDoubleMatrix.Calculate();
  }
 
@@ -682,10 +682,10 @@ bool NEngineMotionControl::ACalculate(void)
  CreateLink("","Statistic","StatisticDoubleMatrix","InputMatrixData");
  // Считаем статистику
  // за ожидаемое время переходного процесса
- CurrentContourAmplitude->assign(NumControlLoops,0);
- CurrentContourAverage->assign(NumControlLoops,0);
+ CurrentContourAmplitude.assign(NumControlLoops,0);
+ CurrentContourAverage.assign(NumControlLoops,0);
 
- UEPtr<UNet> source=dynamic_pointer_cast<UNet>(GetComponent("NManipulatorSource1"));
+ UEPtr<UDynamicMatNet> source=dynamic_pointer_cast<UDynamicMatNet>(GetComponent("NManipulatorSource1"));
  HistorySize=int(TransientHistoryTime*TimeStep);
  vector<double> measure;
 
@@ -718,11 +718,11 @@ bool NEngineMotionControl::ACalculate(void)
   }
   if(CurrentContourAmplitude->size()>i)
   {
-   (*CurrentContourAmplitude)[i]=max_val-min_val;
-   (*CurrentContourAverage)[i]=avg_val/History.size();
+   CurrentContourAmplitude[i]=max_val-min_val;
+   CurrentContourAverage[i]=avg_val/History.size();
    double max_min=max_val-min_val;
-   if(((*MaxContourAmplitude)[i])<max_min)
-    (*MaxContourAmplitude)[i]=max_min;
+   if((MaxContourAmplitude[i])<max_min)
+    MaxContourAmplitude[i]=max_min;
   }
  }
 
@@ -845,9 +845,9 @@ bool NEngineMotionControl::ACalculate(void)
  stats.push_back(CurrentTransientTime);
  stats.push_back(CurrentTransientState);
 
- Statistic->Assign(1,stats.size(),0.0);
+ Statistic.Assign(1,stats.size(),0.0);
  for(size_t i=0;i<stats.size();i++)
-  (*Statistic)(0,i)=stats[i];
+  Statistic(0,i)=stats[i];
 
 
  return true;
@@ -966,12 +966,12 @@ bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
 /// Алгоритм адаптивной настройки
 void NEngineMotionControl::AdaptiveTuning(void)
 {
- std::vector<double> &current_contour_amplitude=*CurrentContourAmplitude;
- std::vector<bool> &use_contour_data=*UseContourData;
- double &current_transient_time=*CurrentTransientTime;
- std::vector<double> &dest_contour_max_amplitude=*DestContourMaxAmplitude;
- std::vector<double> &dest_contour_min_amplitude=*DestContourMinAmplitude;
- double &dest_transient_time=*DestTransientTime;
+ const std::vector<double> &current_contour_amplitude=*CurrentContourAmplitude;
+ const std::vector<bool> &use_contour_data=*UseContourData;
+ const double &current_transient_time=*CurrentTransientTime;
+ std::vector<double> dest_contour_max_amplitude=*DestContourMaxAmplitude;
+ std::vector<double> dest_contour_min_amplitude=*DestContourMinAmplitude;
+ double dest_transient_time=*DestTransientTime;
 
  int num_motion_elements=NumMotionElements;
  double control_grain=PacGain;
@@ -979,7 +979,9 @@ void NEngineMotionControl::AdaptiveTuning(void)
  AdaptiveTuningSimple(current_contour_amplitude,
 		use_contour_data, current_transient_time, dest_contour_max_amplitude,
 		dest_contour_min_amplitude, dest_transient_time, num_motion_elements, control_grain);
-
+ DestContourMaxAmplitude=dest_contour_max_amplitude;
+ DestContourMinAmplitude=dest_contour_min_amplitude;
+ DestTransientTime=dest_transient_time;
  // Применяем настройки регулятора
  NumMotionElements=num_motion_elements;
  PacGain=control_grain;
@@ -1205,7 +1207,7 @@ void NEngineMotionControl::SetupPacRange(void)
  double a_min=-PacGain;
  double a_max=PacGain;
  int num_motions=NumMotionElements;
- vector<Real> values=cont->Gain;
+ vector<Real> values(cont->Gain.GetRangeData());
 
  if(num_motions*2 != int(values.size()))
   return; // TODO: Это аномалия, которую нужно разрешить
@@ -1298,7 +1300,7 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
  for(int i=0;i<NumMotionElements;i++)
  {
   UEPtr<NReceptor> receptor=0;
-  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(MotionElementClassName));
+  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*MotionElementClassName));
   if(!cont)
    continue;
   UEPtr<NMotionElement> melement=0;
@@ -1307,10 +1309,10 @@ void NEngineMotionControl::MotionElementsSetup(UEPtr<UContainer> net, int inp_mo
   if(melement)
   {
 //   ChangeLookupPropertyType("InterneuronPresentMode",ptPubParameter);
-   melement->NeuroObjectName = MCNeuroObjectName;
-   melement->AfferentObjectName = MCAfferentObjectName;
-   melement->NumControlLoops=NumControlLoops;
-   melement->InterneuronPresentMode=InterneuronPresentMode;
+   melement->NeuroObjectName = *MCNeuroObjectName;
+   melement->AfferentObjectName = *MCAfferentObjectName;
+   melement->NumControlLoops= *NumControlLoops;
+   melement->InterneuronPresentMode= *InterneuronPresentMode;
    if(InterneuronPresentMode == 0)
    {
 	std::vector<int> modes;
@@ -1451,7 +1453,7 @@ void NEngineMotionControl::PACSetup(UEPtr<UContainer> net,
  if(PacObjectName->empty())
   return;
 
- cont=dynamic_pointer_cast<NPac>(storage->TakeObject(PacObjectName));
+ cont=dynamic_pointer_cast<NPac>(storage->TakeObject(*PacObjectName));
 
 //try
 //{
@@ -1521,7 +1523,7 @@ void NEngineMotionControl::AACSetup(UEPtr<UContainer> net, double gain_value)
  if(!storage)
   return;
 
- cont=dynamic_pointer_cast<NPac>(storage->TakeObject(PacObjectName));
+ cont=dynamic_pointer_cast<NPac>(storage->TakeObject(*PacObjectName));
  if(!cont)
   return;
  cont->SetName("Pac");
@@ -1881,8 +1883,8 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UContainer> net)
 
  if(CheckName("NManipulatorSource1"))
  {
-  UEPtr<UADItem> cont2=0;
-  cont2=dynamic_pointer_cast<UADItem>(storage->TakeObject(ObjectControlInterfaceClassName));
+  UEPtr<UNet> cont2=0;
+  cont2=dynamic_pointer_cast<UNet>(storage->TakeObject(*ObjectControlInterfaceClassName));
   if(!cont2)
    return;
   cont2->SetName("NManipulatorSource1");
@@ -2097,20 +2099,20 @@ UNet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
 // ChangeLookupPropertyType("IcMin",ptParameter);
 // ChangeLookupPropertyType("IcMax",ptParameter);
 
- ActiveContours->resize(4,0);
+ ActiveContours.resize(4,0);
 
 // ChangeLookupPropertyType("AfferentMin",ptParameter);
 // ChangeLookupPropertyType("AfferentMax",ptParameter);
- AfferentMin->resize(4,0);
- AfferentMax->resize(4,0);
- (*AfferentMin)[0]=IIMin;
- (*AfferentMax)[0]=IIMax;
- (*AfferentMin)[1]=IaMin;
- (*AfferentMax)[1]=IaMax;
- (*AfferentMin)[2]=IbMin;
- (*AfferentMax)[2]=IbMax;
- (*AfferentMin)[3]=IcMin;
- (*AfferentMax)[3]=IcMax;
+ AfferentMin.resize(4,0);
+ AfferentMax.resize(4,0);
+ AfferentMin[0]=IIMin;
+ AfferentMax[0]=IIMax;
+ AfferentMin[1]=IaMin;
+ AfferentMax[1]=IaMax;
+ AfferentMin[2]=IbMin;
+ AfferentMax[2]=IbMax;
+ AfferentMin[3]=IcMin;
+ AfferentMax[3]=IcMax;
 
  ChangeLookupPropertyType("MCNeuroObjectName",ptPubState);
  ChangeLookupPropertyType("MCAfferentObjectName",ptPubState);
@@ -2197,7 +2199,7 @@ UNet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
 // return net; // Заглушка!!!
 
  // Установка связей
- ULongId item,conn;
+// ULongId item,conn;
 
  StandardLinksSetup(net, "Pac");
 /*
@@ -2350,20 +2352,20 @@ UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bo
 // ChangeLookupPropertyType("IcMin",ptParameter);
 // ChangeLookupPropertyType("IcMax",ptParameter);
 
- ActiveContours->resize(4,0);
+ ActiveContours.resize(4,0);
 
 // ChangeLookupPropertyType("AfferentMin",ptParameter);
 // ChangeLookupPropertyType("AfferentMax",ptParameter);
- AfferentMin->resize(4,0);
- AfferentMax->resize(4,0);
- (*AfferentMin)[0]=IIMin;
- (*AfferentMax)[0]=IIMax;
- (*AfferentMin)[1]=IaMin;
- (*AfferentMax)[1]=IaMax;
- (*AfferentMin)[2]=IbMin;
- (*AfferentMax)[2]=IbMax;
- (*AfferentMin)[3]=IcMin;
- (*AfferentMax)[3]=IcMax;
+ AfferentMin.resize(4,0);
+ AfferentMax.resize(4,0);
+ AfferentMin[0]=IIMin;
+ AfferentMax[0]=IIMax;
+ AfferentMin[1]=IaMin;
+ AfferentMax[1]=IaMax;
+ AfferentMin[2]=IbMin;
+ AfferentMax[2]=IbMax;
+ AfferentMin[3]=IcMin;
+ AfferentMax[3]=IcMax;
 
  ChangeLookupPropertyType("MCNeuroObjectName",ptPubState);
  ChangeLookupPropertyType("MCAfferentObjectName",ptPubState);
@@ -2434,7 +2436,7 @@ UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bo
 
 
  // Установка связей
- ULongId item,conn;
+ //ULongId item,conn;
 
  StandardLinksSetup(net, "Pac");
 
@@ -2489,20 +2491,20 @@ UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cross
 // ChangeLookupPropertyType("IcMin",ptParameter);
 // ChangeLookupPropertyType("IcMax",ptParameter);
 
- ActiveContours->resize(4,0);
+ ActiveContours.resize(4,0);
 
 // ChangeLookupPropertyType("AfferentMin",ptParameter);
 // ChangeLookupPropertyType("AfferentMax",ptParameter);
- AfferentMin->resize(4,0);
- AfferentMax->resize(4,0);
- (*AfferentMin)[0]=IIMin;
- (*AfferentMax)[0]=IIMax;
- (*AfferentMin)[1]=IaMin;
- (*AfferentMax)[1]=IaMax;
- (*AfferentMin)[2]=IbMin;
- (*AfferentMax)[2]=IbMax;
- (*AfferentMin)[3]=IcMin;
- (*AfferentMax)[3]=IcMax;
+ AfferentMin.resize(4,0);
+ AfferentMax.resize(4,0);
+ AfferentMin[0]=IIMin;
+ AfferentMax[0]=IIMax;
+ AfferentMin[1]=IaMin;
+ AfferentMax[1]=IaMax;
+ AfferentMin[2]=IbMin;
+ AfferentMax[2]=IbMax;
+ AfferentMin[3]=IcMin;
+ AfferentMax[3]=IcMax;
 
  ChangeLookupPropertyType("MCNeuroObjectName",ptPubState);
  ChangeLookupPropertyType("MCAfferentObjectName",ptPubState);
@@ -2528,12 +2530,12 @@ UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cross
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
  {
-     if(AfferentMin->size()<=i)
+	 if(AfferentMin->size()<=size_t(i))
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
       break;
      }
-     if(AfferentMax->size()<=i)
+	 if(AfferentMax->size()<=size_t(i))
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
       break;
@@ -2562,7 +2564,7 @@ UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cross
  IntervalSeparatorsSetup(net, 5, 1, -1);
 
  // Установка связей
- ULongId item,conn;
+// ULongId item,conn;
 
  StandardLinksSetup(net, "Pac");
 
@@ -2590,18 +2592,18 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
 // ChangeLookupPropertyType("IIMin",ptPubParameter);
 // ChangeLookupPropertyType("IIMax",ptPubParameter);
 
- ActiveContours->resize(3,0);
+ ActiveContours.resize(3,0);
 
 // ChangeLookupPropertyType("AfferentMin",ptParameter);
 // ChangeLookupPropertyType("AfferentMax",ptParameter);
- AfferentMin->resize(3,0);
- AfferentMax->resize(3,0);
- (*AfferentMin)[0]=IIMin;
- (*AfferentMax)[0]=IIMax;
- (*AfferentMin)[1]=IaMin;
- (*AfferentMax)[1]=IaMax;
- (*AfferentMin)[2]=IbMin;
- (*AfferentMax)[2]=IbMax;
+ AfferentMin.resize(3,0);
+ AfferentMax.resize(3,0);
+ AfferentMin[0]=IIMin;
+ AfferentMax[0]=IIMax;
+ AfferentMin[1]=IaMin;
+ AfferentMax[1]=IaMax;
+ AfferentMin[2]=IbMin;
+ AfferentMax[2]=IbMax;
 
  ChangeLookupPropertyType("MCNeuroObjectName",ptPubState);
  ChangeLookupPropertyType("MCAfferentObjectName",ptPubState);
@@ -2644,12 +2646,12 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
  {
-     if(AfferentMin->size()<=i)
+	 if(AfferentMin->size()<=size_t(i))
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
       break;
      }
-     if(AfferentMax->size()<=i)
+	 if(AfferentMax->size()<=size_t(i))
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
       break;
@@ -2705,7 +2707,7 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
                   */
 
  // Установка связей
- ULongId item,conn;
+// ULongId item,conn;
 
  StandardLinksSetup(net, "Pac");
 
@@ -2755,7 +2757,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(void)
 // ChangeLookupPropertyType("IcMin",ptParameter);
 // ChangeLookupPropertyType("IcMax",ptParameter);
 
- ActiveContours->resize(4,0);
+ ActiveContours.resize(4,0);
 
  ChangeLookupPropertyType("MCNeuroObjectName",ptPubParameter);
  ChangeLookupPropertyType("MCAfferentObjectName",ptPubParameter);
@@ -2786,12 +2788,12 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(void)
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
  {
-     if(AfferentMin->size()<=i)
+	 if(AfferentMin->size()<=size_t(i))
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
       break;
      }
-     if(AfferentMax->size()<=i)
+     if(AfferentMax->size()<=size_t(i))
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
       break;
@@ -2821,7 +2823,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(void)
  NewIntervalSeparatorsSetup(IntervalSeparatorMode, 6, 1, -1);
 
  // Установка связей
- ULongId item,conn;
+// ULongId item,conn;
 
  NewStandardLinksSetup("Pac");
 
@@ -2858,7 +2860,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
  for(int i=0;i<NumMotionElements;i++)
  {
   UEPtr<NReceptor> receptor=0;
-  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(MotionElementClassName));
+  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*MotionElementClassName));
   if(!cont)
    continue;
   cont->SetName(string("MotionElement")+RDK::sntoa(i));
@@ -2868,14 +2870,14 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
   UEPtr<NMotionElement> melement=dynamic_pointer_cast<NMotionElement>(cont);
   if(melement)
   {
-   melement->NeuroObjectName = MCNeuroObjectName;
-   melement->AfferentObjectName = MCAfferentObjectName;
-   melement->NumControlLoops=NumControlLoops;
-   melement->InterneuronPresentMode=InterneuronPresentMode;
-   melement->MotoneuronBranchMode=MotoneuronBranchMode;
+   melement->NeuroObjectName = *MCNeuroObjectName;
+   melement->AfferentObjectName = *MCAfferentObjectName;
+   melement->NumControlLoops=*NumControlLoops;
+   melement->InterneuronPresentMode=*InterneuronPresentMode;
+   melement->MotoneuronBranchMode=*MotoneuronBranchMode;
 
    melement->RenshowMode=!RenshowMode; // TODO: Заглушка, чтобы обойти невозможность выполнить Build, т.к. Ready в melement уже взведен.
-   melement->RenshowMode=RenshowMode;
+   melement->RenshowMode=*RenshowMode;
    if(InterneuronPresentMode == 0)
    {
 	std::vector<int> modes;
@@ -2941,7 +2943,7 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
  if(PacObjectName->empty())
   return;
 
- cont=dynamic_pointer_cast<NPac>(storage->TakeObject(PacObjectName));
+ cont=dynamic_pointer_cast<NPac>(storage->TakeObject(*PacObjectName));
 //try
 //{
 // cont=AddMissingComponent<NPac>(PacObjectName,"Pac");
@@ -3342,14 +3344,14 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
 
 	if(res)
 	{
-	 ActiveContours->resize(NumControlLoops,0);
-	 (*ActiveContours)[index] = value;
+	 ActiveContours.resize(NumControlLoops,0);
+	 ActiveContours[index] = value;
     }
    }
    else
    if(ControlMode == 1)
    {
-    ActiveContours->resize(NumControlLoops,0);
+    ActiveContours.resize(NumControlLoops,0);
 	std::string pos_separator=std::string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(index+1);
 	std::string neg_separator=std::string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(index+1);
 
@@ -3377,7 +3379,7 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
 	 res&=CreateLink("AfferentSource1","DataOutput0",motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor","DataInput0");
 	 res&=CreateLink("AfferentSource1","DataOutput0",motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor","DataInput0");
 	}
-    (*ActiveContours)[index] = value;
+    ActiveContours[index] = value;
    }
   }
   return true;
@@ -3389,13 +3391,13 @@ bool NEngineMotionControl::GetIsAfferentLinked(const int &index)
   switch(index)
   {
   case 0:
-   return CheckLink("II_PosIntervalSeparator1","DataOutput0","MotionElement0.Afferent_II1.Receptor","DataInput0");
+   return IsLinkExists("II_PosIntervalSeparator1","DataOutput0","MotionElement0.Afferent_II1.Receptor","DataInput0");
   case 1:
-   return CheckLink("Ia_PosIntervalSeparator1","DataOutput0","MotionElement0.Afferent_Ia2.Receptor","DataInput0");
+   return IsLinkExists("Ia_PosIntervalSeparator1","DataOutput0","MotionElement0.Afferent_Ia2.Receptor","DataInput0");
   case 2:
-   return CheckLink("Ib_PosIntervalSeparator1","DataOutput0","MotionElement0.Afferent_Ib1.Receptor","DataInput0");
+   return IsLinkExists("Ib_PosIntervalSeparator1","DataOutput0","MotionElement0.Afferent_Ib1.Receptor","DataInput0");
   case 3:
-   return CheckLink("Ic_PosIntervalSeparator1","DataOutput0","MotionElement0.Afferent_Ic1.Receptor","DataInput0");
+   return IsLinkExists("Ic_PosIntervalSeparator1","DataOutput0","MotionElement0.Afferent_Ic1.Receptor","DataInput0");
   }
  }
  else
@@ -3419,7 +3421,7 @@ void NEngineMotionControl::ConnectInternalGenerators(int direction, int num_moti
  if(!InternalGenerator)
   return;
 
- InternalGenerator->DisconnectAll();
+ InternalGenerator->BreakOutputLinks();
  bool res=true;
 
  int num_elements=(num_motion_elements<NumMotionElements)?num_motion_elements:NumMotionElements;
