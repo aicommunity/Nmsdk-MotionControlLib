@@ -813,7 +813,7 @@ bool NEngineMotionControl::ACalculate(void)
   if(receptors[i][5] && receptors[i][5]->GetInputData(size_t(0)) && receptors[i][5]->GetInputData(size_t(0))->Double[0] > 0)
    ++neg_angle;*/
   }
-  catch (UEPtr<NReceptor>::EUsingZeroPtr &exc)
+  catch (UEPtr<NReceptor>::EUsingZeroPtr &)
   {
    continue;
   }
@@ -1942,7 +1942,7 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
 				 std::string("II_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
- catch (EComponentNameNotExist &exc)
+ catch (EComponentNameNotExist &)
  {
  }
 
@@ -1955,7 +1955,7 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
 				 std::string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
- catch (EComponentNameNotExist &exc)
+ catch (EComponentNameNotExist &)
  {
  }
 
@@ -1968,7 +1968,7 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
 				 std::string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
- catch (EComponentNameNotExist &exc)
+ catch (EComponentNameNotExist &)
  {
  }
 
@@ -1993,7 +1993,7 @@ if(Ia)
 				 string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
- catch (EComponentNameNotExist &exc) {  }
+ catch (EComponentNameNotExist &) {  }
 }
 
 if(II)
@@ -2007,7 +2007,7 @@ if(II)
 				 string("II_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
- catch (EComponentNameNotExist &exc) {  }
+ catch (EComponentNameNotExist &) {  }
 }
 
 if(Ib)
@@ -2021,7 +2021,7 @@ if(Ib)
 				 string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
- catch (EComponentNameNotExist &exc) {  }
+ catch (EComponentNameNotExist &) {  }
 }
 
 if(Ic)
@@ -2035,7 +2035,7 @@ if(Ic)
 				 string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
   }
  }
- catch (EComponentNameNotExist &exc) {  }
+ catch (EComponentNameNotExist &) {  }
 }
 
 
@@ -2048,7 +2048,7 @@ if(Ic)
 	res=net->CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_Ia2.Receptor","DataInput0");
 	res=net->CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_Ia1.Receptor","DataInput0");
    }
-   catch (EComponentNameNotExist &exc) {  }
+   catch (EComponentNameNotExist &) {  }
 
   if(ActiveContours->size()>0 && (*ActiveContours)[0])
    try
@@ -2056,21 +2056,21 @@ if(Ic)
 	res=net->CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_II1.Receptor","DataInput0");
 	res=net->CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_II2.Receptor","DataInput0");
    }
-   catch (EComponentNameNotExist &exc) {  }
+   catch (EComponentNameNotExist &) {  }
 
   if(ActiveContours->size()>2 && (*ActiveContours)[2])
   try{
    res=net->BreakLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_Ib2.Receptor","DataInput0");
    res=net->BreakLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_Ib1.Receptor","DataInput0");
   }
-  catch (EComponentNameNotExist &exc) {  }
+  catch (EComponentNameNotExist &) {  }
 
   if(ActiveContours->size()>3 && (*ActiveContours)[3])
   try{
    res=net->CreateLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_Ic2.Receptor","DataInput0");
    res=net->CreateLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(k+1),"DataOutput0",Motions[k]->GetName()+".Afferent_Ic1.Receptor","DataInput0");
   }
-  catch (EComponentNameNotExist &exc) {  }
+  catch (EComponentNameNotExist &) {  }
  }
 
  if(res)
@@ -2852,7 +2852,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
   InternalGenerator->SetName("InternalGenerator");
   net->AddComponent(InternalGenerator);
  }
- catch (EComponentNameNotExist &exc)
+ catch (EComponentNameNotExist &)
  {
  }
 
@@ -2907,7 +2907,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
 //	   receptor->Gain=receptor_gain;
 //	   receptor->ExpCoeff=exp_coeff;
 	  }
-	  catch (EComponentNameNotExist &exc)
+      catch (EComponentNameNotExist &)
 	  {
 	  }
 
@@ -2922,7 +2922,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
 //	   receptor->Gain=receptor_gain;
 //	   receptor->ExpCoeff=exp_coeff;
 	  }
-	  catch (EComponentNameNotExist &exc)
+      catch (EComponentNameNotExist &)
 	  {
 	  }
 	}
@@ -3137,7 +3137,7 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
        {
 		cont=GetComponent(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
        }
-       catch (EComponentNameNotExist &exc)
+       catch (EComponentNameNotExist &)
        {
         continue;
        }
@@ -3152,7 +3152,7 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
        {
 		cont=GetComponent(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
        }
-       catch (EComponentNameNotExist &exc)
+       catch (EComponentNameNotExist &)
 	   {
         continue;
        }
@@ -3198,7 +3198,7 @@ for(int i=0;i<NumMotionElements;i++)
 	}
   }
  }
- catch (EComponentNameNotExist &exc) {  }
+ catch (EComponentNameNotExist &) {  }
 }
 
 
@@ -3212,7 +3212,7 @@ for(int i=0;i<NumMotionElements;i++)
 		 res=CreateLink(string("PosIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),"DataOutput0",Motions[k]->GetName()+".AfferentL"+sntoa(l+1)+".Receptor","DataInput0");
 		 res=CreateLink(string("NegIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),"DataOutput0",Motions[k]->GetName()+".AfferentR"+sntoa(l+1)+".Receptor","DataInput0");
 		}
-        catch (EComponentNameNotExist &exc) {  }
+        catch (EComponentNameNotExist &) {  }
   }
 
  }
@@ -3274,7 +3274,7 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
 	 res&=CreateLink("AfferentSource1","DataOutput0",motion+".Afferent_Ia1.Receptor","DataInput0");
     }
    }
-   catch (EComponentNameNotExist &exc) {  }
+   catch (EComponentNameNotExist &) {  }
 
    if(index == 0)
    try
@@ -3296,7 +3296,7 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
 	 res&=CreateLink("AfferentSource1","DataOutput0",motion+".Afferent_II1.Receptor","DataInput0");
     }
    }
-   catch (EComponentNameNotExist &exc) {  }
+   catch (EComponentNameNotExist &) {  }
 
   if(index == 2)
    try
@@ -3318,7 +3318,7 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
 	 res&=CreateLink("AfferentSource1","DataOutput0",motion+".Afferent_Ib2.Receptor","DataInput0");
 	}
    }
-   catch (EComponentNameNotExist &exc) {  }
+   catch (EComponentNameNotExist &) {  }
 
   if(index == 3)
    try
@@ -3340,7 +3340,7 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
 	 res&=CreateLink("AfferentSource1","DataOutput0",motion+".Afferent_Ic1.Receptor","DataInput0");
     }
    }
-   catch (EComponentNameNotExist &exc) {  }
+   catch (EComponentNameNotExist &) {  }
 
 	if(res)
 	{

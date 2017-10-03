@@ -22,7 +22,7 @@ namespace NMSDK {
 class RDK_LIB_TYPE NNewPositionControlElement: public NPositionControlElement
 {
 public: // Свойства
-RDK::UPropertyInput<NEngineMotionControl,NNewPositionControlElement> MotionControl;
+//RDK::UPropertyRangeInput<NEngineMotionControl,std::vector<NEngineMotionControl>, NNewPositionControlElement> MotionControl;
 RDK::UProperty<bool, NNewPositionControlElement, ptPubParameter> SimControl;
 //RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> CurrentPosition;
 //RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement> TargetPosition;
