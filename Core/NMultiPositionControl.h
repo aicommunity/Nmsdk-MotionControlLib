@@ -19,7 +19,7 @@ namespace NMSDK {
 class RDK_LIB_TYPE NMultiPositionControl: public NPositionControlElement
 {
 protected: // Свойства
-RDK::UPropertyInput<NPositionControlElement,NMultiPositionControl> PositionControl;
+RDK::UPropertyRangeInput<NPositionControlElement,NMultiPositionControl> PositionControl;
 RDK::UProperty<int, NPositionControlElement,ptPubParameter> NumOfPositions;
 
 public: // Переменные состояния

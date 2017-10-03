@@ -23,7 +23,7 @@ class RDK_LIB_TYPE NNewPositionControlElement: public NPositionControlElement
 {
 public: // Свойства
 RDK::UPropertyInput<NEngineMotionControl,NNewPositionControlElement> MotionControl;
-RDK::ULProperty<bool, NNewPositionControlElement> SimControl;
+RDK::UProperty<bool, NNewPositionControlElement, ptPubParameter> SimControl;
 //RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> CurrentPosition;
 //RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement> TargetPosition;
 //RDK::ULProperty<string, NNewPositionControlElement> InputNeuronType;
