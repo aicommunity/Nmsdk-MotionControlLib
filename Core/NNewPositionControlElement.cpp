@@ -1,9 +1,9 @@
 /* ***********************************************************
 
-E-mail:        
-Url:           
+E-mail:
+Url:
 
-This file is part of the project: 
+This file is part of the project:
 
 File License:       New BSD License
 Project License:    New BSD License
@@ -208,7 +208,7 @@ bool NNewPositionControlElement::CreateNeurons()
 {
    UEPtr<UContainer> cont;
    UEPtr<UStorage> storage = GetStorage();
-   bool res;
+   bool res(true);
    vector<NNet*> Motions = MotionControl->GetMotion();
    //Creating InputNeurons
    for(int i=0;i<MotionControl->NumMotionElements;i++)
@@ -243,7 +243,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  if(!cont)
 	   return 0;
 	  cont->SetName(inputNeuronLName);
-	  res=AddComponent(cont);
+	  res&=AddComponent(cont);
 	  InputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, inputLName);
 	  LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronLName)));
@@ -262,7 +262,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  if(!cont)
 	   return 0;
 	  cont->SetName(inputNeuronRName);
-	  res=AddComponent(cont);
+	  res&=AddComponent(cont);
 	  InputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, inputRName);
 	  RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
@@ -305,9 +305,9 @@ bool NNewPositionControlElement::CreateNeurons()
 	 {
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
 	  if(!cont)
-	   return 0;
+	   return false;
 	  cont->SetName(controlNeuronLName);
-	  res=AddComponent(cont);
+	  res&=AddComponent(cont);
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, controlLName);
       LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
@@ -323,9 +323,9 @@ bool NNewPositionControlElement::CreateNeurons()
 	 {
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
 	  if(!cont)
-	   return 0;
+	   return false;
 	  cont->SetName(controlNeuronRName);
-	  res=AddComponent(cont);
+	  res&=AddComponent(cont);
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, controlRName);
 	  RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
@@ -363,9 +363,9 @@ bool NNewPositionControlElement::CreateNeurons()
 	 {
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
 	  if(!cont)
-	   return 0;
+	   return false;
 	  cont->SetName(preControlNeuronLName);
-	  res=AddComponent(cont);
+	  res&=AddComponent(cont);
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
 	 }
@@ -378,9 +378,9 @@ bool NNewPositionControlElement::CreateNeurons()
 	 {
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
 	  if(!cont)
-	   return 0;
+	   return false;
 	  cont->SetName(preControlNeuronRName);
-	  res=AddComponent(cont);
+	  res&=AddComponent(cont);
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
 	 }
@@ -410,9 +410,9 @@ bool NNewPositionControlElement::CreateNeurons()
 	 {
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
 	  if(!cont)
-	   return 0;
+	   return false;
 	  cont->SetName(postInputNeuronLName);
-	  res=AddComponent(cont);
+	  res&=AddComponent(cont);
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
@@ -425,9 +425,9 @@ bool NNewPositionControlElement::CreateNeurons()
 	 {
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
 	  if(!cont)
-	   return 0;
+	   return false;
 	  cont->SetName(postInputNeuronRName);
-	  res=AddComponent(cont);
+	  res&=AddComponent(cont);
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
@@ -514,14 +514,14 @@ bool NNewPositionControlElement::CreateNeurons()
    }
 
    CreateExternalControlElements();
-   return true;
+   return res;
 }
 
 bool NNewPositionControlElement::CreateExternalControlElements(void)
 {
    UEPtr<UContainer> cont;
    UEPtr<UStorage> storage = GetStorage();
-   bool res;
+   bool res(true);
    vector<NNet*> Motions = MotionControl->GetMotion();
 
    for(int i=0;i<MotionControl->NumMotionElements;i++)
@@ -545,9 +545,9 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
 	 {
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NPGenerator"));
 	  if(!cont)
-	   return 0;
+	   return false;
 	  cont->SetName(generatorLName);
-	  res=AddComponent(cont);
+	  res&=AddComponent(cont);
 	  Generators.push_back(static_pointer_cast<NNet>(cont));
 	  LeftGenerators[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
@@ -560,15 +560,15 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
 	 {
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NPGenerator"));
 	  if(!cont)
-	   return 0;
+	   return false;
 	  cont->SetName(generatorRName);
-	  res=AddComponent(cont);
+	  res&=AddComponent(cont);
 	  Generators.push_back(static_pointer_cast<NNet>(cont));
 	  RightGenerators[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
 	}
    }
- return true;
+ return res;
 }
 
 bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> finish)

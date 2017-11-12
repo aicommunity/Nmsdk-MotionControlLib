@@ -169,12 +169,12 @@ if(Ready)
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
  {
-  if(AfferentMin->size()<=i)
+  if(int(AfferentMin->size())<=i)
   {
    LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
    break;
   }
-  if(AfferentMax->size()<=i)
+  if(int(AfferentMax->size())<=i)
   {
    LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
    break;
@@ -225,12 +225,12 @@ if(Ready)
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
  {
-     if(AfferentMin->size()<=i)
+     if(int(AfferentMin->size())<=i)
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
       break;
      }
-     if(AfferentMax->size()<=i)
+     if(int(AfferentMax->size())<=i)
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
       break;
@@ -1918,6 +1918,8 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
 
  res=net->CreateLink(engine_integrator_name,0,"NManipulatorInput1");
 
+if(CheckComponent("Ia_PosIntervalSeparator1"))
+{
  try {
   for(size_t i=0;i<Motions.size();i++)
   {
@@ -1958,18 +1960,19 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
  }
 
  try {
-  for(size_t i=0;i<Motions.size();i++)
-  {
-   res&=net->CreateLink("NManipulatorSource1",3,
+  if(this->CheckComponent("Ic_PosIntervalSeparator1"))
+   for(size_t i=0;i<Motions.size();i++)
+   {
+    res&=net->CreateLink("NManipulatorSource1",3,
 				 std::string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),0);
-   res&=net->CreateLink("NManipulatorSource1",3,
+    res&=net->CreateLink("NManipulatorSource1",3,
 				 std::string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),0);
-  }
+   }
  }
  catch (EComponentNameNotExist &exc)
  {
  }
-
+}
  if(res)
   return;
 }
@@ -2528,12 +2531,12 @@ UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cross
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
  {
-     if(AfferentMin->size()<=i)
+     if(int(AfferentMin->size())<=i)
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
       break;
      }
-     if(AfferentMax->size()<=i)
+     if(int(AfferentMax->size())<=i)
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
       break;
@@ -2644,12 +2647,12 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
  {
-     if(AfferentMin->size()<=i)
+     if(int(AfferentMin->size())<=i)
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
       break;
      }
-     if(AfferentMax->size()<=i)
+     if(int(AfferentMax->size())<=i)
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
       break;
@@ -2786,12 +2789,12 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(void)
  AfferentRangesNeg.resize(NumControlLoops);
  for(int i=0;i<NumControlLoops;i++)
  {
-     if(AfferentMin->size()<=i)
+     if(int(AfferentMin->size())<=i)
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMin size less than NumControlLoops");
       break;
      }
-     if(AfferentMax->size()<=i)
+     if(int(AfferentMax->size())<=i)
      {
       LogMessageEx(RDK_EX_WARNING,__FUNCTION__,"AfferentMax size less than NumControlLoops");
       break;
