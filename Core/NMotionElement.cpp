@@ -1318,7 +1318,7 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 
    UEPtr<UContainer> cont;
    UEPtr<UStorage> storage = GetStorage();
-   bool res;
+   bool res(true);
 
 
  // Мотонейрон 1
@@ -1326,14 +1326,14 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
    if(!cont)
 	return 0;
    cont->SetName("MotoneuronL");
-   res=AddComponent(cont);
+   res&=AddComponent(cont);
 
   // Мотонейрон 2
    cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*NeuroObjectName));
    if(!cont)
 	return false;
    cont->SetName("MotoneuronR");
-   res=AddComponent(cont);
+   res&=AddComponent(cont);
 
    if(RenshowMode)
    {
@@ -1342,24 +1342,24 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 	if(!cont)
 	 return false;
 	cont->SetName("RenshowL");
-	res=AddComponent(cont);
+	res&=AddComponent(cont);
 
 	// Клетка реншоу 2
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*NeuroObjectName));
 	if(!cont)
 	 return false;
 	cont->SetName("RenshowR");
-	res=AddComponent(cont);
+	res&=AddComponent(cont);
    }
 
-   return true;
+   return res;
  }
  // Создаёт связку афферентных нейронов
  bool NMotionElement::CreateAfferents()
  {
    UEPtr<UContainer> cont;
    UEPtr<UStorage> storage = GetStorage();
-   bool res;
+   bool res(true);
 
 
    for (int i=0; i<NumControlLoops; i++)
@@ -1368,16 +1368,16 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 	  if(!cont)
 	   return 0;
 	  cont->SetName("AfferentR"+sntoa(i+1));
-	  res=AddComponent(cont);
+	  res&=AddComponent(cont);
 
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*AfferentObjectName));
 	  if(!cont)
 	   return 0;
 	  cont->SetName("AfferentL"+sntoa(i+1));
-	  res=AddComponent(cont);
+	  res&=AddComponent(cont);
    }
 
-   return true;
+   return res;
  }
  bool NMotionElement::CreateInterneurons()
  {
@@ -1385,7 +1385,7 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 	return 0;
    UEPtr<UContainer> cont;
    UEPtr<UStorage> storage = GetStorage();
-   bool res;
+   bool res(true);
 
    for (int i=0; i<NumControlLoops; i++)
    {
@@ -1393,16 +1393,16 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 	if(!cont)
 	 return 0;
 	cont->SetName("PostAfferentL"+sntoa(i+1));
-	res=AddComponent(cont);
+	res&=AddComponent(cont);
 
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(*NeuroObjectName));
 	if(!cont)
 	 return 0;
 	cont->SetName("PostAfferentR"+sntoa(i+1));
-	res=AddComponent(cont);
+	res&=AddComponent(cont);
    }
 
-   return true;
+   return res;
  }
 
  // Создание связей

@@ -1920,6 +1920,8 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
 
  res=net->CreateLink(engine_integrator_name,"DataOutput0","NManipulatorInput1","");
 
+if(CheckComponent("Ia_PosIntervalSeparator1"))
+{
  try {
   for(size_t i=0;i<Motions.size();i++)
   {
@@ -1960,18 +1962,19 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
  }
 
  try {
-  for(size_t i=0;i<Motions.size();i++)
-  {
+  if(this->CheckComponent("Ic_PosIntervalSeparator1"))
+   for(size_t i=0;i<Motions.size();i++)
+   {
    res&=net->CreateLink("NManipulatorSource1","DataOutput3",
 				 std::string("Ic_PosIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
    res&=net->CreateLink("NManipulatorSource1","DataOutput3",
 				 std::string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),"DataInput0");
-  }
+   }
  }
  catch (EComponentNameNotExist &)
  {
  }
-
+}
  if(res)
   return;
 }
