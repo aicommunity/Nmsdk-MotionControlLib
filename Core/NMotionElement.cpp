@@ -640,7 +640,7 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
   {
    ltmembr=neuron->GetComponent("LTMembrane");
   }
-  catch(UContainer::EComponentNameNotExist &exc){}
+  catch(UContainer::EComponentNameNotExist &){}
  }
  if(ltmembr)
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
@@ -668,7 +668,7 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
   {
    ltmembr=neuron->GetComponent("LTMembrane");
   }
-  catch(UContainer::EComponentNameNotExist &exc){}
+  catch(UContainer::EComponentNameNotExist &){}
  }
  if(ltmembr)
   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
@@ -698,13 +698,13 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
   {
    ltmembr=neuron->GetComponent("LTMembrane");
   }
-  catch(UContainer::EComponentNameNotExist &exc){}
+  catch(UContainer::EComponentNameNotExist &){}
  }
  try
  {
   branch=dynamic_pointer_cast<NPulseMembrane>(neuron->GetComponent(branch_name));
  }
- catch(UContainer::EComponentNameNotExist &exc)
+ catch(UContainer::EComponentNameNotExist &)
  {
   return false;
  }
@@ -1326,14 +1326,14 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
    if(!cont)
 	return 0;
    cont->SetName("MotoneuronL");
-   res&=AddComponent(cont);
+   res&=(AddComponent(cont)!=ForbiddenId);
 
   // Мотонейрон 2
    cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
    if(!cont)
 	return false;
    cont->SetName("MotoneuronR");
-   res&=AddComponent(cont);
+   res&=(AddComponent(cont)!=ForbiddenId);
 
    if(RenshowMode)
    {
@@ -1342,14 +1342,14 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 	if(!cont)
 	 return false;
 	cont->SetName("RenshowL");
-	res&=AddComponent(cont);
+    res&=(AddComponent(cont)!=ForbiddenId);
 
 	// Клетка реншоу 2
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
 	if(!cont)
 	 return false;
 	cont->SetName("RenshowR");
-	res&=AddComponent(cont);
+    res&=(AddComponent(cont)!=ForbiddenId);
    }
 
    return res;
@@ -1368,13 +1368,13 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 	  if(!cont)
 	   return 0;
 	  cont->SetName("AfferentR"+sntoa(i+1));
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont)!=ForbiddenId);
 
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(AfferentObjectName));
 	  if(!cont)
 	   return 0;
 	  cont->SetName("AfferentL"+sntoa(i+1));
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont)!=ForbiddenId);
    }
 
    return res;
@@ -1393,13 +1393,13 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 	if(!cont)
 	 return 0;
 	cont->SetName("PostAfferentL"+sntoa(i+1));
-	res&=AddComponent(cont);
+    res&=(AddComponent(cont)!=ForbiddenId);
 
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
 	if(!cont)
 	 return 0;
 	cont->SetName("PostAfferentR"+sntoa(i+1));
-	res&=AddComponent(cont);
+    res&=(AddComponent(cont)!=ForbiddenId);
    }
 
    return res;

@@ -243,7 +243,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  if(!cont)
 	   return 0;
 	  cont->SetName(inputNeuronLName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  InputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, inputLName);
 	  LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronLName)));
@@ -262,7 +262,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  if(!cont)
 	   return 0;
 	  cont->SetName(inputNeuronRName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  InputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, inputRName);
 	  RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
@@ -307,7 +307,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  if(!cont)
 	   return false;
 	  cont->SetName(controlNeuronLName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, controlLName);
       LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
@@ -325,7 +325,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  if(!cont)
 	   return false;
 	  cont->SetName(controlNeuronRName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, controlRName);
 	  RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
@@ -365,7 +365,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  if(!cont)
 	   return false;
 	  cont->SetName(preControlNeuronLName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
 	 }
@@ -380,7 +380,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  if(!cont)
 	   return false;
 	  cont->SetName(preControlNeuronRName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
 	 }
@@ -412,7 +412,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  if(!cont)
 	   return false;
 	  cont->SetName(postInputNeuronLName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
@@ -427,7 +427,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  if(!cont)
 	   return false;
 	  cont->SetName(postInputNeuronRName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
@@ -547,7 +547,7 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
 	  if(!cont)
 	   return false;
 	  cont->SetName(generatorLName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  Generators.push_back(static_pointer_cast<NNet>(cont));
 	  LeftGenerators[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
@@ -562,7 +562,7 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
 	  if(!cont)
 	   return false;
 	  cont->SetName(generatorRName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  Generators.push_back(static_pointer_cast<NNet>(cont));
 	  RightGenerators[j].push_back(static_pointer_cast<NNet>(cont));
 	 }

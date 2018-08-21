@@ -200,11 +200,11 @@ bool NMultiPositionControl::CreateNeurons(void)
  UEPtr<UContainer> cont;
  UEPtr<UStorage> storage = GetStorage();
  //Creating InputNeurons
- size_t positionControlSize = PositionControl->size();
+ int positionControlSize = int(PositionControl->size());
  InputNeuronsByContours.resize(positionControlSize);
- for(size_t i=0; i<positionControlSize; i++)
+ for(int i=0; i<positionControlSize; i++)
  {
-  for(size_t j=0; j<PositionControl[i]->PostInputNeurons.size(); j++)
+  for(int j=0; j<int(PositionControl[i]->PostInputNeurons.size()); j++)
   {
    UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
    string inputNeuronName = "InputNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
@@ -236,9 +236,9 @@ bool NMultiPositionControl::CreateNeurons(void)
  }
  //Creating ControlNeurons 0
  ControlNeuronsByContours.resize(positionControlSize);
- for(size_t i=0; i<positionControlSize; i++)
+ for(int i=0; i<positionControlSize; i++)
  {
-  for(size_t j=0; j<PositionControl[i]->PreControlNeurons.size(); j++)
+  for(int j=0; j<int(PositionControl[i]->PreControlNeurons.size()); j++)
   {
    UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
    string controlNeuronName = "ControlNeuron"+sntoa(i+1)+"-"+sntoa(j+1);

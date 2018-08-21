@@ -161,11 +161,11 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 // pair<double,double> Ia(-2.0*M_PI,2.0*M_PI);
 // pair<double,double> Ib(-10,10);
 // pair<double,double> II(-M_PI/2,M_PI/2);
- size_t max_number_of_mc=1;
+ int max_number_of_mc=1;
 
  // Формируем сеть управления двигателем с разделением информационного потока с датчиков
  // на две полосы по знаку
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -184,7 +184,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 
  // Формируем сеть управления двигателем c разделением информационного потока с датчиков
  // на полосы по амплитуде
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -205,7 +205,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Формируем сеть управления двигателем с разделением информационного потока с датчиков
  // на две полосы по знаку
  // используется двигательная единица без вставочных интернейронов
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -225,7 +225,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Формируем сеть управления двигателем c разделением информационного потока с датчиков
  // на полосы по амплитуде
  // используется двигательная единица без вставочных интернейронов
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -247,7 +247,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Формируем сеть управления двигателем c разделением информационного потока с датчиков
  // на полосы по амплитуде
  // Автоматическое формирование нейронов
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -269,7 +269,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // на полосы по амплитуде
  // используется двигательная единица без вставочных интернейронов
  // Автоматическое формирование нейронов
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -291,7 +291,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // на полосы по амплитуде
  // Автоматическое формирование нейронов
  // Перекрестные связи
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -314,7 +314,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // используется двигательная единица без вставочных интернейронов
  // Автоматическое формирование нейронов
  // Перекрестные связи
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -336,7 +336,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Формируем сеть управления двигателем c разделением информационного потока с датчиков
  // на полосы по амплитуде без пересечения диапазонов
  // Автоматическое формирование нейронов
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -358,7 +358,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // на полосы по амплитуде без пересекающихся диапазонов
  // Автоматическое формирование нейронов
  // Перекрестные связи
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -381,7 +381,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Автоматическое формирование нейронов
  // Перекрестные связи
  // Нейроны с непрерывной переходной функцией
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -398,7 +398,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  }
 
  // Формируем сеть управления двигателем c простейшей моделью СУ
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -417,7 +417,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 
  // Формируем сеть управления двигателем c простейшей моделью СУ
  // Ветвление дендритов
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -437,7 +437,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // и простейшими афферентами
  // Ветвление дендритов
 // max_number_of_mc=1;
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -458,7 +458,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Ветвление дендритов
  // Новая модель нейрона с выделенной сомой
 // max_number_of_mc=1;
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -482,7 +482,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // 3 афферентных канала
  int temp=max_number_of_mc;
  max_number_of_mc=3;
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -503,7 +503,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // и простейшими афферентами
  // Ветвление дендритов
  // 3 афферентных канала
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -525,7 +525,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Новая модель нейрона с выделенной сомой
  // 3 афферентных канала
  // Пейсмекерные нейроны в СУ
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -546,7 +546,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Ветвление дендритов
  // 3 афферентных канала
  // Пейсмекерные нейроны в СУ
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -567,7 +567,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Ветвление дендритов
  // Новая модель нейрона с выделенной сомой
  // 4 афферентных канала
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -587,7 +587,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // и простейшими афферентами
  // Ветвление дендритов
  // 4 афферентных канала
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -609,7 +609,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Новая модель нейрона с выделенной сомой
  // 4 афферентных канала
  // Пейсмекерные нейроны в СУ
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -630,7 +630,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  // Ветвление дендритов
  // 4 афферентных канала
  // Пейсмекерные нейроны в СУ
- for(size_t i=0;i<max_number_of_mc;i++)
+ for(int i=0;i<max_number_of_mc;i++)
  {
   cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
   cs->NumMotionElements=i+1;
@@ -646,7 +646,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
    UploadClass("NAslsSimplestAfferentBranchedEngineControlPM",net);
  }
 
-		 for(size_t i=0;i<max_number_of_mc;i++)
+         for(int i=0;i<max_number_of_mc;i++)
 		 {
 		  cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
 		  cs->NumMotionElements=i+1;
@@ -663,7 +663,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 		   UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl",net);
 		 }
 
-		 for(size_t i=0;i<max_number_of_mc;i++)
+         for(int i=0;i<max_number_of_mc;i++)
 		 {
 		  cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
 		  cs->NumMotionElements=i+1;

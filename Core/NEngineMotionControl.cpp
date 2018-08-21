@@ -219,7 +219,7 @@ if(Ready)
 			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
  CalcAfferentRange(NumMotionElements, crossranges, IcMin, IcMax,
-			Ic_ranges_pos, Ic_ranges_neg,value);
+            Ic_ranges_pos, Ic_ranges_neg,int(value));
 
  AfferentRangesPos.resize(NumControlLoops);
  AfferentRangesNeg.resize(NumControlLoops);
@@ -236,7 +236,7 @@ if(Ready)
       break;
      }
   CalcAfferentRange(NumMotionElements, crossranges, (*AfferentMin)[i], (*AfferentMax)[i],
-			AfferentRangesPos[i], AfferentRangesNeg[i],value);
+            AfferentRangesPos[i], AfferentRangesNeg[i],int(value));
  }
 
  IntervalSeparatorsUpdate(this, 5);
@@ -636,7 +636,7 @@ bool NEngineMotionControl::AReset(void)
   try {
    cont=GetComponent(string("MotionElement")+RDK::sntoa(n));
   }
-  catch (EComponentNameNotExist &exc)
+  catch (EComponentNameNotExist &)
   {
    continue;
   }
@@ -692,8 +692,8 @@ bool NEngineMotionControl::ACalculate(void)
  measure.resize(source->GetNumOutputs());
  for(size_t i=0;i<measure.size();i++)
  {
-  if(source->GetOutputDataSize(i)>MMatrixSize(1,0))
-   measure[i]=source->GetOutputData(i).Double[0];
+  if(source->GetOutputDataSize(int(i))>MMatrixSize(1,0))
+   measure[i]=source->GetOutputData(int(i)).Double[0];
   else
    measure[i]=0;
  }
@@ -792,8 +792,8 @@ bool NEngineMotionControl::ACalculate(void)
  if(AdaptiveStructureMode == 2)
   AdaptiveTuning();
 
- int pos_angle=0,pos_speed=0,pos_moment=0;
- int neg_angle=0,neg_speed=0,neg_moment=0;
+// int pos_angle=0,pos_speed=0,pos_moment=0;
+// int neg_angle=0,neg_speed=0,neg_moment=0;
  // Receptors
  for(int i=0;i<NumMotionElements;i++)
  {
@@ -813,7 +813,7 @@ bool NEngineMotionControl::ACalculate(void)
   if(receptors[i][5] && receptors[i][5]->GetInputData(size_t(0)) && receptors[i][5]->GetInputData(size_t(0))->Double[0] > 0)
    ++neg_angle;*/
   }
-  catch (UEPtr<NReceptor>::EUsingZeroPtr &exc)
+  catch (UEPtr<NReceptor>::EUsingZeroPtr &)
   {
    continue;
   }
@@ -845,9 +845,9 @@ bool NEngineMotionControl::ACalculate(void)
  stats.push_back(CurrentTransientTime);
  stats.push_back(CurrentTransientState);
 
- Statistic->Assign(1,stats.size(),0.0);
+ Statistic->Assign(1,int(stats.size()),0.0);
  for(size_t i=0;i<stats.size();i++)
-  (*Statistic)(0,i)=stats[i];
+  (*Statistic)(0,int(i))=stats[i];
 
 
  return true;
@@ -1465,7 +1465,7 @@ void NEngineMotionControl::PACSetup(UEPtr<UContainer> net,
   return;
  cont->SetName("Pac");
  net->AddComponent(cont);
- cont->SetOutputDataSize(0,MMatrixSize(1,Motions.size()*2));
+ cont->SetOutputDataSize(0,MMatrixSize(1,int(Motions.size())*2));
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
@@ -1528,7 +1528,7 @@ void NEngineMotionControl::AACSetup(UEPtr<UContainer> net, double gain_value)
  cont->Mode=0;
  cont->TCMode=0;
  net->AddComponent(cont);
- cont->SetOutputDataSize(0,MMatrixSize(1,Motions.size()*2));
+ cont->SetOutputDataSize(0,MMatrixSize(1,int(Motions.size())*2));
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
@@ -1929,7 +1929,7 @@ if(CheckComponent("Ia_PosIntervalSeparator1"))
 				 std::string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),0);
   }
  }
- catch (EComponentNameNotExist &exc)
+ catch (EComponentNameNotExist &)
  {
  }
 
@@ -1942,7 +1942,7 @@ if(CheckComponent("Ia_PosIntervalSeparator1"))
 				 std::string("II_NegIntervalSeparator")+RDK::sntoa(i+1),0);
   }
  }
- catch (EComponentNameNotExist &exc)
+ catch (EComponentNameNotExist &)
  {
  }
 
@@ -1955,7 +1955,7 @@ if(CheckComponent("Ia_PosIntervalSeparator1"))
 				 std::string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),0);
   }
  }
- catch (EComponentNameNotExist &exc)
+ catch (EComponentNameNotExist &)
  {
  }
 
@@ -1969,7 +1969,7 @@ if(CheckComponent("Ia_PosIntervalSeparator1"))
 				 std::string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),0);
    }
  }
- catch (EComponentNameNotExist &exc)
+ catch (EComponentNameNotExist &)
  {
  }
 }
@@ -1994,7 +1994,7 @@ if(Ia)
 				 string("Ia_NegIntervalSeparator")+RDK::sntoa(i+1),0);
   }
  }
- catch (EComponentNameNotExist &exc) {  }
+ catch (EComponentNameNotExist &) {  }
 }
 
 if(II)
@@ -2008,7 +2008,7 @@ if(II)
 				 string("II_NegIntervalSeparator")+RDK::sntoa(i+1),0);
   }
  }
- catch (EComponentNameNotExist &exc) {  }
+ catch (EComponentNameNotExist &) {  }
 }
 
 if(Ib)
@@ -2022,7 +2022,7 @@ if(Ib)
 				 string("Ib_NegIntervalSeparator")+RDK::sntoa(i+1),0);
   }
  }
- catch (EComponentNameNotExist &exc) {  }
+ catch (EComponentNameNotExist &) {  }
 }
 
 if(Ic)
@@ -2036,7 +2036,7 @@ if(Ic)
 				 string("Ic_NegIntervalSeparator")+RDK::sntoa(i+1),0);
   }
  }
- catch (EComponentNameNotExist &exc) {  }
+ catch (EComponentNameNotExist &) {  }
 }
 
 
@@ -2049,7 +2049,7 @@ if(Ic)
 	res=net->CreateLink(string("Ia_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia2.Receptor",0);
 	res=net->CreateLink(string("Ia_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ia1.Receptor",0);
    }
-   catch (EComponentNameNotExist &exc) {  }
+   catch (EComponentNameNotExist &) {  }
 
   if(ActiveContours->size()>0 && (*ActiveContours)[0])
    try
@@ -2057,21 +2057,21 @@ if(Ic)
 	res=net->CreateLink(string("II_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II1.Receptor",0);
 	res=net->CreateLink(string("II_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_II2.Receptor",0);
    }
-   catch (EComponentNameNotExist &exc) {  }
+   catch (EComponentNameNotExist &) {  }
 
   if(ActiveContours->size()>2 && (*ActiveContours)[2])
   try{
    res=net->BreakLink(string("Ib_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib2.Receptor",0);
    res=net->BreakLink(string("Ib_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ib1.Receptor",0);
   }
-  catch (EComponentNameNotExist &exc) {  }
+  catch (EComponentNameNotExist &) {  }
 
   if(ActiveContours->size()>3 && (*ActiveContours)[3])
   try{
    res=net->CreateLink(string("Ic_NegIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ic2.Receptor",0);
    res=net->CreateLink(string("Ic_PosIntervalSeparator")+RDK::sntoa(k+1),0,Motions[k]->GetName()+".Afferent_Ic1.Receptor",0);
   }
-  catch (EComponentNameNotExist &exc) {  }
+  catch (EComponentNameNotExist &) {  }
  }
 
  if(res)
@@ -2385,11 +2385,11 @@ UNet* NEngineMotionControl::CreateEngineControlRangeAfferent(bool crosslinks, bo
  // Число неперекрывающихся диапазонов
  int real_ranges=0;
 
- real_ranges=CalcAfferentRange(num_motions, crossranges, IaMin, IaMax,
+ real_ranges=CalcAfferentRange(int(num_motions), crossranges, IaMin, IaMax,
 			Ia_ranges_pos, Ia_ranges_neg,AfferentRangeMode);
- real_ranges=CalcAfferentRange(num_motions, crossranges, IbMin, IbMax,
+ real_ranges=CalcAfferentRange(int(num_motions), crossranges, IbMin, IbMax,
 			Ib_ranges_pos, Ib_ranges_neg,AfferentRangeMode);
- real_ranges=CalcAfferentRange(num_motions, crossranges, IIMin, IIMax,
+ real_ranges=CalcAfferentRange(int(num_motions), crossranges, IIMin, IIMax,
 			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
  AfferentRangesPos.resize(NumControlLoops);
@@ -2520,11 +2520,11 @@ UNet* NEngineMotionControl::CreateEngineControlContinuesNeuronsSimple(bool cross
  // Число неперекрывающихся диапазонов
  int real_ranges=0;
 
- real_ranges=CalcAfferentRange(num_motions, crossranges, IaMin, IaMax,
+ real_ranges=CalcAfferentRange(int(num_motions), crossranges, IaMin, IaMax,
 			Ia_ranges_pos, Ia_ranges_neg,AfferentRangeMode);
- real_ranges=CalcAfferentRange(num_motions, crossranges, IbMin, IbMax,
+ real_ranges=CalcAfferentRange(int(num_motions), crossranges, IbMin, IbMax,
 			Ib_ranges_pos, Ib_ranges_neg,AfferentRangeMode);
- real_ranges=CalcAfferentRange(num_motions, crossranges, IIMin, IIMax,
+ real_ranges=CalcAfferentRange(int(num_motions), crossranges, IIMin, IIMax,
 			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
  AfferentRangesPos.resize(NumControlLoops);
@@ -2621,16 +2621,16 @@ UNet* NEngineMotionControl::CreateEngineControl2NeuronsSimplest(bool use_speed_f
 // bool crosslinks=false;
 
 
- real_ranges=CalcAfferentRange(num_motions, crossranges, IaMin, IaMax,
+ real_ranges=CalcAfferentRange(int(num_motions), crossranges, IaMin, IaMax,
 			Ia_ranges_pos, Ia_ranges_neg,AfferentRangeMode);
- real_ranges=CalcAfferentRange(num_motions, crossranges, IbMin, IbMax,
+ real_ranges=CalcAfferentRange(int(num_motions), crossranges, IbMin, IbMax,
 			Ib_ranges_pos, Ib_ranges_neg,AfferentRangeMode);
- real_ranges=CalcAfferentRange(num_motions, crossranges, IIMin, IIMax,
+ real_ranges=CalcAfferentRange(int(num_motions), crossranges, IIMin, IIMax,
 			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
  if(use_add_contours)
  {
-  real_ranges=CalcAfferentRange(num_motions, crossranges, IcMin, IcMax,
+  real_ranges=CalcAfferentRange(int(num_motions), crossranges, IcMin, IcMax,
 			Ic_ranges_pos, Ic_ranges_neg,AfferentRangeMode);
   NumControlLoops=4;
   ChangeLookupPropertyType("IcMin",ptPubParameter);
@@ -2778,11 +2778,11 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(void)
 // bool crosslinks=false;
 
 
- real_ranges=CalcAfferentRange(num_motions, crossranges, IaMin, IaMax,
+ real_ranges=CalcAfferentRange(int(num_motions), crossranges, IaMin, IaMax,
 			Ia_ranges_pos, Ia_ranges_neg,AfferentRangeMode);
- real_ranges=CalcAfferentRange(num_motions, crossranges, IbMin, IbMax,
+ real_ranges=CalcAfferentRange(int(num_motions), crossranges, IbMin, IbMax,
 			Ib_ranges_pos, Ib_ranges_neg,AfferentRangeMode);
- real_ranges=CalcAfferentRange(num_motions, crossranges, IIMin, IIMax,
+ real_ranges=CalcAfferentRange(int(num_motions), crossranges, IIMin, IIMax,
 			II_ranges_pos, II_ranges_neg,AfferentRangeMode);
 
  AfferentRangesPos.resize(NumControlLoops);
@@ -2853,7 +2853,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
   InternalGenerator->SetName("InternalGenerator");
   net->AddComponent(InternalGenerator);
  }
- catch (EComponentNameNotExist &exc)
+ catch (EComponentNameNotExist &)
  {
  }
 
@@ -2908,7 +2908,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
 //	   receptor->Gain=receptor_gain;
 //	   receptor->ExpCoeff=exp_coeff;
 	  }
-	  catch (EComponentNameNotExist &exc)
+      catch (EComponentNameNotExist &)
 	  {
 	  }
 
@@ -2923,7 +2923,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
 //	   receptor->Gain=receptor_gain;
 //	   receptor->ExpCoeff=exp_coeff;
 	  }
-	  catch (EComponentNameNotExist &exc)
+      catch (EComponentNameNotExist &)
 	  {
 	  }
 	}
@@ -2957,7 +2957,7 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
   return;
  cont->SetName("Pac");
  AddComponent(cont);
- cont->SetOutputDataSize(0,MMatrixSize(1,Motions.size()*2));
+ cont->SetOutputDataSize(0,MMatrixSize(1,int(Motions.size())*2));
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
@@ -3138,7 +3138,7 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
        {
 		cont=GetComponent(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
        }
-       catch (EComponentNameNotExist &exc)
+       catch (EComponentNameNotExist &)
        {
         continue;
        }
@@ -3153,7 +3153,7 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
        {
 		cont=GetComponent(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
        }
-       catch (EComponentNameNotExist &exc)
+       catch (EComponentNameNotExist &)
 	   {
         continue;
        }
@@ -3197,7 +3197,7 @@ for(int i=0;i<NumMotionElements;i++)
 	}
   }
  }
- catch (EComponentNameNotExist &exc) {  }
+ catch (EComponentNameNotExist &) {  }
 }
 
 
@@ -3211,7 +3211,7 @@ for(int i=0;i<NumMotionElements;i++)
 		 res=CreateLink(string("PosIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),0,Motions[k]->GetName()+".AfferentL"+sntoa(l+1)+".Receptor",0);
 		 res=CreateLink(string("NegIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),0,Motions[k]->GetName()+".AfferentR"+sntoa(l+1)+".Receptor",0);
 		}
-        catch (EComponentNameNotExist &exc) {  }
+        catch (EComponentNameNotExist &) {  }
   }
 
  }
@@ -3273,7 +3273,7 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
 	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ia1.Receptor",0);
     }
    }
-   catch (EComponentNameNotExist &exc) {  }
+   catch (EComponentNameNotExist &) {  }
 
    if(index == 0)
    try
@@ -3295,7 +3295,7 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
 	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_II1.Receptor",0);
     }
    }
-   catch (EComponentNameNotExist &exc) {  }
+   catch (EComponentNameNotExist &) {  }
 
   if(index == 2)
    try
@@ -3317,7 +3317,7 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
 	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ib2.Receptor",0);
 	}
    }
-   catch (EComponentNameNotExist &exc) {  }
+   catch (EComponentNameNotExist &) {  }
 
   if(index == 3)
    try
@@ -3339,7 +3339,7 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
 	 res&=CreateLink("AfferentSource1",0,motion+".Afferent_Ic1.Receptor",0);
     }
    }
-   catch (EComponentNameNotExist &exc) {  }
+   catch (EComponentNameNotExist &) {  }
 
 	if(res)
 	{

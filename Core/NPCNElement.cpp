@@ -192,7 +192,7 @@ bool NPCNElement::CreateNeurons()
 	  if(!cont)
 	   return false;
 	  cont->SetName(inputNeuronLName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  InputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, inputLName);
 	  LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
@@ -211,7 +211,7 @@ bool NPCNElement::CreateNeurons()
 	  if(!cont)
 	   return false;
 	  cont->SetName(inputNeuronRName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  InputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, inputRName);
 	  RightInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
@@ -271,7 +271,7 @@ bool NPCNElement::CreateNeurons()
 	  if(!cont)
 	   return false;
 	  cont->SetName(controlNeuronLName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, controlLName);
 	  LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(cont));
@@ -289,7 +289,7 @@ bool NPCNElement::CreateNeurons()
 	  if(!cont)
 	   return false;
 	  cont->SetName(controlNeuronRName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, controlRName);
 	  RightControlNeurons[j].push_back(static_pointer_cast<NNet>(cont));
@@ -406,7 +406,7 @@ bool NPCNElement::CreateExternalControlElements(void)
 	  if(!cont)
 	   return false;
 	  cont->SetName(generatorLName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  Generators.push_back(static_pointer_cast<NNet>(cont));
 	  LeftGenerators[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
@@ -421,7 +421,7 @@ bool NPCNElement::CreateExternalControlElements(void)
 	  if(!cont)
 	   return false;
 	  cont->SetName(generatorRName);
-	  res&=AddComponent(cont);
+      res&=(AddComponent(cont) != ForbiddenId);
 	  Generators.push_back(static_pointer_cast<NNet>(cont));
 	  RightGenerators[j].push_back(static_pointer_cast<NNet>(cont));
 	 }
