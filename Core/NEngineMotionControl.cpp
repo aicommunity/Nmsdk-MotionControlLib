@@ -3130,6 +3130,12 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
     mode.assign(1,last_mode_value);
    }
 
+   if(int(Motions.size())<=j)
+   {
+	LogMessageEx(RDK_EX_WARNING,__FUNCTION__, std::string("Motion element not found, #")+sntoa(j));
+    break;
+   }
+
 	 NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[j]);
 	 if(melem)
 	 for(int i=0;i<melem->NumControlLoops;i++)
