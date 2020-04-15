@@ -13,7 +13,6 @@ See file license.txt for more information
 #ifndef NEngineMotionControlH
 #define NEngineMotionControlH
 
-#include "../../Nmsdk-BasicLib/Core/NSupport.h"
 #include "../../Nmsdk-PulseLib/Core/NReceptor.h"
 #include "../../Nmsdk-BasicLib/Core/NNet.h"
 #include "../../Nmsdk-SourceLib/Core/NPulseGenerator.h"

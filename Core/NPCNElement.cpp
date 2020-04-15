@@ -438,7 +438,7 @@ bool NPCNElement::LinkNeurons(vector <NNet*> start, vector <NNet*> finish)
 	for(size_t j=0;j<finish.size();j++)
 	{
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
-	  UEPtr<NPulseMembrane> branch;
+	  UEPtr<NPulseMembraneCommon> branch;
 	  bool hasEmptyMembrane=false;
 	  for(size_t k=0;k<neuron->GetNumMembranes();k++)
 	  {
@@ -451,7 +451,7 @@ bool NPCNElement::LinkNeurons(vector <NNet*> start, vector <NNet*> finish)
 	   }
 	  }
 	  if(!hasEmptyMembrane)
-	   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
+	   branch=neuron->BranchDendrite("PNeuronMembrane",false);
 	  NameT finishName;
 	  branch->GetLongName(owner, finishName);
 	  finishName += ".PosChannel";
@@ -477,7 +477,7 @@ bool NPCNElement::LinkNeuronsNeg(vector <NNet*> start, vector <NNet*> finish)
 	for(size_t j=0;j<finish.size();j++)
 	{
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
-	  UEPtr<NPulseMembrane> branch;
+	  UEPtr<NPulseMembraneCommon> branch;
 	  bool hasEmptyMembrane=false;
 	  for(size_t k=0;k<neuron->GetNumMembranes();k++)
 	  {
@@ -490,7 +490,7 @@ bool NPCNElement::LinkNeuronsNeg(vector <NNet*> start, vector <NNet*> finish)
 	   }
 	  }
 	  if(!hasEmptyMembrane)
-	   branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
+	   branch=neuron->BranchDendrite("PNeuronMembrane",false);
 	  NameT finishName;
 	  branch->GetLongName(owner, finishName);
 	  finishName += ".PosChannel";

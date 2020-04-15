@@ -1205,7 +1205,7 @@ void NEngineMotionControl::SetupPacRange(void)
  double a_min=-PacGain;
  double a_max=PacGain;
  int num_motions=NumMotionElements;
- vector<Real> values=cont->Gain;
+ vector<vector<double> > values=cont->Gain;
 
  if(num_motions*2 != int(values.size()))
   return; // TODO: Это аномалия, которую нужно разрешить
@@ -1469,7 +1469,7 @@ void NEngineMotionControl::PACSetup(UEPtr<UContainer> net,
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
- vector<Real> values;
+ vector<vector<double> > values;
 
  values.resize(Motions.size()*2);
  for(size_t i=0;i<values.size();i++)
@@ -1532,7 +1532,7 @@ void NEngineMotionControl::AACSetup(UEPtr<UContainer> net, double gain_value)
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
- vector<Real> values;
+ vector<vector<double> > values;
  values.resize(Motions.size()*2);
 
  // Усиление
@@ -1555,8 +1555,8 @@ void NEngineMotionControl::IntervalSeparatorsSetup(UEPtr<UContainer> net, int mo
  UContainer* cont=0;
  UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
  bool res=true;
- Real left_value,right_value;
- Real pos_gain,neg_gain;
+ vector<double>  left_value,right_value;
+ vector<double>  pos_gain,neg_gain;
 
  if(!storage)
   return;
@@ -1717,7 +1717,7 @@ void NEngineMotionControl::IntervalSeparatorsUpdate(UEPtr<UContainer> net, int m
 {
  UContainer* cont=0;
  bool res=true;
- Real left_value,right_value;
+ vector<double>  left_value,right_value;
 
  vector<int> mode;
  mode.assign(1,mode_value);
@@ -2177,7 +2177,7 @@ UNet* NEngineMotionControl::CreateEngineControlSignumAfferent(void)
  static_pointer_cast<NSignumSeparator>(cont)->SetNumOutputs(1);
  res=net->AddComponent(cont);
 
- Real gain_value;
+ vector<double>  gain_value;
 
  cont=dynamic_pointer_cast<NSignumSeparator>(storage->TakeObject("NPosSignumSeparator"));
  if(!cont)
@@ -2961,7 +2961,7 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
- vector<Real> values;
+ vector<vector<double> > values;
 
  values.resize(Motions.size()*2);
  for(size_t i=0;i<values.size();i++)
@@ -3013,7 +3013,7 @@ void NEngineMotionControl::UpdatePacTCParameters(void)
 
   // Начальные значения всем параметрам
  // Амплитуда входных импульсов
- vector<Real> values;
+ vector<vector<double> > values;
 
  // Постоянная времени выделения медиатора
  values.resize(pac->SecretionTC->size());
@@ -3055,8 +3055,8 @@ void NEngineMotionControl::NewIntervalSeparatorsSetup(int mode_value, int last_m
  UContainer* cont=0;
  UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
  bool res=true;
- Real left_value,right_value;
- Real pos_gain,neg_gain;
+ vector<double>  left_value,right_value;
+ vector<double>  pos_gain,neg_gain;
 
  if(!storage)
   return;
@@ -3118,7 +3118,7 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
 {
  UContainer* cont=0;
  bool res=true;
- Real left_value,right_value;
+ vector<double>  left_value,right_value;
 
  vector<int> mode;
  mode.assign(1,mode_value);

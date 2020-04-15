@@ -629,7 +629,7 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
 {
  string tmpname;
  UEPtr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
- UEPtr<NPulseMembrane> branch;
+ UEPtr<NPulseMembraneCommon> branch;
  UEPtr<NPulseChannel> channel;
  UEPtr<UContainer> ltmembr;
 
@@ -643,9 +643,9 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
   catch(UContainer::EComponentNameNotExist &){}
  }
  if(ltmembr)
-  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
+  branch=neuron->BranchDendrite("PNeuronMembrane",false);
  else
-  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
+  branch=neuron->BranchDendrite("PNeuronMembrane",true);
  channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
  bool res=net->CreateLink(source,0,
 				 channel->GetLongName(net,tmpname));
@@ -657,7 +657,7 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
 {
  string tmpname;
  UEPtr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
- UEPtr<NPulseMembrane> branch;
+ UEPtr<NPulseMembraneCommon> branch;
  UEPtr<NPulseChannel> channel;
  UEPtr<UContainer> ltmembr;
 
@@ -671,9 +671,9 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
   catch(UContainer::EComponentNameNotExist &){}
  }
  if(ltmembr)
-  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),false);
+  branch=neuron->BranchDendrite("PNeuronMembrane",false);
  else
-  branch=neuron->BranchDendrite(neuron->GetComponentId("PNeuronMembrane"),true);
+  branch=neuron->BranchDendrite("PNeuronMembrane",true);
 
  branch->GetLongName(neuron,branch_bame);
  channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
