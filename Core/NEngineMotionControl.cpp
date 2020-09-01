@@ -1909,14 +1909,14 @@ void NEngineMotionControl::StandardLinksSetup(UEPtr<UNet> net,
  bool res=true;
 
  for(size_t k=0;k<Motions.size();k++)
-  res=net->CreateLink(Motions[k]->GetName()+".MotoneuronR.LTZone","Output",
+  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron1.LTZone","Output",
 				 engine_integrator_name,"Inputs");
 
  for(size_t k=0;k<Motions.size();k++)
-  res=net->CreateLink(Motions[k]->GetName()+".MotoneuronL.LTZone","Output",
+  res=net->CreateLink(Motions[k]->GetName()+".Motoneuron2.LTZone","Output",
 				 engine_integrator_name,"Inputs");
 
- res=net->CreateLink(engine_integrator_name,/*"Output"*/0, "NManipulatorInput1");
+ res=net->CreateLink(engine_integrator_name,"Output", "NManipulatorInput1", "Input");
 
 if(CheckComponent("Ia_PosIntervalSeparator1"))
 {
@@ -3043,7 +3043,7 @@ void NEngineMotionControl::NewStandardLinksSetup(const string &engine_integrator
   res&=CreateLink(Motions[k]->GetName()+".MotoneuronR.LTZone","Output",
 				 engine_integrator_name,"Inputs");
 
- res&=CreateLink(engine_integrator_name,0,"NManipulatorInput1");
+ res&=CreateLink(engine_integrator_name,"Output","NManipulatorInput1","Input");
 
  if(res)
   return;

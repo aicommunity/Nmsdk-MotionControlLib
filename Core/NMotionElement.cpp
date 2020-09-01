@@ -1406,7 +1406,7 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
  }
 
  // Создание связей
- bool NMotionElement::LinkMotoneurons(const string &afferentL, const string afferentR, int mode)
+ bool NMotionElement::LinkMotoneurons(const string &afferentL, const string &afferentR, int mode)
  {
    if(!(CheckComponent(afferentL) && CheckComponent(afferentR) && CheckComponent("MotoneuronL") &&
 		CheckComponent("MotoneuronR")))
@@ -1424,54 +1424,54 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 	   switch(mode)
 	   {
 		case 0:
-			res&=CreateLink(afferentL+".LTZone","Output","MotoneuronL.Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink(afferentR+".LTZone","Output","MotoneuronR.Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink(afferentL+".LTZone","Output","MotoneuronR.Soma1.InhChannel","ChannelInputs");
-			res&=CreateLink(afferentR+".LTZone","Output","MotoneuronL.Soma1.InhChannel","ChannelInputs");
+			res&=LinkNeuron(afferentL,"MotoneuronL",0);
+			res&=LinkNeuron(afferentR,"MotoneuronR",0);
+			res&=LinkNeuron(afferentL,"MotoneuronR",1);
+			res&=LinkNeuron(afferentR,"MotoneuronL",1);
 			break;
 
 		 case 1:
 			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
 			  return false;
-			res&=CreateLink(afferentL+".LTZone","Output","Post"+afferentL+".Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink("Post"+afferentL+".LTZone","Output","MotoneuronR.Soma1.InhChannel","ChannelInputs");
-			res&=CreateLink("Post"+afferentL+".LTZone","Output","MotoneuronL.Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink(afferentR+".LTZone","Output","Post"+afferentR+".Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink("Post"+afferentR+".LTZone","Output","MotoneuronL.Soma1.InhChannel","ChannelInputs");
-			res&=CreateLink("Post"+afferentR+".LTZone","Output","MotoneuronR.Soma1.ExcChannel","ChannelInputs");
+			res&=LinkNeuron(afferentL,"Post"+afferentL,0);
+			res&=LinkNeuron("Post"+afferentL,"MotoneuronR",1);
+			res&=LinkNeuron("Post"+afferentL,"MotoneuronL",0);
+			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
+			res&=LinkNeuron("Post"+afferentR,"MotoneuronL",1);
+			res&=LinkNeuron("Post"+afferentR,"MotoneuronR",0);
 			break;
 
 		 case 2:
 			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
 			  return false;
-			res&=CreateLink(afferentL+".LTZone","Output","MotoneuronL.Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink(afferentR+".LTZone","Output","MotoneuronR.Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink(afferentL+".LTZone","Output","Post"+afferentL+".Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink("Post"+afferentL+".LTZone","Output","MotoneuronR.Soma1.InhChannel","ChannelInputs");
-			res&=CreateLink(afferentR+".LTZone","Output","Post"+afferentR+".Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink("Post"+afferentR+".LTZone","Output","MotoneuronL.Soma1.InhChannel","ChannelInputs");
+			res&=LinkNeuron(afferentL,"MotoneuronL",0);
+			res&=LinkNeuron(afferentR,"MotoneuronR",0);
+			res&=LinkNeuron(afferentL,"Post"+afferentL,0);
+			res&=LinkNeuron("Post"+afferentL,"MotoneuronR",1);
+			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
+			res&=LinkNeuron("Post"+afferentR,"MotoneuronL",1);
 			break;
 
 		 case 3:
 			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
 			  return false;
-			res&=CreateLink(afferentL+".LTZone","Output","MotoneuronR.Soma1.InhChannel","ChannelInputs");
-			res&=CreateLink(afferentR+".LTZone","Output","MotoneuronL.Soma1.InhChannel","ChannelInputs");
-			res&=CreateLink(afferentL+".LTZone","Output","Post"+afferentL+".Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink(afferentR+".LTZone","Output","Post"+afferentR+".Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink("Post"+afferentL+".LTZone","Output","MotoneuronL.Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink("Post"+afferentR+".LTZone","Output","MotoneuronR.Soma1.ExcChannel","ChannelInputs");
+			res&=LinkNeuron(afferentL,"MotoneuronR",1);
+			res&=LinkNeuron(afferentR,"MotoneuronL",1);
+			res&=LinkNeuron(afferentL,"Post"+afferentL,0);
+			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
+			res&=LinkNeuron("Post"+afferentL,"MotoneuronL",0);
+			res&=LinkNeuron("Post"+afferentR,"MotoneuronR",0);
 			break;
 
 		 case 4:
 			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
 			  return false;
-			res&=CreateLink(afferentL+".LTZone","Output","Post"+afferentL+".Soma1.ExcChannel","ChannelInputs");
+			res&=LinkNeuron(afferentL,"Post"+afferentL,0);
 //			res&=CreateLink("Post"+afferentL+".LTZone",0,"MotoneuronR.Soma1.InhChannel");
-			res&=CreateLink("Post"+afferentL+".LTZone","Output","MotoneuronL.Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink(afferentR+".LTZone","Output","Post"+afferentR+".Soma1.ExcChannel","ChannelInputs");
+			res&=LinkNeuron("Post"+afferentL,"MotoneuronL",0);
+			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
  //			res&=CreateLink("Post"+afferentR+".LTZone",0,"MotoneuronL.Soma1.InhChannel");
-			res&=CreateLink("Post"+afferentR+".LTZone","Output","MotoneuronR.Soma1.ExcChannel","ChannelInputs");
+			res&=LinkNeuron("Post"+afferentR,"MotoneuronR",0);
 			break;
 
 	   }
@@ -1484,48 +1484,48 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 	   {
 		case 0:
 		 res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronL", "ExcChannel",branch_name);
-			res&=CreateLink(afferentL+".LTZone","Output",std::string("MotoneuronR.")+branch_name+".InhChannel","ChannelInputs");
+			res&=LinkNeuron(afferentL,"MotoneuronR",1,branch_name);
 		 res&=CreateNeuronBranchLink(this,afferentR+".LTZone","MotoneuronR", "ExcChannel",branch_name);
-			res&=CreateLink(afferentR+".LTZone","Output",std::string("MotoneuronL.")+branch_name+".InhChannel","ChannelInputs");
+			res&=LinkNeuron(afferentR,"MotoneuronL",1,branch_name);
 		 break;
 
 		 case 1:
 			if(!(CheckComponent("Post"+afferentL) && CheckComponent("Post"+afferentR)))
 			  return false;
 //			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"ExcChannel");
-			res&=CreateLink(afferentL+".LTZone","Output","Post"+afferentL+".Soma1.ExcChannel","ChannelInputs");
+			res&=LinkNeuron(afferentL,"Post"+afferentL,0);
 			res&=CreateNeuronBranchLink(this,"Post"+afferentL+".LTZone","MotoneuronR","InhChannel",branch_name);
-			res&=CreateLink("Post"+afferentR+".LTZone","Output",std::string("MotoneuronR.")+branch_name+".ExcChannel","ChannelInputs");
+			res&=LinkNeuron("Post"+afferentR,"MotoneuronR",0,branch_name);
 //			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","Post"+afferentR,"ExcChannel");
-			res&=CreateLink(afferentR+".LTZone","Output","Post"+afferentR+".Soma1.ExcChannel","ChannelInputs");
+			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
 			res&=CreateNeuronBranchLink(this,"Post"+afferentR+".LTZone","MotoneuronL","InhChannel",branch_name);
-			res&=CreateLink("Post"+afferentL+".LTZone","Output",std::string("MotoneuronL.")+branch_name+".ExcChannel","ChannelInputs");
+			res&=LinkNeuron("Post"+afferentL,"MotoneuronL",0,branch_name);
 			break;
 
 		 case 2:
 			if(!(CheckComponent("Post"+afferentL) && CheckComponent("Post"+afferentR)))
 			  return false;
 			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronL","ExcChannel",branch_name);
-			res&=CreateLink("Post"+afferentR+".LTZone","Output",std::string("MotoneuronL.")+branch_name+".InhChannel","ChannelInputs");
+			res&=LinkNeuron("Post"+afferentR,"MotoneuronL",1,branch_name);
 //			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"ExcChannel");
-			res&=CreateLink(afferentL+".LTZone","Output","Post"+afferentL+".Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink("Post"+afferentL+".LTZone","Output",std::string("MotoneuronR.")+branch_name+".InhChannel","ChannelInputs");
+			res&=LinkNeuron(afferentL,"Post"+afferentL,0);
+			res&=LinkNeuron("Post"+afferentL,"MotoneuronR",1,branch_name);
 			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","MotoneuronR","ExcChannel",branch_name);
 //			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","Post"+afferentR,"ExcChannel");
-			res&=CreateLink(afferentR+".LTZone","Output","Post"+afferentR+".Soma1.ExcChannel","ChannelInputs");
+			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
 			break;
 
 		 case 3:
 			if(!(CheckComponent("Post"+afferentL) && CheckComponent("Post"+afferentR)))
 			  return false;
 			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronR","InhChannel",branch_name);
-			res&=CreateLink("Post"+afferentR+".LTZone","Output",std::string("MotoneuronR.")+branch_name+".ExcChannel","ChannelInputs");
+			res&=LinkNeuron("Post"+afferentR,"MotoneuronR",0,branch_name);
 //			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"ExcChannel");
-			res&=CreateLink(afferentL+".LTZone","Output","Post"+afferentL+".Soma1.ExcChannel","ChannelInputs");
-			res&=CreateLink("Post"+afferentL+".LTZone","Output",std::string("MotoneuronL.")+branch_name+".ExcChannel","ChannelInputs");
+			res&=LinkNeuron(afferentL,"Post"+afferentL,0);
+			res&=LinkNeuron("Post"+afferentL,"MotoneuronL",0,branch_name);
 			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","MotoneuronL","InhChannel",branch_name);
 //			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","Post"+afferentR,"ExcChannel");
-			res&=CreateLink(afferentR+".LTZone","Output","Post"+afferentR+".Soma1.ExcChannel","ChannelInputs");
+			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
 			break;
 
 		 case 4:
@@ -1533,9 +1533,9 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
 			  return false;
 //			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"ExcChannel");
 //			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","Post"+afferentR,"ExcChannel");
-			res&=CreateLink(afferentL+".LTZone","Output","Post"+afferentL+".Soma1.ExcChannel","ChannelInputs");
+			res&=LinkNeuron(afferentL,"Post"+afferentL,0);
 			res&=CreateNeuronBranchLink(this,"Post"+afferentL+".LTZone","MotoneuronL","ExcChannel");
-			res&=CreateLink(afferentR+".LTZone","Output","Post"+afferentR+".Soma1.ExcChannel","ChannelInputs");
+			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
 			res&=CreateNeuronBranchLink(this,"Post"+afferentR+".LTZone","MotoneuronR","ExcChannel");
 			break;
 
@@ -1549,11 +1549,24 @@ UEPtr<UNet> CreateSimplestBranchedMotionElementPM(UStorage *storage,
    bool res = true;
    if(!(CheckComponent("RenshowL")&&CheckComponent("RenshowR")))
 	 return false;
-   res&=CreateLink("MotoneuronL.LTZone","Output","RenshowL.Soma1.ExcChannel","ChannelInputs");
-   res&=CreateLink("RenshowL.LTZone","Output","MotoneuronL.Soma1.InhChannel","ChannelInputs");
+   res&=LinkNeuron("MotoneuronL","RenshowL",0);
+   res&=LinkNeuron("RenshowL","MotoneuronL",1);
 
-   res&=CreateLink("MotoneuronR.LTZone","Output","RenshowR.Soma1.ExcChannel","ChannelInputs");
-   res&=CreateLink("RenshowR.LTZone","Output","MotoneuronR.Soma1.InhChannel","ChannelInputs");
+   res&=LinkNeuron("MotoneuronR","RenshowR",0);
+   res&=LinkNeuron("RenshowR","MotoneuronR",1);
+
+   return res;
+ }
+ bool NMotionElement::LinkNeuron(const string &source, const string &sink, int mode, const string &branch)
+ {
+   bool res = true;
+   bool isSyn(NeuroObjectName->find("Syn")!=std::string::npos);
+
+   string effect = (mode==0)?"Exc":"Inh";
+   string input_element = (isSyn)?"Channel":"Synapse1";
+   string input = (isSyn)?"SynapticInputs":"Input";
+
+   res&=CreateLink(source+".LTZone","Output",sink+"."+branch+"."+effect+input_element,input);
 
    return res;
  }
