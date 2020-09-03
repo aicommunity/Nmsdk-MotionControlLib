@@ -82,8 +82,8 @@ NPositionControlElement* NPositionControlElement::New(void)
 // Восстановление настроек по умолчанию и сброс процесса счета
 bool NPositionControlElement::ADefault(void)
 {
- InputNeuronType = "NNewSynSPNeuron";
- ControlNeuronType = "NNewSynSPNeuron";
+ InputNeuronType = "NNewSPNeuron";
+ ControlNeuronType = "NNewSPNeuron";
  ExternalControl = false;
  return true;
 }

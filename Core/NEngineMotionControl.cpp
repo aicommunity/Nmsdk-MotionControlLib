@@ -574,7 +574,7 @@ bool NEngineMotionControl::ADefault(void)
  TransientObjectIndex=0;
  TransientAverageThreshold=0.05;
 
- MCNeuroObjectName = "NNewSynSPNeuron";
+ MCNeuroObjectName = "NNewSPNeuron";
  MCAfferentObjectName = "NSimpleAfferentNeuron";
  PacObjectName="NPac";
 
