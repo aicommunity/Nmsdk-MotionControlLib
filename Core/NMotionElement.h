@@ -170,11 +170,14 @@ bool CreateInterneurons();
 // 1 - связь через интернейроны
 // 2 - связь через интернейроны(L-R) + прямая связь(L-L)
 // 3 - связь через интернейроны(L-L) + прямая связь(L-R)
-bool LinkMotoneurons(const string &afferentL, const string afferentR, int mode);
+bool LinkMotoneurons(const string &afferentL, const string &afferentR, int mode);
 
 // Создание связей с клетками Реншоу
 bool LinkRenshow();
-
+// Создание связи между двумя нейронами
+// 0 - возбуждающая связь
+// 1 - тормозная связь
+bool LinkNeuron(const string &source, const string &sink, int mode, const string &branch = "Soma1");
 };
 
 // Формирует СУ двигательной единицей

@@ -116,6 +116,14 @@ bool NPositionControlElement::ACalculate(void)
 {
  return true;
 }
+template <typename T>
+void NPositionControlElement::SetPositions(vector<T*>& values, int x_base, int x_shift, int y_base, int y_shift)
+{
+ for(int i=0;i<values.size();++i)
+ {
+  values[i]->SetCoord(MVector<double,3>(x_base + i*x_shift,y_base + i*y_shift,0));
+ }
+}
 // --------------------------
 bool NPositionControlElement::CreateNeurons()
 {
@@ -146,8 +154,8 @@ bool NPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> f
 	   }
 	  }
 	  if(!hasEmptyMembrane)
-	   branch=neuron->BranchDendrite("PNeuronMembrane",false);
-	  NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".PosChannel";
+	   branch=neuron->BranchDendrite("Soma1",false);
+	  NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".ExcChannel";
 	  for(size_t i=0;i<start.size();i++)
 	  {
 	   NameT startName = start[i]->GetName()+".LTZone";
@@ -170,7 +178,7 @@ bool NPositionControlElement::UnlinkNeurons(vector <NNet*> start, vector <NNet*>
   {
    for(size_t k=0;k<neuron->Membranes.size();k++)
    {
-	NameT finishName = finish[j]->GetName()+"."+neuron->Membranes[k]->GetName()+".PosChannel";
+	NameT finishName = finish[j]->GetName()+"."+neuron->Membranes[k]->GetName()+".ExcChannel";
 	if(CheckLink(startName,finishName))
 	   BreakLink(startName,finishName);
    }
@@ -188,6 +196,24 @@ bool NPositionControlElement::LinkGenerators(vector <UNet*> generators, vector <
 }
 bool NPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet*> finish)
 {
+ return true;
+}
+
+bool NPositionControlElement::PositionNeurons()
+{
+   int x_base=5;
+   int x_shift=0;
+   int y_base=2;
+   int y_shift = 2;
+   SetPositions<NNet>(InputNeurons, x_base, x_shift, y_base, y_shift);
+   x_base+=10;
+   SetPositions<NNet>(PostInputNeurons, x_base, x_shift, y_base, y_shift);
+   x_base+=10;
+   SetPositions<NNet>(PreControlNeurons, x_base, x_shift, y_base, y_shift);
+   x_base+=10;
+   SetPositions<NNet>(ControlNeurons, x_base, x_shift, y_base, y_shift);
+   x_base+=10;
+   SetPositions<UNet>(Generators, x_base, x_shift, y_base, y_shift);
  return true;
 }
 
