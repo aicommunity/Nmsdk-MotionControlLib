@@ -46,6 +46,10 @@ RDK::ULProperty<int, NMotionElement> InterneuronPresentMode;
 // 0 - клеток Реншоу нет
 // 1 - клетки Реншоу есть
 RDK::ULProperty<int, NMotionElement> RenshowMode;
+// Режим наличия пейсмейкерных нейронов
+// 0 - пейсмейкерных нейронов нет
+// 1 - пейсмейкерные нейроны есть
+RDK::ULProperty<int, NMotionElement> PacemakerMode;
 
 // Режим наличия возвратного торможения
 // 0 - возвратного торможения нет
@@ -108,6 +112,7 @@ virtual ~NMotionElement(void);
 bool SetNumControlLoops(const int &value);
 bool SetEnableControlLoopFlags(const std::vector<int> &value);
 bool SetRenshowMode(const int &value);
+bool SetPacemakerMode(const int &value);
 bool SetLinkModes(const std::vector<int> &value);
 bool SetInterneuronPresentMode(const int &value);
 bool SetRecurrentInhibitionMode(const int &value);
@@ -174,37 +179,14 @@ bool LinkMotoneurons(const string &afferentL, const string &afferentR, int mode)
 
 // Создание связей с клетками Реншоу
 bool LinkRenshow();
+// Создание связей с пейсмейкерными нейронами
+bool LinkPM();
 // Создание связи между двумя нейронами
 // 0 - возбуждающая связь
 // 1 - тормозная связь
 bool LinkNeuron(const string &source, const string &sink, int mode, const string &branch = "Soma1");
 };
 
-// Формирует СУ двигательной единицей
-// Если mode == 0 - формируется полная модель
-// 	    mode == 1 - модель без вставочных интернейронов
-UEPtr<UNet> RDK_LIB_TYPE CreateMotionElement(UStorage *storage, const string &netclassname, int mode);
-
-// Аналогично, но с развязкой по дендритам
-UEPtr<UNet> RDK_LIB_TYPE CreateBranchedMotionElement(UStorage *storage, const string &netclassname,
-	const string &neuron_class_name, const string &afferent_neuron_class_name, int mode);
-
-// Формирует простейшую СУ двигательной единицей из двух мотонейронов
-UEPtr<UNet> RDK_LIB_TYPE CreateSimplestMotionElement(UStorage *storage, const string &netclassname, int mode);
-UEPtr<UNet> RDK_LIB_TYPE CreateSimplestBranchedMotionElement(UStorage *storage, const string &netclassname, int mode, bool use_speed_force=false, bool use_add_contours=false);
-UEPtr<UNet> RDK_LIB_TYPE CreateSimplestBranchedMotionElementPM(UStorage *storage, const string &netclassname, int mode, bool use_speed_force=false, bool use_add_contours=false);
-// Формирует СУ двигательной единицей
-
-// Аналогично, но с развязкой по дендритам
-UEPtr<UNet> RDK_LIB_TYPE CreateSimplestBranchedMotionElement(UStorage *storage,
-	const string &netclassname, const string &neuron_class_name,
-	const string &afferent_neuron_class_name, int mode, bool use_speed_force, bool use_add_contours);
-
-// Формирует СУ двигательной единицей
-// Аналогично, но с развязкой по дендритам
-UEPtr<UNet> RDK_LIB_TYPE CreateSimplestBranchedMotionElementPM(UStorage *storage,
-	const string &netclassname, const string &neuron_class_name,
-	const string &afferent_neuron_class_name, int mode, bool use_speed_force, bool use_add_contours);
 
 bool RDK_LIB_TYPE CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
 	const string &target_head, const string &target_tail);
