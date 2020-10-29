@@ -690,9 +690,9 @@ bool NEngineMotionControl::ACalculate(void)
  UEPtr<UNet> source;
  for(size_t i=0;i<NumControlLoops;i++)
  {
-  source=dynamic_pointer_cast<UNet>(GetComponent("NManipulatorSource"+sntoa(i+1)));
+  source=dynamic_pointer_cast<UNet>(GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/));
   if(source->GetOutputDataSize(0)>MMatrixSize(1,0))
-   measure[i]=source->GetOutputData(0).Double[0];
+   measure[i]=source->GetOutputData(0).Double[i];
   else
    measure[i]=0;
  }
@@ -1348,9 +1348,9 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UContainer> net)
   res=net->AddComponent(cont);
  }
 
- for(int i=0; i<NumControlLoops; ++i)
+ //for(int i=0; i<NumControlLoops; ++i)
  {
-  std::string name="NManipulatorSource"+sntoa(i+1);
+  std::string name="NManipulatorSource1";
   if(CheckName(name))
   {
    UEPtr<UADItem> cont2=0;
@@ -1847,12 +1847,12 @@ for(int i=0;i<NumMotionElements;i++)
   {
 //    if (!CheckLink("NManipulatorSource1","PosIntervalSeparator"+RDK::sntoa(i+1)+RDK::sntoa(j+1)))
 	{
-	   res=CreateLink("NManipulatorSource"+RDK::sntoa(j+1),"Output",//j
+	   res=CreateLink("NManipulatorSource1.OutputProxy"+RDK::sntoa(j+1),"Output",//j
 					 string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1),"Input");
 	}
 //	if (!CheckLink("NManipulatorSource1",string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1)))
 	{
-	   res=CreateLink("NManipulatorSource"+RDK::sntoa(j+1),"Output",   //j
+	   res=CreateLink("NManipulatorSource1.OutputProxy"+RDK::sntoa(j+1),"Output",   //j
 					 string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1),"Input");
 	}
   }
