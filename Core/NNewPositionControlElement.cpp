@@ -264,10 +264,10 @@ bool NNewPositionControlElement::CreateNeurons()
 	  RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
 	 }
 
-	 res = owner->CreateLink(ltzoneLName,0,inputLName+".Soma1.ExcChannel");
-	 res = owner->CreateLink(ltzoneLName,0,inputRName+".Soma1.InhChannel");
-	 res = owner->CreateLink(ltzoneRName,0,inputLName+".Soma1.InhChannel");
-	 res = owner->CreateLink(ltzoneRName,0,inputRName+".Soma1.ExcChannel");
+	 res = owner->CreateLink(ltzoneLName,"Output",inputLName+".Soma1.ExcSynapse1","Input");
+	 res = owner->CreateLink(ltzoneLName,"Output",inputRName+".Soma1.InhSynapse1","Input");
+	 res = owner->CreateLink(ltzoneRName,"Output",inputLName+".Soma1.InhSynapse1","Input");
+	 res = owner->CreateLink(ltzoneRName,"Output",inputRName+".Soma1.ExcSynapse1","Input");
 	}
    }
    //Creating ControlNeurons
@@ -326,10 +326,10 @@ bool NNewPositionControlElement::CreateNeurons()
 	  cont->GetLongName(owner, controlRName);
 	  RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
 	 }
-	 res = owner->CreateLink(controlLName+".LTZone",0,postAfferentLName+".Soma1.ExcChannel");
-	 res = owner->CreateLink(controlLName+".LTZone",0,postAfferentRName+".Soma1.InhChannel");
-	 res = owner->CreateLink(controlRName+".LTZone",0,postAfferentLName+".Soma1.InhChannel");
-	 res = owner->CreateLink(controlRName+".LTZone",0,postAfferentRName+".Soma1.ExcChannel");
+	 res = owner->CreateLink(controlLName+".LTZone","Output",postAfferentLName+".Soma1.ExcSynapse1","Input");
+	 res = owner->CreateLink(controlLName+".LTZone","Output",postAfferentRName+".Soma1.InhSynapse1","Input");
+	 res = owner->CreateLink(controlRName+".LTZone","Output",postAfferentLName+".Soma1.InhSynapse1","Input");
+	 res = owner->CreateLink(controlRName+".LTZone","Output",postAfferentRName+".Soma1.ExcSynapse1","Input");
 	/*
 	 owner->CreateLink(controlLName+".LTZone",0,postAfferentRName+".Soma1.ExcChannel");
 	 owner->CreateLink(controlLName+".LTZone",0,postAfferentLName+".Soma1.InhChannel");
@@ -589,12 +589,12 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
 	  }
 	  if(!hasEmptyMembrane)
 	   branch=neuron->BranchDendrite("Soma1",false);
-	  NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".ExcChannel";
+	  NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".ExcSynapse1";
 	  for(size_t i=0;i<start.size();i++)
 	  {
 	   NameT startName = start[i]->GetName()+".LTZone";
 	   if(!CheckLink(startName,finishName))
-		CreateLink(startName, 0, finishName);
+		CreateLink(startName, "Output", finishName,"Input");
 //	   ExternalControl=false;
 	  }
 	}
@@ -621,12 +621,12 @@ bool NNewPositionControlElement::LinkNeuronsNeg(vector <NNet*> start, vector <NN
 	  }
 	  if(!hasEmptyMembrane)
 	   branch=neuron->BranchDendrite("Soma1",false);
-	  NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".InhChannel";
+	  NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".InhSynapse1";
 	  for(size_t i=0;i<start.size();i++)
 	  {
 	   NameT startName = start[i]->GetName()+".LTZone";
 	   if(!CheckLink(startName,finishName))
-		CreateLink(startName, 0, finishName);
+		CreateLink(startName, "Output", finishName,"Input");
 //	   ExternalControl=false;
 	  }
 	}
@@ -644,7 +644,7 @@ bool NNewPositionControlElement::UnlinkNeurons(vector <NNet*> start, vector <NNe
   {
    for(size_t k=0;k<neuron->Membranes.size();k++)
    {
-	NameT finishName = finish[j]->GetName()+"."+neuron->Membranes[k]->GetName()+".ExcChannel";
+	NameT finishName = finish[j]->GetName()+"."+neuron->Membranes[k]->GetName()+".ExcSynapse1";
 	if(CheckLink(startName,finishName))
 	   BreakLink(startName,finishName);
    }
@@ -671,10 +671,10 @@ bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vecto
    {
 	string generatorLName = "NPGeneratorL"+sntoa(i+1)+sntoa(j+1);
 	string generatorRName = "NPGeneratorR"+sntoa(i+1)+sntoa(j+1);
-	string controlNeuronLName = "ControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".Soma1.ExcChannel";
-	string controlNeuronRName = "ControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".Soma1.ExcChannel";
-	string preControlNeuronLName = "PreControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".Soma1.ExcChannel";
-	string preControlNeuronRName = "PreControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".Soma1.ExcChannel";
+	string controlNeuronLName = "ControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".Soma1.ExcSynapse1";
+	string controlNeuronRName = "ControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".Soma1.ExcSynapse1";
+	string preControlNeuronLName = "PreControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".Soma1.ExcSynapse1";
+	string preControlNeuronRName = "PreControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".Soma1.ExcSynapse1";
 
 	if(link)
 	{
@@ -686,9 +686,9 @@ bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vecto
 		 BreakLink(generatorRName,controlNeuronRName);
 
 	  if(!CheckLink(generatorLName,preControlNeuronLName))
-		 CreateLink(generatorLName, 0, preControlNeuronLName);
+		 CreateLink(generatorLName, "Output", preControlNeuronLName,"Input");
 	  if(!CheckLink(generatorRName,preControlNeuronRName))
-		 CreateLink(generatorRName, 0, preControlNeuronRName);
+		 CreateLink(generatorRName, "Output", preControlNeuronRName,"Input");
 	 }
 	 else
 	 {
@@ -698,9 +698,9 @@ bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vecto
 		 BreakLink(generatorRName,preControlNeuronRName);
 
 	  if(!CheckLink(generatorLName,controlNeuronLName))
-		 CreateLink(generatorLName, 0, controlNeuronLName);
+		 CreateLink(generatorLName, "Output", controlNeuronLName, "Input");
 	  if(!CheckLink(generatorRName,controlNeuronRName))
-		 CreateLink(generatorRName, 0, controlNeuronRName);
+		 CreateLink(generatorRName, "Output", controlNeuronRName, "Input");
 	 }
 	}
 	else
@@ -740,13 +740,13 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
 	 for(size_t m=0;m<neuronL->GetNumMembranes();m++)
 	 {
 	  NPulseMembrane* membr = neuronL->GetMembrane(m);
-	  if(CheckLink(inputNeuronLName,postInputNeuronLName+"."+membr->GetName()+".ExcChannel"))
+	  if(CheckLink(inputNeuronLName,postInputNeuronLName+"."+membr->GetName()+".ExcSynapse1"))
 		membrToConnectL.push_back(membr);
 	 }
 	 for(size_t n=0;n<neuronR->GetNumMembranes();n++)
 	 {
 	  NPulseMembrane* membr = neuronR->GetMembrane(n);
-	  if(CheckLink(inputNeuronRName,postInputNeuronRName+"."+membr->GetName()+".ExcChannel"))
+	  if(CheckLink(inputNeuronRName,postInputNeuronRName+"."+membr->GetName()+".ExcSynapse1"))
 		membrToConnectR.push_back(membr);
 	 }
 	}
@@ -757,13 +757,13 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
 	{
 	 string membrLName;
 	 membrToConnectL[l]->GetLongName(this,membrLName);
-	 CreateLink(start[c]->GetName()+".LTZone",0,membrLName+".InhChannel");
+	 CreateLink(start[c]->GetName()+".LTZone","Output",membrLName+".InhSynapse1","Input");
 	}
 	for(size_t k=0;k<membrToConnectR.size();k++)
 	{
 	 string membrRName;
 	 membrToConnectR[k]->GetLongName(this,membrRName);
-	 CreateLink(start[c]->GetName()+".LTZone",0,membrRName+".InhChannel");
+	 CreateLink(start[c]->GetName()+".LTZone","Output",membrRName+".InhSynapse1","Input");
 	}
    }
    return true;
