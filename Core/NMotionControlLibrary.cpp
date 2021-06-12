@@ -27,7 +27,7 @@ NMotionControlLibrary MotionControlLibrary;
 // Конструкторы и деструкторы
 // --------------------------
 NMotionControlLibrary::NMotionControlLibrary(void)
- : ULibrary("MotionControlLibrary","1.0")
+ : ULibrary("MotionControlLibrary","1.0", GetGlobalVersion())
 {
 }
 // --------------------------
