@@ -1909,7 +1909,6 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
   if((index >=NumControlLoops)||(index <0))
    return false;
 
-  bool res=true;
   for(int i=0;i<NumMotionElements;i++)
   {
    std::string motion=Motions[i]->GetName();
