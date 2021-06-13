@@ -119,7 +119,7 @@ bool NPositionControlElement::ACalculate(void)
 template <typename T>
 void NPositionControlElement::SetPositions(vector<T*>& values, int x_base, int x_shift, int y_base, int y_shift)
 {
- for(int i=0;i<values.size();++i)
+ for(int i=0;i<int(values.size());++i)
  {
   values[i]->SetCoord(MVector<double,3>(x_base + i*x_shift,y_base + i*y_shift,0));
  }

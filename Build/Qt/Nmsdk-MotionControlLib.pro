@@ -10,6 +10,9 @@ TARGET = Nmsdk-MotionControlLib.qt
 TEMPLATE = lib
 CONFIG += staticlib
 
+include($$PWD/../../../../Rdk/Build/Lib/Qt/RdkDefines.pri)
+
+
 DEFINES += LIBRDK_LIBRARY_EXPORT
 DEFINES += RDK_UNICODE_RUN
 DEFINES += RDK_QT

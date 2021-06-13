@@ -630,14 +630,10 @@ bool NEngineMotionControl::AReset(void)
  for(int n=0;n<NumMotionElements;n++)
  {
   receptors[n].resize(6);
-  UContainer* cont=0;
-  try {
-   cont=GetComponent(string("MotionElement")+RDK::sntoa(n));
-  }
-  catch (EComponentNameNotExist &)
-  {
+  UContainer* cont=GetComponent(string("MotionElement")+RDK::sntoa(n),true);
+  if(!cont)
    continue;
-  }
+
 /*  try {
    receptors[n][4]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_II1.Receptor"));
    receptors[n][5]=static_pointer_cast<NReceptor>(cont->GetComponentL("Afferent_II2.Receptor"));
@@ -688,7 +684,7 @@ bool NEngineMotionControl::ACalculate(void)
 
  measure.resize(NumControlLoops);
  UEPtr<UNet> source;
- for(size_t i=0;i<NumControlLoops;i++)
+ for(int i=0;i<NumControlLoops;i++)
  {
   source=dynamic_pointer_cast<UNet>(GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/));
   if(source->GetOutputDataSize(0)>MMatrixSize(1,0))
