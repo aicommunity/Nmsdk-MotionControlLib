@@ -85,6 +85,8 @@ virtual bool AReset(void);
 // Выполняет расчет этого объекта
 virtual bool ACalculate(void);
 // --------------------------
+template <typename T>
+void SetPositions(vector<T*>& values, int x_base, int x_shift, int y_base, int y_shift);
 public:
 virtual bool CreateNeurons(void);
 virtual bool CreateExternalControlElements(void);
@@ -93,6 +95,7 @@ virtual bool UnlinkNeurons(vector <NNet*> start, vector <NNet*> finish);
 virtual bool LinkGenerators(const bool &value);
 virtual bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim);
 virtual bool LinkNegative(vector <NNet*> start, vector <NNet*> finish);
+virtual bool PositionNeurons();
 vector<NNet*> GetInputNeurons(void);
 vector<NNet*> GetControlNeurons(void);
 };

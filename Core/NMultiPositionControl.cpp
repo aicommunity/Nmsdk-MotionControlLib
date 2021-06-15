@@ -231,7 +231,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
 	cont->GetLongName(owner, inputName);
    }
-   owner->CreateLink(ltzoneName+".LTZone",0,inputName+".PNeuronMembrane.PosChannel");
+   owner->CreateLink(ltzoneName+".LTZone",0,inputName+".Soma1.ExcChannel");
   }
  }
  //Creating ControlNeurons 0
@@ -243,7 +243,7 @@ bool NMultiPositionControl::CreateNeurons(void)
    UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
    string controlNeuronName = "ControlNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
    string outputName, controlName;
-   //UEPtr<UADItem> output=dynamic_pointer_cast<UADItem>(PositionControl[i]->PreControlNeurons[j]->GetComponentL(".PNeuronMembrane.PosChannel"));
+   //UEPtr<UADItem> output=dynamic_pointer_cast<UADItem>(PositionControl[i]->PreControlNeurons[j]->GetComponentL(".Soma1.ExcChannel"));
    PositionControl[i]->PreControlNeurons[j]->GetLongName(owner, outputName);
    if(CheckComponentL(controlNeuronName))
    {
@@ -264,7 +264,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	ControlNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
 	cont->GetLongName(owner, controlName);
    }
-   owner->CreateLink(controlName+".LTZone",0,outputName+".PNeuronMembrane.PosChannel");
+   owner->CreateLink(controlName+".LTZone",0,outputName+".Soma1.ExcChannel");
   }
  }
  for(int i=0;i<(*NumOfPositions);i++)
@@ -331,7 +331,7 @@ bool NMultiPositionControl::LinkGenerators(vector <UNet*> generators, vector <NN
 	if(j==i)
 	{
 	 string generatorName = generators[i]->GetName();
-	 string controlNeuronName = neurons[j]->GetName()+".PNeuronMembrane.PosChannel";
+	 string controlNeuronName = neurons[j]->GetName()+".Soma1.ExcChannel";
 
 	 if(link)
 	 {
