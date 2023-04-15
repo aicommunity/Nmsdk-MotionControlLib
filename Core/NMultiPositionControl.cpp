@@ -148,7 +148,7 @@ bool NMultiPositionControl::ACalculate(void)
 	 }
    for(size_t i=0;i<InputNeurons.size();i++)
    {
-	UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(InputNeurons[i]->GetComponentL("LTZone"));
+    UEPtr<UItem> ltzone=dynamic_pointer_cast<UItem>(InputNeurons[i]->GetComponentL("LTZone"));
 	if(ltzone->GetOutputData(2).Double[0]>0)
 	{
 	 activeInputs.push_back(InputNeurons[i]);
@@ -157,7 +157,7 @@ bool NMultiPositionControl::ACalculate(void)
    }
 /*   for(size_t c=0;c<ControlNeurons.size();c++)
    {
-	UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(ControlNeurons[c]->GetComponentL("LTZone"));
+    UEPtr<UItem> ltzone=dynamic_pointer_cast<UItem>(ControlNeurons[c]->GetComponentL("LTZone"));
 	if(ltzone->GetOutputData(2).Double[0]>0)
 	{
 	 activeControls.push_back(ControlNeurons[c]);
@@ -209,7 +209,7 @@ bool NMultiPositionControl::CreateNeurons(void)
    UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
    string inputNeuronName = "InputNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
    string ltzoneName, inputName;
-   //UEPtr<UADItem> ltzone=dynamic_pointer_cast<UADItem>(PositionControl[i]->PostInputNeurons[j]->GetComponentL(".LTZone"));
+   //UEPtr<UItem> ltzone=dynamic_pointer_cast<UItem>(PositionControl[i]->PostInputNeurons[j]->GetComponentL(".LTZone"));
    PositionControl[i]->PostInputNeurons[j]->GetLongName(owner, ltzoneName);
    
    if(CheckComponentL(inputNeuronName))
@@ -243,7 +243,7 @@ bool NMultiPositionControl::CreateNeurons(void)
    UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
    string controlNeuronName = "ControlNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
    string outputName, controlName;
-   //UEPtr<UADItem> output=dynamic_pointer_cast<UADItem>(PositionControl[i]->PreControlNeurons[j]->GetComponentL(".Soma1.ExcChannel"));
+   //UEPtr<UItem> output=dynamic_pointer_cast<UItem>(PositionControl[i]->PreControlNeurons[j]->GetComponentL(".Soma1.ExcChannel"));
    PositionControl[i]->PreControlNeurons[j]->GetLongName(owner, outputName);
    if(CheckComponentL(controlNeuronName))
    {

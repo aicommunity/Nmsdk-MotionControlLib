@@ -1349,8 +1349,8 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UContainer> net)
   std::string name="NManipulatorSource1";
   if(CheckName(name))
   {
-   UEPtr<UADItem> cont2=0;
-   cont2=dynamic_pointer_cast<UADItem>(storage->TakeObject(ObjectControlInterfaceClassName));
+   UEPtr<UItem> cont2=0;
+   cont2=dynamic_pointer_cast<UItem>(storage->TakeObject(ObjectControlInterfaceClassName));
    if(!cont2)
 	return;
    cont2->SetName(name);

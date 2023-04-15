@@ -216,8 +216,8 @@ bool NNewPositionControlElement::CreateNeurons()
 	RightInputNeurons.resize(melem->NumControlLoops);
 	for(int j=0;j<melem->NumControlLoops;j++)
 	{
-	 UEPtr<UADItem> ltzoneL=dynamic_pointer_cast<UADItem>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
-	UEPtr<UADItem> ltzoneR=dynamic_pointer_cast<UADItem>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
+     UEPtr<UItem> ltzoneL=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
+    UEPtr<UItem> ltzoneR=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
 	 UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
 	 string ltzoneLName,ltzoneRName;
 	 ltzoneL->GetLongName(owner, ltzoneLName);
@@ -280,8 +280,8 @@ bool NNewPositionControlElement::CreateNeurons()
 	RightControlNeurons.resize(melem->NumControlLoops);
 	for(int j=0;j<melem->NumControlLoops;j++)
 	{
-	 UEPtr<UADItem> postAfferentL=dynamic_pointer_cast<UADItem>(melem->GetComponentL("PostAfferentL"+sntoa(j+1)));
-	 UEPtr<UADItem> postAfferentR=dynamic_pointer_cast<UADItem>(melem->GetComponentL("PostAfferentR"+sntoa(j+1)));
+     UEPtr<UItem> postAfferentL=dynamic_pointer_cast<UItem>(melem->GetComponentL("PostAfferentL"+sntoa(j+1)));
+     UEPtr<UItem> postAfferentR=dynamic_pointer_cast<UItem>(melem->GetComponentL("PostAfferentR"+sntoa(j+1)));
 	 UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
 	 string postAfferentLName,postAfferentRName;
 	 postAfferentL->GetLongName(owner, postAfferentLName);
