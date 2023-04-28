@@ -252,8 +252,8 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
  else
   branch=neuron->BranchDendrite("Soma1",true);
  channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
- bool res=net->CreateLink(source,0,
-				 channel->GetLongName(net,tmpname));
+ bool res=net->CreateLink(source,"Output",
+                 channel->GetLongName(net,tmpname),"ChannelInput");
  return res;
 }
 
@@ -282,8 +282,8 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
 
  branch->GetLongName(neuron,branch_bame);
  channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
- bool res=net->CreateLink(source,0,
-				 channel->GetLongName(net,tmpname));
+ bool res=net->CreateLink(source,"Output",
+                 channel->GetLongName(net,tmpname), "ChannelInput");
  return res;
 }
 
@@ -314,8 +314,8 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
   return false;
  }
  channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
- bool res=net->CreateLink(source,0,
-				 channel->GetLongName(net,tmpname));
+ bool res=net->CreateLink(source,"Output",
+                 channel->GetLongName(net,tmpname), "ChannelInput");
  return res;
 }
 
