@@ -683,12 +683,12 @@ bool NEngineMotionControl::ACalculate(void)
  vector<double> measure;
 
  measure.resize(NumControlLoops);
- UEPtr<UNet> source;
+ UEPtr<NManipulatorSource> source;
  for(int i=0;i<NumControlLoops;i++)
  {
-  source=dynamic_pointer_cast<UNet>(GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/));
-  if(source->GetOutputDataSize(0)>MMatrixSize(1,0))
-   measure[i]=source->GetOutputData(0).Double[i];
+  source=dynamic_pointer_cast<NManipulatorSource>(GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/));
+  if(source->OutputAngle->GetRows()>i && source->OutputAngle->GetCols()>0) // TODO: проверить!!
+   measure[i]=source->OutputAngle->Double[i];
   else
    measure[i]=0;
  }
@@ -1279,7 +1279,7 @@ void NEngineMotionControl::AACSetup(UEPtr<UContainer> net, double gain_value)
  cont->Mode=0;
  cont->TCMode=0;
  net->AddComponent(cont);
- cont->SetOutputDataSize(0,MMatrixSize(1,int(Motions.size())*2));
+ cont->Output->Resize(1,int(Motions.size())*2);
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
@@ -1607,7 +1607,7 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
   return;
  cont->SetName("Pac");
  AddComponent(cont);
- cont->SetOutputDataSize(0,MMatrixSize(1,int(Motions.size())*2));
+ cont->Output->Resize(1,int(Motions.size())*2);
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
@@ -1730,7 +1730,7 @@ for (int j=0; j < NumMotionElements ; j++)
 	   if(!cont)
 		continue;
 	   cont->SetName(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
-	   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
+       //((NIntervalSeparator*)cont)->SetNumOutputs(1);
 	   ((NIntervalSeparator*)cont)->Gain=neg_gain;
 
 	   left_value.assign(1,AfferentRangesNeg[i][j].first);
@@ -1745,7 +1745,7 @@ for (int j=0; j < NumMotionElements ; j++)
 	   if(!cont)
 		continue;
 	   cont->SetName(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
-	   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
+//	   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
 	   ((NIntervalSeparator*)cont)->Gain=pos_gain;
 
 	   left_value.assign(1,AfferentRangesPos[i][j].first);

@@ -148,8 +148,8 @@ bool NMultiPositionControl::ACalculate(void)
 	 }
    for(size_t i=0;i<InputNeurons.size();i++)
    {
-    UEPtr<UItem> ltzone=dynamic_pointer_cast<UItem>(InputNeurons[i]->GetComponentL("LTZone"));
-	if(ltzone->GetOutputData(2).Double[0]>0)
+    UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(InputNeurons[i]->GetComponentL("LTZone"));
+    if(ltzone->OutputFrequency->Double[0]>0)
 	{
 	 activeInputs.push_back(InputNeurons[i]);
 	 activeControls.push_back(ControlNeurons[i]);
@@ -231,7 +231,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
 	cont->GetLongName(owner, inputName);
    }
-   owner->CreateLink(ltzoneName+".LTZone",0,inputName+".Soma1.ExcChannel");
+   owner->CreateLink(ltzoneName+".LTZone","Output",inputName+".Soma1.ExcChannel", "SynapticInputs");
   }
  }
  //Creating ControlNeurons 0
@@ -264,7 +264,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	ControlNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
 	cont->GetLongName(owner, controlName);
    }
-   owner->CreateLink(controlName+".LTZone",0,outputName+".Soma1.ExcChannel");
+   owner->CreateLink(controlName+".LTZone","Output",outputName+".Soma1.ExcChannel", "SynapticInputs");
   }
  }
  for(int i=0;i<(*NumOfPositions);i++)
@@ -336,7 +336,7 @@ bool NMultiPositionControl::LinkGenerators(vector <UNet*> generators, vector <NN
 	 if(link)
 	 {
 	  if(!CheckLink(generatorName,controlNeuronName))
-		 CreateLink(generatorName, 0, controlNeuronName);
+         CreateLink(generatorName, "Output", controlNeuronName, "SynapticInputs");
 	 }
 	 else
 	 {

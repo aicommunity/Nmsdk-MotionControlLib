@@ -49,7 +49,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  net->SetName("MotionElement");
  net->Default();
  UploadClass("NNewMotionElement",net);
-/*
+
  // Создаем прототип систем управления
  UEPtr<NEngineMotionControl> cs=0;
  cs=new NEngineMotionControl;
@@ -68,7 +68,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 
  net->SetName("EngineControlRangeAfferent");
  UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl",net);
-*/
+
 
 {
  UEPtr<UContainer> generated_cont=new NPositionControlElement;
@@ -76,14 +76,14 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  generated_cont->Default();
  UploadClass("NPositionControlElement",generated_cont);
 }
- /*
+
 {
  UEPtr<UContainer> generated_cont=new NNewPositionControlElement;
  generated_cont->SetName("NNewPositionControlElement");
  generated_cont->Default();
  UploadClass("NNewPositionControlElement",generated_cont);
-}*/
-/*
+}
+
 {
  UEPtr<UContainer> generated_cont=new NMultiPositionControl;
  generated_cont->SetName("NMultiPositionControl");
@@ -96,7 +96,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  generated_cont->SetName("NPCN");
  generated_cont->Default();
  UploadClass("NPCN",generated_cont);
-}*/
+}
 }
 // --------------------------
 
