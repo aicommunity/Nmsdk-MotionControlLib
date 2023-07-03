@@ -14,10 +14,10 @@ See file license.txt for more information
 #ifndef NMotionControlLibraryH
 #define NMotionControlLibraryH
 
-//#include "NEngineMotionControl.h"
+#include "NEngineMotionControl.h"
 #include "NMotionElement.h"
 #include "NPositionControlElement.h"
-//#include "NNewPositionControlElement.h"
+#include "NNewPositionControlElement.h"
 //#include "NMultiPositionControl.h"
 //#include "NPCNElement.h"
 
