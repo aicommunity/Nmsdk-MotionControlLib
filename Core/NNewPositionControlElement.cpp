@@ -121,13 +121,15 @@ bool NNewPositionControlElement::ACalculate(void)
   if(InputNeurons.empty()||ControlNeurons.empty()||PreControlNeurons.empty()||PostInputNeurons.empty())
    CreateNeurons();
   CurrentPosition->Assign(1,1,0.0);
-  vector<NNet*> Motions = MotionControl->GetMotion();
+  vector<NMotionElement *> Motions = MotionControl->GetMotion();
+  //vector<NNet*> Motions = MotionControl->GetMotion();
   CurrentPosition->Assign(MotionControl->GetNumControlLoops(),2*MotionControl->NumMotionElements,0.0);
   Delta->Assign(MotionControl->GetNumControlLoops(),2*MotionControl->NumMotionElements,0.0);
   //CurrentPosition Calculation
   for(int i=0;i<MotionControl->NumMotionElements;i++)
   {
-   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+   NMotionElement *melem=Motions[i];
+   //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
    if(!melem)
 	continue;
    for(int j=0;j<melem->NumControlLoops;j++)
@@ -146,7 +148,8 @@ bool NNewPositionControlElement::ACalculate(void)
   //Delta Calculation
   for(int i=0;i<MotionControl->NumMotionElements;i++)
   {
-   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+   NMotionElement *melem=Motions[i];
+   //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
    if(!melem)
 	continue;
    for(int j=0;j<melem->NumControlLoops;j++)
@@ -205,11 +208,13 @@ bool NNewPositionControlElement::CreateNeurons()
    UEPtr<UContainer> cont;
    UEPtr<UStorage> storage = GetStorage();
    bool res(true);
-   vector<NNet*> Motions = MotionControl->GetMotion();
+   vector<NMotionElement *> Motions = MotionControl->GetMotion();
+
    //Creating InputNeurons
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
-	NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+    NMotionElement *melem=Motions[i];
+    //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
 	if(!melem)
 	 continue;
 	LeftInputNeurons.resize(melem->NumControlLoops);
@@ -217,7 +222,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	for(int j=0;j<melem->NumControlLoops;j++)
 	{
      UEPtr<UItem> ltzoneL=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
-    UEPtr<UItem> ltzoneR=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
+     UEPtr<UItem> ltzoneR=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
 	 UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
 	 string ltzoneLName,ltzoneRName;
 	 ltzoneL->GetLongName(owner, ltzoneLName);
@@ -273,7 +278,8 @@ bool NNewPositionControlElement::CreateNeurons()
    //Creating ControlNeurons
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
-	NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+    NMotionElement *melem=Motions[i];
+    //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
 	if(!melem)
 	 continue;
 	LeftControlNeurons.resize(melem->NumControlLoops);
@@ -340,7 +346,8 @@ bool NNewPositionControlElement::CreateNeurons()
    //Creating PreControlNeurons
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
-	NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+    NMotionElement *melem=Motions[i];
+    //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
 	if(!melem)
 	 continue;
 	LeftPreControlNeurons.resize(melem->NumControlLoops);
@@ -387,7 +394,8 @@ bool NNewPositionControlElement::CreateNeurons()
    RightPostInputNeurons.clear();
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
-	NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+    NMotionElement *melem=Motions[i];
+    //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
 	if(!melem)
 	 continue;
 	LeftPostInputNeurons.resize(melem->NumControlLoops);
@@ -432,7 +440,8 @@ bool NNewPositionControlElement::CreateNeurons()
    //Creating downward links
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
-	NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+    NMotionElement *melem=Motions[i];
+    //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
 	if(!melem)
 	 continue;
 	for(int j=0;j<melem->NumControlLoops;j++)
@@ -520,11 +529,13 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
    UEPtr<UContainer> cont;
    UEPtr<UStorage> storage = GetStorage();
    bool res(true);
-   vector<NNet*> Motions = MotionControl->GetMotion();
+   vector<NMotionElement *> Motions = MotionControl->GetMotion();
+   //vector<NNet*> Motions = MotionControl->GetMotion();
 
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
-	NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+    NMotionElement *melem=Motions[i];
+    //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
 	if(!melem)
 	 continue;
 	LeftGenerators.resize(melem->NumControlLoops);
@@ -660,11 +671,13 @@ bool NNewPositionControlElement::LinkGenerators(const bool &value)
 
 bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim)
 {
-  vector<NNet*> Motions = MotionControl->GetMotion();
+    vector<NMotionElement *> Motions = MotionControl->GetMotion();
+  //vector<NNet*> Motions = MotionControl->GetMotion();
 
   for(int i=0;i<MotionControl->NumMotionElements;i++)
   {
-   NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+   NMotionElement *melem=Motions[i];
+   //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
    if(!melem)
 	continue;
    for(int j=0;j<melem->NumControlLoops;j++)
@@ -721,12 +734,14 @@ bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vecto
 }
 bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet*> finish)
 {
-   vector<NNet*> Motions = MotionControl->GetMotion();
+   vector<NMotionElement *> Motions = MotionControl->GetMotion();
+   //vector<NNet*> Motions = MotionControl->GetMotion();
    vector<NPulseMembrane*> membrToConnectL;
    vector<NPulseMembrane*> membrToConnectR;
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
-	NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
+    NMotionElement *melem=Motions[i];
+    //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
 	if(!melem)
 	 continue;
 	for(int j=0;j<melem->NumControlLoops;j++)

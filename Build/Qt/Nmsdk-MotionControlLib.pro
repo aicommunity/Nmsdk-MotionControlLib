@@ -28,7 +28,7 @@ windows {
 }
 
 HEADERS += \
-#    ../../Core/NEngineMotionControl.h \
+    ../../Core/NEngineMotionControl.h \
     ../../Core/NMotionControlLibrary.h \
     ../../Core/NMotionElement.h \
 #    ../../Core/NMultiPositionControl.h \
@@ -37,7 +37,7 @@ HEADERS += \
 #    ../../Core/NPCNElement.h
 
 SOURCES += \
- #   ../../Core/NEngineMotionControl.cpp \
+    ../../Core/NEngineMotionControl.cpp \
     ../../Core/NMotionControlLibrary.cpp \
     ../../Core/NMotionElement.cpp \
 #    ../../Core/NMultiPositionControl.cpp \
