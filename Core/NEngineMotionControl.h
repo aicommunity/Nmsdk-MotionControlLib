@@ -18,6 +18,8 @@ See file license.txt for more information
 #include "../../Nmsdk-SourceLib/Core/NPulseGenerator.h"
 #include "../../Rdk-BasicStatisticLib/Core/UStatisticLibrary.h"
 #include "NMotionElement.h"
+#include "../../Nmsdk-SourceLib/Core/NManipulatorSource.h"
+#include "../../Nmsdk-SensorLib/Core/NIntervalSeparator.h"
 
 
 namespace NMSDK {
@@ -232,11 +234,15 @@ public: // Методы
 // --------------------------
 NEngineMotionControl(void);
 virtual ~NEngineMotionControl(void);
+
 // --------------------------
 // --------------------------
 // Методы управления параметрами
 // --------------------------
 protected:
+//UEPtr<NManipulatorSource> ManipulatorSource1;
+//UEPtr<NIntervalSeparator> PosIntervalSeparator;
+
 // Число контуров управления
 bool SetNumControlLoops(const int &value);
 
