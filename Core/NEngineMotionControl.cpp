@@ -1901,10 +1901,24 @@ for(int i=0;i<NumMotionElements;i++)
 	 continue;
 	for (int l = 0; l < melem->NumControlLoops; l++) {
       try{
-         res=CreateLink(string("PosIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),"Output",
-                        Motions[k]->GetName()+".AfferentL"+sntoa(l+1)+".Receptor","Input");
-         res=CreateLink(string("NegIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),"Output",
-                        Motions[k]->GetName()+".AfferentR"+sntoa(l+1)+".Receptor","Input");
+//         UEPtr<NIntervalSeparator> posIntSep = GetComponentL<NIntervalSeparator>("PosIntervalSeparator", true);
+//         if(!posIntSep)
+//         {
+//           int an = 0;
+//         }
+
+//         UEPtr<NMotionElement> motionEl = GetComponentL<NMotionElement>(Motions[k]->GetName()+".AfferentL"+RDK::sntoa(l+1)+".Receptor", true);
+//         if(!motionEl)
+//         {
+//            int bn = 0;
+//         }
+
+         string posIntSep = std::string("PosIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1);
+         string motionRec = Motions[k]->GetName()+".AfferentL"+RDK::sntoa(l+1)+".Receptor";
+
+         res=CreateLink(posIntSep,"Output", motionRec,"Input");
+         res=CreateLink(std::string("NegIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),"Output",
+                        Motions[k]->GetName()+".AfferentR"+RDK::sntoa(l+1)+".Receptor","Input");
 		}
         catch (EComponentNameNotExist &) {  }
   }
