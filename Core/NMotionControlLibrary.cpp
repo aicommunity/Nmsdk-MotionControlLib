@@ -15,7 +15,7 @@ See file license.txt for more information
 
 #include "NMotionElement.cpp"
 #include "NEngineMotionControl.cpp"
-#include "NPositionControlElement.cpp"
+//#include "NPositionControlElement.cpp"
 #include "NNewPositionControlElement.cpp"
 //#include "NMultiPositionControl.cpp"
 

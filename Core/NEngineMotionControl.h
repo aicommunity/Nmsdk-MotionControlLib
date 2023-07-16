@@ -17,6 +17,10 @@ See file license.txt for more information
 #include "../../Nmsdk-BasicLib/Core/NNet.h"
 #include "../../Nmsdk-SourceLib/Core/NPulseGenerator.h"
 #include "../../Rdk-BasicStatisticLib/Core/UStatisticLibrary.h"
+#include "NMotionElement.h"
+#include "../../Nmsdk-SourceLib/Core/NManipulatorSource.h"
+#include "../../Nmsdk-SensorLib/Core/NIntervalSeparator.h"
+
 
 namespace NMSDK {
 
@@ -192,7 +196,7 @@ vector<pair<double,double> > Ic_ranges_pos,Ic_ranges_neg;
 
 vector<vector<pair<double,double> > > AfferentRangesPos, AfferentRangesNeg;
 
-vector<NNet*> Motions;
+vector<NMotionElement *> Motions;
 
 /// Генераторы принудительной коррекции регулятора
 UEPtr<NPulseGenerator> InternalGenerator;
@@ -230,11 +234,15 @@ public: // Методы
 // --------------------------
 NEngineMotionControl(void);
 virtual ~NEngineMotionControl(void);
+
 // --------------------------
 // --------------------------
 // Методы управления параметрами
 // --------------------------
 protected:
+//UEPtr<NManipulatorSource> ManipulatorSource1;
+//UEPtr<NIntervalSeparator> PosIntervalSeparator;
+
 // Число контуров управления
 bool SetNumControlLoops(const int &value);
 
@@ -402,7 +410,7 @@ void ConnectInternalGenerators(int direction, int num_motion_elements, int contr
 void SetInternalGeneratorFrequency(int direction, int num_motion_elements, int control_loop_index, double value);
 // --------------------------
 
-vector<NNet*> GetMotion(void);
+vector<NMotionElement *> GetMotion(void);
 
 };
 

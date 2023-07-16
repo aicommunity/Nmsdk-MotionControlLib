@@ -186,6 +186,7 @@ bool NPositionControlElement::UnlinkNeurons(vector <NNet*> start, vector <NNet*>
  }
  return true;
 }
+
 bool NPositionControlElement::LinkGenerators(const bool &value)
 {
  return true;
