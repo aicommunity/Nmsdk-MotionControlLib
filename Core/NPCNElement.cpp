@@ -106,7 +106,7 @@ bool NPCNElement::ACalculate(void)
   if(InputNeurons.empty()||ControlNeurons.empty())
    CreateNeurons();
   CurrentPosition->Assign(1,1,0.0);
-  vector<NNet*> Motions = MotionControl->GetMotion();
+  vector<NMotionElement*> Motions = MotionControl->GetMotion();
   CurrentPosition->Assign(MotionControl->GetNumControlLoops(),2*MotionControl->NumMotionElements,0.0);
   //CurrentPosition Calculation
   for(int i=0;i<MotionControl->NumMotionElements;i++)
@@ -144,7 +144,7 @@ bool NPCNElement::CreateNeurons()
    UEPtr<UContainer> cont;
    UEPtr<UStorage> storage = GetStorage();
    bool res(true);
-    vector<NNet*> Motions = MotionControl->GetMotion();
+    vector<NMotionElement*> Motions = MotionControl->GetMotion();
    //Creating InputNeurons
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
@@ -375,7 +375,7 @@ bool NPCNElement::CreateExternalControlElements(void)
    UEPtr<UContainer> cont;
    UEPtr<UStorage> storage = GetStorage();
    bool res(true);
-   vector<NNet*> Motions = MotionControl->GetMotion();
+   vector<NMotionElement*> Motions = MotionControl->GetMotion();
 
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
@@ -529,7 +529,7 @@ bool NPCNElement::LinkGenerators(const bool &value)
 
 bool NPCNElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim)
 {
-  vector<NNet*> Motions = MotionControl->GetMotion();
+  vector<NMotionElement*> Motions = MotionControl->GetMotion();
 
   for(int i=0;i<MotionControl->NumMotionElements;i++)
   {
@@ -563,7 +563,7 @@ bool NPCNElement::LinkGenerators(vector <UNet*> generators, vector <NNet*> neuro
 }
 bool NPCNElement::LinkNegative(vector <NNet*> start, vector <NNet*> finish)
 {
-   vector<NNet*> Motions = MotionControl->GetMotion();
+   vector<NMotionElement*> Motions = MotionControl->GetMotion();
    vector<NPulseMembrane*> membrToConnectL;
    vector<NPulseMembrane*> membrToConnectR;
    for(int i=0;i<MotionControl->NumMotionElements;i++)
