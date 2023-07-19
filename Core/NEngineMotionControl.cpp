@@ -572,6 +572,7 @@ bool NEngineMotionControl::ADefault(void)
  MotionElementClassName="NNewMotionElement";
  ObjectControlInterfaceClassName="NControlObjectSource";
  AdaptiveStructureMode=2;
+ //InterneuronPresentMode=1;
  InterneuronPresentMode=0;
  LinkModes->assign(1,1);
 
@@ -1901,28 +1902,13 @@ for(int i=0;i<NumMotionElements;i++)
 	 continue;
 	for (int l = 0; l < melem->NumControlLoops; l++) {
       try{
-//         UEPtr<NIntervalSeparator> posIntSep = GetComponentL<NIntervalSeparator>("PosIntervalSeparator", true);
-//         if(!posIntSep)
-//         {
-//           int an = 0;
-//         }
-
-//         UEPtr<NMotionElement> motionEl = GetComponentL<NMotionElement>(Motions[k]->GetName()+".AfferentL"+RDK::sntoa(l+1)+".Receptor", true);
-//         if(!motionEl)
-//         {
-//            int bn = 0;
-//         }
-
-         string posIntSep = std::string("PosIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1);
-         string motionRec = Motions[k]->GetName()+".AfferentL"+RDK::sntoa(l+1)+".Receptor";
-
-         res=CreateLink(posIntSep,"Output", motionRec,"Input");
-         res=CreateLink(std::string("NegIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),"Output",
+         res&=CreateLink(std::string("PosIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),"Output",
+                        Motions[k]->GetName()+".AfferentL"+RDK::sntoa(l+1)+".Receptor","Input");
+         res&=CreateLink(std::string("NegIntervalSeparator")+RDK::sntoa(k+1)+RDK::sntoa(l+1),"Output",
                         Motions[k]->GetName()+".AfferentR"+RDK::sntoa(l+1)+".Receptor","Input");
 		}
         catch (EComponentNameNotExist &) {  }
   }
-
  }
 
  if(res)
@@ -1987,8 +1973,8 @@ bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &val
 	}
 	else
 	{
-	 res&=BreakLink(pos_separator,"Output",motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor","Input");
-	 res&=BreakLink(neg_separator,"Output",motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor","Input");
+     res&=BreakLink(pos_separator,"Output",motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor","Input");
+     res&=BreakLink(neg_separator,"Output",motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor","Input");
 	 res&=CreateLink("AfferentSource1","Output",motion_name+".AfferentL"+RDK::sntoa(index+1)+".Receptor","Input");
 	 res&=CreateLink("AfferentSource1","Output",motion_name+".AfferentR"+RDK::sntoa(index+1)+".Receptor","Input");
 	}
@@ -2010,7 +1996,7 @@ bool NEngineMotionControl::GetIsAfferentLinked(const int &index)
 }
 
 
-/// Подключает внутренние генераторы к вставочным нейронам нужного числа управляющих эдементов
+/// Подключает внутренние генераторы к вставочным нейронам нужного числа управляющих элементов
 /// direction 0 - налево, direction 1 - направо
 void NEngineMotionControl::ConnectInternalGenerators(int direction, int num_motion_elements, int control_loop_index)
 {
@@ -2030,8 +2016,9 @@ void NEngineMotionControl::ConnectInternalGenerators(int direction, int num_moti
   std::string post_afferent_L_name="PostAfferentR"+sntoa(control_loop_index+1);
   if(direction == 0)
   {
-         //Связь не строится
-   res&=CreateLink("InternalGenerator","Output",std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".Soma1.ExcChannel","ChannelInputs");
+   //Связь не строится
+   res&=CreateLink("InternalGenerator","Output",
+                   std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".Soma1.ExcChannel","ChannelInputs");
 //   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".PNeuronMembrane.NegChannel");
    InternalGeneratorDirection=0;
   }

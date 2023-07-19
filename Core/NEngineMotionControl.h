@@ -402,7 +402,7 @@ void NewIntervalSeparatorsUpdate(int mode_value, int last_mode_value);
 // Установка связей разделителей интервалов
 void NewIntervalSeparatorLinksSetup(void);
 
-/// Подключает внутренние генераторы к вставочным нейронам нужного числа управляющих эдементов
+/// Подключает внутренние генераторы к вставочным нейронам нужного числа управляющих элементов
 /// direction 0 - налево, direction 1 - направо
 void ConnectInternalGenerators(int direction, int num_motion_elements, int control_loop_index);
 
