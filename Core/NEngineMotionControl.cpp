@@ -695,13 +695,21 @@ bool NEngineMotionControl::ACalculate(void)
  vector<double> measure;
 
  measure.resize(NumControlLoops);
- UEPtr<UNet> source;
+ //UEPtr<UNet> source;
+ UEPtr<NControlObjectSource> source;
  for(int i=0;i<NumControlLoops;i++)
  {
-  source=dynamic_pointer_cast<UNet>(GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/));
-//  if(source->GetOutputDataSize(0)>MMatrixSize(1,0))
-//   measure[i]=source->GetOutputData(0).Double[i];
-//  else
+    source=dynamic_pointer_cast<NControlObjectSource>(GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/));
+ // source=dynamic_pointer_cast<UNet>(GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/));
+    source->SetCoord(MVector<double,3>(8.0, 6.0, 5.0));
+
+  MMatrixSize source_size = source->Output->GetMatrixSize();
+
+  //if(source->GetOutputDataSize(0)>MMatrixSize(1,0))
+  if (source_size > MMatrixSize(1,0))
+   //measure[i]=source->GetOutputData(0).Double[i];
+   measure[i]=source->Output[i];
+  else
    measure[i]=0;
  }
 
@@ -917,6 +925,7 @@ bool NEngineMotionControl::Create(bool full_recreate)
 
  UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
  UEPtr<UStatisticMatrix<double> > stats=AddMissingComponent<UStatisticMatrix<double> >("StatisticDoubleMatrix", "UStatisticDoubleMatrix");
+ stats->SetCoord(MVector<double,3>(5.0, 13.0, 10));
  stats->ManualModeEnabled=true;
  return true;
 }
@@ -1291,6 +1300,7 @@ void NEngineMotionControl::AACSetup(UEPtr<UContainer> net, double gain_value)
  cont->Mode=0;
  cont->TCMode=0;
  net->AddComponent(cont);
+ cont->SetCoord(MVector<double,3>(28.0, 7.0, 8));
 // cont->SetOutputDataSize(0,MMatrixSize(1,int(Motions.size())*2));
 
  // Начальные значения всем параметрам
@@ -1333,6 +1343,7 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UContainer> net)
   ((NPulseGenerator*)cont)->Amplitude=1;
   ((NPulseGenerator*)cont)->Frequency=0;
   res=net->AddComponent(cont);
+  cont->SetCoord(MVector<double,3>(5.0, 15.0, 2.0));
  }
 
  if(CheckName("IINegAfferentGenerator"))
@@ -1344,6 +1355,7 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UContainer> net)
   ((NPulseGenerator*)cont)->Amplitude=1;
   ((NPulseGenerator*)cont)->Frequency=0;
   res=net->AddComponent(cont);
+  cont->SetCoord(MVector<double,3>(5.0, 17.0, 3.0));
  }
 
  if(CheckName("AfferentSource1"))
@@ -1354,6 +1366,7 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UContainer> net)
   cont->SetName("AfferentSource1");
   ((NConstGenerator*)cont)->Amplitude=0;
   res=net->AddComponent(cont);
+  cont->SetCoord(MVector<double,3>(15.0, 2.0, 5.0));
  }
 
  //for(int i=0; i<NumControlLoops; ++i)
@@ -1373,6 +1386,7 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UContainer> net)
     return;
    cont2->SetName(name);
    res=net->AddComponent(cont2);
+   cont2->SetCoord(MVector<double,3>(8.0, 6.0, 5.0));
   }
 // }
 
@@ -1384,6 +1398,7 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UContainer> net)
    return;
   cont->SetName("NManipulatorInput1");
   res=net->AddComponent(cont);
+  cont->SetCoord(MVector<double,3>(35.0, 7.0, 6.0));
  }
 
  if(res)
@@ -1521,6 +1536,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
   InternalGenerator=dynamic_pointer_cast<NPulseGenerator>(storage->TakeObject("NPGenerator"));
   InternalGenerator->SetName("InternalGenerator");
   net->AddComponent(InternalGenerator);
+  InternalGenerator->SetCoord(MVector<double,3>(11.0, 13.0, 6.0));
  }
  catch (EComponentNameNotExist &)
  {
@@ -1535,6 +1551,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
    continue;
   cont->SetName(string("MotionElement")+RDK::sntoa(i));
   net->AddComponent(cont);
+  cont->SetCoord(MVector<double,3>(22.0, 7+(5*i), 6.0));
   Motions.push_back(dynamic_pointer_cast<NMotionElement>(cont));
   //Motions.push_back(static_pointer_cast<NNet>(cont));
 
@@ -1628,6 +1645,7 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
   return;
  cont->SetName("Pac");
  AddComponent(cont);
+ cont->SetCoord(MVector<double,3>(28.0, 7.0, 8.0));
  //cont->SetOutputDataSize(0,MMatrixSize(1,int(Motions.size())*2));
 
  // Начальные значения всем параметрам
@@ -1760,6 +1778,7 @@ for (int j=0; j < NumMotionElements ; j++)
 	   ((NIntervalSeparator*)cont)->MinRange=left_value;
 	   ((NIntervalSeparator*)cont)->MaxRange=right_value;
 	   res=AddComponent(cont);
+       cont->SetCoord(MVector<double,3>(15.0, 8.0, 9));
   }
 
 //  //Создаем PosIntervalSeparator
@@ -1781,6 +1800,7 @@ for (int j=0; j < NumMotionElements ; j++)
        ((NIntervalSeparator*)cont)->MinRange=left_value;
        ((NIntervalSeparator*)cont)->MaxRange=right_value;
        res=AddComponent(cont);
+       cont->SetCoord(MVector<double,3>(15.0, 5.0, 10));
   }
  }
 }
