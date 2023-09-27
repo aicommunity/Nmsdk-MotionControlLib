@@ -349,6 +349,7 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 	return 0;
    cont->SetName("MotoneuronL");
    res&=(AddComponent(cont)!=ForbiddenId);
+   cont->SetCoord(MVector<double,3>(22.0, 5.0, 0));
    neuron = dynamic_pointer_cast<NPulseNeuron> (cont);
    if(!neuron)
 	return 0;
@@ -361,6 +362,7 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 	return false;
    cont->SetName("MotoneuronR");
    res&=(AddComponent(cont)!=ForbiddenId);
+   cont->SetCoord(MVector<double,3>(22.0, 8.0, 1.0));
    neuron = dynamic_pointer_cast<NPulseNeuron> (cont);
    if(!neuron)
 	return 0;
@@ -374,6 +376,7 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 	 return false;
 	cont->SetName("RenshowL");
     res&=(AddComponent(cont)!=ForbiddenId);
+    cont->SetCoord(MVector<double,3>(15.0, 3.0, 0.0));
 
 	// Клетка реншоу 2
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
@@ -381,6 +384,7 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 	 return false;
 	cont->SetName("RenshowR");
     res&=(AddComponent(cont)!=ForbiddenId);
+    cont->SetCoord(MVector<double,3>(15.0, 10.0, 1.0));
    }
 
    if(PacemakerMode)
@@ -391,6 +395,7 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 	 return false;
 	cont->SetName("PmL");
     res&=(AddComponent(cont)!=ForbiddenId);
+    cont->SetCoord(MVector<double,3>(15.0, 1.0, 4.0));
 
 	// пейсмейкер 2
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
@@ -398,6 +403,7 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 	 return false;
 	cont->SetName("PmR");
     res&=(AddComponent(cont)!=ForbiddenId);
+    cont->SetCoord(MVector<double,3>(15.0, 12.0, 5.0));
    }
    return res;
  }
@@ -418,12 +424,14 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 	   return 0;
 	  cont->SetName("AfferentR"+sntoa(i+1));
       res&=(AddComponent(cont)!=ForbiddenId);
+      cont->SetCoord(MVector<double,3>((5.0+i), 8.0, 2.0));
 
 	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(AfferentObjectName));
 	  if(!cont)
 	   return 0;
 	  cont->SetName("AfferentL"+sntoa(i+1));
       res&=(AddComponent(cont)!=ForbiddenId);
+      cont->SetCoord(MVector<double,3>((5.0+i), 5.0, 3.0));
    }
 
    return res;
@@ -447,12 +455,14 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 	 return 0;
 	cont->SetName("PostAfferentL"+sntoa(i+1));
     res&=(AddComponent(cont)!=ForbiddenId);
+    cont->SetCoord(MVector<double,3>((15.0+i), 5.0, 4));
 
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
 	if(!cont)
 	 return 0;
 	cont->SetName("PostAfferentR"+sntoa(i+1));
     res&=(AddComponent(cont)!=ForbiddenId);
+    cont->SetCoord(MVector<double,3>((15.0+i), 8.0, 5));
    }
 
    return res;
