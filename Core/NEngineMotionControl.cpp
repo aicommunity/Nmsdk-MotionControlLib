@@ -571,9 +571,12 @@ bool NEngineMotionControl::ADefault(void)
  MinAfferentRange=0.1;
  MotionElementClassName="NNewMotionElement";
  ObjectControlInterfaceClassName="NControlObjectSource";
- AdaptiveStructureMode=2;
- //InterneuronPresentMode=1;
- InterneuronPresentMode=0;
+ //AdaptiveStructureMode=2;
+ //InterneuronPresentMode=0;
+  AdaptiveStructureMode=1; //добавлено
+ InterneuronPresentMode=1;//добавлено
+ ActiveContours->assign(1,1);//добавлено
+
  LinkModes->assign(1,1);
 
  DestTransientTime=0.1;

@@ -125,6 +125,8 @@ bool NNewPositionControlElement::ACalculate(void)
   //vector<NNet*> Motions = MotionControl->GetMotion();
   CurrentPosition->Assign(MotionControl->GetNumControlLoops(),2*MotionControl->NumMotionElements,0.0);
   Delta->Assign(MotionControl->GetNumControlLoops(),2*MotionControl->NumMotionElements,0.0);
+
+
   //CurrentPosition Calculation
   for(int i=0;i<MotionControl->NumMotionElements;i++)
   {
@@ -145,6 +147,8 @@ bool NNewPositionControlElement::ACalculate(void)
 	(*CurrentPosition)(j,2*i+1)= temp;
    }
   }
+
+
   //Delta Calculation
   for(int i=0;i<MotionControl->NumMotionElements;i++)
   {
@@ -209,6 +213,10 @@ bool NNewPositionControlElement::CreateNeurons()
    UEPtr<UStorage> storage = GetStorage();
    bool res(true);
    vector<NMotionElement *> Motions = MotionControl->GetMotion();
+
+   if(Motions.empty())//добавлено
+       return false;
+
 
    //Creating InputNeurons
    for(int i=0;i<MotionControl->NumMotionElements;i++)
@@ -275,6 +283,8 @@ bool NNewPositionControlElement::CreateNeurons()
 	 res = owner->CreateLink(ltzoneRName,"Output",inputRName+".Soma1.ExcSynapse1","Input");
 	}
    }
+
+
    //Creating ControlNeurons
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
@@ -343,6 +353,8 @@ bool NNewPositionControlElement::CreateNeurons()
 	 owner->CreateLink(controlRName+".LTZone",0,postAfferentLName+".Soma1.ExcChannel");  */
 	}
    }
+
+
    //Creating PreControlNeurons
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
@@ -389,6 +401,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	 }
 	}
    }
+
    //Creating PostInputNeurons
    LeftPostInputNeurons.clear();
    RightPostInputNeurons.clear();
@@ -437,6 +450,8 @@ bool NNewPositionControlElement::CreateNeurons()
 	 }
 	}
    }
+
+
    //Creating downward links
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
@@ -531,6 +546,8 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
    bool res(true);
    vector<NMotionElement *> Motions = MotionControl->GetMotion();
    //vector<NNet*> Motions = MotionControl->GetMotion();
+   if(Motions.empty())//добавлено
+       return false;
 
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
