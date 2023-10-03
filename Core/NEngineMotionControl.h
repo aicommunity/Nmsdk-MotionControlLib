@@ -20,6 +20,7 @@ See file license.txt for more information
 #include "NMotionElement.h"
 #include "../../Nmsdk-SourceLib/Core/NManipulatorSource.h"
 #include "../../Nmsdk-SensorLib/Core/NIntervalSeparator.h"
+#include "../../Nmsdk-SourceLib/Core/NControlObjectSource.h"
 
 
 namespace NMSDK {
