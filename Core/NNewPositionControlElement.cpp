@@ -277,6 +277,8 @@ bool NNewPositionControlElement::CreateNeurons()
 	  RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
 	 }
 
+     //Построение связей от афферентных нейронов в EngineMotionControl->MotionElement
+     //ко входным нейронам (InputNeuron) в NNewPositionControlElement
 	 res = owner->CreateLink(ltzoneLName,"Output",inputLName+".Soma1.ExcSynapse1","Input");
 	 res = owner->CreateLink(ltzoneLName,"Output",inputRName+".Soma1.InhSynapse1","Input");
 	 res = owner->CreateLink(ltzoneRName,"Output",inputLName+".Soma1.InhSynapse1","Input");
@@ -342,6 +344,9 @@ bool NNewPositionControlElement::CreateNeurons()
 	  cont->GetLongName(owner, controlRName);
 	  RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
 	 }
+
+     //Построение связей от ControlNeuron-ов в NNewPositionControlElement к!!!
+     //постафферентным нейронам (PostAfferent)в EngineMotionControl->MotionElement
 	 res = owner->CreateLink(controlLName+".LTZone","Output",postAfferentLName+".Soma1.ExcSynapse1","Input");
 	 res = owner->CreateLink(controlLName+".LTZone","Output",postAfferentRName+".Soma1.InhSynapse1","Input");
 	 res = owner->CreateLink(controlRName+".LTZone","Output",postAfferentLName+".Soma1.InhSynapse1","Input");
@@ -622,6 +627,8 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
 	  {
 	   NameT startName = start[i]->GetName()+".LTZone";
 	   if(!CheckLink(startName,finishName))
+
+        //Построение связи от InputNeuron к PostInputNeuron в NNewPositionControl
 		CreateLink(startName, "Output", finishName,"Input");
 //	   ExternalControl=false;
 	  }
@@ -691,7 +698,9 @@ bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vecto
     vector<NMotionElement *> Motions = MotionControl->GetMotion();
   //vector<NNet*> Motions = MotionControl->GetMotion();
 
-  for(int i=0;i<MotionControl->NumMotionElements;i++)
+  int check = MotionControl->NumMotionElements;
+  //int i=0;
+  for(int i=0; i<MotionControl->NumMotionElements;i++)
   {
    NMotionElement *melem=Motions[i];
    //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
