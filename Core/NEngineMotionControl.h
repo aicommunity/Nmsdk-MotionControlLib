@@ -14,8 +14,8 @@ See file license.txt for more information
 #define NEngineMotionControlH
 
 #include "../../Nmsdk-PulseLib/Core/NReceptor.h"
-#include "../../Nmsdk-BasicLib/Core/NNet.h"
-#include "../../Nmsdk-SourceLib/Core/NPulseGenerator.h"
+#include "../../Nmsdk-PulseLib/Core/NNet.h"
+#include "../../Nmsdk-PulseLib/Core/NPulseGenerator.h"
 #include "../../Rdk-BasicLib/Core/UBCLLibrary.h"
 #include "NMotionElement.h"
 #include "../../Nmsdk-SourceLib/Core/NManipulatorSource.h"
