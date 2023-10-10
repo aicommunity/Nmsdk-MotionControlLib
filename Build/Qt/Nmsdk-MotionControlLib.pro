@@ -33,7 +33,7 @@ HEADERS += \
     ../../Core/NMotionElement.h \
     ../../Core/NMultiPositionControl.h \
     ../../Core/NNewPositionControlElement.h \
-    ../../Core/NPositionControlElement.h #\
+    ../../Core/NPositionControlElement.h \
     ../../Core/NPCNElement.h
 
 SOURCES += \

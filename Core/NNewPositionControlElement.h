@@ -18,7 +18,7 @@ See file license.txt for more information
 
 namespace NMSDK {
 
-//class NEngineMotionControl;
+class NEngineMotionControl;
 class RDK_LIB_TYPE NNewPositionControlElement: public NPositionControlElement
 {
 public: // Свойства

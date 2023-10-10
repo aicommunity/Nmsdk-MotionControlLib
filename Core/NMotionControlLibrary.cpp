@@ -12,13 +12,13 @@ See file license.txt for more information
 *********************************************************** */
 
 #include "NMotionControlLibrary.h"
-/*
-#include "NMotionElement.cpp"
-#include "NEngineMotionControl.cpp"
-#include "NPositionControlElement.cpp"
-#include "NNewPositionControlElement.cpp"
-#include "NMultiPositionControl.cpp"
-*/
+
+//#include "NMotionElement.cpp"
+//#include "NEngineMotionControl.cpp"
+//#include "NPositionControlElement.cpp"
+//#include "NNewPositionControlElement.cpp"
+//#include "NMultiPositionControl.cpp"
+
 namespace NMSDK {
 
 NMotionControlLibrary MotionControlLibrary;
@@ -57,6 +57,43 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  cs->SetName("EngineMotionControl");
  UploadClass("NEngineMotionControl",cs);
 
+ // Режим формирования сети
+
+ // 1 - Range
+ // 2 - Branched Range
+ // 3 - Branched Range Crosslinks
+ // 4 - Branched Ind. Range
+ // 5 - Branched Ind. Range Crosslinks
+ // 10 - Branched Ind. Range Continues LTZone neurons
+ // 11 - Simplest 2 neuron model
+ // 12 - As 11 but speed and force control added
+ // 13 - As 12 but additional control contour added
+
+ // 0 - Signum
+ cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
+ cs->NumMotionElements=1;
+ cs->CreationMode=0;
+ cs->MotionElementClassName="NNewMotionElement";
+ cs->MCNeuroObjectName="NNewSPNeuron";
+ cs->ObjectControlInterfaceClassName="NControlObjectSource";
+ cs->Create();
+ net=cs;
+ net->SetName("EngineControlSignumAfferent");
+ UploadClass("NEngineControlSignumAfferent",net);
+
+ // 1 - Range
+ cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
+ cs->NumMotionElements=1;
+ cs->CreationMode=0;
+ cs->MotionElementClassName="NNewMotionElement";
+ cs->MCNeuroObjectName="NNewSPNeuron";
+ cs->ObjectControlInterfaceClassName="NControlObjectSource";
+ cs->Create();
+ net=cs;
+ net->SetName("EngineControlRangeAfferent");
+ UploadClass("NEngineControlRangeAfferent",net);
+
+ // 14 - New net with parametric structure control
  cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
  cs->NumMotionElements=1;
  cs->CreationMode=14;
@@ -65,7 +102,6 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  cs->ObjectControlInterfaceClassName="NControlObjectSource";
  cs->Create();
  net=cs;
-
  net->SetName("EngineControlRangeAfferent");
  UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl",net);
 

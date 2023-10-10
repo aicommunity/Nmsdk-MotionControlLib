@@ -186,6 +186,7 @@ bool NPositionControlElement::UnlinkNeurons(vector <NNet*> start, vector <NNet*>
  }
  return true;
 }
+
 bool NPositionControlElement::LinkGenerators(const bool &value)
 {
  return true;
@@ -201,18 +202,18 @@ bool NPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet*> 
 
 bool NPositionControlElement::PositionNeurons()
 {
-   int x_base=5;
+   int x_base=4; //5
    int x_shift=0;
-   int y_base=2;
+   int y_base=6; //6
    int y_shift = 2;
    SetPositions<NNet>(InputNeurons, x_base, x_shift, y_base, y_shift);
-   x_base+=10;
+   x_base+=7; //10
    SetPositions<NNet>(PostInputNeurons, x_base, x_shift, y_base, y_shift);
-   x_base+=10;
+   x_base+=7; //10
    SetPositions<NNet>(PreControlNeurons, x_base, x_shift, y_base, y_shift);
-   x_base+=10;
+   x_base+=7; //10
    SetPositions<NNet>(ControlNeurons, x_base, x_shift, y_base, y_shift);
-   x_base+=10;
+   x_base+=7; //10
    SetPositions<UNet>(Generators, x_base, x_shift, y_base, y_shift);
  return true;
 }
