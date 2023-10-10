@@ -16,7 +16,7 @@ See file license.txt for more information
 #include "../../Nmsdk-PulseLib/Core/NReceptor.h"
 #include "../../Nmsdk-BasicLib/Core/NNet.h"
 #include "../../Nmsdk-SourceLib/Core/NPulseGenerator.h"
-#include "../../Rdk-BasicStatisticLib/Core/UStatisticLibrary.h"
+#include "../../Rdk-BasicLib/Core/UBCLLibrary.h"
 #include "NMotionElement.h"
 #include "../../Nmsdk-SourceLib/Core/NManipulatorSource.h"
 #include "../../Nmsdk-SensorLib/Core/NIntervalSeparator.h"
