@@ -18,9 +18,10 @@ See file license.txt for more information
 #include "../../Nmsdk-PulseLib/Core/NPulseGenerator.h"
 #include "../../Rdk-BasicLib/Core/UBCLLibrary.h"
 #include "NMotionElement.h"
-#include "../../Nmsdk-SourceLib/Core/NManipulatorSource.h"
-#include "../../Nmsdk-SensorLib/Core/NIntervalSeparator.h"
-#include "../../Nmsdk-SourceLib/Core/NControlObjectSource.h"
+#include "NManipulatorSource.h"
+#include "NIntervalSeparator.h"
+#include "NControlObjectSource.h"
+
 
 
 namespace NMSDK {

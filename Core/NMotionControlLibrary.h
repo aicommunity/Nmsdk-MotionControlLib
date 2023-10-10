@@ -14,6 +14,33 @@ See file license.txt for more information
 #ifndef NMotionControlLibraryH
 #define NMotionControlLibraryH
 
+
+#include "NDCEngine.h"
+#include "NPendulumAndCart.h"
+#include "NAstaticGyro.h"
+#include "NManipulatorAndGyro.h"
+
+
+#include "NManipulator.h"
+#include "NNavMousePrimitive.h"
+
+#include "NFrequencyReceiver.h"
+#include "NManipulatorInput.h"
+#include "NManipulatorInputEmulator.h"
+#include "NSimpleStatistic.h"
+//#include "NNetworkLinksStatistic.h"
+#include "NPulseReceiver.h"
+
+#include "NSignumSeparator.h"
+#include "NIntervalSeparator.h"
+#include "NEyeRetina.h"
+
+
+#include "NManipulatorSourceEmulator.h"
+#include "NManipulatorSource.h"
+#include "NControlObjectSource.h"
+
+
 #include "NEngineMotionControl.h"
 #include "NMotionElement.h"
 #include "NPositionControlElement.h"

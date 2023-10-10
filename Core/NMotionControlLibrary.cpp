@@ -44,6 +44,129 @@ NMotionControlLibrary::NMotionControlLibrary(void)
 // Не требуется предварительная очистка массива и уборка памяти.
 void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 {
+ UEPtr<RDK::UContainer> cont;
+
+ cont=new NDCEngine;
+ cont->SetName("DCEngine");
+ cont->Default();
+ UploadClass("NDCEngine",cont);
+
+ cont=new NPendulumAndCart;
+ cont->SetName("PendulumAndCart");
+ cont->Default();
+ UploadClass("NPendulumAndCart",cont);
+
+{
+ UEPtr<UContainer> generated_cont=new NAstaticGyro;
+ generated_cont->SetName("NAstaticGyro");
+ generated_cont->Default();
+ UploadClass("NAstaticGyro",generated_cont);
+}
+
+{
+ UEPtr<UContainer> generated_cont=new NManipulatorAndGyro;
+ generated_cont->SetName("NManipulatorAndGyro");
+ generated_cont->Default();
+ UploadClass("NManipulatorAndGyro",generated_cont);
+}
+
+
+
+ cont=new NManipulator;
+ cont->SetName("Manipulator");
+ cont->Default();
+ UploadClass("NManipulator",cont);
+
+ cont=new NNavMousePrimitive;
+ cont->SetName("NavMousePrimitive");
+ cont->Default();
+ UploadClass("NNavMousePrimitive",cont);
+
+
+
+  cont=new NFrequencyReceiver;
+ cont->SetName("FrequencyReceiver");
+ cont->Default();
+ UploadClass("NFrequencyReceiver",cont);
+
+ cont=new NManipulatorInput;
+ cont->SetName("ManipulatorInput");
+ cont->Default();
+ UploadClass("NManipulatorInput",cont);
+
+ cont=new NManipulatorInputEmulator;
+ cont->SetName("ManipulatorInputEmulator");
+ cont->Default();
+ UploadClass("NManipulatorInputEmulator",cont);
+
+ cont=new NSimpleStatistic;
+ cont->SetName("SimpleStatistic");
+ cont->Default();
+ UploadClass("NSimpleStatistic",cont);
+/*
+ cont=new NNetworkLinksStatistic;
+ cont->SetName("NetworkLinksStatistic");
+ cont->Default();
+ UploadClass("NNetworkLinksStatistic",cont);
+ */
+ cont=new NPulseReceiver;
+ cont->SetName("PulseReceiver");
+ cont->Default();
+ UploadClass("NPulseReceiver",cont);
+
+
+
+ cont=new NSignumSeparator;
+ cont->SetName("SignumSeparator");
+ cont->Default();
+ UploadClass("NSignumSeparator",cont);
+
+ cont=new NIntervalSeparator;
+ cont->SetName("IntervalSeparator");
+ cont->Default();
+ UploadClass("NIntervalSeparator",cont);
+
+
+ // Разделители аналогового сигнала на положительную и отрицательную части
+ cont=dynamic_pointer_cast<UContainer>(dynamic_cast<UStorage*>(storage)->TakeObject("NSignumSeparator"));
+ cont->SetName("PosSignumSeparator");
+ vector<double> signum;
+ signum.assign(1,1.0);
+// signum.assign(1,1.0/(2*M_PI));
+ cont->Default();
+ dynamic_pointer_cast<NSignumSeparator>(cont)->Sign=signum;
+ UploadClass("NPosSignumSeparator",cont);
+
+ cont=dynamic_pointer_cast<UContainer>(dynamic_cast<UStorage*>(storage)->TakeObject("NSignumSeparator"));
+ cont->SetName("NegSignumSeparator");
+ signum.assign(1,-1.0);
+// signum.assign(1,-1.0/(2*M_PI));
+ cont->Default();
+ dynamic_pointer_cast<NSignumSeparator>(cont)->Sign=signum;
+ UploadClass("NNegSignumSeparator",cont);
+
+ cont=new NEyeRetina;
+ cont->SetName("EyeRetina");
+ cont->Default();
+ UploadClass("NEyeRetina",cont);
+
+
+  cont=new NManipulatorSourceEmulator;
+ cont->SetName("ManipulatorSourceEmulator");
+ cont->Default();
+ UploadClass("NManipulatorSourceEmulator",cont);
+
+ cont=new NManipulatorSource;
+ cont->SetName("ManipulatorSource");
+ cont->Default();
+ UploadClass("NManipulatorSource",cont);
+
+ cont=new NControlObjectSource;
+ cont->SetName("ManipulatorSource");
+ cont->Default();
+ UploadClass("NControlObjectSource",cont);
+
+
  // Создаем СУ двигательной единицей
  UEPtr<UNet> net=new NMotionElement;
  net->SetName("MotionElement");

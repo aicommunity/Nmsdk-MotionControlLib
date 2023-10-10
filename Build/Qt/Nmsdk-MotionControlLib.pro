@@ -28,19 +28,59 @@ windows {
 }
 
 HEADERS += \
+    ../../Core/NAstaticGyro.h \
+    ../../Core/NControlObjectSource.h \
+    ../../Core/NDCEngine.h \
     ../../Core/NEngineMotionControl.h \
+    ../../Core/NEyeRetina.h \
+    ../../Core/NEyeRetinaCore/DiffObjectSelector.h \
+    ../../Core/NEyeRetinaCore/NEyeRetinaBWCore.h \
+    ../../Core/NEyeRetinaCore/NEyeRetinaMuscleCore.h \
+    ../../Core/NFrequencyReceiver.h \
+    ../../Core/NIntervalSeparator.h \
+    ../../Core/NManipulator.h \
+    ../../Core/NManipulatorAndGyro.h \
+    ../../Core/NManipulatorInput.h \
+    ../../Core/NManipulatorInputEmulator.h \
+    ../../Core/NManipulatorSource.h \
+    ../../Core/NManipulatorSourceEmulator.h \
     ../../Core/NMotionControlLibrary.h \
     ../../Core/NMotionElement.h \
     ../../Core/NMultiPositionControl.h \
+    ../../Core/NNavMousePrimitive.h \
     ../../Core/NNewPositionControlElement.h \
+    ../../Core/NPendulumAndCart.h \
     ../../Core/NPositionControlElement.h \
-    ../../Core/NPCNElement.h
+    ../../Core/NPCNElement.h \
+    ../../Core/NPulseReceiver.h \
+    ../../Core/NSignumSeparator.h \
+    ../../Core/NSimpleStatistic.h
 
 SOURCES += \
+    ../../Core/NAstaticGyro.cpp \
+    ../../Core/NControlObjectSource.cpp \
+    ../../Core/NDCEngine.cpp \
     ../../Core/NEngineMotionControl.cpp \
+    ../../Core/NEyeRetina.cpp \
+    ../../Core/NEyeRetinaCore/DiffObjectSelector.cpp \
+    ../../Core/NEyeRetinaCore/NEyeRetinaBWCore.cpp \
+    ../../Core/NEyeRetinaCore/NEyeRetinaMuscleCore.cpp \
+    ../../Core/NFrequencyReceiver.cpp \
+    ../../Core/NIntervalSeparator.cpp \
+    ../../Core/NManipulator.cpp \
+    ../../Core/NManipulatorAndGyro.cpp \
+    ../../Core/NManipulatorInput.cpp \
+    ../../Core/NManipulatorInputEmulator.cpp \
+    ../../Core/NManipulatorSource.cpp \
+    ../../Core/NManipulatorSourceEmulator.cpp \
     ../../Core/NMotionControlLibrary.cpp \
     ../../Core/NMotionElement.cpp \
     ../../Core/NMultiPositionControl.cpp \
+    ../../Core/NNavMousePrimitive.cpp \
     ../../Core/NNewPositionControlElement.cpp \
+    ../../Core/NPendulumAndCart.cpp \
     ../../Core/NPositionControlElement.cpp \
-    ../../Core/NPCNElement.cpp
+    ../../Core/NPCNElement.cpp \
+    ../../Core/NPulseReceiver.cpp \
+    ../../Core/NSignumSeparator.cpp \
+    ../../Core/NSimpleStatistic.cpp
