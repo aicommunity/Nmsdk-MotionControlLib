@@ -563,11 +563,11 @@ bool NEngineMotionControl::ADefault(void)
  IcMax=10;
  AfferentMin->assign(1,-M_PI/2);
  AfferentMax->assign(1,M_PI/2);
- PacGain=100;
+ PacGain=1000;
  PacDissociationTC=0.001;
  PacSecretionTC=0.001;
  AfferentRangeMode=2;//0;
- PacRangeMode=2;//0;
+ PacRangeMode=2;
  MinAfferentRange=0.1;
  MotionElementClassName="NNewMotionElement";
  ObjectControlInterfaceClassName="NControlObjectSource";
