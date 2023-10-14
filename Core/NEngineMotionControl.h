@@ -383,7 +383,7 @@ void AdditionalComponentsSetup(UEPtr<UContainer> net);
 UNet* CreateNewEngineControl2NeuronsSimplest(bool crosslinks = false, bool crossranges=false);
 
 // Настройка рецепторов
-void NewMotionElementsSetup(UEPtr<UContainer> net, int inp_mode, int out_mode, double exp_coeff, double receptor_max_output, double receptor_gain, int real_ranges);
+void NewMotionElementsSetup(UEPtr<UContainer> net);
 
 // Настройка преобразователя импульс-аналог
 void NewPACSetup(double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode);

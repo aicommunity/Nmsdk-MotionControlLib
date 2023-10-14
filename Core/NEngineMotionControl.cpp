@@ -1487,7 +1487,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
  double exp_coeff=0.0001;//0.00001;
 
  // Двигательные элементы
- NewMotionElementsSetup(net, inpmode, outmode, exp_coeff, PacGain, 1, real_ranges);
+ NewMotionElementsSetup(net);
 
  AdditionalComponentsSetup(net);
  if(CreationMode == 10)
@@ -1524,7 +1524,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
 }
 
 // Настройка рецепторов
-void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp_mode, int out_mode, double exp_coeff, double receptor_max_output, double receptor_gain, int real_ranges)
+void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net)
 {
  UEPtr<UContainer> cont;
  UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
@@ -1582,42 +1582,6 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net, int inp
 	modes.assign(melement->NumControlLoops,1);
 	melement->LinkModes=modes;
    }
-
-  //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
-//  melement->SetNumControlLoops(2);
-   melement->Build();
-	for (int j = 0; j < melement->NumControlLoops; j++)
-	{
-	  try
-	  {
-	   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("AfferentL"+RDK::sntoa(j+1)+".Receptor"));
-	   receptor->MinInputRange=0;
-	   receptor->MaxInputRange=fabs(IaMin)/real_ranges;
-//	   receptor->InputAdaptationMode=inp_mode;
-//	   receptor->OutputAdaptationMode=out_mode;
-//	   receptor->MaxOutputRange=receptor_max_output;
-//	   receptor->Gain=receptor_gain;
-//	   receptor->ExpCoeff=exp_coeff;
-	  }
-      catch (EComponentNameNotExist &)
-	  {
-	  }
-
-	  try
-	  {
-	   receptor=dynamic_pointer_cast<NReceptor>(Motions[i]->GetComponentL("AfferentR"+RDK::sntoa(j+1)+".Receptor"));
-	   receptor->MinInputRange=0;
-	   receptor->MaxInputRange=fabs(IaMax)/real_ranges;
-//	   receptor->InputAdaptationMode=inp_mode;
-//	   receptor->OutputAdaptationMode=out_mode;
-//	   receptor->MaxOutputRange=receptor_max_output;
-//	   receptor->Gain=receptor_gain;
-//	   receptor->ExpCoeff=exp_coeff;
-	  }
-      catch (EComponentNameNotExist &)
-	  {
-	  }
-	}
   }
  }
 
@@ -1744,7 +1708,6 @@ void NEngineMotionControl::NewStandardLinksSetup(const string &engine_integrator
 // Настройка разделителей интервалов
 void NEngineMotionControl::NewIntervalSeparatorsSetup(int mode_value, int last_mode_value, double pos_gain_value, double neg_gain_value)
 {
- UContainer* cont=0;
  UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
  bool res=true;
  vector<double>  left_value,right_value;
@@ -1762,26 +1725,31 @@ void NEngineMotionControl::NewIntervalSeparatorsSetup(int mode_value, int last_m
 for (int j=0; j < NumMotionElements ; j++)
 {
  NMotionElement *melem = Motions[j];
- //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[j]);
  if(!melem)
 	 continue;
  for(int i=0; i < melem->NumControlLoops ; i++)
  {
   if (!CheckComponentL((std::string("NegIntervalSeparator")+sntoa(j+1)+sntoa(i+1)).c_str()))
   {
-	   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NIntervalSeparator"));
-	   if(!cont)
-		continue;
-	   cont->SetName(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
-//	   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
-	   ((NIntervalSeparator*)cont)->Gain=neg_gain;
+   UEPtr<NIntervalSeparator> separator=dynamic_pointer_cast<NIntervalSeparator>(storage->TakeObject("NIntervalSeparator"));
+   if(!separator)
+    continue;
+   separator->SetName(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
+   separator->Gain=neg_gain;
 
-	   left_value.assign(1,AfferentRangesNeg[i][j].first);
-	   right_value.assign(1,AfferentRangesNeg[i][j].second);
-	   ((NIntervalSeparator*)cont)->MinRange=left_value;
-	   ((NIntervalSeparator*)cont)->MaxRange=right_value;
-	   res=AddComponent(cont);
-       cont->SetCoord(MVector<double,3>(15.0, 8.0, 9));
+   left_value.assign(1,AfferentRangesNeg[i][j].first);
+   right_value.assign(1,AfferentRangesNeg[i][j].second);
+   separator->MinRange=left_value;
+   separator->MaxRange=right_value;
+   res=AddComponent(separator);
+   separator->SetCoord(MVector<double,3>(15.0, 8.0, 9));
+
+   UEPtr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentR"+RDK::sntoa(i+1)+".Receptor", true));
+   if(receptor)
+   {
+    receptor->MinInputRange=0;
+    receptor->MaxInputRange=separator->MaxRange[0]-separator->MinRange[0];
+   }
   }
 
 //  //Создаем PosIntervalSeparator
@@ -1791,23 +1759,28 @@ for (int j=0; j < NumMotionElements ; j++)
 
   if (!CheckComponentL((std::string("PosIntervalSeparator")+sntoa(j+1)+sntoa(i+1)).c_str()))
   {
-       cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NIntervalSeparator"));
-       if(!cont)
-        continue;
-       cont->SetName(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
-//	   ((NIntervalSeparator*)cont)->SetNumOutputs(1);
-       ((NIntervalSeparator*)cont)->Gain=pos_gain;
+   UEPtr<NIntervalSeparator> separator=dynamic_pointer_cast<NIntervalSeparator>(storage->TakeObject("NIntervalSeparator"));
+   if(!separator)
+    continue;
+   separator->SetName(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
+   separator->Gain=pos_gain;
 
-       left_value.assign(1,AfferentRangesPos[i][j].first);
-       right_value.assign(1,AfferentRangesPos[i][j].second);
-       ((NIntervalSeparator*)cont)->MinRange=left_value;
-       ((NIntervalSeparator*)cont)->MaxRange=right_value;
-       res=AddComponent(cont);
-       cont->SetCoord(MVector<double,3>(15.0, 5.0, 10));
+   left_value.assign(1,AfferentRangesPos[i][j].first);
+   right_value.assign(1,AfferentRangesPos[i][j].second);
+   separator->MinRange=left_value;
+   separator->MaxRange=right_value;
+   res=AddComponent(separator);
+   separator->SetCoord(MVector<double,3>(15.0, 5.0, 10));
+
+   UEPtr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentL"+RDK::sntoa(i+1)+".Receptor", true));
+   if(receptor)
+   {
+    receptor->MinInputRange=0;
+    receptor->MaxInputRange=separator->MaxRange[0]-separator->MinRange[0];
+   }
   }
  }
 }
-
 
  NewIntervalSeparatorsUpdate(mode_value, last_mode_value);
  if(res)
@@ -1817,7 +1790,6 @@ for (int j=0; j < NumMotionElements ; j++)
 // Настройка разделителей интервалов
 void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_mode_value)
 {
- UContainer* cont=0;
  bool res=true;
  vector<double>  left_value,right_value;
 
@@ -1842,36 +1814,42 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
 	 if(melem)
 	 for(int i=0;i<melem->NumControlLoops;i++)
 	  {
-	   try
+       UEPtr<NIntervalSeparator> separator;
+       separator=GetComponent<NIntervalSeparator>(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), true);
+       if(separator)
        {
-		cont=GetComponent(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
+        separator->Mode=mode;
+
+        left_value.assign(1,AfferentRangesNeg[i][j].first);
+        right_value.assign(1,AfferentRangesNeg[i][j].second);
+        separator->MinRange=left_value;
+        separator->MaxRange=right_value;
+
+        UEPtr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentR"+RDK::sntoa(i+1)+".Receptor", true));
+        if(receptor)
+        {
+         receptor->MinInputRange=0;
+         receptor->MaxInputRange=separator->MaxRange[0]-separator->MinRange[0];
+        }
        }
-       catch (EComponentNameNotExist &)
+
+       separator=GetComponent<NIntervalSeparator>(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), true);
+       if(separator)
        {
-        continue;
+        separator->Mode=mode;
+
+        left_value.assign(1,AfferentRangesPos[i][j].first);
+        right_value.assign(1,AfferentRangesPos[i][j].second);
+        separator->MinRange=left_value;
+        separator->MaxRange=right_value;
+
+        UEPtr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentL"+RDK::sntoa(i+1)+".Receptor", true));
+        if(receptor)
+        {
+         receptor->MinInputRange=0;
+         receptor->MaxInputRange=separator->MaxRange[0]-separator->MinRange[0];
+        }
        }
-       ((NIntervalSeparator*)cont)->Mode=mode;
-
-	   left_value.assign(1,AfferentRangesNeg[i][j].first);
-	   right_value.assign(1,AfferentRangesNeg[i][j].second);
-       ((NIntervalSeparator*)cont)->MinRange=left_value;
-       ((NIntervalSeparator*)cont)->MaxRange=right_value;
-
-       try
-       {
-		cont=GetComponent(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
-       }
-       catch (EComponentNameNotExist &)
-	   {
-        continue;
-       }
-
-       ((NIntervalSeparator*)cont)->Mode=mode;
-
-	   left_value.assign(1,AfferentRangesPos[i][j].first);
-       right_value.assign(1,AfferentRangesPos[i][j].second);
-       ((NIntervalSeparator*)cont)->MinRange=left_value;
-	   ((NIntervalSeparator*)cont)->MaxRange=right_value;
 	  }
 	}
 
