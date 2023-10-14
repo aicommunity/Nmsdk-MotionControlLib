@@ -1288,23 +1288,14 @@ void NEngineMotionControl::SetupPacRange(void)
 }
 
 // Настройка преобразователя аналог-аналог
-void NEngineMotionControl::AACSetup(UEPtr<UContainer> net, double gain_value)
+void NEngineMotionControl::AACSetup(UEPtr<UNet> net, double gain_value)
 {
- NPac* cont=0;
- UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
-
- if(!storage)
+ UEPtr<NPac> pac = net->AddMissingComponent<NPac>("Pac", PacObjectName);
+ if(!pac)
   return;
-
- cont=dynamic_pointer_cast<NPac>(storage->TakeObject(PacObjectName));
- if(!cont)
-  return;
- cont->SetName("Pac");
- cont->Mode=0;
- cont->TCMode=0;
- net->AddComponent(cont);
- cont->SetCoord(MVector<double,3>(28.0, 7.0, 8));
-// cont->SetOutputDataSize(0,MMatrixSize(1,int(Motions.size())*2));
+ pac->Mode=0;
+ pac->TCMode=0;
+ pac->SetCoord(MVector<double,3>(28.0, 7.0, 8));
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
@@ -1322,54 +1313,42 @@ void NEngineMotionControl::AACSetup(UEPtr<UContainer> net, double gain_value)
   values[i].assign(1,-gain_value/Motions.size());
  }
 
- cont->Gain=values;
+ pac->Gain=values;
 }
 
 
 
 // Задание вспомогательных компонент
-void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UContainer> net)
+void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UNet> net)
 {
- UContainer* cont=0;
- UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
- bool res=true;
-
- if(!storage)
-  return;
-
  if(CheckName("IIPosAfferentGenerator"))
  {
-  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NPGenerator"));
-  if(!cont)
+  UEPtr<NPulseGenerator> gen=net->AddMissingComponent<NPulseGenerator>("IIPosAfferentGenerator", "NPGenerator");
+  if(!gen)
    return;
-  cont->SetName("IIPosAfferentGenerator");
-  ((NPulseGenerator*)cont)->Amplitude=1;
-  ((NPulseGenerator*)cont)->Frequency=0;
-  res=net->AddComponent(cont);
-  cont->SetCoord(MVector<double,3>(5.0, 15.0, 2.0));
+  gen->Amplitude=1;
+  gen->Frequency=0;
+  gen->SetCoord(MVector<double,3>(5.0, 15.0, 2.0));
  }
 
  if(CheckName("IINegAfferentGenerator"))
  {
-  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NPGenerator"));
-  if(!cont)
+  UEPtr<NPulseGenerator> gen=net->AddMissingComponent<NPulseGenerator>("IINegAfferentGenerator", "NPGenerator");
+  if(!gen)
    return;
-  cont->SetName("IINegAfferentGenerator");
-  ((NPulseGenerator*)cont)->Amplitude=1;
-  ((NPulseGenerator*)cont)->Frequency=0;
-  res=net->AddComponent(cont);
-  cont->SetCoord(MVector<double,3>(5.0, 17.0, 3.0));
+  gen->Amplitude=1;
+  gen->Frequency=0;
+  gen->SetCoord(MVector<double,3>(5.0, 17.0, 3.0));
  }
 
  if(CheckName("AfferentSource1"))
  {
-  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NCGenerator"));
-  if(!cont)
+  UEPtr<NConstGenerator> gen=net->AddMissingComponent<NConstGenerator>("AfferentSource1", "NCGenerator");
+  if(!gen)
    return;
-  cont->SetName("AfferentSource1");
-  ((NConstGenerator*)cont)->Amplitude=0;
-  res=net->AddComponent(cont);
-  cont->SetCoord(MVector<double,3>(15.0, 2.0, 5.0));
+
+  gen->Amplitude=0;
+  gen->SetCoord(MVector<double,3>(15.0, 2.0, 5.0));
  }
 
  //for(int i=0; i<NumControlLoops; ++i)
@@ -1383,29 +1362,22 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UContainer> net)
   std::string name="NManipulatorSource1";
   if(CheckName(name))
   {
-   UEPtr<UItem> cont2=0;
-   cont2=dynamic_pointer_cast<UItem>(storage->TakeObject(ObjectControlInterfaceClassName));
+   UEPtr<NControlObjectSource> cont2=net->AddMissingComponent<NControlObjectSource>(name, ObjectControlInterfaceClassName);
    if(!cont2)
     return;
-   cont2->SetName(name);
-   res=net->AddComponent(cont2);
+
    cont2->SetCoord(MVector<double,3>(8.0, 6.0, 5.0));
   }
 // }
 
 
  if(CheckName("NManipulatorInput1"))
- {
-  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NManipulatorInput"));
+ {     
+  UEPtr<NManipulatorInput> cont=net->AddMissingComponent<NManipulatorInput>("NManipulatorInput1", "NManipulatorInput");
   if(!cont)
    return;
-  cont->SetName("NManipulatorInput1");
-  res=net->AddComponent(cont);
   cont->SetCoord(MVector<double,3>(35.0, 7.0, 6.0));
  }
-
- if(res)
-  return;
 }
 
 // Формируем сеть управления новым способом на 2 импульсных нейронах
@@ -1439,7 +1411,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
 
  ChangeLookupPropertyType("NumControlLoops", ptPubParameter);
 
- bool res(false);
+ bool res(true);
  UEPtr<UStorage> storage=static_pointer_cast<UStorage>(Storage);
  size_t num_motions=NumMotionElements;
 
@@ -1481,11 +1453,6 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
  if(!net)
   return 0;
 
- int outmode=0;
- int inpmode=0;
-
- double exp_coeff=0.0001;//0.00001;
-
  // Двигательные элементы
  NewMotionElementsSetup(net);
 
@@ -1501,8 +1468,6 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
  NewIntervalSeparatorsSetup(IntervalSeparatorMode, 6, 1, -1);
 
  // Установка связей
- ULongId item,conn;
-
  NewStandardLinksSetup("Pac");
 
  NewIntervalSeparatorLinksSetup();
@@ -1511,10 +1476,10 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
  {
   for(size_t k=1;k<Motions.size()-1;k++)
   {
-   res=net->CreateLink(Motions[k]->GetName()+".RenshowL.LTZone","Output",Motions[k-1]->GetName()+".MotoneuronL.Soma1.InhSynapse1","Input");
-   res=net->CreateLink(Motions[k]->GetName()+".RenshowL.LTZone","Output",Motions[k+1]->GetName()+".MotoneuronL.Soma1.InhSynapse1","Input");
-   res=net->CreateLink(Motions[k]->GetName()+".RenshowR.LTZone","Output",Motions[k-1]->GetName()+".MotoneuronR.Soma1.InhSynapse1","Input");
-   res=net->CreateLink(Motions[k]->GetName()+".RenshowR.LTZone","Output",Motions[k+1]->GetName()+".MotoneuronR.Soma1.InhSynapse1","Input");
+   res&=net->CreateLink(Motions[k]->GetName()+".RenshowL.LTZone","Output",Motions[k-1]->GetName()+".MotoneuronL.Soma1.InhSynapse1","Input");
+   res&=net->CreateLink(Motions[k]->GetName()+".RenshowL.LTZone","Output",Motions[k+1]->GetName()+".MotoneuronL.Soma1.InhSynapse1","Input");
+   res&=net->CreateLink(Motions[k]->GetName()+".RenshowR.LTZone","Output",Motions[k-1]->GetName()+".MotoneuronR.Soma1.InhSynapse1","Input");
+   res&=net->CreateLink(Motions[k]->GetName()+".RenshowR.LTZone","Output",Motions[k+1]->GetName()+".MotoneuronR.Soma1.InhSynapse1","Input");
   }
  }
  if(!res)
@@ -1524,21 +1489,14 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
 }
 
 // Настройка рецепторов
-void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net)
+void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UNet> net)
 {
- UEPtr<UContainer> cont;
- UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
  Motions.clear();
-
- if(!storage)
-  return;
 
  InternalGenerator=0;
  try
  {
-  InternalGenerator=dynamic_pointer_cast<NPulseGenerator>(storage->TakeObject("NPGenerator"));
-  InternalGenerator->SetName("InternalGenerator");
-  net->AddComponent(InternalGenerator);
+  InternalGenerator=AddMissingComponent<NPulseGenerator>("InternalGenerator", "NPGenerator");
   InternalGenerator->SetCoord(MVector<double,3>(11.0, 13.0, 6.0));
  }
  catch (EComponentNameNotExist &)
@@ -1548,72 +1506,49 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UContainer> net)
 
  for(int i=0;i<NumMotionElements;i++)
  {
-  UEPtr<NReceptor> receptor=0;
-  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(MotionElementClassName));
-  if(!cont)
+  UEPtr<NMotionElement> motion_elem = AddMissingComponent<NMotionElement>(string("MotionElement")+RDK::sntoa(i), MotionElementClassName);
+  motion_elem->Build();
+  if(!motion_elem)
    continue;
-  cont->SetName(string("MotionElement")+RDK::sntoa(i));
-  net->AddComponent(cont);
-  cont->SetCoord(MVector<double,3>(22.0, 7+(5*i), 6.0));
-  Motions.push_back(dynamic_pointer_cast<NMotionElement>(cont));
-  //Motions.push_back(static_pointer_cast<NNet>(cont));
+  motion_elem->SetCoord(MVector<double,3>(22.0, 7+(5*i), 6.0));
+  Motions.push_back(motion_elem);
 
-  UEPtr<NMotionElement> melement=dynamic_pointer_cast<NMotionElement>(cont);
-  if(melement)
+  motion_elem->NeuroObjectName = MCNeuroObjectName;
+  motion_elem->AfferentObjectName = MCAfferentObjectName;
+  motion_elem->NumControlLoops=NumControlLoops;
+  motion_elem->InterneuronPresentMode=InterneuronPresentMode;
+  motion_elem->MotoneuronBranchMode=MotoneuronBranchMode;
+
+  motion_elem->RenshowMode=!RenshowMode; // TODO: Заглушка, чтобы обойти невозможность выполнить Build, т.к. Ready в melement уже взведен.
+  motion_elem->RenshowMode=RenshowMode;
+
+  if(InterneuronPresentMode == 0)
   {
-   melement->NeuroObjectName = MCNeuroObjectName;
-   melement->AfferentObjectName = MCAfferentObjectName;
-   melement->NumControlLoops=NumControlLoops;
-   melement->InterneuronPresentMode=InterneuronPresentMode;
-   melement->MotoneuronBranchMode=MotoneuronBranchMode;
-
-   melement->RenshowMode=!RenshowMode; // TODO: Заглушка, чтобы обойти невозможность выполнить Build, т.к. Ready в melement уже взведен.
-   melement->RenshowMode=RenshowMode;
-
-   if(InterneuronPresentMode == 0)
-   {
-	std::vector<int> modes;
-	modes.assign(melement->NumControlLoops,0);
-	melement->LinkModes=modes;
-   }
-   else
-   {
-	std::vector<int> modes;
-	modes.assign(melement->NumControlLoops,1);
-	melement->LinkModes=modes;
-   }
+   std::vector<int> modes;
+   modes.assign(motion_elem->NumControlLoops,0);
+   motion_elem->LinkModes=modes;
+  }
+  else
+  {
+   std::vector<int> modes;
+   modes.assign(motion_elem->NumControlLoops,1);
+   motion_elem->LinkModes=modes;
   }
  }
-
 }
 
 // Настройка преобразователя импульс-аналог
 void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode)
 {
- UEPtr<NPac> cont;
- UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
-
- if(!storage)
-  return;
-
  if(PacObjectName->empty())
   return;
 
- cont=dynamic_pointer_cast<NPac>(storage->TakeObject(PacObjectName));
-//try
-//{
-// cont=AddMissingComponent<NPac>(PacObjectName,"Pac");
-//}
-//catch(UException &ex)
-//{
-// return;
-//}
- if(!cont)
+ UEPtr<NPac> pac=AddMissingComponent<NPac>("Pac", PacObjectName);
+
+ if(!pac)
   return;
- cont->SetName("Pac");
- AddComponent(cont);
- cont->SetCoord(MVector<double,3>(28.0, 7.0, 8.0));
- //cont->SetOutputDataSize(0,MMatrixSize(1,int(Motions.size())*2));
+
+ pac->SetCoord(MVector<double,3>(28.0, 7.0, 8.0));
 
  // Начальные значения всем параметрам
  // Амплитуда входных импульсов
@@ -1623,19 +1558,19 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
  for(size_t i=0;i<values.size();i++)
 //  values[i].assign(2,1);
   values[i].assign(1,pulse_amplitude);
- ((NPac*)cont)->PulseAmplitude=values;
+ pac->PulseAmplitude=values;
 
  // Постоянная времени выделения медиатора
  for(size_t i=0;i<values.size();i++)
 //  values[i].assign(2,0.05);
   values[i].assign(1,secretion_tc);
- ((NPac*)cont)->SecretionTC=values;
+ pac->SecretionTC=values;
 
  // Постоянная времени распада медиатора
  for(size_t i=0;i<values.size();i++)
   values[i].assign(1,dissociaton_tc);
 //  values[i].assign(2,0.5);
- ((NPac*)cont)->DissociationTC=values;
+ pac->DissociationTC=values;
 
   if(gain_div_mode)
   {
@@ -1656,7 +1591,7 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
 	values[i].assign(1,gain_value);
   }
 
- ((NPac*)cont)->Gain=values;
+ pac->Gain=values;
 
 }
 
@@ -1708,13 +1643,9 @@ void NEngineMotionControl::NewStandardLinksSetup(const string &engine_integrator
 // Настройка разделителей интервалов
 void NEngineMotionControl::NewIntervalSeparatorsSetup(int mode_value, int last_mode_value, double pos_gain_value, double neg_gain_value)
 {
- UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
  bool res=true;
  vector<double>  left_value,right_value;
  vector<double>  pos_gain,neg_gain;
-
- if(!storage)
-  return;
 
  vector<int> mode;
  mode.assign(1,mode_value);
@@ -1731,17 +1662,15 @@ for (int j=0; j < NumMotionElements ; j++)
  {
   if (!CheckComponentL((std::string("NegIntervalSeparator")+sntoa(j+1)+sntoa(i+1)).c_str()))
   {
-   UEPtr<NIntervalSeparator> separator=dynamic_pointer_cast<NIntervalSeparator>(storage->TakeObject("NIntervalSeparator"));
+   UEPtr<NIntervalSeparator> separator=AddMissingComponent<NIntervalSeparator>(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), "NIntervalSeparator");
    if(!separator)
     continue;
-   separator->SetName(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
    separator->Gain=neg_gain;
 
    left_value.assign(1,AfferentRangesNeg[i][j].first);
    right_value.assign(1,AfferentRangesNeg[i][j].second);
    separator->MinRange=left_value;
    separator->MaxRange=right_value;
-   res=AddComponent(separator);
    separator->SetCoord(MVector<double,3>(15.0, 8.0, 9));
 
    UEPtr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentR"+RDK::sntoa(i+1)+".Receptor", true));
@@ -1759,17 +1688,15 @@ for (int j=0; j < NumMotionElements ; j++)
 
   if (!CheckComponentL((std::string("PosIntervalSeparator")+sntoa(j+1)+sntoa(i+1)).c_str()))
   {
-   UEPtr<NIntervalSeparator> separator=dynamic_pointer_cast<NIntervalSeparator>(storage->TakeObject("NIntervalSeparator"));
+   UEPtr<NIntervalSeparator> separator=AddMissingComponent<NIntervalSeparator>(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), "NIntervalSeparator");
    if(!separator)
     continue;
-   separator->SetName(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1));
    separator->Gain=pos_gain;
 
    left_value.assign(1,AfferentRangesPos[i][j].first);
    right_value.assign(1,AfferentRangesPos[i][j].second);
    separator->MinRange=left_value;
    separator->MaxRange=right_value;
-   res=AddComponent(separator);
    separator->SetCoord(MVector<double,3>(15.0, 5.0, 10));
 
    UEPtr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentL"+RDK::sntoa(i+1)+".Receptor", true));
@@ -1874,7 +1801,7 @@ for(int i=0;i<NumMotionElements;i++)
   {
 //    if (!CheckLink("NManipulatorSource1","PosIntervalSeparator"+RDK::sntoa(i+1)+RDK::sntoa(j+1)))
 //	{
-       res=CreateLink(std::string("NManipulatorSource1"),"Output",//j
+       res&=CreateLink(std::string("NManipulatorSource1"),"Output",//j
                      std::string("PosIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1),"Input");
 
 //       res=CreateLink("NManipulatorSource1.OutputProxy"+RDK::sntoa(j+1),"Output",//j
@@ -1882,7 +1809,7 @@ for(int i=0;i<NumMotionElements;i++)
 //	}
 //	if (!CheckLink("NManipulatorSource1",string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1)))
 //	{
-       res=CreateLink(std::string("NManipulatorSource1"),"Output",   //j
+       res&=CreateLink(std::string("NManipulatorSource1"),"Output",   //j
                      std::string("NegIntervalSeparator")+RDK::sntoa(i+1)+RDK::sntoa(j+1),"Input");
 
 //       res=CreateLink("NManipulatorSource1.OutputProxy"+RDK::sntoa(j+1),"Output",   //j
