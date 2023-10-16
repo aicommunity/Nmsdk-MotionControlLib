@@ -375,10 +375,10 @@ bool NNewPositionControlElement::CreateNeurons()
 
      //Построение связей от ControlNeuron-ов в NNewPositionControlElement к!!!
      //постафферентным нейронам (PostAfferent)в EngineMotionControl->MotionElement
-	 res = owner->CreateLink(controlLName+".LTZone","Output",postAfferentLName+".Soma1.ExcSynapse1","Input");
+     res = owner->CreateLink(controlLName+".LTZone","Output",postAfferentLName+".Soma1.ExcSynapse2","Input");
 	 res = owner->CreateLink(controlLName+".LTZone","Output",postAfferentRName+".Soma1.InhSynapse1","Input");
 	 res = owner->CreateLink(controlRName+".LTZone","Output",postAfferentLName+".Soma1.InhSynapse1","Input");
-	 res = owner->CreateLink(controlRName+".LTZone","Output",postAfferentRName+".Soma1.ExcSynapse1","Input");
+     res = owner->CreateLink(controlRName+".LTZone","Output",postAfferentRName+".Soma1.ExcSynapse2","Input");
 	/*
 	 owner->CreateLink(controlLName+".LTZone",0,postAfferentRName+".Soma1.ExcChannel");
 	 owner->CreateLink(controlLName+".LTZone",0,postAfferentLName+".Soma1.InhChannel");

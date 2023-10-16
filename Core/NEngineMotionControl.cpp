@@ -1497,7 +1497,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UNet> net)
  try
  {
   InternalGenerator=AddMissingComponent<NPulseGenerator>("InternalGenerator", "NPGenerator");
-  InternalGenerator->SetCoord(MVector<double,3>(11.0, 13.0, 6.0));
+  InternalGenerator->SetCoord(MVector<double,3>(5.0, 19.0, 6.0));
  }
  catch (EComponentNameNotExist &)
  {
@@ -1533,7 +1533,25 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UNet> net)
    modes.assign(motion_elem->NumControlLoops,1);
    motion_elem->LinkModes=modes;
   }
-  motion_elem->Build();
+  motion_elem->Build(); 
+
+  //Adding synapses for link to ControlNeurons in PositionControlElement
+  for (int k=0; k< motion_elem->NumControlLoops; k++)
+  {
+   UEPtr<NPulseMembrane> post_afL_soma = motion_elem->GetComponentL<NPulseMembrane>("PostAfferentL1.Soma1",true);
+   UEPtr<NPulseMembrane> post_afR_soma = motion_elem->GetComponentL<NPulseMembrane>("PostAfferentR1.Soma1",true);
+   if(post_afL_soma)
+   {
+       post_afL_soma->NumExcitatorySynapses=2;
+       post_afL_soma->Build();
+   }
+   if(post_afR_soma)
+   {
+       post_afR_soma->NumExcitatorySynapses=2;
+       post_afR_soma->Build();
+   }
+  }
+
  }
 }
 
@@ -1665,13 +1683,13 @@ for (int j=0; j < NumMotionElements ; j++)
    UEPtr<NIntervalSeparator> separator=AddMissingComponent<NIntervalSeparator>(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), "NIntervalSeparator");
    if(!separator)
     continue;
+   separator->SetCoord(MVector<double,3>(15.0, (8.0+(j*5)), 9.0));
    separator->Gain=neg_gain;
 
    left_value.assign(1,AfferentRangesNeg[i][j].first);
    right_value.assign(1,AfferentRangesNeg[i][j].second);
    separator->MinRange=left_value;
    separator->MaxRange=right_value;
-   separator->SetCoord(MVector<double,3>(15.0, 8.0, 9));
 
    UEPtr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentR"+RDK::sntoa(i+1)+".Receptor", true));
    if(receptor)
@@ -1691,13 +1709,13 @@ for (int j=0; j < NumMotionElements ; j++)
    UEPtr<NIntervalSeparator> separator=AddMissingComponent<NIntervalSeparator>(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), "NIntervalSeparator");
    if(!separator)
     continue;
+   separator->SetCoord(MVector<double,3>(15.0, (6.0+(j*5)), 10.0));
    separator->Gain=pos_gain;
 
    left_value.assign(1,AfferentRangesPos[i][j].first);
    right_value.assign(1,AfferentRangesPos[i][j].second);
    separator->MinRange=left_value;
    separator->MaxRange=right_value;
-   separator->SetCoord(MVector<double,3>(15.0, 5.0, 10));
 
    UEPtr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentL"+RDK::sntoa(i+1)+".Receptor", true));
    if(receptor)
