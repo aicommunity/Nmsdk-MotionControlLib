@@ -1507,7 +1507,6 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UNet> net)
  for(int i=0;i<NumMotionElements;i++)
  {
   UEPtr<NMotionElement> motion_elem = AddMissingComponent<NMotionElement>(string("MotionElement")+RDK::sntoa(i), MotionElementClassName);
-  motion_elem->Build();
   if(!motion_elem)
    continue;
   motion_elem->SetCoord(MVector<double,3>(22.0, 7+(5*i), 6.0));
@@ -1534,6 +1533,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UNet> net)
    modes.assign(motion_elem->NumControlLoops,1);
    motion_elem->LinkModes=modes;
   }
+  motion_elem->Build();
  }
 }
 

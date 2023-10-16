@@ -336,76 +336,50 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 // Создает пару мотонейронов
  bool NMotionElement::CreateMotoneurons()
  {
-
-   UEPtr<UContainer> cont;
-   UEPtr<NPulseNeuron> neuron;
-   UEPtr<UStorage> storage = GetStorage();
-   bool res(true);
-
-
- // Мотонейрон 1
-   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
-   if(!cont)
-	return 0;
-   cont->SetName("MotoneuronL");
-   res&=(AddComponent(cont)!=ForbiddenId);
-   cont->SetCoord(MVector<double,3>(22.0, 5.0, 0));
-   neuron = dynamic_pointer_cast<NPulseNeuron> (cont);
-   if(!neuron)
-	return 0;
-   neuron->NumSomaMembraneParts = NumControlLoops;
-
+  // Мотонейрон 1
+  UEPtr<NPulseNeuron> mn1 = AddMissingComponent<NPulseNeuron>("MotoneuronL", NeuroObjectName);
+  if(!mn1)
+   return false;
+  mn1->SetCoord(MVector<double,3>(22.0, 5.0, 0));
+  mn1->NumSomaMembraneParts = NumControlLoops;
 
   // Мотонейрон 2
-   cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
-   if(!cont)
-	return false;
-   cont->SetName("MotoneuronR");
-   res&=(AddComponent(cont)!=ForbiddenId);
-   cont->SetCoord(MVector<double,3>(22.0, 8.0, 1.0));
-   neuron = dynamic_pointer_cast<NPulseNeuron> (cont);
-   if(!neuron)
-	return 0;
-   neuron->NumSomaMembraneParts = NumControlLoops;
+  UEPtr<NPulseNeuron> mn2 = AddMissingComponent<NPulseNeuron>("MotoneuronR", NeuroObjectName);
+  if(!mn2)
+   return false;
+  mn2->SetCoord(MVector<double,3>(22.0, 8.0, 1.0));
+  mn2->NumSomaMembraneParts = NumControlLoops;
 
-   if(RenshowMode)
-   {
-	// Клетка реншоу 1
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
-	if(!cont)
-	 return false;
-	cont->SetName("RenshowL");
-    res&=(AddComponent(cont)!=ForbiddenId);
-    cont->SetCoord(MVector<double,3>(15.0, 3.0, 0.0));
+  if(RenshowMode)
+  {
+   // Клетка реншоу 1
+   UEPtr<NPulseNeuron> ren1=AddMissingComponent<NPulseNeuron>("RenshowL", NeuroObjectName);
+   if(!ren1)
+    return false;
+   ren1->SetCoord(MVector<double,3>(15.0, 3.0, 0.0));
 
-	// Клетка реншоу 2
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
-	if(!cont)
-	 return false;
-	cont->SetName("RenshowR");
-    res&=(AddComponent(cont)!=ForbiddenId);
-    cont->SetCoord(MVector<double,3>(15.0, 10.0, 1.0));
-   }
+   // Клетка реншоу 2
+   UEPtr<NPulseNeuron> ren2=AddMissingComponent<NPulseNeuron>("RenshowR", NeuroObjectName);
+   if(!ren2)
+    return false;
+   ren2->SetCoord(MVector<double,3>(15.0, 10.0, 1.0));
+  }
 
-   if(PacemakerMode)
-   {
-	// пейсмейкер 1
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
-	if(!cont)
-	 return false;
-	cont->SetName("PmL");
-    res&=(AddComponent(cont)!=ForbiddenId);
-    cont->SetCoord(MVector<double,3>(15.0, 1.0, 4.0));
+  if(PacemakerMode)
+  {
+   // пейсмейкер 1
+   UEPtr<NPulseNeuron> pml=AddMissingComponent<NPulseNeuron>("PmL", NeuroObjectName);
+   if(!pml)
+    return false;
+   pml->SetCoord(MVector<double,3>(15.0, 1.0, 4.0));
 
-	// пейсмейкер 2
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
-	if(!cont)
-	 return false;
-	cont->SetName("PmR");
-    res&=(AddComponent(cont)!=ForbiddenId);
-    cont->SetCoord(MVector<double,3>(15.0, 12.0, 5.0));
-   }
-   return res;
+   // пейсмейкер 2
+   UEPtr<NPulseNeuron> pmr=AddMissingComponent<NPulseNeuron>("PmR", NeuroObjectName);
+   if(!pmr)
+    return false;
+   pmr->SetCoord(MVector<double,3>(15.0, 12.0, 5.0));
+  }
+  return true;
  }
 
 
@@ -413,28 +387,20 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
  // Создаёт связку афферентных нейронов
  bool NMotionElement::CreateAfferents()
  {
-   UEPtr<UContainer> cont;
-   UEPtr<UStorage> storage = GetStorage();
-   bool res(true);
-
    for (int i=0; i<NumControlLoops; i++)
    {
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(AfferentObjectName));
-	  if(!cont)
-	   return 0;
-	  cont->SetName("AfferentR"+sntoa(i+1));
-      res&=(AddComponent(cont)!=ForbiddenId);
-      cont->SetCoord(MVector<double,3>((5.0+i), 8.0, 2.0));
+    UEPtr<NAfferentNeuron> cont=AddMissingComponent<NAfferentNeuron>("AfferentR"+sntoa(i+1), AfferentObjectName);
+    if(!cont)
+     return false;
+    cont->SetCoord(MVector<double,3>((5.0+i), 8.0, 2.0));
 
-	  cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(AfferentObjectName));
-	  if(!cont)
-	   return 0;
-	  cont->SetName("AfferentL"+sntoa(i+1));
-      res&=(AddComponent(cont)!=ForbiddenId);
-      cont->SetCoord(MVector<double,3>((5.0+i), 5.0, 3.0));
+    cont=AddMissingComponent<NAfferentNeuron>("AfferentL"+sntoa(i+1), AfferentObjectName);
+    if(!cont)
+     return false;
+    cont->SetCoord(MVector<double,3>((5.0+i), 5.0, 3.0));
    }
 
-   return res;
+   return true;
  }
 
 
@@ -443,29 +409,22 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
  bool NMotionElement::CreateInterneurons()
  {
    if(InterneuronPresentMode!=1)
-    return 0;
-   UEPtr<UContainer> cont;
-   UEPtr<UStorage> storage = GetStorage();
-   bool res(true);
+    return false;
 
    for (int i=0; i<NumControlLoops; i++)
    {
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
+    UEPtr<NPulseNeuron> cont=AddMissingComponent<NPulseNeuron>("PostAfferentL"+sntoa(i+1), NeuroObjectName);
 	if(!cont)
-	 return 0;
-	cont->SetName("PostAfferentL"+sntoa(i+1));
-    res&=(AddComponent(cont)!=ForbiddenId);
+     return false;
     cont->SetCoord(MVector<double,3>((15.0+i), 5.0, 4));
 
-	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(NeuroObjectName));
-	if(!cont)
-	 return 0;
-	cont->SetName("PostAfferentR"+sntoa(i+1));
-    res&=(AddComponent(cont)!=ForbiddenId);
+    cont=AddMissingComponent<NPulseNeuron>("PostAfferentR"+sntoa(i+1), NeuroObjectName);
+    if(!cont)
+     return false;
     cont->SetCoord(MVector<double,3>((15.0+i), 8.0, 5));
    }
 
-   return res;
+   return true;
  }
 
 
