@@ -54,7 +54,8 @@ HEADERS += \
     ../../Core/NPCNElement.h \
     ../../Core/NPulseReceiver.h \
     ../../Core/NSignumSeparator.h \
-    ../../Core/NSimpleStatistic.h
+    ../../Core/NSimpleStatistic.h \
+    ../../Core/NSuppressionUnit.h
 
 SOURCES += \
     ../../Core/NAstaticGyro.cpp \
@@ -83,4 +84,5 @@ SOURCES += \
     ../../Core/NPCNElement.cpp \
     ../../Core/NPulseReceiver.cpp \
     ../../Core/NSignumSeparator.cpp \
-    ../../Core/NSimpleStatistic.cpp
+    ../../Core/NSimpleStatistic.cpp \
+    ../../Core/NSuppressionUnit.cpp

@@ -48,6 +48,8 @@ See file license.txt for more information
 #include "NMultiPositionControl.h"
 #include "NPCNElement.h"
 
+#include "NSuppressionUnit.h"
+
 namespace NMSDK {
 
 class RDK_LIB_TYPE NMotionControlLibrary: public ULibrary

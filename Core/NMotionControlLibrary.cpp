@@ -167,6 +167,12 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  UploadClass("NControlObjectSource",cont);
 
 
+ cont=new NSuppressionUnit;
+ cont->SetName("SuppressionUnit");
+ cont->Default();
+ UploadClass("NSuppressionUnit",cont);
+
+
  // Создаем СУ двигательной единицей
  UEPtr<UNet> net=new NMotionElement;
  net->SetName("MotionElement");
