@@ -384,13 +384,7 @@ bool NSuppressionUnit::ACalculate(void)
 
  // Передаём выходную информацию
  if(Neuron)
- {
-  UEPtr<NLTZone> ltzone = Neuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
-  if(!ltzone)
-   return true;
-
-  Output = ltzone->Output;
- }
+  Output = Neuron->Output;
 
  // Настраиваем управляющие генераторы Delay1 и Delay2
  if (DelayGenerators.size() == 2)
