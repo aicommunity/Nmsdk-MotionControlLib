@@ -89,8 +89,55 @@ bool NNewPositionControlElement::ABuild(void)
 {
  CurrentPosition->Assign(2,1,0.0);
  TargetPosition->Assign(MotionControl->GetNumControlLoops(),2*MotionControl->NumMotionElements,0.0);
+
+ //удаление старой структуры перед перестройкой
+ if (MotionControl)
+ {
+    size_t i_min = 2*(size_t(MotionControl->NumMotionElements));
+    if (i_min>0)
+    {
+      size_t i_max = InputNeurons.size();
+      for (size_t i=i_min; i<i_max; i++)
+      {
+        //NameT check_name = InputNeurons[i]->GetName();
+        DelComponent(InputNeurons[i],true);
+      }
+
+      i_max = PostInputNeurons.size();
+      for (size_t i=i_min; i<i_max; i++)
+      {
+        //NameT check_name = PostInputNeurons[i]->GetName();
+        DelComponent(PostInputNeurons[i],true);
+      }
+
+      i_max = PreControlNeurons.size();
+      for (size_t i=i_min; i<i_max; i++)
+      {
+        //NameT check_name = PreControlNeurons[i]->GetName();
+        DelComponent(PreControlNeurons[i],true);
+      }
+
+      i_max = ControlNeurons.size();
+      for (size_t i=i_min; i<i_max; i++)
+      {
+       //NameT check_name = ControlNeurons[i]->GetName();
+        DelComponent(ControlNeurons[i],true);
+      }
+
+      i_max = Generators.size();
+      for (size_t i=i_min; i<i_max; i++)
+      {
+        //NameT check_name = Generators[i]->GetName();
+        DelComponent(Generators[i],true);
+      }
+    }
+ }
+
  InputNeurons.clear();
+ PostInputNeurons.clear();//добавлено
+ PreControlNeurons.clear();//добавлено
  ControlNeurons.clear();
+
  Generators.clear();
  LeftGenerators.clear();
  RightGenerators.clear();
@@ -219,6 +266,8 @@ bool NNewPositionControlElement::CreateNeurons()
 
 
    //Creating InputNeurons
+   LeftInputNeurons.clear(); //добавлено
+   RightInputNeurons.clear(); //добавлено
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
     NMotionElement *melem=Motions[i];
@@ -289,6 +338,8 @@ bool NNewPositionControlElement::CreateNeurons()
    int num_motions = MotionControl->NumMotionElements;
 
    //Creating ControlNeurons
+   LeftControlNeurons.clear(); //добавлено
+   RightControlNeurons.clear(); //добавлено
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
     NMotionElement *melem=Motions[i];
@@ -389,6 +440,8 @@ bool NNewPositionControlElement::CreateNeurons()
 
 
    //Creating PreControlNeurons
+   LeftPreControlNeurons.clear(); //добавлено
+   RightPreControlNeurons.clear(); //добавлено
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
     NMotionElement *melem=Motions[i];
@@ -499,7 +552,7 @@ bool NNewPositionControlElement::CreateNeurons()
 
 	 if(i==0)
 	 {
-	  start.push_back(LeftInputNeurons[j][0]);
+      start.push_back(LeftInputNeurons[j][0]);
 	  finish.push_back(RightPostInputNeurons[j][0]);
 	  LinkNeuronsNeg(start,finish);
 	  start.clear();
@@ -513,19 +566,25 @@ bool NNewPositionControlElement::CreateNeurons()
 
 	 start.push_back(LeftInputNeurons[j][i]);
 	 finish.push_back(LeftPostInputNeurons[j][i]);
-	 LinkNeurons(start,finish);
+     NameT check_startName = LeftInputNeurons[j][i]->GetName();
+     NameT check_finisName = LeftPostInputNeurons[j][i]->GetName();
+     LinkNeurons(start,finish);
 	 start.clear();
 	 finish.clear();
 
 	 start.push_back(RightInputNeurons[j][i]);
 	 finish.push_back(RightPostInputNeurons[j][i]);
+     check_startName = RightInputNeurons[j][i]->GetName();
+     check_finisName = RightPostInputNeurons[j][i]->GetName();
 	 LinkNeurons(start,finish);
 	 start.clear();
 	 finish.clear();
 
+     check_startName = LeftInputNeurons[j][i]->GetName();
 	 start.push_back(LeftInputNeurons[j][i]);
 	 for(int k=0;k<i;k++)
 	 {
+      check_finisName = LeftPostInputNeurons[j][k]->GetName();
 	  finish.push_back(LeftPostInputNeurons[j][k]);
 	 }
 	 LinkNeuronsNeg(start,finish);
@@ -533,17 +592,21 @@ bool NNewPositionControlElement::CreateNeurons()
 	 finish.clear();
 
 	 start.push_back(RightInputNeurons[j][i]);
+     check_startName = RightInputNeurons[j][i]->GetName();
 	 for(int k=0;k<i;k++)
 	 {
-	  finish.push_back(RightPostInputNeurons[j][k]);
+      check_finisName = RightPostInputNeurons[j][k]->GetName();
+	  finish.push_back(RightPostInputNeurons[j][k]);  
 	 }
 	 LinkNeuronsNeg(start,finish);
 	 start.clear();
 	 finish.clear();
 
 	 start.push_back(RightInputNeurons[j][i]);
+     check_startName = RightInputNeurons[j][i]->GetName();
 	 for(int k=0;k<i;k++)
 	 {
+      check_finisName = RightPostInputNeurons[j][k]->GetName();
 	  finish.push_back(RightPostInputNeurons[j][k]);
 	 }
 	 LinkNeuronsNeg(start,finish);
@@ -551,8 +614,10 @@ bool NNewPositionControlElement::CreateNeurons()
 	 finish.clear();
 
 	 start.push_back(LeftPreControlNeurons[j][i]);
+     check_startName = LeftPreControlNeurons[j][i]->GetName();
 	 for(int k=0;k<=i;k++)
 	 {
+      check_finisName = LeftControlNeurons[j][k]->GetName();
       finish.push_back(LeftControlNeurons[j][k]);
 	 }
 	 LinkNeurons(start,finish);
@@ -560,8 +625,10 @@ bool NNewPositionControlElement::CreateNeurons()
 	 finish.clear();
 
 	 start.push_back(RightPreControlNeurons[j][i]);
+     check_startName = RightPreControlNeurons[j][i]->GetName();
 	 for(int k=0;k<=i;k++)
 	 {
+      check_finisName = RightControlNeurons[j][k]->GetName();
 	  finish.push_back(RightControlNeurons[j][k]);
 	 }
 	 LinkNeurons(start,finish);
@@ -750,7 +817,7 @@ bool NNewPositionControlElement::LinkGenerators(vector <UNet*> generators, vecto
     vector<NMotionElement *> Motions = MotionControl->GetMotion();
   //vector<NNet*> Motions = MotionControl->GetMotion();
 
-  int check = MotionControl->NumMotionElements;
+  //int check = MotionControl->NumMotionElements;
   //int i=0;
   for(int i=0; i<MotionControl->NumMotionElements;i++)
   {
