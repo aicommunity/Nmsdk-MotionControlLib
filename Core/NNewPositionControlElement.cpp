@@ -726,32 +726,39 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
        neuron->Build();
       }
 
-      //NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".ExcSynapse1";
+      NameT startName;
       NameT finishName;
       int syns_max = branch->NumExcitatorySynapses;
+
 	  for(size_t i=0;i<start.size();i++)
 	  {
-       for (int m = 0; m<syns_max; m++)
-       {
-         UEPtr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma1.ExcSynapse"+sntoa(m+1),true);
-         if(!syn)
-           return true;
-         if (syn->Input.IsConnected()==false)
-         {
-             finishName = finish[j]->GetName()+"."+branch->GetName()+".ExcSynapse"+sntoa(m+1);
-             NameT startName = start[i]->GetName()+".LTZone";
-             if(!CheckLink(startName,finishName))
+          startName = start[i]->GetName()+".LTZone";
+          bool next_start = false;
+
+          for (int m = 0; m<syns_max; m++)
+          {
+              UEPtr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma1.ExcSynapse"+sntoa(m+1),true);
+              if(!syn)
+                return true;
+
+              finishName = finish[j]->GetName()+"."+branch->GetName()+".ExcSynapse"+sntoa(m+1);
+
+              if(CheckLink(startName,finishName))
+              {
+                  next_start = true;//перейти к следующему элементу в start
+                  break;
+              }
+
+              if (syn->Input.IsConnected())
+                continue; //перейти к следующему синапсу
+
               CreateLink(startName, "Output", finishName,"Input");
-             break;
-         }
-       }
-
-
+              break;
+          }
+      }
 //	   ExternalControl=false;
-	  }
-	}
-
-	return true;
+    }
+    return true;
 }
 
 
