@@ -30,6 +30,7 @@ windows {
 HEADERS += \
     ../../Core/NAstaticGyro.h \
     ../../Core/NControlObjectSource.h \
+    ../../Core/NCounterNeuron.h \
     ../../Core/NDCEngine.h \
     ../../Core/NEngineMotionControl.h \
     ../../Core/NEyeRetina.h \
@@ -60,6 +61,7 @@ HEADERS += \
 SOURCES += \
     ../../Core/NAstaticGyro.cpp \
     ../../Core/NControlObjectSource.cpp \
+    ../../Core/NCounterNeuron.cpp \
     ../../Core/NDCEngine.cpp \
     ../../Core/NEngineMotionControl.cpp \
     ../../Core/NEyeRetina.cpp \

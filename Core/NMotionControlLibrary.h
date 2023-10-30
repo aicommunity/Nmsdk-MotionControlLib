@@ -49,6 +49,7 @@ See file license.txt for more information
 #include "NPCNElement.h"
 
 #include "NSuppressionUnit.h"
+#include "NCounterNeuron.h"
 
 namespace NMSDK {
 

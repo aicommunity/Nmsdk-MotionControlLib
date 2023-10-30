@@ -172,6 +172,11 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  cont->Default();
  UploadClass("NSuppressionUnit",cont);
 
+ cont=new NCounterNeuron;
+ cont->SetName("NCounterNeuron");
+ cont->Default();
+ UploadClass("NCounterNeuron",cont);
+
 
  // Создаем СУ двигательной единицей
  UEPtr<UNet> net=new NMotionElement;
