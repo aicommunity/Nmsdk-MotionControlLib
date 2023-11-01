@@ -270,7 +270,7 @@ bool NSuppressionUnit::ADefault(void)
  PulseLength = 0.001;
  Amplitude = 1.0;
  SuppressionFreq = 500.0;
- LTZThreshold = 100;
+ LTZThreshold = 0.0115;
 
  Delay1 = 0;
  Delay2 = 0;
@@ -306,7 +306,6 @@ bool NSuppressionUnit::ABuild(void)
   DelayGenerators[i] = AddMissingComponent<NPulseGeneratorTransit>(std::string("Delay") + sntoa(i + 1), PulseGeneratorClassName);
   DelayGenerators[i]->SetCoord(MVector<double,3>(4.6, 6 + i * 2, 0));
   DelayGenerators[i]->DisconnectAll("Output");
-  DelayGenerators[i]->Frequency = 0.0000001;  // генераци€ сигнала с большим периодом
  }
 
  // »нициализируем подавл€ющий генератор
@@ -318,6 +317,11 @@ bool NSuppressionUnit::ABuild(void)
  // »нициализируем нейрон
  Neuron = AddMissingComponent<NPulseNeuron>(std::string("Neuron"), NeuronClassName);
  Neuron->SetCoord(MVector<double,3>(12.6, 3, 0));
+
+ UEPtr<NLTZone> ltzone = Neuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
+ if(!ltzone)
+  return true;
+ ltzone->Threshold = LTZThreshold;
 
 
  // —оздаЄм св€зи между элементами
@@ -362,15 +366,30 @@ bool NSuppressionUnit::ABuild(void)
 bool NSuppressionUnit::AReset(void)
 {
  Output.ToZero();
+
  DelayGenerators[0]->UseTransitSignal = false;
- DelayGenerators[0]->Frequency = 0.0000001;
- DelayGenerators[1]->Frequency = 0.0000001;
+ for(int i = 0; i < 2; i++)
+ {
+  DelayGenerators[i]->Frequency = 0.0000001;
+  DelayGenerators[i]->PulseLength = PulseLength;
+  DelayGenerators[i]->Amplitude = Amplitude;
+ }
+ DelayGenerators[0]->Delay = Delay1;
+ DelayGenerators[1]->Delay = Delay2;
+
+ ControlledGenerator->PatternFrequency = SuppressionFreq;
+ ControlledGenerator->PulseLength = PulseLength;
+ ControlledGenerator->Amplitude = Amplitude;
+
+ SourceGenerator->PulseLength = PulseLength;
+ SourceGenerator->Amplitude = Amplitude;
 
  if (!TransitInput)
  {
   SourceGenerator->Frequency = SourceFreq;
   SourceGenerator->Delay = SourceDelay;
  }
+
  return true;
 }
 
