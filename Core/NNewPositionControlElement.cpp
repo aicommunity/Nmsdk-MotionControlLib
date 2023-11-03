@@ -23,13 +23,14 @@ namespace NMSDK {
 // --------------------------
 NNewPositionControlElement::NNewPositionControlElement(void)
 :   MotionControl("MotionControl",this),
-	SimControl("SimControl", this)//,
+    SimControl("SimControl", this),
+    Output("Output", this)//,
+    //RememberState("RememberState", this)//,
 	//CurrentPosition("CurrentPosition",this),
 	//TargetPosition("TargetPosition",this),
 	//InputNeuronType("InputNeuronType",this, &NNewPositionControlElement::SetInputNeuronType),
 	//ControlNeuronType("ControlNeuronType",this, &NNewPositionControlElement::SetControlNeuronType),
 	//ExternalControl("ExternalControl", this),
-	//RememberState("RememberState", this),
 	//Delta("Delta",this)
 {
 }
@@ -90,7 +91,7 @@ bool NNewPositionControlElement::ABuild(void)
  CurrentPosition->Assign(2,1,0.0);
  TargetPosition->Assign(MotionControl->GetNumControlLoops(),2*MotionControl->NumMotionElements,0.0);
 
- //удаление старой структуры перед перестройкой
+ //удаление старой структуры перед перестройкой, добавлено
  if (MotionControl)
  {
     size_t i_min = 2*(size_t(MotionControl->NumMotionElements));
@@ -509,7 +510,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	 {
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)));
 	  LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)));
-      //Adding synapses for links from InputNeurons
+      //Adding synapses for links from InputNeurons, добавлено
       UEPtr<NPulseMembrane> soma = GetComponent(postInputNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
       if(!soma)
        return true;
@@ -525,7 +526,7 @@ bool NNewPositionControlElement::CreateNeurons()
       res&=(AddComponent(cont) != ForbiddenId);
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
-      //Adding synapses for links from InputNeurons
+      //Adding synapses for links from InputNeurons, добавлено
       UEPtr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
       if(!soma)
        return true;
@@ -538,7 +539,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	 {
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)));
 	  RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)));
-      //Adding synapses for links from InputNeurons
+      //Adding synapses for links from InputNeurons, добавлено
       UEPtr<NPulseMembrane> soma = GetComponent(postInputNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
       if(!soma)
        return true;
@@ -555,7 +556,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 
-      //Adding synapses for links from InputNeurons
+      //Adding synapses for links from InputNeurons, добавлено
       UEPtr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
       if(!soma)
        return true;

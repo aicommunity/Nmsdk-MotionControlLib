@@ -24,12 +24,12 @@ class RDK_LIB_TYPE NNewPositionControlElement: public NPositionControlElement
 public: // Свойства
 RDK::UPropertyInput<NEngineMotionControl,NNewPositionControlElement> MotionControl;
 RDK::ULProperty<bool, NNewPositionControlElement> SimControl;
+//RDK::ULProperty<bool, NNewPositionControlElement, ptPubState> RememberState;
 //RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> CurrentPosition;
 //RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement> TargetPosition;
 //RDK::ULProperty<string, NNewPositionControlElement> InputNeuronType;
 //RDK::ULProperty<string, NNewPositionControlElement> ControlNeuronType;
 //RDK::ULProperty<bool, NNewPositionControlElement> ExternalControl;
-//RDK::ULProperty<bool, NNewPositionControlElement, ptPubState> RememberState;
 //RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> Delta;
 
 public: // Переменные состояния
@@ -85,6 +85,10 @@ vector<vector<UNet*> > LeftGenerators;
 // G(0,0) G(0,1), ..., G(0,M) - генераторы всех УЭ 0 контура
 // G(1,0) G(1,1), ..., G(1,M) - генераторы всех УЭ 1 контура
 vector<vector<UNet*> > RightGenerators;
+
+//Выходы
+//Выход для подключения к MultiPositionControl
+UPropertyOutputData<MDMatrix<double>, NNewPositionControlElement> Output;
 
 public: // Методы
 // --------------------------
