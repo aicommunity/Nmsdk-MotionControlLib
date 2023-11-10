@@ -133,6 +133,8 @@ bool NMultiPositionControl::ACalculate(void)
 	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  postInputs.push_back(static_pointer_cast<NNet>(cont));
 	 }
+
+
 	 size_t generatorSize = Generators.size();
 	 string generatorName = "PGenerator"+sntoa(generatorSize+1);
 	 if(CheckComponentL(generatorName))
@@ -148,10 +150,17 @@ bool NMultiPositionControl::ACalculate(void)
 	  AddComponent(cont);
 	  Generators.push_back(static_pointer_cast<NNet>(cont));
 	 }
+
+
    for(size_t i=0;i<InputNeurons.size();i++)
    {
     UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(InputNeurons[i]->GetComponentL("LTZone"));
-    if(ltzone->OutputFrequency->Double[0]>0)
+
+    NameT check_name = InputNeurons[i]->GetName();
+    double ltz_fr = ltzone->OutputFrequency->As<double>(0);
+
+    //if(ltzone->OutputFrequency->Double[0]>0)
+    if(ltzone->OutputFrequency->As<double>(0) >0)
 	{
 	 activeInputs.push_back(InputNeurons[i]);
 	 activeControls.push_back(ControlNeurons[i]);
@@ -193,6 +202,7 @@ bool NMultiPositionControl::ACalculate(void)
    (*NumOfPositions)++;
   }
 
+ PositionNeurons();//добавлено
  return true;
 }
 // --------------------------
@@ -236,7 +246,9 @@ bool NMultiPositionControl::CreateNeurons(void)
 	InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
 	cont->GetLongName(owner, inputName);
    }
+   //ѕостроение св€зей между PostInput Neurons в NNewPositionControl и InputNeurons в MultiPositionControl
    owner->CreateLink(ltzoneName+".LTZone","Output",inputName+".Soma1.ExcChannel", "SynapticInputs");
+   //owner->CreateLink(ltzoneName+".LTZone","Output",inputName+".Soma1.ExcSynapse1", "Input"); //добавлено
   }
  }
 
@@ -271,7 +283,9 @@ bool NMultiPositionControl::CreateNeurons(void)
 	ControlNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
 	cont->GetLongName(owner, controlName);
    }
+   //ѕостроение св€зей между Control Neurons в MultiPositionControl и PreControl Neurons в NewPositionControl
    owner->CreateLink(controlName+".LTZone","Output",outputName+".Soma1.ExcChannel", "SynapticInputs");
+   //owner->CreateLink(controlName+".LTZone","Output",outputName+".Soma1.ExcSynapse1", "Input"); //добавлено
   }
  }
 
@@ -326,6 +340,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	  Generators.push_back(static_pointer_cast<NNet>(cont));
 	 }
  }
+  PositionNeurons();
  return true;
 }
 

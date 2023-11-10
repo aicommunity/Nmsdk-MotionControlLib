@@ -220,11 +220,14 @@ bool NNewPositionControlElement::ACalculate(void)
   {
    RememberState = false;
    vector<NNet*> activeInputs, postInputs, preControls, activeControls;
+
    for(size_t i=0;i<InputNeurons.size();i++)
    {
 	UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(InputNeurons[i]->GetComponentL("LTZone"));
+    //double check = ltzone->OutputFrequency->As<double>(0);
 	if(ltzone->OutputFrequency->As<double>(0)>0)
 	{
+     //NameT check_input_name = InputNeurons[i]->GetName();
 	 activeInputs.push_back(InputNeurons[i]);
 	 preControls.push_back(PreControlNeurons[i]);
 	}
@@ -234,6 +237,7 @@ bool NNewPositionControlElement::ACalculate(void)
 	UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(ControlNeurons[c]->GetComponentL("LTZone"));
 	if(ltzone->OutputFrequency->As<double>(0)>0)
 	{
+     //NameT check_postInputs_name = PostInputNeurons[c]->GetName();
 	 activeControls.push_back(ControlNeurons[c]);
 	 postInputs.push_back(PostInputNeurons[c]);
 	}
@@ -595,25 +599,25 @@ bool NNewPositionControlElement::CreateNeurons()
 
 	 start.push_back(LeftInputNeurons[j][i]);
 	 finish.push_back(LeftPostInputNeurons[j][i]);
-     NameT check_startName = LeftInputNeurons[j][i]->GetName();
-     NameT check_finisName = LeftPostInputNeurons[j][i]->GetName();
+     //NameT check_startName = LeftInputNeurons[j][i]->GetName();
+     //NameT check_finisName = LeftPostInputNeurons[j][i]->GetName();
      LinkNeurons(start,finish);
 	 start.clear();
 	 finish.clear();
 
 	 start.push_back(RightInputNeurons[j][i]);
 	 finish.push_back(RightPostInputNeurons[j][i]);
-     check_startName = RightInputNeurons[j][i]->GetName();
-     check_finisName = RightPostInputNeurons[j][i]->GetName();
+     //check_startName = RightInputNeurons[j][i]->GetName();
+     //check_finisName = RightPostInputNeurons[j][i]->GetName();
 	 LinkNeurons(start,finish);
 	 start.clear();
 	 finish.clear();
 
-     check_startName = LeftInputNeurons[j][i]->GetName();
+     //check_startName = LeftInputNeurons[j][i]->GetName();
 	 start.push_back(LeftInputNeurons[j][i]);
 	 for(int k=0;k<i;k++)
 	 {
-      check_finisName = LeftPostInputNeurons[j][k]->GetName();
+      //check_finisName = LeftPostInputNeurons[j][k]->GetName();
 	  finish.push_back(LeftPostInputNeurons[j][k]);
 	 }
 	 LinkNeuronsNeg(start,finish);
@@ -621,10 +625,10 @@ bool NNewPositionControlElement::CreateNeurons()
 	 finish.clear();
 
 	 start.push_back(RightInputNeurons[j][i]);
-     check_startName = RightInputNeurons[j][i]->GetName();
+     //check_startName = RightInputNeurons[j][i]->GetName();
 	 for(int k=0;k<i;k++)
 	 {
-      check_finisName = RightPostInputNeurons[j][k]->GetName();
+      //check_finisName = RightPostInputNeurons[j][k]->GetName();
 	  finish.push_back(RightPostInputNeurons[j][k]);  
 	 }
 	 LinkNeuronsNeg(start,finish);
@@ -632,10 +636,10 @@ bool NNewPositionControlElement::CreateNeurons()
 	 finish.clear();
 
 	 start.push_back(RightInputNeurons[j][i]);
-     check_startName = RightInputNeurons[j][i]->GetName();
+     //check_startName = RightInputNeurons[j][i]->GetName();
 	 for(int k=0;k<i;k++)
 	 {
-      check_finisName = RightPostInputNeurons[j][k]->GetName();
+      //check_finisName = RightPostInputNeurons[j][k]->GetName();
 	  finish.push_back(RightPostInputNeurons[j][k]);
 	 }
 	 LinkNeuronsNeg(start,finish);
@@ -643,10 +647,10 @@ bool NNewPositionControlElement::CreateNeurons()
 	 finish.clear();
 
 	 start.push_back(LeftPreControlNeurons[j][i]);
-     check_startName = LeftPreControlNeurons[j][i]->GetName();
+     //check_startName = LeftPreControlNeurons[j][i]->GetName();
 	 for(int k=0;k<=i;k++)
 	 {
-      check_finisName = LeftControlNeurons[j][k]->GetName();
+      //check_finisName = LeftControlNeurons[j][k]->GetName();
       finish.push_back(LeftControlNeurons[j][k]);
 	 }
 	 LinkNeurons(start,finish);
@@ -654,10 +658,10 @@ bool NNewPositionControlElement::CreateNeurons()
 	 finish.clear();
 
 	 start.push_back(RightPreControlNeurons[j][i]);
-     check_startName = RightPreControlNeurons[j][i]->GetName();
+     //check_startName = RightPreControlNeurons[j][i]->GetName();
 	 for(int k=0;k<=i;k++)
 	 {
-      check_finisName = RightControlNeurons[j][k]->GetName();
+      //check_finisName = RightControlNeurons[j][k]->GetName();
 	  finish.push_back(RightControlNeurons[j][k]);
 	 }
 	 LinkNeurons(start,finish);
@@ -941,6 +945,7 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
    //vector<NNet*> Motions = MotionControl->GetMotion();
    vector<NPulseMembrane*> membrToConnectL;
    vector<NPulseMembrane*> membrToConnectR;
+
    for(int i=0;i<MotionControl->NumMotionElements;i++)
    {
     NMotionElement *melem=Motions[i];
@@ -955,15 +960,20 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
 	 string postInputNeuronRName = "PostInputNeuronR"+sntoa(i+1)+sntoa(j+1);
 	 UEPtr<NPulseNeuron> neuronL=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronLName));
 	 UEPtr<NPulseNeuron> neuronR=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronRName));
+
 	 for(size_t m=0;m<neuronL->GetNumMembranes();m++)
 	 {
 	  NPulseMembrane* membr = neuronL->GetMembrane(m);
+      //string check_startName = inputNeuronLName;
+      //string check_finishName = postInputNeuronLName+"."+membr->GetName()+".ExcSynapse1";
 	  if(CheckLink(inputNeuronLName,postInputNeuronLName+"."+membr->GetName()+".ExcSynapse1"))
 		membrToConnectL.push_back(membr);
 	 }
 	 for(size_t n=0;n<neuronR->GetNumMembranes();n++)
 	 {
 	  NPulseMembrane* membr = neuronR->GetMembrane(n);
+      //string check_startName = inputNeuronRName;
+      //string check_finishName = postInputNeuronRName+"."+membr->GetName()+".ExcSynapse1";
 	  if(CheckLink(inputNeuronRName,postInputNeuronRName+"."+membr->GetName()+".ExcSynapse1"))
 		membrToConnectR.push_back(membr);
 	 }
@@ -975,12 +985,17 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
 	{
 	 string membrLName;
 	 membrToConnectL[l]->GetLongName(this,membrLName);
+     //string check_startName = start[c]->GetName()+".LTZone";
+     //string check_finishName = membrLName+".InhSynapse1";
 	 CreateLink(start[c]->GetName()+".LTZone","Output",membrLName+".InhSynapse1","Input");
 	}
+
 	for(size_t k=0;k<membrToConnectR.size();k++)
 	{
 	 string membrRName;
 	 membrToConnectR[k]->GetLongName(this,membrRName);
+     //string check_startName = start[c]->GetName()+".LTZone";
+     //string check_finishName = membrRName+".InhSynapse1";
 	 CreateLink(start[c]->GetName()+".LTZone","Output",membrRName+".InhSynapse1","Input");
 	}
    }
