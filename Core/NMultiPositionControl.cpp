@@ -86,7 +86,7 @@ bool NMultiPositionControl::AReset(void)
 // Выполняет расчет этого объекта
 bool NMultiPositionControl::ACalculate(void)
 {
- ControlNeuronType = "NNewSynSPNeuron";
+ ControlNeuronType = "NNewSPNeuron";
  UEPtr<UContainer> cont;
  UEPtr<UStorage> storage = GetStorage();
 
@@ -156,10 +156,6 @@ bool NMultiPositionControl::ACalculate(void)
    {
     UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(InputNeurons[i]->GetComponentL("LTZone"));
 
-    NameT check_name = InputNeurons[i]->GetName();
-    double ltz_fr = ltzone->OutputFrequency->As<double>(0);
-
-    //if(ltzone->OutputFrequency->Double[0]>0)
     if(ltzone->OutputFrequency->As<double>(0) >0)
 	{
 	 activeInputs.push_back(InputNeurons[i]);
@@ -232,11 +228,10 @@ bool NMultiPositionControl::CreateNeurons(void)
 	InputNeurons.push_back(inputNeuron);
 	InputNeuronsByContours[i].push_back(inputNeuron);
 	inputNeuron->GetLongName(owner, inputName);
-    //inputNeuron->SetCoord(MVector<double,3>(8.0, 6.0, 5.0));
    }
    else
    {
-	InputNeuronType = "NNewSynSPNeuron";
+    InputNeuronType = "NNewSPNeuron";
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(InputNeuronType));
 	if(!cont)
 	 return 0;
@@ -247,8 +242,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	cont->GetLongName(owner, inputName);
    }
    //Построение связей между PostInput Neurons в NNewPositionControl и InputNeurons в MultiPositionControl
-   owner->CreateLink(ltzoneName+".LTZone","Output",inputName+".Soma1.ExcChannel", "SynapticInputs");
-   //owner->CreateLink(ltzoneName+".LTZone","Output",inputName+".Soma1.ExcSynapse1", "Input"); //добавлено
+   owner->CreateLink(ltzoneName+".LTZone","Output",inputName+".Soma1.ExcSynapse1", "Input"); //добавлено
   }
  }
 
@@ -273,7 +267,7 @@ bool NMultiPositionControl::CreateNeurons(void)
    }
    else
    {
-    ControlNeuronType = "NNewSynSPNeuron";
+    ControlNeuronType = "NNewSPNeuron";
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
 	if(!cont)
 	 return 0;
@@ -284,8 +278,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	cont->GetLongName(owner, controlName);
    }
    //Построение связей между Control Neurons в MultiPositionControl и PreControl Neurons в NewPositionControl
-   owner->CreateLink(controlName+".LTZone","Output",outputName+".Soma1.ExcChannel", "SynapticInputs");
-   //owner->CreateLink(controlName+".LTZone","Output",outputName+".Soma1.ExcSynapse1", "Input"); //добавлено
+   owner->CreateLink(controlName+".LTZone","Output",outputName+".Soma1.ExcSynapse2", "Input"); //добавлено
   }
  }
 
@@ -360,12 +353,14 @@ bool NMultiPositionControl::LinkGenerators(vector <UNet*> generators, vector <NN
 	if(j==i)
 	{
 	 string generatorName = generators[i]->GetName();
-	 string controlNeuronName = neurons[j]->GetName()+".Soma1.ExcChannel";
+     string controlNeuronName = neurons[j]->GetName()+".Soma1.ExcSynapse1";
 
 	 if(link)
 	 {
 	  if(!CheckLink(generatorName,controlNeuronName))
-         CreateLink(generatorName, "Output", controlNeuronName, "SynapticInputs");
+      {
+          CreateLink(generatorName, "Output", controlNeuronName, "Input");
+      }
 	 }
 	 else
 	 {

@@ -224,7 +224,6 @@ bool NNewPositionControlElement::ACalculate(void)
    for(size_t i=0;i<InputNeurons.size();i++)
    {
 	UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(InputNeurons[i]->GetComponentL("LTZone"));
-    //double check = ltzone->OutputFrequency->As<double>(0);
 	if(ltzone->OutputFrequency->As<double>(0)>0)
 	{
      //NameT check_input_name = InputNeurons[i]->GetName();
@@ -372,7 +371,7 @@ bool NNewPositionControlElement::CreateNeurons()
       ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
 	  controlNeuron->GetLongName(owner, controlLName);
 	  LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
-      //Adding synapses for links to PrecontrolNeurons
+      //Adding synapses for links to PrecontrolNeurons, добавлено
       UEPtr<NPulseMembrane> soma = controlNeuron->GetComponentL<NPulseMembrane>("Soma1",true);
       if(!soma)
        return true;
@@ -389,7 +388,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, controlLName);
       LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
-      //Adding synapses for links to PrecontrolNeurons
+      //Adding synapses for links to PrecontrolNeurons, добавлено
       UEPtr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
       if(!soma)
        return true;
@@ -404,7 +403,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
 	  controlNeuron->GetLongName(owner, controlRName);
 	  RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
-      //Adding synapses for links to PrecontrolNeurons
+      //Adding synapses for links to PrecontrolNeurons, добавлено
       UEPtr<NPulseMembrane> soma = controlNeuron->GetComponentL<NPulseMembrane>("Soma1",true);
       if(!soma)
        return true;
@@ -421,7 +420,7 @@ bool NNewPositionControlElement::CreateNeurons()
 	  ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  cont->GetLongName(owner, controlRName);
 	  RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
-      //Adding synapses for links to PrecontrolNeurons
+      //Adding synapses for links to PrecontrolNeurons, добавлено
       UEPtr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
       if(!soma)
        return true;
@@ -429,7 +428,7 @@ bool NNewPositionControlElement::CreateNeurons()
       soma->Build();
 	 }
 
-     //ѕостроение св€зей от ControlNeuron-ов в NNewPositionControlElement к!!!
+     //ѕостроение св€зей от ControlNeuron-ов в NNewPositionControlElement к
      //постафферентным нейронам (PostAfferent)в EngineMotionControl->MotionElement
      res = owner->CreateLink(controlLName+".LTZone","Output",postAfferentLName+".Soma1.ExcSynapse2","Input");
 	 res = owner->CreateLink(controlLName+".LTZone","Output",postAfferentRName+".Soma1.InhSynapse1","Input");
@@ -460,10 +459,17 @@ bool NNewPositionControlElement::CreateNeurons()
 	 string preControlNeuronLName = "PreControlNeuronL"+sntoa(i+1)+sntoa(j+1);
 	 string preControlNeuronRName = "PreControlNeuronR"+sntoa(i+1)+sntoa(j+1);
 
+     //Left PreControl Neurons
 	 if(CheckComponentL(preControlNeuronLName))
 	 {
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
 	  LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
+      //Adding synapses for links from Control Neurons in NMultiPositionControl, добавлено
+      UEPtr<NPulseMembrane> soma = GetComponent(preControlNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
+      if(!soma)
+       return true;
+      soma->NumExcitatorySynapses = 2;
+      soma->Build();
 	 }
 	 else
 	 {
@@ -474,11 +480,25 @@ bool NNewPositionControlElement::CreateNeurons()
       res&=(AddComponent(cont) != ForbiddenId);
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
+      //Adding synapses for links from Control Neurons in NMultiPositionControl, добавлено
+      UEPtr<NPulseMembrane> soma = GetComponent(preControlNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
+      if(!soma)
+       return true;
+      soma->NumExcitatorySynapses = 2;
+      soma->Build();
 	 }
+
+     //Right PreControl Neurons
 	 if(CheckComponentL(preControlNeuronRName))
 	 {
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
 	  RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
+      //Adding synapses for links from Control Neurons in NMultiPositionControl, добавлено
+      UEPtr<NPulseMembrane> soma = GetComponent(preControlNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
+      if(!soma)
+       return true;
+      soma->NumExcitatorySynapses = 2;
+      soma->Build();
 	 }
 	 else
 	 {
@@ -489,6 +509,12 @@ bool NNewPositionControlElement::CreateNeurons()
       res&=(AddComponent(cont) != ForbiddenId);
 	  PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
 	  RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
+      //Adding synapses for links from Control Neurons in NMultiPositionControl, добавлено
+      UEPtr<NPulseMembrane> soma = GetComponent(preControlNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
+      if(!soma)
+       return true;
+      soma->NumExcitatorySynapses = 2;
+      soma->Build();
 	 }
 	}
    }
@@ -569,7 +595,6 @@ bool NNewPositionControlElement::CreateNeurons()
 	 }
 	}
    }
-
 
    //Creating downward links
    for(int i=0;i<MotionControl->NumMotionElements;i++)
@@ -669,7 +694,7 @@ bool NNewPositionControlElement::CreateNeurons()
    }
 
    CreateExternalControlElements();
-    //Setting coordinates
+   //Setting coordinates
    PositionNeurons();
    return res;
 }
@@ -763,7 +788,7 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
       NameT finishName;
       int syns_max = branch->NumExcitatorySynapses;
 
-	  for(size_t i=0;i<start.size();i++)
+      for(size_t i=0;i<start.size();i++) //добавлено
 	  {
           startName = start[i]->GetName()+".LTZone";
 
@@ -813,16 +838,15 @@ bool NNewPositionControlElement::LinkNeuronsNeg(vector <NNet*> start, vector <NN
 	  if(!hasEmptyMembrane)
       {
        //branch=neuron->BranchDendrite("Soma1",false);
-       neuron->NumSomaMembraneParts = 1;
+       neuron->NumSomaMembraneParts = 1; //добавлено
        neuron->Build();
       }
 
-      //NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".InhSynapse1";
       NameT startName;
       NameT finishName;
       int syns_max = branch->NumInhibitorySynapses;
 
-	  for(size_t i=0;i<start.size();i++)
+      for(size_t i=0;i<start.size();i++) //добавлено
 	  {
        startName = start[i]->GetName()+".LTZone";
 

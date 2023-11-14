@@ -141,7 +141,7 @@ bool NPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> f
 	for(size_t j=0;j<finish.size();j++)
 	{
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
-	  UEPtr<NPulseMembraneCommon> branch;
+      UEPtr<NPulseMembrane> branch;
 	  bool hasEmptyMembrane=false;
 	  for(size_t k=0;k<neuron->GetNumMembranes();k++)
 	  {
@@ -153,16 +153,49 @@ bool NPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> f
 		 break;
 	   }
 	  }
-	  if(!hasEmptyMembrane)
-	   branch=neuron->BranchDendrite("Soma1",false);
-	  NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".ExcChannel";
-	  for(size_t i=0;i<start.size();i++)
-	  {
-	   NameT startName = start[i]->GetName()+".LTZone";
-	   if(!CheckLink(startName,finishName))
-        CreateLink(startName, "Output", finishName, "SynapticInput");
-//	   ExternalControl=false;
-	  }
+
+      if(!hasEmptyMembrane)
+      {
+       //branch=neuron->BranchDendrite("Soma1",false);
+       neuron->NumSomaMembraneParts = 1;
+       neuron->Build();
+      }
+
+      NameT startName;
+      //NameT finishName = finish[j]->GetName()+"."+branch->GetName()+".ExcChannel";
+      NameT finishName;
+
+      int syns_max = branch->NumExcitatorySynapses;
+
+      for(size_t i=0;i<start.size();i++)//добавлено
+      {
+          startName = start[i]->GetName()+".LTZone";
+
+          for (int m = 0; m<syns_max; m++)
+          {
+              UEPtr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma1.ExcSynapse"+sntoa(m+1),true);
+              if(!syn)
+                return true;
+
+              finishName = finish[j]->GetName()+"."+branch->GetName()+".ExcSynapse"+sntoa(m+1);
+
+              if(CheckLink(startName,finishName))
+                break;//перейти к следующему элементу в start
+
+              if (syn->Input.IsConnected())
+              {
+                  branch->NumExcitatorySynapses++;
+                  branch->Build();
+                  syns_max = branch->NumExcitatorySynapses;
+                  continue; //перейти к следующему синапсу
+              }
+
+              CreateLink(startName, "Output", finishName,"Input");
+              break;
+          }
+      }
+
+      //	   ExternalControl=false;
 	}
 
 	return true;
