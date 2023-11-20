@@ -65,6 +65,12 @@ public: // Общедоступные свойства
  /// иначе внутренний источник компонента генерирует сигнал в соответствии с настройками
  ULProperty<bool, NSuppressionUnit, ptPubParameter> TransitInput;
 
+ /// При поднятом флаге компонент не использует источник сигнала и нейрон
+ /// Результатом работы компонента является только подавляющий сигнал
+ ULProperty<bool, NSuppressionUnit, ptPubParameter> OnlyInhibition;
+
+ /// При поднятом флаге подвление сигнала происходит только на одной итерации
+ ULProperty<bool, NSuppressionUnit, ptPubParameter> SingleUse;
 
 public: // Входы и выходы
 /// Входной сигнал на компонент
@@ -78,10 +84,13 @@ protected: // Данные
  /// Генераторы входных импульсов
  UEPtr <NPulseGeneratorTransit> SourceGenerator;
 
- /// Генераторы входных импульсов
+ /// Генераторы задержек
  std::vector<UEPtr<NPulseGeneratorTransit>> DelayGenerators;
 
- /// Генераторы входных импульсов
+ /// Нейрон ИЛИ
+ UEPtr <NPulseNeuron> ORNeuron;
+
+ /// Генератор подавляющих импульсов
  UEPtr <NPulseGeneratorTransit> ControlledGenerator;
 
  /// Нейрон
@@ -154,7 +163,7 @@ bool SetDelay1(const double &value);
 /// Установка момента времени Т2, до которого происходит подавление сигнала
 bool SetDelay2(const double &value);
 
-/// Установка частоты источника подавляемого сигнала
+/// Установка частоты источника подавляемого сигнала (и генераторов задержек)
 bool SetSourceFreq(const double &value);
 
 /// Установка задержки источника подавляемого сигнала
@@ -162,6 +171,12 @@ bool SetSourceDelay(const double &value);
 
 /// Установка значения флага транзита сигнала внешнего источника
 bool SetTransitInput(const bool &value);
+
+/// Установка значения флага использования только подавляющего сигнала
+bool SetOnlyInhibition(const bool &value);
+
+/// Установка значения флага единоразового подавления сигнала
+bool SetSingleUse(const bool &value);
 
 // --------------------------
 

@@ -33,12 +33,15 @@ NSuppressionUnit::NSuppressionUnit(void)
    SourceFreq("SourceFreq", this, &NSuppressionUnit::SetSourceFreq),
    SourceDelay("SourceDelay", this, &NSuppressionUnit::SetSourceDelay),
    TransitInput("TransitInput", this, &NSuppressionUnit::SetTransitInput),
+   OnlyInhibition("OnlyInhibition", this, &NSuppressionUnit::SetOnlyInhibition),
+   SingleUse("SingleUse", this, &NSuppressionUnit::SetSingleUse),
    Input("Input",this),
    Output("Output", this)
 {
  SourceGenerator = NULL;
  DelayGenerators.clear();
  ControlledGenerator = NULL;
+ ORNeuron = NULL;
  Neuron = NULL;
 }
 
@@ -211,7 +214,7 @@ bool NSuppressionUnit::SetDelay2(const double &value)
  return true;
 }
 
-/// Установка частоты источника подавляемого сигнала
+/// Установка частоты источника подавляемого сигнала (и генераторов задержек)
 bool NSuppressionUnit::SetSourceFreq(const double &value)
 {
  if(value < 0)
@@ -219,6 +222,12 @@ bool NSuppressionUnit::SetSourceFreq(const double &value)
 
  if (!TransitInput && SourceGenerator)
   SourceGenerator->Frequency = value;
+
+ for (int i = 0; i < 2; i++)
+ {
+  if (DelayGenerators[i])
+   DelayGenerators[i]->Frequency = value;
+ }
 
  return true;
 }
@@ -254,6 +263,26 @@ bool NSuppressionUnit::SetTransitInput(const bool &value)
  return true;
 }
 
+/// Установка значения флага использования только подавляющего сигнала
+bool NSuppressionUnit::SetOnlyInhibition(const bool &value)
+{
+ SourceGenerator->SetActivity(!value);
+ Neuron->SetActivity(!value);
+ return true;
+}
+
+/// Установка значения флага единоразового подавления сигнала
+bool NSuppressionUnit::SetSingleUse(const bool &value)
+{
+ for (int i = 0; i < 2; i++)
+ {
+  if (DelayGenerators[i])
+   DelayGenerators[i]->Frequency = SourceFreq;
+ }
+
+ return true;
+}
+
 // --------------------------
 
 
@@ -277,7 +306,9 @@ bool NSuppressionUnit::ADefault(void)
 
  SourceFreq = 0.0;
  SourceDelay = 0.0;
- TransitInput = true;
+ TransitInput = false;
+ OnlyInhibition = false;
+ SingleUse = false;
 
  Input->Assign(1,1,0.0);
  Output.Assign(1,1,0.0);
@@ -296,7 +327,8 @@ bool NSuppressionUnit::ABuild(void)
  // Инициализируем генератор входных импульсов
  SourceGenerator = AddMissingComponent<NPulseGeneratorTransit>(std::string("Source"), PulseGeneratorClassName);
  SourceGenerator->SetCoord(MVector<double,3>(4.6, 3, 0));
- SourceGenerator->UseTransitSignal = true;  // Включаем режим транзита сигнала от внешнего источника
+ if (TransitInput)
+  SourceGenerator->UseTransitSignal = true;  // Включаем режим транзита сигнала от внешнего источника
  SourceGenerator->DisconnectAll("Output");
 
  // Инициализируем генераторы управляющих импульсов
@@ -308,15 +340,26 @@ bool NSuppressionUnit::ABuild(void)
   DelayGenerators[i]->DisconnectAll("Output");
  }
 
+ // Инициализируем нейрон ИЛИ
+ ORNeuron = AddMissingComponent<NPulseNeuron>(std::string("ORNeuron"), NeuronClassName);
+ ORNeuron->SetCoord(MVector<double,3>(11.33, 7, 0));
+ ORNeuron->DisconnectAll("Output");
+ UEPtr<NPulseMembrane> orsoma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
+ if (orsoma)
+ {
+  orsoma->NumExcitatorySynapses = 2;
+  orsoma->Build();
+ }
+
  // Инициализируем подавляющий генератор
  ControlledGenerator = AddMissingComponent<NPulseGeneratorTransit>(std::string("ControlledGenerator"), PulseGeneratorClassName);
- ControlledGenerator->SetCoord(MVector<double,3>(12.6, 6, 0));
+ ControlledGenerator->SetCoord(MVector<double,3>(18, 7, 0));
  ControlledGenerator->UsePatternOutput = true;  // Включаем режим генерации импульсов с повышенной частотой
  ControlledGenerator->DisconnectAll("Output");
 
  // Инициализируем нейрон
  Neuron = AddMissingComponent<NPulseNeuron>(std::string("Neuron"), NeuronClassName);
- Neuron->SetCoord(MVector<double,3>(12.6, 3, 0));
+ Neuron->SetCoord(MVector<double,3>(18, 3, 0));
 
  UEPtr<NLTZone> ltzone = Neuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
  if(!ltzone)
@@ -326,16 +369,12 @@ bool NSuppressionUnit::ABuild(void)
 
  // Создаём связи между элементами
 
- // Создаём связь между Delay1 и ControlledGenerator
- if (!CheckLink("Delay1", "Output", "ControlledGenerator", "Input"))
-  res &= CreateLink("Delay1", "Output", "ControlledGenerator", "Input");
-
- // Создаём связь между Delay2 и Delay1
- if (!CheckLink("Delay2", "Output", "Delay1", "Input"))
-  res &= CreateLink("Delay2", "Output", "Delay1", "Input");
+ // Создаём связь между ORNeuron и ControlledGenerator
+ if (!CheckLink("ORNeuron", "Output", "ControlledGenerator", "Input"))
+  res &= CreateLink("ORNeuron", "Output", "ControlledGenerator", "Input");
 
 
- // Находим нужные элементы
+ // Находим нужные элементы в Neuron
  UEPtr<NPulseMembrane> soma = Neuron->GetComponentL<NPulseMembrane>("Soma1", true);
  if(!soma)
  {
@@ -350,13 +389,36 @@ bool NSuppressionUnit::ABuild(void)
   return true;
  }
 
- // Создаём связь между ControlledGenerator и тормозным синапсом сомы
+ // Создаём связь между ControlledGenerator и тормозным синапсом сомы Neuron
  if (!CheckLink("ControlledGenerator", "Output", inhsynapse->GetLongName(this), "Input"))
   res &= CreateLink("ControlledGenerator", "Output", inhsynapse->GetLongName(this), "Input");
 
- // Создаём связь между источником входного сигнала Source и синапсом сомы
+ // Создаём связь между источником входного сигнала Source и синапсом сомы Neuron
  if (!CheckLink("Source", "Output", excsynapse->GetLongName(this), "Input"))
   res &= CreateLink("Source", "Output", excsynapse->GetLongName(this), "Input");
+
+
+ // Находим составляющие компоненты ORNeuron
+ if(!orsoma)
+ {
+  LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because ORNeuron->Soma1 isn't exists: "));
+  return true;
+ }
+
+ // Создаём связи между Delay1, Delay2 и синапсами нейрона ORNeuron
+ for (int i = 0; i < 2; i++)
+ {
+  NPulseSynapseCommon *orexcsynapse = orsoma->GetExcitatorySynapses(i);
+  if(!orexcsynapse)
+  {
+   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because ORNeuron->Soma1->ExcSynapse" + sntoa(i+1) + " isn't exists: "));
+   return true;
+  }
+
+  // Создаём связь
+  if (!CheckLink(DelayGenerators[i]->GetLongName(this), "Output", orexcsynapse->GetLongName(this), "Input"))
+   res &= CreateLink(DelayGenerators[i]->GetLongName(this), "Output", orexcsynapse->GetLongName(this), "Input");
+ }
 
  return res;
 }
@@ -370,9 +432,9 @@ bool NSuppressionUnit::AReset(void)
  DelayGenerators[0]->UseTransitSignal = false;
  for(int i = 0; i < 2; i++)
  {
-  DelayGenerators[i]->Frequency = 0.0000001;
   DelayGenerators[i]->PulseLength = PulseLength;
   DelayGenerators[i]->Amplitude = Amplitude;
+  DelayGenerators[i]->Frequency = SourceFreq;
  }
  DelayGenerators[0]->Delay = Delay1;
  DelayGenerators[1]->Delay = Delay2;
@@ -393,6 +455,7 @@ bool NSuppressionUnit::AReset(void)
  return true;
 }
 
+
 // Execute math. computations of current object on current step
 bool NSuppressionUnit::ACalculate(void)
 {
@@ -402,25 +465,21 @@ bool NSuppressionUnit::ACalculate(void)
   *SourceGenerator->Input = *Input;
 
  // Передаём выходную информацию
- if(Neuron)
+ if (OnlyInhibition)
+  Output = ControlledGenerator->Output;
+ else if(Neuron)
   Output = Neuron->Output;
 
- // Настраиваем управляющие генераторы Delay1 и Delay2
- if (DelayGenerators.size() == 2)
+ if (SingleUse)
  {
-  // Первый генератор испустил импульс, можем обнулить ему частоту, чтобы он больше не работал
+  // Первый генератор уже сработал - выключаем
   if (DelayGenerators[0]->Frequency != 0 && ControlledGenerator->IsInPatternMode)
-  {
    DelayGenerators[0]->Frequency = 0;
-   // Генератор Delay1 испускает импульс в Т1 и пропускает через себя импульс в Т2
-   DelayGenerators[0]->UseTransitSignal = true;
-  }
-  // Второй генератор испустил импульс, также обнуляем ему частоту
+  // Второй также уже сработал - можем выключить
   if (DelayGenerators[1]->Frequency != 0 && !ControlledGenerator->IsInPatternMode && DelayGenerators[0]->Frequency == 0)
-  {
    DelayGenerators[1]->Frequency = 0;
-  }
  }
+
  return true;
 }
 // --------------------------
