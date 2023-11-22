@@ -50,6 +50,7 @@ HEADERS += \
     ../../Core/NMultiPositionControl.h \
     ../../Core/NNavMousePrimitive.h \
     ../../Core/NNewPositionControlElement.h \
+    ../../Core/NObjInArea.h \
     ../../Core/NPendulumAndCart.h \
     ../../Core/NPositionControlElement.h \
     ../../Core/NPCNElement.h \
@@ -81,6 +82,7 @@ SOURCES += \
     ../../Core/NMultiPositionControl.cpp \
     ../../Core/NNavMousePrimitive.cpp \
     ../../Core/NNewPositionControlElement.cpp \
+    ../../Core/NObjInArea.cpp \
     ../../Core/NPendulumAndCart.cpp \
     ../../Core/NPositionControlElement.cpp \
     ../../Core/NPCNElement.cpp \

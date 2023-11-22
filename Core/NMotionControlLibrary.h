@@ -50,6 +50,7 @@ See file license.txt for more information
 
 #include "NSuppressionUnit.h"
 #include "NCounterNeuron.h"
+#include "NObjInArea.h"
 
 namespace NMSDK {
 
