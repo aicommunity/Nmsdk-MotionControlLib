@@ -1,14 +1,6 @@
-/* ***********************************************************
-@Copyright Alexander V. Bakhshiev, 2012.
-E-mail:        alexab@ailab.ru
-url:        http://ailab.ru
-
-This file - part of the project: RDK
-
-File License:        BSD License
-Project License:     BSD License
-See file license.txt for more information
-*********************************************************** */
+/// @author Barymova Elizaveta (elizaveta.barymova@gmail.com)
+/// @date   October, 2023
+/// @brief  A component suppress input pulses in time from Delay1 to Delay2
 
 
 #include "NSuppressionUnit.h"
