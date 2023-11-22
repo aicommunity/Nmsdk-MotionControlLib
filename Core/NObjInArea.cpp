@@ -180,7 +180,7 @@ bool NObjInArea::SetFrequency(const double &value)
  return true;
 }
 
-/// Установка частоты импульсов подавляющих генераторов
+/// Установка частоты импульсов подавляющих и возбуждающего генераторов
 bool NObjInArea::SetHighFreq(const double &value)
 {
  if(value < 0)
@@ -199,7 +199,7 @@ bool NObjInArea::SetHighFreq(const double &value)
  return true;
 }
 
-/// Установка момента времени t=0, с которого начинается подавление сигнала класса 1
+/// Установка момента времени t=t0, с которого начинается подавление области кадра с левой стороны
 bool NObjInArea::SetDelay1_1(const double &value)
 {
  if(value < 0)
@@ -214,7 +214,7 @@ bool NObjInArea::SetDelay1_1(const double &value)
  return true;
 }
 
-/// Установка момента времени t=t1, до которого происходит подавление сигнала класса 1
+/// Установка момента времени t=t1, до которого происходит подавление области кадра с левой стороны
 bool NObjInArea::SetDelay1_2(const double &value)
 {
  if(value < 0)
@@ -229,7 +229,7 @@ bool NObjInArea::SetDelay1_2(const double &value)
  return true;
 }
 
-/// Установка момента времени t=t2, с которого начинается подавление сигнала класса N
+/// Установка момента времени t=t2, с которого начинается подавление области кадра с правой стороны
 bool NObjInArea::SetDelay2_1(const double &value)
 {
  if(value < 0)
@@ -244,7 +244,7 @@ bool NObjInArea::SetDelay2_1(const double &value)
  return true;
 }
 
-/// Установка момента времени t=T, до которого происходит подавление сигнала класса N
+/// Установка момента времени t=T, до которого происходит подавление области кадра с правой стороны
 bool NObjInArea::SetDelay2_2(const double &value)
 {
  if(value < 0)
