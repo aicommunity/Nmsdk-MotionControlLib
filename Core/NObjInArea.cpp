@@ -23,6 +23,7 @@ NObjInArea::NObjInArea(void)
    Delay2_2("Delay2_2", this, &NObjInArea::SetDelay2_2),
    PulseCount("PulseCount", this, &NObjInArea::SetPulseCount),
    NumObj("NumObj", this, &NObjInArea::SetNumObj),
+   Delays_ClsSpikeFr("Delays_ClsSpikeFr", this, &NObjInArea::SetDelays_ClsSpikeFr),
    Output("Output", this)
 {
  OldNumObj = 0;
@@ -273,6 +274,8 @@ bool NObjInArea::SetPulseCount(const int &value)
   ClsSpikeFr[i]->Reset();
  }
 
+ Delays_ClsSpikeFr.Resize(NumObj, value, 0.0);
+
  return true;
 }
 
@@ -286,6 +289,22 @@ bool NObjInArea::SetNumObj(const int &value)
 
  Ready = false;
  return true;
+}
+
+/// Установка задержек, задающих спайковый образы классов
+bool NObjInArea::SetDelays_ClsSpikeFr(const MDMatrix<double> &value)
+{
+ bool res = true;
+
+ for(int i = 0; i < int(ClsSpikeFr.size()); i++)
+ {
+  for (int j = 0; j < PulseCount; j++)
+   ClsSpikeFr[i]->Delays[j] = value(i, j);
+
+  ClsSpikeFr[i]->Reset();
+ }
+
+ return res;
 }
 
 // --------------------------
@@ -313,6 +332,7 @@ bool NObjInArea::ADefault(void)
  NumObj = 1;
 
  Output.Assign(1,1,0.0);
+ Delays_ClsSpikeFr.Assign(NumObj, PulseCount, 0.0);
 
  return true;
 }
@@ -324,6 +344,8 @@ bool NObjInArea::ADefault(void)
 bool NObjInArea::ABuild(void)
 {
  bool res = true;
+
+ Delays_ClsSpikeFr.Resize(NumObj, PulseCount, 0.0);
 
  // Удаляем лишние генераторы спайковых образов классов
  for(int i = NumObj; i < OldNumObj; i++)

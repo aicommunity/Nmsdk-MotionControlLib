@@ -54,6 +54,9 @@ public: // Общедоступные свойства
  /// Количество объектов для распознавания
  ULProperty<int, NObjInArea, ptPubParameter> NumObj;
 
+ /// Задержки, задающие спайковый образы классов
+ ULProperty<MDMatrix<double>, NObjInArea, ptPubParameter> Delays_ClsSpikeFr;
+
 
 public: // Входы и выходы
 /// Входные сигнал класса 1
@@ -164,6 +167,9 @@ bool SetPulseCount(const int &value);
 
 /// Установка количества объектов для распознавания
 bool SetNumObj(const int &value);
+
+/// Установка задержек, задающих спайковый образы классов
+bool SetDelays_ClsSpikeFr(const MDMatrix<double> &value);
 
 // --------------------------
 
