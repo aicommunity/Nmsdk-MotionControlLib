@@ -136,7 +136,7 @@ bool NCounterNeuron::SetCurCount(const int &value)
 bool NCounterNeuron::CreateSomaLinks(UEPtr<NPulseMembrane> soma)
 {
  bool res = true;
- UEPtr<NPulseChannelCommon> channel1, channel2, ltchannel1,ltchannel2;
+ UEPtr<NPulseChannelCommon> channel1, channel2;
 
  // Находим каналы мембраны
  channel1 = dynamic_pointer_cast<NPulseChannelCommon>(soma->GetComponent("ExcChannel",true));
@@ -188,7 +188,7 @@ bool NCounterNeuron::ABuild(void)
  bool res = true;
 
  UEPtr<NPulseMembrane> membr;
- UEPtr<UNet> gen_pos,gen_neg;
+ UEPtr<UNet> gen_pos, gen_neg;
 
  // Добавляем компонент генераторной зоны нейрона
  LTZone = AddMissingComponent<NLTZone>("LTZone", LTZoneClassName);

@@ -22,6 +22,9 @@ public: // Общедоступные свойства
  /// Имя класса нейрона
  ULProperty<std::string, NObjInArea, ptPubParameter> NeuronClassName;
 
+ /// Имя класса генератора последовательности импульсов
+ ULProperty<std::string, NObjInArea, ptPubParameter> MultiGeneratorClassName;
+
  /// Длительность импульсов (с)
  ULProperty<double, NObjInArea, ptPubParameter> PulseLength;
 
@@ -36,16 +39,16 @@ public: // Общедоступные свойства
 
 
  /// Момент времени t=t0, с которого начинается подавление области кадра с левой стороны
- ULProperty<double, NObjInArea, ptPubParameter> Delay1_1;
+ ULProperty<double, NObjInArea, ptPubParameter> Delay11;
 
  /// Момент времени t=t1, до которого происходит подавление области кадра с левой стороны
- ULProperty<double, NObjInArea, ptPubParameter> Delay1_2;
+ ULProperty<double, NObjInArea, ptPubParameter> Delay12;
 
  /// Момент времени t=t2, с которого начинается подавление области кадра с правой стороны
- ULProperty<double, NObjInArea, ptPubParameter> Delay2_1;
+ ULProperty<double, NObjInArea, ptPubParameter> Delay21;
 
  /// Момент времени t=T, до которого происходит подавление области кадра с правой стороны
- ULProperty<double, NObjInArea, ptPubParameter> Delay2_2;
+ ULProperty<double, NObjInArea, ptPubParameter> Delay22;
 
 
  /// Размерность спайковых образов в одномерном случае
@@ -54,13 +57,11 @@ public: // Общедоступные свойства
  /// Количество объектов для распознавания
  ULProperty<int, NObjInArea, ptPubParameter> NumObj;
 
- /// Задержки, задающие спайковый образы классов
- ULProperty<MDMatrix<double>, NObjInArea, ptPubParameter> Delays_ClsSpikeFr;
+ /// Задержки, задающие спайковые образы классов
+ ULProperty<MDMatrix<double>, NObjInArea, ptPubParameter> DelaysClsSpikeFr;
 
 
 public: // Входы и выходы
-/// Входные сигнал класса 1
-//std::vector<UPropertyInputData<MDMatrix<double>, NObjInArea, ptInput | ptPubState>> InputDelaysCls;
 
 /// Выход модели
 UPropertyOutputData<MDMatrix<double>, NObjInArea, ptOutput | ptPubState> Output;
@@ -138,6 +139,9 @@ protected:
 /// Установка имени класса нейрона
 bool SetNeuronClassName(const std::string &value);
 
+/// Установка имени класса генератора последовательности импульсов
+bool SetMultiGeneratorClassName(const std::string &value);
+
 /// Установка длительности импульсов
 bool SetPulseLength(const double &value);
 
@@ -151,16 +155,16 @@ bool SetFrequency(const double &value);
 bool SetHighFreq(const double &value);
 
 /// Установка момента времени t=t0, с которого начинается подавление области кадра с левой стороны
-bool SetDelay1_1(const double &value);
+bool SetDelay11(const double &value);
 
 /// Установка момента времени t=t1, до которого происходит подавление области кадра с левой стороны
-bool SetDelay1_2(const double &value);
+bool SetDelay12(const double &value);
 
 /// Установка момента времени t=t2, с которого начинается подавление области кадра с правой стороны
-bool SetDelay2_1(const double &value);
+bool SetDelay21(const double &value);
 
 /// Установка момента времени t=T, до которого происходит подавление области кадра с правой стороны
-bool SetDelay2_2(const double &value);
+bool SetDelay22(const double &value);
 
 /// Установка размерности спайковых образов
 bool SetPulseCount(const int &value);
@@ -168,8 +172,8 @@ bool SetPulseCount(const int &value);
 /// Установка количества объектов для распознавания
 bool SetNumObj(const int &value);
 
-/// Установка задержек, задающих спайковый образы классов
-bool SetDelays_ClsSpikeFr(const MDMatrix<double> &value);
+/// Установка задержек, задающих спайковые образы классов
+bool SetDelaysClsSpikeFr(const MDMatrix<double> &value);
 
 // --------------------------
 

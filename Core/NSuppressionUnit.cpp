@@ -336,11 +336,11 @@ bool NSuppressionUnit::ABuild(void)
  ORNeuron = AddMissingComponent<NPulseNeuron>(std::string("ORNeuron"), NeuronClassName);
  ORNeuron->SetCoord(MVector<double,3>(11.33, 7, 0));
  ORNeuron->DisconnectAll("Output");
- UEPtr<NPulseMembrane> orsoma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
- if (orsoma)
+ UEPtr<NPulseMembrane> or_soma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
+ if (or_soma)
  {
-  orsoma->NumExcitatorySynapses = 2;
-  orsoma->Build();
+  or_soma->NumExcitatorySynapses = 2;
+  or_soma->Build();
  }
 
  // Инициализируем подавляющий генератор
@@ -391,7 +391,7 @@ bool NSuppressionUnit::ABuild(void)
 
 
  // Находим составляющие компоненты ORNeuron
- if(!orsoma)
+ if(!or_soma)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because ORNeuron->Soma1 isn't exists: "));
   return true;
@@ -400,16 +400,16 @@ bool NSuppressionUnit::ABuild(void)
  // Создаём связи между Delay1, Delay2 и синапсами нейрона ORNeuron
  for (int i = 0; i < 2; i++)
  {
-  NPulseSynapseCommon *orexcsynapse = orsoma->GetExcitatorySynapses(i);
-  if(!orexcsynapse)
+  NPulseSynapseCommon *or_excsynapse = or_soma->GetExcitatorySynapses(i);
+  if(!or_excsynapse)
   {
    LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because ORNeuron->Soma1->ExcSynapse" + sntoa(i+1) + " isn't exists: "));
    return true;
   }
 
   // Создаём связь
-  if (!CheckLink(DelayGenerators[i]->GetLongName(this), "Output", orexcsynapse->GetLongName(this), "Input"))
-   res &= CreateLink(DelayGenerators[i]->GetLongName(this), "Output", orexcsynapse->GetLongName(this), "Input");
+  if (!CheckLink(DelayGenerators[i]->GetLongName(this), "Output", or_excsynapse->GetLongName(this), "Input"))
+   res &= CreateLink(DelayGenerators[i]->GetLongName(this), "Output", or_excsynapse->GetLongName(this), "Input");
  }
 
  return res;

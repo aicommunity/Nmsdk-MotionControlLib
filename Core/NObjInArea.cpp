@@ -13,17 +13,18 @@ namespace NMSDK {
 // --------------------------
 NObjInArea::NObjInArea(void)
  : NeuronClassName("NeuronClassName", this, &NObjInArea::SetNeuronClassName),
+   MultiGeneratorClassName("MultiGeneratorClassName", this, &NObjInArea::SetMultiGeneratorClassName),
    PulseLength("PulseLength", this, &NObjInArea::SetPulseLength),
    Amplitude("Amplitude", this, &NObjInArea::SetAmplitude),
    Frequency("Frequency", this, &NObjInArea::SetFrequency),
    HighFreq("HighFreq", this, &NObjInArea::SetHighFreq),
-   Delay1_1("Delay1_1", this, &NObjInArea::SetDelay1_1),
-   Delay1_2("Delay1_2", this, &NObjInArea::SetDelay1_2),
-   Delay2_1("Delay2_1", this, &NObjInArea::SetDelay2_1),
-   Delay2_2("Delay2_2", this, &NObjInArea::SetDelay2_2),
+   Delay11("Delay11", this, &NObjInArea::SetDelay11),
+   Delay12("Delay12", this, &NObjInArea::SetDelay12),
+   Delay21("Delay21", this, &NObjInArea::SetDelay21),
+   Delay22("Delay22", this, &NObjInArea::SetDelay22),
    PulseCount("PulseCount", this, &NObjInArea::SetPulseCount),
    NumObj("NumObj", this, &NObjInArea::SetNumObj),
-   Delays_ClsSpikeFr("Delays_ClsSpikeFr", this, &NObjInArea::SetDelays_ClsSpikeFr),
+   DelaysClsSpikeFr("DelaysClsSpikeFr", this, &NObjInArea::SetDelaysClsSpikeFr),
    Output("Output", this)
 {
  OldNumObj = 0;
@@ -83,6 +84,13 @@ bool NObjInArea::ADelComponent(UEPtr<UContainer> comp)
 
 /// Установка имени класса нейрона
 bool NObjInArea::SetNeuronClassName(const std::string &value)
+{
+ Ready = false;
+ return true;
+}
+
+/// Установка имени класса генератора последовательности импульсов
+bool NObjInArea::SetMultiGeneratorClassName(const std::string &value)
 {
  Ready = false;
  return true;
@@ -201,7 +209,7 @@ bool NObjInArea::SetHighFreq(const double &value)
 }
 
 /// Установка момента времени t=t0, с которого начинается подавление области кадра с левой стороны
-bool NObjInArea::SetDelay1_1(const double &value)
+bool NObjInArea::SetDelay11(const double &value)
 {
  if(value < 0)
   return false;
@@ -216,7 +224,7 @@ bool NObjInArea::SetDelay1_1(const double &value)
 }
 
 /// Установка момента времени t=t1, до которого происходит подавление области кадра с левой стороны
-bool NObjInArea::SetDelay1_2(const double &value)
+bool NObjInArea::SetDelay12(const double &value)
 {
  if(value < 0)
   return false;
@@ -231,7 +239,7 @@ bool NObjInArea::SetDelay1_2(const double &value)
 }
 
 /// Установка момента времени t=t2, с которого начинается подавление области кадра с правой стороны
-bool NObjInArea::SetDelay2_1(const double &value)
+bool NObjInArea::SetDelay21(const double &value)
 {
  if(value < 0)
   return false;
@@ -246,7 +254,7 @@ bool NObjInArea::SetDelay2_1(const double &value)
 }
 
 /// Установка момента времени t=T, до которого происходит подавление области кадра с правой стороны
-bool NObjInArea::SetDelay2_2(const double &value)
+bool NObjInArea::SetDelay22(const double &value)
 {
  if(value < 0)
   return false;
@@ -274,7 +282,7 @@ bool NObjInArea::SetPulseCount(const int &value)
   ClsSpikeFr[i]->Reset();
  }
 
- Delays_ClsSpikeFr.Resize(NumObj, value, 0.0);
+ DelaysClsSpikeFr.Resize(NumObj, value, 0.0);
 
  return true;
 }
@@ -291,8 +299,8 @@ bool NObjInArea::SetNumObj(const int &value)
  return true;
 }
 
-/// Установка задержек, задающих спайковый образы классов
-bool NObjInArea::SetDelays_ClsSpikeFr(const MDMatrix<double> &value)
+/// Установка задержек, задающих спайковые образы классов
+bool NObjInArea::SetDelaysClsSpikeFr(const MDMatrix<double> &value)
 {
  bool res = true;
 
@@ -317,22 +325,23 @@ bool NObjInArea::SetDelays_ClsSpikeFr(const MDMatrix<double> &value)
 bool NObjInArea::ADefault(void)
 {
  NeuronClassName = "NSPNeuronGen";
+ MultiGeneratorClassName = "NPulseGeneratorMulti";
 
  PulseLength = 0.001;
  Amplitude = 1.0;
  Frequency = 0.0;
  HighFreq = 500.0;
 
- Delay1_1 = 0;
- Delay1_2 = 0;
- Delay2_1 = 0;
- Delay2_2 = 0;
+ Delay11 = 0;
+ Delay12 = 0;
+ Delay21 = 0;
+ Delay22 = 0;
 
  PulseCount = 1;
  NumObj = 1;
 
  Output.Assign(1,1,0.0);
- Delays_ClsSpikeFr.Assign(NumObj, PulseCount, 0.0);
+ DelaysClsSpikeFr.Assign(NumObj, PulseCount, 0.0);
 
  return true;
 }
@@ -345,7 +354,7 @@ bool NObjInArea::ABuild(void)
 {
  bool res = true;
 
- Delays_ClsSpikeFr.Resize(NumObj, PulseCount, 0.0);
+ DelaysClsSpikeFr.Resize(NumObj, PulseCount, 0.0);
 
  // Удаляем лишние генераторы спайковых образов классов
  for(int i = NumObj; i < OldNumObj; i++)
@@ -355,7 +364,7 @@ bool NObjInArea::ABuild(void)
  ClsSpikeFr.resize(NumObj);
  for (int i = 0; i < NumObj; i++)
  {
-  ClsSpikeFr[i] = AddMissingComponent<NPulseGeneratorMulti>(std::string("Cls")+sntoa(i+1)+std::string("SpikeFr"), "NPulseGeneratorMulti");
+  ClsSpikeFr[i] = AddMissingComponent<NPulseGeneratorMulti>(std::string("Cls")+sntoa(i+1)+std::string("SpikeFr"), MultiGeneratorClassName);
   ClsSpikeFr[i]->SetCoord(MVector<double,3>(4, 2 + 2.33 * i, 0));
   ClsSpikeFr[i]->DisconnectAll("Output");
  }
@@ -375,11 +384,11 @@ bool NObjInArea::ABuild(void)
  ORNeuron = AddMissingComponent<NPulseNeuron>(std::string("ORNeuron"), NeuronClassName);
  ORNeuron->SetCoord(MVector<double,3>(10.33, 2 + 2.33 * (NumObj - 1) / 2, 0));
  ORNeuron->DisconnectAll("Output");
- UEPtr<NPulseMembrane> orsoma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
- if (orsoma)
+ UEPtr<NPulseMembrane> or_soma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
+ if (or_soma)
  {
-  orsoma->NumExcitatorySynapses = NumObj;
-  orsoma->Build();
+  or_soma->NumExcitatorySynapses = NumObj;
+  or_soma->Build();
  }
 
  // Инициализируем решающий нейрон
@@ -396,12 +405,12 @@ bool NObjInArea::ABuild(void)
  }
  DecidingNeuron->Reset();
 
- UEPtr<NPulseMembrane> decdend = DecidingNeuron->GetComponentL<NPulseMembrane>("Dendrite1_1", true);
- UEPtr<NPulseMembrane> decsoma = DecidingNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
- if (decsoma)
+ UEPtr<NPulseMembrane> decidning_dend = DecidingNeuron->GetComponentL<NPulseMembrane>("Dendrite1_1", true);
+ UEPtr<NPulseMembrane> deciding_soma = DecidingNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
+ if (deciding_soma)
  {
-  decsoma->NumInhibitorySynapses = 2;
-  decsoma->Build();
+  deciding_soma->NumInhibitorySynapses = 2;
+  deciding_soma->Build();
  }
 
  // Инициализируем возбуждающий генератор
@@ -419,7 +428,7 @@ bool NObjInArea::ABuild(void)
 
  // Строим связи между компонентами
  // Находим составляющие компоненты ORNeuron
- if(!orsoma)
+ if(!or_soma)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because ORNeuron->Soma1 isn't exists: "));
   return true;
@@ -428,45 +437,45 @@ bool NObjInArea::ABuild(void)
  // Создаём связи между ClsSpikeFr и синапсами нейрона ИЛИ
  for (int i = 0; i < NumObj; i++)
  {
-  NPulseSynapseCommon *orexcsynapse = orsoma->GetExcitatorySynapses(i);
-  if(!orexcsynapse)
+  NPulseSynapseCommon *or_excsynapse = or_soma->GetExcitatorySynapses(i);
+  if(!or_excsynapse)
   {
    LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because ORNeuron->Soma1->ExcSynapse" + sntoa(i+1) + " isn't exists: "));
    return true;
   }
 
   // Создаём связь
-  if (!CheckLink(ClsSpikeFr[i]->GetLongName(this), "Output", orexcsynapse->GetLongName(this), "Input"))
-   res &= CreateLink(ClsSpikeFr[i]->GetLongName(this), "Output", orexcsynapse->GetLongName(this), "Input");
+  if (!CheckLink(ClsSpikeFr[i]->GetLongName(this), "Output", or_excsynapse->GetLongName(this), "Input"))
+   res &= CreateLink(ClsSpikeFr[i]->GetLongName(this), "Output", or_excsynapse->GetLongName(this), "Input");
  }
 
 
   // Находим составляющие компоненты DecidingNeuron
- if(!decsoma)
+ if(!deciding_soma)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because DecidingNeuron->Soma1 isn't exists: "));
   return true;
  }
- NPulseSynapseCommon *decexcsynapse1 = decdend->GetExcitatorySynapses(0);
- NPulseSynapseCommon *decinhsynapse1 = decsoma->GetInhibitorySynapses(0);
- NPulseSynapseCommon *decinhsynapse2 = decsoma->GetInhibitorySynapses(1);
- if(!decexcsynapse1 || !decinhsynapse1 || !decinhsynapse2)
+ NPulseSynapseCommon *deciding_excsynapse1 = decidning_dend->GetExcitatorySynapses(0);
+ NPulseSynapseCommon *deciding_inhsynapse1 = deciding_soma->GetInhibitorySynapses(0);
+ NPulseSynapseCommon *deciding_inhsynapse2 = deciding_soma->GetInhibitorySynapses(1);
+ if(!deciding_excsynapse1 || !deciding_inhsynapse1 || !deciding_inhsynapse2)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because synapses in DecidingNeuron->Soma1 isn't exists: "));
   return true;
  }
 
  // Создаём связь между ORNeuron и возбуждающим синапсом дендрита DecidingNeuron
- if (!CheckLink("ORNeuron", "Output", decexcsynapse1->GetLongName(this), "Input"))
-  res &= CreateLink("ORNeuron", "Output", decexcsynapse1->GetLongName(this), "Input");
+ if (!CheckLink("ORNeuron", "Output", deciding_excsynapse1->GetLongName(this), "Input"))
+  res &= CreateLink("ORNeuron", "Output", deciding_excsynapse1->GetLongName(this), "Input");
 
  // Создаём связь между SuppressUnit1 и тормозным синапсом сомы DecidingNeuron
- if (!CheckLink("SuppressUnit1", "Output", decinhsynapse1->GetLongName(this), "Input"))
-  res &= CreateLink("SuppressUnit1", "Output", decinhsynapse1->GetLongName(this), "Input");
+ if (!CheckLink("SuppressUnit1", "Output", deciding_inhsynapse1->GetLongName(this), "Input"))
+  res &= CreateLink("SuppressUnit1", "Output", deciding_inhsynapse1->GetLongName(this), "Input");
 
  // Создаём связь между SuppressUnit2 и тормозным синапсом сомы DecidingNeuron
- if (!CheckLink("SuppressUnit2", "Output", decinhsynapse2->GetLongName(this), "Input"))
-  res &= CreateLink("SuppressUnit2", "Output", decinhsynapse2->GetLongName(this), "Input");
+ if (!CheckLink("SuppressUnit2", "Output", deciding_inhsynapse2->GetLongName(this), "Input"))
+  res &= CreateLink("SuppressUnit2", "Output", deciding_inhsynapse2->GetLongName(this), "Input");
 
 
  // Создаём связь между DecidingNeuron и ExcitatoryGen
@@ -475,45 +484,45 @@ bool NObjInArea::ABuild(void)
 
 
  // Находим составляющие компоненты ANDNeuron
- UEPtr<NPulseMembrane> andsoma1 = ANDNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
- UEPtr<NPulseMembrane> andsoma2 = ANDNeuron->GetComponentL<NPulseMembrane>("Soma2", true);
- if(!andsoma1 || !andsoma2)
+ UEPtr<NPulseMembrane> and_soma1 = ANDNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
+ UEPtr<NPulseMembrane> and_soma2 = ANDNeuron->GetComponentL<NPulseMembrane>("Soma2", true);
+ if(!and_soma1 || !and_soma2)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because ANDNeuron->Soma1 or ANDNeuron->Soma2 isn't exists: "));
   return true;
  }
- NPulseSynapseCommon *andexcsynapse11 = andsoma1->GetExcitatorySynapses(0);
- NPulseSynapseCommon *andexcsynapse12 = andsoma2->GetExcitatorySynapses(0);
- if(!andexcsynapse11 || !andexcsynapse12)
+ NPulseSynapseCommon *and_excsynapse11 = and_soma1->GetExcitatorySynapses(0);
+ NPulseSynapseCommon *and_excsynapse12 = and_soma2->GetExcitatorySynapses(0);
+ if(!and_excsynapse11 || !and_excsynapse12)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because synapses in ANDNeuron isn't exists: "));
   return true;
  }
 
  // Создаём связь между ExcitatoryGen и возбуждающим синапсом ANDNeuron->Soma1
- if (!CheckLink("ExcitatoryGen", "Output", andexcsynapse11->GetLongName(this), "Input"))
-  res &= CreateLink("ExcitatoryGen", "Output", andexcsynapse11->GetLongName(this), "Input");
+ if (!CheckLink("ExcitatoryGen", "Output", and_excsynapse11->GetLongName(this), "Input"))
+  res &= CreateLink("ExcitatoryGen", "Output", and_excsynapse11->GetLongName(this), "Input");
 
  // Находим источник импульса в момент t=T
- UEPtr<NPulseGeneratorTransit> delayT = SuppressUnit2->GetComponentL<NPulseGeneratorTransit>("Delay2", true);
- if(!delayT)
+ UEPtr<NPulseGeneratorTransit> delay_T = SuppressUnit2->GetComponentL<NPulseGeneratorTransit>("Delay2", true);
+ if(!delay_T)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because SuppressUnit2->Delay2 isn't exists: "));
   return true;
  }
 
  // Разрываем связь с SuppressUnit2->Delay2, если она была
- if(delayT && CheckLink(delayT->GetLongName(this), "Output", "ExcitatoryGen", "Input"))
-  res &= BreakLink(delayT->GetLongName(this), "Output", "ExcitatoryGen", "Input");
+ if(delay_T && CheckLink(delay_T->GetLongName(this), "Output", "ExcitatoryGen", "Input"))
+  res &= BreakLink(delay_T->GetLongName(this), "Output", "ExcitatoryGen", "Input");
 
  // Создаём связь между источником импульса в момент t=T и возбуждающим синапсом ANDNeuron->Soma2
- if (!CheckLink(delayT->GetLongName(this), "Output", andexcsynapse12->GetLongName(this), "Input"))
-  res &= CreateLink(delayT->GetLongName(this), "Output", andexcsynapse12->GetLongName(this), "Input");
+ if (!CheckLink(delay_T->GetLongName(this), "Output", and_excsynapse12->GetLongName(this), "Input"))
+  res &= CreateLink(delay_T->GetLongName(this), "Output", and_excsynapse12->GetLongName(this), "Input");
 
  /* Нельзя сделать две связи на один вход
  // Создаём связь между источником импульса в момент t=T и ExcitatoryGen
- if (!CheckLink(delayT->GetLongName(this), "Output", "ExcitatoryGen", "Input"))
-  res &= CreateLink(delayT->GetLongName(this), "Output", "ExcitatoryGen", "Input");
+ if (!CheckLink(delay_T->GetLongName(this), "Output", "ExcitatoryGen", "Input"))
+  res &= CreateLink(delay_T->GetLongName(this), "Output", "ExcitatoryGen", "Input");
 */
 
  return res;
@@ -553,12 +562,12 @@ bool NObjInArea::AReset(void)
  // Настраиваем подавляющие блоки
  SuppressUnit1->OnlyInhibition = true;
  SuppressUnit1->SuppressionFreq = HighFreq;
- SuppressUnit1->Delay1 = Delay1_1;
- SuppressUnit1->Delay2 = Delay1_2;
+ SuppressUnit1->Delay1 = Delay11;
+ SuppressUnit1->Delay2 = Delay12;
  SuppressUnit2->OnlyInhibition = true;
  SuppressUnit2->SuppressionFreq = HighFreq;
- SuppressUnit2->Delay1 = Delay2_1;
- SuppressUnit2->Delay2 = Delay2_2;
+ SuppressUnit2->Delay1 = Delay21;
+ SuppressUnit2->Delay2 = Delay22;
 
  // Настраиваем возбуждающий генератор
  ExcitatoryGen->UsePatternOutput = true;
@@ -586,9 +595,9 @@ bool NObjInArea::ACalculate(void)
   if(CheckLink("DecidingNeuron", "Output", "ExcitatoryGen", "Input"))
    res &= BreakLink("DecidingNeuron", "Output", "ExcitatoryGen", "Input");
 
-  UEPtr<NPulseGeneratorTransit> delayT = SuppressUnit2->GetComponentL<NPulseGeneratorTransit>("Delay2", true);
-  if(delayT && !CheckLink(delayT->GetLongName(this), "Output", "ExcitatoryGen", "Input"))
-   res &= CreateLink(delayT->GetLongName(this), "Output", "ExcitatoryGen", "Input");
+  UEPtr<NPulseGeneratorTransit> delay_T = SuppressUnit2->GetComponentL<NPulseGeneratorTransit>("Delay2", true);
+  if(delay_T && !CheckLink(delay_T->GetLongName(this), "Output", "ExcitatoryGen", "Input"))
+   res &= CreateLink(delay_T->GetLongName(this), "Output", "ExcitatoryGen", "Input");
   Relinked = true;
  }
 
@@ -596,9 +605,9 @@ bool NObjInArea::ACalculate(void)
  // поэтому разрываем связь с SuppressUnit2->Delay2 и подключаемся к DecidingNeuron перед следующей итерацией
  if (!ExcitatoryGen->IsInPatternMode && Relinked)
  {
-  UEPtr<NPulseGeneratorTransit> delayT = SuppressUnit2->GetComponentL<NPulseGeneratorTransit>("Delay2", true);
-  if(delayT && CheckLink(delayT->GetLongName(this), "Output", "ExcitatoryGen", "Input"))
-   res &= BreakLink(delayT->GetLongName(this), "Output", "ExcitatoryGen", "Input");
+  UEPtr<NPulseGeneratorTransit> delay_T = SuppressUnit2->GetComponentL<NPulseGeneratorTransit>("Delay2", true);
+  if(delay_T && CheckLink(delay_T->GetLongName(this), "Output", "ExcitatoryGen", "Input"))
+   res &= BreakLink(delay_T->GetLongName(this), "Output", "ExcitatoryGen", "Input");
 
   if(!CheckLink("DecidingNeuron", "Output", "ExcitatoryGen", "Input"))
    res &= CreateLink("DecidingNeuron", "Output", "ExcitatoryGen", "Input");
