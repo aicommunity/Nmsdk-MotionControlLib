@@ -182,6 +182,11 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  cont->Default();
  UploadClass("NObjInArea",cont);
 
+ cont=new NSeqComparison;
+ cont->SetName("NSeqComparison");
+ cont->Default();
+ UploadClass("NSeqComparison",cont);
+
 
  // Создаем СУ двигательной единицей
  UEPtr<UNet> net=new NMotionElement;

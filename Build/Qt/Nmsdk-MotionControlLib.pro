@@ -55,6 +55,7 @@ HEADERS += \
     ../../Core/NPositionControlElement.h \
     ../../Core/NPCNElement.h \
     ../../Core/NPulseReceiver.h \
+    ../../Core/NSeqComparison.h \
     ../../Core/NSignumSeparator.h \
     ../../Core/NSimpleStatistic.h \
     ../../Core/NSuppressionUnit.h
@@ -87,6 +88,7 @@ SOURCES += \
     ../../Core/NPositionControlElement.cpp \
     ../../Core/NPCNElement.cpp \
     ../../Core/NPulseReceiver.cpp \
+    ../../Core/NSeqComparison.cpp \
     ../../Core/NSignumSeparator.cpp \
     ../../Core/NSimpleStatistic.cpp \
     ../../Core/NSuppressionUnit.cpp
