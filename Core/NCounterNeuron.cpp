@@ -118,7 +118,7 @@ bool NCounterNeuron::SetMaxCount(const int &value)
 /// Установка начала отсчёта для счётчика
 bool NCounterNeuron::SetCurCount(const int &value)
 {
- if(value < 1 || value > MaxCount)
+ if(value < 0 || value > MaxCount)
   return false;
 
  Ready = false;
