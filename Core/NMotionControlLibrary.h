@@ -52,6 +52,7 @@ See file license.txt for more information
 #include "NCounterNeuron.h"
 #include "NObjInArea.h"
 #include "NSeqComparison.h"
+#include "NActuatorSignals.h"
 
 namespace NMSDK {
 

@@ -28,6 +28,7 @@ windows {
 }
 
 HEADERS += \
+    ../../Core/NActuatorSignals.h \
     ../../Core/NAstaticGyro.h \
     ../../Core/NControlObjectSource.h \
     ../../Core/NCounterNeuron.h \
@@ -61,6 +62,7 @@ HEADERS += \
     ../../Core/NSuppressionUnit.h
 
 SOURCES += \
+    ../../Core/NActuatorSignals.cpp \
     ../../Core/NAstaticGyro.cpp \
     ../../Core/NControlObjectSource.cpp \
     ../../Core/NCounterNeuron.cpp \

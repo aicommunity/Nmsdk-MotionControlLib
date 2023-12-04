@@ -167,25 +167,30 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  UploadClass("NControlObjectSource",cont);
 
 
- cont=new NSuppressionUnit;
+ cont = new NSuppressionUnit;
  cont->SetName("SuppressionUnit");
  cont->Default();
- UploadClass("NSuppressionUnit",cont);
+ UploadClass("NSuppressionUnit", cont);
 
- cont=new NCounterNeuron;
+ cont = new NCounterNeuron;
  cont->SetName("NCounterNeuron");
  cont->Default();
- UploadClass("NCounterNeuron",cont);
+ UploadClass("NCounterNeuron", cont);
 
- cont=new NObjInArea;
+ cont = new NObjInArea;
  cont->SetName("NObjInArea");
  cont->Default();
- UploadClass("NObjInArea",cont);
+ UploadClass("NObjInArea", cont);
 
- cont=new NSeqComparison;
+ cont = new NSeqComparison;
  cont->SetName("NSeqComparison");
  cont->Default();
- UploadClass("NSeqComparison",cont);
+ UploadClass("NSeqComparison", cont);
+
+ cont = new NActuatorSignals;
+ cont->SetName("NActuatorSignals");
+ cont->Default();
+ UploadClass("NActuatorSignals", cont);
 
 
  // Создаем СУ двигательной единицей
