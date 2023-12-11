@@ -192,6 +192,11 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  cont->Default();
  UploadClass("NActuatorSignals", cont);
 
+ cont = new NSignalEstimation;
+ cont->SetName("NSignalEstimation");
+ cont->Default();
+ UploadClass("NSignalEstimation", cont);
+
 
  // Создаем СУ двигательной единицей
  UEPtr<UNet> net=new NMotionElement;

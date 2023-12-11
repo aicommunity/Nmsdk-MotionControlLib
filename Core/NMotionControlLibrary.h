@@ -53,6 +53,8 @@ See file license.txt for more information
 #include "NObjInArea.h"
 #include "NSeqComparison.h"
 #include "NActuatorSignals.h"
+#include "NSignalEstimation.h"
+
 
 namespace NMSDK {
 
