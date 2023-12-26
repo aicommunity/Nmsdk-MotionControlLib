@@ -48,7 +48,6 @@ RDK::ULProperty<int, NMultiPositionControl> PCsNum;
 RDK::ULProperty<int, NMultiPositionControl> InputsNum;
 
 
-
 public: // Методы
 // --------------------------
 // Конструкторы и деструкторы
