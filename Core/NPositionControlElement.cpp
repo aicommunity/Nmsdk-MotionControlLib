@@ -58,6 +58,7 @@ bool NPositionControlElement::SetExternalControl(const bool &value)
  Ready=false;
  return true;
 }
+
 // ---------------------
 
 // ---------------------
@@ -124,6 +125,7 @@ void NPositionControlElement::SetPositions(vector<T*>& values, int x_base, int x
   values[i]->SetCoord(MVector<double,3>(x_base + i*x_shift,y_base + i*y_shift,0));
  }
 }
+
 // --------------------------
 bool NPositionControlElement::CreateNeurons()
 {
@@ -237,7 +239,7 @@ bool NPositionControlElement::PositionNeurons()
 {
    int x_base=4; //5
    int x_shift=0;
-   int y_base=6; //6
+   int y_base=2; //6
    int y_shift = 2;
    SetPositions<NNet>(InputNeurons, x_base, x_shift, y_base, y_shift);
    x_base+=7; //10

@@ -96,8 +96,8 @@ bool NMultiPositionControl::ADefault(void)
 // в случае успешной сборки
 bool NMultiPositionControl::ABuild(void)
 {
-  //InputNeurons.clear();
-  //ControlNeurons.clear();
+  InputNeurons.clear();
+  ControlNeurons.clear();
 
  // if(InputNeurons.empty()||ControlNeurons.empty())//test
  // {
