@@ -22,7 +22,7 @@ class NEngineMotionControl;
 class RDK_LIB_TYPE NNewPositionControlElement: public NPositionControlElement
 {
 public: // Свойства
-RDK::UPropertyInput<NEngineMotionControl,NNewPositionControlElement> MotionControl;
+RDK::UPropertyInput<void*,NNewPositionControlElement> PMotionControl;
 RDK::ULProperty<bool, NNewPositionControlElement> SimControl;
 //RDK::ULProperty<bool, NNewPositionControlElement, ptPubState> RememberState;
 //RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> CurrentPosition;
@@ -89,6 +89,8 @@ vector<vector<UNet*> > RightGenerators;
 //Выходы
 //Выход для подключения к MultiPositionControl
 UPropertyOutputData<MDMatrix<double>, NNewPositionControlElement> Output;
+
+UEPtr<NEngineMotionControl> MotionControl;
 
 public: // Методы
 // --------------------------

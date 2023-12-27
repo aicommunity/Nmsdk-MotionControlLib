@@ -22,7 +22,7 @@ namespace NMSDK {
 // Конструкторы и деструкторы
 // --------------------------
 NNewPositionControlElement::NNewPositionControlElement(void)
-:   MotionControl("MotionControl",this),
+:   PMotionControl("MotionControl",this),
     SimControl("SimControl", this),
     Output("Output", this)//,
     //RememberState("RememberState", this)//,
