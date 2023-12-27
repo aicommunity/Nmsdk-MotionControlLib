@@ -13,7 +13,7 @@ namespace NMSDK {
 class RDK_LIB_TYPE NPCNElement: public NPositionControlElement
 {
 public: // Свойства
-RDK::UPropertyInput<void*,NPCNElement> PMotionControl;
+RDK::UPropertyInputData<void*,NPCNElement> PMotionControl;
 RDK::ULProperty<bool, NPCNElement> SimControl;
 
 public: // Переменные состояния

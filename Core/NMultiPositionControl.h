@@ -19,7 +19,7 @@ namespace NMSDK {
 class RDK_LIB_TYPE NMultiPositionControl: public NPositionControlElement
 {
 protected: // Свойства
-RDK::UPropertyInputC<NPositionControlElement,NMultiPositionControl> PositionControl;
+RDK::UPropertyInputData<void*,NMultiPositionControl> PPositionControl;
 RDK::ULProperty<int, NPositionControlElement> NumOfPositions;
 
 public: // Переменные состояния
@@ -47,7 +47,7 @@ RDK::ULProperty<int, NMultiPositionControl> PCsNum;
 //используется при автономной работе Multi (при BuildSolo = true)
 RDK::ULProperty<int, NMultiPositionControl> InputsNum;
 
-
+std::vector<UEPtr<NPositionControlElement>> PositionControl;
 
 public: // Методы
 // --------------------------

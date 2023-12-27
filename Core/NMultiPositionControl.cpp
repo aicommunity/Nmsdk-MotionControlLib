@@ -23,7 +23,7 @@ namespace NMSDK {
 // --------------------------
 NMultiPositionControl::NMultiPositionControl(void)
 :
- PositionControl("PositionControl", this),
+ PPositionControl("PositionControl", this),
  NumOfPositions("NumOfPositions",this),
  BuildSolo("BuildSolo",this),
  InputsNum("InputsNum",this),
@@ -246,7 +246,7 @@ bool NMultiPositionControl::CreateNeurons(void)
  UEPtr<UStorage> storage = GetStorage();
 
  //Creating InputNeurons
- int positionControlSize = int(PositionControl->size());
+ int positionControlSize = int(PositionControl.size());
  InputNeuronsByContours.resize(positionControlSize);
 
  for(int i=0; i<positionControlSize; i++)

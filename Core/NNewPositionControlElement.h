@@ -22,7 +22,7 @@ class NEngineMotionControl;
 class RDK_LIB_TYPE NNewPositionControlElement: public NPositionControlElement
 {
 public: // Свойства
-RDK::UPropertyInput<void*,NNewPositionControlElement> PMotionControl;
+RDK::UPropertyInputData<void*,NNewPositionControlElement> PMotionControl;
 RDK::ULProperty<bool, NNewPositionControlElement> SimControl;
 //RDK::ULProperty<bool, NNewPositionControlElement, ptPubState> RememberState;
 //RDK::ULProperty<MDMatrix<double>, NNewPositionControlElement, ptPubState> CurrentPosition;
