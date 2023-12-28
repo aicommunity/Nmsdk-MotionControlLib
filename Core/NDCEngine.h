@@ -62,14 +62,14 @@ UPropertyOutputData<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputAn
 UPropertyOutputData<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputAngleSpeed;
 
 protected: // Данные
+// Угол поворота
+UProperty<double,NDCEngine> Angle;
+
 // Ток якоря
 double Current;
 
 // ЭДС якоря
 double EMF;
-
-// Угол поворота
-double Angle;
 
 // Момент развиваемый двигателем
 double Moment;
