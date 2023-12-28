@@ -47,6 +47,13 @@ RDK::ULProperty<int, NMultiPositionControl> PCsNum;
 //используетс€ при автономной работе Multi (при BuildSolo = true)
 RDK::ULProperty<int, NMultiPositionControl> InputsNum;
 
+//‘лаг необходимости обновлени€ структуры внутри блока
+//true - если необходимо изменить InputsNum или PCsNum,
+//в таком случае поверх переименованных блоков схемы стро€тс€ новые, со стандартными названи€ми
+//используетс€ при автономной работе Multi (при BuildSolo = true)
+RDK::ULProperty<bool, NMultiPositionControl> IsNeedToRebuild;
+
+
 
 public: // ћетоды
 // --------------------------
@@ -62,6 +69,7 @@ virtual ~NMultiPositionControl(void);
 bool SetBuildSolo(const bool &value);
 bool SetInputsNum(const int &value);
 bool SetPCsNum(const int &value);
+bool SetIsNeedToRebuild(const bool &value);
 // ---------------------
 
 // ---------------------
