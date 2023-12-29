@@ -63,7 +63,7 @@ UPropertyOutputData<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputAn
 
 protected: // Данные
 // Угол поворота
-UProperty<double,NDCEngine> Angle;
+UProperty<double,NDCEngine, ptPubParameter> Angle;
 
 // Ток якоря
 double Current;
