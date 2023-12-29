@@ -83,10 +83,8 @@ bool NPulseReceiver::AReset(void)
 {
  Output.Assign(int(Inputs->size())*2,1,0.0);
  MatrixData.clear();
-// for(size_t i=0;i<Data.size();i++)
-//  Data[i].clear();
-   for(size_t i=0;i<PulseFlag.size();i++)
-    PulseFlag[i]=false;
+ for(size_t i=0;i<PulseFlag.size();i++)
+  PulseFlag[i]=false;
 
  return true;
 }
@@ -98,49 +96,25 @@ bool NPulseReceiver::ACalculate(void)
  MatrixData.resize(Inputs->size()*2);
  PulseFlag.resize(Inputs->size());
 
-/*
-	 for(int i=0;i<NumInputs;i++)
-	 {
-	  if(GetInputData(i)->Double[0]>0)
-	  {
-	   if(!PulseFlag[i])
-		Data[i].push_back(Environment->GetTime().GetDoubleTime());
-	   PulseFlag[i]=true;
-	  }
-	  else
-	   PulseFlag[i]=false;
-
-	  list<double>::iterator I,J;
-	  I=Data[i].begin();
-	  J=Data[i].end();
-
-	  SetOutputDataSize(i,Data[i].size());
-	  I=Data[i].begin(),J=Data[i].end();
-	  for(int j=0;I!=J;++I,++j)
-	   POutputData[i].Double[j]=*I;
-	 }
-
-*/
-
   //Для выхода MDMatrix
  for(int i=0;i<int(Inputs->size());i++)
  {
-  if((*Inputs[i])(0,0)>0)
+  if(Inputs[i](0,0)>0)
   {
    if(!PulseFlag[i])
    {
-	MatrixData[i*2].push_back(Environment->GetTime().GetDoubleTime());
-	MatrixData[i*2+1].push_back(1.0);
-	PulseFlag[i]=true;
+    MatrixData[i*2].push_back(Environment->GetTime().GetDoubleTime());
+    MatrixData[i*2+1].push_back(1.0);
+    PulseFlag[i]=true;
    }
   }
   else
   {
    if(PulseFlag[i])
    {
-	MatrixData[i*2].push_back(Environment->GetTime().GetDoubleTime());
-	MatrixData[i*2+1].push_back(0.0);
-	PulseFlag[i]=false;
+    MatrixData[i*2].push_back(Environment->GetTime().GetDoubleTime());
+    MatrixData[i*2+1].push_back(0.0);
+    PulseFlag[i]=false;
    }
   }
 
@@ -152,9 +126,9 @@ bool NPulseReceiver::ACalculate(void)
   {
    while((MatrixData[i*2].back()-MatrixData[i*2].front())>MaxAccumulationRange)
    {
-	++I;
-	MatrixData[i*2].pop_front();
-	++K;
+    ++I;
+    MatrixData[i*2].pop_front();
+    ++K;
     MatrixData[i*2+1].pop_front();
    }
   }
