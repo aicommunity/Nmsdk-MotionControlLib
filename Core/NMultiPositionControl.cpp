@@ -25,9 +25,10 @@ NMultiPositionControl::NMultiPositionControl(void)
 :
  PPositionControl("PositionControl", this),
  NumOfPositions("NumOfPositions",this),
- BuildSolo("BuildSolo",this),
- InputsNum("InputsNum",this),
- PCsNum("PCsNum",this)
+ BuildSolo("BuildSolo",this, &NMultiPositionControl::SetBuildSolo),
+ InputsNum("InputsNum",this, &NMultiPositionControl::SetInputsNum),
+ PCsNum("PCsNum",this, &NMultiPositionControl::SetPCsNum),
+ IsNeedToRebuild("IsNeedToRebuild",this, &NMultiPositionControl::SetIsNeedToRebuild)
 {
 }
 
@@ -42,17 +43,24 @@ NMultiPositionControl::~NMultiPositionControl(void)
 // ---------------------
 bool NMultiPositionControl::SetBuildSolo(const bool &value)
 {
- Ready=false;
  return true;
 }
 
 bool NMultiPositionControl::SetInputsNum(const int &value)
 {
  Ready=false;
+ IsNeedToRebuild = true;
  return true;
 }
 
 bool NMultiPositionControl::SetPCsNum(const int &value)
+{
+ Ready=false;
+ IsNeedToRebuild = true;
+ return true;
+}
+
+bool NMultiPositionControl::SetIsNeedToRebuild(const bool &value)
 {
  Ready=false;
  return true;
@@ -84,10 +92,11 @@ bool NMultiPositionControl::ADefault(void)
 {
  NPositionControlElement::ADefault();
  NumOfPositions=0;
- BuildSolo = false;
- PCsNum = 0;
+ BuildSolo = true;
+ PCsNum = 1;
  InputsNum = 0;
-
+ ExternalControl = true;
+ IsNeedToRebuild = false;
  return true;
 }
 
@@ -97,8 +106,19 @@ bool NMultiPositionControl::ADefault(void)
 // в случае успешной сборки
 bool NMultiPositionControl::ABuild(void)
 {
- InputNeurons.clear();
- ControlNeurons.clear();
+ if (IsNeedToRebuild||InputNeurons.empty()||ControlNeurons.empty())
+ {
+   InputNeurons.clear();
+   ControlNeurons.clear();
+
+   // if(InputNeurons.empty()||ControlNeurons.empty())//test
+   // {
+        if (BuildSolo)//test
+         CreateNeuronsSolo();
+        else
+         CreateNeurons();
+   // }
+ }
  return true;
 }
 
@@ -111,24 +131,17 @@ bool NMultiPositionControl::AReset(void)
 // Выполняет расчет этого объекта
 bool NMultiPositionControl::ACalculate(void)
 {
-//    if(BuildSolo)
-//    {
-//        Build();
-//        //return true;
-//    }
-
  ControlNeuronType = "NNewSPNeuron";
  UEPtr<UContainer> cont;
  UEPtr<UStorage> storage = GetStorage();
 
- if(InputNeurons.empty()||ControlNeurons.empty())
- {
-     if (BuildSolo)
-      CreateNeuronsSolo();
-     else
-      CreateNeurons();
- }
-
+// if(InputNeurons.empty()||ControlNeurons.empty())//test
+// {
+//     if (BuildSolo)
+//      CreateNeuronsSolo();
+//     else
+//      CreateNeurons();
+// }
 
  if(RememberState)
   {
