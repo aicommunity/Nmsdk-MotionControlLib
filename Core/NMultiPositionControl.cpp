@@ -49,14 +49,14 @@ bool NMultiPositionControl::SetBuildSolo(const bool &value)
 bool NMultiPositionControl::SetInputsNum(const int &value)
 {
  Ready=false;
- IsNeedToRebuild = true;
+ //IsNeedToRebuild = true;
  return true;
 }
 
 bool NMultiPositionControl::SetPCsNum(const int &value)
 {
  Ready=false;
- IsNeedToRebuild = true;
+ //IsNeedToRebuild = true;
  return true;
 }
 
@@ -106,19 +106,32 @@ bool NMultiPositionControl::ADefault(void)
 // в случае успешной сборки
 bool NMultiPositionControl::ABuild(void)
 {
- if (IsNeedToRebuild||InputNeurons.empty()||ControlNeurons.empty())
- {
-   InputNeurons.clear();
-   ControlNeurons.clear();
+ bool a_check = IsNeedToRebuild;
+ bool b_check = InputNeurons.empty();
+ bool c_check = ControlNeurons.empty();
 
-   // if(InputNeurons.empty()||ControlNeurons.empty())//test
-   // {
-        if (BuildSolo)//test
-         CreateNeuronsSolo();
-        else
-         CreateNeurons();
-   // }
+ if (IsNeedToRebuild)
+ {
+     InputNeurons.clear();
+     ControlNeurons.clear();
+
+     if (BuildSolo)//test
+      CreateNeuronsSolo();
+     else
+      CreateNeurons();
+
+     IsNeedToRebuild = false;
  }
+
+
+ // if(InputNeurons.empty()||ControlNeurons.empty())//test
+ // {
+//        if (BuildSolo)//test
+//         CreateNeuronsSolo();
+//        else
+//         CreateNeurons();
+ // }
+
  return true;
 }
 
