@@ -433,7 +433,7 @@ bool NSignalEstimation::AReset(void)
  else
  {
   SinchroGen->Frequency = Frequency;
-  SinchroGen->Delay = DelaySignal;
+  SinchroGen->Delay = DelaySinchro;
  }
 
 
