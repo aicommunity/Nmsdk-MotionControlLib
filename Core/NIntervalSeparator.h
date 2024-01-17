@@ -26,10 +26,10 @@ class RDK_LIB_TYPE NIntervalSeparator: public UNet
 {
 public: // ќбщедоступные свойства
 /// Ќижн€€ граница выдел€емого интервала
-UCLProperty<vector<double> ,NIntervalSeparator> MinRange;
+UProperty<vector<double> ,NIntervalSeparator, ptPubParameter> MinRange;
 
 /// ¬ерхн€€ граница выдел€емого интервала
-UCLProperty<vector<double> ,NIntervalSeparator> MaxRange;
+UProperty<vector<double> ,NIntervalSeparator, ptPubParameter> MaxRange;
 
 /// –ежим разделени€.
 /// 0 - если значение попадает в заданный интервал, то оно и возврашаетс€, иначе 0
@@ -44,10 +44,10 @@ UCLProperty<vector<double> ,NIntervalSeparator> MaxRange;
 /// 6 -  если значение превышает нижнюю границу, то возврашаетс€ значение минус
 /// нижн€€ граница интервала;если значение превышает верхнюю границу, то возвращаетс€
 /// верхн€€ граница минус нижн€€ граница
-UCLProperty<vector<int>,NIntervalSeparator> Mode;
+UProperty<vector<int>,NIntervalSeparator, ptPubParameter> Mode;
 
 /// ћножитель выходного значени€
-UCLProperty<vector<double> ,NIntervalSeparator> Gain;
+UProperty<vector<double> ,NIntervalSeparator, ptPubParameter> Gain;
 
 /// ¬ходные данные
 UPropertyInputData<MDMatrix<double>,NIntervalSeparator, ptInput | ptPubState> Input;

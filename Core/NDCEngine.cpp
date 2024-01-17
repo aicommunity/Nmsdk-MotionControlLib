@@ -34,9 +34,9 @@ NDCEngine::NDCEngine(void)
    InputMomentum("InputMomentum",this),
    OutputMomentum("OutputMomentum",this),
    OutputAngle("OutputAngle",this),
-   OutputAngleSpeed("OutputAngleSpeed",this)
+   OutputAngleSpeed("OutputAngleSpeed",this),
+   Angle("Angle",this)
 {
- AddLookupProperty("Angle",ptPubState,new UVProperty<double,NDCEngine>(this,&Angle));
 }
 
 NDCEngine::~NDCEngine(void)
@@ -172,7 +172,7 @@ bool NDCEngine::ACalculate(void)
  Moment=Current*EMFactor/Resistance;//EMF;
 
  OutputAngleSpeed(0,0)=EMF/EMFactor; // ”глова€ скорость //AngleSpeed;
- Angle+=OutputAngleSpeed(0,0)/(ReductionRate*TimeStep);
+ Angle.v+=OutputAngleSpeed(0,0)/(ReductionRate*TimeStep);
  OutputAngle(0,0)=Angle;
  OutputMomentum(0,0)=Moment;
 

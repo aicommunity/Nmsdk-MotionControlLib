@@ -28,8 +28,10 @@ windows {
 }
 
 HEADERS += \
+    ../../Core/NActuatorSignals.h \
     ../../Core/NAstaticGyro.h \
     ../../Core/NControlObjectSource.h \
+    ../../Core/NCounterNeuron.h \
     ../../Core/NDCEngine.h \
     ../../Core/NEngineMotionControl.h \
     ../../Core/NEyeRetina.h \
@@ -49,16 +51,22 @@ HEADERS += \
     ../../Core/NMultiPositionControl.h \
     ../../Core/NNavMousePrimitive.h \
     ../../Core/NNewPositionControlElement.h \
+    ../../Core/NObjInArea.h \
     ../../Core/NPendulumAndCart.h \
     ../../Core/NPositionControlElement.h \
     ../../Core/NPCNElement.h \
     ../../Core/NPulseReceiver.h \
+    ../../Core/NSeqComparison.h \
+    ../../Core/NSignalEstimation.h \
     ../../Core/NSignumSeparator.h \
-    ../../Core/NSimpleStatistic.h
+    ../../Core/NSimpleStatistic.h \
+    ../../Core/NSuppressionUnit.h
 
 SOURCES += \
+    ../../Core/NActuatorSignals.cpp \
     ../../Core/NAstaticGyro.cpp \
     ../../Core/NControlObjectSource.cpp \
+    ../../Core/NCounterNeuron.cpp \
     ../../Core/NDCEngine.cpp \
     ../../Core/NEngineMotionControl.cpp \
     ../../Core/NEyeRetina.cpp \
@@ -78,9 +86,13 @@ SOURCES += \
     ../../Core/NMultiPositionControl.cpp \
     ../../Core/NNavMousePrimitive.cpp \
     ../../Core/NNewPositionControlElement.cpp \
+    ../../Core/NObjInArea.cpp \
     ../../Core/NPendulumAndCart.cpp \
     ../../Core/NPositionControlElement.cpp \
     ../../Core/NPCNElement.cpp \
     ../../Core/NPulseReceiver.cpp \
+    ../../Core/NSeqComparison.cpp \
+    ../../Core/NSignalEstimation.cpp \
     ../../Core/NSignumSeparator.cpp \
-    ../../Core/NSimpleStatistic.cpp
+    ../../Core/NSimpleStatistic.cpp \
+    ../../Core/NSuppressionUnit.cpp

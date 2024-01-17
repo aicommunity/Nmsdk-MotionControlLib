@@ -19,7 +19,7 @@ namespace NMSDK {
 class RDK_LIB_TYPE NMultiPositionControl: public NPositionControlElement
 {
 protected: // Свойства
-RDK::UPropertyInputC<NPositionControlElement,NMultiPositionControl> PositionControl;
+RDK::UPropertyInputData<void*,NMultiPositionControl> PPositionControl;
 RDK::ULProperty<int, NPositionControlElement> NumOfPositions;
 
 public: // Переменные состояния
@@ -32,6 +32,23 @@ vector<vector<NNet*> > InputNeuronsByContours;
 // Ctrl(1,0) Ctrl(1,1), ..., Ctrl(1,M) - нейроны, подключенные ко второму элементу нижнего уровня
 vector<vector<NNet*> > ControlNeuronsByContours;
 
+//Режим сборки
+//true - сбока структуры в Build и автономная работа, без подключения NewPositionControl
+//false - сбока структуры в Calculate и работа в системе с NewPositionControl
+RDK::ULProperty<bool, NMultiPositionControl> BuildSolo;
+
+//Число входов
+//используется при автономной работе Multi (при BuildSolo = true),
+//и заменяет число подключенных NNewPositionControls
+//может быть интерпретировано как число звеньев объекта управления
+RDK::ULProperty<int, NMultiPositionControl> PCsNum;
+
+//Число InputNeurons и ControlNeurons
+//используется при автономной работе Multi (при BuildSolo = true)
+RDK::ULProperty<int, NMultiPositionControl> InputsNum;
+
+std::vector<UEPtr<NPositionControlElement>> PositionControl;
+
 public: // Методы
 // --------------------------
 // Конструкторы и деструкторы
@@ -43,6 +60,9 @@ virtual ~NMultiPositionControl(void);
 // ---------------------
 // Методы управления параметрами
 // ---------------------
+bool SetBuildSolo(const bool &value);
+bool SetInputsNum(const int &value);
+bool SetPCsNum(const int &value);
 // ---------------------
 
 // ---------------------
@@ -81,6 +101,7 @@ bool CreateNeurons(void);
 bool LinkGenerators(const bool &value);
 bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim);
 
+bool CreateNeuronsSolo(void);
 };
 
 

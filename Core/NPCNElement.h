@@ -13,7 +13,7 @@ namespace NMSDK {
 class RDK_LIB_TYPE NPCNElement: public NPositionControlElement
 {
 public: // Свойства
-RDK::UPropertyInput<NEngineMotionControl,NPCNElement> MotionControl;
+RDK::UPropertyInputData<void*,NPCNElement> PMotionControl;
 RDK::ULProperty<bool, NPCNElement> SimControl;
 
 public: // Переменные состояния
@@ -68,6 +68,9 @@ vector<vector<UNet*> > LeftGenerators;
 // G(0,0) G(0,1), ..., G(0,M) - генераторы всех УЭ 0 контура
 // G(1,0) G(1,1), ..., G(1,M) - генераторы всех УЭ 1 контура
 vector<vector<UNet*> > RightGenerators;
+
+
+UEPtr<NEngineMotionControl> MotionControl;
 
 public: // Методы
 // --------------------------

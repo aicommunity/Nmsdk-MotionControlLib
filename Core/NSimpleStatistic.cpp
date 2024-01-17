@@ -160,15 +160,15 @@ bool NSimpleStatistic::ACalculate(void)
   ResizeStats();
   for(int i=0;i<int(Inputs->size());i++)
   {
-   for(int j=0;j<Inputs[i]->GetCols();j++)
+   for(int j=0;j<Inputs[i].GetCols();j++)
    {
-	if(StatsMin[i][j]>(*Inputs[i])(0,j))
-	 StatsMin[i][j]=(*Inputs[i])(0,j);
-	if(StatsMax[i][j]<(*Inputs[i])(0,j))
-	 StatsMax[i][j]=(*Inputs[i])(0,j);
+    if(StatsMin[i][j]>Inputs[i](0,j))
+     StatsMin[i][j]=Inputs[i](0,j);
+    if(StatsMax[i][j]<Inputs[i](0,j))
+     StatsMax[i][j]=Inputs[i](0,j);
 
-	StatsAvg[i][j]=(StatsMax[i][j]+StatsMin[i][j])/2;
-	StatsDelta[i][j]=(StatsMax[i][j]-StatsMin[i][j]);
+    StatsAvg[i][j]=(StatsMax[i][j]+StatsMin[i][j])/2;
+    StatsDelta[i][j]=(StatsMax[i][j]-StatsMin[i][j]);
    }
   }
  }
@@ -180,11 +180,11 @@ bool NSimpleStatistic::ACalculate(void)
    (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<Environment->GetTime().GetDoubleTime()<<endl;
    for(int i=0;i<int(Inputs->size());i++)
    {
-	for(int j=0;j<Inputs[i]->GetCols();j++)
-	{
-	 (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<(*Inputs[i])(0,j)<<"\t";
-	}
-	(*StatsFile)<<endl;
+    for(int j=0;j<Inputs[i].GetCols();j++)
+    {
+     (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<Inputs[i](0,j)<<"\t";
+    }
+    (*StatsFile)<<endl;
    }
    (*StatsFile)<<endl;
 
@@ -201,10 +201,10 @@ bool NSimpleStatistic::ACalculate(void)
    (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<Environment->GetTime().GetDoubleTime()<<"\t";
    for(int i=0;i<int(Inputs->size());i++)
    {
-	for(int j=0;j<Inputs[i]->GetCols();j++)
-	{
-	 (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<(*Inputs[i])(0,j)<<"\t";
-	}
+    for(int j=0;j<Inputs[i].GetCols();j++)
+    {
+     (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<Inputs[i](0,j)<<"\t";
+    }
    }
    (*StatsFile)<<endl;
 
@@ -243,10 +243,10 @@ void NSimpleStatistic::ResizeStats(void)
  StatsDelta.resize(Inputs->size());
  for(int i=0;i<int(Inputs->size());i++)
  {
-  StatsMin[i].resize(Inputs[i]->GetCols());
-  StatsMax[i].resize(Inputs[i]->GetCols());
-  StatsAvg[i].resize(Inputs[i]->GetCols());
-  StatsDelta[i].resize(Inputs[i]->GetCols());
+  StatsMin[i].resize(Inputs[i].GetCols());
+  StatsMax[i].resize(Inputs[i].GetCols());
+  StatsAvg[i].resize(Inputs[i].GetCols());
+  StatsDelta[i].resize(Inputs[i].GetCols());
  }
 }
 // --------------------------

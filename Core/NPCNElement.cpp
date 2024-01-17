@@ -14,7 +14,7 @@ namespace NMSDK {
 // Конструкторы и деструкторы
 // --------------------------
 NPCNElement::NPCNElement(void)
-:   MotionControl("MotionControl",this),
+:   PMotionControl("MotionControl",this),
 	SimControl("SimControl", this)
 {
 }

@@ -371,10 +371,10 @@ int CalcAfferentRange(int num_motions, bool cross_ranges, double a_min, double a
 void SetupPacRange(void);
 
 // Настройка преобразователя аналог-аналог
-void AACSetup(UEPtr<UContainer> net, double gain_value);
+void AACSetup(UEPtr<UNet> net, double gain_value);
 
 // Задание вспомогательных компонент
-void AdditionalComponentsSetup(UEPtr<UContainer> net);
+void AdditionalComponentsSetup(UEPtr<UNet> net);
 
 //------------------------------
 //Новый способ формирования сети
@@ -383,7 +383,7 @@ void AdditionalComponentsSetup(UEPtr<UContainer> net);
 UNet* CreateNewEngineControl2NeuronsSimplest(bool crosslinks = false, bool crossranges=false);
 
 // Настройка рецепторов
-void NewMotionElementsSetup(UEPtr<UContainer> net);
+void NewMotionElementsSetup(UEPtr<UNet> net);
 
 // Настройка преобразователя импульс-аналог
 void NewPACSetup(double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode);
