@@ -19,7 +19,7 @@ namespace NMSDK {
 class RDK_LIB_TYPE NMultiPositionControl: public NPositionControlElement
 {
 protected: // Свойства
-RDK::UPropertyInputData<void*,NMultiPositionControl> PPositionControl;
+RDK::UPropertyInputCData<MDMatrix<double>,NMultiPositionControl> PositionControl;
 RDK::ULProperty<int, NPositionControlElement> NumOfPositions;
 
 public: // Переменные состояния
@@ -47,7 +47,14 @@ RDK::ULProperty<int, NMultiPositionControl> PCsNum;
 //используется при автономной работе Multi (при BuildSolo = true)
 RDK::ULProperty<int, NMultiPositionControl> InputsNum;
 
-std::vector<UEPtr<NPositionControlElement>> PositionControl;
+//Флаг необходимости обновления структуры внутри блока
+//true - если необходимо изменить InputsNum или PCsNum,
+//в таком случае поверх переименованных блоков схемы строятся новые, со стандартными названиями
+//используется при автономной работе Multi (при BuildSolo = true)
+RDK::ULProperty<bool, NMultiPositionControl> IsNeedToRebuild;
+
+protected:
+std::vector<UEPtr<NPositionControlElement>> PositionControlElement;
 
 public: // Методы
 // --------------------------
@@ -63,6 +70,7 @@ virtual ~NMultiPositionControl(void);
 bool SetBuildSolo(const bool &value);
 bool SetInputsNum(const int &value);
 bool SetPCsNum(const int &value);
+bool SetIsNeedToRebuild(const bool &value);
 // ---------------------
 
 // ---------------------

@@ -23,11 +23,12 @@ namespace NMSDK {
 // --------------------------
 NMultiPositionControl::NMultiPositionControl(void)
 :
- PPositionControl("PositionControl", this),
+ PositionControl("PositionControl", this),
  NumOfPositions("NumOfPositions",this),
- BuildSolo("BuildSolo",this),
- InputsNum("InputsNum",this),
- PCsNum("PCsNum",this)
+ BuildSolo("BuildSolo",this, &NMultiPositionControl::SetBuildSolo),
+ InputsNum("InputsNum",this, &NMultiPositionControl::SetInputsNum),
+ PCsNum("PCsNum",this, &NMultiPositionControl::SetPCsNum),
+ IsNeedToRebuild("IsNeedToRebuild",this, &NMultiPositionControl::SetIsNeedToRebuild)
 {
 }
 
@@ -42,17 +43,24 @@ NMultiPositionControl::~NMultiPositionControl(void)
 // ---------------------
 bool NMultiPositionControl::SetBuildSolo(const bool &value)
 {
- Ready=false;
  return true;
 }
 
 bool NMultiPositionControl::SetInputsNum(const int &value)
 {
  Ready=false;
+ IsNeedToRebuild = true;
  return true;
 }
 
 bool NMultiPositionControl::SetPCsNum(const int &value)
+{
+ Ready=false;
+ IsNeedToRebuild = true;
+ return true;
+}
+
+bool NMultiPositionControl::SetIsNeedToRebuild(const bool &value)
 {
  Ready=false;
  return true;
@@ -84,10 +92,11 @@ bool NMultiPositionControl::ADefault(void)
 {
  NPositionControlElement::ADefault();
  NumOfPositions=0;
- BuildSolo = false;
- PCsNum = 0;
+ BuildSolo = true;
+ PCsNum = 1;
  InputsNum = 0;
-
+ ExternalControl = true;
+ IsNeedToRebuild = false;
  return true;
 }
 
@@ -97,8 +106,23 @@ bool NMultiPositionControl::ADefault(void)
 // в случае успешной сборки
 bool NMultiPositionControl::ABuild(void)
 {
- InputNeurons.clear();
- ControlNeurons.clear();
+ PositionControlElement.resize(PositionControl.size());
+
+ for(size_t i=0;i<PositionControl.size();i++)
+  PositionControlElement[i] = dynamic_cast<NPositionControlElement*>(PositionControl.GetItem(int(i)));
+ if (IsNeedToRebuild||InputNeurons.empty()||ControlNeurons.empty())
+ {
+   InputNeurons.clear();
+   ControlNeurons.clear();
+
+   // if(InputNeurons.empty()||ControlNeurons.empty())//test
+   // {
+        if (BuildSolo)//test
+         CreateNeuronsSolo();
+        else
+         CreateNeurons();
+   // }
+ }
  return true;
 }
 
@@ -111,24 +135,17 @@ bool NMultiPositionControl::AReset(void)
 // Выполняет расчет этого объекта
 bool NMultiPositionControl::ACalculate(void)
 {
-//    if(BuildSolo)
-//    {
-//        Build();
-//        //return true;
-//    }
-
  ControlNeuronType = "NNewSPNeuron";
  UEPtr<UContainer> cont;
  UEPtr<UStorage> storage = GetStorage();
 
- if(InputNeurons.empty()||ControlNeurons.empty())
- {
-     if (BuildSolo)
-      CreateNeuronsSolo();
-     else
-      CreateNeurons();
- }
-
+// if(InputNeurons.empty()||ControlNeurons.empty())//test
+// {
+//     if (BuildSolo)
+//      CreateNeuronsSolo();
+//     else
+//      CreateNeurons();
+// }
 
  if(RememberState)
   {
@@ -246,18 +263,18 @@ bool NMultiPositionControl::CreateNeurons(void)
  UEPtr<UStorage> storage = GetStorage();
 
  //Creating InputNeurons
- int positionControlSize = int(PositionControl.size());
+ int positionControlSize = int(PositionControlElement.size());
  InputNeuronsByContours.resize(positionControlSize);
 
  for(int i=0; i<positionControlSize; i++)
  {
-  for(int j=0; j<int(PositionControl[i]->PostInputNeurons.size()); j++)
+  for(int j=0; j<int(PositionControlElement[i]->PostInputNeurons.size()); j++)
   {
    UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
    string inputNeuronName = "InputNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
    string ltzoneName, inputName;
-   //UEPtr<UItem> ltzone=dynamic_pointer_cast<UItem>(PositionControl[i]->PostInputNeurons[j]->GetComponentL(".LTZone"));
-   PositionControl[i]->PostInputNeurons[j]->GetLongName(owner, ltzoneName);
+   //UEPtr<UItem> ltzone=dynamic_pointer_cast<UItem>(PositionControlElement[i]->PostInputNeurons[j]->GetComponentL(".LTZone"));
+   PositionControlElement[i]->PostInputNeurons[j]->GetLongName(owner, ltzoneName);
    
    if(CheckComponentL(inputNeuronName))
    {
@@ -288,13 +305,13 @@ bool NMultiPositionControl::CreateNeurons(void)
  ControlNeuronsByContours.resize(positionControlSize);
  for(int i=0; i<positionControlSize; i++)
  {
-  for(int j=0; j<int(PositionControl[i]->PreControlNeurons.size()); j++)
+  for(int j=0; j<int(PositionControlElement[i]->PreControlNeurons.size()); j++)
   {
    UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
    string controlNeuronName = "ControlNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
    string outputName, controlName;
-   //UEPtr<UItem> output=dynamic_pointer_cast<UItem>(PositionControl[i]->PreControlNeurons[j]->GetComponentL(".Soma1.ExcChannel"));
-   PositionControl[i]->PreControlNeurons[j]->GetLongName(owner, outputName);
+   //UEPtr<UItem> output=dynamic_pointer_cast<UItem>(PositionControlElement[i]->PreControlNeurons[j]->GetComponentL(".Soma1.ExcChannel"));
+   PositionControlElement[i]->PreControlNeurons[j]->GetLongName(owner, outputName);
    if(CheckComponentL(controlNeuronName))
    {
 	NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronName));
@@ -381,17 +398,17 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
  UEPtr<UStorage> storage = GetStorage();
 
  //Creating InputNeurons
- int positionControlSize = PCsNum; //int(PositionControl->size());
+ int positionControlSize = PCsNum; //int(PositionControlElement->size());
  InputNeuronsByContours.resize(positionControlSize);
 
  for(int i=0; i<positionControlSize; i++)
  {
-  for(int j=0; j<InputsNum; j++)//int(PositionControl[i]->PostInputNeurons.size())
+  for(int j=0; j<InputsNum; j++)//int(PositionControlElement[i]->PostInputNeurons.size())
   {
    UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
    string inputNeuronName = "InputNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
    string ltzoneName, inputName;
-   //PositionControl[i]->PostInputNeurons[j]->GetLongName(owner, ltzoneName);
+   //PositionControlElement[i]->PostInputNeurons[j]->GetLongName(owner, ltzoneName);
 
    if(CheckComponentL(inputNeuronName))
    {
@@ -422,13 +439,13 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
  ControlNeuronsByContours.resize(positionControlSize);
  for(int i=0; i<positionControlSize; i++)
  {
-  for(int j=0; j<InputsNum; j++)//int(PositionControl[i]->PreControlNeurons.size()
+  for(int j=0; j<InputsNum; j++)//int(PositionControlElement[i]->PreControlNeurons.size()
   {
    UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
    string controlNeuronName = "ControlNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
    string outputName, controlName;
-   //UEPtr<UItem> output=dynamic_pointer_cast<UItem>(PositionControl[i]->PreControlNeurons[j]->GetComponentL(".Soma1.ExcChannel"));
-   //PositionControl[i]->PreControlNeurons[j]->GetLongName(owner, outputName);
+   //UEPtr<UItem> output=dynamic_pointer_cast<UItem>(PositionControlElement[i]->PreControlNeurons[j]->GetComponentL(".Soma1.ExcChannel"));
+   //PositionControlElement[i]->PreControlNeurons[j]->GetLongName(owner, outputName);
    if(CheckComponentL(controlNeuronName))
    {
     NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronName));

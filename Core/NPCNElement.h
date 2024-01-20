@@ -13,7 +13,7 @@ namespace NMSDK {
 class RDK_LIB_TYPE NPCNElement: public NPositionControlElement
 {
 public: // Свойства
-RDK::UPropertyInputData<void*,NPCNElement> PMotionControl;
+RDK::UPropertyInputData<MDMatrix<double>,NPCNElement> MotionControl;
 RDK::ULProperty<bool, NPCNElement> SimControl;
 
 public: // Переменные состояния
@@ -70,7 +70,7 @@ vector<vector<UNet*> > LeftGenerators;
 vector<vector<UNet*> > RightGenerators;
 
 
-UEPtr<NEngineMotionControl> MotionControl;
+UEPtr<NEngineMotionControl> MotionControlElement;
 
 public: // Методы
 // --------------------------
