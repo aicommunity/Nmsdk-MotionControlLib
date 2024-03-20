@@ -148,7 +148,8 @@ bool NMultiPositionControl::AReset(void)
 // Выполняет расчет этого объекта
 bool NMultiPositionControl::ACalculate(void)
 {
- ControlNeuronType = "NNewSPNeuron";
+ //ControlNeuronType = "NNewSPNeuron";
+ ControlNeuronType = "NSPNeuronGen";
  UEPtr<UContainer> cont;
  UEPtr<UStorage> storage = GetStorage();
 
@@ -309,7 +310,8 @@ bool NMultiPositionControl::CreateNeurons(void)
    }
    else
    {
-    InputNeuronType = "NNewSPNeuron";
+    //InputNeuronType = "NNewSPNeuron";
+    InputNeuronType = "NSPNeuronGen";
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(InputNeuronType));
 	if(!cont)
 	 return 0;
@@ -345,7 +347,8 @@ bool NMultiPositionControl::CreateNeurons(void)
    }
    else
    {
-    ControlNeuronType = "NNewSPNeuron";
+    //ControlNeuronType = "NNewSPNeuron";
+    ControlNeuronType = "NSPNeuronGen";
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
 	if(!cont)
 	 return 0;
@@ -443,7 +446,8 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
    }
    else
    {
-    InputNeuronType = "NNewSPNeuron";
+    //InputNeuronType = "NNewSPNeuron";
+    InputNeuronType = "NSPNeuronGen";
     cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(InputNeuronType));
     if(!cont)
      return 0;
@@ -479,7 +483,8 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
    }
    else
    {
-    ControlNeuronType = "NNewSPNeuron";
+    //ControlNeuronType = "NNewSPNeuron";
+    ControlNeuronType = "NSPNeuronGen";
     cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
     if(!cont)
      return 0;
