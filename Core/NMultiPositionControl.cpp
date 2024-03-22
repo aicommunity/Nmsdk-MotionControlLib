@@ -110,31 +110,19 @@ bool NMultiPositionControl::ABuild(void)
 
  for(size_t i=0;i<PositionControl.size();i++)
   PositionControlElement[i] = dynamic_cast<NPositionControlElement*>(PositionControl.GetItem(int(i)));
- bool a_check = IsNeedToRebuild;
- bool b_check = InputNeurons.empty();
- bool c_check = ControlNeurons.empty();
 
  if (IsNeedToRebuild)
  {
      InputNeurons.clear();
      ControlNeurons.clear();
 
-     if (BuildSolo)//test
+     if (BuildSolo)
       CreateNeuronsSolo();
      else
       CreateNeurons();
 
      IsNeedToRebuild = false;
  }
-
-
- // if(InputNeurons.empty()||ControlNeurons.empty())//test
- // {
-//        if (BuildSolo)//test
-//         CreateNeuronsSolo();
-//        else
-//         CreateNeurons();
- // }
 
  return true;
 }
@@ -148,18 +136,9 @@ bool NMultiPositionControl::AReset(void)
 // Выполняет расчет этого объекта
 bool NMultiPositionControl::ACalculate(void)
 {
- //ControlNeuronType = "NNewSPNeuron";
  ControlNeuronType = "NSPNeuronGen";
  UEPtr<UContainer> cont;
  UEPtr<UStorage> storage = GetStorage();
-
-// if(InputNeurons.empty()||ControlNeurons.empty())//test
-// {
-//     if (BuildSolo)
-//      CreateNeuronsSolo();
-//     else
-//      CreateNeurons();
-// }
 
  if(RememberState)
   {
@@ -239,8 +218,16 @@ bool NMultiPositionControl::ACalculate(void)
      //string check_actInp = InputNeurons[i]->GetName();
 	 activeInputs.push_back(InputNeurons[i]);
 	 activeControls.push_back(ControlNeurons[i]);
+
 	}
    }
+   NPulseNeuron *postInputNeuron = static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronName));
+   postInputNeuron->NumSomaMembraneParts = activeInputs.size();
+   //size_t check_size = activeInputs.size();
+   //int check_membrNum = postInputNeuron->NumSomaMembraneParts;
+   postInputNeuron->Reset();
+
+
 /*   for(size_t c=0;c<ControlNeurons.size();c++)
    {
     UEPtr<UItem> ltzone=dynamic_pointer_cast<UItem>(ControlNeurons[c]->GetComponentL("LTZone"));
@@ -268,7 +255,7 @@ bool NMultiPositionControl::ACalculate(void)
    }
 */
    //LinkNegative(activeInputs, postInputs);
-   LinkNeurons(activeInputs, postInputs);
+   LinkNeuronsWithNorm(activeInputs, postInputs);
    LinkNeurons(preControls, activeControls);
    if(ExternalControl)
    {
@@ -277,7 +264,7 @@ bool NMultiPositionControl::ACalculate(void)
    (*NumOfPositions)++;
   }
 
- PositionNeurons();//добавлено
+ PositionNeurons();
  return true;
 }
 // --------------------------
@@ -310,7 +297,6 @@ bool NMultiPositionControl::CreateNeurons(void)
    }
    else
    {
-    //InputNeuronType = "NNewSPNeuron";
     InputNeuronType = "NSPNeuronGen";
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(InputNeuronType));
 	if(!cont)
@@ -322,7 +308,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	cont->GetLongName(owner, inputName);
    }
    //Построение связей между PostInput Neurons в NNewPositionControl и InputNeurons в MultiPositionControl
-   owner->CreateLink(ltzoneName+".LTZone","Output",inputName+".Soma1.ExcSynapse1", "Input"); //добавлено
+   owner->CreateLink(ltzoneName+".LTZone","Output",inputName+".Soma1.ExcSynapse1", "Input");
   }
  }
 
@@ -347,7 +333,6 @@ bool NMultiPositionControl::CreateNeurons(void)
    }
    else
    {
-    //ControlNeuronType = "NNewSPNeuron";
     ControlNeuronType = "NSPNeuronGen";
 	cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
 	if(!cont)
@@ -359,7 +344,7 @@ bool NMultiPositionControl::CreateNeurons(void)
 	cont->GetLongName(owner, controlName);
    }
    //Построение связей между Control Neurons в MultiPositionControl и PreControl Neurons в NewPositionControl
-   owner->CreateLink(controlName+".LTZone","Output",outputName+".Soma1.ExcSynapse2", "Input"); //добавлено
+   owner->CreateLink(controlName+".LTZone","Output",outputName+".Soma1.ExcSynapse2", "Input");
   }
  }
 
@@ -425,17 +410,16 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
  UEPtr<UStorage> storage = GetStorage();
 
  //Creating InputNeurons
- int positionControlSize = PCsNum; //int(PositionControlElement->size());
+ int positionControlSize = PCsNum;
  InputNeuronsByContours.resize(positionControlSize);
 
  for(int i=0; i<positionControlSize; i++)
  {
-  for(int j=0; j<InputsNum; j++)//int(PositionControlElement[i]->PostInputNeurons.size())
+  for(int j=0; j<InputsNum; j++)
   {
    UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
    string inputNeuronName = "InputNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
-   string ltzoneName, inputName;
-   //PositionControlElement[i]->PostInputNeurons[j]->GetLongName(owner, ltzoneName);
+   string inputName;
 
    if(CheckComponentL(inputNeuronName))
    {
@@ -446,7 +430,6 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
    }
    else
    {
-    //InputNeuronType = "NNewSPNeuron";
     InputNeuronType = "NSPNeuronGen";
     cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(InputNeuronType));
     if(!cont)
@@ -457,8 +440,6 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
     InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
     cont->GetLongName(owner, inputName);
    }
-   //Построение связей между PostInput Neurons в NNewPositionControl и InputNeurons в MultiPositionControl
-   owner->CreateLink(ltzoneName+".LTZone","Output",inputName+".Soma1.ExcSynapse1", "Input"); //добавлено
   }
  }
 
@@ -467,13 +448,12 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
  ControlNeuronsByContours.resize(positionControlSize);
  for(int i=0; i<positionControlSize; i++)
  {
-  for(int j=0; j<InputsNum; j++)//int(PositionControlElement[i]->PreControlNeurons.size()
+  for(int j=0; j<InputsNum; j++)
   {
    UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
    string controlNeuronName = "ControlNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
-   string outputName, controlName;
-   //UEPtr<UItem> output=dynamic_pointer_cast<UItem>(PositionControlElement[i]->PreControlNeurons[j]->GetComponentL(".Soma1.ExcChannel"));
-   //PositionControlElement[i]->PreControlNeurons[j]->GetLongName(owner, outputName);
+   string controlName;
+
    if(CheckComponentL(controlNeuronName))
    {
     NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronName));
@@ -483,7 +463,6 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
    }
    else
    {
-    //ControlNeuronType = "NNewSPNeuron";
     ControlNeuronType = "NSPNeuronGen";
     cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
     if(!cont)
@@ -494,8 +473,6 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
     ControlNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
     cont->GetLongName(owner, controlName);
    }
-   //Построение связей между Control Neurons в MultiPositionControl и PreControl Neurons в NewPositionControl
-   owner->CreateLink(controlName+".LTZone","Output",outputName+".Soma1.ExcSynapse2", "Input"); //добавлено
   }
  }
 
@@ -554,6 +531,61 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
  return true;
 }
 
+bool NMultiPositionControl::LinkNeuronsWithNorm(vector <NNet*> start, vector <NNet*> finish)
+{
+    for(size_t j=0;j<finish.size();j++)
+    {
+      NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
+//      UEPtr<NPulseMembrane> branch;
+//      bool hasEmptyMembrane=false;
+
+//      for(size_t k=0;k<neuron->GetNumMembranes();k++)
+//      {
+//       NPulseMembrane* membr = neuron->GetMembrane(k);
+//       if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
+//       {
+//         branch=neuron->GetMembrane(k);
+//         hasEmptyMembrane=true;
+//         break;
+//       }
+//      }
+
+//      if(!hasEmptyMembrane)
+//      {
+//       neuron->NumSomaMembraneParts = 1;
+//       neuron->Build();
+//      }
+
+   NameT startName;
+   NameT finishName;
+   int soma_parts_max = neuron->NumSomaMembraneParts;
+
+   for(size_t i=0;i<start.size();i++)
+   {
+    startName = start[i]->GetName()+".LTZone";
+    //string check_startName = start[i]->GetName()+".LTZone";
+
+    for (int m = 0; m<soma_parts_max; m++)
+    {
+     finishName = finish[j]->GetName()+".Soma"+sntoa(m+1)+".ExcSynapse1";
+     //string check_finishName = finish[j]->GetName()+".Soma"+sntoa(m+1)+".ExcSynapse1";
+
+     if(CheckLink(startName,finishName))
+       break; //перейти к следующему элементу в start
+
+     UEPtr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma"+sntoa(m+1)+".ExcSynapse1",true);
+     if(!syn)
+       return true;
+     if (syn->Input.IsConnected())
+       continue; //перейти к следующему участку сомы
+
+     CreateLink(startName, "Output", finishName,"Input");
+     break;
+    }
+   }
+ }
+ return true;
+}
 
 
 bool NMultiPositionControl::LinkGenerators(const bool &value)

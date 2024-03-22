@@ -37,20 +37,21 @@ vector<vector<NNet*> > ControlNeuronsByContours;
 //false - сбока структуры в Calculate и работа в системе с NewPositionControl
 RDK::ULProperty<bool, NMultiPositionControl> BuildSolo;
 
-//Число входов
+//Число групп входов
 //используется при автономной работе Multi (при BuildSolo = true),
-//и заменяет число подключенных NNewPositionControls
-//может быть интерпретировано как число звеньев объекта управления
+//заменяет число подключенных NNewPositionControls
+//может быть интерпретировано как число звеньев объекта управления, число групп входных признаков
 RDK::ULProperty<int, NMultiPositionControl> PCsNum;
 
 //Число InputNeurons и ControlNeurons
 //используется при автономной работе Multi (при BuildSolo = true)
+//может быть интерпретировано как число признаков в одной группе
 RDK::ULProperty<int, NMultiPositionControl> InputsNum;
 
 //Флаг необходимости обновления структуры внутри блока
-//true - если необходимо изменить InputsNum или PCsNum,
-//в таком случае поверх переименованных блоков схемы строятся новые, со стандартными названиями
 //используется при автономной работе Multi (при BuildSolo = true)
+//true - если необходимо изменить InputsNum или PCsNum, false - иначе
+//Важно! При обновлении структуры поверх переименованных блоков схемы строятся новые, со стандартными названиями!
 RDK::ULProperty<bool, NMultiPositionControl> IsNeedToRebuild;
 
 protected:
@@ -71,6 +72,7 @@ bool SetBuildSolo(const bool &value);
 bool SetInputsNum(const int &value);
 bool SetPCsNum(const int &value);
 bool SetIsNeedToRebuild(const bool &value);
+
 // ---------------------
 
 // ---------------------
@@ -110,6 +112,7 @@ bool LinkGenerators(const bool &value);
 bool LinkGenerators(vector <UNet*> generators, vector <NNet*> neurons, bool link, bool is_sim);
 
 bool CreateNeuronsSolo(void);
+bool LinkNeuronsWithNorm(vector <NNet*> start, vector <NNet*> finish);
 };
 
 
