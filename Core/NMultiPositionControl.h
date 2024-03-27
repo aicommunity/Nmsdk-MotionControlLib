@@ -54,6 +54,11 @@ RDK::ULProperty<int, NMultiPositionControl> InputsNum;
 //Важно! При обновлении структуры поверх переименованных блоков схемы строятся новые, со стандартными названиями!
 RDK::ULProperty<bool, NMultiPositionControl> IsNeedToRebuild;
 
+//Порог срабатывания нейронов PostInput
+//устанавливается для всех PostInput в схеме,
+//используется при автономной работе Multi (при BuildSolo = true)
+RDK::ULProperty<double, NMultiPositionControl> PostInputThreshold;
+
 protected:
 std::vector<UEPtr<NPositionControlElement>> PositionControlElement;
 
@@ -72,6 +77,7 @@ bool SetBuildSolo(const bool &value);
 bool SetInputsNum(const int &value);
 bool SetPCsNum(const int &value);
 bool SetIsNeedToRebuild(const bool &value);
+bool SetPostInputTreshold(const double &value);
 
 // ---------------------
 
