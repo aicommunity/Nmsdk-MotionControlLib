@@ -49,6 +49,7 @@ HEADERS += \
     ../../Core/NMotionControlLibrary.h \
     ../../Core/NMotionElement.h \
     ../../Core/NMultiPositionControl.h \
+    ../../Core/NTrajectoryElement.h \
     ../../Core/NNavMousePrimitive.h \
     ../../Core/NNewPositionControlElement.h \
     ../../Core/NObjInArea.h \
@@ -84,6 +85,7 @@ SOURCES += \
     ../../Core/NMotionControlLibrary.cpp \
     ../../Core/NMotionElement.cpp \
     ../../Core/NMultiPositionControl.cpp \
+    ../../Core/NTrajectoryElement.cpp \
     ../../Core/NNavMousePrimitive.cpp \
     ../../Core/NNewPositionControlElement.cpp \
     ../../Core/NObjInArea.cpp \
