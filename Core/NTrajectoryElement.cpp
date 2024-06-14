@@ -23,10 +23,10 @@ namespace NMSDK {
 // --------------------------
 NTrajectoryElement::NTrajectoryElement(void)
 : NeuronClassName("NeuronClassName",this, &NTrajectoryElement::SetNeuronClassName),
-  Input_u_top("Input_u_top",this),
-  Input_u_tcn("Input_u_tcn",this),
-  Input_y_pcn2("Input_y_pcn2",this),
   Output("Output",this)
+  //Input_u_top("Input_u_top",this),
+  //Input_u_tcn("Input_u_tcn",this),
+  //Input_y_pcn2("Input_y_pcn2",this),
 {
 }
 
@@ -66,6 +66,7 @@ NTrajectoryElement* NTrajectoryElement::New(void)
 bool NTrajectoryElement::ADefault(void)
 {
  NeuronClassName = "NSPNeuronGen"; //NNewSPNeuron
+
  return true;
 }
 
@@ -115,14 +116,19 @@ bool NTrajectoryElement::ABuild(void)
   return true;
 
  //—инапсы дл€ подключени€ внешних входов в ACalculate
- n1_d1_seg2_exc = neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_2.ExcSynapse1",true);
- n1_d1_seg3_exc = neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_3.ExcSynapse1",true);
- n1_s3_inh = neurons[0]->GetComponentL<NPulseSynapse>("Soma3.InhSynapse1",true);
- n1_s4_inh = neurons[0]->GetComponentL<NPulseSynapse>("Soma4.InhSynapse1",true);
- n1_d1_seg3_inh = neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_3.InhSynapse1",true);
- n1_d1_seg1_inh = neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_1.InhSynapse1",true);
- n2_d1_seg3_inh = neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_3.InhSynapse1",true);
- n2_d1_seg1_inh = neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_1.InhSynapse1",true);
+// n1_d1_seg2_exc = neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_2.ExcSynapse1",true);
+// n1_d1_seg3_exc = neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_3.ExcSynapse1",true);
+// n1_s3_inh = neurons[0]->GetComponentL<NPulseSynapse>("Soma3.InhSynapse1",true);
+// n1_s4_inh = neurons[0]->GetComponentL<NPulseSynapse>("Soma4.InhSynapse1",true);
+// n1_d1_seg3_inh = neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_3.InhSynapse1",true);
+// n1_d1_seg1_inh = neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_1.InhSynapse1",true);
+// n2_d1_seg3_inh = neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_3.InhSynapse1",true);
+// n2_d1_seg1_inh = neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_1.InhSynapse1",true);
+
+ //¬ход с u_top
+// res&=CreateLink(" ", "Input_u_top", n1_d1_seg2_exc->GetLongName(this),"Input");
+// if(!res)
+//  return true;
 
  return true;
 }
@@ -140,20 +146,6 @@ bool NTrajectoryElement::ACalculate(void)
 {
  //ѕередача сигнала к выходу блока
   Output = neurons[0]->Output;
-
-  //¬ход с u_top
-  n1_d1_seg2_exc->Input = Input_u_top;
-
-  //¬ход с предыдущего сегмента u_tcn
-  n1_d1_seg3_exc->Input = Input_u_tcn;
-  n1_s3_inh->Input = Input_u_tcn;
-  n1_s4_inh->Input = Input_u_tcn;
-
-  //¬ход с предыдущего уровн€ системы (уровень PCN2, блоки MultiPositioncontrol) y_pcn2
-  n1_d1_seg3_inh->Input = Input_y_pcn2;
-  n1_d1_seg1_inh->Input = Input_y_pcn2;
-  n2_d1_seg3_inh->Input = Input_y_pcn2;
-  n2_d1_seg1_inh->Input = Input_y_pcn2;
 
  return true;
 }

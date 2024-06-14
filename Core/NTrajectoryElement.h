@@ -24,35 +24,41 @@ public: // Параметры
 /// Имя класса нейрона
 ULProperty<std::string, NTrajectoryElement, ptPubParameter> NeuronClassName;
 
-/// Входной сигнал с высшего уровня управления
-UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_top;
-
-/// Входной сигнал c предыдущего элемента траектории
-UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_tcn;
-
-/// Входной сигнал с предыдущего уровня системы управления - PCN2 (блоки NMultiPositionControl),
-/// сигнализирует о выполнении текущего элемента траектории
-UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_y_pcn2;
-
 /// Выходной сигнал на следующий элемент траектории
 UPropertyOutputData<MDMatrix<double>, NTrajectoryElement, ptOutput | ptPubState> Output;
 
+//Input_u_top, Input_u_tcn и Input_y_pcn2 - перемычки от входа блока к синапсам соответсвующих сегментов дендритов (согласно схеме),
+//заданы для упрощения покдлючения блока NTrajectoryElement к внешним источникам.
+//Сейчас неактивны, т.к. нет возможности в коде подключить Input блока к Input синапса.
+//Могут быть полезны, если такая возможность появится - тогда в код необходимо добавить построение связей между
+//Input_u_top, Input_u_tcn и Input_y_pcn2 и соответствующими синапсами
+
+/// Входной сигнал с высшего уровня управления (
+//UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_top;
+
+/// Входной сигнал c предыдущего элемента траектории
+//UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_tcn;
+
+/// Входной сигнал с предыдущего уровня системы управления - PCN2 (блоки NMultiPositionControl),
+/// сигнализирует о выполнении текущего элемента траектории
+//UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_y_pcn2;
+
+
 protected:
-///Внутренние нейроны элемента траеткории
+///Внутренние нейроны элемента траектории
 std::vector<UEPtr<NPulseNeuron>> neurons;
 
 ///Синапсы для подключения внешних входов
 /// n - № нейрона, d - № дендрита, seg - № сегмента дендрита,
 /// s - № сомы, exc или inh - тип синапса
-UEPtr<NPulseSynapse> n1_d1_seg2_exc;
-UEPtr<NPulseSynapse> n1_d1_seg3_exc;
-UEPtr<NPulseSynapse> n1_s3_inh;
-UEPtr<NPulseSynapse> n1_s4_inh;
-UEPtr<NPulseSynapse> n1_d1_seg3_inh;
-UEPtr<NPulseSynapse> n1_d1_seg1_inh;
-UEPtr<NPulseSynapse> n2_d1_seg3_inh;
-UEPtr<NPulseSynapse> n2_d1_seg1_inh;
-
+//UEPtr<NPulseSynapse> n1_d1_seg2_exc;
+//UEPtr<NPulseSynapse> n1_d1_seg3_exc;
+//UEPtr<NPulseSynapse> n1_s3_inh;
+//UEPtr<NPulseSynapse> n1_s4_inh;
+//UEPtr<NPulseSynapse> n1_d1_seg3_inh;
+//UEPtr<NPulseSynapse> n1_d1_seg1_inh;
+//UEPtr<NPulseSynapse> n2_d1_seg3_inh;
+//UEPtr<NPulseSynapse> n2_d1_seg1_inh;
 
 public: // Методы
 // --------------------------
