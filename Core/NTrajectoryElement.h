@@ -46,7 +46,13 @@ UPropertyOutputData<MDMatrix<double>, NTrajectoryElement, ptOutput | ptPubState>
 
 protected:
 ///Внутренние нейроны элемента траектории
-std::vector<UEPtr<NPulseNeuron>> neurons;
+std::vector<UEPtr<NPulseNeuron>> Neurons;
+
+///Размер сомы нейронов 1 и 2
+int SomaSize;
+
+///Размер дендритов нейронов 1 и 2
+std::vector<int> DendSizes;
 
 ///Синапсы для подключения внешних входов
 /// n - № нейрона, d - № дендрита, seg - № сегмента дендрита,

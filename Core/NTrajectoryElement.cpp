@@ -66,6 +66,9 @@ NTrajectoryElement* NTrajectoryElement::New(void)
 bool NTrajectoryElement::ADefault(void)
 {
  NeuronClassName = "NSPNeuronGen"; //NNewSPNeuron
+ SomaSize = 1;
+ DendSizes.resize(SomaSize);
+ DendSizes[0] = 6;
 
  return true;
 }
@@ -82,38 +85,73 @@ bool NTrajectoryElement::ABuild(void)
  int y_shift = 2;
 
  //Создаем нейроны
- neurons.resize(2);
+ Neurons.resize(2);
  for (int i = 0; i<2; i++)
  {
-  neurons[i] = AddMissingComponent<NPulseNeuron>(std::string("Neuron")+sntoa(i+1), "NSPNeuronGen");
-  if(!neurons[i])
-   return false;
-  neurons[i]->SetCoord(MVector<double,3>(4.0, y_base+i*y_shift, 0));
-  neurons[i]->NumSomaMembraneParts = 4;
-  neurons[i]->NumDendriteMembranePartsVec[0] = 3;
-  neurons[i]->Reset();
+  Neurons[i] = AddMissingComponent<NPulseNeuron>(std::string("Neuron")+sntoa(i+1), NeuronClassName);
+  if(!Neurons[i])
+   return true;
+  Neurons[i]->SetCoord(MVector<double,3>(4.0, y_base+i*y_shift, 0));
+  Neurons[i]->NumSomaMembraneParts = SomaSize;
+  Neurons[i]->NumDendriteMembranePartsVec = DendSizes;
+  Neurons[i]->Reset();
+  UEPtr<NPulseMembrane> dend6 = Neurons[i]->GetComponentL<NPulseMembrane>("Dendrite1_6",true);
+  if(!dend6)
+   return true;
+  dend6->NumExcitatorySynapses = 2;
+  dend6->Reset();
  }
+
+ UEPtr<NPulseMembrane> n1_s1 = Neurons[0]->GetComponentL<NPulseMembrane>("Soma1",true);
+ n1_s1->NumExcitatorySynapses = 2;
+ n1_s1->Reset();
 
  //Строим связи
  bool res(true);
 
- //Выход 2го нейрона - М2 1го нейрона
- UEPtr<NLTZone> ltzone2 = neurons[1]->GetComponentL<NLTZone>("LTZone", true);
- if(!ltzone2)
+ //НОВАЯ КОНФИГУРАЦИЯ (подобрана для обновленной NNewSPNeuron)
+ //От N1 к N2
+ UEPtr<NLTZone> ltzone1 = Neurons[0]->GetComponentL<NLTZone>("LTZone", true);
+ if(!ltzone1)
      return true;
- UEPtr<NPulseSynapse> M21_n1_d1_seg2 = neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_1.ExcSynapse1",true);
- res&=CreateLink(ltzone2->GetLongName(this),"Output",M21_n1_d1_seg2->GetLongName(this),"Input");
+ UEPtr<NPulseSynapse> n2_d1_seg6_syn1 = Neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_6.ExcSynapse1",true);
+ res&=CreateLink(ltzone1->GetLongName(this),"Output",n2_d1_seg6_syn1->GetLongName(this),"Input");
+ if(!res)
+  return true;
+ UEPtr<NPulseSynapse> n2_d1_seg6_syn2 = Neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_6.ExcSynapse2",true);
+ res&=CreateLink(ltzone1->GetLongName(this),"Output",n2_d1_seg6_syn2->GetLongName(this),"Input");
  if(!res)
   return true;
 
- //Выход 1го нейрона - М2 2го нейрона
- UEPtr<NLTZone> ltzone1 = neurons[0]->GetComponentL<NLTZone>("LTZone", true);
- if(!ltzone1)
+ //От N2 к N1
+ UEPtr<NLTZone> ltzone2 = Neurons[1]->GetComponentL<NLTZone>("LTZone", true);
+ if(!ltzone2)
      return true;
- UEPtr<NPulseSynapse> M22_n2_d1_seg2 = neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_1.ExcSynapse1",true);
- res&=CreateLink(ltzone1->GetLongName(this),"Output",M22_n2_d1_seg2->GetLongName(this),"Input");
+ UEPtr<NPulseSynapse> n1_s1_syn1 = Neurons[0]->GetComponentL<NPulseSynapse>("Soma1.ExcSynapse1",true);
+ res&=CreateLink(ltzone2->GetLongName(this),"Output",n1_s1_syn1->GetLongName(this),"Input");
  if(!res)
   return true;
+
+
+//ИСХОДНАЯ КОНФИГУРАЦИЯ
+// //Выход 2го нейрона - М2 1го нейрона
+// UEPtr<NLTZone> ltzone2 = neurons[1]->GetComponentL<NLTZone>("LTZone", true);
+// if(!ltzone2)
+//     return true;
+// UEPtr<NPulseSynapse> M21_n1_d1_seg2 = neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_1.ExcSynapse1",true);
+// res&=CreateLink(ltzone2->GetLongName(this),"Output",M21_n1_d1_seg2->GetLongName(this),"Input");
+// if(!res)
+//  return true;
+
+// //Выход 1го нейрона - М2 2го нейрона
+// UEPtr<NLTZone> ltzone1 = neurons[0]->GetComponentL<NLTZone>("LTZone", true);
+// if(!ltzone1)
+//     return true;
+// UEPtr<NPulseSynapse> M22_n2_d1_seg2 = neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_1.ExcSynapse1",true);
+// res&=CreateLink(ltzone1->GetLongName(this),"Output",M22_n2_d1_seg2->GetLongName(this),"Input");
+// if(!res)
+//  return true;
+
 
  //Синапсы для подключения внешних входов в ACalculate
 // n1_d1_seg2_exc = neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_2.ExcSynapse1",true);
@@ -145,7 +183,7 @@ bool NTrajectoryElement::AReset(void)
 bool NTrajectoryElement::ACalculate(void)
 {
  //Передача сигнала к выходу блока
-  Output = neurons[0]->Output;
+  Output = Neurons[0]->Output;
 
  return true;
 }
