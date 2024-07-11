@@ -51,20 +51,12 @@ std::vector<UEPtr<NPulseNeuron>> Neurons;
 ///Размер сомы нейронов 1 и 2
 int SomaSize;
 
-///Размер дендритов нейронов 1 и 2
-std::vector<int> DendSizes;
+///Размер дендритов нейрона 1
+std::vector<int> DendSizes1;
 
-///Синапсы для подключения внешних входов
-/// n - № нейрона, d - № дендрита, seg - № сегмента дендрита,
-/// s - № сомы, exc или inh - тип синапса
-//UEPtr<NPulseSynapse> n1_d1_seg2_exc;
-//UEPtr<NPulseSynapse> n1_d1_seg3_exc;
-//UEPtr<NPulseSynapse> n1_s3_inh;
-//UEPtr<NPulseSynapse> n1_s4_inh;
-//UEPtr<NPulseSynapse> n1_d1_seg3_inh;
-//UEPtr<NPulseSynapse> n1_d1_seg1_inh;
-//UEPtr<NPulseSynapse> n2_d1_seg3_inh;
-//UEPtr<NPulseSynapse> n2_d1_seg1_inh;
+///Размер дендритов нейрона 2
+std::vector<int> DendSizes2;
+
 
 public: // Методы
 // --------------------------
