@@ -59,6 +59,10 @@ RDK::ULProperty<bool, NMultiPositionControl> IsNeedToRebuild;
 //используетс€ при автономной работе Multi (при BuildSolo = true)
 RDK::ULProperty<double, NMultiPositionControl> PostInputThreshold;
 
+//‘лаг необходимости построени€ PostInput и PreControl нейронов
+//независимо от момента обучени€ (true при использовании в MazeMemory, иначе false)
+RDK::ULProperty<bool, NMultiPositionControl> PrebuildStructure;
+
 protected:
 std::vector<UEPtr<NPositionControlElement>> PositionControlElement;
 
@@ -78,6 +82,7 @@ bool SetInputsNum(const int &value);
 bool SetPCsNum(const int &value);
 bool SetIsNeedToRebuild(const bool &value);
 bool SetPostInputTreshold(const double &value);
+bool SetPrebuildStructure(const bool &value);
 
 // ---------------------
 

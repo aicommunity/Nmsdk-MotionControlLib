@@ -23,6 +23,7 @@ namespace NMSDK {
 // --------------------------
 NTrajectoryElement::NTrajectoryElement(void)
 : NeuronClassName("NeuronClassName",this, &NTrajectoryElement::SetNeuronClassName),
+  Layer("Layer", this, &NTrajectoryElement::SetLayer),
   Output("Output",this)
   //Input_u_top("Input_u_top",this),
   //Input_u_tcn("Input_u_tcn",this),
@@ -40,6 +41,12 @@ NTrajectoryElement::~NTrajectoryElement(void)
 // Методы управления параметрами
 // --------------------------
 bool NTrajectoryElement::SetNeuronClassName(const std::string &value)
+{
+ Ready=false;
+ return true;
+}
+
+bool NTrajectoryElement::SetLayer(const int &value)
 {
  Ready=false;
  return true;
@@ -71,6 +78,9 @@ bool NTrajectoryElement::ADefault(void)
  DendSizes1[0] = 5;
  DendSizes2.resize(SomaSize);
  DendSizes2[0] = 3;
+
+ CurrentForward = -1;
+ CurrentBackward = -1;
 
  return true;
 }

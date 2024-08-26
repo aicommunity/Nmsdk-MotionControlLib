@@ -47,6 +47,7 @@ See file license.txt for more information
 #include "NNewPositionControlElement.h"
 #include "NMultiPositionControl.h"
 #include "NTrajectoryElement.h"
+#include "NMazeMemory.h"
 #include "NPCNElement.h"
 
 #include "NSuppressionUnit.h"

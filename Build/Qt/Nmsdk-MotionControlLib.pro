@@ -46,10 +46,10 @@ HEADERS += \
     ../../Core/NManipulatorInputEmulator.h \
     ../../Core/NManipulatorSource.h \
     ../../Core/NManipulatorSourceEmulator.h \
+    ../../Core/NMazeMemory.h \
     ../../Core/NMotionControlLibrary.h \
     ../../Core/NMotionElement.h \
     ../../Core/NMultiPositionControl.h \
-    ../../Core/NTrajectoryElement.h \
     ../../Core/NNavMousePrimitive.h \
     ../../Core/NNewPositionControlElement.h \
     ../../Core/NObjInArea.h \
@@ -61,7 +61,8 @@ HEADERS += \
     ../../Core/NSignalEstimation.h \
     ../../Core/NSignumSeparator.h \
     ../../Core/NSimpleStatistic.h \
-    ../../Core/NSuppressionUnit.h
+    ../../Core/NSuppressionUnit.h \
+    ../../Core/NTrajectoryElement.h
 
 SOURCES += \
     ../../Core/NActuatorSignals.cpp \
@@ -82,6 +83,7 @@ SOURCES += \
     ../../Core/NManipulatorInputEmulator.cpp \
     ../../Core/NManipulatorSource.cpp \
     ../../Core/NManipulatorSourceEmulator.cpp \
+    ../../Core/NMazeMemory.cpp \
     ../../Core/NMotionControlLibrary.cpp \
     ../../Core/NMotionElement.cpp \
     ../../Core/NMultiPositionControl.cpp \

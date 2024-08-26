@@ -27,6 +27,10 @@ ULProperty<std::string, NTrajectoryElement, ptPubParameter> NeuronClassName;
 /// Выходной сигнал на следующий элемент траектории
 UPropertyOutputData<MDMatrix<double>, NTrajectoryElement, ptOutput | ptPubState> Output;
 
+///Номер слоя, к которому принадлежит элемент траетории
+/// (для использования в MazeMemory, по умолчанию = 0)
+ULProperty<int, NTrajectoryElement, ptPubParameter> Layer;
+
 //Input_u_top, Input_u_tcn и Input_y_pcn2 - перемычки от входа блока к синапсам соответсвующих сегментов дендритов (согласно схеме),
 //заданы для упрощения покдлючения блока NTrajectoryElement к внешним источникам.
 //Сейчас неактивны, т.к. нет возможности в коде подключить Input блока к Input синапса.
@@ -43,6 +47,25 @@ UPropertyOutputData<MDMatrix<double>, NTrajectoryElement, ptOutput | ptPubState>
 /// сигнализирует о выполнении текущего элемента траектории
 //UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_y_pcn2;
 
+///Возможные направления движения из данного элемента траектории
+/// (возможные действия в данной ситуации)
+/// параметр необходим для использования в MazeMemory
+std::vector<UEPtr<NTrajectoryElement>> Forwards;
+
+///Последнее выбранное направление движения
+/// (возможное действие)
+///параметр необходим для использования в MazeMemory
+int CurrentForward;
+
+///Обратные связи из данной точки
+///параметр необходим для использования в MazeMemory
+std::vector<UEPtr<NTrajectoryElement>> Backwards;
+
+///Последняя выбранная обратная связь
+///параметр необходим для использования в MazeMemory
+int CurrentBackward;
+
+
 
 protected:
 ///Внутренние нейроны элемента траектории
@@ -58,6 +81,9 @@ std::vector<int> DendSizes1;
 std::vector<int> DendSizes2;
 
 
+
+
+
 public: // Методы
 // --------------------------
 // Конструкторы и деструкторы
@@ -71,6 +97,10 @@ virtual ~NTrajectoryElement(void);
 // --------------------------
 /// Имя класса, создающего нейрон
 bool SetNeuronClassName(const std::string &value);
+
+///Номер слоя, к которому принадлежит элемент траетории
+/// (для использования в MazeMemory, по умолчанию = 0)
+bool SetLayer(const int &value);
 
 
 // --------------------------

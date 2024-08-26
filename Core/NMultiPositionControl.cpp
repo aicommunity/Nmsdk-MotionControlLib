@@ -29,7 +29,8 @@ NMultiPositionControl::NMultiPositionControl(void)
  InputsNum("InputsNum",this, &NMultiPositionControl::SetInputsNum),
  PCsNum("PCsNum",this, &NMultiPositionControl::SetPCsNum),
  IsNeedToRebuild("IsNeedToRebuild",this, &NMultiPositionControl::SetIsNeedToRebuild),
- PostInputThreshold("PostInputThreshold", this, &NMultiPositionControl::SetPostInputTreshold)
+ PostInputThreshold("PostInputThreshold", this, &NMultiPositionControl::SetPostInputTreshold),
+ PrebuildStructure ("PrebuildStructure", this, &NMultiPositionControl::SetPrebuildStructure)
 {
 }
 
@@ -72,6 +73,12 @@ bool NMultiPositionControl::SetPostInputTreshold(const double &value)
  return true;
 }
 
+bool NMultiPositionControl::SetPrebuildStructure(const bool &value)
+{
+ Ready=false;
+ return true;
+}
+
 // ---------------------
 
 // ---------------------
@@ -104,6 +111,7 @@ bool NMultiPositionControl::ADefault(void)
  ExternalControl = true;
  IsNeedToRebuild = false;
  PostInputThreshold = 0.024;
+ PrebuildStructure = false;
  return true;
 }
 
@@ -123,10 +131,59 @@ bool NMultiPositionControl::ABuild(void)
     InputNeurons.clear();
     ControlNeurons.clear();
 
-    if (BuildSolo)
-      CreateNeuronsSolo();
-    else
+    if (!BuildSolo)
       CreateNeurons();
+    else
+    {
+      CreateNeuronsSolo();
+
+      if (PrebuildStructure)
+      {
+        UEPtr<UContainer> cont;
+        UEPtr<UStorage> storage = GetStorage();
+        vector<NNet*> postInputs, preControls;
+
+        //Adding PreControlNeuron
+        size_t preControlSize = PreControlNeurons.size();
+        string preControlNeuronName = "PreControlNeuron"+sntoa(preControlSize+1);
+        if(CheckComponentL(preControlNeuronName))
+        {
+          PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
+          preControls.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
+        }
+        else
+        {
+          cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
+          if(!cont)
+            return 0;
+          cont->SetName(preControlNeuronName);
+          AddComponent(cont);
+          PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
+          preControls.push_back(static_pointer_cast<NNet>(cont));
+        }
+
+        //Adding PostInputNeuron
+        size_t postInputSize = PostInputNeurons.size();
+        string postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
+
+        if(CheckComponentL(postInputNeuronName))
+        {
+          PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
+          postInputs.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
+        }
+        else
+        {
+          cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(ControlNeuronType));
+          if(!cont)
+            return 0;
+          cont->SetName(postInputNeuronName);
+          AddComponent(cont);
+          PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
+          postInputs.push_back(static_pointer_cast<NNet>(cont));
+        }
+        PositionNeurons();
+      }
+    }
 
     IsNeedToRebuild = false;
   }
@@ -159,14 +216,16 @@ bool NMultiPositionControl::ACalculate(void)
   {
     RememberState = false;
     vector<NNet*> activeInputs, postInputs, preControls, activeControls;
+    string preControlNeuronName;
+    string postInputNeuronName;
 
     size_t preControlSize = PreControlNeurons.size();
-    string preControlNeuronName = "PreControlNeuron"+sntoa(preControlSize+1);
+    preControlNeuronName = "PreControlNeuron"+sntoa(preControlSize+1);
 
     //Adding PreControlNeuron
-    if (IsNeedToRebuild)
+    if(CheckComponentL(preControlNeuronName))
     {
-      if(CheckComponentL(preControlNeuronName))
+      if(IsNeedToRebuild)
       {
         PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
         preControls.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
@@ -185,11 +244,11 @@ bool NMultiPositionControl::ACalculate(void)
 
     //Adding PostInputNeuron
     size_t postInputSize = PostInputNeurons.size();
-    string postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
+    postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
 
-    if (IsNeedToRebuild)
+    if(CheckComponentL(postInputNeuronName))//Если мы не перестраиваем структуру заново, нет смысла заново добавлять уже существующие PostInput- нейроны в вектор, они там уже есть)
     {
-      if(CheckComponentL(postInputNeuronName))
+      if (IsNeedToRebuild)
       {
         PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
         postInputs.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
@@ -205,6 +264,7 @@ bool NMultiPositionControl::ACalculate(void)
       PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
       postInputs.push_back(static_pointer_cast<NNet>(cont));
     }
+
 
     //Adding Generator
     size_t generatorSize = Generators.size();
@@ -223,21 +283,11 @@ bool NMultiPositionControl::ACalculate(void)
       Generators.push_back(static_pointer_cast<NNet>(cont));
     }
 
+
     //Выбор активных InputNeurons для построения связей с PostInput
     for(size_t i=0;i<InputNeurons.size();i++)
     {
-//    if (BuildSolo)
-//    {
-//      UEPtr<NPulseLTZoneThreshold> ltzone=dynamic_pointer_cast<NPulseLTZoneThreshold>(InputNeurons[i]->GetComponentL("LTZone"));
-//    }
-//    else
-//    {
       UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(InputNeurons[i]->GetComponentL("LTZone"));
-//    }
-//      bool check_LTZ = true;
-//      if (!ltzone)
-//          check_LTZ = false;
-
       if(ltzone->OutputFrequency->As<double>(0) >0)
       {
         //string check_actInp = InputNeurons[i]->GetName();
