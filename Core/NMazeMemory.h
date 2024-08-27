@@ -80,6 +80,12 @@ double SideWeight;
 ///Пройденные элементы траектории
 std::vector<UEPtr<NTrajectoryElement>> PassedTEs;
 
+///
+//UEPtr<NTrajectoryElement> base_TE;
+
+///
+//UEPtr<NMultiPositionControl> base_MPC;
+
 
 
 public: // Методы
@@ -163,8 +169,12 @@ virtual bool AReset(void);
 // Выполняет расчет этого объекта
 virtual bool ACalculate(void);
 
-
+//Создание новой точки маршрута (варианта действия), т.е.
+//построение связки TrajectoryElement+MultiPC
 UEPtr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
+
+//Обработка новой ситуации (развилки)
+bool ProcessOptions();
 // --------------------------
 };
 
