@@ -50,8 +50,6 @@ ULProperty<int, NMazeMemory, ptPubParameter> FeaturesNum;
 ULProperty<bool, NMazeMemory, ptPubParameter> IsDeadlock;
 
 
-
-
 protected:
 ///¬се элементы траектории на схеме
 std::vector<UEPtr<NTrajectoryElement>> TrajectoryElements;
@@ -68,23 +66,17 @@ int CurrentTE;
 /// Ќомер текущего сло€
 int CurrentLayer;
 
-///–ассто€ние между сло€ми по оси X (нужно дл€ растановки блоков)
+///–ассто€ние по умолчанию между сло€ми по оси X (нужно дл€ растановки блоков)
 double LayerShift;
 
-///–ассто€ние между блоками по оси Y (нужно дл€ растановки блоков)
+///–ассто€ние по умолчанию между блоками по оси Y (нужно дл€ растановки блоков)
 double yShift;
 
-///¬ес дополнительных св€зей (на направлени€ помимо основного)
+///¬ес по умолчанию дополнительных св€зей (на направлени€ помимо основного)
 double SideWeight;
 
 ///ѕройденные элементы траектории
 std::vector<UEPtr<NTrajectoryElement>> PassedTEs;
-
-///
-//UEPtr<NTrajectoryElement> base_TE;
-
-///
-//UEPtr<NMultiPositionControl> base_MPC;
 
 
 
@@ -174,7 +166,7 @@ virtual bool ACalculate(void);
 UEPtr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
 
 //ќбработка новой ситуации (развилки)
-bool ProcessOptions();
+//bool ProcessOptions();
 // --------------------------
 };
 
