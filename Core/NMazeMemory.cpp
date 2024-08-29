@@ -217,30 +217,30 @@ bool NMazeMemory::ACalculate(void)
         //+убрать "тупиковый" ЭТ из стека пройденных точек
         PassedTEs.pop_back();
       }
-      else
-      {
-       //Проверяем, есть ли другие активные ЭТ в сети -
-       //т.е.совпадает ли текущая ситуация с какой-либо из уже изученных
-       for(int i = 0; i++; i<CurrentTE)
-       {
-        UEPtr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
-        UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
-        if(!ltzone)
-            return true;
+//      else
+//      {
+//       //Проверяем, есть ли другие активные ЭТ в сети -
+//       //т.е.совпадает ли текущая ситуация с какой-либо из уже изученных
+//       for(int i = 0; i++; i<CurrentTE)
+//       {
+//        UEPtr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
+//        UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+//        if(!ltzone)
+//            return true;
 
-        if(ltzone->OutputFrequency->As<double>(0) >0)
-        {
-         //string check_actInp = InputNeurons[i]->GetName();
-         ActiveTE.push_back(TrajectoryElements[i]);
-        }
+//        if(ltzone->OutputFrequency->As<double>(0) >0)
+//        {
+//         //string check_actInp = InputNeurons[i]->GetName();
+//         ActiveTE.push_back(TrajectoryElements[i]);
+//        }
 
-        if(ActiveTE.size()>0)
-        {
-            //сливаем активные ЭТ в один
-        }
+//        if(ActiveTE.size()>0)
+//        {
+//            //сливаем активные ЭТ в один
+//        }
 
-       }
-      }
+//       }
+//      }
 
 
 
@@ -389,7 +389,7 @@ bool NMazeMemory::ACalculate(void)
           CreateLink(start_name,"Output", finish_name, "Input");
       //base_MPC->RememberState = true;
 
-
+    }
 
 //      //Переходим к следующему элементу траектории (обновляем CurrentTE)
 //      for(int i = 0; i<int(TrajectoryElements.size()); i++)
@@ -445,7 +445,7 @@ bool NMazeMemory::ACalculate(void)
         }
 
       }
-    }
+
 
   return true;
 }
@@ -518,8 +518,8 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
  return traj_el;
 }
 
-bool NMazeMemory::ProcessOptions()
-{
+//bool NMazeMemory::ProcessOptions()
+//{
 //  // если есть доступные направления
 //  UEPtr<NTrajectoryElement> traj_el;
 //  MVector<double,3> base_coords = base_TE->GetCoord();
@@ -644,8 +644,8 @@ bool NMazeMemory::ProcessOptions()
 //   }
 //  }
 
-  return true;
-}
+//  return true;
+//}
 
 }
 #endif
