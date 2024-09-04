@@ -38,7 +38,7 @@ public: // Параметры
 ULProperty<int, NMazeMemory, ptPubParameter> OptionsNum;
 
 /// Флаг ситуации с множественным выбором (перекресток, развилка)
-ULProperty<bool, NMazeMemory, ptPubParameter> NewSituation;
+ULProperty<bool, NMazeMemory, ptPubParameter> Situation;
 
 /// Флаг запоминания ситуации (положения)
 ULProperty<bool, NMazeMemory, ptPubParameter> RememberSituation;
@@ -54,8 +54,8 @@ protected:
 ///Все элементы траектории на схеме
 std::vector<UEPtr<NTrajectoryElement>> TrajectoryElements;
 
-/// Активные элементы траектории в схеме
-std::vector<UEPtr<NTrajectoryElement>> ActiveTE;
+/// Активные PostInput нейроны в схеме
+std::vector<UEPtr<NTrajectoryElement>> ActivePIs;
 
 /// Блоки MultiPC (осуществляют запоминание признаков ситуации)
 std::vector<UEPtr<NMultiPositionControl>> MultiPCs;
@@ -77,6 +77,12 @@ double SideWeight;
 
 ///Пройденные элементы траектории
 std::vector<UEPtr<NTrajectoryElement>> PassedTEs;
+
+///Текущий элемент траектории
+UEPtr<NTrajectoryElement> base_TE;
+
+///MultiPC, соответствующий текущему элементу траектории
+UEPtr<NMultiPositionControl> base_MPC;
 
 
 
@@ -165,8 +171,18 @@ virtual bool ACalculate(void);
 //построение связки TrajectoryElement+MultiPC
 UEPtr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
 
+//Слияние совпадающих элементов траектории
+bool MergingTEs();
+
+//Проверяет, есть ли активные PostInput нейроны в сети
+std::vector<UEPtr<NTrajectoryElement>> CheckActivePIs();
+
 //Обработка новой ситуации (развилки)
-//bool ProcessOptions();
+bool ProcessOptions();
+
+//Обработка тупика
+bool DeadlockProcessing();
+
 // --------------------------
 };
 

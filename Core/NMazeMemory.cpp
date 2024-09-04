@@ -27,7 +27,7 @@ namespace NMSDK {
 // --------------------------
 NMazeMemory::NMazeMemory(void)
 : OptionsNum("OptionsNum",this, &NMazeMemory::SetOptionsNum),
-  NewSituation("NewSituation",this, &NMazeMemory::SetNewSituation),
+  Situation("Situation",this, &NMazeMemory::SetNewSituation),
   RememberSituation("RememberSituation",this, &NMazeMemory::SetRememberSituation),
   FeaturesNum("FeaturesNum",this, &NMazeMemory::SetFeaturesNum),
   IsDeadlock("IsDeadlock",this, &NMazeMemory::SetIsDeadlock)
@@ -136,11 +136,9 @@ bool NMazeMemory::AReset(void)
 // Восстановление настроек по умолчанию и сброс процесса счета
 bool NMazeMemory::ADefault(void)
 {
- NewSituation = false;
+ Situation = false;
  RememberSituation = false;
  FeaturesNum = 1;
-
- NewSituation = false;
  OptionsNum = 2;
  IsDeadlock = false;
 
@@ -172,280 +170,201 @@ bool NMazeMemory::ABuild(void)
 // Выполняет расчет этого объекта
 bool NMazeMemory::ACalculate(void)
 {
-    UEPtr<NTrajectoryElement> base_TE = TrajectoryElements[CurrentTE];
-    UEPtr<NMultiPositionControl> base_MPC = MultiPCs[CurrentTE];
+  base_TE = TrajectoryElements[CurrentTE];
+  base_MPC = MultiPCs[CurrentTE];
 
-    if (NewSituation)
-    {
-      //Обрабатываем новую ситуацию
-      NewSituation = false;
-      //base_TE = TrajectoryElements[CurrentTE];
-      PassedTEs.push_back(base_TE);
-      //base_MPC = MultiPCs[CurrentTE];
+  string check_baseTE = string(base_TE->GetName());
+  string check_baseMPC = string(base_MPC->GetName());
+
+  if (Situation)
+  {
+    //Обрабатываем новую ситуацию
+    Situation = false;
+    PassedTEs.push_back(base_TE);
+
+    //Проверяем, есть ли активные PostInput нейроны в сети -
+    //т.е.совпадает ли текущая ситуация с какой-либо из уже изученных
+    ActivePIs.clear();
+    ActivePIs = CheckActivePIs();
+    //std::vector<UEPtr<NTrajectoryElement>> actives = CheckActivePIs();
+    //ActivePIs.assign(actives.begin(), actives.end());
+
+   if(ActivePIs.size()>0)//если обнаружили другой активный ТЭ, помимо текущего,
+   {
+     MergingTEs(); //сливаем активные ЭТ в один
+   }
+   else if (OptionsNum <1) // если нет доступных направлений движения
+   {
+     //w обратной связи на ЭТ(i-1) = 1,
+     //w текущего ЭТ(i) = 0,2
+   }
+   else // если есть доступные направления
+   {
+     UEPtr<NTrajectoryElement> traj_el;
+     MVector<double,3> base_coords = base_TE->GetCoord();
+
+     CurrentLayer++;
+
+     UEPtr<NPulseNeuron> base_neuron = TrajectoryElements[CurrentTE]->GetComponentL<NPulseNeuron>("Neuron1", true);
+     UEPtr<NLTZone> ltzone_te = base_neuron->GetComponentL<NLTZone>("LTZone", true);
+     if(!ltzone_te)
+      return true;
+
+     //добавляем синапсы на текущий ЭТ для обратных связей на сому
+     UEPtr<NPulseMembrane> base_soma = base_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+     if (CurrentTE==0)
+         base_soma->NumExcitatorySynapses = OptionsNum+1; //дополнительный синапс на первый ЭТ - для запускающего сигнала с высшего уровня СУ
+     else
+         base_soma->NumExcitatorySynapses = OptionsNum;
+     base_soma->Reset();
+     //на N1_D1_2
+     UEPtr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
+     base_dend->NumExcitatorySynapses = OptionsNum;
+     base_dend->Reset();
 
 
-      if (IsDeadlock)//Если попали в тупик
+     for(int k = 0; k<OptionsNum; k++)
+     {
+      //Рассчитываем координаты и добавляем блоки
+      double x = (double)CurrentLayer*LayerShift + base_coords[0];
+      double y = (double)k*yShift + base_coords[1];
+      MVector<double,3> coords = {x, y, 0.0};
+      traj_el = CreatePoint(coords);//ДОБАВЛЕНИЕ БЛОКОВ
+      traj_el->Reset();
+      base_TE->Forwards.push_back(traj_el);
+      traj_el->Layer = CurrentLayer;
+
+      //Строим связи от текущего элемента траектории на только что созданные
+      bool res(true);
+      //возбуждающее воздействие на N1_D5_syn1
+      UEPtr<NPulseNeuron> input_neuron = traj_el->GetComponentL<NPulseNeuron>("Neuron1", true);
+      UEPtr<NPulseSynapse> synapse = input_neuron->GetComponentL<NPulseSynapse>("Dendrite1_5.ExcSynapse1",true);
+      if (k>0)
       {
-        //w обратной связи на ЭТ(i-1) = 1
-        UEPtr<NTrajectoryElement> prev_TE;
-        int k = PassedTEs.size()-1;
-        if (k>=0)
-        {
-          prev_TE = PassedTEs[k];
-        }
-        NameT start_name = prev_TE->GetName()+".Output";
-        UEPtr<NPulseNeuron> fin_neuron = base_TE->GetComponentL<NPulseNeuron>("Neuron1", true);
-        UEPtr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
-
-        for(int i=0; i< fin_dend->NumExcitatorySynapses(); i++)
-        {
-          UEPtr<NPulseSynapse> fin_synapse = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i), true);
-          NameT finish_name = fin_synapse->GetName();
-          if(CheckLink(start_name,finish_name))
-              fin_synapse->Weight=1;
-        }
-
-        //w текущего ЭТ(i) = 0,2
-        UEPtr<NPulseNeuron> base_neuron = base_TE->GetComponentL<NPulseNeuron>("Neuron1", true);
-        UEPtr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_5", true);
-        for (int j=0; j<base_dend->NumExcitatorySynapses; j++)
-        {
-          UEPtr<NPulseSynapse> base_synapse = base_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(j), true);
-          base_synapse->Weight=0.2;
-        }
-
-        //+убрать "тупиковый" ЭТ из стека пройденных точек
-        PassedTEs.pop_back();
+        synapse->Weight = SideWeight;
       }
-//      else
-//      {
-//       //Проверяем, есть ли другие активные ЭТ в сети -
-//       //т.е.совпадает ли текущая ситуация с какой-либо из уже изученных
-//       for(int i = 0; i++; i<CurrentTE)
-//       {
-//        UEPtr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
-//        UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
-//        if(!ltzone)
-//            return true;
-
-//        if(ltzone->OutputFrequency->As<double>(0) >0)
-//        {
-//         //string check_actInp = InputNeurons[i]->GetName();
-//         ActiveTE.push_back(TrajectoryElements[i]);
-//        }
-
-//        if(ActiveTE.size()>0)
-//        {
-//            //сливаем активные ЭТ в один
-//        }
-
-//       }
-//      }
-
-
-
-
-
-
-      if (OptionsNum <1) // если нет доступных направлений движения
+      else
       {
-        //w обратной связи на ЭТ(i-1) = 1,
-        //w текущего ЭТ(i) = 0,2
+        traj_el->CurrentForward = k;
       }
-      else // если есть доступные направления
+      res&=CreateLink(base_TE->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+      if(!res)
+       return true;
+      //тормозное воздействие на N1_S1_syn1
+      synapse = input_neuron->GetComponentL<NPulseSynapse>("Soma1.InhSynapse1",true);
+      res&=CreateLink(base_TE->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+      if(!res)
+       return true;
+      //тормозное воздействие на N2_S1_syn1
+      input_neuron = traj_el->GetComponentL<NPulseNeuron>("Neuron2", true);
+      synapse = input_neuron->GetComponentL<NPulseSynapse>("Soma1.InhSynapse1",true);
+      res&=CreateLink(base_TE->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+      if(!res)
+       return true;
+
+      //обратные связи
+      traj_el->Backwards.push_back(base_TE);
+      traj_el->CurrentBackward = 0;
+      //на сому
+      int syn_num;
+      if (CurrentTE==0)
+          syn_num = k+2;
+      else
+          syn_num = k+1;
+      synapse = base_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(syn_num),true);
+      synapse->Weight = 0.2;
+      res&=CreateLink(traj_el->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+      if(!res)
+       return true;
+      //на N1_D1_2
+      synapse = base_neuron->GetComponentL<NPulseSynapse>("Dendrite1_2.ExcSynapse"+sntoa(k+1),true);
+      synapse->Weight = 0.2;
+      res&=CreateLink(traj_el->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+      if(!res)
+       return true;
+
+      //связи между PreControl нейронами для "клича"
+      int passed_max = PassedTEs.size();
+      for (int j=0; j<passed_max; j++)
       {
-        UEPtr<NTrajectoryElement> traj_el;
-        MVector<double,3> base_coords = base_TE->GetCoord();
+       UEPtr<NMultiPositionControl> output_mpc = MultiPCs[j];
+       UEPtr<NPulseNeuron> output_postinputn = output_mpc->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
+       UEPtr<NLTZone> output_ltzone = output_postinputn->GetComponentL<NLTZone>("LTZone", true);
 
-        CurrentLayer++;
+       UEPtr<NMultiPositionControl> input_mpc = MultiPCs[CurrentTE+k+1];
+       UEPtr<NPulseNeuron> input_precontroln = input_mpc->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
+       UEPtr<NPulseMembrane> input_soma = input_precontroln->GetComponentL<NPulseMembrane>("Soma1", true);
 
-        UEPtr<NPulseNeuron> base_neuron = TrajectoryElements[CurrentTE]->GetComponentL<NPulseNeuron>("Neuron1", true);
-        UEPtr<NLTZone> ltzone_te = base_neuron->GetComponentL<NLTZone>("LTZone", true);
-        if(!ltzone_te)
-         return true;
-
-        //добавляем синапсы на текущий ЭТ для обратных связей на сому
-        UEPtr<NPulseMembrane> base_soma = base_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
-        if (CurrentTE==0)
-            base_soma->NumExcitatorySynapses = OptionsNum+1; //дополнительный синапс на первый ЭТ - для запускающего сигнала с высшего уровня СУ
-        else
-            base_soma->NumExcitatorySynapses = OptionsNum;
-        base_soma->Reset();
-        //на N1_D1_2
-        UEPtr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
-        base_dend->NumExcitatorySynapses = OptionsNum;
-        base_dend->Reset();
-
-
-        for(int k = 0; k<OptionsNum; k++)
-        {
-         //Рассчитываем координаты и добавляем блоки
-         double x = (double)CurrentLayer*LayerShift + base_coords[0];
-         double y = (double)k*yShift + base_coords[1];
-         MVector<double,3> coords = {x, y, 0.0};
-         traj_el = CreatePoint(coords);//ДОБАВЛЕНИЕ БЛОКОВ
-         traj_el->Reset();
-         base_TE->Forwards.push_back(traj_el);
-         traj_el->Layer = CurrentLayer;
-
-         //Строим связи от текущего элемента траектории на только что созданные
-         bool res(true);
-         //возбуждающее воздействие на N1_D5_syn1
-         UEPtr<NPulseNeuron> input_neuron = traj_el->GetComponentL<NPulseNeuron>("Neuron1", true);
-         UEPtr<NPulseSynapse> synapse = input_neuron->GetComponentL<NPulseSynapse>("Dendrite1_5.ExcSynapse1",true);
-         if (k>0)
-         {
-           synapse->Weight = SideWeight;
-         }
-         else
-         {
-           traj_el->CurrentForward = k;
-         }
-         res&=CreateLink(base_TE->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
-         if(!res)
-          return true;
-         //тормозное воздействие на N1_S1_syn1
-         synapse = input_neuron->GetComponentL<NPulseSynapse>("Soma1.InhSynapse1",true);
-         res&=CreateLink(base_TE->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
-         if(!res)
-          return true;
-         //тормозное воздействие на N2_S1_syn1
-         input_neuron = traj_el->GetComponentL<NPulseNeuron>("Neuron2", true);
-         synapse = input_neuron->GetComponentL<NPulseSynapse>("Soma1.InhSynapse1",true);
-         res&=CreateLink(base_TE->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
-         if(!res)
-          return true;
-
-         //обратные связи
-         traj_el->Backwards.push_back(base_TE);
-         traj_el->CurrentBackward = 0;
-         //на сому
-         int syn_num;
-         if (CurrentTE==0)
-             syn_num = k+2;
-         else
-             syn_num = k+1;
-         synapse = base_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(syn_num),true);
-         synapse->Weight = 0.2;
-         res&=CreateLink(traj_el->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
-         if(!res)
-          return true;
-         //на N1_D1_2
-         synapse = base_neuron->GetComponentL<NPulseSynapse>("Dendrite1_2.ExcSynapse"+sntoa(k+1),true);
-         synapse->Weight = 0.2;
-         res&=CreateLink(traj_el->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
-         if(!res)
-          return true;
-
-         //связи между PreControl нейронами для "клича"
-         int passed_max = PassedTEs.size();
-         for (int j=0; j<passed_max; j++)
-         {
-          UEPtr<NMultiPositionControl> output_mpc = MultiPCs[j];
-          UEPtr<NPulseNeuron> output_postinputn = output_mpc->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
-          UEPtr<NLTZone> output_ltzone = output_postinputn->GetComponentL<NLTZone>("LTZone", true);
-
-          UEPtr<NMultiPositionControl> input_mpc = MultiPCs[CurrentTE+k+1];
-          UEPtr<NPulseNeuron> input_precontroln = input_mpc->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
-          UEPtr<NPulseMembrane> input_soma = input_precontroln->GetComponentL<NPulseMembrane>("Soma1", true);
-
-          int syn_num = input_soma->NumExcitatorySynapses;
-          for (int i = 1; i<=syn_num; i++)
-          {
-           UEPtr<NPulseSynapse> syn = input_precontroln->GetComponentL<NPulseSynapse>("Soma1.ExcSynapse"+sntoa(i),true);
-           if(!syn)
-             return true;
-
-           if (syn->Input.IsConnected())
-           {
-            if(syn_num==i)
-            {
-             input_soma->NumExcitatorySynapses++;
-             input_soma->Reset();
-             syn_num = input_soma->NumExcitatorySynapses;
-            }
-             continue; //перейти к следующему синапсу
-           }
-           else
-           {
-            res&=CreateLink(output_ltzone->GetLongName(this),"Output",syn->GetLongName(this),"Input");
-            if(!res)
-             return true;
-            break;
-           }
-          }
-         }
-        }
-      }
-
-      //Запоминаем текущую ситуацию
-      NameT start_name =  base_MPC->GetName()+".InputNeuron1-1.LTZone";
-      NameT finish_name = base_MPC->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
-      if(!CheckLink(start_name,finish_name))
-          CreateLink(start_name,"Output", finish_name, "Input");
-      start_name =  base_MPC->GetName()+".PreControlNeuron1.LTZone";
-      finish_name = base_MPC->GetName()+".ControlNeuron1-1.Soma1.ExcSynapse1";
-      if(!CheckLink(start_name,finish_name))
-          CreateLink(start_name,"Output", finish_name, "Input");
-      //base_MPC->RememberState = true;
-
-    }
-
-//      //Переходим к следующему элементу траектории (обновляем CurrentTE)
-//      for(int i = 0; i<int(TrajectoryElements.size()); i++)
-//      {
-//       UEPtr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
-//       UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
-//       if(!ltzone)
-//           return true;
-//       int layer = TrajectoryElements[i]->Layer;
-
-//       if (layer<CurrentLayer)
-//           continue;
-//       else if (layer>CurrentLayer)
-//           break;
-
-//       string check_name = TrajectoryElements[i]->GetName();
-//       double check_frequency = ltzone->OutputFrequency->As<double>(0);
-
-//       //(layer==CurrentLayer)&&
-//       if(ltzone->OutputFrequency->As<double>(0)>0)
-//       {
-//         CurrentTE=i;
-//         string check_TE = TrajectoryElements[CurrentTE]->GetName();
-//       }
-//      }
-
-      //Переходим к следующему элементу траектории (обновляем CurrentForward)
-       for(int i = 0; i<int(base_TE->Forwards.size()); i++)
+       int syn_num = input_soma->NumExcitatorySynapses;
+       for (int i = 1; i<=syn_num; i++)
        {
-        UEPtr<NPulseNeuron> neuron = base_TE->Forwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
-        UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
-        if(!ltzone)
-            return true;
+        UEPtr<NPulseSynapse> syn = input_precontroln->GetComponentL<NPulseSynapse>("Soma1.ExcSynapse"+sntoa(i),true);
+        if(!syn)
+          return true;
 
-        //string check_name = TrajectoryElements[i]->GetName();
-        //double check_frequency = ltzone->OutputFrequency->As<double>(0);
-
-        if(ltzone->OutputFrequency->As<double>(0)>0)
+        if (syn->Input.IsConnected())
         {
-         base_TE->CurrentForward = i;
-         NameT currentf_name = base_TE->Forwards[i]->GetName();
-
-         for(int j = 0; j<int(TrajectoryElements.size()); j++)//(обновляем CurrentTE)
+         if(syn_num==i)
          {
-           NameT name = TrajectoryElements[j]->GetName();
-           if (name==currentf_name)
-           {
-               CurrentTE=j;
-               break;
-           }
+          input_soma->NumExcitatorySynapses++;
+          input_soma->Reset();
+          syn_num = input_soma->NumExcitatorySynapses;
          }
+          continue; //перейти к следующему синапсу
+        }
+        else
+        {
+         res&=CreateLink(output_ltzone->GetLongName(this),"Output",syn->GetLongName(this),"Input");
+         if(!res)
+          return true;
          break;
         }
-
+       }
       }
+     }
+   }
 
+   //Запоминаем текущую ситуацию
+   NameT start_name =  base_MPC->GetName()+".InputNeuron1-1.LTZone";
+   NameT finish_name = base_MPC->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
+   if(!CheckLink(start_name,finish_name))
+       CreateLink(start_name,"Output", finish_name, "Input");
+   start_name =  base_MPC->GetName()+".PreControlNeuron1.LTZone";
+   finish_name = base_MPC->GetName()+".ControlNeuron1-1.Soma1.ExcSynapse1";
+   if(!CheckLink(start_name,finish_name))
+       CreateLink(start_name,"Output", finish_name, "Input");
+   //base_MPC->RememberState = true;
+ }
+
+
+ //Переходим к следующему элементу траектории (обновляем CurrentForward)
+ for(int i = 0; i<int(base_TE->Forwards.size()); i++)
+ {
+   UEPtr<NPulseNeuron> neuron = base_TE->Forwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
+   UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+   if(!ltzone)
+       return true;
+
+   //string check_name = TrajectoryElements[i]->GetName();
+   //double check_frequency = ltzone->OutputFrequency->As<double>(0);
+
+   if(ltzone->OutputFrequency->As<double>(0)>0)
+   {
+    base_TE->CurrentForward = i;
+    NameT currentf_name = base_TE->Forwards[i]->GetName();
+
+    for(int j = 0; j<int(TrajectoryElements.size()); j++)//(обновляем CurrentTE)
+    {
+      NameT name = TrajectoryElements[j]->GetName();
+      if (name==currentf_name)
+      {
+          CurrentTE=j;
+          break;
+      }
+    }
+    break;
+   }
+ }
 
   return true;
 }
@@ -518,8 +437,224 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
  return traj_el;
 }
 
-//bool NMazeMemory::ProcessOptions()
-//{
+std::vector<UEPtr<NTrajectoryElement>> NMazeMemory::CheckActivePIs()
+{
+  std::vector<UEPtr<NTrajectoryElement>> active_PIs;
+  for(int i = 0; i<CurrentTE; i++)
+  {
+    UEPtr<NPulseNeuron> neuron = MultiPCs[i]->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
+    UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+//    if(!ltzone)
+//      return active_PIs;
+
+    if(ltzone->OutputFrequency->As<double>(0) >0)
+    {
+      string check_actInp = TrajectoryElements[i]->GetName();
+      active_PIs.push_back(TrajectoryElements[i]);
+    }
+  }
+  return active_PIs;
+}
+
+
+
+bool NMazeMemory::MergingTEs()
+{
+    UEPtr<NTrajectoryElement> prev_TE;
+    int k = PassedTEs.size()-2;
+
+    if (k<0)
+        return true;
+
+    prev_TE = PassedTEs[k];
+    string check_prevTE = string(prev_TE->GetName());
+
+    for (int j=0; j<ActivePIs.size(); j++)
+    {
+      //переносим ВХОДНЫЕ СВЯЗИ с текущего ЭТ на активный
+      NameT start = prev_TE->GetLongName(this);
+      bool res;
+      NameT finish;
+
+      //возуждающее воздействие на N1_D1_5
+      UEPtr<NPulseNeuron> fin_neuron = ActivePIs[j]->GetComponentL<NPulseNeuron>("Neuron1", true);
+      UEPtr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_5", true);
+      int dend_syns = fin_dend->NumExcitatorySynapses;
+      for (int n = 1; n<=dend_syns; n++)
+      {
+        UEPtr<NPulseSynapse> syn = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
+        if(!syn)
+          return true;
+
+        if (syn->Input.IsConnected())
+        {
+         if(n==dend_syns)
+         {
+          fin_dend->NumExcitatorySynapses++;
+          fin_dend->Reset();
+          dend_syns = fin_dend->NumExcitatorySynapses;
+         }
+          continue; //перейти к следующему синапсу
+        }
+        else
+        {
+         //finish_name = ActivePIs[j]->GetName()+".Neuron1.Dendrite1_5.ExcSynapse"+sntoa(n);
+         finish = syn->GetLongName(this);
+         res&=CreateLink(start,"Output",finish,"Input");
+//         if(!res)
+//          return true;
+         break;
+        }
+      }
+
+      //тормозное воздействие на N1_S1
+      UEPtr<NPulseMembrane> fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+      int soma_syn = fin_soma->NumInhibitorySynapses;
+      for (int n = 1; n<=soma_syn; n++)
+      {
+       UEPtr<NPulseSynapse> syn = fin_soma->GetComponentL<NPulseSynapse>("InhSynapse"+sntoa(n),true);
+       if(!syn)
+         return true;
+
+       if (syn->Input.IsConnected())
+       {
+         if(n==soma_syn)
+         {
+           fin_soma->NumInhibitorySynapses++;
+           fin_soma->Reset();
+           soma_syn = fin_soma->NumInhibitorySynapses;
+         }
+         continue; //перейти к следующему синапсу
+       }
+       else
+       {
+        //finish = ActivePIs[j]->GetName()+".Neuron1.Soma1.InhSynapse"+sntoa(n);
+        finish = syn->GetLongName(this);
+        res&=CreateLink(start,"Output",finish,"Input");
+        //if(!res)
+        // return true;
+        break;
+       }
+      }
+
+      //тормозное воздействие на N2_S1
+      fin_neuron = ActivePIs[j]->GetComponentL<NPulseNeuron>("Neuron2", true);
+      fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+      soma_syn = fin_soma->NumInhibitorySynapses;
+      for (int n = 1; n<=soma_syn; n++)
+      {
+        UEPtr<NPulseSynapse> syn = fin_soma->GetComponentL<NPulseSynapse>("InhSynapse"+sntoa(n),true);
+        if(!syn)
+          return true;
+
+        if (syn->Input.IsConnected())
+        {
+          if(n==soma_syn)
+          {
+            fin_soma->NumInhibitorySynapses++;
+            fin_soma->Reset();
+            soma_syn = fin_soma->NumInhibitorySynapses;
+          }
+          continue; //перейти к следующему синапсу
+        }
+        else
+        {
+          finish = syn->GetLongName(this);
+          //finish = ActivePIs[j]->GetName()+".Neuron1.Soma1.InhSynapse"+sntoa(n);
+          res&=CreateLink(start,"Output",finish,"Input");
+          //if(!res)
+          //  return true;
+          break;
+        }
+      }
+
+      //переносим ОБРАТНЫЕ СВЯЗИ с текущего ЭТ на активный
+      start = ActivePIs[j]->GetLongName(this);
+
+      int back_max = base_TE->Backwards.size();
+      for (int i = 0; i<back_max; i++)
+      {
+        //на N1_D1_2
+        UEPtr<NPulseNeuron> fin_neuron = base_TE->Backwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
+        UEPtr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
+        int dend_syns = fin_dend->NumExcitatorySynapses;
+        for (int n = 1; n<=dend_syns; n++)
+        {
+          UEPtr<NPulseSynapse> syn = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
+          if(!syn)
+            return true;
+
+          if (syn->Input.IsConnected())
+          {
+           if(n==dend_syns)
+           {
+            fin_dend->NumExcitatorySynapses++;
+            fin_dend->Reset();
+            dend_syns = fin_dend->NumExcitatorySynapses;
+           }
+            continue; //перейти к следующему синапсу
+          }
+          else
+          {
+           //finish_name = ActivePIs[j]->GetName()+".Neuron1.Dendrite1_5.ExcSynapse"+sntoa(n);
+           finish = syn->GetLongName(this);
+           res&=CreateLink(start,"Output",finish,"Input");
+    //       if(!res)
+    //        return true;
+           break;
+          }
+        }
+
+
+        //на N1_S1
+        fin_neuron = base_TE->Backwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
+        fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+
+        soma_syn = fin_soma->NumExcitatorySynapses;
+        for (int n = 1; n<=soma_syn; n++)
+        {
+          UEPtr<NPulseSynapse> syn = fin_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
+          if(!syn)
+            return true;
+
+          if (syn->Input.IsConnected())
+          {
+            if(n==soma_syn)
+            {
+              fin_soma->NumExcitatorySynapses++;
+              fin_soma->Reset();
+              soma_syn = fin_soma->NumExcitatorySynapses;
+            }
+            continue; //перейти к следующему синапсу
+          }
+          else
+          {
+            finish = syn->GetLongName(this);
+            //finish = ActivePIs[j]->GetName()+".Neuron1.Soma1.ExcSynapse"+sntoa(n);
+            res&=CreateLink(start,"Output",finish,"Input");
+            //if(!res)
+            //  return true;
+            break;
+          }
+        }
+
+      }
+
+
+    }
+
+    DelComponent(base_TE,true);
+    base_TE = ActivePIs[0];
+    DelComponent(base_MPC, true);
+    //base_MPC =
+    NameT check_base = base_TE->GetName();
+
+    return true;
+}
+
+
+bool NMazeMemory::ProcessOptions()
+{
 //  // если есть доступные направления
 //  UEPtr<NTrajectoryElement> traj_el;
 //  MVector<double,3> base_coords = base_TE->GetCoord();
@@ -643,9 +778,54 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
 //    }
 //   }
 //  }
+  return true;
+}
 
-//  return true;
-//}
+
+bool NMazeMemory::DeadlockProcessing()//ТРЕБУЕТ ОТЛАДКИ
+{
+//    //w обратной связи на ЭТ(i-1) = 1
+//    UEPtr<NTrajectoryElement> prev_TE;
+//    int k = PassedTEs.size()-2;
+//    if (k>=0)
+//    {
+//      prev_TE = PassedTEs[k];
+//      string check_prevTE = string(prev_TE->GetName());
+//    }
+//    NameT start_name = prev_TE->GetName()+".Output";
+
+//    UEPtr<NPulseNeuron> fin_neuron = base_TE->GetComponentL<NPulseNeuron>("Neuron1", true);
+//    UEPtr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
+//    UEPtr<NPulseMembrane> fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+//    int check_dmax = fin_dend->NumExcitatorySynapses();
+
+//    for(int i=0; i< fin_dend->NumExcitatorySynapses(); i++)
+//    {
+//      NameT finish_name = base_TE->GetName()+".Neuron1.Dendrite1_2.ExcSynapse"+sntoa(i+1);
+//      if(CheckLink(start_name,finish_name))
+//      {
+//          UEPtr<NPulseSynapse> fin_synapse = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i), true);
+//          fin_synapse->Weight=1;
+
+//              //fin_synapse = fin_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i), true);
+//              //fin_synapse->Weight=1;
+//      }
+//    }
+
+//    //w текущего ЭТ(i) = 0,2
+//    UEPtr<NPulseNeuron> base_neuron = base_TE->GetComponentL<NPulseNeuron>("Neuron1", true);
+//    UEPtr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_5", true);
+//    for (int j=0; j<base_dend->NumExcitatorySynapses; j++)
+//    {
+//      UEPtr<NPulseSynapse> base_synapse = base_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(j), true);
+//      base_synapse->Weight=0.2;
+//    }
+
+//    //+убрать "тупиковый" ЭТ из стека пройденных точек
+//    PassedTEs.pop_back();
+
+    return true;
+}
 
 }
 #endif
