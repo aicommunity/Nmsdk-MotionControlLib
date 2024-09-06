@@ -67,11 +67,15 @@ int CurrentBackward;
 
 ///Все связи из данной точки
 ///параметр необходим для использования в MazeMemory
-std::vector<UEPtr<NTrajectoryElement>> AllPaths;
+std::vector<UEPtr<NTrajectoryElement>> Paths;
+
+///Последняя выбранная связь (прямая или обратная)
+///параметр необходим для использования в MazeMemory
+int CurrentPath;
 
 ///Связь, по которой попали из предыдущего TE в текущий
 ///параметр необходим для использования в MazeMemory
-int UsedPath;
+//int UsedPath;
 
 
 

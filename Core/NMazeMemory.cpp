@@ -254,6 +254,7 @@ bool NMazeMemory::ACalculate(void)
           traj_el = CreatePoint(coords);//ДОБАВЛЕНИЕ БЛОКОВ
           traj_el->Reset();
           base_TE->Forwards.push_back(traj_el);
+          base_TE->Paths.push_back(traj_el);
           traj_el->Layer = CurrentLayer;
 
           //Строим связи от текущего элемента траектории на только что созданные
@@ -286,6 +287,7 @@ bool NMazeMemory::ACalculate(void)
 
           //обратные связи
           traj_el->Backwards.push_back(base_TE);
+          traj_el->Paths.push_back(base_TE);
           traj_el->CurrentBackward = 0;
           //на сому
           int syn_num;
@@ -326,20 +328,20 @@ bool NMazeMemory::ACalculate(void)
 
             if (syn->Input.IsConnected())
             {
-             if(syn_num==i)
-             {
-              input_soma->NumExcitatorySynapses++;
-              input_soma->Reset();
-              syn_num = input_soma->NumExcitatorySynapses;
-             }
+              if(syn_num==i)
+              {
+               input_soma->NumExcitatorySynapses++;
+               input_soma->Reset();
+               syn_num = input_soma->NumExcitatorySynapses;
+              }
               continue; //перейти к следующему синапсу
             }
             else
             {
-             res&=CreateLink(output_ltzone->GetLongName(this),"Output",syn->GetLongName(this),"Input");
-             if(!res)
-              return true;
-             break;
+              res&=CreateLink(output_ltzone->GetLongName(this),"Output",syn->GetLongName(this),"Input");
+              if(!res)
+               return true;
+              break;
             }
            }
           }
@@ -411,9 +413,38 @@ bool NMazeMemory::ACalculate(void)
        res&=CreateLink(base_TE->GetLongName(this),"Output", fin,"Input");
 //       if(!res)
 //        return true;
-       for (int j = 0; j< MultiPCs.size(); j++)
-       {
 
+       bool response = false;
+       UEPtr<NTrajectoryElement> responding_TE;
+
+       int max_layer = 0;
+       for (int j = 0; j< int(MultiPCs.size()); j++)
+       {
+         if (base_TE->Layer - TrajectoryElements[j]->Layer > 1)
+         {
+           UEPtr<NPulseNeuron> neuron = MultiPCs[j]->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
+           UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+           if(!ltzone)
+               return true;
+
+           if (ltzone->OutputFrequency->As<double>(0)>0) //Проверяем, ответил ли кто-то через слой или ниже
+           {
+             response = true;
+             if (TrajectoryElements[j]->Layer > max_layer)
+                 max_layer = TrajectoryElements[j]->Layer;
+           }
+         }
+       }
+
+       if (response)
+       {
+           //для нижнего из сработавших нейронов - переключить связь на следующую
+           responding_TE->CurrentPath++;
+       }
+       else
+       {
+           //для следующей связи w = 1,
+           //для текущей в списке w  = 0.2
        }
 
 
@@ -464,21 +495,35 @@ bool NMazeMemory::ACalculate(void)
           break;
         }
       }
-      if (found)
-        break;
-
-      //обновляем CurrentBackward
-      for(int j = 0; j<int(base_TE->Backwards.size()); j++)
+      if (!found)
       {
-        NameT name = base_TE->Backwards[j]->GetName();
-        if (name==currentf_name)
+        //обновляем CurrentBackward
+        for(int j = 0; j<int(base_TE->Backwards.size()); j++)
         {
-          base_TE->CurrentBackward = j;
-          found = true;
-          break;
+          NameT name = base_TE->Backwards[j]->GetName();
+          if (name==currentf_name)
+          {
+            base_TE->CurrentBackward = j;
+            found = true;
+            break;
+          }
         }
       }
-      break;
+
+      if (!found)
+      {
+        //обновляем CurrentPath
+        for(int j = 0; j<int(base_TE->Paths.size()); j++)
+        {
+          NameT name = base_TE->Paths[j]->GetName();
+          if (name==currentf_name)
+          {
+            base_TE->CurrentPath = j;
+            found = true;
+            break;
+          }
+        }
+      }
     }
   }
 
