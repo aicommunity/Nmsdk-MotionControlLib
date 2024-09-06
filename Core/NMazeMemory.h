@@ -41,7 +41,7 @@ ULProperty<int, NMazeMemory, ptPubParameter> OptionsNum;
 ULProperty<bool, NMazeMemory, ptPubParameter> Situation;
 
 /// Флаг запоминания ситуации (положения)
-ULProperty<bool, NMazeMemory, ptPubParameter> RememberSituation;
+//ULProperty<bool, NMazeMemory, ptPubParameter> RememberSituation;
 
 /// Количество признаков, описывающих запоминаемую ситуацию
 ULProperty<int, NMazeMemory, ptPubParameter> FeaturesNum;
@@ -104,7 +104,7 @@ bool SetOptionsNum(const int &value);
 bool SetNewSituation(const bool &value);
 
 /// Флаг ситуации с множественным выбором (перекресток, развилка)
-bool SetRememberSituation(const bool &value);
+//bool SetRememberSituation(const bool &value);
 
 /// Количество признаков, описывающих запоминаемую ситуацию
 bool SetFeaturesNum(const int &value);
@@ -172,7 +172,10 @@ virtual bool ACalculate(void);
 UEPtr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
 
 //Слияние совпадающих элементов траектории
-bool MergingTEs();
+//Принимает на вход порядковый номер ТЕ в векторе TrajectoryElements,
+//которому соответствует активный PostInput нейрон
+//т.е. номер TE, с которым совпадает текущая ситуация
+bool MergingTEs(int active_num);
 
 //Проверяет, есть ли активные PostInput нейроны в сети
 std::vector<UEPtr<NTrajectoryElement>> CheckActivePIs();
