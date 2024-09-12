@@ -15,6 +15,7 @@ See file license.txt for more information
 
 #include "NMultiPositionControl.h"
 
+
 namespace NMSDK {
 
 // Ìועמהû
@@ -52,6 +53,12 @@ bool NMultiPositionControl::SetInputsNum(const int &value)
 {
  Ready=false;
  //IsNeedToRebuild = true;
+ return true;
+}
+
+bool NMultiPositionControl::SetFeaturesNum(const int &value)
+{
+ Ready=false;
  return true;
 }
 
@@ -524,12 +531,13 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
       }
       else
       {
-        InputNeuronType = "NSPNeuronGen";
-        cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(InputNeuronType));
+        //InputNeuronType = "NSPNeuronGen";
+        InputNeuronType = "NNeuronTrainer";
+        cont=dynamic_pointer_cast<NNeuronTrainer>(storage->TakeObject(InputNeuronType));
         if(!cont)
           return 0;
         cont->SetName(inputNeuronName);
-        AddComponent(cont);
+        AddComponent(cont);           
         InputNeurons.push_back(static_pointer_cast<NNet>(cont));
         InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
         cont->GetLongName(owner, inputName);

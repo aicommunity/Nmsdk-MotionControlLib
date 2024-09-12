@@ -13,6 +13,8 @@ See file license.txt for more information
 #define NMultiPositionControl_H
 
 #include "NPositionControlElement.h"
+#include "../../Nmsdk-PulseLib/Core/NNeuronTrainer.h"
+//#include <string>
 
 namespace NMSDK {
 
@@ -80,6 +82,7 @@ virtual ~NMultiPositionControl(void);
 bool SetBuildSolo(const bool &value);
 bool SetInputsNum(const int &value);
 bool SetPCsNum(const int &value);
+bool SetFeaturesNum(const int &value);
 bool SetIsNeedToRebuild(const bool &value);
 bool SetPostInputTreshold(const double &value);
 bool SetPrebuildStructure(const bool &value);

@@ -19,6 +19,7 @@ See file license.txt for more information
 
 #include "NTrajectoryElement.h"
 #include "NMultiPositionControl.h"
+#include "../../Nmsdk-PulseLib/Core/NNeuronTrainer.h"
 #include "../../Nmsdk-PulseLib/Core/NPulseNeuron.h"
 #include "../../../Rdk/Deploy/Include/rdk.h"
 #include <iostream>
@@ -33,24 +34,32 @@ namespace NMSDK {
 class RDK_LIB_TYPE NMazeMemory: public UNet
 {
 public: // Параметры
-/// Количество возможных вариантов выбора в ситуации
-/// (возможных напарвлений движения)
-ULProperty<int, NMazeMemory, ptPubParameter> OptionsNum;
-
 /// Флаг ситуации с множественным выбором (перекресток, развилка)
 ULProperty<bool, NMazeMemory, ptPubParameter> Situation;
 
-/// Флаг запоминания ситуации (положения)
-//ULProperty<bool, NMazeMemory, ptPubParameter> RememberSituation;
+/// Вектор возможных вариантов действий в ситуации (направлений движения)
+/// Кол-во элементов = кол-ву возможных вариантов,
+/// значения элеменов вектора:
+/// 1 - есть возможность совершить это действие, 0 - нет возможности
+/// [0] - поворот направо, [1] - поворот налево, [2] - ехать прямо, [3] - стоп
+ULProperty<std::vector<int>,NMazeMemory, ptPubParameter> Options;
+
+///Тип нейронов действия
+RDK::ULProperty<string, NMazeMemory, ptPubParameter> ActionNeuronsType;
 
 /// Количество признаков, описывающих запоминаемую ситуацию
 ULProperty<int, NMazeMemory, ptPubParameter> FeaturesNum;
 
-/// Флаг попадания в тупик
-ULProperty<bool, NMazeMemory, ptPubParameter> IsDeadlock;
+/// Флаг завершения работы (все возможные варианты исследованы)
+ULProperty<bool, NMazeMemory, ptPubParameter> IsDone;
 
+///Вектор параметров ситуации (сейчас = {x,y,alpha}, где alpha - ориентация робота
+ULProperty<MDMatrix<double>, NMazeMemory, ptPubParameter> Coords;
 
 protected:
+///Нейроны действий
+std::vector<UEPtr<NPulseNeuron>> ActionNeurons;
+
 ///Все элементы траектории на схеме
 std::vector<UEPtr<NTrajectoryElement>> TrajectoryElements;
 
@@ -79,10 +88,13 @@ double SideWeight;
 std::vector<UEPtr<NTrajectoryElement>> PassedTEs;
 
 ///Текущий элемент траектории
-UEPtr<NTrajectoryElement> base_TE;
+UEPtr<NTrajectoryElement> BaseTE;
 
 ///MultiPC, соответствующий текущему элементу траектории
-UEPtr<NMultiPositionControl> base_MPC;
+UEPtr<NMultiPositionControl> BaseMPC;
+
+///Предыдущий элемент траектории
+UEPtr<NTrajectoryElement> PrevTE;
 
 
 
@@ -97,21 +109,27 @@ virtual ~NMazeMemory(void);
 // --------------------------
 // Методы упраления параметрами
 // --------------------------
-/// Количество возможных вариантов (направлений движения)
-bool SetOptionsNum(const int &value);
-
 /// Флаг ситуации с множественным выбором (перекресток, развилка)
-bool SetNewSituation(const bool &value);
+bool SetSituation(const bool &value);
 
-/// Флаг ситуации с множественным выбором (перекресток, развилка)
-//bool SetRememberSituation(const bool &value);
+/// Вектор возможных вариантов действий в ситуации (направлений движения)
+/// Кол-во элементов = кол-ву возможных вариантов,
+/// значения элеменов вектора:
+/// 1 - есть возможность совершить это действие, 0 - нет возможности
+/// [0] - поворот направо, [1] - поворот налево, [2] - ехать прямо, [3] - стоп
+bool SetOptions(const std::vector<int> &value);
+
+///Тип нейронов действия
+bool SetActionNeuronsType(const string &value);
 
 /// Количество признаков, описывающих запоминаемую ситуацию
 bool SetFeaturesNum(const int &value);
 
-/// Флаг попадания в тупик
-bool SetIsDeadlock(const bool &value);
+/// Флаг завершения работы (все возможные варианты исследованы)
+bool SetIsDone(const bool &value);
 
+///Вектор параметров ситуации (сейчас = {x,y,alpha}, где alpha - ориентация робота
+bool SetCoords(const MDMatrix<double> &value);
 
 // --------------------------
 
@@ -179,6 +197,12 @@ bool MergingTEs(int active_num);
 
 //Проверяет, есть ли активные PostInput нейроны в сети
 std::vector<UEPtr<NTrajectoryElement>> CheckActivePIs();
+
+//Проверяет, есть ли активные элементы траектории среди возможных вариантов действий
+bool CheckActiveForwards(UEPtr<NTrajectoryElement> t_element);
+
+//Вес связи, по которой попали в эту точку, w = 0,2
+bool LastUsedLink();
 
 //Обработка новой ситуации (развилки)
 bool ProcessOptions();

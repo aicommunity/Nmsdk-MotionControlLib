@@ -79,8 +79,8 @@ bool NTrajectoryElement::ADefault(void)
  DendSizes2.resize(SomaSize);
  DendSizes2[0] = 3;
 
- CurrentForward = -1;
- CurrentBackward = -1;
+ //CurrentForward = -1;
+ //CurrentBackward = -1;
 
  return true;
 }
