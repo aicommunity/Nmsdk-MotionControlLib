@@ -42,7 +42,7 @@ ULProperty<bool, NMazeMemory, ptPubParameter> Situation;
 /// значени€ элеменов вектора:
 /// 1 - есть возможность совершить это действие, 0 - нет возможности
 /// [0] - поворот направо, [1] - поворот налево, [2] - ехать пр€мо, [3] - стоп
-ULProperty<std::vector<int>,NMazeMemory, ptPubParameter> Options;
+ULProperty<std::vector<int>,NMazeMemory, ptPubParameter> InputActions;
 
 ///“ип нейронов действи€
 RDK::ULProperty<string, NMazeMemory, ptPubParameter> ActionNeuronsType;
@@ -54,7 +54,7 @@ ULProperty<int, NMazeMemory, ptPubParameter> FeaturesNum;
 ULProperty<bool, NMazeMemory, ptPubParameter> IsDone;
 
 ///¬ектор параметров ситуации (сейчас = {x,y,alpha}, где alpha - ориентаци€ робота
-ULProperty<MDMatrix<double>, NMazeMemory, ptPubParameter> Coords;
+ULProperty<MDMatrix<double>, NMazeMemory, ptPubParameter> SituationCoords;
 
 protected:
 ///Ќейроны действий
@@ -117,7 +117,7 @@ bool SetSituation(const bool &value);
 /// значени€ элеменов вектора:
 /// 1 - есть возможность совершить это действие, 0 - нет возможности
 /// [0] - поворот направо, [1] - поворот налево, [2] - ехать пр€мо, [3] - стоп
-bool SetOptions(const std::vector<int> &value);
+bool SetInputActions(const std::vector<int> &value);
 
 ///“ип нейронов действи€
 bool SetActionNeuronsType(const string &value);
@@ -129,7 +129,7 @@ bool SetFeaturesNum(const int &value);
 bool SetIsDone(const bool &value);
 
 ///¬ектор параметров ситуации (сейчас = {x,y,alpha}, где alpha - ориентаци€ робота
-bool SetCoords(const MDMatrix<double> &value);
+bool SetSituationCoords(const MDMatrix<double> &value);
 
 // --------------------------
 

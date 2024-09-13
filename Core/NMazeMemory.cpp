@@ -27,11 +27,11 @@ namespace NMSDK {
 // --------------------------
 NMazeMemory::NMazeMemory(void)
 : Situation("Situation",this, &NMazeMemory::SetSituation),
-  Options("Options",this, &NMazeMemory::SetOptions),
+  InputActions("InputActions",this, &NMazeMemory::SetInputActions),
   ActionNeuronsType("ActionNeuronsType",this, &NMazeMemory::SetActionNeuronsType),
   FeaturesNum("FeaturesNum",this, &NMazeMemory::SetFeaturesNum),
   IsDone("IsDone",this, &NMazeMemory::SetIsDone),
-  Coords("Coords",this, &NMazeMemory::SetCoords)
+  SituationCoords("SituationCoords",this, &NMazeMemory::SetSituationCoords)
   //IsDeadlock("IsDeadlock",this, &NMazeMemory::SetIsDeadlock)
 
 {
@@ -56,7 +56,7 @@ bool NMazeMemory::SetSituation(const bool &value)
  return true;
 }
 
-bool NMazeMemory::SetOptions(const std::vector<int> &value)
+bool NMazeMemory::SetInputActions(const std::vector<int> &value)
 {
  return true;
 }
@@ -76,7 +76,7 @@ bool NMazeMemory::SetIsDone(const bool &value)
  return true;
 }
 
-bool NMazeMemory::SetCoords(const MDMatrix<double> &value)
+bool NMazeMemory::SetSituationCoords(const MDMatrix<double> &value)
 {
  return true;
 }
@@ -139,13 +139,13 @@ bool NMazeMemory::AReset(void)
 bool NMazeMemory::ADefault(void)
 {
  Situation = false;
- Options.assign(3, 0); //(size,val)
+ InputActions.assign(3, 0); //(size,val)
  ActionNeuronsType = "NSPNeuronGen";
  FeaturesNum = 3;
  IsDone = false;
 
  const int temp = FeaturesNum;
- Coords.Resize(temp,1);; //(rows,cols,val)
+ SituationCoords.Resize(temp,1);; //(rows,cols,val)
 
  CurrentTE = 0;
  CurrentLayer = 0;
@@ -169,7 +169,7 @@ bool NMazeMemory::ABuild(void)
       int x_shift = 7;
 
       //Добавляем нейроны действия
-      ActionNeurons.resize(Options.size());
+      ActionNeurons.resize(InputActions.size());
       for (int n=0; n<ActionNeurons.size(); n++)
       {
         ActionNeurons[n] = AddMissingComponent<NPulseNeuron>(std::string("ActionNeuron")+sntoa(n+1), ActionNeuronsType);
@@ -192,7 +192,7 @@ bool NMazeMemory::ACalculate(void)
   for (int j = 0; j<int(MultiPCs.size()); j++)
   {
     UEPtr<NNeuronTrainer> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
-    neuron_trainer->InputPattern = Coords;
+    neuron_trainer->InputPattern = SituationCoords;
   }
 
   if (Situation)//Обрабатываем ситуацию
@@ -251,10 +251,10 @@ bool NMazeMemory::ACalculate(void)
 
    if(!CheckLink(inp_n,pi_n)) //Если еще не были в этой точке
    {
-       int OptionsNum = 0;
-       for (int j = 0; j < Options.size(); j++)//Определяем число возможных действий по входному вектору
+       int OptionsNum = 0; //число возможных действий в текущей ситуации = числу ненулевых элементов в векторе InputActions
+       for (int j = 0; j < InputActions.size(); j++)//Определяем число возможных действий по входному вектору
        {
-          if (Options[j]>0)
+          if (InputActions[j]>0)
               OptionsNum++;
        }
 
@@ -295,20 +295,22 @@ bool NMazeMemory::ACalculate(void)
          //добавляем синапсы на текущий ЭТ для обратных связей на сому
          UEPtr<NPulseMembrane> base_soma = base_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
          if (CurrentTE==0)
-             base_soma->NumExcitatorySynapses = int(Options.size())+1; //дополнительный синапс на первый ЭТ - для запускающего сигнала с высшего уровня СУ
+             base_soma->NumExcitatorySynapses = OptionsNum+1; //дополнительный синапс на первый ЭТ - для запускающего сигнала с высшего уровня СУ
          else
-             base_soma->NumExcitatorySynapses = int(Options.size());
+             base_soma->NumExcitatorySynapses = OptionsNum;
          base_soma->Reset();
          //на N1_D1_2
          UEPtr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
-         base_dend->NumExcitatorySynapses = int(Options.size());
+         base_dend->NumExcitatorySynapses = OptionsNum;
          base_dend->Reset();
 
-
-         for(int option_num = 0; option_num<int(Options.size()); option_num++)
+         int option_num = 0; // номер возможного действия = 0..OptionsNum
+         for(int input_action = 0; input_action<int(InputActions.size()); input_action++)//номер элемента во входном векторе действий = 0...InputActions.size()
          {
-           if (Options[option_num]==0)
+           if (InputActions[input_action]==0)
                continue;
+
+           option_num++;
 
           //Рассчитываем координаты и добавляем блоки
           double x = (double)CurrentLayer*LayerShift + base_coords[0];
@@ -319,12 +321,12 @@ bool NMazeMemory::ACalculate(void)
           BaseTE->Forwards.push_back(traj_el);
           traj_el->Layer = CurrentLayer;
 
-          //Строим связи от текущего элемента траектории на только что созданные
+          //СТРОИМ СВЯЗИ ОТ ТЕКУЩЕГО ЭЛЕМЕНТА ТРАЕКТОРИИ НА ТОЛЬКО ЧТО СОЗДАННЫЕ
           bool res(true);
           //возбуждающее воздействие на N1_D5_syn1
           UEPtr<NPulseNeuron> input_neuron = traj_el->GetComponentL<NPulseNeuron>("Neuron1", true);
           UEPtr<NPulseSynapse> synapse = input_neuron->GetComponentL<NPulseSynapse>("Dendrite1_5.ExcSynapse1",true);
-          if (option_num>0)
+          if (option_num>1)
           {
             synapse->Weight = SideWeight;
           }
@@ -351,16 +353,16 @@ bool NMazeMemory::ACalculate(void)
           if(!res)
            return true;
 
-          //обратные связи
+          //ОБРАТНЫЕ СВЯЗИ
           traj_el->Backwards.push_back(BaseTE);
           //traj_el->CurrentBackward = 0;
 
           //на сому
           int syn_num;
           if (CurrentTE==0)
-              syn_num = option_num+2;
-          else
               syn_num = option_num+1;
+          else
+              syn_num = option_num;
           synapse = base_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(syn_num),true);
           synapse->Weight = 0.2;
           res&=CreateLink(traj_el->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
@@ -368,7 +370,7 @@ bool NMazeMemory::ACalculate(void)
            return true;
 
           //на N1_D1_2
-          synapse = base_neuron->GetComponentL<NPulseSynapse>("Dendrite1_2.ExcSynapse"+sntoa(option_num+1),true);
+          synapse = base_neuron->GetComponentL<NPulseSynapse>("Dendrite1_2.ExcSynapse"+sntoa(option_num),true);
           synapse->Weight = 0.2;
           res&=CreateLink(traj_el->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
           if(!res)
@@ -415,7 +417,7 @@ bool NMazeMemory::ACalculate(void)
           }
 
           //связи на нейроны действий
-          UEPtr<NPulseMembrane> action_soma = ActionNeurons[option_num]->GetComponentL<NPulseMembrane>("Soma1",true);
+          UEPtr<NPulseMembrane> action_soma = ActionNeurons[input_action]->GetComponentL<NPulseMembrane>("Soma1",true);
           int syn_max_num = action_soma->NumExcitatorySynapses;
           for (int i = 1; i<=syn_max_num; i++)
           {
@@ -445,16 +447,19 @@ bool NMazeMemory::ACalculate(void)
        }
 
        //Запоминаем текущую ситуацию (Обучились текущему положению)
-       NameT start_name =  BaseMPC->GetName()+".InputNeuron1-1.LTZone";
+       bool check_res = false;
+       UEPtr<NNeuronTrainer> neuron_trainer = BaseMPC->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
+       UEPtr<NPulseNeuron> neuron = neuron_trainer->GetComponentL<NPulseNeuron>("Neuron",true);
+       UEPtr<NLTZone> ltzoneTr = neuron->GetComponentL<NLTZone>("LTZone", true);
+       NameT start_name =  ltzoneTr->GetLongName(this);
        NameT finish_name = BaseMPC->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
        if(!CheckLink(start_name,finish_name))
-           CreateLink(start_name,"Output", finish_name, "Input");
+           check_res = CreateLink(start_name,"Output", finish_name, "Input");
        start_name =  BaseMPC->GetName()+".PreControlNeuron1.LTZone";
        finish_name = BaseMPC->GetName()+".ControlNeuron1-1.Soma1.ExcSynapse1";
        if(!CheckLink(start_name,finish_name))
-           CreateLink(start_name,"Output", finish_name, "Input");
+           check_res = CreateLink(start_name,"Output", finish_name, "Input");
        //BaseMPC->RememberState = true;
-       UEPtr<NNeuronTrainer> neuron_trainer = BaseMPC->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
        neuron_trainer->IsNeedToTrain = true;
 
    }
@@ -522,44 +527,44 @@ bool NMazeMemory::ACalculate(void)
    } //конец "если уже были в этой точке"
 
 
-   //Проверяем, есть ли активные направления (кроме обратных связей)
-   if(!CheckActiveForwards(BaseTE)) //если нет активных направлений вперед
-   {
-     //w обратной связи на ЭТ(i-1) = 1
-     int num = int(BaseTE->Paths.size())-1;
-     BaseTE->Paths[num]->Weight = 1;
-
-     //w ВСЕХ связей на вход ЭТ(i) = 0.2
-     UEPtr<NPulseNeuron> neuron1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
-     UEPtr<NPulseMembrane> dend1_5 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_5",true);
-     int max = dend1_5->NumExcitatorySynapses;
-     for (int i = 0; i<max; i++)
-     {
-         UEPtr<NPulseSynapse> synapse = dend1_5->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i+1),true);
-         synapse->Weight = 0.2;
-     }
-
-     //У всех ли ЭТ блоки MultiPC обучены? - условие завершения алгоритма
-     bool done = true;
-     for(int i = 0; i<int(MultiPCs.size()); i++)
-     {
-       NameT start_name =  MultiPCs[i]->GetName()+".InputNeuron1-1.LTZone";
-       NameT finish_name = MultiPCs[i]->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
-       if(!CheckLink(start_name,finish_name))
-       {
-         IsDone = false;
-         break;
-       }
-     }
-     IsDone = done;
-
-
-   }
-
-
-
-
  }//конец if (Situation)
+
+
+  //Проверяем, есть ли активные направления (кроме обратных связей)
+  bool check_activeForwards = CheckActiveForwards(BaseTE);
+  if(!CheckActiveForwards(BaseTE)) //если нет активных направлений вперед
+  {
+    //w обратной связи на ЭТ(i-1) = 1
+    int num = int(BaseTE->Paths.size())-1;
+    BaseTE->Paths[num]->Weight = 1;
+
+    //w ВСЕХ связей на вход ЭТ(i) = 0.2
+    UEPtr<NPulseNeuron> neuron1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
+    UEPtr<NPulseMembrane> dend1_5 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_5",true);
+    int max = dend1_5->NumExcitatorySynapses;
+    for (int i = 0; i<max; i++)
+    {
+        UEPtr<NPulseSynapse> synapse = dend1_5->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i+1),true);
+        synapse->Weight = 0.2;
+    }
+
+    //У всех ли ЭТ блоки MultiPC обучены? - условие завершения алгоритма
+    bool done = true;
+    for(int i = 0; i<int(MultiPCs.size()); i++)
+    {
+      UEPtr<NNeuronTrainer> neuron_trainer = MultiPCs[i]->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
+      UEPtr<NPulseNeuron> neuron = neuron_trainer->GetComponentL<NPulseNeuron>("Neuron",true);
+      UEPtr<NLTZone> ltzoneTr = neuron->GetComponentL<NLTZone>("LTZone", true);
+      NameT start_name =  ltzoneTr->GetLongName(this);
+      NameT finish_name = MultiPCs[i]->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
+      if(!CheckLink(start_name,finish_name))
+      {
+        done = false;
+        break;
+      }
+    }
+    IsDone = done;
+  }
 
 
   //Переходим к следующему элементу траектории (обновляем CurrentTE)
@@ -575,8 +580,6 @@ bool NMazeMemory::ACalculate(void)
       CurrentTE=i;
       NameT currentf_name = TrajectoryElements[i]->GetName();
 
-      bool found = false;
-
       //обновляем LastUsedPath (CurrentForward)
       for(int j = 0; j<int(BaseTE->Paths.size()); j++)
       {
@@ -584,7 +587,6 @@ bool NMazeMemory::ACalculate(void)
         if (name==currentf_name)
         {
           BaseTE->LastUsedPath = j;
-          found = true;
           break;
         }
       }
@@ -664,7 +666,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
      {
          neuron_tr->NumInputDendrite = FeaturesNum;//Число дендритов на InputNeuron, если InputNeuronsType = NNeuronTrainer (т.е. ситуация характеризуется набором численных признаков)
          neuron_tr->Reset();
-         //neuron_tr->InputPattern = Coords;
+         neuron_tr->SpikesFrequency = 30;//Чтобы тормозное воздействие на ЭТ было достаточно сильным для переключения на следующий ЭТ
      }
 
  }
