@@ -97,6 +97,8 @@ UEPtr<NMultiPositionControl> BaseMPC;
 UEPtr<NTrajectoryElement> PrevTE;
 
 
+MDMatrix<double> check_pattern;
+
 
 public: // Ìועמהû
 // --------------------------
