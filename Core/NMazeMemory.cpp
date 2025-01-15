@@ -68,6 +68,14 @@ bool NMazeMemory::SetActionNeuronsType(const string &value)
 
 bool NMazeMemory::SetFeaturesNum(const int &value)
 {
+ SituationCoords.Resize(value,1);
+ // for (int j = 0; j<int(MultiPCs.size()); j++)
+ // {
+ //     UEPtr<NNeuronTrainer> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
+ //     neuron_trainer->NumInputDendrite = value; //Заодно ресайзнет и InputPattern
+ //     neuron_trainer->Reset();
+ //     neuron_trainer->IsNeedToTrain = false;
+ // }
  return true;
 }
 
@@ -80,19 +88,28 @@ bool NMazeMemory::SetSituationCoords(const MDMatrix<double> &value)
 {
     for (int j = 0; j<int(MultiPCs.size()); j++)
     {
-      UEPtr<NNeuronTrainer> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
-      int cnt = 0;
-      int cnt_max = value.GetRows();
-      MDMatrix<double> pattern;
-      pattern.Resize(cnt_max+1,1);
-      neuron_trainer->InputPattern.Resize(cnt_max+1,1);
-      for (cnt = 0; cnt< cnt_max; cnt++)
-      {
-         pattern[cnt] = value[cnt];
-      }
-      pattern[cnt] = 0.2;
-      neuron_trainer->InputPattern = pattern;
+        UEPtr<NNeuronTrainer> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
+        neuron_trainer->NumInputDendrite = value.GetRows(); //Заодно ресайзнет и InputPattern
+        neuron_trainer->Reset();
+        neuron_trainer->InputPattern = value;
+        neuron_trainer->IsNeedToTrain = false;
     }
+
+    // for (int j = 0; j<int(MultiPCs.size()); j++)
+    // {
+    //   UEPtr<NNeuronTrainer> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
+    //   int cnt = 0;
+    //   int cnt_max = value.GetRows();
+    //   MDMatrix<double> pattern;
+    //   pattern.Resize(cnt_max+1,1);
+    //   neuron_trainer->InputPattern.Resize(cnt_max+1,1);
+    //   for (cnt = 0; cnt< cnt_max; cnt++)
+    //   {
+    //      pattern[cnt] = value[cnt];
+    //   }
+    //   pattern[cnt] = 0.2;
+    //   neuron_trainer->InputPattern = pattern;
+    // }
 
  return true;
 }
@@ -157,7 +174,7 @@ bool NMazeMemory::ADefault(void)
  Situation = false;
  InputActions.assign(3, 0); //(size,val)
  ActionNeuronsType = "NSPNeuronGen";
- FeaturesNum = 3;
+ FeaturesNum = 4; //x,y,alpha + калибровочное значение 0.2
  IsDone = false;
 
  const int temp = FeaturesNum;
@@ -273,7 +290,7 @@ bool NMazeMemory::ACalculate(void)
 
 
    //Проверяем, были ли уже в этой точке (были в точке = обучились=>есть связь между Input и PostInput)
-   NameT inp_n =  BaseMPC->GetName()+".InputNeuron1-1.Neuron.LTZone";
+   NameT inp_n =  BaseMPC->GetName()+".InputNeuron1-1";
    NameT pi_n = BaseMPC->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
 
    if(!CheckLink(inp_n,pi_n)) //Если еще не были в этой точке
@@ -492,12 +509,12 @@ bool NMazeMemory::ACalculate(void)
        string check_name = neuron_trainer->GetLongName(this);
        neuron_trainer->IsNeedToTrain = true;
        bool check_isntt1 = neuron_trainer->IsNeedToTrain;
-       neuron_trainer->Reset();
+       //neuron_trainer->Reset();
 
        bool res1(true);
        bool res2(true);
 
-       NameT start_name =  BaseMPC->GetName()+".InputNeuron1-1.Neuron.LTZone";
+       NameT start_name =  BaseMPC->GetName()+".InputNeuron1-1";
        NameT finish_name = BaseMPC->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
        if(!CheckLink(start_name,finish_name))
            res1 &= CreateLink(start_name,"Output", finish_name, "Input");
@@ -670,6 +687,11 @@ return true;
         cont->SetName(MultiPCName);
         cont->SetCoord(MVector<double,3>(coords[0], coords[1]+2.0, 0.0));
         AddComponent(cont);
+        // UEPtr<NNeuronTrainer> neuron_tr = cont->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
+        // if(neuron_tr)
+        // {
+        //     neuron_tr->IsNeedToTrain = false;
+        // }
 
         //Настройка блока MultiPC
         UEPtr<NMultiPositionControl> multi_pc = dynamic_pointer_cast<NMultiPositionControl>(cont);
@@ -679,18 +701,19 @@ return true;
         multi_pc->IsNeedToRebuild = true;
         multi_pc->InputsNum = 1;//Число InputNeurons, если InputNeuronsType = NSPNeuronGen (т.е. ситуация характеризуется набором бинарных признаков)
         multi_pc->PrebuildStructure = true;
-        multi_pc->Reset();
+        //multi_pc->Reset();
         if ("NNeuronTrainer"==string(multi_pc->InputNeuronType))
         {
             UEPtr<NNeuronTrainer> neuron_tr = multi_pc->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
             if(neuron_tr)
             {
-                neuron_tr->NumInputDendrite = FeaturesNum+1;//Число дендритов на InputNeuron, если InputNeuronsType = NNeuronTrainer (т.е. ситуация характеризуется набором численных признаков)
+                neuron_tr->NumInputDendrite = FeaturesNum;//Число дендритов на InputNeuron, если InputNeuronsType = NNeuronTrainer (т.е. ситуация характеризуется набором численных признаков)
                 neuron_tr->Reset();
                 neuron_tr->SpikesFrequency = 30;//Чтобы тормозное воздействие на ЭТ было достаточно сильным для переключения на следующий ЭТ
                 neuron_tr->IsNeedToTrain = false;
             }
         }
+        multi_pc->Reset();
 
 
         //Построение связей от PostInputNeuron к TrajectoryElement
