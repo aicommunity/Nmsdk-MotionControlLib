@@ -532,7 +532,7 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
       else
       {
         //InputNeuronType = "NSPNeuronGen";
-        InputNeuronType = "NNeuronTrainer";
+        InputNeuronType = "NNeuronTrainerMemory";
         cont=dynamic_pointer_cast<NNeuronTrainer>(storage->TakeObject(InputNeuronType));
         if(!cont)
           return 0;
