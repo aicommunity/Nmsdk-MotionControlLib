@@ -71,10 +71,14 @@ bool NMazeMemory::SetFeaturesNum(const int &value)
  SituationCoords.Resize(value,1);
  for (int j = 0; j<int(MultiPCs.size()); j++)
  {
-     UEPtr<NNeuronTrainer> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
-     neuron_trainer->NumInputDendrite = value; //Заодно ресайзнет и InputPattern
-     neuron_trainer->Reset();
-     neuron_trainer->IsNeedToTrain = false;
+     //UEPtr<NNeuronTrainerMemory> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainerMemory>("InputNeuron1-1", true);
+     UEPtr<NNeuronTrainer> neuron_trainer = GetComponentL<NNeuronTrainer>("NNeuronTrainer"+sntoa(j), true);
+     if (neuron_trainer)
+     {
+         neuron_trainer->NumInputDendrite = value; //Заодно ресайзнет и InputPattern
+         neuron_trainer->Reset();
+     }
+
  }
  return true;
 }
@@ -88,28 +92,17 @@ bool NMazeMemory::SetSituationCoords(const MDMatrix<double> &value)
 {
     for (int j = 0; j<int(MultiPCs.size()); j++)
     {
-        UEPtr<NNeuronTrainer> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
-        neuron_trainer->NumInputDendrite = value.GetRows(); //Заодно ресайзнет и InputPattern
-        neuron_trainer->Reset();
-        neuron_trainer->InputPattern = value;
-        neuron_trainer->IsNeedToTrain = false;
-    }
+        //UEPtr<NNeuronTrainerMemory> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainerMemory>("InputNeuron1-1", true);
+        UEPtr<NNeuronTrainer> neuron_trainer = GetComponentL<NNeuronTrainer>("NNeuronTrainer"+sntoa(j), true);
+        if (neuron_trainer)
+        {
+            neuron_trainer->NumInputDendrite = value.GetRows(); //Заодно ресайзнет и InputPattern
+            neuron_trainer->Reset();
+            neuron_trainer->InputPattern = value;
+            //neuron_trainer->IsNeedToTrain = false;
+        }
 
-    // for (int j = 0; j<int(MultiPCs.size()); j++)
-    // {
-    //   UEPtr<NNeuronTrainer> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
-    //   int cnt = 0;
-    //   int cnt_max = value.GetRows();
-    //   MDMatrix<double> pattern;
-    //   pattern.Resize(cnt_max+1,1);
-    //   neuron_trainer->InputPattern.Resize(cnt_max+1,1);
-    //   for (cnt = 0; cnt< cnt_max; cnt++)
-    //   {
-    //      pattern[cnt] = value[cnt];
-    //   }
-    //   pattern[cnt] = 0.2;
-    //   neuron_trainer->InputPattern = pattern;
-    // }
+    }
 
  return true;
 }
@@ -183,7 +176,7 @@ bool NMazeMemory::ADefault(void)
  CurrentTE = 0;
  CurrentLayer = 0;
  LayerShift = 7.0;
- yShift = 5.0;
+ yShift = 7.0;
  SideWeight = 0.75;
 
  return true;
@@ -225,7 +218,7 @@ bool NMazeMemory::ACalculate(void)
 //  //Проставляем координаты текущей ситуации во все MultiPC схемы
 //  for (int j = 0; j<int(MultiPCs.size()); j++)
 //  {
-//    UEPtr<NNeuronTrainer> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
+//    UEPtr<NNeuronTrainerMemory> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainerMemory>("InputNeuron1-1", true);
 //    int cnt = 0;
 //    int cnt_max = SituationCoords.GetRows();
 //    //neuron_trainer->InputPattern.Resize(cnt_max+1,1);
@@ -246,7 +239,6 @@ bool NMazeMemory::ACalculate(void)
     BaseMPC = MultiPCs[CurrentTE];
     PassedTEs.push_back(BaseTE);
 
-    //int k = PassedTEs.size()-2;
     if (int(PassedTEs.size()-2) >0) //-2 - т.к индексация с 0 и т.к. берем предыдущий блок
     {
       PrevTE = PassedTEs[int(PassedTEs.size()-2)];
@@ -494,30 +486,32 @@ bool NMazeMemory::ACalculate(void)
        }
 
        //Запоминаем текущую ситуацию (Обучились текущему положению)
-       UEPtr<NNeuronTrainer> neuron_trainer = BaseMPC->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
-//       MDMatrix<double> pattern;
-//       int cnt = 0;
-//       int cnt_max = SituationCoords.GetRows();
-//       pattern.Resize(cnt_max+1,1);
-//       for (cnt = 0; cnt< SituationCoords.GetRows(); cnt++)
-//       {
-//          pattern[cnt] = SituationCoords[cnt];
-//       }
-//       pattern[cnt] = 0.2;
-//       neuron_trainer->InputPattern = pattern;
+       //int te_num =  int(TrajectoryElements.size())-OptionsNum-1;
+       UEPtr<NNeuronTrainer> neuron_trainer = AddMissingComponent<NNeuronTrainer>(std::string("NeuronTrainer"+sntoa(CurrentTE)), "NNeuronTrainer");
+       MVector<double,3> base_coords = BaseTE->GetCoord();
+       neuron_trainer->SetCoord(MVector<double,3>(base_coords[0], base_coords[1]+4.0, 0));
+       neuron_trainer->NumInputDendrite = FeaturesNum;
+       neuron_trainer->Reset();
+       neuron_trainer->InputPattern = SituationCoords;
+       //neuron_trainer->SpikesFrequency = 30;//Чтобы тормозное воздействие на ЭТ было достаточно сильным для переключения на следующий ЭТ
+       neuron_trainer->Reset();
 
-       string check_name = neuron_trainer->GetLongName(this);
-       neuron_trainer->IsNeedToTrain = true;
-       bool check_isntt1 = neuron_trainer->IsNeedToTrain;
-       //neuron_trainer->Reset();
+       //UEPtr<NNeuronTrainerMemory> neuron_trainer = BaseMPC->GetComponentL<NNeuronTrainerMemory>("InputNeuron1-1", true);
+       // neuron_trainer->IsNeedToTrain = true;
+       // neuron_trainer->Reset();
 
        bool res1(true);
        bool res2(true);
 
-       NameT start_name =  BaseMPC->GetName()+".InputNeuron1-1";
+       NameT start_name =  neuron_trainer->GetName();
        NameT finish_name = BaseMPC->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
        if(!CheckLink(start_name,finish_name))
            res1 &= CreateLink(start_name,"Output", finish_name, "Input");
+
+       // NameT start_name =  BaseMPC->GetName()+".InputNeuron1-1";
+       // NameT finish_name = BaseMPC->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
+       // if(!CheckLink(start_name,finish_name))
+       //     res1 &= CreateLink(start_name,"Output", finish_name, "Input");
 
        start_name =  BaseMPC->GetName()+".PreControlNeuron1.LTZone";
        finish_name = BaseMPC->GetName()+".ControlNeuron1-1.Soma1.ExcSynapse1";
@@ -617,7 +611,7 @@ bool NMazeMemory::ACalculate(void)
 //       bool done = true;
 //       for(int i = 0; i<int(MultiPCs.size()); i++)
 //       {
-//         UEPtr<NNeuronTrainer> neuron_trainer = MultiPCs[i]->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
+//         UEPtr<NNeuronTrainerMemory> neuron_trainer = MultiPCs[i]->GetComponentL<NNeuronTrainerMemory>("InputNeuron1-1", true);
 //         UEPtr<NPulseNeuron> neuron = neuron_trainer->GetComponentL<NPulseNeuron>("Neuron",true);
 //         UEPtr<NLTZone> ltzoneTr = neuron->GetComponentL<NLTZone>("LTZone", true);
 //         NameT start_name =  ltzoneTr->GetLongName(this);
@@ -698,17 +692,17 @@ return true;
         multi_pc->PrebuildStructure = true;
         multi_pc->Reset();
 
-        if ("NNeuronTrainerMemory"==string(multi_pc->InputNeuronType))
-        {
-            UEPtr<NNeuronTrainer> neuron_tr = multi_pc->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
-            if(neuron_tr)
-            {
-                neuron_tr->NumInputDendrite = FeaturesNum;//Число дендритов на InputNeuron, если InputNeuronsType = NNeuronTrainer (т.е. ситуация характеризуется набором численных признаков)
-                neuron_tr->Reset();
-                neuron_tr->SpikesFrequency = 30;//Чтобы тормозное воздействие на ЭТ было достаточно сильным для переключения на следующий ЭТ
-                neuron_tr->IsUsedInMemory = false;
-            }
-        }
+        // if ("NNeuronTrainerMemory"==string(multi_pc->InputNeuronType))
+        // {
+        //     UEPtr<NNeuronTrainerMemory> neuron_tr = multi_pc->GetComponentL<NNeuronTrainerMemory>("InputNeuron1-1", true);
+        //     if(neuron_tr)
+        //     {
+        //         neuron_tr->NumInputDendrite = FeaturesNum;//Число дендритов на InputNeuron, если InputNeuronsType = NNeuronTrainerMemory (т.е. ситуация характеризуется набором численных признаков)
+        //         neuron_tr->Reset();
+        //         neuron_tr->SpikesFrequency = 30;//Чтобы тормозное воздействие на ЭТ было достаточно сильным для переключения на следующий ЭТ
+        //         neuron_tr->IsUsedInMemory = false;
+        //     }
+        // }
 
 
         //Построение связей от PostInputNeuron к TrajectoryElement
