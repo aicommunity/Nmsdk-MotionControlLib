@@ -66,11 +66,17 @@ std::vector<UEPtr<NTrajectoryElement>> TrajectoryElements;
 /// Активные PostInput нейроны в схеме
 std::vector<UEPtr<NTrajectoryElement>> ActivePIs;
 
-/// Блоки MultiPC (осуществляют запоминание признаков ситуации)
+/// Блоки MultiPC
 std::vector<UEPtr<NMultiPositionControl>> MultiPCs;
+
+/// Блоки NeuronTrainer (осуществляют запоминание признаков ситуации)
+std::vector<UEPtr<NNeuronTrainer>> NTrainers;
 
 ///Индекс текущего элемента траектории в массиве
 int CurrentTE;
+
+///Указатель на текущий NeuronTrainer в массиве
+UEPtr<NNeuronTrainer> CurrentNT;
 
 /// Номер текущего слоя
 int CurrentLayer;
@@ -95,6 +101,15 @@ UEPtr<NMultiPositionControl> BaseMPC;
 
 ///Предыдущий элемент траектории
 UEPtr<NTrajectoryElement> PrevTE;
+
+///Флаг ожидания завершения обучения NeuronTrainer
+///(ждем, пока обучится NT, чтобы завершить обработку ситуации)
+bool IsNotFinished;
+
+///Счетчик-заглушка,
+///обеспечивает паузу после окончания обучения NeuronTrainer,
+///чтобы сигнал успел дойти до дочерних TE
+int WaitForSpike;
 
 
 MDMatrix<double> check_pattern;
@@ -191,6 +206,10 @@ virtual bool ACalculate(void);
 //построение связки TrajectoryElement+MultiPC
 UEPtr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
 
+//Построение связей между новой точкой маршрута (вариантом действия)
+// и остальными блокмаи сети
+bool CreateLinksForPoint(UEPtr<NTrajectoryElement> traj_el,  MVector<double,3> base_coords, int option_num);
+
 //Слияние совпадающих элементов траектории
 //Принимает на вход порядковый номер ТЕ в векторе TrajectoryElements,
 //которому соответствует активный PostInput нейрон
@@ -198,7 +217,7 @@ UEPtr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
 bool MergingTEs(int active_num);
 
 //Проверяет, есть ли активные PostInput нейроны в сети
-std::vector<UEPtr<NTrajectoryElement>> CheckActivePIs();
+int CheckActivePIs();
 
 //Проверяет, есть ли активные элементы траектории среди возможных вариантов действий
 bool CheckActiveForwards(UEPtr<NTrajectoryElement> t_element);
