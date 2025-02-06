@@ -208,7 +208,7 @@ UEPtr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
 
 //Построение связей между новой точкой маршрута (вариантом действия)
 // и остальными блокмаи сети
-bool CreateLinksForPoint(UEPtr<NTrajectoryElement> traj_el,  MVector<double,3> base_coords, int option_num);
+bool LinkPoint(UEPtr<NTrajectoryElement> traj_el,  MVector<double,3> base_coords, int option_num);
 
 //Слияние совпадающих элементов траектории
 //Принимает на вход порядковый номер ТЕ в векторе TrajectoryElements,
