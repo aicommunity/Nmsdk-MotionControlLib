@@ -187,6 +187,12 @@ bool NMultiPositionControl::ABuild(void)
           AddComponent(cont);
           PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
           postInputs.push_back(static_pointer_cast<NNet>(cont));
+
+          UEPtr<NPulseNeuron> neuron = cont->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
+          //UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(neuron->GetComponentL("LTZone"));
+          UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(cont->GetComponentL("LTZone"));
+          if(ltzone)
+              ltzone->AvgInterval = 3; //увеличиваем интервал для подчета OutputFrequency, чтобы проверять активность нейрона в MazeMemory
         }
         PositionNeurons();
       }
