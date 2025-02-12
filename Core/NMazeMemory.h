@@ -112,7 +112,25 @@ bool IsNotFinished;
 int WaitForSpike;
 
 
-MDMatrix<double> check_pattern;
+///Счетчик-заглушка,
+///обеспечивает паузу после переключения между TE,
+///чтобы сигнал успел дойти до PostInputNeuron
+int WaitForSpikePI;
+
+
+bool IsWaitingForAnswer;
+
+///Счетчик-заглушка,
+///обеспечивает паузу после подачи активности
+/// на PreControl нейроны
+int WaitForAnswerCnt;
+
+
+//MDMatrix<double> check_pattern;
+
+//Компоненты, которые нужно будет удалить
+UEPtr<NTrajectoryElement> TEToDelete;
+UEPtr<NMultiPositionControl> MPCToDelete;
 
 
 public: // Методы
@@ -221,6 +239,11 @@ int CheckActivePIs();
 
 //Проверяет, есть ли активные элементы траектории среди возможных вариантов действий
 bool CheckActiveForwards(UEPtr<NTrajectoryElement> t_element);
+
+//Ищем непроверенные варианты ниже по дереву
+//(переключаем активность на PreControl нейрон и проверяем,
+// есть ли отклик через уровень или ниже)
+bool CallForResponse();
 
 //Вес связи, по которой попали в эту точку, w = 0,2
 bool LastUsedLink();
