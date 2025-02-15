@@ -109,7 +109,7 @@ bool NTrajectoryElement::ABuild(void)
  }
 
    Neurons[0]->NumDendriteMembranePartsVec = DendSizes1;
-   Neurons[0]->Reset();
+   Neurons[0]->Reset();  
    Neurons[1]->NumDendriteMembranePartsVec = DendSizes2;
    Neurons[1]->Reset();
 
@@ -119,7 +119,7 @@ bool NTrajectoryElement::ABuild(void)
 
  //НОВАЯ КОНФИГУРАЦИЯ (подобрана для обновленной NNewSPNeuron)
  //От N1 к N2
- UEPtr<NLTZone> ltzone1 = Neurons[0]->GetComponentL<NLTZone>("LTZone", true);
+ UEPtr<NPulseLTZoneCommon> ltzone1 = Neurons[0]->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
  if(!ltzone1)
      return true;
 

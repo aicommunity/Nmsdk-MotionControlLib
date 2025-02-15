@@ -219,7 +219,7 @@ bool NMazeMemory::ABuild(void)
 // Выполняет расчет этого объекта
 bool NMazeMemory::ACalculate(void)
 {
-    if (IsWaitingForAnswer)
+  if (IsWaitingForAnswer)
     {
         //Пауза после подачи активности на PreControl нейроны
         if(WaitForAnswerCnt < 2000)
@@ -293,62 +293,61 @@ bool NMazeMemory::ACalculate(void)
             return true;
 
         //Обнуляем флаги
-        Situation = false;
+        //Situation = false;
         IsWaitingForAnswer = false;
         WaitForAnswerCnt = 0;
 
         return true;
     }
 
-
-
-
   if(IsNotFinished)
   {
-      //Ждем, пока обучится NeuronTrainer + еще немного, чтобы перейти к следующему TE
-      if (CurrentNT->IsNeedToTrain==true)
-         return true;
-      else
-      {
-        WaitForSpike++;
-        if(WaitForSpike < 2000)
-         return true;
-      }
+    //Ждем, пока обучится NeuronTrainer + еще немного, чтобы перейти к следующему TE
+    if (CurrentNT->IsNeedToTrain==true)
+       return true;
+    else
+    {
+      WaitForSpike++;
+      if(WaitForSpike < 5000)
+       return true;
+    }
 
-        //Проверяем, есть ли активные направления (кроме обратных связей)
-        //bool check_activeForwards = CheckActiveForwards(BaseTE);
-        if(!CheckActiveForwards(BaseTE)) //если нет активных направлений вперед
+    WaitForSpike = 0;
+
+    //Проверяем, есть ли активные направления (кроме обратных связей)
+    //bool check_activeForwards = CheckActiveForwards(BaseTE);
+    if(!CheckActiveForwards(BaseTE)) //если нет активных направлений вперед
+    {
+        //w обратной связи на ЭТ(i-1) = 1
+        int num = int(BaseTE->Paths.size())-1;
+        string check_BaseTE_n = BaseTE->GetName();
+        string check_Path_n = BaseTE->Paths[num]->GetLongName(this);
+        BaseTE->Paths[num]->Weight = 1; //берет свзять на D1_5 - т.е. прямую, поправить
+
+        //w ВСЕХ связей на вход ЭТ(i) = 0.2
+        UEPtr<NPulseNeuron> neuron1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
+        UEPtr<NPulseMembrane> dend1_5 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_5",true);
+        int max = dend1_5->NumExcitatorySynapses;
+        for (int i = 0; i<max; i++)
         {
-            //w обратной связи на ЭТ(i-1) = 1
-            int num = int(BaseTE->Paths.size())-1;
-            string check_BaseTE_n = BaseTE->GetName();
-            string check_Path_n = BaseTE->Paths[num]->GetLongName(this);
-            BaseTE->Paths[num]->Weight = 1; //берет свзять на D1_5 - т.е. прямую, поправить
-
-            //w ВСЕХ связей на вход ЭТ(i) = 0.2
-            UEPtr<NPulseNeuron> neuron1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
-            UEPtr<NPulseMembrane> dend1_5 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_5",true);
-            int max = dend1_5->NumExcitatorySynapses;
-            for (int i = 0; i<max; i++)
-            {
-                UEPtr<NPulseSynapse> synapse = dend1_5->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i+1),true);
-                string check_syn_n = synapse->GetLongName(this);
-                synapse->Weight = 0.2;
-            }
-
-            //У всех ли ЭТ блоки MultiPC обучены? - условие завершения алгоритма
-            bool done = true;
-            for(int i = 0; i<int(MultiPCs.size()); i++)
-            {
-                UEPtr<NNeuronTrainer> neuron_trainer = GetComponentL<NNeuronTrainer>("NeuronTrainer"+sntoa(i), true);
-                if(!((neuron_trainer)&&(neuron_trainer->IsNeedToTrain==false)))
-                {
-                    done = false;
-                    break;
-                }
-            }
-            IsDone = done;
+            UEPtr<NPulseSynapse> synapse = dend1_5->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i+1),true);
+            string check_syn_n = synapse->GetLongName(this);
+            synapse->Weight = 0.2;
         }
+
+        //У всех ли ЭТ блоки MultiPC обучены? - условие завершения алгоритма
+        bool done = true;
+        for(int i = 0; i<int(MultiPCs.size()); i++)
+        {
+            UEPtr<NNeuronTrainer> neuron_trainer = GetComponentL<NNeuronTrainer>("NeuronTrainer"+sntoa(i), true);
+            if(!((neuron_trainer)&&(neuron_trainer->IsNeedToTrain==false)))
+            {
+                done = false;
+                break;
+            }
+        }
+        IsDone = done;
+    }
 
 
         //Переходим к следующему элементу траектории (обновляем CurrentTE)
@@ -475,7 +474,7 @@ bool NMazeMemory::ACalculate(void)
        neuron_trainer->NumInputDendrite = FeaturesNum;
        neuron_trainer->Reset();
        neuron_trainer->InputPattern = SituationCoords;
-       neuron_trainer->Reset();
+       //neuron_trainer->Reset(); //убираем, иначе сигнал останавливается после галочки Situation
        NTrainers.push_back(neuron_trainer);
        CurrentNT = neuron_trainer;
        IsNotFinished = true;
@@ -664,7 +663,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
      if (possible_action_num>1)
      {
          synapse->Weight = SideWeight;
-         //string check_sn = synapse->GetLongName(this);
+         string check_sn = synapse->GetLongName(this);
      }
      else
      {
