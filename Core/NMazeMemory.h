@@ -126,8 +126,6 @@ bool IsWaitingForAnswer;
 int WaitForAnswerCnt;
 
 
-//MDMatrix<double> check_pattern;
-
 //Компоненты, которые нужно будет удалить
 UEPtr<NTrajectoryElement> TEToDelete;
 UEPtr<NMultiPositionControl> MPCToDelete;
@@ -233,6 +231,9 @@ bool LinkPoint(UEPtr<NTrajectoryElement> traj_el,  MVector<double,3> base_coords
 //которому соответствует активный PostInput нейрон
 //т.е. номер TE, с которым совпадает текущая ситуация
 bool MergingTEs(int active_num);
+
+//Обновляет значение указателя на текущий TE в конце итерации
+bool UpdateCurrentTE();
 
 //Проверяет, есть ли активные PostInput нейроны в сети
 int CheckActivePIs();

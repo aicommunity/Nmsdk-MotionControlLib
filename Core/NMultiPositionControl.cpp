@@ -152,7 +152,8 @@ bool NMultiPositionControl::ABuild(void)
 
         //Adding PreControlNeuron
         size_t preControlSize = PreControlNeurons.size();
-        string preControlNeuronName = "PreControlNeuron"+sntoa(preControlSize+1);
+        string preControlNeuronName = "PreControlNeuron1";//Костыль! Ок для Mazememory, но если нужно запоминать больше 1 признака, проблема
+        //string preControlNeuronName = "PreControlNeuron"+sntoa(preControlSize+1);
         if(CheckComponentL(preControlNeuronName))
         {
           PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
@@ -170,8 +171,10 @@ bool NMultiPositionControl::ABuild(void)
         }
 
         //Adding PostInputNeuron
+        string name = this->GetName();
         size_t postInputSize = PostInputNeurons.size();
-        string postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
+        string postInputNeuronName = "PostInputNeuron1"; //Костыль! Ок для Mazememory, но если нужно запоминать больше 1 признака, проблема
+        //string postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
 
         if(CheckComponentL(postInputNeuronName))
         {
