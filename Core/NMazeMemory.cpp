@@ -210,6 +210,7 @@ bool NMazeMemory::ABuild(void)
       //Добавляем корневой элемент траектории
       MVector<double,3> root_coords = {5.0, 5.0, 0};
       UEPtr<NTrajectoryElement> root = CreatePoint(root_coords);
+      BaseTE = root;
       //PassedTEs.push_back(root);
    }
 
@@ -266,6 +267,9 @@ bool NMazeMemory::ACalculate(void)
         else //если нет ответа
         {
             //для текущей в списке w  = 0.2
+            int check_path_n = BaseTE->LastUsedPath;
+            string check_lu_paths = string(BaseTE->Paths[BaseTE->LastUsedPath]->GetLongName(this));
+
             BaseTE->Paths[BaseTE->LastUsedPath]->Weight=0.2;
             BaseTE->LastUsedPath++;
             //для следующей связи w = 1,
@@ -296,7 +300,6 @@ bool NMazeMemory::ACalculate(void)
         //Situation = false;
         IsWaitingForAnswer = false;
         WaitForAnswerCnt = 0;
-
         return true;
     }
 
@@ -308,14 +311,14 @@ bool NMazeMemory::ACalculate(void)
     else
     {
       WaitForSpike++;
-      if(WaitForSpike < 5000)
+      if(WaitForSpike < 2000)
        return true;
     }
 
     WaitForSpike = 0;
 
     //Проверяем, есть ли активные направления (кроме обратных связей)
-    //bool check_activeForwards = CheckActiveForwards(BaseTE);
+    bool check_activeForwards = CheckActiveForwards(BaseTE);
     if(!CheckActiveForwards(BaseTE)) //если нет активных направлений вперед
     {
         //w обратной связи на ЭТ(i-1) = 1
@@ -350,39 +353,41 @@ bool NMazeMemory::ACalculate(void)
     }
 
 
-        //Переходим к следующему элементу траектории (обновляем CurrentTE)
-        for(int i = 0; i<int(TrajectoryElements.size()); i++)
+    //Переходим к следующему элементу траектории (обновляем CurrentTE)
+    for(int i = 0; i<int(TrajectoryElements.size()); i++)
+    {
+        UEPtr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
+        UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+        if(!ltzone)
+            return true;
+
+        if(ltzone->OutputFrequency->As<double>(0)>0)
         {
-            UEPtr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
-            UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
-            if(!ltzone)
-                return true;
+            CurrentTE=i;
+            string currentf_name = string(TrajectoryElements[i]->GetName());// имя ЭТ
 
-            if(ltzone->OutputFrequency->As<double>(0)>0)
+            //обновляем LastUsedPath (CurrentForward)
+            for(int j = 0; j<int(BaseTE->Paths.size()); j++)
             {
-                CurrentTE=i;
-                string currentf_name = string(TrajectoryElements[i]->GetName());// имя ЭТ
-
-                //обновляем LastUsedPath (CurrentForward)
-                for(int j = 0; j<int(BaseTE->Paths.size()); j++)
+                string name = string(BaseTE->Paths[j]->GetLongName(this));// имя синапса
+                //if (name==currentf_name)
+                int check_comparison = name.compare(0, currentf_name.length(), currentf_name);
+                if (name.compare(0, currentf_name.length(), currentf_name)==0)
                 {
-                    string name = string(BaseTE->Paths[j]->GetLongName(this));// имя синапса
-                    //if (name==currentf_name)
-                    int check_comparison = name.compare(0, currentf_name.length(), currentf_name);
-                    if (name.compare(0, currentf_name.length(), currentf_name)==0)
-                    {
-                        BaseTE->LastUsedPath = j;
-                        break;
-                    }
+                    BaseTE->LastUsedPath = j;
+                    break;
                 }
             }
         }
-        PrevTE = BaseTE;
-        IsNotFinished = false;
+    }
+    PrevTE = BaseTE;
+    IsNotFinished = false;
   }
 
   if (Situation)//Обрабатываем ситуацию
   {
+    UpdateCurrentTE();
+
     if (WaitForSpikePI==0)//Обновляем переменные,только если сейчас не выдерживаем паузу
     {
       //Situation = false;
@@ -474,7 +479,7 @@ bool NMazeMemory::ACalculate(void)
        neuron_trainer->NumInputDendrite = FeaturesNum;
        neuron_trainer->Reset();
        neuron_trainer->InputPattern = SituationCoords;
-       //neuron_trainer->Reset(); //убираем, иначе сигнал останавливается после галочки Situation
+       //neuron_trainer->LTZThreshold = 0.155;
        NTrainers.push_back(neuron_trainer);
        CurrentNT = neuron_trainer;
        IsNotFinished = true;
@@ -539,7 +544,7 @@ bool NMazeMemory::ACalculate(void)
         {}
 
         IsWaitingForAnswer = true;
-        return true;
+        //return true;
       }
     } //конец "если уже были в этой точке"
 
@@ -781,7 +786,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
 
          if (action_syn->Input.IsConnected())
          {
-             if(syn_num==i)
+             if((i+1)>syn_max_num)
              {
                  action_soma->NumExcitatorySynapses++;
                  action_soma->Reset();
@@ -862,44 +867,41 @@ bool NMazeMemory::MergingTEs(int active_index)
     {
         string active_name = string(ActivePIs[j]->GetName());
 
-        //если совпали с ситуацией, в которой были на прошлом шаге
+        //ЕСЛИ СОВПАЛИ С СИТУАЦИЕЙ, В КОТОРОЙ БЫЛИ НА ПРОШЛОМ ШАГЕ
         if (prevTE_name == active_name)
         {
-            //Строим связь с текущего TE на активный, чтобы передать активность
-            NameT start = BaseTE->GetLongName(this);
-            bool res(true);
-            NameT finish;
-
-            UEPtr<NPulseNeuron> fin_neuron = ActivePIs[j]->GetComponentL<NPulseNeuron>("Neuron1", true);
-            UEPtr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
-            int dend_syns = fin_dend->NumExcitatorySynapses;
-            for (int n = 1; n<=dend_syns; n++)
+            //Увеличиваем вес обратных связей на прошлый TE
+            //на соме
+            NameT start_name =  BaseTE->GetName();
+            UEPtr<NPulseNeuron> prev_neuron = PrevTE->GetComponentL<NPulseNeuron>("Neuron1", true);
+            UEPtr<NPulseMembrane> prev_dend = prev_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+            if(!prev_dend)
+                return true;
+            for (int i = 1; i<= prev_dend->NumExcitatorySynapses; i++)
             {
-                UEPtr<NPulseSynapse> syn = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
+                UEPtr<NPulseSynapse> syn = prev_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
                 if(!syn)
                     return true;
-
-                if (syn->Input.IsConnected())
-                {
-                    if(n==dend_syns)
-                    {
-                        fin_dend->NumExcitatorySynapses++;
-                        fin_dend->Reset();
-                        dend_syns = fin_dend->NumExcitatorySynapses;
-                    }
-                    continue; //перейти к следующему синапсу
-                }
-                else
-                {
-                    finish = syn->GetLongName(this);
-                    res&=CreateLink(start,"Output",finish,"Input");
-                    if(!res)
-                       return true;
-                    break;
-                }
+                NameT finish_name = syn->GetLongName(this);
+                if(CheckLink(start_name,finish_name))
+                    syn->Weight = 1;
+            }
+            //на D1_2
+            prev_dend = prev_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
+            if(!prev_dend)
+                return true;
+            for (int i = 1; i<= prev_dend->NumExcitatorySynapses; i++)
+            {
+                UEPtr<NPulseSynapse> syn = prev_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
+                if(!syn)
+                    return true;
+                NameT finish_name = syn->GetLongName(this);
+                if(CheckLink(start_name,finish_name))
+                    syn->Weight = 1;
             }
 
             //Временно отключаем воздействие NeuronTrainer, чтобы он не заглушал активность TE
+            bool res(true);
             NameT active_PI = MultiPCs[active_index]->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
             string check_actNT = string(active_PI);
             string check_NT = string(CurrentNT->GetLongName(this));
@@ -916,7 +918,7 @@ bool NMazeMemory::MergingTEs(int active_index)
         }
 
 
-      //если совпали с ситуацией, в которой были раньше, чем на прошлом шаге
+      //ЕСЛИ СОВПАЛИ С СИТУАЦИЕЙ, В КОТОРОЙ БЫЛИ РАНЬШЕ, ЧЕМ НА ПРОШЛОМ ШАГЕ
       //переносим ВХОДНЫЕ СВЯЗИ с текущего ЭТ на активный
       NameT start = PrevTE->GetLongName(this);
       bool res;
@@ -1102,6 +1104,40 @@ bool NMazeMemory::MergingTEs(int active_index)
     BaseMPC = MultiPCs[active_index];
     MultiPCs.erase(MultiPCs.begin()+CurrentTE);
     CurrentTE = active_index;
+
+    return true;
+}
+
+
+bool NMazeMemory::UpdateCurrentTE()
+{
+    //Переходим к следующему элементу траектории (обновляем CurrentTE)
+    for(int i = 0; i<int(TrajectoryElements.size()); i++)
+    {
+        UEPtr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
+        UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+        if(!ltzone)
+            return true;
+
+        if(ltzone->OutputFrequency->As<double>(0)>0)
+        {
+            CurrentTE=i;
+            string currentf_name = string(TrajectoryElements[i]->GetName());// имя ЭТ
+
+            //обновляем LastUsedPath (CurrentForward)
+            for(int j = 0; j<int(BaseTE->Paths.size()); j++)
+            {
+                string name = string(BaseTE->Paths[j]->GetLongName(this));// имя синапса
+                //if (name==currentf_name)
+                int check_comparison = name.compare(0, currentf_name.length(), currentf_name);
+                if (name.compare(0, currentf_name.length(), currentf_name)==0)
+                {
+                    BaseTE->LastUsedPath = j;
+                    break;
+                }
+            }
+        }
+    }
 
     return true;
 }
