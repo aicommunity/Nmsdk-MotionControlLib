@@ -296,10 +296,10 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 }
 
 {
- UEPtr<UContainer> generated_cont=new NMazeMemory_simplified;
- generated_cont->SetName("NMazeMemory_simplified");
+ UEPtr<UContainer> generated_cont=new NMazeMemorySimplified;
+ generated_cont->SetName("NMazeMemorySimplified");
  generated_cont->Default();
- UploadClass("NMazeMemory_simplified",generated_cont);
+ UploadClass("NMazeMemorySimplified",generated_cont);
 }
 
 {
