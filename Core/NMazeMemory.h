@@ -56,6 +56,9 @@ ULProperty<bool, NMazeMemory, ptPubParameter> IsDone;
 ///Вектор параметров ситуации (сейчас = {x,y,alpha}, где alpha - ориентация робота)
 ULProperty<MDMatrix<double>, NMazeMemory, ptPubParameter> SituationCoords;
 
+///Содержимое вектора PassedTEs
+ULProperty<std::vector<string>, NMazeMemory, ptPubParameter> PassedTEsNames;
+
 protected:
 ///Нейроны действий
 std::vector<UEPtr<NPulseNeuron>> ActionNeurons;

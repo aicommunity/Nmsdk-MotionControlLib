@@ -26,7 +26,9 @@ NTrajectoryElement::NTrajectoryElement(void)
   Layer("Layer", this, &NTrajectoryElement::SetLayer),
   Output("Output",this),
   ForwardsNames("ForwardsNames", this),// &NTrajectoryElement::SetForwardsNames),
+  LastUsedForward("LastUsedForward", this),
   BackwardsNames("BackwardsNames", this),// &NTrajectoryElement::SetBackwardsNames),
+  LastUsedBackward("LastUsedBackward", this),
   PathsNames("PathsNames", this) // &NTrajectoryElement::SetPathsNames)
   //Input_u_top("Input_u_top",this),
   //Input_u_tcn("Input_u_tcn",this),
@@ -87,8 +89,8 @@ bool NTrajectoryElement::ADefault(void)
  BackwardsNames.assign(0,"");
  PathsNames.assign(0,"");
 
- //CurrentForward = -1;
- //CurrentBackward = -1;
+ LastUsedForward = -1;
+ LastUsedBackward = -1;
 
  return true;
 }

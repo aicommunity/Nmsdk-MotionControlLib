@@ -66,7 +66,7 @@ std::vector<UEPtr<NTrajectoryElement>> Forwards;
 ///Последнее выбранное направление движения
 /// (возможное действие)
 ///параметр необходим для использования в MazeMemory
-//int CurrentForward;
+ULProperty<int, NTrajectoryElement, ptPubParameter> LastUsedForward;
 
 ///Обратные связи из данной точки
 ///параметр необходим для использования в MazeMemory
@@ -74,7 +74,7 @@ std::vector<UEPtr<NTrajectoryElement>> Backwards;
 
 ///Последняя выбранная обратная связь
 ///параметр необходим для использования в MazeMemory
-//int CurrentBackward;
+ULProperty<int, NTrajectoryElement, ptPubParameter> LastUsedBackward;
 
 ///Все связи из данной точки
 ///параметр необходим для использования в MazeMemory
@@ -87,8 +87,6 @@ int LastUsedPath;
 ///Связь, по которой попали из предыдущего TE в текущий
 ///параметр необходим для использования в MazeMemory
 //int UsedPath;
-
-
 
 
 protected:
