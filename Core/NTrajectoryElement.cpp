@@ -29,7 +29,9 @@ NTrajectoryElement::NTrajectoryElement(void)
   LastUsedForward("LastUsedForward", this),
   BackwardsNames("BackwardsNames", this),// &NTrajectoryElement::SetBackwardsNames),
   LastUsedBackward("LastUsedBackward", this),
-  PathsNames("PathsNames", this) // &NTrajectoryElement::SetPathsNames)
+  PathsNames("PathsNames", this), // &NTrajectoryElement::SetPathsNames)
+  ForwardSynsNames("ForwardSynsNames", this),
+  BackwardSynsNames("BackwardSynsNames", this)
   //Input_u_top("Input_u_top",this),
   //Input_u_tcn("Input_u_tcn",this),
   //Input_y_pcn2("Input_y_pcn2",this),

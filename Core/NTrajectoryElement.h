@@ -53,6 +53,12 @@ ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> ForwardsName
 /// Имена родительских TE (содержимое вектора Backwards)
 ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> BackwardsNames;
 
+/// Имена синапсов, на которые заведены связи на дочерние TE (содержимое вектора ForwardSyns)
+ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> ForwardSynsNames;
+
+/// Имена синапсов, на которые заведены обратные связи на родительские TE (содержимое вектора BackwardSyns)
+ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> BackwardSynsNames;
+
 ///Имена всех узлов (СИНАПСЫ), в которые можно попасть из данного (содержимое вектора Paths)
 ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> PathsNames;
 
@@ -79,6 +85,15 @@ ULProperty<int, NTrajectoryElement, ptPubParameter> LastUsedBackward;
 ///Все связи из данной точки
 ///параметр необходим для использования в MazeMemory
 std::vector<UEPtr<NPulseSynapse>> Paths;
+
+///Вектор синапсов на N1_D1_5 дочерних TE
+///параметр необходим для использования в MazeMemory
+std::vector<UEPtr<NPulseSynapse>> ForwardSyns;
+
+///Вектор синапсов на N1_S1 и N1_D1_5 родительских TE
+///(обратные связи)
+///параметр необходим для использования в MazeMemory
+std::vector<UEPtr<NPulseSynapse>> BackwardSyns;
 
 ///Последняя выбранная связь (прямая или обратная)
 ///параметр необходим для использования в MazeMemory

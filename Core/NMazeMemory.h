@@ -133,6 +133,10 @@ int WaitForAnswerCnt;
 UEPtr<NTrajectoryElement> TEToDelete;
 UEPtr<NMultiPositionControl> MPCToDelete;
 
+/// Синапсы, веса которых нужно вернуть к значению 0.2
+/// после передачи активности при слиянии узлов
+vector<UEPtr<NPulseSynapse>> SynsToChngWeights;
+
 ///Для отладки
 string CheckBaseTE;
 
@@ -247,8 +251,22 @@ bool UpdateNames();
 //Проверяет, есть ли активные PostInput нейроны в сети
 int CheckActivePIs();
 
+//Проверяет, есть ли активные NeuronTrainer в сети
+int CheckActiveNTs();
+
 //Проверяет, есть ли активные элементы траектории среди возможных вариантов действий
 bool CheckActiveForwards(UEPtr<NTrajectoryElement> t_element);
+
+UEPtr<NPulseSynapse> GetForwardSyn(UEPtr<NTrajectoryElement> start_te, UEPtr<NTrajectoryElement> finish_te);
+
+// Возвращает вектор ссылок на первый свободный синапс следующих сегментов заданного TE:
+// N1_D1_5(Exc) + N1_S1(Inh) + N2_S1(Inh)
+vector<UEPtr<NPulseSynapse>> GetAllForwardSyns(UEPtr<NTrajectoryElement> t_element);
+
+// Возвращает вектор ссылок на первый свободный синапс следующих сегментов заданного TE:
+// N1_D1_2(Exc) + N1_S1(Exc)
+// автоматически задает вес этих синапсов равным 0.2!
+vector<UEPtr<NPulseSynapse>> GetAllBackwardSyns(UEPtr<NTrajectoryElement> t_element);
 
 //Вес связи, по которой попали в эту точку, w = 0,2
 bool LastUsedLink();
