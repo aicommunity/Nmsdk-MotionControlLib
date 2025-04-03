@@ -37,7 +37,7 @@ ULProperty<int, NTrajectoryElement, ptPubParameter> Layer;
 //Могут быть полезны, если такая возможность появится - тогда в код необходимо добавить построение связей между
 //Input_u_top, Input_u_tcn и Input_y_pcn2 и соответствующими синапсами
 
-/// Входной сигнал с высшего уровня управления (
+/// Входной сигнал с высшего уровня управления
 //UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_top;
 
 /// Входной сигнал c предыдущего элемента траектории
@@ -47,7 +47,18 @@ ULProperty<int, NTrajectoryElement, ptPubParameter> Layer;
 /// сигнализирует о выполнении текущего элемента траектории
 //UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_y_pcn2;
 
-///Возможные направления движения из данного элемента траектории
+/// Имена дочерних TE (содержимое вектора Forwards)
+ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> ForwardsNames;
+
+/// Имена родительских TE (содержимое вектора Backwards)
+ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> BackwardsNames;
+
+///Имена всех узлов (СИНАПСЫ), в которые можно попасть из данного (содержимое вектора Paths)
+ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> PathsNames;
+
+// Параметры для MazeMemory
+
+/// Возможные направления движения из данного элемента траектории
 /// (возможные действия в данной ситуации)
 /// параметр необходим для использования в MazeMemory
 std::vector<UEPtr<NTrajectoryElement>> Forwards;
@@ -92,6 +103,7 @@ std::vector<int> DendSizes1;
 
 ///Размер дендритов нейрона 2
 std::vector<int> DendSizes2;
+
 
 
 

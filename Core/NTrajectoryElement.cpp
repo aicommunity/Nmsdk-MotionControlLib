@@ -24,7 +24,10 @@ namespace NMSDK {
 NTrajectoryElement::NTrajectoryElement(void)
 : NeuronClassName("NeuronClassName",this, &NTrajectoryElement::SetNeuronClassName),
   Layer("Layer", this, &NTrajectoryElement::SetLayer),
-  Output("Output",this)
+  Output("Output",this),
+  ForwardsNames("ForwardsNames", this),// &NTrajectoryElement::SetForwardsNames),
+  BackwardsNames("BackwardsNames", this),// &NTrajectoryElement::SetBackwardsNames),
+  PathsNames("PathsNames", this) // &NTrajectoryElement::SetPathsNames)
   //Input_u_top("Input_u_top",this),
   //Input_u_tcn("Input_u_tcn",this),
   //Input_y_pcn2("Input_y_pcn2",this),
@@ -52,6 +55,7 @@ bool NTrajectoryElement::SetLayer(const int &value)
  return true;
 }
 
+
 // --------------------------
 
 
@@ -78,6 +82,10 @@ bool NTrajectoryElement::ADefault(void)
  DendSizes1[0] = 5;
  DendSizes2.resize(SomaSize);
  DendSizes2[0] = 3;
+
+ ForwardsNames.assign(0,"");
+ BackwardsNames.assign(0,"");
+ PathsNames.assign(0,"");
 
  //CurrentForward = -1;
  //CurrentBackward = -1;

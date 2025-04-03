@@ -53,7 +53,7 @@ ULProperty<int, NMazeMemory, ptPubParameter> FeaturesNum;
 /// Флаг завершения работы (все возможные варианты исследованы)
 ULProperty<bool, NMazeMemory, ptPubParameter> IsDone;
 
-///Вектор параметров ситуации (сейчас = {x,y,alpha}, где alpha - ориентация робота
+///Вектор параметров ситуации (сейчас = {x,y,alpha}, где alpha - ориентация робота)
 ULProperty<MDMatrix<double>, NMazeMemory, ptPubParameter> SituationCoords;
 
 protected:
@@ -126,9 +126,12 @@ bool IsWaitingForAnswer;
 int WaitForAnswerCnt;
 
 
-//Компоненты, которые нужно будет удалить
+///Компоненты, которые нужно будет удалить
 UEPtr<NTrajectoryElement> TEToDelete;
 UEPtr<NMultiPositionControl> MPCToDelete;
+
+///Для отладки
+string CheckBaseTE;
 
 
 public: // Методы
@@ -235,22 +238,17 @@ bool MergingTEs(int active_num);
 //Обновляет значение указателя на текущий TE в конце итерации
 bool UpdateCurrentTE();
 
+//Обновляет значения BackwardNames, ForwardNames, PathsNames всех TE внутри MazeMemory
+bool UpdateNames();
+
 //Проверяет, есть ли активные PostInput нейроны в сети
 int CheckActivePIs();
 
 //Проверяет, есть ли активные элементы траектории среди возможных вариантов действий
 bool CheckActiveForwards(UEPtr<NTrajectoryElement> t_element);
 
-//Ищем непроверенные варианты ниже по дереву
-//(переключаем активность на PreControl нейрон и проверяем,
-// есть ли отклик через уровень или ниже)
-bool CallForResponse();
-
 //Вес связи, по которой попали в эту точку, w = 0,2
 bool LastUsedLink();
-
-//Обработка новой ситуации (развилки)
-bool ProcessOptions();
 
 //Обработка тупика
 bool DeadlockProcessing();
