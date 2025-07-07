@@ -152,7 +152,8 @@ bool NMultiPositionControl::ABuild(void)
 
         //Adding PreControlNeuron
         size_t preControlSize = PreControlNeurons.size();
-        string preControlNeuronName = "PreControlNeuron"+sntoa(preControlSize+1);
+        string preControlNeuronName = "PreControlNeuron1";//Костыль! Ок для Mazememory, но если нужно запоминать больше 1 признака, проблема
+        //string preControlNeuronName = "PreControlNeuron"+sntoa(preControlSize+1);
         if(CheckComponentL(preControlNeuronName))
         {
           PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
@@ -170,8 +171,10 @@ bool NMultiPositionControl::ABuild(void)
         }
 
         //Adding PostInputNeuron
+        string name = this->GetName();
         size_t postInputSize = PostInputNeurons.size();
-        string postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
+        string postInputNeuronName = "PostInputNeuron1"; //Костыль! Ок для Mazememory, но если нужно запоминать больше 1 признака, проблема
+        //string postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
 
         if(CheckComponentL(postInputNeuronName))
         {
@@ -187,6 +190,12 @@ bool NMultiPositionControl::ABuild(void)
           AddComponent(cont);
           PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
           postInputs.push_back(static_pointer_cast<NNet>(cont));
+
+          UEPtr<NPulseNeuron> neuron = cont->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
+          //UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(neuron->GetComponentL("LTZone"));
+          UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(cont->GetComponentL("LTZone"));
+          if(ltzone)
+              ltzone->AvgInterval = 3; //увеличиваем интервал для подчета OutputFrequency, чтобы проверять активность нейрона в MazeMemory
         }
         PositionNeurons();
       }
@@ -510,40 +519,39 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
   UEPtr<UContainer> cont;
   UEPtr<UStorage> storage = GetStorage();
 
-  //Creating InputNeurons
-  int positionControlSize = PCsNum;
-  InputNeuronsByContours.resize(positionControlSize);
+   //Creating InputNeurons
+   int positionControlSize = PCsNum;
+   InputNeuronsByContours.resize(positionControlSize);
 
-  for(int i=0; i<positionControlSize; i++)
-  {
-    for(int j=0; j<InputsNum; j++)
-    {
-      UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
-      string inputNeuronName = "InputNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
-      string inputName;
+  // for(int i=0; i<positionControlSize; i++)
+  // {
+  //   for(int j=0; j<InputsNum; j++)
+  //   {
+  //     UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
+  //     string inputNeuronName = "InputNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
+  //     string inputName;
 
-      if(CheckComponentL(inputNeuronName))
-      {
-        NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronName));
-        InputNeurons.push_back(inputNeuron);
-        InputNeuronsByContours[i].push_back(inputNeuron);
-        inputNeuron->GetLongName(owner, inputName);
-      }
-      else
-      {
-        //InputNeuronType = "NSPNeuronGen";
-        InputNeuronType = "NNeuronTrainer";
-        cont=dynamic_pointer_cast<NNeuronTrainer>(storage->TakeObject(InputNeuronType));
-        if(!cont)
-          return 0;
-        cont->SetName(inputNeuronName);
-        AddComponent(cont);           
-        InputNeurons.push_back(static_pointer_cast<NNet>(cont));
-        InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
-        cont->GetLongName(owner, inputName);
-      }
-    }
-  }
+  //     if(CheckComponentL(inputNeuronName))
+  //     {
+  //       NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronName));
+  //       InputNeurons.push_back(inputNeuron);
+  //       InputNeuronsByContours[i].push_back(inputNeuron);
+  //       inputNeuron->GetLongName(owner, inputName);
+  //     }
+  //     else
+  //     {
+  //       InputNeuronType = "NSPNeuronGen";
+  //       cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(InputNeuronType));
+  //       if(!cont)
+  //         return 0;
+  //       cont->SetName(inputNeuronName);
+  //       AddComponent(cont);
+  //       InputNeurons.push_back(static_pointer_cast<NNet>(cont));
+  //       InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
+  //       cont->GetLongName(owner, inputName);
+  //     }
+  //   }
+  // }
 
   //Creating ControlNeurons 0
   ControlNeuronsByContours.resize(positionControlSize);

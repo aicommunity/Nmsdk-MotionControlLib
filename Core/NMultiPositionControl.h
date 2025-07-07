@@ -13,7 +13,6 @@ See file license.txt for more information
 #define NMultiPositionControl_H
 
 #include "NPositionControlElement.h"
-#include "../../Nmsdk-PulseLib/Core/NNeuronTrainer.h"
 //#include <string>
 
 namespace NMSDK {
