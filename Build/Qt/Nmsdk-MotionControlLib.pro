@@ -47,6 +47,7 @@ HEADERS += \
     ../../Core/NManipulatorSource.h \
     ../../Core/NManipulatorSourceEmulator.h \
     ../../Core/NMazeMemory.h \
+    ../../Core/NMazeMemory_simplified.h \
     ../../Core/NMotionControlLibrary.h \
     ../../Core/NMotionElement.h \
     ../../Core/NMultiPositionControl.h \
@@ -84,6 +85,7 @@ SOURCES += \
     ../../Core/NManipulatorSource.cpp \
     ../../Core/NManipulatorSourceEmulator.cpp \
     ../../Core/NMazeMemory.cpp \
+    ../../Core/NMazeMemory_simplified.cpp \
     ../../Core/NMotionControlLibrary.cpp \
     ../../Core/NMotionElement.cpp \
     ../../Core/NMultiPositionControl.cpp \
