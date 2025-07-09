@@ -103,7 +103,7 @@ bool NObjInArea::SetPulseLength(const double &value)
   return false;
 
  // Настраиваем генераторы образов
- for (int i = 0; i < ClsSpikeFr.size(); i++)
+ for (size_t i = 0; i < ClsSpikeFr.size(); i++)
  {
   if (!ClsSpikeFr[i])
    continue;
@@ -551,7 +551,7 @@ bool NObjInArea::AReset(void)
  }
 
  // Настраиваем генераторы образов
- for (int i = 0; i < ClsSpikeFr.size(); i++)
+ for (size_t i = 0; i < ClsSpikeFr.size(); i++)
  {
   ClsSpikeFr[i]->Amplitude = Amplitude;
   ClsSpikeFr[i]->PulseLength = PulseLength;
