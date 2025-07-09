@@ -94,10 +94,10 @@ bool NSeqComparison::SetPulseLength(const double &value)
  if(value <= 0)
   return false;
 
- int temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
+ size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
  // Настраиваем генераторы образов
- for (int i = 0; i < temp_size; i++)
+ for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->PulseLength = value;
   FrClsSpikes[i]->PulseLength = value;
@@ -112,10 +112,10 @@ bool NSeqComparison::SetAmplitude(const double &value)
  if(value <= 0)
   return false;
 
- int temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
+ size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
  // Настраиваем генераторы образов
- for (int i = 0; i < temp_size; i++)
+ for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->Amplitude = value;
   FrClsSpikes[i]->Amplitude = value;
@@ -130,10 +130,10 @@ bool NSeqComparison::SetFrequency(const double &value)
  if(value < 0)
   return false;
 
- int temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
+ size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
  // Настраиваем генераторы образов
- for (int i = 0; i < temp_size; i++)
+ for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->Frequency = value;
   FrClsSpikes[i]->Frequency = value;
@@ -166,9 +166,9 @@ bool NSeqComparison::SetPulseCount(const int &value)
  if(value < 1)
   return false;
 
- int temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
+ size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
- for (int i = 0; i < temp_size; i++)
+ for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->PulseCount = value;
   KFClsSpikes[i]->Reset();
@@ -351,10 +351,10 @@ bool NSeqComparison::AReset(void)
 
  Output.ToZero();
 
- int temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
+ size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
  // Настраиваем генераторы образов
- for (int i = 0; i < temp_size; i++)
+ for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->Amplitude = Amplitude;
   KFClsSpikes[i]->PulseLength = PulseLength;

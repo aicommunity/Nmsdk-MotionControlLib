@@ -328,7 +328,7 @@ bool NSignalEstimation::ABuild(void)
   {
    std::vector<int> dend;
    dend.assign(2, 1);
-   dend[0] = UpperLimitsOfZones[NumZones - i - 1] / 0.01 - 1;
+   dend[0] = int(UpperLimitsOfZones[NumZones - i - 1] / 0.01 - 1);
    ZoneNeurons[i]->NumDendriteMembranePartsVec = dend;
   }
 
@@ -338,7 +338,7 @@ bool NSignalEstimation::ABuild(void)
  // Строим связи с генераторов на нейроны
  for (int i = 0; i < NumZones; i++)
  {
-  int dendrite_num = UpperLimitsOfZones[NumZones - i - 1] / 0.01 - 1;
+  int dendrite_num = int(UpperLimitsOfZones[NumZones - i - 1] / 0.01 - 1);
   UEPtr<NPulseMembrane> dendrite = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Dendrite1_"+sntoa(dendrite_num), true);
   if (!dendrite)
    continue;
@@ -460,7 +460,7 @@ bool NSignalEstimation::AReset(void)
  for (int i = 0; i < NumZones; i++)
  {
   // Первый дендрит
-  int dendrite_num = UpperLimitsOfZones[NumZones - i - 1] / 0.01 - 1;
+  int dendrite_num = int(UpperLimitsOfZones[NumZones - i - 1] / 0.01 - 1);
   UEPtr<NPulseMembrane> dendrite = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Dendrite1_"+sntoa(dendrite_num), true);
   if (!dendrite)
    continue;

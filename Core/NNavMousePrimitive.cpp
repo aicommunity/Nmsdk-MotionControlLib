@@ -181,9 +181,9 @@ bool NNavMousePrimitive::AReset(void)
  //Это спорно, но логика подсказывает, что именно так и надо
  MousePosition=0.0+MouseSize+MouseSize/10;
 
- vibriss_counters.resize(2, 0.0);
- vibriss_counters[0]=0.0;
- vibriss_counters[1]=0.0;
+ vibriss_counters.resize(2, 0);
+ vibriss_counters[0]=0;
+ vibriss_counters[1]=0;
  pain_counter=0;
 
  if(Environment)

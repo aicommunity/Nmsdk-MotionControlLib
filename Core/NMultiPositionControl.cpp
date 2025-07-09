@@ -151,7 +151,7 @@ bool NMultiPositionControl::ABuild(void)
         vector<NNet*> postInputs, preControls;
 
         //Adding PreControlNeuron
-        size_t preControlSize = PreControlNeurons.size();
+        //size_t preControlSize = PreControlNeurons.size();
         string preControlNeuronName = "PreControlNeuron1";//Костыль! Ок для Mazememory, но если нужно запоминать больше 1 признака, проблема
         //string preControlNeuronName = "PreControlNeuron"+sntoa(preControlSize+1);
         if(CheckComponentL(preControlNeuronName))
@@ -172,7 +172,7 @@ bool NMultiPositionControl::ABuild(void)
 
         //Adding PostInputNeuron
         string name = this->GetName();
-        size_t postInputSize = PostInputNeurons.size();
+        //size_t postInputSize = PostInputNeurons.size();
         string postInputNeuronName = "PostInputNeuron1"; //Костыль! Ок для Mazememory, но если нужно запоминать больше 1 признака, проблема
         //string postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
 
@@ -317,7 +317,7 @@ bool NMultiPositionControl::ACalculate(void)
     {
       NPulseNeuron *postInputNeuron = static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronName));
       if (activeInputs.size()>0)
-        postInputNeuron->NumSomaMembraneParts = activeInputs.size();
+        postInputNeuron->NumSomaMembraneParts = int(activeInputs.size());
       else
         postInputNeuron->NumSomaMembraneParts = 1;
 

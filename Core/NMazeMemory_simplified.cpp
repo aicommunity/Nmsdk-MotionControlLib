@@ -523,7 +523,7 @@ std::vector<UEPtr<NTrajectoryElement>> NMazeMemory_simplified::CheckActivePIs()
 
 bool NMazeMemory_simplified::MergingTEs(int active_num)
 {
-    int k = PassedTEs.size()-2;
+    int k = int(PassedTEs.size())-2;
     if (k<0)
         return true;
 
@@ -632,8 +632,8 @@ bool NMazeMemory_simplified::MergingTEs(int active_num)
       //ïåðåíîñèì ÎÁÐÀÒÍÛÅ ÑÂßÇÈ ñ òåêóùåãî ÝÒ íà àêòèâíûé
       start = ActivePIs[j]->GetLongName(this);
 
-      int back_max = BaseTE->Backwards.size();
-      for (int i = 0; i<back_max; i++)
+      size_t back_max = BaseTE->Backwards.size();
+      for (size_t i = 0; i<back_max; i++)
       {
         //íà N1_D1_2
         UEPtr<NPulseNeuron> fin_neuron = BaseTE->Backwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);

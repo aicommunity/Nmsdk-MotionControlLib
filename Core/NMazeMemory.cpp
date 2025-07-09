@@ -268,7 +268,7 @@ bool NMazeMemory::ACalculate(void)
         else //если нет ответа
         {
             //для текущей в списке w  = 0.2
-            int check_path_n = BaseTE->LastUsedPath;
+            //int check_path_n = BaseTE->LastUsedPath;
             string check_lu_paths = string(BaseTE->Paths[BaseTE->LastUsedPath]->GetLongName(this));
 
             BaseTE->Paths[BaseTE->LastUsedPath]->Weight=0.2;
@@ -333,7 +333,7 @@ bool NMazeMemory::ACalculate(void)
     WaitForSpike = 0;
 
     //Проверяем, есть ли активные направления (кроме обратных связей)
-    bool check_activeForwards = CheckActiveForwards(BaseTE);
+    //bool check_activeForwards = CheckActiveForwards(BaseTE);
     if(!CheckActiveForwards(BaseTE)) //если нет активных направлений вперед
     {
         //w обратной связи на ЭТ(i-1) = 1
@@ -390,7 +390,7 @@ bool NMazeMemory::ACalculate(void)
             {
                 string name = string(BaseTE->Paths[j]->GetLongName(this));// имя синапса
                 //if (name==currentf_name)
-                int check_comparison = name.compare(0, currentf_name.length(), currentf_name);
+                //int check_comparison = name.compare(0, currentf_name.length(), currentf_name);
                 if (name.compare(0, currentf_name.length(), currentf_name)==0)
                 {
                     BaseTE->LastUsedPath = j;
@@ -541,16 +541,16 @@ bool NMazeMemory::ACalculate(void)
      PassedTEs.clear();
 
      string check_base_name = string(BaseTE->GetName());
-     int check_base_layer = BaseTE->Layer;
+     //int check_base_layer = BaseTE->Layer;
      string check_prev_name = string(PrevTE->GetName());
-     int check_prev_layer = PrevTE->Layer;
+     //int check_prev_layer = PrevTE->Layer;
 
      if (BaseTE->Layer <= PrevTE->Layer)//Если не спустились на уровень ниже по сравнению с предыдущим ЭТ (т.е. не продвинулись дальше в исследовании лабиринта)
      {
         //Вес связи, по которой попали в эту точку, w = 0,2
         PrevTE->Paths[PrevTE->LastUsedPath]->Weight = 0.2;
 
-        int check_lastusedpath = PrevTE->LastUsedPath;
+        //int check_lastusedpath = PrevTE->LastUsedPath;
         string check_paths = string(PrevTE->Paths[PrevTE->LastUsedPath]->GetLongName(this));
 
         //Кидаем "клич"
@@ -597,7 +597,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
    if (TrajectoryElements.size()>0)
    {
        string check1 = TrajectoryElements[int(TrajectoryElements.size())-1]->GetName();
-       char check_te_num = string(TrajectoryElements[int(TrajectoryElements.size())-1]->GetName())[18];
+       //char check_te_num = string(TrajectoryElements[int(TrajectoryElements.size())-1]->GetName())[18];
 
        string name = string(TrajectoryElements[int(TrajectoryElements.size())-1]->GetName());
        te_num = int(name[18]-'0')+1;
@@ -605,7 +605,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
    if (MultiPCs.size()>0)
    {
        string check2 = MultiPCs[int(MultiPCs.size())-1]->GetName();
-       char check_mpc_num = string(MultiPCs[int(MultiPCs.size())-1]->GetName())[21];
+       //char check_mpc_num = string(MultiPCs[int(MultiPCs.size())-1]->GetName())[21];
 
        string name = string(MultiPCs[int(MultiPCs.size())-1]->GetName());
        mpc_num = int(name[21]-'0')+1;
@@ -742,7 +742,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
          return true;
 
      //ОБРАТНЫЕ СВЯЗИ
-     int check_Backwards = traj_el->Backwards.size();
+     //int check_Backwards = traj_el->Backwards.size();
      traj_el->Backwards.push_back(BaseTE);
      //traj_el->CurrentBackward = 0;
 
@@ -767,11 +767,11 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
      if(!res)
          return true;
      traj_el->Paths.push_back(synapse);
-     int check_Paths = traj_el->Paths.size();
+     //int check_Paths = traj_el->Paths.size();
 
      //связи между PreControl нейронами для "клича"
-     int passed_max = PassedTEs.size();
-     for (int j=0; j<passed_max; j++)
+     size_t passed_max = PassedTEs.size();
+     for (size_t j=0; j<passed_max; j++)
      {   
          UEPtr<NMultiPositionControl> output_mpc = MultiPCs[j];
          UEPtr<NPulseNeuron> output_postinputn = output_mpc->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
@@ -871,7 +871,7 @@ bool NMazeMemory::CheckActiveForwards(UEPtr<NTrajectoryElement> t_element)
       return false;
 
     string check_ltz = ltzone->GetLongName(this);
-    double check_frequency = ltzone->OutputFrequency->As<double>(0);
+    //double check_frequency = ltzone->OutputFrequency->As<double>(0);
     if(ltzone->OutputFrequency->As<double>(0) >0)
     {
       return true;
@@ -906,7 +906,7 @@ int NMazeMemory::CheckActivePIs()
 
 bool NMazeMemory::MergingTEs(int active_index)
 {
-    int k = PassedTEs.size()-2;
+    int k = int(PassedTEs.size())-2;
     if (k<0)
         return true;
 
@@ -1069,8 +1069,8 @@ bool NMazeMemory::MergingTEs(int active_index)
       //переносим ОБРАТНЫЕ СВЯЗИ с текущего ЭТ на активный
       start = ActivePIs[j]->GetLongName(this);
 
-      int back_max = BaseTE->Backwards.size();
-      for (int i = 0; i<back_max; i++)
+      size_t back_max = BaseTE->Backwards.size();
+      for (size_t i = 0; i<back_max; i++)
       {
         //на N1_D1_2
         UEPtr<NPulseNeuron> fin_neuron = BaseTE->Backwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
@@ -1179,7 +1179,7 @@ bool NMazeMemory::UpdateCurrentTE()
             {
                 string name = string(BaseTE->Paths[j]->GetLongName(this));// имя синапса
                 //if (name==currentf_name)
-                int check_comparison = name.compare(0, currentf_name.length(), currentf_name);
+                //int check_comparison = name.compare(0, currentf_name.length(), currentf_name);
                 if (name.compare(0, currentf_name.length(), currentf_name)==0)
                 {
                     BaseTE->LastUsedPath = j;
