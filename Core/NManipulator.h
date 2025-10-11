@@ -16,6 +16,10 @@ See file license.txt for more information
 #ifndef NManipulatorH
 #define NManipulatorH
 #include "../../../Rdk/Deploy/Include/rdk.h"
+#include "../../../Rdk/Core/Engine/ModernSmartPointers.h"
+#include "../../../Rdk/Core/Engine/ModernContainers.h"
+#include "../../../Rdk/Core/System/ModernChrono.h"
+#include "../../../Rdk/Core/System/ModernMutex.h"
 
 //---------------------------------------------------------------------------
 namespace NMSDK {
@@ -25,69 +29,69 @@ using namespace RDK;
 /* *************************************************************************** */
 class RDK_LIB_TYPE NManipulator: public UNet
 {
-public: // Общедоступные свойства
-/// Электромагнитный коэффициент
+public: // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 ULProperty<double, NManipulator, ptPubParameter> EMFactor;
 
-/// Индуктивность
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 ULProperty<double, NManipulator, ptPubParameter> Inductance;
 
-/// Сопротивление
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 ULProperty<double, NManipulator, ptPubParameter> Resistance;
 
-public: // Входы и выходы
-/// Входной сигнал
+public: // пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 UPropertyInputData<MDMatrix<double>, NManipulator, ptInput | ptPubState> Input;
 
-/// Выходой сигнал
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 UPropertyOutputData<MDMatrix<double>, NManipulator, ptOutput | ptPubState> Output;
 
-protected: // Временные переменные
-// Ток якоря
+protected: // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 double Current;
 
-// Класс рисования
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 UGraphics Graphics;
 
-public: // Методы
+public: // пїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Конструкторы и деструкторы
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 NManipulator(void);
 virtual ~NManipulator(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 virtual NManipulator* New(void);
 // --------------------------
 
 protected:
 // --------------------------
-// Методы управления общедоступными свойствами
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Электромагнитный коэффициент
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool SetEMFactor(const double &value);
 
-// Индуктивность
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool SetInductance(const double &value);
 
-// Сопротивление
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool SetResistance(const double &value);
 // --------------------------
 
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Reset() пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Ready пїЅ true
+// пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 virtual bool ABuild(void);
 
 // Reset computation
@@ -95,6 +99,36 @@ virtual bool AReset(void);
 
 // Execute math. computations of current object on current step
 virtual bool ACalculate(void);
+// --------------------------
+
+// --------------------------
+// Modern C++20 methods
+// --------------------------
+// Move semantics
+NManipulator(const NManipulator&) = default;
+NManipulator(NManipulator&&) noexcept = default;
+NManipulator& operator=(const NManipulator&) = default;
+NManipulator& operator=(NManipulator&&) noexcept = default;
+
+// Modern manipulator operations
+void OptimizeManipulatorPerformance();
+bool IsManipulatorValid() const;
+void ReserveManipulatorMemory(size_t control_points_count);
+TimePoint GetLastManipulatorUpdateTime() const;
+void SetLastManipulatorUpdateTime(TimePoint time);
+
+// Modern control operations
+template<typename T>
+void ReserveControlPoints(std::vector<T>& control_points, size_t count);
+
+template<typename T>
+void MoveControlPoints(std::vector<T>& target, std::vector<T>&& source);
+
+// Advanced manipulator algorithms
+void UpdateManipulatorParameters(double em_factor, double inductance, double resistance);
+void CalculateManipulatorKinematics(const std::vector<double>& joint_angles);
+void OptimizeManipulatorTrajectory(const std::vector<double>& target_positions);
+void UpdateManipulatorDynamics(double torque, double velocity, double acceleration);
 // --------------------------
 };
 /* *************************************************************************** */
