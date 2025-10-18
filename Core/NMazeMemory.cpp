@@ -228,6 +228,13 @@ bool NMazeMemory::ACalculate(void)
 {
   UpdateNames();
 
+  if(CheckFinish)
+  {
+      CheckIfFinished();
+      CheckFinish = false;
+      return true;
+  }
+
   if (IsWaitingForAnswer)
   {
       //Пауза после подачи активности на PreControl нейроны
@@ -375,14 +382,6 @@ bool NMazeMemory::ACalculate(void)
 
       CheckFinish = true;
 
-      return true;
-  }
-
-
-  if(CheckFinish)
-  {
-      CheckIfFinished();
-      CheckFinish = false;
       return true;
   }
 

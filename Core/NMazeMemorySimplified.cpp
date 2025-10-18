@@ -16,7 +16,7 @@ See file license.txt for more information
 #ifndef NMAZEMEMORY_CPP
 #define NMAZEMEMORY_CPP
 
-#include "NMazeMemorySimplified.h".h"
+#include "NMazeMemorySimplified.h"
 #include <QString>
 
 namespace NMSDK {
