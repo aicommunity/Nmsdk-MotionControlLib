@@ -358,6 +358,7 @@ bool NMazeMemory::ACalculate(void)
       //Выключаем обратно веса, которые использовали для передачи активности
       for (int i=0; i < int(SynsToChngWeights.size()); i++)
       {
+        string check_name = SynsToChngWeights[i]->GetLongName(this);
         SynsToChngWeights[i]->Weight = 0;//0.2
       }
 
@@ -736,8 +737,6 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
    UEPtr<UStorage> storage = GetStorage();
    UEPtr<NTrajectoryElement> traj_el;
 
-
-
    int te_num = int(TrajectoryElements.size());
    int mpc_num = int(MultiPCs.size());
 
@@ -1021,6 +1020,12 @@ bool NMazeMemory::CheckActiveForwards(UEPtr<NTrajectoryElement> t_element)
   for(int i = 0; i<max; i++)
   {
     string checknname = t_element->Forwards[i]->GetName();
+
+    if(t_element->Forwards[i]->GetName() == t_element->GetName()) // проверяем, что найденный возможный путь вперед не является циклом и не ведет снова к текущему ЭТ
+    {
+        continue;
+    }
+
     UEPtr<NPulseNeuron> neuron = t_element->Forwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
     if(!neuron)
       return false;
@@ -1032,7 +1037,10 @@ bool NMazeMemory::CheckActiveForwards(UEPtr<NTrajectoryElement> t_element)
     double check_frequency = ltzone->OutputFrequency->As<double>(0);
     if(ltzone->OutputFrequency->As<double>(0) >0)
     {
-      return true;
+      //if(t_element->Forwards[i]->GetName() != t_element->GetName()) // проверяем, что найденный возможный путь вперед не является циклом и не ведет снова к текущему ЭТ
+      //{
+          return true;
+      //}
     }
   }
   return false;
