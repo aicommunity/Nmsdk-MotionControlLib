@@ -120,13 +120,18 @@ int WaitForSpike;
 ///чтобы сигнал успел дойти до PostInputNeuron
 int WaitForSpikePI;
 
-
+/// Флаг паузы после подачи активности
+/// на PreControl нейроны
 bool IsWaitingForAnswer;
 
 ///Счетчик-заглушка,
 ///обеспечивает паузу после подачи активности
 /// на PreControl нейроны
 int WaitForAnswerCnt;
+
+/// Флаг, обозначающий необходимость вызова функции
+/// для проверки выполнения условия завершения алгоритма
+bool CheckFinish;
 
 
 ///Компоненты, которые нужно будет удалить
@@ -236,11 +241,26 @@ UEPtr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
 // и остальными блокмаи сети
 bool LinkPoint(UEPtr<NTrajectoryElement> traj_el,  MVector<double,3> base_coords, int option_num);
 
+//Проверяет, есть ли активные элементы траектории среди возможных вариантов действий
+bool CheckActiveForwards(UEPtr<NTrajectoryElement> t_element);
+
+//Проверяет, есть ли активные PostInput нейроны в сети
+int CheckActivePIs();
+
+// Переключает связь TE на следующую
+// (устанавливает для текущей связи w = 0, увеличивает LastUsedForward (или LastUsedBackward) на 1,
+// для следующей связи устанавливает w = 1)
+bool SwitchToNextLink(UEPtr<NTrajectoryElement> t_element);
+
 //Слияние совпадающих элементов траектории
 //Принимает на вход порядковый номер ТЕ в векторе TrajectoryElements,
 //которому соответствует активный PostInput нейрон
 //т.е. номер TE, с которым совпадает текущая ситуация
 bool MergingTEs(int active_num);
+
+// Возвращает указатель на синапс D1_5 элемента finish_te,
+// на который заведена связь от элемента start_te
+UEPtr<NPulseSynapse> GetForwardSyn(UEPtr<NTrajectoryElement> start_te, UEPtr<NTrajectoryElement> finish_te);
 
 //Обновляет значение указателя на текущий TE в конце итерации
 bool UpdateCurrentTE();
@@ -248,31 +268,26 @@ bool UpdateCurrentTE();
 //Обновляет значения BackwardNames, ForwardNames, PathsNames всех TE внутри MazeMemory
 bool UpdateNames();
 
-//Проверяет, есть ли активные PostInput нейроны в сети
-int CheckActivePIs();
+// Завершение алгоритма
+bool CheckIfFinished();
 
 //Проверяет, есть ли активные NeuronTrainer в сети
-int CheckActiveNTs();
-
-//Проверяет, есть ли активные элементы траектории среди возможных вариантов действий
-bool CheckActiveForwards(UEPtr<NTrajectoryElement> t_element);
-
-UEPtr<NPulseSynapse> GetForwardSyn(UEPtr<NTrajectoryElement> start_te, UEPtr<NTrajectoryElement> finish_te);
+//int CheckActiveNTs();
 
 // Возвращает вектор ссылок на первый свободный синапс следующих сегментов заданного TE:
 // N1_D1_5(Exc) + N1_S1(Inh) + N2_S1(Inh)
-vector<UEPtr<NPulseSynapse>> GetAllForwardSyns(UEPtr<NTrajectoryElement> t_element);
+//vector<UEPtr<NPulseSynapse>> GetAllForwardSyns(UEPtr<NTrajectoryElement> t_element);
 
 // Возвращает вектор ссылок на первый свободный синапс следующих сегментов заданного TE:
 // N1_D1_2(Exc) + N1_S1(Exc)
 // автоматически задает вес этих синапсов равным 0.2!
-vector<UEPtr<NPulseSynapse>> GetAllBackwardSyns(UEPtr<NTrajectoryElement> t_element);
+//vector<UEPtr<NPulseSynapse>> GetAllBackwardSyns(UEPtr<NTrajectoryElement> t_element);
 
-//Вес связи, по которой попали в эту точку, w = 0,2
-bool LastUsedLink();
+// Возвращает номер
+//bool UpdateLastUsed(UEPtr<NTrajectoryElement> prev_te, UEPtr<NTrajectoryElement> base_te);
 
 //Обработка тупика
-bool DeadlockProcessing();
+//bool DeadlockProcessing();
 
 // --------------------------
 };
