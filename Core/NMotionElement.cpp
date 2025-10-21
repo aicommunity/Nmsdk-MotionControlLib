@@ -19,7 +19,7 @@ See file license.txt for more information
 namespace NMSDK {
 
 // --------------------------
-// Конструкторы и деструкторы
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 NMotionElement::NMotionElement(void)
 :
@@ -50,7 +50,7 @@ NMotionElement::~NMotionElement(void)
 // --------------------------
 
 // --------------------------
-// Методы управления параметрами
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 bool NMotionElement::SetNumControlLoops(const int &value)
 {
@@ -85,7 +85,7 @@ bool NMotionElement::SetLinkModes(const std::vector<int> &value)
 
 bool NMotionElement::SetInterneuronPresentMode(const int &value)
 {
- if(value==0)//Если интернейроны отсутствуют - сброс связи в режим 0 (без интернейронов)
+ if(value==0)//пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ 0 (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
  {
   LinkModes->clear();
   LinkModes->resize(NumControlLoops, 0);
@@ -142,9 +142,9 @@ bool NMotionElement::SetAfferentObjectName(const string &value)
 
 
 // --------------------------
-// Системные методы управления объектом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 NMotionElement* NMotionElement::New(void)
 {
  return new NMotionElement;
@@ -154,7 +154,7 @@ NMotionElement* NMotionElement::New(void)
 // --------------------------
 // Proctected computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 bool NMotionElement::ADefault(void)
 {
   if(!isNumControlLoopsInitialized)
@@ -169,10 +169,10 @@ bool NMotionElement::ADefault(void)
 }
 
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Reset() пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Ready пїЅ true
+// пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 bool NMotionElement::ABuild(void)
 {
  BackupExternalLinks();
@@ -197,8 +197,8 @@ bool NMotionElement::ACalculate(void)
 }
 
 
-// Создает структуру в соответствии с текущими значениями параметров
-// Если структура существует, то пытается модифицировать ее с минимальными изменениями
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void NMotionElement::CreateStructure(void)
 {
   DelAllComponents();
@@ -211,7 +211,7 @@ void NMotionElement::CreateStructure(void)
   CreateInterneurons();
 }
 
-// Создает внутренние связи в соответствии с текущими значениями параметров
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void NMotionElement::CreateInternalLinks(void)
 {
    LinkMotoneurons();
@@ -221,7 +221,7 @@ void NMotionElement::CreateInternalLinks(void)
      LinkPM();
 }
 
-// Сохраняет и восстанавливает внешние связи
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 void NMotionElement::BackupExternalLinks(void)
 {
 
@@ -333,17 +333,17 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 
 
 
-// Создает пару мотонейронов
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  bool NMotionElement::CreateMotoneurons()
  {
-  // Мотонейрон 1
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1
   UEPtr<NPulseNeuron> mn1 = AddMissingComponent<NPulseNeuron>("MotoneuronL", NeuroObjectName);
   if(!mn1)
    return false;
   mn1->SetCoord(MVector<double,3>(22.0, 5.0, 0));
   mn1->NumSomaMembraneParts = NumControlLoops;
 
-  // Мотонейрон 2
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2
   UEPtr<NPulseNeuron> mn2 = AddMissingComponent<NPulseNeuron>("MotoneuronR", NeuroObjectName);
   if(!mn2)
    return false;
@@ -352,13 +352,13 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 
   if(RenshowMode)
   {
-   // Клетка реншоу 1
+   // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ 1
    UEPtr<NPulseNeuron> ren1=AddMissingComponent<NPulseNeuron>("RenshowL", NeuroObjectName);
    if(!ren1)
     return false;
    ren1->SetCoord(MVector<double,3>(15.0, 3.0, 0.0));
 
-   // Клетка реншоу 2
+   // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ 2
    UEPtr<NPulseNeuron> ren2=AddMissingComponent<NPulseNeuron>("RenshowR", NeuroObjectName);
    if(!ren2)
     return false;
@@ -367,13 +367,13 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 
   if(PacemakerMode)
   {
-   // пейсмейкер 1
+   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1
    UEPtr<NPulseNeuron> pml=AddMissingComponent<NPulseNeuron>("PmL", NeuroObjectName);
    if(!pml)
     return false;
    pml->SetCoord(MVector<double,3>(15.0, 1.0, 4.0));
 
-   // пейсмейкер 2
+   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2
    UEPtr<NPulseNeuron> pmr=AddMissingComponent<NPulseNeuron>("PmR", NeuroObjectName);
    if(!pmr)
     return false;
@@ -384,7 +384,7 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 
 
 
- // Создаёт связку афферентных нейронов
+ // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  bool NMotionElement::CreateAfferents()
  {
    for (int i=0; i<NumControlLoops; i++)
@@ -430,11 +430,11 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 
 
 
- // Создание связей
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
  bool NMotionElement::LinkMotoneurons()
  {
    UEPtr<UContainer> cont;
-   UEPtr<UStorage> storage = GetStorage();
+   UEPtr<UStorage> storage(GetStorage().get());
    bool res = true;
 
    ULongId item,conn;
@@ -454,25 +454,25 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
    {
 	   switch(mode)
 	   {
-        case 0: //прямая связь (без интернейронов)
-            res&=LinkNeuron(afferentL,"MotoneuronL",0,"Soma"+sntoa(i+1)); // 0 - возбуждающая связь
+        case 0: //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
+            res&=LinkNeuron(afferentL,"MotoneuronL",0,"Soma"+sntoa(i+1)); // 0 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 			res&=LinkNeuron(afferentR,"MotoneuronR",0,"Soma"+sntoa(i+1));
-            res&=LinkNeuron(afferentL,"MotoneuronR",1,"Soma"+sntoa(i+1)); // 1 - тормозная связь
+            res&=LinkNeuron(afferentL,"MotoneuronR",1,"Soma"+sntoa(i+1)); // 1 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 			res&=LinkNeuron(afferentR,"MotoneuronL",1,"Soma"+sntoa(i+1));
 			break;
 
-         case 1: //связь через интернейроны - все связи рабочие
+         case 1: //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
 			  return false;
-            res&=LinkNeuron(afferentL,"Post"+afferentL,0); //возбуждающая связь
-            res&=LinkNeuron("Post"+afferentL,"MotoneuronR",1,"Soma"+sntoa(i+1)); //тормозная связь
-            res&=LinkNeuron("Post"+afferentL,"MotoneuronL",0,"Soma"+sntoa(i+1)); //возбуждающая связь
-            res&=LinkNeuron(afferentR,"Post"+afferentR,0); //возбуждающая связь
-            res&=LinkNeuron("Post"+afferentR,"MotoneuronL",1,"Soma"+sntoa(i+1)); //тормозная связь
-            res&=LinkNeuron("Post"+afferentR,"MotoneuronR",0,"Soma"+sntoa(i+1)); //возбуждающая связь
+            res&=LinkNeuron(afferentL,"Post"+afferentL,0); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+            res&=LinkNeuron("Post"+afferentL,"MotoneuronR",1,"Soma"+sntoa(i+1)); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+            res&=LinkNeuron("Post"+afferentL,"MotoneuronL",0,"Soma"+sntoa(i+1)); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+            res&=LinkNeuron(afferentR,"Post"+afferentR,0); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+            res&=LinkNeuron("Post"+afferentR,"MotoneuronL",1,"Soma"+sntoa(i+1)); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+            res&=LinkNeuron("Post"+afferentR,"MotoneuronR",0,"Soma"+sntoa(i+1)); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 			break;
 
-         case 2: //связь через интернейроны(L-R) + прямая связь(L-L)
+         case 2: //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ(L-R) + пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ(L-L)
 			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
 			  return false;
 			res&=LinkNeuron(afferentL,"MotoneuronL",0,"Soma"+sntoa(i+1));
@@ -483,7 +483,7 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 			res&=LinkNeuron("Post"+afferentR,"MotoneuronL",1,"Soma"+sntoa(i+1));
 			break;
 
-         case 3://связь через интернейроны(L-L) + прямая связь(L-R)
+         case 3://пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ(L-L) + пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ(L-R)
 			if(!(CheckComponent("Post"+afferentL)&&CheckComponent("Post"+afferentR)))
 			  return false;
 			res&=LinkNeuron(afferentL,"MotoneuronR",1,"Soma"+sntoa(i+1));
@@ -513,14 +513,14 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
     std::string branch_name;
 	   switch(mode)
 	   {
-        case 0: //прямая связь (без интернейронов)
+        case 0: //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
 		 res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronL", "ExcChannel",branch_name);
 			res&=LinkNeuron(afferentL,"MotoneuronR",1,branch_name);
 		 res&=CreateNeuronBranchLink(this,afferentR+".LTZone","MotoneuronR", "ExcChannel",branch_name);
 			res&=LinkNeuron(afferentR,"MotoneuronL",1,branch_name);
 		 break;
 
-         case 1: //связь через интернейроны
+         case 1: //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			if(!(CheckComponent("Post"+afferentL) && CheckComponent("Post"+afferentR)))
 			  return false;
 //			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"ExcChannel");
@@ -533,7 +533,7 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 			res&=LinkNeuron("Post"+afferentL,"MotoneuronL",0,branch_name);
 			break;
 
-         case 2: //связь через интернейроны(L-R) + прямая связь(L-L)
+         case 2: //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ(L-R) + пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ(L-L)
 			if(!(CheckComponent("Post"+afferentL) && CheckComponent("Post"+afferentR)))
 			  return false;
 			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronL","ExcChannel",branch_name);
@@ -546,7 +546,7 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
 			break;
 
-         case 3: //связь через интернейроны(L-L) + прямая связь(L-R)
+         case 3: //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ(L-L) + пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ(L-R)
 			if(!(CheckComponent("Post"+afferentL) && CheckComponent("Post"+afferentR)))
 			  return false;
 			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronR","InhChannel",branch_name);

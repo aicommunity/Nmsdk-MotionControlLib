@@ -14,13 +14,19 @@ See file license.txt for more information
 
 #include "NEngineMotionControl.h"
 #include "NMotionElement.h"
+#include "UEPtr.h"
+#include "ModernSmartPointers.h"
+#include <memory>
+#include <mutex>
+#include <chrono>
+#include <thread>
 
 namespace NMSDK {
 
 //class NEngineMotionControl;
 class RDK_LIB_TYPE NPositionControlElement: public UNet
 {
-public: // Свойства
+public: // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> CurrentPosition;
 RDK::ULProperty<MDMatrix<double>, NPositionControlElement> TargetPosition;
 RDK::ULProperty<string, NPositionControlElement> InputNeuronType;
@@ -29,7 +35,7 @@ RDK::ULProperty<bool, NPositionControlElement> ExternalControl;
 RDK::ULProperty<bool, NPositionControlElement, ptPubState> RememberState;
 RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> Delta;
 
-public: // Переменные состояния
+public: // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 vector<NNet*> InputNeurons;
 vector<NNet*> ControlNeurons;
 vector<NNet*> PreControlNeurons;
@@ -38,16 +44,30 @@ vector<NNet*> PostInputNeurons;
 
 vector<UNet*> Generators;
 
-public: // Методы
+public: // пїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Конструкторы и деструкторы
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 NPositionControlElement(void);
 virtual ~NPositionControlElement(void);
+
+// Modern C++20 thread-safe position control
+// Thread-safe position operations
+void SetPositionSafe(const MDMatrix<double>& position);
+MDMatrix<double> GetPositionSafe(void) const;
+void SetTargetPositionSafe(const MDMatrix<double>& target);
+
+// Modern move semantics
+NPositionControlElement(NPositionControlElement&& other) noexcept;
+NPositionControlElement& operator=(NPositionControlElement&& other) noexcept;
+
+// Modern smart pointer factory
+static std::shared_ptr<NPositionControlElement> Create(void);
+
 // --------------------------
 
 // ---------------------
-// Методы управления параметрами
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // ---------------------
 bool SetInputNeuronType(const string &value);
 bool SetControlNeuronType(const string &value);
@@ -55,34 +75,34 @@ bool SetExternalControl(const bool &value);
 // ---------------------
 
 // ---------------------
-// Методы управления переменными состояния
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // ---------------------
 // ---------------------
 
 // --------------------------
-// Системные методы управления объектом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 virtual NPositionControlElement* New(void);
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Reset() пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Ready пїЅ true
+// пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 virtual bool ABuild(void);
 
-// Сброс процесса счета без потери настроек
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 virtual bool AReset(void);
 
-// Выполняет расчет этого объекта
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 virtual bool ACalculate(void);
 // --------------------------
 template <typename T>

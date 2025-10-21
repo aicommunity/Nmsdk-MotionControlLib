@@ -126,7 +126,7 @@ bool NSimpleStatistic::ABuild(void)
 bool NSimpleStatistic::AReset(void)
 {
  ClearStats();
- StatsStartTime=Environment->GetTime().GetDoubleTime();
+ StatsStartTime=Environment.lock()->GetTime().GetDoubleTime();
  return true;
 }
 
@@ -141,9 +141,9 @@ bool NSimpleStatistic::ACalculate(void)
  if(Mode == 0)
  {
   // Проверяем, возможно нам уже пора сохранять статистику
-  if(Environment->GetTime().GetDoubleTime()-StatsStartTime>=StatsInterval)
+  if(Environment.lock()->GetTime().GetDoubleTime()-StatsStartTime>=StatsInterval)
   {
-   (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<Environment->GetTime().GetDoubleTime()<<"\t";
+   (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<Environment.lock()->GetTime().GetDoubleTime()<<"\t";
    for(size_t i=0;i<StatsMin.size();i++)
    {
 	for(size_t j=0;j<StatsMin[i].size();j++)
@@ -154,7 +154,7 @@ bool NSimpleStatistic::ACalculate(void)
    (*StatsFile)<<endl;
 
    ClearStats();
-   StatsStartTime=Environment->GetTime().GetDoubleTime();
+   StatsStartTime=Environment.lock()->GetTime().GetDoubleTime();
   }
 
   ResizeStats();
@@ -175,9 +175,9 @@ bool NSimpleStatistic::ACalculate(void)
  else
  if(Mode == 1)
  {
-  if(Environment->GetTime().GetDoubleTime()-StatsStartTime>=StatsInterval)
+  if(Environment.lock()->GetTime().GetDoubleTime()-StatsStartTime>=StatsInterval)
   {
-   (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<Environment->GetTime().GetDoubleTime()<<endl;
+   (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<Environment.lock()->GetTime().GetDoubleTime()<<endl;
    for(int i=0;i<int(Inputs->size());i++)
    {
     for(int j=0;j<Inputs[i].GetCols();j++)
@@ -189,16 +189,16 @@ bool NSimpleStatistic::ACalculate(void)
    (*StatsFile)<<endl;
 
    ClearStats();
-   StatsStartTime=Environment->GetTime().GetDoubleTime();
+   StatsStartTime=Environment.lock()->GetTime().GetDoubleTime();
   }
  }
  else
  if(Mode == 2)
  {
   // Проверяем, возможно нам уже пора сохранять статистику
-  if(Environment->GetTime().GetDoubleTime()-StatsStartTime>=StatsInterval)
+  if(Environment.lock()->GetTime().GetDoubleTime()-StatsStartTime>=StatsInterval)
   {
-   (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<Environment->GetTime().GetDoubleTime()<<"\t";
+   (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<Environment.lock()->GetTime().GetDoubleTime()<<"\t";
    for(int i=0;i<int(Inputs->size());i++)
    {
     for(int j=0;j<Inputs[i].GetCols();j++)
@@ -209,7 +209,7 @@ bool NSimpleStatistic::ACalculate(void)
    (*StatsFile)<<endl;
 
    ClearStats();
-   StatsStartTime=Environment->GetTime().GetDoubleTime();
+   StatsStartTime=Environment.lock()->GetTime().GetDoubleTime();
   }
  }
 

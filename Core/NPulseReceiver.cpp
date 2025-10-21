@@ -103,7 +103,7 @@ bool NPulseReceiver::ACalculate(void)
   {
    if(!PulseFlag[i])
    {
-    MatrixData[i*2].push_back(Environment->GetTime().GetDoubleTime());
+    MatrixData[i*2].push_back(Environment.lock()->GetTime().GetDoubleTime());
     MatrixData[i*2+1].push_back(1.0);
     PulseFlag[i]=true;
    }
@@ -112,7 +112,7 @@ bool NPulseReceiver::ACalculate(void)
   {
    if(PulseFlag[i])
    {
-    MatrixData[i*2].push_back(Environment->GetTime().GetDoubleTime());
+    MatrixData[i*2].push_back(Environment.lock()->GetTime().GetDoubleTime());
     MatrixData[i*2+1].push_back(0.0);
     PulseFlag[i]=false;
    }

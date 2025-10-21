@@ -9,9 +9,9 @@
 
 namespace NMSDK {
 
-// Методы
+// пїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Конструкторы и деструкторы
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 NPCNElement::NPCNElement(void)
 :   MotionControl("MotionControl",this),
@@ -26,7 +26,7 @@ NPCNElement::~NPCNElement(void)
 
 
 // ---------------------
-// Методы управления параметрами
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // ---------------------
 bool NPCNElement::SetInputNeuronType(const string &value)
 {
@@ -41,14 +41,14 @@ bool NPCNElement::SetControlNeuronType(const string &value)
 // ---------------------
 
 // ---------------------
-// Методы управления переменными состояния
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // ---------------------
 // ---------------------
 
 // --------------------------
-// Системные методы управления объектом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 NPCNElement* NPCNElement::New(void)
 {
  return new NPCNElement;
@@ -57,19 +57,19 @@ NPCNElement* NPCNElement::New(void)
 
 
 // --------------------------
-// Скрытые методы управления счетом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 bool NPCNElement::ADefault(void)
 {
  NPositionControlElement::ADefault();
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Reset() пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Ready пїЅ true
+// пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 bool NPCNElement::ABuild(void)
 {
  MotionControlElement = dynamic_cast<NEngineMotionControl*>(MotionControl.GetItem());
@@ -86,14 +86,14 @@ bool NPCNElement::ABuild(void)
  return true;
 }
 
-// Сброс процесса счета без потери настроек
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NPCNElement::AReset(void)
 {
  RememberState = false;
  return true;
 }
 
-// Выполняет расчет этого объекта
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NPCNElement::ACalculate(void)
 {
  if(!MotionControlElement)
@@ -148,7 +148,7 @@ bool NPCNElement::CreateNeurons()
  if(!MotionControlElement)
   return false;
    UEPtr<UContainer> cont;
-   UEPtr<UStorage> storage = GetStorage();
+   UEPtr<UStorage> storage(GetStorage().get());
    bool res(true);
     vector<NMotionElement*> Motions = MotionControlElement->GetMotion();
    //Creating InputNeurons
@@ -169,7 +169,7 @@ bool NPCNElement::CreateNeurons()
      UEPtr<NNet> afferentL=dynamic_pointer_cast<NNet>(melem->GetComponentL("AfferentL"+sntoa(j+1)));
      UEPtr<NNet> afferentR=dynamic_pointer_cast<NNet>(melem->GetComponentL("AfferentR"+sntoa(j+1)));
      //
-     UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
+     UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
      string ltzoneLName,ltzoneRName;
      ltzoneL->GetLongName(owner, ltzoneLName);
      LeftAfferentNeurons[j].push_back(static_pointer_cast<NNet>(afferentL));
@@ -246,7 +246,7 @@ bool NPCNElement::CreateNeurons()
      UEPtr<NNet> postafferentL=dynamic_pointer_cast<NNet>(melem->GetComponentL("PostAfferentL"+sntoa(j+1)));
      UEPtr<NNet> postafferentR=dynamic_pointer_cast<NNet>(melem->GetComponentL("PostAfferentR"+sntoa(j+1)));
      //
-     UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
+     UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
      string postAfferentLName,postAfferentRName;
 
      postAfferentL->GetLongName(owner, postAfferentLName);
@@ -381,7 +381,7 @@ bool NPCNElement::CreateExternalControlElements(void)
  if(!MotionControlElement)
   return false;
  UEPtr<UContainer> cont;
- UEPtr<UStorage> storage = GetStorage();
+ UEPtr<UStorage> storage(GetStorage().get());
  bool res(true);
  vector<NMotionElement*> Motions = MotionControlElement->GetMotion();
 
@@ -436,7 +436,7 @@ bool NPCNElement::LinkNeurons(vector <NNet*> start, vector <NNet*> finish)
 {
 	//vector <NNet*>::iterator I,J;
 
-	UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
+	UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
 	for(size_t j=0;j<finish.size();j++)
 	{
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
@@ -475,7 +475,7 @@ bool NPCNElement::LinkNeuronsNeg(vector <NNet*> start, vector <NNet*> finish)
 {
 	//vector <NNet*>::iterator I,J;
 
-	UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
+	UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
 	for(size_t j=0;j<finish.size();j++)
 	{
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
@@ -512,7 +512,7 @@ bool NPCNElement::LinkNeuronsNeg(vector <NNet*> start, vector <NNet*> finish)
 
 bool NPCNElement::UnlinkNeurons(vector <NNet*> start, vector <NNet*> finish)
 {
- UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
+ UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
  for(size_t i=0;i<start.size();i++)
  {
   NameT startName = start[i]->GetName()+".LTZone";

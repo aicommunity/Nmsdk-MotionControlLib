@@ -21,9 +21,9 @@ See file license.txt for more information
 
 namespace NMSDK {
 
-// Методы
+// пїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Конструкторы и деструкторы
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 NMazeMemory::NMazeMemory(void)
 : Situation("Situation",this, &NMazeMemory::SetSituation),
@@ -44,12 +44,12 @@ NMazeMemory::~NMazeMemory(void)
 // --------------------------
 
 // --------------------------
-// Методы доступа к временным переменным
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 // --------------------------
 
 // --------------------------
-// Методы упраления параметрами
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 bool NMazeMemory::SetSituation(const bool &value)
 {
@@ -75,7 +75,7 @@ bool NMazeMemory::SetFeaturesNum(const int &value)
      UEPtr<NNeuronTrainer> neuron_trainer = GetComponentL<NNeuronTrainer>("NNeuronTrainer"+sntoa(j), true);
      if (neuron_trainer)
      {
-         neuron_trainer->NumInputDendrite = value; //Заодно ресайзнет и InputPattern
+         neuron_trainer->NumInputDendrite = value; //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ InputPattern
          neuron_trainer->Reset();
      }
 
@@ -96,7 +96,7 @@ bool NMazeMemory::SetSituationCoords(const MDMatrix<double> &value)
         UEPtr<NNeuronTrainer> neuron_trainer = NTrainers[cnt];
         if (neuron_trainer)
         {
-            neuron_trainer->NumInputDendrite = value.GetRows(); //Заодно ресайзнет и InputPattern
+            neuron_trainer->NumInputDendrite = value.GetRows(); //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ InputPattern
             neuron_trainer->Reset();
             neuron_trainer->InputPattern = value;
         }
@@ -108,9 +108,9 @@ bool NMazeMemory::SetSituationCoords(const MDMatrix<double> &value)
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 NMazeMemory* NMazeMemory::New(void)
 {
  return new NMazeMemory;
@@ -123,22 +123,22 @@ UComponent* NMazeMemory::NewStatic(void)
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления компонентами
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Выполняет завершающие пользовательские действия
-// при добавлении дочернего компонента в этот объект
-// Метод будет вызван только если comp был
-// успешно добавлен в список компонент
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ comp пїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NMazeMemory::AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer)
 {
 
  return true;
 }
 
-// Выполняет предварительные пользовательские действия
-// при удалении дочернего компонента из этого объекта
-// Метод будет вызван только если comp
-// существует в списке компонент
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ comp
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NMazeMemory::ADelComponent(UEPtr<UContainer> comp)
 {
 
@@ -147,11 +147,11 @@ bool NMazeMemory::ADelComponent(UEPtr<UContainer> comp)
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 
 
-// Сброс процесса счета.
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
 bool NMazeMemory::AReset(void)
 {
 
@@ -159,13 +159,13 @@ bool NMazeMemory::AReset(void)
  return true;
 }
 
-// Восстановление настроек по умолчанию и сброс процесса счета
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 bool NMazeMemory::ADefault(void)
 {
  Situation = false;
  InputActions.assign(3, 0); //(size,val)
  ActionNeuronsType = "NSPNeuronGen";
- FeaturesNum = 4; //x,y,alpha + калибровочное значение 0.2
+ FeaturesNum = 4; //x,y,alpha + пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 0.2
  IsDone = false;
 
  const int temp = FeaturesNum;
@@ -186,10 +186,10 @@ bool NMazeMemory::ADefault(void)
 }
 
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Reset() пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Ready пїЅ true
+// пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 bool NMazeMemory::ABuild(void)
 {
    if (TrajectoryElements.size()<1)
@@ -197,7 +197,7 @@ bool NMazeMemory::ABuild(void)
       int x_base = 5;
       int x_shift = 7;
 
-      //Добавляем нейроны действия
+      //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
       ActionNeurons.resize(InputActions.size());
       for (int n=0; n<ActionNeurons.size(); n++)
       {
@@ -207,7 +207,7 @@ bool NMazeMemory::ABuild(void)
         ActionNeurons[n]->SetCoord(MVector<double,3>(x_base+n*x_shift, 2.0, 0));
       }
 
-      //Добавляем корневой элемент траектории
+      //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
       MVector<double,3> root_coords = {5.0, 5.0, 0};
       UEPtr<NTrajectoryElement> root = CreatePoint(root_coords);
       BaseTE = root;
@@ -218,26 +218,26 @@ bool NMazeMemory::ABuild(void)
 }
 
 
-// Выполняет расчет этого объекта
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NMazeMemory::ACalculate(void)
 {
   if (IsWaitingForAnswer)
     {
-        //Пауза после подачи активности на PreControl нейроны
+        //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ PreControl пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         if(WaitForAnswerCnt < 2000)
         {
             WaitForAnswerCnt++;
             return true;
         }
 
-        //Проверяем, есть ли ответ на "клич"
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ "пїЅпїЅпїЅпїЅ"
         bool response = false;
         UEPtr<NTrajectoryElement> responding_TE;
 
         int max_layer = 0;
         for (int j = 0; j< int(MultiPCs.size()); j++)
         {
-            //Проверяем, если ли ответ через слой или ниже
+            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
             if (TrajectoryElements[j]->Layer - BaseTE->Layer > 1)
             {
                 UEPtr<NPulseNeuron> neuron = MultiPCs[j]->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
@@ -258,31 +258,31 @@ bool NMazeMemory::ACalculate(void)
             }
         }
 
-        if (response)//если кто-то ответил на "клич"
+        if (response)//пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ "пїЅпїЅпїЅпїЅ"
         {
-            //для нижнего из сработавших нейронов - переключить связь на следующую
+            //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             responding_TE->Paths[responding_TE->LastUsedPath]->Weight=0.6;
             responding_TE->LastUsedPath++;
             responding_TE->Paths[responding_TE->LastUsedPath]->Weight=1;
         }
-        else //если нет ответа
+        else //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         {
-            //для текущей в списке w  = 0.2
+            //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ w  = 0.2
             //int check_path_n = BaseTE->LastUsedPath;
             string check_lu_paths = string(BaseTE->Paths[BaseTE->LastUsedPath]->GetLongName(this));
 
             BaseTE->Paths[BaseTE->LastUsedPath]->Weight=0.2;
             BaseTE->LastUsedPath++;
-            //для следующей связи w = 1,
+            //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ w = 1,
             BaseTE->Paths[BaseTE->LastUsedPath]->Weight=1;
         }
 
-        //Удаляем дублирующий узел (TE+MultiPC)
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ (TE+MultiPC)
         DelComponent(TEToDelete,true);
         DelComponent(MPCToDelete, true);
 
 
-//        //Для отладки check
+//        //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ check
 //        for (int cnt = 0; cnt< TrajectoryElements.size(); cnt++)
 //        {
 //            string te = string(TrajectoryElements[cnt]->GetName());
@@ -293,14 +293,14 @@ bool NMazeMemory::ACalculate(void)
 //        }
 
 
-        //Разрываем связь, которую строили для "клича"
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅ"
         NameT fin = BaseMPC->GetName()+".PreControlNeuron1.Soma1.ExcSynapse1";
         bool res(true);
         res&=BreakLink(BaseTE->GetLongName(this),"Output", fin,"Input");
         if(!res)
             return true;
 
-        //Возвращаем связь с NeuronTrainer
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ NeuronTrainer
         string name = string(BaseTE->GetName());
         int num = int(name[18]-'0');
         string check_name_nt = "NeuronTrainer"+sntoa(num);
@@ -311,7 +311,7 @@ bool NMazeMemory::ACalculate(void)
         if(!res)
             return true;
 
-        //Обнуляем флаги
+        //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
         //Situation = false;
         IsWaitingForAnswer = false;
         WaitForAnswerCnt = 0;
@@ -320,7 +320,7 @@ bool NMazeMemory::ACalculate(void)
 
   if(IsNotFinished)
   {
-    //Ждем, пока обучится NeuronTrainer + еще немного, чтобы перейти к следующему TE
+    //пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ NeuronTrainer + пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ TE
     if (CurrentNT->IsNeedToTrain==true)
        return true;
     else
@@ -332,17 +332,17 @@ bool NMazeMemory::ACalculate(void)
 
     WaitForSpike = 0;
 
-    //Проверяем, есть ли активные направления (кроме обратных связей)
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
     //bool check_activeForwards = CheckActiveForwards(BaseTE);
-    if(!CheckActiveForwards(BaseTE)) //если нет активных направлений вперед
+    if(!CheckActiveForwards(BaseTE)) //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     {
-        //w обратной связи на ЭТ(i-1) = 1
+        //w пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ(i-1) = 1
         int num = int(BaseTE->Paths.size())-1;
         string check_BaseTE_n = BaseTE->GetName();
         string check_Path_n = BaseTE->Paths[num]->GetLongName(this);
-        BaseTE->Paths[num]->Weight = 1; //берет свзять на D1_5 - т.е. прямую, поправить
+        BaseTE->Paths[num]->Weight = 1; //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ D1_5 - пїЅ.пїЅ. пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-        //w ВСЕХ связей на вход ЭТ(i) = 0.2
+        //w пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ(i) = 0.2
         UEPtr<NPulseNeuron> neuron1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
         UEPtr<NPulseMembrane> dend1_5 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_5",true);
         int max = dend1_5->NumExcitatorySynapses;
@@ -353,7 +353,7 @@ bool NMazeMemory::ACalculate(void)
             synapse->Weight = 0.2;
         }
 
-        //У всех ли ЭТ блоки MultiPC обучены? - условие завершения алгоритма
+        //пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ MultiPC пїЅпїЅпїЅпїЅпїЅпїЅпїЅ? - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         bool done = true;
         for(int i = 0; i<int(TrajectoryElements.size()); i++)
         {
@@ -372,7 +372,7 @@ bool NMazeMemory::ACalculate(void)
     }
 
 
-    //Переходим к следующему элементу траектории (обновляем CurrentTE)
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ CurrentTE)
     for(int i = 0; i<int(TrajectoryElements.size()); i++)
     {
         UEPtr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
@@ -383,12 +383,12 @@ bool NMazeMemory::ACalculate(void)
         if(ltzone->OutputFrequency->As<double>(0)>0)
         {
             CurrentTE=i;
-            string currentf_name = string(TrajectoryElements[i]->GetName());// имя ЭТ
+            string currentf_name = string(TrajectoryElements[i]->GetName());// пїЅпїЅпїЅ пїЅпїЅ
 
-            //обновляем LastUsedPath (CurrentForward)
+            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ LastUsedPath (CurrentForward)
             for(int j = 0; j<int(BaseTE->Paths.size()); j++)
             {
-                string name = string(BaseTE->Paths[j]->GetLongName(this));// имя синапса
+                string name = string(BaseTE->Paths[j]->GetLongName(this));// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 //if (name==currentf_name)
                 //int check_comparison = name.compare(0, currentf_name.length(), currentf_name);
                 if (name.compare(0, currentf_name.length(), currentf_name)==0)
@@ -403,9 +403,9 @@ bool NMazeMemory::ACalculate(void)
     IsNotFinished = false;
   }
 
-  if (Situation)//Обрабатываем ситуацию
+  if (Situation)//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   {    
-    if (WaitForSpikePI==0)//Обновляем переменные,только если сейчас не выдерживаем паузу
+    if (WaitForSpikePI==0)//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
     {
       //Situation = false;
       UpdateCurrentTE();
@@ -414,14 +414,14 @@ bool NMazeMemory::ACalculate(void)
       PassedTEs.push_back(BaseTE);
 
 
-      if (int(PassedTEs.size()-2) >0) //-2 - т.к индексация с 0 и т.к. берем предыдущий блок
+      if (int(PassedTEs.size()-2) >0) //-2 - пїЅ.пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ 0 пїЅ пїЅ.пїЅ. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
       {
         PrevTE = PassedTEs[int(PassedTEs.size()-2)];
          string check_prevTE = string(PrevTE->GetName());
       }
 
 
-      //Блок для отладки
+      //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
       string check_baseTE = string(BaseTE->GetName());
       string check_baseMPC = string(BaseMPC->GetName());
       std::vector<string> check_passed;
@@ -432,8 +432,8 @@ bool NMazeMemory::ACalculate(void)
       }
     }
 
-    //Проверяем, есть ли активные PostInput нейроны в сети -
-    //т.е.совпадает ли текущая ситуация с какой-либо из уже изученных
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ PostInput пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ -
+    //пїЅ.пїЅ.пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     if (WaitForSpikePI < 2000)
     {
         WaitForSpikePI++;
@@ -441,41 +441,41 @@ bool NMazeMemory::ACalculate(void)
     }
     WaitForSpikePI = 0;
     ActivePIs.clear();
-    int active_index = CheckActivePIs(); //функция также изменяет и ActivePIs
-    if(ActivePIs.size()>0)//если обнаружили другой активный ЭТ, помимо текущего,
+    int active_index = CheckActivePIs(); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ ActivePIs
+    if(ActivePIs.size()>0)//пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
     {
-      MergingTEs(active_index); //сливаем активные ЭТ в один
+      MergingTEs(active_index); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ
     }
 
 
-   //Проверяем, были ли уже в этой точке (были в точке, обучились=>есть соответствующий NeuronTrainer)
+   //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ=>пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ NeuronTrainer)
    string name = string(BaseTE->GetName());
    int num = int(name[18]-'0');
    string check_name_nt = "NeuronTrainer"+sntoa(num);
    CurrentNT = GetComponentL<NNeuronTrainer>("NeuronTrainer"+sntoa(num), true);
 
-   if (!CurrentNT)//если еще не были
+   if (!CurrentNT)//пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
    {
-       int OptionsNum = 0; //число возможных действий в текущей ситуации = числу ненулевых элементов в векторе InputActions
-       for (int j = 0; j < InputActions.size(); j++)//Определяем число возможных действий по входному вектору
+       int OptionsNum = 0; //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ = пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ InputActions
+       for (int j = 0; j < InputActions.size(); j++)//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
        {
           if (InputActions[j]>0)
               OptionsNum++;
        }
 
-       if (OptionsNum <1) // если нет доступных направлений движения
+       if (OptionsNum <1) // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
        {
          if (PassedTEs.size()>1)
          {
-           //w обратной связи на ЭТ(i-1) = 1,
+           //w пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ(i-1) = 1,
            int num = int(BaseTE->Paths.size())-1;
            BaseTE->Paths[num]->Weight = 1;
 
-           //w текущего ЭТ(i) = 0,2
+           //w пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ(i) = 0,2
            num = PrevTE->LastUsedPath;
            PrevTE->Paths[num]->Weight = 0.2;
 
-           //убрать "тупиковый" ЭТ из стека пройденных точек
+           //пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
            PassedTEs.pop_back();
          }
          else
@@ -485,15 +485,15 @@ bool NMazeMemory::ACalculate(void)
          }
 
        }
-       else // если есть доступные направления
+       else // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
        {
          UEPtr<NTrajectoryElement> traj_el;
          MVector<double,3> base_coords = BaseTE->GetCoord();
          CurrentLayer++;
-         LinkPoint(traj_el, base_coords, OptionsNum);//Создаем TE+MultiPC и необходимые связи
+         LinkPoint(traj_el, base_coords, OptionsNum);//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ TE+MultiPC пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
        }
 
-       //Запоминаем текущую ситуацию (Обучились текущему положению)
+       //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
        string name = string(BaseTE->GetName());
        int num = int(name[18]-'0');
        string check_name_nt = "NeuronTrainer"+sntoa(num);
@@ -522,7 +522,7 @@ bool NMazeMemory::ACalculate(void)
        if(!CheckLink(start_name,finish_name))
            res2 &= CreateLink(start_name,"Output", finish_name, "Input");
 
-       //Удаляем все входящие связи для "клича"
+       //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅ"
        string check_baseMPC = string(BaseMPC->GetName());
        UEPtr<NPulseNeuron> precontrol_n = BaseMPC->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
        UEPtr<NPulseMembrane> precontrol_soma = precontrol_n->GetComponentL<NPulseMembrane>("Soma1", true);
@@ -536,7 +536,7 @@ bool NMazeMemory::ACalculate(void)
 
 
      }
-   else //если уже были в этой точке
+   else //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
    {
      PassedTEs.clear();
 
@@ -545,15 +545,15 @@ bool NMazeMemory::ACalculate(void)
      string check_prev_name = string(PrevTE->GetName());
      //int check_prev_layer = PrevTE->Layer;
 
-     if (BaseTE->Layer <= PrevTE->Layer)//Если не спустились на уровень ниже по сравнению с предыдущим ЭТ (т.е. не продвинулись дальше в исследовании лабиринта)
+     if (BaseTE->Layer <= PrevTE->Layer)//пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ (пїЅ.пїЅ. пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
      {
-        //Вес связи, по которой попали в эту точку, w = 0,2
+        //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, w = 0,2
         PrevTE->Paths[PrevTE->LastUsedPath]->Weight = 0.2;
 
         //int check_lastusedpath = PrevTE->LastUsedPath;
         string check_paths = string(PrevTE->Paths[PrevTE->LastUsedPath]->GetLongName(this));
 
-        //Кидаем "клич"
+        //пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅ"
         NameT fin = BaseMPC->GetName()+".PreControlNeuron1.Soma1.ExcSynapse1";
         string check_fin = string(fin);
         bool res(true);
@@ -561,7 +561,7 @@ bool NMazeMemory::ACalculate(void)
         if(!res)
           return true;
 
-        //Для отладки
+        //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         UEPtr<NPulseNeuron> check_n1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
         UEPtr<NPulseLTZoneCommon> check_ltz1 = check_n1->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
         double check_base_activity = check_ltz1->OutputFrequency->As<double>(0);
@@ -571,11 +571,11 @@ bool NMazeMemory::ACalculate(void)
         IsWaitingForAnswer = true;
         //return true;
       }
-    } //конец "если уже были в этой точке"
+    } //пїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ"
 
     Situation = false;
 
-  }//конец if (Situation)
+  }//пїЅпїЅпїЅпїЅпїЅ if (Situation)
 
   return true;
 }
@@ -586,7 +586,7 @@ bool NMazeMemory::ACalculate(void)
 UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
   {
    UEPtr<UContainer> cont;
-   UEPtr<UStorage> storage = GetStorage();
+   UEPtr<UStorage> storage(GetStorage().get());
    UEPtr<NTrajectoryElement> traj_el;
 
 
@@ -611,12 +611,12 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
        mpc_num = int(name[21]-'0')+1;
    }
 
-   //Добавляем элемент траектории
+   //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
    traj_el = AddMissingComponent<NTrajectoryElement>(std::string("NTrajectoryElement"+sntoa(te_num)), "NTrajectoryElement");
    traj_el->SetCoord(coords);
    TrajectoryElements.push_back(traj_el);
 
-   //Добавляем блок MultiPC
+   //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ MultiPC
    string MultiPCName = "NMultiPositionControl"+sntoa(mpc_num);
    cont=dynamic_pointer_cast<UContainer>(storage->TakeObject("NMultiPositionControl"));
    if(!cont)
@@ -625,18 +625,18 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
    cont->SetCoord(MVector<double,3>(coords[0], coords[1]+2.0, 0.0));
    AddComponent(cont);
 
-   //Настройка блока MultiPC
+   //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ MultiPC
    UEPtr<NMultiPositionControl> multi_pc = dynamic_pointer_cast<NMultiPositionControl>(cont);
    MultiPCs.push_back(multi_pc);
    multi_pc->BuildSolo = true;
    multi_pc->ExternalControl = false;
    multi_pc->IsNeedToRebuild = true;
-   multi_pc->InputsNum = 1;//Число InputNeurons, если InputNeuronsType = NSPNeuronGen (т.е. ситуация характеризуется набором бинарных признаков)
+   multi_pc->InputsNum = 1;//пїЅпїЅпїЅпїЅпїЅ InputNeurons, пїЅпїЅпїЅпїЅ InputNeuronsType = NSPNeuronGen (пїЅ.пїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
    multi_pc->PrebuildStructure = true;
    multi_pc->Reset();
    string check_multipc = multi_pc->GetLongName(this);
 
-   //Построение связей от PostInputNeuron к TrajectoryElement
+   //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ PostInputNeuron пїЅ TrajectoryElement
    bool res(true);
 
    UEPtr<NPulseNeuron> postinput = multi_pc->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
@@ -680,20 +680,20 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
      if(!ltzone_te)
          return true;
 
-     //добавляем синапсы на текущий ЭТ для обратных связей на сому
+     //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ
      UEPtr<NPulseMembrane> base_soma = base_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
      if (CurrentTE==0)
-         base_soma->NumExcitatorySynapses = options_num+1; //дополнительный синапс на первый ЭТ - для запускающего сигнала с высшего уровня СУ
+         base_soma->NumExcitatorySynapses = options_num+1; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ - пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
      else
          base_soma->NumExcitatorySynapses = options_num;
      base_soma->Reset();
-     //на N1_D1_2
+     //пїЅпїЅ N1_D1_2
      UEPtr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
      base_dend->NumExcitatorySynapses = options_num;
      base_dend->Reset();
 
-     int possible_action_num = 0; // номер возможного действия = 0..OptionsNum
-     for(int input_action = 0; input_action<int(InputActions.size()); input_action++)//номер элемента во входном векторе действий = 0...InputActions.size()
+     int possible_action_num = 0; // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ = 0..OptionsNum
+     for(int input_action = 0; input_action<int(InputActions.size()); input_action++)//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ = 0...InputActions.size()
      {
          if (InputActions[input_action]==0)
              continue;
@@ -708,9 +708,9 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
      BaseTE->Forwards.push_back(traj_el);
      traj_el->Layer = CurrentLayer;
 
-     //СТРОИМ СВЯЗИ ОТ ТЕКУЩЕГО ЭЛЕМЕНТА ТРАЕКТОРИИ НА ТОЛЬКО ЧТО СОЗДАННЫЕ
+     //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
      bool res(true);
-     //возбуждающее воздействие на N1_D5_syn1
+     //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ N1_D5_syn1
      UEPtr<NPulseNeuron> input_neuron = traj_el->GetComponentL<NPulseNeuron>("Neuron1", true);
      UEPtr<NPulseSynapse> synapse = input_neuron->GetComponentL<NPulseSynapse>("Dendrite1_5.ExcSynapse1",true);
      if (possible_action_num>1)
@@ -729,24 +729,24 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
          return true;
      BaseTE->Paths.push_back(synapse);
 
-     //тормозное воздействие на N1_S1_syn1
+     //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ N1_S1_syn1
      synapse = input_neuron->GetComponentL<NPulseSynapse>("Soma1.InhSynapse1",true);
      res&=CreateLink(BaseTE->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
      if(!res)
          return true;
-     //тормозное воздействие на N2_S1_syn1
+     //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ N2_S1_syn1
      input_neuron = traj_el->GetComponentL<NPulseNeuron>("Neuron2", true);
      synapse = input_neuron->GetComponentL<NPulseSynapse>("Soma1.InhSynapse1",true);
      res&=CreateLink(BaseTE->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
      if(!res)
          return true;
 
-     //ОБРАТНЫЕ СВЯЗИ
+     //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
      //int check_Backwards = traj_el->Backwards.size();
      traj_el->Backwards.push_back(BaseTE);
      //traj_el->CurrentBackward = 0;
 
-     //на сому
+     //пїЅпїЅ пїЅпїЅпїЅпїЅ
      int syn_num;
      if (CurrentTE==0)
          syn_num = possible_action_num+1;
@@ -759,7 +759,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
      if(!res)
          return true;
 
-     //на N1_D1_2
+     //пїЅпїЅ N1_D1_2
      synapse = base_neuron->GetComponentL<NPulseSynapse>("Dendrite1_2.ExcSynapse"+sntoa(possible_action_num),true);
      string check_s2 = synapse->GetLongName(this);
      synapse->Weight = 0.2;
@@ -769,7 +769,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
      traj_el->Paths.push_back(synapse);
      //int check_Paths = traj_el->Paths.size();
 
-     //связи между PreControl нейронами для "клича"
+     //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ PreControl пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅ"
      size_t passed_max = PassedTEs.size();
      for (size_t j=0; j<passed_max; j++)
      {   
@@ -779,14 +779,14 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
          if (!output_ltzone)
              return false;
 
-         UEPtr<NMultiPositionControl> input_mpc = MultiPCs[int(MultiPCs.size())-1];//ПРОВЕРИТЬ
+         UEPtr<NMultiPositionControl> input_mpc = MultiPCs[int(MultiPCs.size())-1];//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
          UEPtr<NPulseNeuron> input_precontroln = input_mpc->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
          UEPtr<NPulseMembrane> input_soma = input_precontroln->GetComponentL<NPulseMembrane>("Soma1", true);
          if (!input_soma)
              return false;
 
 
-         //блок для отладки
+         //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
          string check_outp_mpc = string(output_mpc->GetName());
          string check_output_postinputn = string(output_mpc->GetLongName(this));
          string check_output_ltzone = string(output_ltzone->GetLongName(this));
@@ -814,7 +814,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
                      input_soma->Reset();
                      syn_num = input_soma->NumExcitatorySynapses;
                  }
-                 continue; //перейти к следующему синапсу
+                 continue; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
              }
              else
              {
@@ -826,7 +826,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
          }
      }
 
-     //связи на нейроны действий
+     //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
      UEPtr<NPulseMembrane> action_soma = ActionNeurons[input_action]->GetComponentL<NPulseMembrane>("Soma1",true);
      int syn_max_num = action_soma->NumExcitatorySynapses;
      for (int i = 1; i<=syn_max_num; i++)
@@ -842,7 +842,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
                  action_soma->Reset();
                  syn_max_num = action_soma->NumExcitatorySynapses;
              }
-             continue; //перейти к следующему синапсу
+             continue; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
          }
          else
          {
@@ -899,7 +899,7 @@ int NMazeMemory::CheckActivePIs()
             active_index = i;
         }
     }
-    return active_index; //индекс активного элемента в массиве TEs
+    return active_index; //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ TEs
 }
 
 
@@ -917,11 +917,11 @@ bool NMazeMemory::MergingTEs(int active_index)
     {
       string active_name = string(ActivePIs[j]->GetName());
 
-      //ЕСЛИ СОВПАЛИ С СИТУАЦИЕЙ, В КОТОРОЙ БЫЛИ НА ПРОШЛОМ ШАГЕ
+      //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
       if (prevTE_name == active_name)
       {
-          //Увеличиваем вес обратных связей на прошлый TE
-          //на соме
+          //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ TE
+          //пїЅпїЅ пїЅпїЅпїЅпїЅ
           NameT start_name =  BaseTE->GetName();
           UEPtr<NPulseNeuron> prev_neuron = PrevTE->GetComponentL<NPulseNeuron>("Neuron1", true);
           UEPtr<NPulseMembrane> prev_dend = prev_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
@@ -936,7 +936,7 @@ bool NMazeMemory::MergingTEs(int active_index)
               if(CheckLink(start_name,finish_name))
                   syn->Weight = 1;
           }
-          //на D1_2
+          //пїЅпїЅ D1_2
           prev_dend = prev_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
           if(!prev_dend)
               return true;
@@ -950,7 +950,7 @@ bool NMazeMemory::MergingTEs(int active_index)
                   syn->Weight = 1;
           }
 
-          //Временно отключаем воздействие NeuronTrainer, чтобы он не заглушал активность TE
+          //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ NeuronTrainer, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ TE
           bool res(true);
           NameT active_PI = MultiPCs[active_index]->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
           string check_actNT = string(active_PI);
@@ -968,13 +968,13 @@ bool NMazeMemory::MergingTEs(int active_index)
       }
 
 
-      //ЕСЛИ СОВПАЛИ С СИТУАЦИЕЙ, В КОТОРОЙ БЫЛИ РАНЬШЕ, ЧЕМ НА ПРОШЛОМ ШАГЕ
-      //переносим ВХОДНЫЕ СВЯЗИ с текущего ЭТ на активный
+      //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
+      //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
       NameT start = PrevTE->GetLongName(this);
       bool res;
       NameT finish;
 
-      //возуждающее воздействие на N1_D1_5
+      //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ N1_D1_5
       UEPtr<NPulseNeuron> fin_neuron = ActivePIs[j]->GetComponentL<NPulseNeuron>("Neuron1", true);
       UEPtr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_5", true);
       int dend_syns = fin_dend->NumExcitatorySynapses;
@@ -992,7 +992,7 @@ bool NMazeMemory::MergingTEs(int active_index)
           fin_dend->Reset();
           dend_syns = fin_dend->NumExcitatorySynapses;
          }
-         continue; //перейти к следующему синапсу
+         continue; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         }
         else
         {
@@ -1005,7 +1005,7 @@ bool NMazeMemory::MergingTEs(int active_index)
         }
       }
 
-      //тормозное воздействие на N1_S1
+      //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ N1_S1
       UEPtr<NPulseMembrane> fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
       int soma_syn = fin_soma->NumInhibitorySynapses;
       for (int n = 1; n<=soma_syn; n++)
@@ -1022,7 +1022,7 @@ bool NMazeMemory::MergingTEs(int active_index)
            fin_soma->Reset();
            soma_syn = fin_soma->NumInhibitorySynapses;
          }
-         continue; //перейти к следующему синапсу
+         continue; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
        }
        else
        {
@@ -1035,7 +1035,7 @@ bool NMazeMemory::MergingTEs(int active_index)
        }
       }
 
-      //тормозное воздействие на N2_S1
+      //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ N2_S1
       fin_neuron = ActivePIs[j]->GetComponentL<NPulseNeuron>("Neuron2", true);
       fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
       soma_syn = fin_soma->NumInhibitorySynapses;
@@ -1053,7 +1053,7 @@ bool NMazeMemory::MergingTEs(int active_index)
             fin_soma->Reset();
             soma_syn = fin_soma->NumInhibitorySynapses;
           }
-          continue; //перейти к следующему синапсу
+          continue; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         }
         else
         {
@@ -1066,13 +1066,13 @@ bool NMazeMemory::MergingTEs(int active_index)
         }
       }
 
-      //переносим ОБРАТНЫЕ СВЯЗИ с текущего ЭТ на активный
+      //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
       start = ActivePIs[j]->GetLongName(this);
 
       size_t back_max = BaseTE->Backwards.size();
       for (size_t i = 0; i<back_max; i++)
       {
-        //на N1_D1_2
+        //пїЅпїЅ N1_D1_2
         UEPtr<NPulseNeuron> fin_neuron = BaseTE->Backwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
         UEPtr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
         int dend_syns = fin_dend->NumExcitatorySynapses;
@@ -1090,7 +1090,7 @@ bool NMazeMemory::MergingTEs(int active_index)
             fin_dend->Reset();
             dend_syns = fin_dend->NumExcitatorySynapses;
            }
-            continue; //перейти к следующему синапсу
+            continue; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
           }
           else
           {
@@ -1105,7 +1105,7 @@ bool NMazeMemory::MergingTEs(int active_index)
         }
 
 
-        //на N1_S1
+        //пїЅпїЅ N1_S1
         fin_neuron = BaseTE->Backwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
         fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
 
@@ -1124,7 +1124,7 @@ bool NMazeMemory::MergingTEs(int active_index)
               fin_soma->Reset();
               soma_syn = fin_soma->NumExcitatorySynapses;
             }
-            continue; //перейти к следующему синапсу
+            continue; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
           }
           else
           {
@@ -1142,7 +1142,7 @@ bool NMazeMemory::MergingTEs(int active_index)
       //ActivePIs[j]->Paths.push_back(PrevTE);
     }
 
-    //Удаляем дублирующий TE, обновляем индексы
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ TE, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     //DelComponent(BaseTE,true);
     TEToDelete = BaseTE;
     BaseTE = ActivePIs[0];
@@ -1161,7 +1161,7 @@ bool NMazeMemory::MergingTEs(int active_index)
 
 bool NMazeMemory::UpdateCurrentTE()
 {
-    //Переходим к следующему элементу траектории (обновляем CurrentTE)
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ CurrentTE)
     for(int i = 0; i<int(TrajectoryElements.size()); i++)
     {
         UEPtr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
@@ -1172,12 +1172,12 @@ bool NMazeMemory::UpdateCurrentTE()
         if(ltzone->OutputFrequency->As<double>(0)>0)
         {
             CurrentTE=i;
-            string currentf_name = string(TrajectoryElements[i]->GetName());// имя ЭТ
+            string currentf_name = string(TrajectoryElements[i]->GetName());// пїЅпїЅпїЅ пїЅпїЅ
 
-            //обновляем LastUsedPath (CurrentForward)
+            //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ LastUsedPath (CurrentForward)
             for(int j = 0; j<int(BaseTE->Paths.size()); j++)
             {
-                string name = string(BaseTE->Paths[j]->GetLongName(this));// имя синапса
+                string name = string(BaseTE->Paths[j]->GetLongName(this));// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                 //if (name==currentf_name)
                 //int check_comparison = name.compare(0, currentf_name.length(), currentf_name);
                 if (name.compare(0, currentf_name.length(), currentf_name)==0)
@@ -1202,19 +1202,19 @@ bool NMazeMemory::ProcessOptions()
 
 bool NMazeMemory::LastUsedLink()
 {
-    //Вес связи, по которой попали в эту точку, w = 0,2
-    //Ищем активный синапс - т.е. связь, по которой пришли в этот TE
+    //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, w = 0,2
+    //пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ - пїЅ.пїЅ. пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ TE
     bool found = false;
     UEPtr<NPulseNeuron> neuron1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
 
-    //Проверяем входящие связи на N1_D1_5
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ N1_D1_5
     UEPtr<NPulseMembrane> dend1_5 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_5",true);
     for (int i = 1; i<=(dend1_5->NumExcitatorySynapses); i++)
     {
       UEPtr<NPulseSynapse> synapse = dend1_5->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
       if (synapse->Output().As<double>(0)>0)
       {
-          synapse->Weight=0.2; //ПРОВЕРИТЬ!
+          synapse->Weight=0.2; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!
           found = true;
           break;
       }
@@ -1222,27 +1222,27 @@ bool NMazeMemory::LastUsedLink()
 
     if (!found)
     {
-      //Проверяем обратные связи (на N1_D1_2)
+      //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ N1_D1_2)
       UEPtr<NPulseMembrane> dend1_2 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_2",true);
       for (int i = 1; i<=(dend1_2->NumExcitatorySynapses); i++)
       {
         UEPtr<NPulseSynapse> synapse = dend1_2->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
         if (synapse->Output().As<double>(0)>0)
         {
-            synapse->Weight=0.2; //ПРОВЕРИТЬ!
+            synapse->Weight=0.2; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!
             found = true;
             break;
         }
       }
 
-      //Проверяем обратные связи (на N1_S1)
+      //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ N1_S1)
       UEPtr<NPulseMembrane> soma1 = neuron1->GetComponentL<NPulseMembrane>("Soma1",true);
       for (int i = 1; i<=(soma1->NumExcitatorySynapses); i++)
       {
         UEPtr<NPulseSynapse> synapse = soma1->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
         if (synapse->Output().As<double>(0)>0)
         {
-            synapse->Weight=0.2; //ПРОВЕРИТЬ!
+            synapse->Weight=0.2; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!
             found = true;
             break;
         }
@@ -1262,9 +1262,9 @@ bool NMazeMemory::CallForResponse()
 
 
 
-bool NMazeMemory::DeadlockProcessing()//ТРЕБУЕТ ОТЛАДКИ
+bool NMazeMemory::DeadlockProcessing()//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 {
-//    //w обратной связи на ЭТ(i-1) = 1
+//    //w пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅ(i-1) = 1
 //    UEPtr<NTrajectoryElement> PrevTE;
 //    int k = PassedTEs.size()-2;
 //    if (k>=0)
@@ -1292,7 +1292,7 @@ bool NMazeMemory::DeadlockProcessing()//ТРЕБУЕТ ОТЛАДКИ
 //      }
 //    }
 
-//    //w текущего ЭТ(i) = 0,2
+//    //w пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ(i) = 0,2
 //    UEPtr<NPulseNeuron> base_neuron = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
 //    UEPtr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_5", true);
 //    for (int j=0; j<base_dend->NumExcitatorySynapses; j++)
@@ -1301,7 +1301,7 @@ bool NMazeMemory::DeadlockProcessing()//ТРЕБУЕТ ОТЛАДКИ
 //      base_synapse->Weight=0.2;
 //    }
 
-//    //+убрать "тупиковый" ЭТ из стека пройденных точек
+//    //+пїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ" пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 //    PassedTEs.pop_back();
 
     return true;

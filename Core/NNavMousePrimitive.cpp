@@ -56,9 +56,9 @@ NNavMousePrimitive::~NNavMousePrimitive(void)
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 NNavMousePrimitive* NNavMousePrimitive::New(void)
 {
  return new NNavMousePrimitive;
@@ -66,13 +66,13 @@ NNavMousePrimitive* NNavMousePrimitive::New(void)
 // --------------------------
 
 // --------------------------
-// Методы управления общедоступными свойствами
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 bool NNavMousePrimitive::SetPoleSize(const double &value)
 {
  if(value<=0)
   return false;
- //TODO: Обновление положения и выходов, но пока лучше размер во время работы не менять, и скидывать в ресет
+ //TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
  return true;
 }
 
@@ -80,7 +80,7 @@ bool NNavMousePrimitive::SetVibrissSize(const double &value)
 {
  if(value<=0)
   return false;
- //TODO: Обновление положения и выходов, но пока лучше размер во время работы не менять, и скидывать в ресет
+ //TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
  return true;
 }
 
@@ -88,7 +88,7 @@ bool NNavMousePrimitive::SetMouseSize(const double &value)
 {
  if(value<=0)
   return false;
- //TODO: Обновление положения и выходов, но пока лучше размер во время работы не менять, и скидывать в ресет
+ //TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
  return true;
 }
 
@@ -97,7 +97,7 @@ bool NNavMousePrimitive::SetVelocity(const double &value)
 {
  if(value<=0)
   return false;
- //TODO: Обновление положения и выходов, но пока лучше размер во время работы не менять, и скидывать в ресет
+ //TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ
  return true;
 }
 
@@ -106,18 +106,18 @@ bool NNavMousePrimitive::SetVelocity(const double &value)
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 bool NNavMousePrimitive::ADefault(void)
 {
- //все в см
+ //пїЅпїЅпїЅ пїЅ пїЅпїЅ
  PoleSize=100;
  MouseSize=20;
  VibrissSize=10;
  Velocity=2;
 
- //все как везде
+ //пїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
  Frequency=1.5;
- Delay=0.1;//Я отнюдь не уверен, что именно тут задержка уместна в принципе...
+ Delay=0.1;//пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ...
  VibrissOutput.Resize(1,2);
  VibrissOutput.Assign(1,1,0.0);
  VibrissOutput.Assign(1,2,0.0);
@@ -126,13 +126,13 @@ bool NNavMousePrimitive::ADefault(void)
 
  MotionControlState=0;
 
- //Стоим в нуле, отодвинувшись на целый радиус и еще на 1/10 радиуса, чтобы не пищать даже случайно
+ //пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅ пїЅпїЅ 1/10 пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  MousePosition=0.0+MouseSize+MouseSize/10;
 
- //По дефолту принимаем вход со спайков
+ //пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  UseExternalInput=true;
 
- //Это блин еще зачем ?!
+ //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ ?!
  Input->Assign(1,1,0.0);
  Output.Assign(1,1,0.0);
 
@@ -155,10 +155,10 @@ bool NNavMousePrimitive::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Reset() пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Ready пїЅ true
+// пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 bool NNavMousePrimitive::ABuild(void)
 {
 
@@ -178,7 +178,7 @@ bool NNavMousePrimitive::AReset(void)
 
  PainState=0;
  start_iter_time=0.0;
- //Это спорно, но логика подсказывает, что именно так и надо
+ //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ
  MousePosition=0.0+MouseSize+MouseSize/10;
 
  vibriss_counters.resize(2, 0);
@@ -186,8 +186,9 @@ bool NNavMousePrimitive::AReset(void)
  vibriss_counters[1]=0;
  pain_counter=0;
 
- if(Environment)
-  ResetTime = Environment->GetTime().GetDoubleTime();
+ auto env = Environment.lock();
+ if(env)
+  ResetTime = env->GetTime().GetDoubleTime();
  else
   ResetTime = 0.0;
 
@@ -196,7 +197,7 @@ bool NNavMousePrimitive::AReset(void)
 
 bool NNavMousePrimitive::UpdateState(void)
 {
-    //Определить свое состояние
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     int state=100;
     bool updated=false;
     if(UseExternalInput)
@@ -237,7 +238,7 @@ bool NNavMousePrimitive::UpdateState(void)
     if(!updated)
         state = MotionControlState;
 
-    //По умолчанию не болит, если вылезем за границы - заболит
+    //пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     PainState=0;
 
     if(state==1)
@@ -260,7 +261,7 @@ bool NNavMousePrimitive::UpdateState(void)
         }
     }
 
-    //Рассчитать реакции вибрисс на итерации
+    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     if((MousePosition+MouseSize+VibrissSize)>PoleSize)
     {
         double d = PoleSize-(MousePosition+MouseSize);// (MousePosition+MouseSize+VibrissSize)-PoleSize;
@@ -273,7 +274,7 @@ bool NNavMousePrimitive::UpdateState(void)
     }
     if((MousePosition-MouseSize-VibrissSize)<0)
     {
-        double d = fabs(MousePosition-MouseSize); //проверить!
+        double d = fabs(MousePosition-MouseSize); //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ!
         double dd = ((VibrissSize-d)/VibrissSize)*0.2;
         VibrDelays[1] = Delay+dd;
     }
@@ -282,7 +283,7 @@ bool NNavMousePrimitive::UpdateState(void)
         VibrDelays[1] = Delay;
     }
 
-    //Не забываем сохранить состояние на тот случай, если на будущем шаге команды не придут
+    //пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
     MotionControlState = state;
 
  return true;
@@ -317,7 +318,7 @@ bool NNavMousePrimitive::ACalculate(void)
         for(int i=0; i<vibriss_counters.size();i++)
         {
             double Delay = VibrDelays[i];
-            if(Environment->GetTime().GetDoubleTime() - ResetTime < Delay)
+            if(Environment.lock()->GetTime().GetDoubleTime() - ResetTime < Delay)
                 continue;
 
             int &PulseCounter = vibriss_counters[i];
@@ -332,20 +333,20 @@ bool NNavMousePrimitive::ACalculate(void)
 
 
 
- double iter_time = Environment->GetTime().GetDoubleTime() - start_iter_time; // Текущее время итерации
- double iter_length = (1.0 / Frequency) - (1.0 / double(TimeStep)); // Длина одной итерации
+ double iter_time = Environment.lock()->GetTime().GetDoubleTime() - start_iter_time; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ double iter_length = (1.0 / Frequency) - (1.0 / double(TimeStep)); // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
- //Оцениваем входы
+ //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
  if(UseExternalInput)
  {
      if(MotionControlSpikeForward.IsConnected())
      {
          if(fabs((*MotionControlSpikeForward)(0,0))>0.001)
          {
-             //Только первое ненулевое значение входа (=передний фронт 1-го спайка) имеет значение
+             //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (=пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 1-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
              if(fabs(ForwardSpikeTime)<0.001)
              {
-                 ForwardSpikeTime = iter_time; //Так же правильно - сколько времени прошло ?!
+                 ForwardSpikeTime = iter_time; //пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ?!
              }
          }
      }
@@ -354,10 +355,10 @@ bool NNavMousePrimitive::ACalculate(void)
      {
          if(fabs((*MotionControlSpikeBackward)(0,0))>0.001)
          {
-             //Только первое ненулевое значение входа (=передний фронт 1-го спайка) имеет значение
+             //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (=пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 1-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
              if(fabs(BackwardSpikeTime)<0.001)
              {
-                 BackwardSpikeTime = iter_time; //Так же правильно - сколько времени прошло ?!
+                 BackwardSpikeTime = iter_time; //пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ?!
              }
          }
      }
@@ -366,30 +367,30 @@ bool NNavMousePrimitive::ACalculate(void)
      {
          if(fabs((*MotionControlSpikeStop)(0,0))>0.001)
          {
-             //Только первое ненулевое значение входа (=передний фронт 1-го спайка) имеет значение
+             //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (=пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ 1-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ) пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
              if(fabs(StopSpikeTime)<0.001)
              {
-                 StopSpikeTime = iter_time; //Так же правильно - сколько времени прошло ?!
+                 StopSpikeTime = iter_time; //пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ?!
              }
          }
      }
 
  }
 
- //Формируем выходы
+ //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 
- //Обработать счетчики вибрисс
+ //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for(int i=0; i<vibriss_counters.size();i++)
  {
   double Delay = VibrDelays[i];
-  if(Environment->GetTime().GetDoubleTime() - ResetTime < Delay)
+  if(Environment.lock()->GetTime().GetDoubleTime() - ResetTime < Delay)
    continue;
 
   int &PulseCounter = vibriss_counters[i];
-  if(PulseCounter>0) // Если импульс идет
+  if(PulseCounter>0) // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
   {
    --PulseCounter;
-   if(PulseCounter <= 0) // Выключаем импульс и включаем ожидание
+   if(PulseCounter <= 0) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
    {
     PulseCounter=static_cast<int>(-int(TimeStep/Frequency)+PulseLength*TimeStep);
     VibrissOutput(0, i) = 0.0;
@@ -398,7 +399,7 @@ bool NNavMousePrimitive::ACalculate(void)
   else
   {
    ++PulseCounter;
-   if(PulseCounter >= 0) // Включаем импульс
+   if(PulseCounter >= 0) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
    {
     PulseCounter=static_cast<RDK::UTime>(PulseLength*TimeStep);
     VibrissOutput(0, i) = Amplitude;
@@ -406,17 +407,17 @@ bool NNavMousePrimitive::ACalculate(void)
   }
  }
 
- //Обработать счетчик "боли"
+ //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ "пїЅпїЅпїЅпїЅ"
  double Delay = PainDelay;
- if((Environment->GetTime().GetDoubleTime() - ResetTime) > Delay)
+ if((Environment.lock()->GetTime().GetDoubleTime() - ResetTime) > Delay)
  {
      int &PulseCounter = pain_counter;
-     if(PulseCounter>0) // Если импульс идет
+     if(PulseCounter>0) // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
      {
       --PulseCounter;
-      if(PulseCounter <= 0) // Выключаем импульс и включаем ожидание
+      if(PulseCounter <= 0) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
       {
-       //Включить ожидание на период, НО он никогда не дожидается, будет обновлено раньше в if(iter_time >= iter_length){...}
+       //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ if(iter_time >= iter_length){...}
        PulseCounter=static_cast<int>(-int(TimeStep/Frequency)+PulseLength*TimeStep);
        //PainOutput(1,1)=0;
        PainOutput.Assign(1,1,0.0);
@@ -425,7 +426,7 @@ bool NNavMousePrimitive::ACalculate(void)
      else
      {
       ++PulseCounter;
-      if(PulseCounter >= 0) // Включаем импульс
+      if(PulseCounter >= 0) // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
       {
        PulseCounter=static_cast<RDK::UTime>(PulseLength*TimeStep);
        PainOutput.Assign(1,1,Amplitude);
@@ -437,12 +438,12 @@ bool NNavMousePrimitive::ACalculate(void)
  {
      UpdateState();
 
-     //Специфика такова, что задержки по факту меняются после каждой итерации и потому
-     //после определения задержек надо что-то типа ресета, это и есть тут.
+     //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+     //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ.
      for(int i=0; i<vibriss_counters.size();i++)
      {
          double Delay = VibrDelays[i];
-         if(Environment->GetTime().GetDoubleTime() - ResetTime < Delay)
+         if(Environment.lock()->GetTime().GetDoubleTime() - ResetTime < Delay)
              continue;
 
          int &PulseCounter = vibriss_counters[i];
@@ -451,7 +452,7 @@ bool NNavMousePrimitive::ACalculate(void)
          PulseCounter = static_cast<int>(-int(Delay*TimeStep)); //static_cast<int>(-int(TimeStep/Frequency));
      }
      double Delay = PainDelay;
-     if((Environment->GetTime().GetDoubleTime() - ResetTime) > Delay)
+     if((Environment.lock()->GetTime().GetDoubleTime() - ResetTime) > Delay)
      {
       int &PulseCounter = pain_counter;
       if(PainState>0)
@@ -465,12 +466,12 @@ bool NNavMousePrimitive::ACalculate(void)
       }
      }
 
-     //Сбросить маркеры спайков на входе после конца итерации
+     //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
      ForwardSpikeTime=0.0;
      BackwardSpikeTime=0.0;
      StopSpikeTime=0.0;
-     //Это пока того, на уровне идеи, в обучении все почему-то сложнее
-     start_iter_time = Environment->GetTime().GetDoubleTime();
+     //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+     start_iter_time = Environment.lock()->GetTime().GetDoubleTime();
  }
  return true;
 }

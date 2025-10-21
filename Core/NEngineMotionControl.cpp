@@ -15,7 +15,7 @@
 namespace NMSDK {
 
 // --------------------------
-// Конструкторы и деструкторы
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 NEngineMotionControl::NEngineMotionControl(void)
  :
@@ -88,9 +88,9 @@ NEngineMotionControl::~NEngineMotionControl(void)
 // --------------------------
 
 // --------------------------
-// Методы управления параметрами
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Число контуров управления
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NEngineMotionControl::SetNumControlLoops(const int &value)
 {
  if(value <=0)
@@ -122,7 +122,7 @@ bool NEngineMotionControl::SetNumControlLoops(const int &value)
  return true;
 }
 
-// Число управляющих элементов
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NEngineMotionControl::SetNumMotionElements(const int &value)
 {
 // NumMotionElements.v=value;
@@ -138,14 +138,14 @@ bool NEngineMotionControl::SetNumMotionElements(const int &value)
  return true;
 }
 
-// Режим формирования сети
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 bool NEngineMotionControl::SetCreationMode(const int &value)
 {
  Ready=false;
  return true;
 }
 
-// Режим настройки диапазонов афферентных нейронов
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NEngineMotionControl::SetAfferentRangeMode(const int &value)
 {
  if(value < 0 || value > 3)
@@ -190,7 +190,7 @@ if(Ready)
  return true;
 }
 
-// Режим настрйоки диапазонов pac
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ pac
 bool NEngineMotionControl::SetPacRangeMode(const int &value)
 {
  if(value < 0 || value > 3)
@@ -203,7 +203,7 @@ bool NEngineMotionControl::SetPacRangeMode(const int &value)
  return true;
 }
 
-// Процентная величина от соответствующей разницы *Max-*Min
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ *Max-*Min
 bool NEngineMotionControl::SetMinAfferentRange(const double &value)
 {
  if(value <=0 || value >1)
@@ -245,7 +245,7 @@ if(Ready)
  return true;
 }
 
-// Максимальное усиление управляющего воздействия
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NEngineMotionControl::SetPacGain(const double &value)
 {
  if(value <0)
@@ -360,7 +360,7 @@ bool NEngineMotionControl::SetObjectControlInterfaceClassName(const string &valu
  return true;
 }
 
-/// Диапазон афферентных нейронов по каналам
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NEngineMotionControl::SetAfferentMin(const std::vector<double> &value)
 {
  if(ControlMode == 0)
@@ -468,7 +468,7 @@ bool NEngineMotionControl::SetRenshowMode(const int &value)
  return true;
 }
 
-/// Управление списком активных контуров
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NEngineMotionControl::SetActiveContours(const std::vector<bool> &value)
 {
  int num_controls=GetNumControlLoops();
@@ -484,7 +484,7 @@ bool NEngineMotionControl::SetActiveContours(const std::vector<bool> &value)
 }
 
 
-/// Режим наличия интернейронов
+/// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NEngineMotionControl::SetInterneuronPresentMode(const int &value)
 {
  for(size_t i=0; i<Motions.size(); i++)
@@ -532,9 +532,9 @@ bool NEngineMotionControl::SetLinkModes(const std::vector<int> &value)
 
 
 // --------------------------
-// Системные методы управления объектом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 NEngineMotionControl* NEngineMotionControl::New(void)
 {
  return new NEngineMotionControl;
@@ -544,7 +544,7 @@ NEngineMotionControl* NEngineMotionControl::New(void)
 // --------------------------
 // Proctected computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 bool NEngineMotionControl::ADefault(void)
 {
  NumMotionElements=1;
@@ -573,9 +573,9 @@ bool NEngineMotionControl::ADefault(void)
  ObjectControlInterfaceClassName="NControlObjectSource";
  //AdaptiveStructureMode=2;
  //InterneuronPresentMode=0;
-  AdaptiveStructureMode=1; //добавлено
- InterneuronPresentMode=1;//добавлено
- ActiveContours->assign(1,1);//добавлено
+  AdaptiveStructureMode=1; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ InterneuronPresentMode=1;//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ ActiveContours->assign(1,1);//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
  LinkModes->assign(1,1);
 
@@ -595,10 +595,10 @@ bool NEngineMotionControl::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Reset() пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Ready пїЅ true
+// пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 bool NEngineMotionControl::ABuild(void)
 {
  if(!GetStorage())
@@ -689,8 +689,8 @@ bool NEngineMotionControl::AReset(void)
 bool NEngineMotionControl::ACalculate(void)
 {
  CreateLink("","Statistic","StatisticDoubleMatrix","InputMatrixData");
- // Считаем статистику
- // за ожидаемое время переходного процесса
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  CurrentContourAmplitude->assign(NumControlLoops,0);
  CurrentContourAverage->assign(NumControlLoops,0);
 
@@ -756,14 +756,16 @@ bool NEngineMotionControl::ACalculate(void)
  {
   CurrentTransientState=true;
   TempTransientState=true;
-  TransientStartTime=Environment->GetTime().GetDoubleTime();
+  auto env = Environment.lock();
+  TransientStartTime=env->GetTime().GetDoubleTime();
  }
  else
  if(fabs(InstantAvgSpeed)<TransientAverageThreshold && CurrentTransientState)
  {
   if(TempTransientState)
   {
-   CurrentTransientTime=Environment->GetTime().GetDoubleTime()-TransientStartTime;
+   auto env2 = Environment.lock();
+   CurrentTransientTime=env2->GetTime().GetDoubleTime()-TransientStartTime;
   }
   TempTransientState=false;
 //  if(Environment->GetTime().GetDoubleTime()-TransientStartTime>TransientHistoryTime*3.0)
@@ -873,14 +875,14 @@ bool NEngineMotionControl::ACalculate(void)
 // --------------------------
 
 // --------------------------
-// Методы управления счетом
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Создает объект с желаемой структурой в соответствии с CreationMode
-// Если full_recreate == true удаляет все существующие управляющие элементы
-// Иначе стремится их сохранить
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ CreationMode
+// пїЅпїЅпїЅпїЅ full_recreate == true пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NEngineMotionControl::Create(bool full_recreate)
 {
- // Удаляем все кроме интерфейсных компонент
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  if(full_recreate)
   ClearStructure(0);
  else
@@ -916,7 +918,7 @@ bool NEngineMotionControl::Create(bool full_recreate)
   CreateNewEngineControl2NeuronsSimplest();
  break;
 
- case 14://Этот режим
+ case 14://пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
   CreateNewEngineControl2NeuronsSimplest();
  break;
  };
@@ -926,15 +928,16 @@ bool NEngineMotionControl::Create(bool full_recreate)
  SetActiveContours(*ActiveContours);
 
 
- UEPtr<UStorage> storage=dynamic_pointer_cast<UStorage>(Storage);
+ auto storage_sp = Storage.lock();
+ UEPtr<UStorage> storage(storage_sp.get());
  UEPtr<UStatisticMatrix<double> > stats=AddMissingComponent<UStatisticMatrix<double> >("StatisticDoubleMatrix", "UStatisticDoubleMatrix");
  stats->SetCoord(MVector<double,3>(5.0, 13.0, 10));
  stats->ManualModeEnabled=true;
  return true;
 }
 
-/// Удаляет существующую структуру, не трогая вспомогательные компоненты
-/// Сохраняет expected_num_motion_elements число управляющих элементов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ expected_num_motion_elements пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
 {
  int i=0;
@@ -958,14 +961,14 @@ bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
 		== "MotionElement" && found_motion_elements<expected_num_motion_elements)
 	++found_motion_elements;
    else
-	DelComponent(PComponents[i],true);
+	DelComponent(UEPtr<UContainer>(PComponents[i].get()),true);
   }
  }
  return true;
 }
 
 
-/// Алгоритм адаптивной настройки
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void NEngineMotionControl::AdaptiveTuning(void)
 {
  std::vector<double> &current_contour_amplitude=*CurrentContourAmplitude;
@@ -982,19 +985,19 @@ void NEngineMotionControl::AdaptiveTuning(void)
 		use_contour_data, current_transient_time, dest_contour_max_amplitude,
 		dest_contour_min_amplitude, dest_transient_time, num_motion_elements, control_grain);
 
- // Применяем настройки регулятора
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  NumMotionElements=num_motion_elements;
  PacGain=control_grain;
 }
 
-/// Реализация алгоритмов адаптивной настройки
-/// current_contour_amplitude - текущая амплитуда по контурам управления
-/// use_contour_data - флаги, определающие данные каких контуров можно использовать
-/// current_transient_time - текущее время переходного процесса
-/// dest_contour_amplitude - желаемая амплитуда по контурам управления
-/// dest_transient_time - желаемое время переходного процесса
-/// num_motion_elements - расчетное число управляющих элементов
-/// control_gain - расчетное усиление сигнала управления
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// current_contour_amplitude - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// use_contour_data - пїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// current_transient_time - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// dest_contour_amplitude - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// dest_transient_time - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// num_motion_elements - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// control_gain - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 ///
 void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &current_contour_amplitude,
 								  const std::vector<bool> &use_contour_data,
@@ -1008,13 +1011,14 @@ void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &curre
  if(CurrentTransientState)
   return;
 
- double current_double_time=Environment->GetTime().GetDoubleTime();
+ auto env3 = Environment.lock();
+ double current_double_time=env3->GetTime().GetDoubleTime();
  double last_adaptive_time=LastAdaptiveTime;
  double transient_hist_time=*TransientHistoryTime;
  if(LastAdaptiveTime>0 && current_double_time-last_adaptive_time<transient_hist_time)
   return;
 
- LastAdaptiveTime=Environment->GetTime().GetDoubleTime();
+ LastAdaptiveTime=env3->GetTime().GetDoubleTime();
 
  for(size_t i=0;i<use_contour_data.size();i++)
  {
@@ -1023,14 +1027,14 @@ void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &curre
    if(current_contour_amplitude[i]>dest_contour_max_amplitude[i])
    {
 	++num_motion_elements;
-	break; // Заглушка
+	break; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
    }
    else
    if(current_contour_amplitude[i]<dest_contour_min_amplitude[i])
    {
 	if(num_motion_elements>1)
 	 --num_motion_elements;
-    break; // Заглушка
+    break; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
    }
 
   }
@@ -1039,9 +1043,9 @@ void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &curre
 // --------------------------
 
 // --------------------------
-// Вспомогательные методы
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Вычисляет диапазоны действия афферентнов
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, double a_min, double a_max,
 			vector<pair<double,double> > &pos_ranges, vector<pair<double,double> > &neg_ranges, int range_mode)
 {
@@ -1060,7 +1064,7 @@ int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, 
  {
  for(int i=0;i<num_motions;i++)
  {
-  if(!(i % 2)) // четное
+  if(!(i % 2)) // пїЅпїЅпїЅпїЅпїЅпїЅ
   {
    double left_range=a_min,right_range=a_max;
    double pos_range=(right_range-0)/real_ranges;
@@ -1071,7 +1075,7 @@ int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, 
    neg_ranges[i].first=left_range+rr_index*neg_range;
    neg_ranges[i].second=left_range+(rr_index+1)*neg_range;
   }
-  else // нечетное
+  else // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   {
    double left_range=a_min,right_range=a_max;
    double pos_range=(right_range-0)/real_ranges;
@@ -1210,7 +1214,7 @@ void NEngineMotionControl::SetupPacRange(void)
  vector<vector<double> > values=cont->Gain;
 
  if(num_motions*2 != int(values.size()))
-  return; // TODO: Это аномалия, которую нужно разрешить
+  return; // TODO: пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 // values.resize(num_motions*2);
  int rr_index=0;
@@ -1287,7 +1291,7 @@ void NEngineMotionControl::SetupPacRange(void)
  cont->Gain=values;
 }
 
-// Настройка преобразователя аналог-аналог
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅ
 void NEngineMotionControl::AACSetup(UEPtr<UNet> net, double gain_value)
 {
  UEPtr<NPac> pac = net->AddMissingComponent<NPac>("Pac", PacObjectName);
@@ -1297,12 +1301,12 @@ void NEngineMotionControl::AACSetup(UEPtr<UNet> net, double gain_value)
  pac->TCMode=0;
  pac->SetCoord(MVector<double,3>(28.0, 7.0, 8));
 
- // Начальные значения всем параметрам
- // Амплитуда входных импульсов
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  vector<vector<double> > values;
  values.resize(Motions.size()*2);
 
- // Усиление
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for(size_t i=0;i<values.size()/2;i++)
  {
   values[i].assign(1,gain_value/Motions.size());
@@ -1318,7 +1322,7 @@ void NEngineMotionControl::AACSetup(UEPtr<UNet> net, double gain_value)
 
 
 
-// Задание вспомогательных компонент
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UNet> net)
 {
  if(CheckName("IIPosAfferentGenerator"))
@@ -1354,7 +1358,7 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UNet> net)
  //for(int i=0; i<NumControlLoops; ++i)
 // {
 
-// //Создаем ManipulatorSource1
+// //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ ManipulatorSource1
 // ManipulatorSource1 = AddMissingComponent<NManipulatorSource>(std::string("ManipulatorSource1"),0);
 // ManipulatorSource1->SetCoord(MVector<double,3>(4.3, 2.67, 0));
 // ManipulatorSource1->Reset();
@@ -1380,24 +1384,24 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UNet> net)
  }
 }
 
-// Формируем сеть управления новым способом на 2 импульсных нейронах
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 2 пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslinks, bool crossranges)
 {
- ControlMode=1; //новый режим, в котором число контуров может динамически изменяться
+ ControlMode=1; //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
-// // Отключаем ненужные параметры и состояния
+// // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // ChangeLookupPropertyType("IaMin",ptParameter);
 // ChangeLookupPropertyType("IaMax",ptParameter);
 //
-// // Диапазон афферентных нейронов по каналу Ib
+// // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ Ib
 // ChangeLookupPropertyType("IbMin",ptParameter);
 // ChangeLookupPropertyType("IbMax",ptParameter);
 //
-// // Диапазон афферентных нейронов по каналу II
+// // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ II
 // ChangeLookupPropertyType("IIMin",ptParameter);
 // ChangeLookupPropertyType("IIMax",ptParameter);
 //
-// // Диапазон афферентных нейронов по каналу Ic
+// // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ Ic
 // ChangeLookupPropertyType("IcMin",ptParameter);
 // ChangeLookupPropertyType("IcMax",ptParameter);
 
@@ -1412,10 +1416,11 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
  ChangeLookupPropertyType("NumControlLoops", ptPubParameter);
 
  bool res(true);
- UEPtr<UStorage> storage=static_pointer_cast<UStorage>(Storage);
+ auto storage_sp2 = Storage.lock();
+ UEPtr<UStorage> storage(storage_sp2.get());
  size_t num_motions=NumMotionElements;
 
- // Число неперекрывающихся диапазонов
+ // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  int real_ranges=0;
 // bool crossranges=false;
 // bool crosslinks=false;
@@ -1453,7 +1458,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
  if(!net)
   return 0;
 
- // Двигательные элементы
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  NewMotionElementsSetup(net);
 
  AdditionalComponentsSetup(net);
@@ -1467,7 +1472,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
  }
  NewIntervalSeparatorsSetup(IntervalSeparatorMode, 6, 1, -1);
 
- // Установка связей
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
  NewStandardLinksSetup("Pac");
 
  NewIntervalSeparatorLinksSetup();
@@ -1488,7 +1493,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
  return net;
 }
 
-// Настройка рецепторов
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UNet> net)
 {
  Motions.clear();
@@ -1518,7 +1523,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UNet> net)
   motion_elem->InterneuronPresentMode=InterneuronPresentMode;
   motion_elem->MotoneuronBranchMode=MotoneuronBranchMode;
 
-  motion_elem->RenshowMode=!RenshowMode; // TODO: Заглушка, чтобы обойти невозможность выполнить Build, т.к. Ready в melement уже взведен.
+  motion_elem->RenshowMode=!RenshowMode; // TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Build, пїЅ.пїЅ. Ready пїЅ melement пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
   motion_elem->RenshowMode=RenshowMode;
 
   if(InterneuronPresentMode == 0)
@@ -1555,7 +1560,7 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UNet> net)
  }
 }
 
-// Настройка преобразователя импульс-аналог
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅ
 void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode)
 {
  if(PacObjectName->empty())
@@ -1568,8 +1573,8 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
 
  pac->SetCoord(MVector<double,3>(28.0, 7.0, 8.0));
 
- // Начальные значения всем параметрам
- // Амплитуда входных импульсов
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  vector<vector<double> > values;
 
  values.resize(Motions.size()*2);
@@ -1578,13 +1583,13 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
   values[i].assign(1,pulse_amplitude);
  pac->PulseAmplitude=values;
 
- // Постоянная времени выделения медиатора
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for(size_t i=0;i<values.size();i++)
 //  values[i].assign(2,0.05);
   values[i].assign(1,secretion_tc);
  pac->SecretionTC=values;
 
- // Постоянная времени распада медиатора
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for(size_t i=0;i<values.size();i++)
   values[i].assign(1,dissociaton_tc);
 //  values[i].assign(2,0.5);
@@ -1592,7 +1597,7 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
 
   if(gain_div_mode)
   {
-   // Усиление
+   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
    for(size_t i=0;i<values.size()/2;i++)
 	values[i].assign(1,-gain_value/Motions.size());
 
@@ -1601,7 +1606,7 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
   }
   else
   {
-   // Усиление
+   // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
    for(size_t i=0;i<values.size()/2;i++)
 	values[i].assign(1,-gain_value);
 
@@ -1613,24 +1618,24 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
 
 }
 
-/// Обновляет параметры Pac
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Pac
 void NEngineMotionControl::UpdatePacTCParameters(void)
 {
  UEPtr<NPac> pac=GetComponentL<NPac>("Pac",true);
  if(!pac)
   return;
 
-  // Начальные значения всем параметрам
- // Амплитуда входных импульсов
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  vector<vector<double> > values;
 
- // Постоянная времени выделения медиатора
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  values.resize(pac->SecretionTC->size());
  for(size_t i=0;i<values.size();i++)
   values[i].assign(1,PacSecretionTC);
  pac->SecretionTC=values;
 
- // Постоянная времени распада медиатора
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  values.resize(pac->DissociationTC->size());
  for(size_t i=0;i<values.size();i++)
   values[i].assign(1,PacDissociationTC);
@@ -1639,14 +1644,14 @@ void NEngineMotionControl::UpdatePacTCParameters(void)
 
 
 
-// Установка стандартных связей
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 void NEngineMotionControl::NewStandardLinksSetup(const string &engine_integrator_name)
 {
  bool res=true;
 
  for(size_t k=0;k<Motions.size();k++)
   res&=CreateLink(Motions[k]->GetName()+".MotoneuronL.LTZone","Output",
-                 engine_integrator_name,"Inputs");//связь с Pac
+                 engine_integrator_name,"Inputs");//пїЅпїЅпїЅпїЅпїЅ пїЅ Pac
 
  for(size_t k=0;k<Motions.size();k++)
   res&=CreateLink(Motions[k]->GetName()+".MotoneuronR.LTZone","Output",
@@ -1658,7 +1663,7 @@ void NEngineMotionControl::NewStandardLinksSetup(const string &engine_integrator
   return;
 }
 
-// Настройка разделителей интервалов
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void NEngineMotionControl::NewIntervalSeparatorsSetup(int mode_value, int last_mode_value, double pos_gain_value, double neg_gain_value)
 {
  bool res=true;
@@ -1699,7 +1704,7 @@ for (int j=0; j < NumMotionElements ; j++)
    }
   }
 
-//  //Создаем PosIntervalSeparator
+//  //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ PosIntervalSeparator
 //  PosIntervalSeparator = AddMissingComponent<NIntervalSeparator>(std::string("PosIntervalSeparator"),0);
 //  PosIntervalSeparator->SetCoord(MVector<double,3>(4.3, 4.67, 0));
 //  PosIntervalSeparator->Reset();
@@ -1732,7 +1737,7 @@ for (int j=0; j < NumMotionElements ; j++)
   return;
 }
 
-// Настройка разделителей интервалов
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_mode_value)
 {
  bool res=true;
@@ -1802,7 +1807,7 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
   return;
 }
 
-// Установка связей разделителей интервалов
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void NEngineMotionControl::NewIntervalSeparatorLinksSetup()
 {
  bool res=true;
@@ -1814,7 +1819,7 @@ for(int i=0;i<NumMotionElements;i++)
  if(!melem)
 	 continue;
  try{
-  // Связи с моделью манипулятора (по умолчанию)
+  // пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
   for(int j=0;j<melem->NumControlLoops;j++)
   {
 //    if (!CheckLink("NManipulatorSource1","PosIntervalSeparator"+RDK::sntoa(i+1)+RDK::sntoa(j+1)))
@@ -1868,7 +1873,7 @@ int NEngineMotionControl::GetNumControlLoops(void)
 
  NMotionElement *melem=Motions[0];
  //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[0]);
- if(!melem) // старый вариант управляющего элемента
+ if(!melem) // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  {
   if(Motions[0])
   {
@@ -1942,8 +1947,8 @@ bool NEngineMotionControl::GetIsAfferentLinked(const int &index)
 }
 
 
-/// Подключает внутренние генераторы к вставочным нейронам нужного числа управляющих элементов
-/// direction 0 - налево, direction 1 - направо
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// direction 0 - пїЅпїЅпїЅпїЅпїЅпїЅ, direction 1 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void NEngineMotionControl::ConnectInternalGenerators(int direction, int num_motion_elements, int control_loop_index)
 {
  if(control_loop_index<0 || control_loop_index>=NumControlLoops)
@@ -1962,7 +1967,7 @@ void NEngineMotionControl::ConnectInternalGenerators(int direction, int num_moti
   std::string post_afferent_L_name="PostAfferentR"+sntoa(control_loop_index+1);
   if(direction == 0)
   {
-   //Связь не строится
+   //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
    res&=CreateLink("InternalGenerator","Output",
                    std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".Soma1.ExcChannel","ChannelInputs");
 //   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".PNeuronMembrane.NegChannel");
@@ -1970,7 +1975,7 @@ void NEngineMotionControl::ConnectInternalGenerators(int direction, int num_moti
   }
   else
   {
-      //Связь не строится
+      //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
    res&=CreateLink("InternalGenerator","Output",std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_L_name+".Soma1.ExcChannel","ChannelInputs");
 //   res&=CreateLink("InternalGenerator",0,std::string("MotionElement")+RDK::sntoa(i)+std::string(".")+post_afferent_R_name+".PNeuronMembrane.NegChannel");
    InternalGeneratorDirection=1;
@@ -1979,7 +1984,7 @@ void NEngineMotionControl::ConnectInternalGenerators(int direction, int num_moti
 
 }
 
-/// Задает частоту работы внутреннего генератора
+/// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 void NEngineMotionControl::SetInternalGeneratorFrequency(int direction, int num_motion_elements, int control_loop_index, double value)
 {
  if(!InternalGenerator)
