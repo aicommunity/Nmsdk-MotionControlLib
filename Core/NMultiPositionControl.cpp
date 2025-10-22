@@ -131,7 +131,7 @@ bool NMultiPositionControl::ABuild(void)
   PositionControlElement.resize(PositionControl.size());
 
   for(size_t i=0;i<PositionControl.size();i++)
-    PositionControlElement[i] = dynamic_cast<NPositionControlElement*>(PositionControl.GetItem(int(i)));
+    PositionControlElement[i] = std::shared_ptr<NPositionControlElement>(dynamic_cast<NPositionControlElement*>(PositionControl.GetItem(int(i))), RDK::NonOwningDeleter());
 
   if (IsNeedToRebuild)
   {
@@ -146,8 +146,8 @@ bool NMultiPositionControl::ABuild(void)
 
       if (PrebuildStructure)
       {
-        UEPtr<UContainer> cont;
-        UEPtr<UStorage> storage(GetStorage().get());
+        std::shared_ptr<UContainer> cont;
+        std::shared_ptr<UStorage> storage(GetStorage().get());
         vector<NNet*> postInputs, preControls;
 
         //Adding PreControlNeuron
@@ -156,8 +156,8 @@ bool NMultiPositionControl::ABuild(void)
         //string preControlNeuronName = "PreControlNeuron"+sntoa(preControlSize+1);
         if(CheckComponentL(preControlNeuronName))
         {
-          PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
-          preControls.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
+          PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)).get());
+          preControls.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)).get());
         }
         else
         {
@@ -166,8 +166,8 @@ bool NMultiPositionControl::ABuild(void)
             return 0;
           cont->SetName(preControlNeuronName);
           AddComponent(cont);
-          PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
-          preControls.push_back(static_pointer_cast<NNet>(cont));
+          PreControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+          preControls.push_back(static_pointer_cast<NNet>(cont).get());
         }
 
         //Adding PostInputNeuron
@@ -178,8 +178,8 @@ bool NMultiPositionControl::ABuild(void)
 
         if(CheckComponentL(postInputNeuronName))
         {
-          PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
-          postInputs.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
+          PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)).get());
+          postInputs.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)).get());
         }
         else
         {
@@ -188,12 +188,12 @@ bool NMultiPositionControl::ABuild(void)
             return 0;
           cont->SetName(postInputNeuronName);
           AddComponent(cont);
-          PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
-          postInputs.push_back(static_pointer_cast<NNet>(cont));
+          PostInputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+          postInputs.push_back(static_pointer_cast<NNet>(cont).get());
 
-          UEPtr<NPulseNeuron> neuron = cont->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
-          //UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(neuron->GetComponentL("LTZone"));
-          UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(cont->GetComponentL("LTZone"));
+          std::shared_ptr<NPulseNeuron> neuron = cont->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
+          //std::shared_ptr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(neuron->GetComponentL("LTZone"));
+          std::shared_ptr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(cont->GetComponentL("LTZone"));
           if(ltzone)
               ltzone->AvgInterval = 3; //����������� �������� ��� ������� OutputFrequency, ����� ��������� ���������� ������� � MazeMemory
         }
@@ -224,8 +224,8 @@ bool NMultiPositionControl::ACalculate(void)
   else
     ControlNeuronType = "NNewSPNeuron";
 
-  UEPtr<UContainer> cont;
-  UEPtr<UStorage> storage(GetStorage().get());
+  std::shared_ptr<UContainer> cont;
+  std::shared_ptr<UStorage> storage(GetStorage().get());
 
   //����������� ���������/��������
   if(RememberState)
@@ -243,8 +243,8 @@ bool NMultiPositionControl::ACalculate(void)
     {
       if(IsNeedToRebuild)
       {
-        PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
-        preControls.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
+        PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)).get());
+        preControls.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)).get());
       }
     }
     else
@@ -254,8 +254,8 @@ bool NMultiPositionControl::ACalculate(void)
         return 0;
       cont->SetName(preControlNeuronName);
       AddComponent(cont);
-      PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
-      preControls.push_back(static_pointer_cast<NNet>(cont));
+      PreControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      preControls.push_back(static_pointer_cast<NNet>(cont).get());
     }
 
     //Adding PostInputNeuron
@@ -266,8 +266,8 @@ bool NMultiPositionControl::ACalculate(void)
     {
       if (IsNeedToRebuild)
       {
-        PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
-        postInputs.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
+        PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)).get());
+        postInputs.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)).get());
       }
     }
     else
@@ -277,8 +277,8 @@ bool NMultiPositionControl::ACalculate(void)
         return 0;
       cont->SetName(postInputNeuronName);
       AddComponent(cont);
-      PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
-      postInputs.push_back(static_pointer_cast<NNet>(cont));
+      PostInputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      postInputs.push_back(static_pointer_cast<NNet>(cont).get());
     }
 
 
@@ -287,7 +287,7 @@ bool NMultiPositionControl::ACalculate(void)
     string generatorName = "PGenerator"+sntoa(generatorSize+1);
     if(CheckComponentL(generatorName))
     {
-      Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorName)));
+      Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorName)).get());
     }
     else
     {
@@ -296,14 +296,14 @@ bool NMultiPositionControl::ACalculate(void)
         return 0;
       cont->SetName(generatorName);
       AddComponent(cont);
-      Generators.push_back(static_pointer_cast<NNet>(cont));
+      Generators.push_back(static_pointer_cast<NNet>(cont).get());
     }
 
 
     //����� �������� InputNeurons ��� ���������� ������ � PostInput
     for(size_t i=0;i<InputNeurons.size();i++)
     {
-      UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(InputNeurons[i]->GetComponentL("LTZone"));
+      std::shared_ptr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(InputNeurons[i]->GetComponentL("LTZone"));
       if(ltzone->OutputFrequency->As<double>(0) >0)
       {
         //string check_actInp = InputNeurons[i]->GetName();
@@ -315,13 +315,13 @@ bool NMultiPositionControl::ACalculate(void)
     //������� ���������� ��� � ������� ��� PostInput
     if (BuildSolo)
     {
-      NPulseNeuron *postInputNeuron = static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronName));
+      NPulseNeuron *postInputNeuron = static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronName)).get();
       if (activeInputs.size()>0)
         postInputNeuron->NumSomaMembraneParts = int(activeInputs.size());
       else
         postInputNeuron->NumSomaMembraneParts = 1;
 
-      UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(postInputNeuron->GetComponentL("LTZone"));
+      std::shared_ptr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(postInputNeuron->GetComponentL("LTZone"));
 //       bool check_LTZ = true;
 //       if (!ltzone)
 //           check_LTZ = false;
@@ -332,7 +332,7 @@ bool NMultiPositionControl::ACalculate(void)
 
 /*   for(size_t c=0;c<ControlNeurons.size();c++)
    {
-    UEPtr<UItem> ltzone=dynamic_pointer_cast<UItem>(ControlNeurons[c]->GetComponentL("LTZone"));
+    std::shared_ptr<UItem> ltzone=dynamic_pointer_cast<UItem>(ControlNeurons[c]->GetComponentL("LTZone"));
 	if(ltzone->GetOutputData(2).Double[0]>0)
 	{
 	 activeControls.push_back(ControlNeurons[c]);
@@ -340,8 +340,8 @@ bool NMultiPositionControl::ACalculate(void)
 	 string postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
 	 if(CheckComponentL(postInputNeuronName))
 	 {
-	  PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
-	  postInputs.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
+	  PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)).get());
+	  postInputs.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)).get());
 	 }
 	 else
 	 {
@@ -350,8 +350,8 @@ bool NMultiPositionControl::ACalculate(void)
 	   return 0;
 	  cont->SetName(postInputNeuronName);
 	  AddComponent(cont);
-	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
-	  postInputs.push_back(static_pointer_cast<NNet>(cont));
+	  PostInputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+	  postInputs.push_back(static_pointer_cast<NNet>(cont).get());
 	 }
 	}
    }
@@ -381,8 +381,8 @@ bool NMultiPositionControl::ACalculate(void)
 
 bool NMultiPositionControl::CreateNeurons(void)
 {
-  UEPtr<UContainer> cont;
-  UEPtr<UStorage> storage(GetStorage().get());
+  std::shared_ptr<UContainer> cont;
+  std::shared_ptr<UStorage> storage(GetStorage().get());
 
   //Creating InputNeurons
   int positionControlSize = int(PositionControlElement.size());
@@ -395,15 +395,15 @@ bool NMultiPositionControl::CreateNeurons(void)
       UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
       string inputNeuronName = "InputNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
       string ltzoneName, inputName;
-      //UEPtr<UItem> ltzone=dynamic_pointer_cast<UItem>(PositionControlElement[i]->PostInputNeurons[j]->GetComponentL(".LTZone"));
-      PositionControlElement[i]->PostInputNeurons[j]->GetLongName(owner, ltzoneName);
+      //std::shared_ptr<UItem> ltzone=dynamic_pointer_cast<UItem>(PositionControlElement[i]->PostInputNeurons[j]->GetComponentL(".LTZone"));
+      PositionControlElement[i]->PostInputNeurons[j]->GetLongName(GetThisAsSharedContainer(), ltzoneName);
 
       if(CheckComponentL(inputNeuronName))
       {
-        NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronName));
+        NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronName)).get();
         InputNeurons.push_back(inputNeuron);
         InputNeuronsByContours[i].push_back(inputNeuron);
-        inputNeuron->GetLongName(owner, inputName);
+        inputNeuron->GetLongName(GetThisAsSharedContainer(), inputName);
       }
       else
       {
@@ -413,9 +413,9 @@ bool NMultiPositionControl::CreateNeurons(void)
          return 0;
         cont->SetName(inputNeuronName);
         AddComponent(cont);
-        InputNeurons.push_back(static_pointer_cast<NNet>(cont));
-        InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
-        cont->GetLongName(owner, inputName);
+        InputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+        InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont).get());
+        cont->GetLongName(GetThisAsSharedContainer(), inputName);
       }
     //���������� ������ ����� PostInput Neurons � NNewPositionControl � InputNeurons � MultiPositionControl
     owner->CreateLink(ltzoneName+".LTZone","Output",inputName+".Soma1.ExcSynapse1", "Input");
@@ -432,14 +432,14 @@ bool NMultiPositionControl::CreateNeurons(void)
       UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
       string controlNeuronName = "ControlNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
       string outputName, controlName;
-      //UEPtr<UItem> output=dynamic_pointer_cast<UItem>(PositionControlElement[i]->PreControlNeurons[j]->GetComponentL(".Soma1.ExcChannel"));
-      PositionControlElement[i]->PreControlNeurons[j]->GetLongName(owner, outputName);
+      //std::shared_ptr<UItem> output=dynamic_pointer_cast<UItem>(PositionControlElement[i]->PreControlNeurons[j]->GetComponentL(".Soma1.ExcChannel"));
+      PositionControlElement[i]->PreControlNeurons[j]->GetLongName(GetThisAsSharedContainer(), outputName);
       if(CheckComponentL(controlNeuronName))
       {
-        NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronName));
+        NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronName)).get();
         ControlNeurons.push_back(controlNeuron);
         ControlNeuronsByContours[i].push_back(controlNeuron);
-        controlNeuron->GetLongName(owner, controlName);
+        controlNeuron->GetLongName(GetThisAsSharedContainer(), controlName);
       }
       else
       {
@@ -449,9 +449,9 @@ bool NMultiPositionControl::CreateNeurons(void)
          return 0;
         cont->SetName(controlNeuronName);
         AddComponent(cont);
-        ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
-        ControlNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
-        cont->GetLongName(owner, controlName);
+        ControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+        ControlNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont).get());
+        cont->GetLongName(GetThisAsSharedContainer(), controlName);
       }
       //���������� ������ ����� Control Neurons � MultiPositionControl � PreControl Neurons � NewPositionControl
       owner->CreateLink(controlName+".LTZone","Output",outputName+".Soma1.ExcSynapse2", "Input");
@@ -465,7 +465,7 @@ bool NMultiPositionControl::CreateNeurons(void)
     string preControlNeuronName = "PreControlNeuron"+sntoa(i+1);
     if(CheckComponentL(preControlNeuronName))
     {
-      PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
+      PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)).get());
     }
     else
     {
@@ -474,14 +474,14 @@ bool NMultiPositionControl::CreateNeurons(void)
         return 0;
       cont->SetName(preControlNeuronName);
       AddComponent(cont);
-      PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
+      PreControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
     }
 
     //Creating PostInputNeurons
     string postInputNeuronName = "PostInputNeuron"+sntoa(i+1);
     if(CheckComponentL(postInputNeuronName))
     {
-      PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
+      PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)).get());
     }
     else
     {
@@ -490,14 +490,14 @@ bool NMultiPositionControl::CreateNeurons(void)
         return 0;
       cont->SetName(postInputNeuronName);
       AddComponent(cont);
-      PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
+      PostInputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
     }
 
     //Creating Generators
     string generatorName = "PGenerator"+sntoa(i+1);
     if(CheckComponentL(generatorName))
     {
-      Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorName)));
+      Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorName)).get());
     }
     else
     {
@@ -506,7 +506,7 @@ bool NMultiPositionControl::CreateNeurons(void)
         return 0;
       cont->SetName(generatorName);
       AddComponent(cont);
-      Generators.push_back(static_pointer_cast<NNet>(cont));
+      Generators.push_back(static_pointer_cast<NNet>(cont).get());
     }
   }
   PositionNeurons();
@@ -516,8 +516,8 @@ bool NMultiPositionControl::CreateNeurons(void)
 
 bool NMultiPositionControl::CreateNeuronsSolo(void)
 {
-  UEPtr<UContainer> cont;
-  UEPtr<UStorage> storage(GetStorage().get());
+  std::shared_ptr<UContainer> cont;
+  std::shared_ptr<UStorage> storage(GetStorage().get());
 
    //Creating InputNeurons
    int positionControlSize = PCsNum;
@@ -536,7 +536,7 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
   //       NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronName));
   //       InputNeurons.push_back(inputNeuron);
   //       InputNeuronsByContours[i].push_back(inputNeuron);
-  //       inputNeuron->GetLongName(owner, inputName);
+  //       inputNeuron->GetLongName(GetThisAsSharedContainer(), inputName);
   //     }
   //     else
   //     {
@@ -546,9 +546,9 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
   //         return 0;
   //       cont->SetName(inputNeuronName);
   //       AddComponent(cont);
-  //       InputNeurons.push_back(static_pointer_cast<NNet>(cont));
-  //       InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
-  //       cont->GetLongName(owner, inputName);
+  //       InputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+  //       InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont).get());
+  //       cont->GetLongName(GetThisAsSharedContainer(), inputName);
   //     }
   //   }
   // }
@@ -565,10 +565,10 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
 
       if(CheckComponentL(controlNeuronName))
       {
-        NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronName));
+        NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronName)).get();
         ControlNeurons.push_back(controlNeuron);
         ControlNeuronsByContours[i].push_back(controlNeuron);
-        controlNeuron->GetLongName(owner, controlName);
+        controlNeuron->GetLongName(GetThisAsSharedContainer(), controlName);
       }
       else
       {
@@ -578,9 +578,9 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
           return 0;
         cont->SetName(controlNeuronName);
         AddComponent(cont);
-        ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
-        ControlNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
-        cont->GetLongName(owner, controlName);
+        ControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+        ControlNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont).get());
+        cont->GetLongName(GetThisAsSharedContainer(), controlName);
       }
     }
   }
@@ -592,7 +592,7 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
 //     string preControlNeuronName = "PreControlNeuron"+sntoa(i+1);
 //     if(CheckComponentL(preControlNeuronName))
 //     {
-//      PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
+//      PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)).get());
 //     }
 //     else
 //     {
@@ -601,14 +601,14 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
 //       return 0;
 //      cont->SetName(preControlNeuronName);
 //      AddComponent(cont);
-//      PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
+//      PreControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
 //     }
 
 //     //Creating PostInputNeurons
 //     string postInputNeuronName = "PostInputNeuron"+sntoa(i+1);
 //     if(CheckComponentL(postInputNeuronName))
 //     {
-//      PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)));
+//      PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronName)).get());
 //     }
 //     else
 //     {
@@ -617,13 +617,13 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
 //       return 0;
 //      cont->SetName(postInputNeuronName);
 //      AddComponent(cont);
-//      PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
+//      PostInputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
 //     }
 
 //     //���������� ��� ������������� ������ � CALCULATE! - ��������, ���� ���� ����� �������� (?)
 //     //������� ������� ��� PostInput
 //     NPulseNeuron *postInputNeuron = static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronName));
-//     UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(postInputNeuron->GetComponentL("LTZone"));
+//     std::shared_ptr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(postInputNeuron->GetComponentL("LTZone"));
 //         //bool check_LTZ = true;
 //         //if (!ltzone)
 //           // check_LTZ = false;
@@ -635,7 +635,7 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
 //     string generatorName = "PGenerator"+sntoa(i+1);
 //     if(CheckComponentL(generatorName))
 //     {
-//      Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorName)));
+//      Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorName)).get());
 //     }
 //     else
 //     {
@@ -644,7 +644,7 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
 //       return 0;
 //      cont->SetName(generatorName);
 //      AddComponent(cont);
-//      Generators.push_back(static_pointer_cast<NNet>(cont));
+//      Generators.push_back(static_pointer_cast<NNet>(cont).get());
 //     }
 // }
   PositionNeurons();
@@ -656,7 +656,7 @@ bool NMultiPositionControl::LinkNeuronsWithNorm(vector <NNet*> start, vector <NN
   for(size_t j=0;j<finish.size();j++)
   {
     NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
-//  UEPtr<NPulseMembrane> branch;
+//  std::shared_ptr<NPulseMembrane> branch;
 //  bool hasEmptyMembrane=false;
 
 //  for(size_t k=0;k<neuron->GetNumMembranes();k++)
@@ -693,7 +693,7 @@ bool NMultiPositionControl::LinkNeuronsWithNorm(vector <NNet*> start, vector <NN
         if(CheckLink(startName,finishName))
           break; //������� � ���������� �������� � start
 
-        UEPtr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma"+sntoa(m+1)+".ExcSynapse1",true);
+        std::shared_ptr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma"+sntoa(m+1)+".ExcSynapse1",true);
         if(!syn)
           return true;
         if (syn->Input.IsConnected())

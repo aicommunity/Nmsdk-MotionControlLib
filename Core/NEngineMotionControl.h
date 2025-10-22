@@ -193,7 +193,7 @@ RDK::ULProperty<int, NEngineMotionControl> RenshowMode;
 UPropertyOutputData<MDMatrix<double>, NEngineMotionControl> Statistic;
 
 protected: // ��������� ����������
-vector<vector<UEPtr<NReceptor> > > receptors;
+vector<vector<std::shared_ptr<NReceptor> > > receptors;
 
 vector<pair<double,double> > Ia_ranges_pos,Ia_ranges_neg;
 vector<pair<double,double> > Ib_ranges_pos,Ib_ranges_neg;
@@ -205,7 +205,7 @@ vector<vector<pair<double,double> > > AfferentRangesPos, AfferentRangesNeg;
 vector<NMotionElement *> Motions;
 
 /// ���������� �������������� ��������� ����������
-UEPtr<NPulseGenerator> InternalGenerator;
+std::shared_ptr<NPulseGenerator> InternalGenerator;
 
 vector<vector<double> > History;
 
@@ -246,8 +246,8 @@ virtual ~NEngineMotionControl(void);
 // ������ ���������� �����������
 // --------------------------
 protected:
-//UEPtr<NManipulatorSource> ManipulatorSource1;
-//UEPtr<NIntervalSeparator> PosIntervalSeparator;
+//std::shared_ptr<NManipulatorSource> ManipulatorSource1;
+//std::shared_ptr<NIntervalSeparator> PosIntervalSeparator;
 
 // ����� �������� ����������
 bool SetNumControlLoops(const int &value);
@@ -375,10 +375,10 @@ int CalcAfferentRange(int num_motions, bool cross_ranges, double a_min, double a
 void SetupPacRange(void);
 
 // ��������� ��������������� ������-������
-void AACSetup(UEPtr<UNet> net, double gain_value);
+void AACSetup(std::shared_ptr<UNet> net, double gain_value);
 
 // ������� ��������������� ���������
-void AdditionalComponentsSetup(UEPtr<UNet> net);
+void AdditionalComponentsSetup(std::shared_ptr<UNet> net);
 
 //------------------------------
 //����� ������ ������������ ����
@@ -387,7 +387,7 @@ void AdditionalComponentsSetup(UEPtr<UNet> net);
 UNet* CreateNewEngineControl2NeuronsSimplest(bool crosslinks = false, bool crossranges=false);
 
 // ��������� ����������
-void NewMotionElementsSetup(UEPtr<UNet> net);
+void NewMotionElementsSetup(std::shared_ptr<UNet> net);
 
 // ��������� ��������������� �������-������
 void NewPACSetup(double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode);

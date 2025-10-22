@@ -227,7 +227,7 @@ void UpdateMotionFeedback(double position_error, double velocity_error);
 };
 
 
-bool RDK_LIB_TYPE CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
+bool RDK_LIB_TYPE CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
 	const string &target_head, const string &target_tail);
 
 }

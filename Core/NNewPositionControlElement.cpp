@@ -88,7 +88,7 @@ bool NNewPositionControlElement::ADefault(void)
 // � ������ �������� ������
 bool NNewPositionControlElement::ABuild(void)
 {
- MotionControlElement = dynamic_cast<NEngineMotionControl*>(MotionControl.GetItem());
+ MotionControlElement = std::shared_ptr<NEngineMotionControl>(dynamic_cast<NEngineMotionControl*>(MotionControl.GetItem()), RDK::NonOwningDeleter());
  CurrentPosition->Assign(2,1,0.0);
 
  //�������� ������ ��������� ����� ������������, ���������
@@ -102,35 +102,35 @@ bool NNewPositionControlElement::ABuild(void)
     for (size_t i=i_min; i<i_max; i++)
     {
       //NameT check_name = InputNeurons[i]->GetName();
-      DelComponent(InputNeurons[i],true);
+      DelComponent(std::shared_ptr<UContainer>(InputNeurons[i], RDK::NonOwningDeleter()),true);
     }
 
     i_max = PostInputNeurons.size();
     for (size_t i=i_min; i<i_max; i++)
     {
       //NameT check_name = PostInputNeurons[i]->GetName();
-      DelComponent(PostInputNeurons[i],true);
+      DelComponent(std::shared_ptr<UContainer>(PostInputNeurons[i], RDK::NonOwningDeleter()),true);
     }
 
     i_max = PreControlNeurons.size();
     for (size_t i=i_min; i<i_max; i++)
     {
       //NameT check_name = PreControlNeurons[i]->GetName();
-      DelComponent(PreControlNeurons[i],true);
+      DelComponent(std::shared_ptr<UContainer>(PreControlNeurons[i], RDK::NonOwningDeleter()),true);
     }
 
     i_max = ControlNeurons.size();
     for (size_t i=i_min; i<i_max; i++)
     {
      //NameT check_name = ControlNeurons[i]->GetName();
-      DelComponent(ControlNeurons[i],true);
+      DelComponent(std::shared_ptr<UContainer>(ControlNeurons[i], RDK::NonOwningDeleter()),true);
     }
 
     i_max = Generators.size();
     for (size_t i=i_min; i<i_max; i++)
     {
       //NameT check_name = Generators[i]->GetName();
-      DelComponent(Generators[i],true);
+      DelComponent(std::shared_ptr<UContainer>(Generators[i], RDK::NonOwningDeleter()),true);
     }
   }
  }
@@ -187,8 +187,8 @@ bool NNewPositionControlElement::ACalculate(void)
     continue;
    for(int j=0;j<melem->NumControlLoops;j++)
    {
-    UEPtr<NPulseLTZoneCommon> ltzoneL=dynamic_pointer_cast<NPulseLTZoneCommon>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
-    UEPtr<NPulseLTZoneCommon> ltzoneR=dynamic_pointer_cast<NPulseLTZoneCommon>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
+    std::shared_ptr<NPulseLTZoneCommon> ltzoneL=dynamic_pointer_cast<NPulseLTZoneCommon>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
+    std::shared_ptr<NPulseLTZoneCommon> ltzoneR=dynamic_pointer_cast<NPulseLTZoneCommon>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
 
     double temp=0;
     temp=ltzoneL->OutputFrequency->As<double>(0);
@@ -209,10 +209,10 @@ bool NNewPositionControlElement::ACalculate(void)
     continue;
    for(int j=0;j<melem->NumControlLoops;j++)
    {
-    UEPtr<NPulseLTZoneCommon> controlLTZoneL=dynamic_pointer_cast<NPulseLTZoneCommon>(GetComponentL("ControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
-    UEPtr<NPulseLTZoneCommon> controlLTZoneR=dynamic_pointer_cast<NPulseLTZoneCommon>(GetComponentL("ControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
-    UEPtr<NPulseLTZoneCommon> preControlLTZoneL=dynamic_pointer_cast<NPulseLTZoneCommon>(GetComponentL("PreControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
-    UEPtr<NPulseLTZoneCommon> preControlLTZoneR=dynamic_pointer_cast<NPulseLTZoneCommon>(GetComponentL("PreControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
+    std::shared_ptr<NPulseLTZoneCommon> controlLTZoneL=dynamic_pointer_cast<NPulseLTZoneCommon>(GetComponentL("ControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
+    std::shared_ptr<NPulseLTZoneCommon> controlLTZoneR=dynamic_pointer_cast<NPulseLTZoneCommon>(GetComponentL("ControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
+    std::shared_ptr<NPulseLTZoneCommon> preControlLTZoneL=dynamic_pointer_cast<NPulseLTZoneCommon>(GetComponentL("PreControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
+    std::shared_ptr<NPulseLTZoneCommon> preControlLTZoneR=dynamic_pointer_cast<NPulseLTZoneCommon>(GetComponentL("PreControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
 
     (*Delta)(j,2*i)= controlLTZoneL->OutputFrequency->As<double>(0)-preControlLTZoneL->OutputFrequency->As<double>(0);
     (*Delta)(j,2*i+1)= controlLTZoneR->OutputFrequency->As<double>(0)-preControlLTZoneR->OutputFrequency->As<double>(0);
@@ -226,7 +226,7 @@ bool NNewPositionControlElement::ACalculate(void)
 
    for(size_t i=0;i<InputNeurons.size();i++)
    {
-    UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(InputNeurons[i]->GetComponentL("LTZone"));
+    std::shared_ptr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(InputNeurons[i]->GetComponentL("LTZone"));
     if(ltzone->OutputFrequency->As<double>(0)>0)
     {
         //NameT check_input_name = InputNeurons[i]->GetName();
@@ -236,7 +236,7 @@ bool NNewPositionControlElement::ACalculate(void)
    }
    for(size_t c=0;c<PreControlNeurons.size();c++)
    {
-    UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(ControlNeurons[c]->GetComponentL("LTZone"));
+    std::shared_ptr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(ControlNeurons[c]->GetComponentL("LTZone"));
     if(ltzone->OutputFrequency->As<double>(0)>0)
     {
         //NameT check_postInputs_name = PostInputNeurons[c]->GetName();
@@ -266,8 +266,8 @@ bool NNewPositionControlElement::CreateNeurons()
  if(!MotionControlElement)
   return false;
 
-   UEPtr<UContainer> cont;
-   UEPtr<UStorage> storage(GetStorage().get());
+   std::shared_ptr<UContainer> cont;
+   std::shared_ptr<UStorage> storage(GetStorage().get());
    bool res(true);
    vector<NMotionElement *> Motions = MotionControlElement->GetMotion();
 
@@ -288,22 +288,22 @@ bool NNewPositionControlElement::CreateNeurons()
     RightInputNeurons.resize(melem->NumControlLoops);
     for(int j=0;j<melem->NumControlLoops;j++)
     {
-     UEPtr<UItem> ltzoneL=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
-     UEPtr<UItem> ltzoneR=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
+     std::shared_ptr<UItem> ltzoneL=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
+     std::shared_ptr<UItem> ltzoneR=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
      UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
      string ltzoneLName,ltzoneRName;
-     ltzoneL->GetLongName(owner, ltzoneLName);
-     ltzoneR->GetLongName(owner, ltzoneRName);
+     ltzoneL->GetLongName(GetThisAsSharedContainer(), ltzoneLName);
+     ltzoneR->GetLongName(GetThisAsSharedContainer(), ltzoneRName);
      string inputNeuronLName = "InputNeuronL"+sntoa(i+1)+sntoa(j+1);
      string inputNeuronRName = "InputNeuronR"+sntoa(i+1)+sntoa(j+1);
      string inputLName,inputRName;
 
      if(CheckComponentL(inputNeuronLName))
      {
-      NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronLName));
+      NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronLName)).get();
       InputNeurons.push_back(inputNeuron);
-      inputNeuron->GetLongName(owner, inputLName);
-      LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronLName)));
+      inputNeuron->GetLongName(GetThisAsSharedContainer(), inputLName);
+      LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronLName)).get());
      }
      else
      {
@@ -312,17 +312,17 @@ bool NNewPositionControlElement::CreateNeurons()
        return 0;
       cont->SetName(inputNeuronLName);
          res&=(AddComponent(cont) != ForbiddenId);
-      InputNeurons.push_back(static_pointer_cast<NNet>(cont));
-      cont->GetLongName(owner, inputLName);
-      LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronLName)));
+      InputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      cont->GetLongName(GetThisAsSharedContainer(), inputLName);
+      LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronLName)).get());
      }
 
      if(CheckComponentL(inputNeuronRName))
      {
-      NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronRName));
-      InputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
-      inputNeuron->GetLongName(owner, inputRName);
-      RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
+      NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronRName)).get();
+      InputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)).get());
+      inputNeuron->GetLongName(GetThisAsSharedContainer(), inputRName);
+      RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)).get());
      }
      else
      {
@@ -331,9 +331,9 @@ bool NNewPositionControlElement::CreateNeurons()
        return 0;
       cont->SetName(inputNeuronRName);
          res&=(AddComponent(cont) != ForbiddenId);
-      InputNeurons.push_back(static_pointer_cast<NNet>(cont));
-      cont->GetLongName(owner, inputRName);
-      RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
+      InputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      cont->GetLongName(GetThisAsSharedContainer(), inputRName);
+      RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)).get());
      }
 
         //���������� ������ �� ����������� �������� � EngineMotionControl->MotionElement
@@ -361,24 +361,24 @@ bool NNewPositionControlElement::CreateNeurons()
 
     for(int j=0;j<melem->NumControlLoops;j++)
     {
-        UEPtr<UItem> postAfferentL=dynamic_pointer_cast<UItem>(melem->GetComponentL("PostAfferentL"+sntoa(j+1)));
-        UEPtr<UItem> postAfferentR=dynamic_pointer_cast<UItem>(melem->GetComponentL("PostAfferentR"+sntoa(j+1)));
+        std::shared_ptr<UItem> postAfferentL=dynamic_pointer_cast<UItem>(melem->GetComponentL("PostAfferentL"+sntoa(j+1)));
+        std::shared_ptr<UItem> postAfferentR=dynamic_pointer_cast<UItem>(melem->GetComponentL("PostAfferentR"+sntoa(j+1)));
      UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
      string postAfferentLName,postAfferentRName;
-     postAfferentL->GetLongName(owner, postAfferentLName);
-     postAfferentR->GetLongName(owner, postAfferentRName);
+     postAfferentL->GetLongName(GetThisAsSharedContainer(), postAfferentLName);
+     postAfferentR->GetLongName(GetThisAsSharedContainer(), postAfferentRName);
      string controlNeuronLName = "ControlNeuronL"+sntoa(i+1)+sntoa(j+1);
      string controlNeuronRName = "ControlNeuronR"+sntoa(i+1)+sntoa(j+1);
      string controlLName,controlRName;
 
      if(CheckComponentL(controlNeuronLName))
      {
-      NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronLName));
-         ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
-      controlNeuron->GetLongName(owner, controlLName);
-      LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
+      NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronLName)).get();
+         ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)).get());
+      controlNeuron->GetLongName(GetThisAsSharedContainer(), controlLName);
+      LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)).get());
          //Adding synapses for links to PrecontrolNeurons, ���������
-         UEPtr<NPulseMembrane> soma = controlNeuron->GetComponentL<NPulseMembrane>("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma = controlNeuron->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -391,11 +391,11 @@ bool NNewPositionControlElement::CreateNeurons()
        return false;
       cont->SetName(controlNeuronLName);
          res&=(AddComponent(cont) != ForbiddenId);
-      ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
-      cont->GetLongName(owner, controlLName);
-         LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
+      ControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      cont->GetLongName(GetThisAsSharedContainer(), controlLName);
+         LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)).get());
          //Adding synapses for links to PrecontrolNeurons, ���������
-         UEPtr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -405,12 +405,12 @@ bool NNewPositionControlElement::CreateNeurons()
 
      if(CheckComponentL(controlNeuronRName))
      {
-      NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronRName));
-      ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
-      controlNeuron->GetLongName(owner, controlRName);
-      RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
+      NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronRName)).get();
+      ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)).get());
+      controlNeuron->GetLongName(GetThisAsSharedContainer(), controlRName);
+      RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)).get());
          //Adding synapses for links to PrecontrolNeurons, ���������
-         UEPtr<NPulseMembrane> soma = controlNeuron->GetComponentL<NPulseMembrane>("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma = controlNeuron->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -423,11 +423,11 @@ bool NNewPositionControlElement::CreateNeurons()
        return false;
       cont->SetName(controlNeuronRName);
          res&=(AddComponent(cont) != ForbiddenId);
-      ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
-      cont->GetLongName(owner, controlRName);
-      RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
+      ControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      cont->GetLongName(GetThisAsSharedContainer(), controlRName);
+      RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)).get());
          //Adding synapses for links to PrecontrolNeurons, ���������
-         UEPtr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -468,10 +468,10 @@ bool NNewPositionControlElement::CreateNeurons()
         //Left PreControl Neurons
      if(CheckComponentL(preControlNeuronLName))
      {
-      PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
-      LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
+      PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)).get());
+      LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)).get());
          //Adding synapses for links from Control Neurons in NMultiPositionControl, ���������
-         UEPtr<NPulseMembrane> soma = GetComponent(preControlNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma = GetComponent(preControlNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = 2;
@@ -484,10 +484,10 @@ bool NNewPositionControlElement::CreateNeurons()
        return false;
       cont->SetName(preControlNeuronLName);
          res&=(AddComponent(cont) != ForbiddenId);
-      PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
-      LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
+      PreControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)).get());
          //Adding synapses for links from Control Neurons in NMultiPositionControl, ���������
-         UEPtr<NPulseMembrane> soma = GetComponent(preControlNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma = GetComponent(preControlNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = 2;
@@ -497,10 +497,10 @@ bool NNewPositionControlElement::CreateNeurons()
         //Right PreControl Neurons
      if(CheckComponentL(preControlNeuronRName))
      {
-      PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
-      RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
+      PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)).get());
+      RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)).get());
          //Adding synapses for links from Control Neurons in NMultiPositionControl, ���������
-         UEPtr<NPulseMembrane> soma = GetComponent(preControlNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma = GetComponent(preControlNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = 2;
@@ -513,10 +513,10 @@ bool NNewPositionControlElement::CreateNeurons()
        return false;
       cont->SetName(preControlNeuronRName);
          res&=(AddComponent(cont) != ForbiddenId);
-      PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
-      RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
+      PreControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)).get());
          //Adding synapses for links from Control Neurons in NMultiPositionControl, ���������
-         UEPtr<NPulseMembrane> soma = GetComponent(preControlNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma = GetComponent(preControlNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = 2;
@@ -544,10 +544,10 @@ bool NNewPositionControlElement::CreateNeurons()
 
      if(CheckComponentL(postInputNeuronLName))
      {
-      PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)));
-      LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)));
+      PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)).get());
+      LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)).get());
          //Adding synapses for links from InputNeurons, ���������
-         UEPtr<NPulseMembrane> soma = GetComponent(postInputNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma = GetComponent(postInputNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
          soma->NumInhibitorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -560,10 +560,10 @@ bool NNewPositionControlElement::CreateNeurons()
        return false;
       cont->SetName(postInputNeuronLName);
          res&=(AddComponent(cont) != ForbiddenId);
-      PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
-      LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
+      PostInputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont).get());
          //Adding synapses for links from InputNeurons, ���������
-         UEPtr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
          soma->NumInhibitorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -573,10 +573,10 @@ bool NNewPositionControlElement::CreateNeurons()
 
      if(CheckComponentL(postInputNeuronRName))
      {
-      PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)));
-      RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)));
+      PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)).get());
+      RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)).get());
          //Adding synapses for links from InputNeurons, ���������
-         UEPtr<NPulseMembrane> soma = GetComponent(postInputNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma = GetComponent(postInputNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
          soma->NumInhibitorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -589,11 +589,11 @@ bool NNewPositionControlElement::CreateNeurons()
        return false;
       cont->SetName(postInputNeuronRName);
          res&=(AddComponent(cont) != ForbiddenId);
-      PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
-      RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
+      PostInputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont).get());
 
          //Adding synapses for links from InputNeurons, ���������
-         UEPtr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
          soma->NumInhibitorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -710,8 +710,8 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
  if(!MotionControlElement)
   return false;
 
-   UEPtr<UContainer> cont;
-   UEPtr<UStorage> storage(GetStorage().get());
+   std::shared_ptr<UContainer> cont;
+   std::shared_ptr<UStorage> storage(GetStorage().get());
    bool res(true);
    vector<NMotionElement *> Motions = MotionControlElement->GetMotion();
    //vector<NNet*> Motions = MotionControlElement->GetMotion();
@@ -733,8 +733,8 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
 
      if(CheckComponentL(generatorLName))
      {
-      Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)));
-      LeftGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)));
+      Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)).get());
+      LeftGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)).get());
      }
      else
      {
@@ -743,13 +743,13 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
        return false;
       cont->SetName(generatorLName);
          res&=(AddComponent(cont) != ForbiddenId);
-      Generators.push_back(static_pointer_cast<NNet>(cont));
-      LeftGenerators[j].push_back(static_pointer_cast<NNet>(cont));
+      Generators.push_back(static_pointer_cast<NNet>(cont).get());
+      LeftGenerators[j].push_back(static_pointer_cast<NNet>(cont).get());
      }
      if(CheckComponentL(generatorRName))
      {
-      Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)));
-      RightGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)));
+      Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)).get());
+      RightGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)).get());
      }
      else
      {
@@ -758,8 +758,8 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
        return false;
       cont->SetName(generatorRName);
          res&=(AddComponent(cont) != ForbiddenId);
-      Generators.push_back(static_pointer_cast<NNet>(cont));
-      RightGenerators[j].push_back(static_pointer_cast<NNet>(cont));
+      Generators.push_back(static_pointer_cast<NNet>(cont).get());
+      RightGenerators[j].push_back(static_pointer_cast<NNet>(cont).get());
      }
     }
    }
@@ -772,7 +772,7 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
 	for(size_t j=0;j<finish.size();j++)
 	{
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
-      UEPtr<NPulseMembrane> branch;
+      std::shared_ptr<NPulseMembrane> branch;
 	  bool hasEmptyMembrane=false;
 
 	  for(size_t k=0;k<neuron->GetNumMembranes();k++)
@@ -780,7 +780,7 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
 	   NPulseMembrane* membr = neuron->GetMembrane(k);
 	   if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
 	   {
-     branch=neuron->GetMembrane(k);
+     branch=std::shared_ptr<NPulseMembrane>(neuron->GetMembrane(k), RDK::NonOwningDeleter());
      hasEmptyMembrane=true;
      break;
 	   }
@@ -803,7 +803,7 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
 
     for (int m = 0; m<syns_max; m++)
     {
-     UEPtr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma1.ExcSynapse"+sntoa(m+1),true);
+     std::shared_ptr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma1.ExcSynapse"+sntoa(m+1),true);
      if(!syn)
        return true;
 
@@ -831,14 +831,14 @@ bool NNewPositionControlElement::LinkNeuronsNeg(vector <NNet*> start, vector <NN
 	for(size_t j=0;j<finish.size();j++)
 	{
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
-      UEPtr<NPulseMembrane> branch;
+      std::shared_ptr<NPulseMembrane> branch;
 	  bool hasEmptyMembrane=false;
 	  for(size_t k=0;k<neuron->GetNumMembranes();k++)
 	  {
 	   NPulseMembrane* membr = neuron->GetMembrane(k);
 	   if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
 	   {
-     branch=neuron->GetMembrane(k);
+     branch=std::shared_ptr<NPulseMembrane>(neuron->GetMembrane(k), RDK::NonOwningDeleter());
      hasEmptyMembrane=true;
      break;
     }
@@ -861,7 +861,7 @@ bool NNewPositionControlElement::LinkNeuronsNeg(vector <NNet*> start, vector <NN
 
    for (int m = 0; m<syns_max; m++)
    {
-    UEPtr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma1.InhSynapse"+sntoa(m+1),true);
+    std::shared_ptr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma1.InhSynapse"+sntoa(m+1),true);
     if(!syn)
       return true;
 
@@ -995,8 +995,8 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
      string inputNeuronRName = "InputNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone";
      string postInputNeuronLName = "PostInputNeuronL"+sntoa(i+1)+sntoa(j+1);
      string postInputNeuronRName = "PostInputNeuronR"+sntoa(i+1)+sntoa(j+1);
-     UEPtr<NPulseNeuron> neuronL=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronLName));
-     UEPtr<NPulseNeuron> neuronR=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronRName));
+     std::shared_ptr<NPulseNeuron> neuronL=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronLName));
+     std::shared_ptr<NPulseNeuron> neuronR=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronRName));
 
      for(size_t m=0;m<neuronL->GetNumMembranes();m++)
      {
@@ -1021,7 +1021,7 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
     for(size_t l=0;l<membrToConnectL.size();l++)
     {
      string membrLName;
-     membrToConnectL[l]->GetLongName(this,membrLName);
+      membrToConnectL[l]->GetLongName(GetThisAsSharedContainer(),membrLName);
         //string check_startName = start[c]->GetName()+".LTZone";
         //string check_finishName = membrLName+".InhSynapse1";
      CreateLink(start[c]->GetName()+".LTZone","Output",membrLName+".InhSynapse1","Input");
@@ -1030,7 +1030,7 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
     for(size_t k=0;k<membrToConnectR.size();k++)
     {
      string membrRName;
-     membrToConnectR[k]->GetLongName(this,membrRName);
+      membrToConnectR[k]->GetLongName(GetThisAsSharedContainer(),membrRName);
         //string check_startName = start[c]->GetName()+".LTZone";
         //string check_finishName = membrRName+".InhSynapse1";
      CreateLink(start[c]->GetName()+".LTZone","Output",membrRName+".InhSynapse1","Input");

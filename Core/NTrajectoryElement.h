@@ -14,7 +14,7 @@ See file license.txt for more information
 #define NTrajectoryElementH
 
 #include "../../Nmsdk-PulseLib/Core/NAfferentNeuron.h"
-#include "UEPtr.h"
+#include <memory>
 #include "ModernSmartPointers.h"
 #include <memory>
 #include <mutex>
@@ -56,7 +56,7 @@ ULProperty<int, NTrajectoryElement, ptPubParameter> Layer;
 ///��������� ����������� �������� �� ������� �������� ����������
 /// (��������� �������� � ������ ��������)
 /// �������� ��������� ��� ������������� � MazeMemory
-std::vector<UEPtr<NTrajectoryElement>> Forwards;
+std::vector<std::shared_ptr<NTrajectoryElement>> Forwards;
 
 ///��������� ��������� ����������� ��������
 /// (��������� ��������)
@@ -65,7 +65,7 @@ std::vector<UEPtr<NTrajectoryElement>> Forwards;
 
 ///�������� ����� �� ������ �����
 ///�������� ��������� ��� ������������� � MazeMemory
-std::vector<UEPtr<NTrajectoryElement>> Backwards;
+std::vector<std::shared_ptr<NTrajectoryElement>> Backwards;
 
 ///��������� ��������� �������� �����
 ///�������� ��������� ��� ������������� � MazeMemory
@@ -73,7 +73,7 @@ std::vector<UEPtr<NTrajectoryElement>> Backwards;
 
 ///��� ����� �� ������ �����
 ///�������� ��������� ��� ������������� � MazeMemory
-std::vector<UEPtr<NPulseSynapse>> Paths;
+std::vector<std::shared_ptr<NPulseSynapse>> Paths;
 
 ///��������� ��������� ����� (������ ��� ��������)
 ///�������� ��������� ��� ������������� � MazeMemory
@@ -88,7 +88,7 @@ int LastUsedPath;
 
 protected:
 ///���������� ������� �������� ����������
-std::vector<UEPtr<NPulseNeuron>> Neurons;
+std::vector<std::shared_ptr<NPulseNeuron>> Neurons;
 
 ///������ ���� �������� 1 � 2
 int SomaSize;

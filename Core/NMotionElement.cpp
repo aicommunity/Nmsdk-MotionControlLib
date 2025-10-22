@@ -233,14 +233,14 @@ void NMotionElement::RestoreExternalLinks(void)
 }
 // --------------------------
 
-bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
+bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
 	const string &target_head, const string &target_tail)
 {
  string tmpname;
- UEPtr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
- UEPtr<NPulseMembraneCommon> branch;
- UEPtr<NPulseChannel> channel;
- UEPtr<UContainer> ltmembr;
+ std::shared_ptr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
+ std::shared_ptr<NPulseMembraneCommon> branch;
+ std::shared_ptr<NPulseChannel> channel;
+ std::shared_ptr<UContainer> ltmembr;
 
  bool ltmembr_found=neuron->CheckComponent("LTMembrane");
  if(ltmembr_found)
@@ -252,9 +252,9 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
   catch(UContainer::EComponentNameNotExist &){}
  }
  if(ltmembr)
-  branch=neuron->BranchDendrite("Soma1",false);
+  branch=std::shared_ptr<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false), RDK::NonOwningDeleter());
  else
-  branch=neuron->BranchDendrite("Soma1",true);
+  branch=std::shared_ptr<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",true), RDK::NonOwningDeleter());
  channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
  bool res=net->CreateLink(source,"Output",
                  channel->GetLongName(net,tmpname),"ChannelInput");
@@ -265,14 +265,14 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
 
 
 
-bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
+bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
 	const string &target_head, const string &target_tail, string &branch_bame)
 {
  string tmpname;
- UEPtr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
- UEPtr<NPulseMembraneCommon> branch;
- UEPtr<NPulseChannel> channel;
- UEPtr<UContainer> ltmembr;
+ std::shared_ptr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
+ std::shared_ptr<NPulseMembraneCommon> branch;
+ std::shared_ptr<NPulseChannel> channel;
+ std::shared_ptr<UContainer> ltmembr;
 
  bool ltmembr_found=neuron->CheckComponent("LTMembrane");
  if(ltmembr_found)
@@ -284,9 +284,9 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
   catch(UContainer::EComponentNameNotExist &){}
  }
  if(ltmembr)
-  branch=neuron->BranchDendrite("Soma1",false);
+  branch=std::shared_ptr<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false), RDK::NonOwningDeleter());
  else
-  branch=neuron->BranchDendrite("Soma1",true);
+  branch=std::shared_ptr<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",true), RDK::NonOwningDeleter());
 
  branch->GetLongName(neuron,branch_bame);
  channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
@@ -298,14 +298,14 @@ bool CreateNeuronBranchLink(UEPtr<UNet> net,const string &source,
 
 
 
-bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
+bool CreateNeuronExsitedBranchLink(std::shared_ptr<UNet> net,const string &source,
 	const string &target_head, const string &target_tail, const string &branch_name)
 {
  string tmpname;
- UEPtr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
- UEPtr<NPulseMembrane> branch;
- UEPtr<NPulseChannel> channel;
- UEPtr<UContainer> ltmembr;
+ std::shared_ptr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
+ std::shared_ptr<NPulseMembrane> branch;
+ std::shared_ptr<NPulseChannel> channel;
+ std::shared_ptr<UContainer> ltmembr;
 
  bool ltmembr_found=neuron->CheckComponent("LTMembrane");
  if(ltmembr_found)
@@ -337,14 +337,14 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
  bool NMotionElement::CreateMotoneurons()
  {
   // ���������� 1
-  UEPtr<NPulseNeuron> mn1 = AddMissingComponent<NPulseNeuron>("MotoneuronL", NeuroObjectName);
+  std::shared_ptr<NPulseNeuron> mn1 = AddMissingComponent<NPulseNeuron>("MotoneuronL", NeuroObjectName);
   if(!mn1)
    return false;
   mn1->SetCoord(MVector<double,3>(22.0, 5.0, 0));
   mn1->NumSomaMembraneParts = NumControlLoops;
 
   // ���������� 2
-  UEPtr<NPulseNeuron> mn2 = AddMissingComponent<NPulseNeuron>("MotoneuronR", NeuroObjectName);
+  std::shared_ptr<NPulseNeuron> mn2 = AddMissingComponent<NPulseNeuron>("MotoneuronR", NeuroObjectName);
   if(!mn2)
    return false;
   mn2->SetCoord(MVector<double,3>(22.0, 8.0, 1.0));
@@ -353,13 +353,13 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
   if(RenshowMode)
   {
    // ������ ������ 1
-   UEPtr<NPulseNeuron> ren1=AddMissingComponent<NPulseNeuron>("RenshowL", NeuroObjectName);
+   std::shared_ptr<NPulseNeuron> ren1=AddMissingComponent<NPulseNeuron>("RenshowL", NeuroObjectName);
    if(!ren1)
     return false;
    ren1->SetCoord(MVector<double,3>(15.0, 3.0, 0.0));
 
    // ������ ������ 2
-   UEPtr<NPulseNeuron> ren2=AddMissingComponent<NPulseNeuron>("RenshowR", NeuroObjectName);
+   std::shared_ptr<NPulseNeuron> ren2=AddMissingComponent<NPulseNeuron>("RenshowR", NeuroObjectName);
    if(!ren2)
     return false;
    ren2->SetCoord(MVector<double,3>(15.0, 10.0, 1.0));
@@ -368,13 +368,13 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
   if(PacemakerMode)
   {
    // ���������� 1
-   UEPtr<NPulseNeuron> pml=AddMissingComponent<NPulseNeuron>("PmL", NeuroObjectName);
+   std::shared_ptr<NPulseNeuron> pml=AddMissingComponent<NPulseNeuron>("PmL", NeuroObjectName);
    if(!pml)
     return false;
    pml->SetCoord(MVector<double,3>(15.0, 1.0, 4.0));
 
    // ���������� 2
-   UEPtr<NPulseNeuron> pmr=AddMissingComponent<NPulseNeuron>("PmR", NeuroObjectName);
+   std::shared_ptr<NPulseNeuron> pmr=AddMissingComponent<NPulseNeuron>("PmR", NeuroObjectName);
    if(!pmr)
     return false;
    pmr->SetCoord(MVector<double,3>(15.0, 12.0, 5.0));
@@ -389,7 +389,7 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
  {
    for (int i=0; i<NumControlLoops; i++)
    {
-    UEPtr<NAfferentNeuron> cont=AddMissingComponent<NAfferentNeuron>("AfferentR"+sntoa(i+1), AfferentObjectName);
+    std::shared_ptr<NAfferentNeuron> cont=AddMissingComponent<NAfferentNeuron>("AfferentR"+sntoa(i+1), AfferentObjectName);
     if(!cont)
      return false;
     cont->SetCoord(MVector<double,3>((5.0+i), 8.0, 2.0));
@@ -413,7 +413,7 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 
    for (int i=0; i<NumControlLoops; i++)
    {
-    UEPtr<NPulseNeuron> cont=AddMissingComponent<NPulseNeuron>("PostAfferentL"+sntoa(i+1), NeuroObjectName);
+    std::shared_ptr<NPulseNeuron> cont=AddMissingComponent<NPulseNeuron>("PostAfferentL"+sntoa(i+1), NeuroObjectName);
 	if(!cont)
      return false;
     cont->SetCoord(MVector<double,3>((15.0+i), 5.0, 4));
@@ -433,8 +433,8 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
  // �������� ������
  bool NMotionElement::LinkMotoneurons()
  {
-   UEPtr<UContainer> cont;
-   UEPtr<UStorage> storage(GetStorage().get());
+   std::shared_ptr<UContainer> cont;
+   std::shared_ptr<UStorage> storage(GetStorage().get());
    bool res = true;
 
    ULongId item,conn;
@@ -514,60 +514,60 @@ bool CreateNeuronExsitedBranchLink(UEPtr<UNet> net,const string &source,
 	   switch(mode)
 	   {
         case 0: //������ ����� (��� �������������)
-		 res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronL", "ExcChannel",branch_name);
+		 res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentL+".LTZone","MotoneuronL", "ExcChannel",branch_name);
 			res&=LinkNeuron(afferentL,"MotoneuronR",1,branch_name);
-		 res&=CreateNeuronBranchLink(this,afferentR+".LTZone","MotoneuronR", "ExcChannel",branch_name);
+		 res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentR+".LTZone","MotoneuronR", "ExcChannel",branch_name);
 			res&=LinkNeuron(afferentR,"MotoneuronL",1,branch_name);
 		 break;
 
          case 1: //����� ����� ������������
 			if(!(CheckComponent("Post"+afferentL) && CheckComponent("Post"+afferentR)))
 			  return false;
-//			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"ExcChannel");
+//			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentL+".LTZone","Post"+afferentL,"ExcChannel");
 			res&=LinkNeuron(afferentL,"Post"+afferentL,0);
-			res&=CreateNeuronBranchLink(this,"Post"+afferentL+".LTZone","MotoneuronR","InhChannel",branch_name);
+			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),"Post"+afferentL+".LTZone","MotoneuronR","InhChannel",branch_name);
 			res&=LinkNeuron("Post"+afferentR,"MotoneuronR",0,branch_name);
-//			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","Post"+afferentR,"ExcChannel");
+//			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentR+".LTZone","Post"+afferentR,"ExcChannel");
 			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
-			res&=CreateNeuronBranchLink(this,"Post"+afferentR+".LTZone","MotoneuronL","InhChannel",branch_name);
+			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),"Post"+afferentR+".LTZone","MotoneuronL","InhChannel",branch_name);
 			res&=LinkNeuron("Post"+afferentL,"MotoneuronL",0,branch_name);
 			break;
 
          case 2: //����� ����� ������������(L-R) + ������ �����(L-L)
 			if(!(CheckComponent("Post"+afferentL) && CheckComponent("Post"+afferentR)))
 			  return false;
-			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronL","ExcChannel",branch_name);
+			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentL+".LTZone","MotoneuronL","ExcChannel",branch_name);
 			res&=LinkNeuron("Post"+afferentR,"MotoneuronL",1,branch_name);
-//			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"ExcChannel");
+//			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentL+".LTZone","Post"+afferentL,"ExcChannel");
 			res&=LinkNeuron(afferentL,"Post"+afferentL,0);
 			res&=LinkNeuron("Post"+afferentL,"MotoneuronR",1,branch_name);
-			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","MotoneuronR","ExcChannel",branch_name);
-//			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","Post"+afferentR,"ExcChannel");
+			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentR+".LTZone","MotoneuronR","ExcChannel",branch_name);
+//			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentR+".LTZone","Post"+afferentR,"ExcChannel");
 			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
 			break;
 
          case 3: //����� ����� ������������(L-L) + ������ �����(L-R)
 			if(!(CheckComponent("Post"+afferentL) && CheckComponent("Post"+afferentR)))
 			  return false;
-			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","MotoneuronR","InhChannel",branch_name);
+			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentL+".LTZone","MotoneuronR","InhChannel",branch_name);
 			res&=LinkNeuron("Post"+afferentR,"MotoneuronR",0,branch_name);
-//			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"ExcChannel");
+//			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentL+".LTZone","Post"+afferentL,"ExcChannel");
 			res&=LinkNeuron(afferentL,"Post"+afferentL,0);
 			res&=LinkNeuron("Post"+afferentL,"MotoneuronL",0,branch_name);
-			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","MotoneuronL","InhChannel",branch_name);
-//			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","Post"+afferentR,"ExcChannel");
+			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentR+".LTZone","MotoneuronL","InhChannel",branch_name);
+//			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentR+".LTZone","Post"+afferentR,"ExcChannel");
 			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
 			break;
 
 		 case 4:
 			if(!(CheckComponent("Post"+afferentL) && CheckComponent("Post"+afferentR)))
 			  return false;
-//			res&=CreateNeuronBranchLink(this,afferentL+".LTZone","Post"+afferentL,"ExcChannel");
-//			res&=CreateNeuronBranchLink(this,afferentR+".LTZone","Post"+afferentR,"ExcChannel");
+//			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentL+".LTZone","Post"+afferentL,"ExcChannel");
+//			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),afferentR+".LTZone","Post"+afferentR,"ExcChannel");
 			res&=LinkNeuron(afferentL,"Post"+afferentL,0);
-			res&=CreateNeuronBranchLink(this,"Post"+afferentL+".LTZone","MotoneuronL","ExcChannel");
+			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),"Post"+afferentL+".LTZone","MotoneuronL","ExcChannel");
 			res&=LinkNeuron(afferentR,"Post"+afferentR,0);
-			res&=CreateNeuronBranchLink(this,"Post"+afferentR+".LTZone","MotoneuronR","ExcChannel");
+			res&=CreateNeuronBranchLink(std::static_pointer_cast<UNet>(GetThisAsSharedContainer()),"Post"+afferentR+".LTZone","MotoneuronR","ExcChannel");
 			break;
 
 	   }

@@ -70,7 +70,7 @@ vector<vector<UNet*> > LeftGenerators;
 vector<vector<UNet*> > RightGenerators;
 
 
-UEPtr<NEngineMotionControl> MotionControlElement;
+std::shared_ptr<NEngineMotionControl> MotionControlElement;
 
 public: // Ìועמהû
 // --------------------------

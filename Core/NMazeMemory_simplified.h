@@ -58,16 +58,16 @@ ULProperty<MDMatrix<double>, NMazeMemory_simplified, ptPubParameter> SituationCo
 
 protected:
 ///Нейроны действий
-std::vector<UEPtr<NPulseNeuron>> ActionNeurons;
+std::vector<std::shared_ptr<NPulseNeuron>> ActionNeurons;
 
 ///Все элементы траектории на схеме
-std::vector<UEPtr<NTrajectoryElement>> TrajectoryElements;
+std::vector<std::shared_ptr<NTrajectoryElement>> TrajectoryElements;
 
 /// Активные PostInput нейроны в схеме
-std::vector<UEPtr<NTrajectoryElement>> ActivePIs;
+std::vector<std::shared_ptr<NTrajectoryElement>> ActivePIs;
 
 /// Блоки MultiPC (осуществляют запоминание признаков ситуации)
-std::vector<UEPtr<NMultiPositionControl>> MultiPCs;
+std::vector<std::shared_ptr<NMultiPositionControl>> MultiPCs;
 
 ///Индекс текущего элемента траектории в массиве
 int CurrentTE;
@@ -85,16 +85,16 @@ double yShift;
 double SideWeight;
 
 ///Пройденные элементы траектории
-std::vector<UEPtr<NTrajectoryElement>> PassedTEs;
+std::vector<std::shared_ptr<NTrajectoryElement>> PassedTEs;
 
 ///Текущий элемент траектории
-UEPtr<NTrajectoryElement> BaseTE;
+std::shared_ptr<NTrajectoryElement> BaseTE;
 
 ///MultiPC, соответствующий текущему элементу траектории
-UEPtr<NMultiPositionControl> BaseMPC;
+std::shared_ptr<NMultiPositionControl> BaseMPC;
 
 ///Предыдущий элемент траектории
-UEPtr<NTrajectoryElement> PrevTE;
+std::shared_ptr<NTrajectoryElement> PrevTE;
 
 
 MDMatrix<double> check_pattern;
@@ -157,13 +157,13 @@ protected:
 // при добавлении дочернего компонента в этот объект
 // Метод будет вызван только если comp был
 // успешно добавлен в список компонент
-virtual bool AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer=0);
+virtual bool AAddComponent(std::shared_ptr<UContainer> comp, std::shared_ptr<UIPointer> pointer=0);
 
 // Выполняет предварительные пользовательские действия
 // при удалении дочернего компонента из этого объекта
 // Метод будет вызван только если comp
 // существует в списке компонент
-virtual bool ADelComponent(UEPtr<UContainer> comp);
+virtual bool ADelComponent(std::shared_ptr<UContainer> comp);
 // --------------------------
 
 
@@ -189,7 +189,7 @@ virtual bool ACalculate(void);
 
 //Создание новой точки маршрута (варианта действия), т.е.
 //построение связки TrajectoryElement+MultiPC
-UEPtr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
+std::shared_ptr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
 
 //Слияние совпадающих элементов траектории
 //Принимает на вход порядковый номер ТЕ в векторе TrajectoryElements,
@@ -198,10 +198,10 @@ UEPtr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
 bool MergingTEs(int active_num);
 
 //Проверяет, есть ли активные PostInput нейроны в сети
-std::vector<UEPtr<NTrajectoryElement>> CheckActivePIs();
+std::vector<std::shared_ptr<NTrajectoryElement>> CheckActivePIs();
 
 //Проверяет, есть ли активные элементы траектории среди возможных вариантов действий
-bool CheckActiveForwards(UEPtr<NTrajectoryElement> t_element);
+bool CheckActiveForwards(std::shared_ptr<NTrajectoryElement> t_element);
 
 //Вес связи, по которой попали в эту точку, w = 0,2
 bool LastUsedLink();

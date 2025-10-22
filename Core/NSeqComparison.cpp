@@ -1,8 +1,8 @@
 /// @author Barymova Elizaveta (elizaveta.barymova@gmail.com)
 /// @date   November, 2023
 /// @brief  The component for sequences comparison
-/// Изменила предлагаемую в диссертации схему для правильной работы нейрона:
-/// оба сигнала замыкаются синапсы сомы (а не один на дендрит, другой на сому)
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ:
+/// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ (пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ)
 
 #include "NSeqComparison.h"
 
@@ -37,9 +37,9 @@ NSeqComparison::~NSeqComparison(void) {}
 
 
 // --------------------------
-// Системные методы управления объектом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 NSeqComparison* NSeqComparison::New(void)
 {
  return new NSeqComparison;
@@ -48,21 +48,21 @@ NSeqComparison* NSeqComparison::New(void)
 
 
 // --------------------------
-// Скрытые методы управления компонентами
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 
-/// Выполняет завершающие пользовательские действия
-/// при добавлении дочернего компонента в этот объект
-// Метод будет вызван только если comp был успешно добавлен в список компонент
-bool NSeqComparison::AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer)
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ comp пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+bool NSeqComparison::AAddComponent(std::shared_ptr<UContainer> comp, std::shared_ptr<UIPointer> pointer)
 {
  return true;
 }
 
-/// Выполняет предварительные пользовательские действия
-/// при удалении дочернего компонента из этого объекта
-// Метод будет вызван только если comp существует в списке компонент
-bool NSeqComparison::ADelComponent(UEPtr<UContainer> comp)
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ comp пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+bool NSeqComparison::ADelComponent(std::shared_ptr<UContainer> comp)
 {
  return true;
 }
@@ -71,24 +71,24 @@ bool NSeqComparison::ADelComponent(UEPtr<UContainer> comp)
 
 
 // --------------------------
-// Методы управления общедоступными свойствами
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 
-/// Установка имени класса нейрона
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSeqComparison::SetNeuronClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка имени класса генератора последовательности импульсов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSeqComparison::SetMultiGeneratorClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка длительности импульсов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSeqComparison::SetPulseLength(const double &value)
 {
  if(value <= 0)
@@ -96,7 +96,7 @@ bool NSeqComparison::SetPulseLength(const double &value)
 
  size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
- // Настраиваем генераторы образов
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->PulseLength = value;
@@ -106,7 +106,7 @@ bool NSeqComparison::SetPulseLength(const double &value)
  return true;
 }
 
-/// Установка амплитуды импульсов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSeqComparison::SetAmplitude(const double &value)
 {
  if(value <= 0)
@@ -114,7 +114,7 @@ bool NSeqComparison::SetAmplitude(const double &value)
 
  size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
- // Настраиваем генераторы образов
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->Amplitude = value;
@@ -124,7 +124,7 @@ bool NSeqComparison::SetAmplitude(const double &value)
  return true;
 }
 
-/// Установка частоты генерации (Гц) всех компонентов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ) пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSeqComparison::SetFrequency(const double &value)
 {
  if(value < 0)
@@ -132,7 +132,7 @@ bool NSeqComparison::SetFrequency(const double &value)
 
  size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
- // Настраиваем генераторы образов
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->Frequency = value;
@@ -142,7 +142,7 @@ bool NSeqComparison::SetFrequency(const double &value)
  return true;
 }
 
-/// Установка используемого порога низкопороговой зоны нейрона
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSeqComparison::SetLTZThreshold(const double &value)
 {
  if(value <= 0)
@@ -151,7 +151,7 @@ bool NSeqComparison::SetLTZThreshold(const double &value)
  if (!CompNeuron)
   return true;
 
- UEPtr<NLTZone> ltzone = CompNeuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
+ std::shared_ptr<NLTZone> ltzone = CompNeuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
  if(!ltzone)
   return true;
 
@@ -160,7 +160,7 @@ bool NSeqComparison::SetLTZThreshold(const double &value)
  return true;
 }
 
-/// Установка размерности спайковых образов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSeqComparison::SetPulseCount(const int &value)
 {
  if(value < 1)
@@ -182,7 +182,7 @@ bool NSeqComparison::SetPulseCount(const int &value)
  return true;
 }
 
-/// Установка количества объектов для сравнения
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSeqComparison::SetNumClasses(const int &value)
 {
  if(value < 1)
@@ -194,7 +194,7 @@ bool NSeqComparison::SetNumClasses(const int &value)
  return true;
 }
 
-/// Установка задержек, задающих проверенные спайковые образы классов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSeqComparison::SetDelaysKFCls(const MDMatrix<double> &value)
 {
  bool res = true;
@@ -213,7 +213,7 @@ bool NSeqComparison::SetDelaysKFCls(const MDMatrix<double> &value)
  return res;
 }
 
-/// Установка задержек, задающих тестовые спайковые образы классов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSeqComparison::SetDelaysFrCls(const MDMatrix<double> &value)
 {
  bool res = true;
@@ -237,7 +237,7 @@ bool NSeqComparison::SetDelaysFrCls(const MDMatrix<double> &value)
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 bool NSeqComparison::ADefault(void)
 {
  NeuronClassName = "NSPNeuronGen";
@@ -258,10 +258,10 @@ bool NSeqComparison::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Reset() пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Ready пїЅ true
+// пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSeqComparison::ABuild(void)
 {
  bool res = true;
@@ -269,14 +269,14 @@ bool NSeqComparison::ABuild(void)
  DelaysKFCls.Resize(NumClasses, PulseCount, 0.0);
  DelaysFrCls.Resize(NumClasses, PulseCount, 0.0);
 
- // Удаляем лишние генераторы спайковых образов классов
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for(int i = NumClasses; i < OldNumClasses; i++)
  {
   DelComponent(std::string("KF_Cls")+sntoa(i+1)+std::string("_Spikes"));
   DelComponent(std::string("Fr_Cls")+sntoa(i+1)+std::string("_Spikes"));
  }
 
- // Инициализируем генераторы спайковых образов классов
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  KFClsSpikes.resize(NumClasses);
  FrClsSpikes.resize(NumClasses);
  for (int i = 0; i < NumClasses; i++)
@@ -290,18 +290,18 @@ bool NSeqComparison::ABuild(void)
  }
 
 
- // Инициализируем нейрон ИЛИ
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
  CompNeuron = AddMissingComponent<NPulseNeuron>(std::string("CompNeuron"), NeuronClassName);
  CompNeuron->SetCoord(MVector<double,3>(11, 3.17 + 2.67 * (NumClasses - 1), 0));
  CompNeuron->DisconnectAll("Output");
  CompNeuron->NumSomaMembraneParts = NumClasses;
 
- /* Вариант с замыканием проверенных последовательностей на дендриты
- // Удаляем лишние сегменты дендритов в нейроне ИЛИ
+ /* пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
  for(int i = NumClasses; i < OldNumClasses; i++)
  {
-  UEPtr<NPulseMembrane> dendrite = CompNeuron->GetComponentL<NPulseMembrane>("Dendrite" + sntoa(i+1) + "_1", true);
-  DelComponent(dendrite->GetLongName(this));
+  std::shared_ptr<NPulseMembrane> dendrite = CompNeuron->GetComponentL<NPulseMembrane>("Dendrite" + sntoa(i+1) + "_1", true);
+  DelComponent(dendrite->GetLongName(GetThisAsSharedContainer()));
  }
 
  if(CompNeuron->StructureBuildMode != 2)
@@ -317,12 +317,12 @@ bool NSeqComparison::ABuild(void)
  CompNeuron->Reset();
 
 
- // Строим связи между генераторами и синапсами нейрона
+ // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for (int i = 0; i < NumClasses; i++)
  {
-  UEPtr<NPulseMembrane> dendrite = CompNeuron->GetComponentL<NPulseMembrane>("Dendrite" + sntoa(i+1) + "_1", true);
-  UEPtr<NPulseMembrane> soma = CompNeuron->GetComponentL<NPulseMembrane>("Soma" + sntoa(i+1), true);
-  // Заменить excsynapse, если нужно сделать связь на дендрит
+  std::shared_ptr<NPulseMembrane> dendrite = CompNeuron->GetComponentL<NPulseMembrane>("Dendrite" + sntoa(i+1) + "_1", true);
+  std::shared_ptr<NPulseMembrane> soma = CompNeuron->GetComponentL<NPulseMembrane>("Soma" + sntoa(i+1), true);
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ excsynapse, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 //  NPulseSynapseCommon *excsynapse = dendrite->GetExcitatorySynapses(0);
   NPulseSynapseCommon *excsynapse = soma->GetExcitatorySynapses(0);
   NPulseSynapseCommon *inhsynapse = soma->GetInhibitorySynapses(0);
@@ -333,11 +333,11 @@ bool NSeqComparison::ABuild(void)
    return true;
   }
 
-  if (!CheckLink(KFClsSpikes[i]->GetLongName(this), "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink(KFClsSpikes[i]->GetLongName(this), "Output", excsynapse->GetLongName(this), "Input");
+  if (!CheckLink(KFClsSpikes[i]->GetLongName(GetThisAsSharedContainer()), "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink(KFClsSpikes[i]->GetLongName(GetThisAsSharedContainer()), "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  if (!CheckLink(FrClsSpikes[i]->GetLongName(this), "Output", inhsynapse->GetLongName(this), "Input"))
-   res &= CreateLink(FrClsSpikes[i]->GetLongName(this), "Output", inhsynapse->GetLongName(this), "Input");
+  if (!CheckLink(FrClsSpikes[i]->GetLongName(GetThisAsSharedContainer()), "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink(FrClsSpikes[i]->GetLongName(GetThisAsSharedContainer()), "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
  }
 
  return res;
@@ -353,7 +353,7 @@ bool NSeqComparison::AReset(void)
 
  size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
- // Настраиваем генераторы образов
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->Amplitude = Amplitude;
@@ -369,8 +369,8 @@ bool NSeqComparison::AReset(void)
   FrClsSpikes[i]->Reset();
  }
 
- // Настраиваем порог генераторной зоны нейрона И
- UEPtr<NLTZone> ltzone = CompNeuron->GetComponentL<NLTZone>("LTZone", true);
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ
+ std::shared_ptr<NLTZone> ltzone = CompNeuron->GetComponentL<NLTZone>("LTZone", true);
  ltzone->Threshold = LTZThreshold;
  CompNeuron->UseAverageLTZonePotential = false;
  CompNeuron->Reset();

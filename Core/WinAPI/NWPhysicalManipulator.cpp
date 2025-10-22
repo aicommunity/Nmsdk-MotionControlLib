@@ -460,7 +460,7 @@ void NWPhysicalManipulator::SendCommand(void)
 	PulseState.resize(NumInputs-1);
 	for(size_t i=0;i<PulseState.size();i++)
 	{
-	 const UEPtr<const UItemData>& item=GetInputData(i+1);
+	 const std::shared_ptr<const UItemData>& item=GetInputData(i+1);
 	 if(item)
 	 {
 	  double curval=item->Double[0];

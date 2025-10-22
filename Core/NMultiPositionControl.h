@@ -65,7 +65,7 @@ RDK::ULProperty<double, NMultiPositionControl> PostInputThreshold;
 RDK::ULProperty<bool, NMultiPositionControl> PrebuildStructure;
 
 protected:
-std::vector<UEPtr<NPositionControlElement>> PositionControlElement;
+std::vector<std::shared_ptr<NPositionControlElement>> PositionControlElement;
 
 public: // Ìועמהû
 // --------------------------

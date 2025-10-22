@@ -90,7 +90,7 @@ vector<vector<UNet*> > RightGenerators;
 //Выход для подключения к MultiPositionControl
 UPropertyOutputData<MDMatrix<double>, NNewPositionControlElement> Output;
 
-UEPtr<NEngineMotionControl> MotionControlElement;
+std::shared_ptr<NEngineMotionControl> MotionControlElement;
 
 public: // Методы
 // --------------------------

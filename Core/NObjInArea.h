@@ -69,28 +69,28 @@ UPropertyOutputData<MDMatrix<double>, NObjInArea, ptOutput | ptPubState> Output;
 
 protected: // Данные
  /// Генераторы спайковых образов классов
- std::vector<UEPtr <NPulseGeneratorMulti>> ClsSpikeFr;
+ std::vector<std::shared_ptr <NPulseGeneratorMulti>> ClsSpikeFr;
 
  /// Старое значение количества классов объектов, необходимое для перестраивания компонента
  int OldNumObj;
 
  /// Блок подавления 1
- UEPtr <NSuppressionUnit> SuppressUnit1;
+ std::shared_ptr <NSuppressionUnit> SuppressUnit1;
 
  /// Блок подавления 2
- UEPtr <NSuppressionUnit> SuppressUnit2;
+ std::shared_ptr <NSuppressionUnit> SuppressUnit2;
 
  /// Нейрон ИЛИ
- UEPtr <NPulseNeuron> ORNeuron;
+ std::shared_ptr <NPulseNeuron> ORNeuron;
 
  /// Нейрон И
- UEPtr <NPulseNeuron> ANDNeuron;
+ std::shared_ptr <NPulseNeuron> ANDNeuron;
 
  /// Решающий нейрон
- UEPtr <NPulseNeuron> DecidingNeuron;
+ std::shared_ptr <NPulseNeuron> DecidingNeuron;
 
  /// Возбуждающий генератор
- UEPtr <NPulseGeneratorTransit> ExcitatoryGen;
+ std::shared_ptr <NPulseGeneratorTransit> ExcitatoryGen;
 
  // Флаг для изменения входных связей ExcitatoryGen
  bool Relinked;
@@ -122,12 +122,12 @@ protected:
  /// Выполняет завершающие пользовательские действия
  /// при добавлении дочернего компонента в этот объект
  // Метод будет вызван только если comp был успешно добавлен в список компонент
- virtual bool AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer = 0);
+ virtual bool AAddComponent(std::shared_ptr<UContainer> comp, std::shared_ptr<UIPointer> pointer = 0);
 
  /// Выполняет предварительные пользовательские действия
  /// при удалении дочернего компонента из этого объекта
  // Метод будет вызван только если comp существует в списке компонент
- virtual bool ADelComponent(UEPtr<UContainer> comp);
+ virtual bool ADelComponent(std::shared_ptr<UContainer> comp);
 
  // --------------------------
 

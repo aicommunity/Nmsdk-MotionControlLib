@@ -71,8 +71,8 @@ bool NMazeMemory::SetFeaturesNum(const int &value)
  SituationCoords.Resize(value,1);
  for (int j = 0; j<int(MultiPCs.size()); j++)
  {
-     //UEPtr<NNeuronTrainerMemory> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainerMemory>("InputNeuron1-1", true);
-     UEPtr<NNeuronTrainer> neuron_trainer = GetComponentL<NNeuronTrainer>("NNeuronTrainer"+sntoa(j), true);
+     //std::shared_ptr<NNeuronTrainerMemory> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainerMemory>("InputNeuron1-1", true);
+     std::shared_ptr<NNeuronTrainer> neuron_trainer = GetComponentL<NNeuronTrainer>("NNeuronTrainer"+sntoa(j), true);
      if (neuron_trainer)
      {
          neuron_trainer->NumInputDendrite = value; //������ ��������� � InputPattern
@@ -92,8 +92,8 @@ bool NMazeMemory::SetSituationCoords(const MDMatrix<double> &value)
 {
     for (int cnt = 0; cnt<int(NTrainers.size()); cnt++)
     {
-        //UEPtr<NNeuronTrainer> neuron_trainer = GetComponentL<NNeuronTrainer>("NeuronTrainer"+sntoa(cnt), true);
-        UEPtr<NNeuronTrainer> neuron_trainer = NTrainers[cnt];
+        //std::shared_ptr<NNeuronTrainer> neuron_trainer = GetComponentL<NNeuronTrainer>("NeuronTrainer"+sntoa(cnt), true);
+        std::shared_ptr<NNeuronTrainer> neuron_trainer = NTrainers[cnt];
         if (neuron_trainer)
         {
             neuron_trainer->NumInputDendrite = value.GetRows(); //������ ��������� � InputPattern
@@ -129,7 +129,7 @@ UComponent* NMazeMemory::NewStatic(void)
 // ��� ���������� ��������� ���������� � ���� ������
 // ����� ����� ������ ������ ���� comp ���
 // ������� �������� � ������ ���������
-bool NMazeMemory::AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer)
+bool NMazeMemory::AAddComponent(std::shared_ptr<UContainer> comp, std::shared_ptr<UIPointer> pointer)
 {
 
  return true;
@@ -139,7 +139,7 @@ bool NMazeMemory::AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer
 // ��� �������� ��������� ���������� �� ����� �������
 // ����� ����� ������ ������ ���� comp
 // ���������� � ������ ���������
-bool NMazeMemory::ADelComponent(UEPtr<UContainer> comp)
+bool NMazeMemory::ADelComponent(std::shared_ptr<UContainer> comp)
 {
 
  return true;
@@ -209,7 +209,7 @@ bool NMazeMemory::ABuild(void)
 
       //��������� �������� ������� ����������
       MVector<double,3> root_coords = {5.0, 5.0, 0};
-      UEPtr<NTrajectoryElement> root = CreatePoint(root_coords);
+      std::shared_ptr<NTrajectoryElement> root = CreatePoint(root_coords);
       BaseTE = root;
       //PassedTEs.push_back(root);
    }
@@ -232,7 +232,7 @@ bool NMazeMemory::ACalculate(void)
 
         //���������, ���� �� ����� �� "����"
         bool response = false;
-        UEPtr<NTrajectoryElement> responding_TE;
+        std::shared_ptr<NTrajectoryElement> responding_TE;
 
         int max_layer = 0;
         for (int j = 0; j< int(MultiPCs.size()); j++)
@@ -240,8 +240,8 @@ bool NMazeMemory::ACalculate(void)
             //���������, ���� �� ����� ����� ���� ��� ����
             if (TrajectoryElements[j]->Layer - BaseTE->Layer > 1)
             {
-                UEPtr<NPulseNeuron> neuron = MultiPCs[j]->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
-                UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+                std::shared_ptr<NPulseNeuron> neuron = MultiPCs[j]->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
+                std::shared_ptr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
                 if(!ltzone)
                     return true;
 
@@ -252,7 +252,7 @@ bool NMazeMemory::ACalculate(void)
                     {
                         max_layer = TrajectoryElements[j]->Layer;
                         responding_TE = TrajectoryElements[j];
-                        string check_responding_name = string(responding_TE->GetLongName(this));
+                        string check_responding_name = string(responding_TE->GetLongName(GetThisAsSharedContainer()));
                     }
                 }
             }
@@ -269,7 +269,7 @@ bool NMazeMemory::ACalculate(void)
         {
             //��� ������� � ������ w  = 0.2
             //int check_path_n = BaseTE->LastUsedPath;
-            string check_lu_paths = string(BaseTE->Paths[BaseTE->LastUsedPath]->GetLongName(this));
+            string check_lu_paths = string(BaseTE->Paths[BaseTE->LastUsedPath]->GetLongName(GetThisAsSharedContainer()));
 
             BaseTE->Paths[BaseTE->LastUsedPath]->Weight=0.2;
             BaseTE->LastUsedPath++;
@@ -296,7 +296,7 @@ bool NMazeMemory::ACalculate(void)
         //��������� �����, ������� ������� ��� "�����"
         NameT fin = BaseMPC->GetName()+".PreControlNeuron1.Soma1.ExcSynapse1";
         bool res(true);
-        res&=BreakLink(BaseTE->GetLongName(this),"Output", fin,"Input");
+        res&=BreakLink(BaseTE->GetLongName(GetThisAsSharedContainer()),"Output", fin,"Input");
         if(!res)
             return true;
 
@@ -307,7 +307,7 @@ bool NMazeMemory::ACalculate(void)
 
         CurrentNT = GetComponentL<NNeuronTrainer>("NeuronTrainer"+sntoa(num), true);
         NameT post_input = BaseMPC->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
-        res&=CreateLink(CurrentNT->GetLongName(this),"Output", post_input,"Input");
+        res&=CreateLink(CurrentNT->GetLongName(GetThisAsSharedContainer()),"Output", post_input,"Input");
         if(!res)
             return true;
 
@@ -339,17 +339,17 @@ bool NMazeMemory::ACalculate(void)
         //w �������� ����� �� ��(i-1) = 1
         int num = int(BaseTE->Paths.size())-1;
         string check_BaseTE_n = BaseTE->GetName();
-        string check_Path_n = BaseTE->Paths[num]->GetLongName(this);
+        string check_Path_n = BaseTE->Paths[num]->GetLongName(GetThisAsSharedContainer());
         BaseTE->Paths[num]->Weight = 1; //����� ������ �� D1_5 - �.�. ������, ���������
 
         //w ���� ������ �� ���� ��(i) = 0.2
-        UEPtr<NPulseNeuron> neuron1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
-        UEPtr<NPulseMembrane> dend1_5 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_5",true);
+        std::shared_ptr<NPulseNeuron> neuron1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
+        std::shared_ptr<NPulseMembrane> dend1_5 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_5",true);
         int max = dend1_5->NumExcitatorySynapses;
         for (int i = 0; i<max; i++)
         {
-            UEPtr<NPulseSynapse> synapse = dend1_5->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i+1),true);
-            string check_syn_n = synapse->GetLongName(this);
+            std::shared_ptr<NPulseSynapse> synapse = dend1_5->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i+1),true);
+            string check_syn_n = synapse->GetLongName(GetThisAsSharedContainer());
             synapse->Weight = 0.2;
         }
 
@@ -361,7 +361,7 @@ bool NMazeMemory::ACalculate(void)
             int num = int(name[18]-'0');
             string check_name_nt = "NeuronTrainer"+sntoa(num);
 
-            UEPtr<NNeuronTrainer> neuron_trainer = GetComponentL<NNeuronTrainer>("NeuronTrainer"+sntoa(num), true);
+            std::shared_ptr<NNeuronTrainer> neuron_trainer = GetComponentL<NNeuronTrainer>("NeuronTrainer"+sntoa(num), true);
             if(!((neuron_trainer)&&(neuron_trainer->IsNeedToTrain==false)))
             {
                 done = false;
@@ -375,8 +375,8 @@ bool NMazeMemory::ACalculate(void)
     //��������� � ���������� �������� ���������� (��������� CurrentTE)
     for(int i = 0; i<int(TrajectoryElements.size()); i++)
     {
-        UEPtr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
-        UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+        std::shared_ptr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
+        std::shared_ptr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
         if(!ltzone)
             return true;
 
@@ -388,7 +388,7 @@ bool NMazeMemory::ACalculate(void)
             //��������� LastUsedPath (CurrentForward)
             for(int j = 0; j<int(BaseTE->Paths.size()); j++)
             {
-                string name = string(BaseTE->Paths[j]->GetLongName(this));// ��� �������
+                string name = string(BaseTE->Paths[j]->GetLongName(GetThisAsSharedContainer()));// ��� �������
                 //if (name==currentf_name)
                 //int check_comparison = name.compare(0, currentf_name.length(), currentf_name);
                 if (name.compare(0, currentf_name.length(), currentf_name)==0)
@@ -487,7 +487,7 @@ bool NMazeMemory::ACalculate(void)
        }
        else // ���� ���� ��������� �����������
        {
-         UEPtr<NTrajectoryElement> traj_el;
+         std::shared_ptr<NTrajectoryElement> traj_el;
          MVector<double,3> base_coords = BaseTE->GetCoord();
          CurrentLayer++;
          LinkPoint(traj_el, base_coords, OptionsNum);//������� TE+MultiPC � ����������� �����
@@ -498,7 +498,7 @@ bool NMazeMemory::ACalculate(void)
        int num = int(name[18]-'0');
        string check_name_nt = "NeuronTrainer"+sntoa(num);
 
-       UEPtr<NNeuronTrainer> neuron_trainer = AddMissingComponent<NNeuronTrainer>(std::string("NeuronTrainer"+sntoa(num)), "NNeuronTrainer");
+       std::shared_ptr<NNeuronTrainer> neuron_trainer = AddMissingComponent<NNeuronTrainer>(std::string("NeuronTrainer"+sntoa(num)), "NNeuronTrainer");
        MVector<double,3> base_coords = BaseTE->GetCoord();
        neuron_trainer->SetCoord(MVector<double,3>(base_coords[0], base_coords[1]+4.0, 0));
        neuron_trainer->NumInputDendrite = FeaturesNum;
@@ -524,12 +524,12 @@ bool NMazeMemory::ACalculate(void)
 
        //������� ��� �������� ����� ��� "�����"
        string check_baseMPC = string(BaseMPC->GetName());
-       UEPtr<NPulseNeuron> precontrol_n = BaseMPC->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
-       UEPtr<NPulseMembrane> precontrol_soma = precontrol_n->GetComponentL<NPulseMembrane>("Soma1", true);
+       std::shared_ptr<NPulseNeuron> precontrol_n = BaseMPC->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
+       std::shared_ptr<NPulseMembrane> precontrol_soma = precontrol_n->GetComponentL<NPulseMembrane>("Soma1", true);
        for(int i = 0; i < precontrol_soma->NumExcitatorySynapses(); i++)
        {
-           UEPtr<NPulseSynapse> pc_synapse = precontrol_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i+1),true);
-           string check_pc_synapse = string(pc_synapse->GetLongName(this));
+           std::shared_ptr<NPulseSynapse> pc_synapse = precontrol_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i+1),true);
+           string check_pc_synapse = string(pc_synapse->GetLongName(GetThisAsSharedContainer()));
            if (pc_synapse)
                pc_synapse->DisconnectAllItems();
        }
@@ -551,19 +551,19 @@ bool NMazeMemory::ACalculate(void)
         PrevTE->Paths[PrevTE->LastUsedPath]->Weight = 0.2;
 
         //int check_lastusedpath = PrevTE->LastUsedPath;
-        string check_paths = string(PrevTE->Paths[PrevTE->LastUsedPath]->GetLongName(this));
+        string check_paths = string(PrevTE->Paths[PrevTE->LastUsedPath]->GetLongName(GetThisAsSharedContainer()));
 
         //������ "����"
         NameT fin = BaseMPC->GetName()+".PreControlNeuron1.Soma1.ExcSynapse1";
         string check_fin = string(fin);
         bool res(true);
-        res&=CreateLink(BaseTE->GetLongName(this),"Output", fin,"Input");
+        res&=CreateLink(BaseTE->GetLongName(GetThisAsSharedContainer()),"Output", fin,"Input");
         if(!res)
           return true;
 
         //��� �������
-        UEPtr<NPulseNeuron> check_n1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
-        UEPtr<NPulseLTZoneCommon> check_ltz1 = check_n1->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+        std::shared_ptr<NPulseNeuron> check_n1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
+        std::shared_ptr<NPulseLTZoneCommon> check_ltz1 = check_n1->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
         double check_base_activity = check_ltz1->OutputFrequency->As<double>(0);
         if (check_base_activity>0)
         {}
@@ -583,11 +583,11 @@ bool NMazeMemory::ACalculate(void)
 
 
 
-UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
+std::shared_ptr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
   {
-   UEPtr<UContainer> cont;
-   UEPtr<UStorage> storage(GetStorage().get());
-   UEPtr<NTrajectoryElement> traj_el;
+   std::shared_ptr<UContainer> cont;
+   std::shared_ptr<UStorage> storage(GetStorage().get());
+   std::shared_ptr<NTrajectoryElement> traj_el;
 
 
 
@@ -626,7 +626,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
    AddComponent(cont);
 
    //��������� ����� MultiPC
-   UEPtr<NMultiPositionControl> multi_pc = dynamic_pointer_cast<NMultiPositionControl>(cont);
+   std::shared_ptr<NMultiPositionControl> multi_pc = dynamic_pointer_cast<NMultiPositionControl>(cont);
    MultiPCs.push_back(multi_pc);
    multi_pc->BuildSolo = true;
    multi_pc->ExternalControl = false;
@@ -634,38 +634,38 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
    multi_pc->InputsNum = 1;//����� InputNeurons, ���� InputNeuronsType = NSPNeuronGen (�.�. �������� ��������������� ������� �������� ���������)
    multi_pc->PrebuildStructure = true;
    multi_pc->Reset();
-   string check_multipc = multi_pc->GetLongName(this);
+   string check_multipc = multi_pc->GetLongName(GetThisAsSharedContainer());
 
    //���������� ������ �� PostInputNeuron � TrajectoryElement
    bool res(true);
 
-   UEPtr<NPulseNeuron> postinput = multi_pc->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
-   string check_postinput = postinput->GetLongName(this);
-   UEPtr<NPulseLTZoneCommon> ltzone = postinput->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
-   string check_ltzone = ltzone->GetLongName(this);
+   std::shared_ptr<NPulseNeuron> postinput = multi_pc->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
+   string check_postinput = postinput->GetLongName(GetThisAsSharedContainer());
+   std::shared_ptr<NPulseLTZoneCommon> ltzone = postinput->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+   string check_ltzone = ltzone->GetLongName(GetThisAsSharedContainer());
 
   //       if(!ltzone)
   //           return true;
 
-   UEPtr<NPulseNeuron> neuron1 = traj_el->GetComponentL<NPulseNeuron>("Neuron1", true);
-   UEPtr<NPulseSynapse> synapse = neuron1->GetComponentL<NPulseSynapse>("Dendrite1_1.InhSynapse1",true);
-   res&=CreateLink(ltzone->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+   std::shared_ptr<NPulseNeuron> neuron1 = traj_el->GetComponentL<NPulseNeuron>("Neuron1", true);
+   std::shared_ptr<NPulseSynapse> synapse = neuron1->GetComponentL<NPulseSynapse>("Dendrite1_1.InhSynapse1",true);
+   res&=CreateLink(ltzone->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
    //      if(!res)
    //       return true;
 
    synapse = neuron1->GetComponentL<NPulseSynapse>("Dendrite1_3.InhSynapse1",true);
-   res&=CreateLink(ltzone->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+   res&=CreateLink(ltzone->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
    //      if(!res)
    //       return true;
 
-   UEPtr<NPulseNeuron> neuron2 = traj_el->GetComponentL<NPulseNeuron>("Neuron2", true);
+   std::shared_ptr<NPulseNeuron> neuron2 = traj_el->GetComponentL<NPulseNeuron>("Neuron2", true);
    synapse = neuron2->GetComponentL<NPulseSynapse>("Dendrite1_1.InhSynapse1",true);
-   res&=CreateLink(ltzone->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+   res&=CreateLink(ltzone->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
    //      if(!res)
    //       return true;
 
    synapse = neuron2->GetComponentL<NPulseSynapse>("Dendrite1_3.InhSynapse1",true);
-   res&=CreateLink(ltzone->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+   res&=CreateLink(ltzone->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
    //      if(!res)
    //       return true;
 
@@ -673,22 +673,22 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
   }
 
 
- bool NMazeMemory:: LinkPoint(UEPtr<NTrajectoryElement> traj_el,  MVector<double,3> base_coords, int options_num)
+ bool NMazeMemory:: LinkPoint(std::shared_ptr<NTrajectoryElement> traj_el,  MVector<double,3> base_coords, int options_num)
  {
-     UEPtr<NPulseNeuron> base_neuron = TrajectoryElements[CurrentTE]->GetComponentL<NPulseNeuron>("Neuron1", true);
-     UEPtr<NLTZone> ltzone_te = base_neuron->GetComponentL<NLTZone>("LTZone", true);
+     std::shared_ptr<NPulseNeuron> base_neuron = TrajectoryElements[CurrentTE]->GetComponentL<NPulseNeuron>("Neuron1", true);
+     std::shared_ptr<NLTZone> ltzone_te = base_neuron->GetComponentL<NLTZone>("LTZone", true);
      if(!ltzone_te)
          return true;
 
      //��������� ������� �� ������� �� ��� �������� ������ �� ����
-     UEPtr<NPulseMembrane> base_soma = base_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+     std::shared_ptr<NPulseMembrane> base_soma = base_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
      if (CurrentTE==0)
          base_soma->NumExcitatorySynapses = options_num+1; //�������������� ������ �� ������ �� - ��� ������������ ������� � ������� ������ ��
      else
          base_soma->NumExcitatorySynapses = options_num;
      base_soma->Reset();
      //�� N1_D1_2
-     UEPtr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
+     std::shared_ptr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
      base_dend->NumExcitatorySynapses = options_num;
      base_dend->Reset();
 
@@ -711,12 +711,12 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
      //������ ����� �� �������� �������� ���������� �� ������ ��� ���������
      bool res(true);
      //������������ ����������� �� N1_D5_syn1
-     UEPtr<NPulseNeuron> input_neuron = traj_el->GetComponentL<NPulseNeuron>("Neuron1", true);
-     UEPtr<NPulseSynapse> synapse = input_neuron->GetComponentL<NPulseSynapse>("Dendrite1_5.ExcSynapse1",true);
+     std::shared_ptr<NPulseNeuron> input_neuron = traj_el->GetComponentL<NPulseNeuron>("Neuron1", true);
+     std::shared_ptr<NPulseSynapse> synapse = input_neuron->GetComponentL<NPulseSynapse>("Dendrite1_5.ExcSynapse1",true);
      if (possible_action_num>1)
      {
          synapse->Weight = SideWeight;
-         string check_sn = synapse->GetLongName(this);
+         string check_sn = synapse->GetLongName(GetThisAsSharedContainer());
      }
      else
      {
@@ -724,20 +724,20 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
          traj_el->LastUsedPath = 0;
 
      }
-     res&=CreateLink(BaseTE->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+     res&=CreateLink(BaseTE->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
      if(!res)
          return true;
      BaseTE->Paths.push_back(synapse);
 
      //��������� ����������� �� N1_S1_syn1
      synapse = input_neuron->GetComponentL<NPulseSynapse>("Soma1.InhSynapse1",true);
-     res&=CreateLink(BaseTE->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+     res&=CreateLink(BaseTE->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
      if(!res)
          return true;
      //��������� ����������� �� N2_S1_syn1
      input_neuron = traj_el->GetComponentL<NPulseNeuron>("Neuron2", true);
      synapse = input_neuron->GetComponentL<NPulseSynapse>("Soma1.InhSynapse1",true);
-     res&=CreateLink(BaseTE->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+     res&=CreateLink(BaseTE->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
      if(!res)
          return true;
 
@@ -753,17 +753,17 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
      else
          syn_num = possible_action_num;
      synapse = base_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(syn_num),true);
-     string check_s1 = synapse->GetLongName(this);
+     string check_s1 = synapse->GetLongName(GetThisAsSharedContainer());
      synapse->Weight = 0.2;
-     res&=CreateLink(traj_el->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+     res&=CreateLink(traj_el->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
      if(!res)
          return true;
 
      //�� N1_D1_2
      synapse = base_neuron->GetComponentL<NPulseSynapse>("Dendrite1_2.ExcSynapse"+sntoa(possible_action_num),true);
-     string check_s2 = synapse->GetLongName(this);
+     string check_s2 = synapse->GetLongName(GetThisAsSharedContainer());
      synapse->Weight = 0.2;
-     res&=CreateLink(traj_el->GetLongName(this),"Output",synapse->GetLongName(this),"Input");
+     res&=CreateLink(traj_el->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
      if(!res)
          return true;
      traj_el->Paths.push_back(synapse);
@@ -773,34 +773,34 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
      size_t passed_max = PassedTEs.size();
      for (size_t j=0; j<passed_max; j++)
      {   
-         UEPtr<NMultiPositionControl> output_mpc = MultiPCs[j];
-         UEPtr<NPulseNeuron> output_postinputn = output_mpc->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
-         UEPtr<NLTZone> output_ltzone = output_postinputn->GetComponentL<NLTZone>("LTZone", true);
+         std::shared_ptr<NMultiPositionControl> output_mpc = MultiPCs[j];
+         std::shared_ptr<NPulseNeuron> output_postinputn = output_mpc->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
+         std::shared_ptr<NLTZone> output_ltzone = output_postinputn->GetComponentL<NLTZone>("LTZone", true);
          if (!output_ltzone)
              return false;
 
-         UEPtr<NMultiPositionControl> input_mpc = MultiPCs[int(MultiPCs.size())-1];//���������
-         UEPtr<NPulseNeuron> input_precontroln = input_mpc->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
-         UEPtr<NPulseMembrane> input_soma = input_precontroln->GetComponentL<NPulseMembrane>("Soma1", true);
+         std::shared_ptr<NMultiPositionControl> input_mpc = MultiPCs[int(MultiPCs.size())-1];//���������
+         std::shared_ptr<NPulseNeuron> input_precontroln = input_mpc->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
+         std::shared_ptr<NPulseMembrane> input_soma = input_precontroln->GetComponentL<NPulseMembrane>("Soma1", true);
          if (!input_soma)
              return false;
 
 
          //���� ��� �������
          string check_outp_mpc = string(output_mpc->GetName());
-         string check_output_postinputn = string(output_mpc->GetLongName(this));
-         string check_output_ltzone = string(output_ltzone->GetLongName(this));
+         string check_output_postinputn = string(output_mpc->GetLongName(GetThisAsSharedContainer()));
+         string check_output_ltzone = string(output_ltzone->GetLongName(GetThisAsSharedContainer()));
 
          string check_inp_mpc = string(input_mpc->GetName());
-         string check_input_precontroln = string(input_precontroln->GetLongName(this));
-         string check_input_soma = string(input_soma->GetLongName(this));
+         string check_input_precontroln = string(input_precontroln->GetLongName(GetThisAsSharedContainer()));
+         string check_input_soma = string(input_soma->GetLongName(GetThisAsSharedContainer()));
 
 
 
          int syn_num = input_soma->NumExcitatorySynapses;
          for (int i = 1; i<=syn_num; i++)
          {
-             UEPtr<NPulseSynapse> syn = input_precontroln->GetComponentL<NPulseSynapse>("Soma1.ExcSynapse"+sntoa(i),true);
+             std::shared_ptr<NPulseSynapse> syn = input_precontroln->GetComponentL<NPulseSynapse>("Soma1.ExcSynapse"+sntoa(i),true);
              if(!syn)
                  return true;
 
@@ -818,7 +818,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
              }
              else
              {
-                 res&=CreateLink(output_ltzone->GetLongName(this),"Output",syn->GetLongName(this),"Input");
+                 res&=CreateLink(output_ltzone->GetLongName(GetThisAsSharedContainer()),"Output",syn->GetLongName(GetThisAsSharedContainer()),"Input");
                  if(!res)
                      return true;
                  break;
@@ -827,12 +827,12 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
      }
 
      //����� �� ������� ��������
-     UEPtr<NPulseMembrane> action_soma = ActionNeurons[input_action]->GetComponentL<NPulseMembrane>("Soma1",true);
+     std::shared_ptr<NPulseMembrane> action_soma = ActionNeurons[input_action]->GetComponentL<NPulseMembrane>("Soma1",true);
      int syn_max_num = action_soma->NumExcitatorySynapses;
      for (int i = 1; i<=syn_max_num; i++)
      {
-         UEPtr<NPulseSynapse> action_syn = action_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
-         string check_act_name = action_soma->GetLongName(this);
+         std::shared_ptr<NPulseSynapse> action_syn = action_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
+         string check_act_name = action_soma->GetLongName(GetThisAsSharedContainer());
 
          if (action_syn->Input.IsConnected())
          {
@@ -846,7 +846,7 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
          }
          else
          {
-             res&=CreateLink(traj_el->GetLongName(this),"Output",action_syn->GetLongName(this),"Input");
+             res&=CreateLink(traj_el->GetLongName(GetThisAsSharedContainer()),"Output",action_syn->GetLongName(GetThisAsSharedContainer()),"Input");
              if(!res)
                  return true;
              break;
@@ -857,20 +857,20 @@ UEPtr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
  }
 
 
-bool NMazeMemory::CheckActiveForwards(UEPtr<NTrajectoryElement> t_element)
+bool NMazeMemory::CheckActiveForwards(std::shared_ptr<NTrajectoryElement> t_element)
 {
   int max = int(t_element->Forwards.size());
   for(int i = 0; i<max; i++)
   {
     string checknname = t_element->Forwards[i]->GetName();
-    UEPtr<NPulseNeuron> neuron = t_element->Forwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
+    std::shared_ptr<NPulseNeuron> neuron = t_element->Forwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
     if(!neuron)
         return false;
-    UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+    std::shared_ptr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
     if(!ltzone)
       return false;
 
-    string check_ltz = ltzone->GetLongName(this);
+    string check_ltz = ltzone->GetLongName(GetThisAsSharedContainer());
     //double check_frequency = ltzone->OutputFrequency->As<double>(0);
     if(ltzone->OutputFrequency->As<double>(0) >0)
     {
@@ -887,8 +887,8 @@ int NMazeMemory::CheckActivePIs()
     int active_index = -1;
     for(int i = 0; i<CurrentTE; i++)
     {
-        UEPtr<NPulseNeuron> neuron = MultiPCs[i]->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
-        UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+        std::shared_ptr<NPulseNeuron> neuron = MultiPCs[i]->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
+        std::shared_ptr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
         //if(!ltzone)
         //return active_PIs;
 
@@ -923,16 +923,16 @@ bool NMazeMemory::MergingTEs(int active_index)
           //����������� ��� �������� ������ �� ������� TE
           //�� ����
           NameT start_name =  BaseTE->GetName();
-          UEPtr<NPulseNeuron> prev_neuron = PrevTE->GetComponentL<NPulseNeuron>("Neuron1", true);
-          UEPtr<NPulseMembrane> prev_dend = prev_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+          std::shared_ptr<NPulseNeuron> prev_neuron = PrevTE->GetComponentL<NPulseNeuron>("Neuron1", true);
+          std::shared_ptr<NPulseMembrane> prev_dend = prev_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
           if(!prev_dend)
               return true;
           for (int i = 1; i<= prev_dend->NumExcitatorySynapses; i++)
           {
-              UEPtr<NPulseSynapse> syn = prev_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
+              std::shared_ptr<NPulseSynapse> syn = prev_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
               if(!syn)
                   return true;
-              NameT finish_name = syn->GetLongName(this);
+              NameT finish_name = syn->GetLongName(GetThisAsSharedContainer());
               if(CheckLink(start_name,finish_name))
                   syn->Weight = 1;
           }
@@ -942,10 +942,10 @@ bool NMazeMemory::MergingTEs(int active_index)
               return true;
           for (int i = 1; i<= prev_dend->NumExcitatorySynapses; i++)
           {
-              UEPtr<NPulseSynapse> syn = prev_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
+              std::shared_ptr<NPulseSynapse> syn = prev_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
               if(!syn)
                   return true;
-              NameT finish_name = syn->GetLongName(this);
+              NameT finish_name = syn->GetLongName(GetThisAsSharedContainer());
               if(CheckLink(start_name,finish_name))
                   syn->Weight = 1;
           }
@@ -954,8 +954,8 @@ bool NMazeMemory::MergingTEs(int active_index)
           bool res(true);
           NameT active_PI = MultiPCs[active_index]->GetName()+".PostInputNeuron1.Soma1.ExcSynapse1";
           string check_actNT = string(active_PI);
-          string check_NT = string(CurrentNT->GetLongName(this));
-          res&=BreakLink(CurrentNT->GetLongName(this),"Output", active_PI,"Input");
+          string check_NT = string(CurrentNT->GetLongName(GetThisAsSharedContainer()));
+          res&=BreakLink(CurrentNT->GetLongName(GetThisAsSharedContainer()),"Output", active_PI,"Input");
           if(!res)
               return true;
 
@@ -970,17 +970,17 @@ bool NMazeMemory::MergingTEs(int active_index)
 
       //���� ������� � ���������, � ������� ���� ������, ��� �� ������� ����
       //��������� ������� ����� � �������� �� �� ��������
-      NameT start = PrevTE->GetLongName(this);
+      NameT start = PrevTE->GetLongName(GetThisAsSharedContainer());
       bool res;
       NameT finish;
 
       //����������� ����������� �� N1_D1_5
-      UEPtr<NPulseNeuron> fin_neuron = ActivePIs[j]->GetComponentL<NPulseNeuron>("Neuron1", true);
-      UEPtr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_5", true);
+      std::shared_ptr<NPulseNeuron> fin_neuron = ActivePIs[j]->GetComponentL<NPulseNeuron>("Neuron1", true);
+      std::shared_ptr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_5", true);
       int dend_syns = fin_dend->NumExcitatorySynapses;
       for (int n = 1; n<=dend_syns; n++)
       {
-        UEPtr<NPulseSynapse> syn = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
+        std::shared_ptr<NPulseSynapse> syn = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
         if(!syn)
           return true;
 
@@ -997,7 +997,7 @@ bool NMazeMemory::MergingTEs(int active_index)
         else
         {
          //finish_name = ActivePIs[j]->GetName()+".Neuron1.Dendrite1_5.ExcSynapse"+sntoa(n);
-         finish = syn->GetLongName(this);
+            finish = syn->GetLongName(GetThisAsSharedContainer());
          res&=CreateLink(start,"Output",finish,"Input");
 //         if(!res)
 //          return true;
@@ -1006,11 +1006,11 @@ bool NMazeMemory::MergingTEs(int active_index)
       }
 
       //��������� ����������� �� N1_S1
-      UEPtr<NPulseMembrane> fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+      std::shared_ptr<NPulseMembrane> fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
       int soma_syn = fin_soma->NumInhibitorySynapses;
       for (int n = 1; n<=soma_syn; n++)
       {
-       UEPtr<NPulseSynapse> syn = fin_soma->GetComponentL<NPulseSynapse>("InhSynapse"+sntoa(n),true);
+       std::shared_ptr<NPulseSynapse> syn = fin_soma->GetComponentL<NPulseSynapse>("InhSynapse"+sntoa(n),true);
        if(!syn)
          return true;
 
@@ -1027,7 +1027,7 @@ bool NMazeMemory::MergingTEs(int active_index)
        else
        {
         //finish = ActivePIs[j]->GetName()+".Neuron1.Soma1.InhSynapse"+sntoa(n);
-        finish = syn->GetLongName(this);
+            finish = syn->GetLongName(GetThisAsSharedContainer());
         res&=CreateLink(start,"Output",finish,"Input");
         //if(!res)
         // return true;
@@ -1041,7 +1041,7 @@ bool NMazeMemory::MergingTEs(int active_index)
       soma_syn = fin_soma->NumInhibitorySynapses;
       for (int n = 1; n<=soma_syn; n++)
       {
-        UEPtr<NPulseSynapse> syn = fin_soma->GetComponentL<NPulseSynapse>("InhSynapse"+sntoa(n),true);
+        std::shared_ptr<NPulseSynapse> syn = fin_soma->GetComponentL<NPulseSynapse>("InhSynapse"+sntoa(n),true);
         if(!syn)
           return true;
 
@@ -1057,7 +1057,7 @@ bool NMazeMemory::MergingTEs(int active_index)
         }
         else
         {
-          finish = syn->GetLongName(this);
+            finish = syn->GetLongName(GetThisAsSharedContainer());
           //finish = ActivePIs[j]->GetName()+".Neuron1.Soma1.InhSynapse"+sntoa(n);
           res&=CreateLink(start,"Output",finish,"Input");
           //if(!res)
@@ -1067,18 +1067,18 @@ bool NMazeMemory::MergingTEs(int active_index)
       }
 
       //��������� �������� ����� � �������� �� �� ��������
-      start = ActivePIs[j]->GetLongName(this);
+      start = ActivePIs[j]->GetLongName(GetThisAsSharedContainer());
 
       size_t back_max = BaseTE->Backwards.size();
       for (size_t i = 0; i<back_max; i++)
       {
         //�� N1_D1_2
-        UEPtr<NPulseNeuron> fin_neuron = BaseTE->Backwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
-        UEPtr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
+        std::shared_ptr<NPulseNeuron> fin_neuron = BaseTE->Backwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
+        std::shared_ptr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
         int dend_syns = fin_dend->NumExcitatorySynapses;
         for (int n = 1; n<=dend_syns; n++)
         {
-          UEPtr<NPulseSynapse> syn = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
+          std::shared_ptr<NPulseSynapse> syn = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
           if(!syn)
             return true;
 
@@ -1095,7 +1095,7 @@ bool NMazeMemory::MergingTEs(int active_index)
           else
           {
            //finish_name = ActivePIs[j]->GetName()+".Neuron1.Dendrite1_5.ExcSynapse"+sntoa(n);
-           finish = syn->GetLongName(this);
+            finish = syn->GetLongName(GetThisAsSharedContainer());
            res&=CreateLink(start,"Output",finish,"Input");
     //       if(!res)
     //        return true;
@@ -1112,7 +1112,7 @@ bool NMazeMemory::MergingTEs(int active_index)
         soma_syn = fin_soma->NumExcitatorySynapses;
         for (int n = 1; n<=soma_syn; n++)
         {
-          UEPtr<NPulseSynapse> syn = fin_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
+          std::shared_ptr<NPulseSynapse> syn = fin_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
           if(!syn)
             return true;
 
@@ -1128,7 +1128,7 @@ bool NMazeMemory::MergingTEs(int active_index)
           }
           else
           {
-            finish = syn->GetLongName(this);
+            finish = syn->GetLongName(GetThisAsSharedContainer());
             //finish = ActivePIs[j]->GetName()+".Neuron1.Soma1.ExcSynapse"+sntoa(n);
             res&=CreateLink(start,"Output",finish,"Input");
             //if(!res)
@@ -1164,8 +1164,8 @@ bool NMazeMemory::UpdateCurrentTE()
     //��������� � ���������� �������� ���������� (��������� CurrentTE)
     for(int i = 0; i<int(TrajectoryElements.size()); i++)
     {
-        UEPtr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
-        UEPtr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+        std::shared_ptr<NPulseNeuron> neuron = TrajectoryElements[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
+        std::shared_ptr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
         if(!ltzone)
             return true;
 
@@ -1177,7 +1177,7 @@ bool NMazeMemory::UpdateCurrentTE()
             //��������� LastUsedPath (CurrentForward)
             for(int j = 0; j<int(BaseTE->Paths.size()); j++)
             {
-                string name = string(BaseTE->Paths[j]->GetLongName(this));// ��� �������
+                string name = string(BaseTE->Paths[j]->GetLongName(GetThisAsSharedContainer()));// ��� �������
                 //if (name==currentf_name)
                 //int check_comparison = name.compare(0, currentf_name.length(), currentf_name);
                 if (name.compare(0, currentf_name.length(), currentf_name)==0)
@@ -1205,13 +1205,13 @@ bool NMazeMemory::LastUsedLink()
     //��� �����, �� ������� ������ � ��� �����, w = 0,2
     //���� �������� ������ - �.�. �����, �� ������� ������ � ���� TE
     bool found = false;
-    UEPtr<NPulseNeuron> neuron1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
+    std::shared_ptr<NPulseNeuron> neuron1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
 
     //��������� �������� ����� �� N1_D1_5
-    UEPtr<NPulseMembrane> dend1_5 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_5",true);
+    std::shared_ptr<NPulseMembrane> dend1_5 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_5",true);
     for (int i = 1; i<=(dend1_5->NumExcitatorySynapses); i++)
     {
-      UEPtr<NPulseSynapse> synapse = dend1_5->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
+      std::shared_ptr<NPulseSynapse> synapse = dend1_5->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
       if (synapse->Output().As<double>(0)>0)
       {
           synapse->Weight=0.2; //���������!
@@ -1223,10 +1223,10 @@ bool NMazeMemory::LastUsedLink()
     if (!found)
     {
       //��������� �������� ����� (�� N1_D1_2)
-      UEPtr<NPulseMembrane> dend1_2 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_2",true);
+      std::shared_ptr<NPulseMembrane> dend1_2 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_2",true);
       for (int i = 1; i<=(dend1_2->NumExcitatorySynapses); i++)
       {
-        UEPtr<NPulseSynapse> synapse = dend1_2->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
+        std::shared_ptr<NPulseSynapse> synapse = dend1_2->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
         if (synapse->Output().As<double>(0)>0)
         {
             synapse->Weight=0.2; //���������!
@@ -1236,10 +1236,10 @@ bool NMazeMemory::LastUsedLink()
       }
 
       //��������� �������� ����� (�� N1_S1)
-      UEPtr<NPulseMembrane> soma1 = neuron1->GetComponentL<NPulseMembrane>("Soma1",true);
+      std::shared_ptr<NPulseMembrane> soma1 = neuron1->GetComponentL<NPulseMembrane>("Soma1",true);
       for (int i = 1; i<=(soma1->NumExcitatorySynapses); i++)
       {
-        UEPtr<NPulseSynapse> synapse = soma1->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
+        std::shared_ptr<NPulseSynapse> synapse = soma1->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
         if (synapse->Output().As<double>(0)>0)
         {
             synapse->Weight=0.2; //���������!
@@ -1265,7 +1265,7 @@ bool NMazeMemory::CallForResponse()
 bool NMazeMemory::DeadlockProcessing()//������� �������
 {
 //    //w �������� ����� �� ��(i-1) = 1
-//    UEPtr<NTrajectoryElement> PrevTE;
+//    std::shared_ptr<NTrajectoryElement> PrevTE;
 //    int k = PassedTEs.size()-2;
 //    if (k>=0)
 //    {
@@ -1274,9 +1274,9 @@ bool NMazeMemory::DeadlockProcessing()//������� ������
 //    }
 //    NameT start_name = PrevTE->GetName()+".Output";
 
-//    UEPtr<NPulseNeuron> fin_neuron = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
-//    UEPtr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
-//    UEPtr<NPulseMembrane> fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+//    std::shared_ptr<NPulseNeuron> fin_neuron = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
+//    std::shared_ptr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
+//    std::shared_ptr<NPulseMembrane> fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
 //    int check_dmax = fin_dend->NumExcitatorySynapses();
 
 //    for(int i=0; i< fin_dend->NumExcitatorySynapses(); i++)
@@ -1284,7 +1284,7 @@ bool NMazeMemory::DeadlockProcessing()//������� ������
 //      NameT finish_name = BaseTE->GetName()+".Neuron1.Dendrite1_2.ExcSynapse"+sntoa(i+1);
 //      if(CheckLink(start_name,finish_name))
 //      {
-//          UEPtr<NPulseSynapse> fin_synapse = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i), true);
+//          std::shared_ptr<NPulseSynapse> fin_synapse = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i), true);
 //          fin_synapse->Weight=1;
 
 //              //fin_synapse = fin_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i), true);
@@ -1293,11 +1293,11 @@ bool NMazeMemory::DeadlockProcessing()//������� ������
 //    }
 
 //    //w �������� ��(i) = 0,2
-//    UEPtr<NPulseNeuron> base_neuron = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
-//    UEPtr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_5", true);
+//    std::shared_ptr<NPulseNeuron> base_neuron = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
+//    std::shared_ptr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_5", true);
 //    for (int j=0; j<base_dend->NumExcitatorySynapses; j++)
 //    {
-//      UEPtr<NPulseSynapse> base_synapse = base_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(j), true);
+//      std::shared_ptr<NPulseSynapse> base_synapse = base_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(j), true);
 //      base_synapse->Weight=0.2;
 //    }
 

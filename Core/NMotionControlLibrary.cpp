@@ -24,7 +24,7 @@ namespace NMSDK {
 NMotionControlLibrary MotionControlLibrary;
 
 // --------------------------
-// Конструкторы и деструкторы
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 NMotionControlLibrary::NMotionControlLibrary(void)
  : ULibrary("MotionControlLibrary","1.0", GetGlobalVersion())
@@ -33,38 +33,38 @@ NMotionControlLibrary::NMotionControlLibrary(void)
 // --------------------------
 
 // --------------------------
-// Методы создания составных моделей
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 // --------------------------
 
 // --------------------------
-// Методы заполенения бибилиотеки
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Заполняет массив ClassSamples готовыми экземплярами образцов и их именами.
-// Не требуется предварительная очистка массива и уборка памяти.
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ ClassSamples пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+// пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ.
 void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 {
- UEPtr<RDK::UContainer> cont;
+ std::shared_ptr<UContainer> cont;
 
- cont=new NDCEngine;
+ cont=std::make_shared<NDCEngine>();
  cont->SetName("DCEngine");
  cont->Default();
  UploadClass("NDCEngine",cont);
 
- cont=new NPendulumAndCart;
+ cont=std::make_shared<NPendulumAndCart>();
  cont->SetName("PendulumAndCart");
  cont->Default();
  UploadClass("NPendulumAndCart",cont);
 
 {
- UEPtr<UContainer> generated_cont=new NAstaticGyro;
+ std::shared_ptr<UContainer> generated_cont=std::make_shared<NAstaticGyro>();
  generated_cont->SetName("NAstaticGyro");
  generated_cont->Default();
  UploadClass("NAstaticGyro",generated_cont);
 }
 
 {
- UEPtr<UContainer> generated_cont=new NManipulatorAndGyro;
+ std::shared_ptr<UContainer> generated_cont=std::make_shared<NManipulatorAndGyro>();
  generated_cont->SetName("NManipulatorAndGyro");
  generated_cont->Default();
  UploadClass("NManipulatorAndGyro",generated_cont);
@@ -72,62 +72,62 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 
 
 
- cont=new NManipulator;
+ cont=std::make_shared<NManipulator>();
  cont->SetName("Manipulator");
  cont->Default();
  UploadClass("NManipulator",cont);
 
- cont=new NNavMousePrimitive;
+ cont=std::make_shared<NNavMousePrimitive>();
  cont->SetName("NavMousePrimitive");
  cont->Default();
  UploadClass("NNavMousePrimitive",cont);
 
 
 
-  cont=new NFrequencyReceiver;
+  cont=std::make_shared<NFrequencyReceiver>();
  cont->SetName("FrequencyReceiver");
  cont->Default();
  UploadClass("NFrequencyReceiver",cont);
 
- cont=new NManipulatorInput;
+ cont=std::make_shared<NManipulatorInput>();
  cont->SetName("ManipulatorInput");
  cont->Default();
  UploadClass("NManipulatorInput",cont);
 
- cont=new NManipulatorInputEmulator;
+ cont=std::make_shared<NManipulatorInputEmulator>();
  cont->SetName("ManipulatorInputEmulator");
  cont->Default();
  UploadClass("NManipulatorInputEmulator",cont);
 
- cont=new NSimpleStatistic;
+ cont=std::make_shared<NSimpleStatistic>();
  cont->SetName("SimpleStatistic");
  cont->Default();
  UploadClass("NSimpleStatistic",cont);
 /*
- cont=new NNetworkLinksStatistic;
+ cont=std::make_shared<NNetworkLinksStatistic>();
  cont->SetName("NetworkLinksStatistic");
  cont->Default();
  UploadClass("NNetworkLinksStatistic",cont);
  */
- cont=new NPulseReceiver;
+ cont=std::make_shared<NPulseReceiver>();
  cont->SetName("PulseReceiver");
  cont->Default();
  UploadClass("NPulseReceiver",cont);
 
 
 
- cont=new NSignumSeparator;
+ cont=std::make_shared<NSignumSeparator>();
  cont->SetName("SignumSeparator");
  cont->Default();
  UploadClass("NSignumSeparator",cont);
 
- cont=new NIntervalSeparator;
+ cont=std::make_shared<NIntervalSeparator>();
  cont->SetName("IntervalSeparator");
  cont->Default();
  UploadClass("NIntervalSeparator",cont);
 
 
- // Разделители аналогового сигнала на положительную и отрицательную части
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
  cont=dynamic_pointer_cast<UContainer>(dynamic_cast<UStorage*>(storage)->TakeObject("NSignumSeparator"));
  cont->SetName("PosSignumSeparator");
  vector<double> signum;
@@ -145,73 +145,73 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  dynamic_pointer_cast<NSignumSeparator>(cont)->Sign=signum;
  UploadClass("NNegSignumSeparator",cont);
 
- cont=new NEyeRetina;
+  cont=std::make_shared<NEyeRetina>();
  cont->SetName("EyeRetina");
  cont->Default();
  UploadClass("NEyeRetina",cont);
 
 
-  cont=new NManipulatorSourceEmulator;
+  cont=std::make_shared<NManipulatorSourceEmulator>();
  cont->SetName("ManipulatorSourceEmulator");
  cont->Default();
  UploadClass("NManipulatorSourceEmulator",cont);
 
- cont=new NManipulatorSource;
+ cont=std::make_shared<NManipulatorSource>();
  cont->SetName("ManipulatorSource");
  cont->Default();
  UploadClass("NManipulatorSource",cont);
 
- cont=new NControlObjectSource;
+ cont=std::make_shared<NControlObjectSource>();
  cont->SetName("ManipulatorSource");
  cont->Default();
  UploadClass("NControlObjectSource",cont);
 
 
- cont = new NSuppressionUnit;
+  cont = std::make_shared<NSuppressionUnit>();
  cont->SetName("SuppressionUnit");
  cont->Default();
  UploadClass("NSuppressionUnit", cont);
 
- cont = new NCounterNeuron;
+  cont = std::make_shared<NCounterNeuron>();
  cont->SetName("NCounterNeuron");
  cont->Default();
  UploadClass("NCounterNeuron", cont);
 
- cont = new NObjInArea;
+  cont = std::make_shared<NObjInArea>();
  cont->SetName("NObjInArea");
  cont->Default();
  UploadClass("NObjInArea", cont);
 
- cont = new NSeqComparison;
+  cont = std::make_shared<NSeqComparison>();
  cont->SetName("NSeqComparison");
  cont->Default();
  UploadClass("NSeqComparison", cont);
 
- cont = new NActuatorSignals;
+  cont = std::make_shared<NActuatorSignals>();
  cont->SetName("NActuatorSignals");
  cont->Default();
  UploadClass("NActuatorSignals", cont);
 
- cont = new NSignalEstimation;
+  cont = std::make_shared<NSignalEstimation>();
  cont->SetName("NSignalEstimation");
  cont->Default();
  UploadClass("NSignalEstimation", cont);
 
 
- // Создаем СУ двигательной единицей
- UEPtr<UNet> net=new NMotionElement;
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+  std::shared_ptr<UNet> net=std::make_shared<NMotionElement>();
  net->SetName("MotionElement");
  net->Default();
  UploadClass("NNewMotionElement",net);
 
- // Создаем прототип систем управления
- UEPtr<NEngineMotionControl> cs=0;
- cs=new NEngineMotionControl;
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ std::shared_ptr<NEngineMotionControl> cs=0;
+  cs=std::make_shared<NEngineMotionControl>();
  cs->Default();
  cs->SetName("EngineMotionControl");
  UploadClass("NEngineMotionControl",cs);
 
- // Режим формирования сети
+ // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 
  // 1 - Range
  // 2 - Branched Range
@@ -261,49 +261,49 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 
 
 {
- UEPtr<UContainer> generated_cont=new NPositionControlElement;
+  std::shared_ptr<UContainer> generated_cont=std::make_shared<NPositionControlElement>();
  generated_cont->SetName("NPositionControlElement");
  generated_cont->Default();
  UploadClass("NPositionControlElement",generated_cont);
 }
 
 {
- UEPtr<UContainer> generated_cont=new NNewPositionControlElement;
+  std::shared_ptr<UContainer> generated_cont=std::make_shared<NNewPositionControlElement>();
  generated_cont->SetName("NNewPositionControlElement");
  generated_cont->Default();
  UploadClass("NNewPositionControlElement",generated_cont);
 }
 
 {
- UEPtr<UContainer> generated_cont=new NMultiPositionControl;
+  std::shared_ptr<UContainer> generated_cont=std::make_shared<NMultiPositionControl>();
  generated_cont->SetName("NMultiPositionControl");
  generated_cont->Default();
  UploadClass("NMultiPositionControl",generated_cont);
 }
 
 {
- UEPtr<UContainer> generated_cont=new NTrajectoryElement;
+  std::shared_ptr<UContainer> generated_cont=std::make_shared<NTrajectoryElement>();
  generated_cont->SetName("NTrajectoryElement");
  generated_cont->Default();
  UploadClass("NTrajectoryElement",generated_cont);
 }
 
 {
- UEPtr<UContainer> generated_cont=new NMazeMemory;
+  std::shared_ptr<UContainer> generated_cont=std::make_shared<NMazeMemory>();
  generated_cont->SetName("NMazeMemory");
  generated_cont->Default();
  UploadClass("NMazeMemory",generated_cont);
 }
 
 {
- UEPtr<UContainer> generated_cont=new NMazeMemory_simplified;
+  std::shared_ptr<UContainer> generated_cont=std::make_shared<NMazeMemory_simplified>();
  generated_cont->SetName("NMazeMemory_simplified");
  generated_cont->Default();
  UploadClass("NMazeMemory_simplified",generated_cont);
 }
 
 {
- UEPtr<UContainer> generated_cont=new NPCNElement;
+  std::shared_ptr<UContainer> generated_cont=std::make_shared<NPCNElement>();
  generated_cont->SetName("NPCN");
  generated_cont->Default();
  UploadClass("NPCN",generated_cont);

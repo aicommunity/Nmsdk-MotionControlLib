@@ -58,25 +58,25 @@ ULProperty<MDMatrix<double>, NMazeMemory, ptPubParameter> SituationCoords;
 
 protected:
 ///Нейроны действий
-std::vector<UEPtr<NPulseNeuron>> ActionNeurons;
+std::vector<std::shared_ptr<NPulseNeuron>> ActionNeurons;
 
 ///Все элементы траектории на схеме
-std::vector<UEPtr<NTrajectoryElement>> TrajectoryElements;
+std::vector<std::shared_ptr<NTrajectoryElement>> TrajectoryElements;
 
 /// Активные PostInput нейроны в схеме
-std::vector<UEPtr<NTrajectoryElement>> ActivePIs;
+std::vector<std::shared_ptr<NTrajectoryElement>> ActivePIs;
 
 /// Блоки MultiPC
-std::vector<UEPtr<NMultiPositionControl>> MultiPCs;
+std::vector<std::shared_ptr<NMultiPositionControl>> MultiPCs;
 
 /// Блоки NeuronTrainer (осуществляют запоминание признаков ситуации)
-std::vector<UEPtr<NNeuronTrainer>> NTrainers;
+std::vector<std::shared_ptr<NNeuronTrainer>> NTrainers;
 
 ///Индекс текущего элемента траектории в массиве
 int CurrentTE;
 
 ///Указатель на текущий NeuronTrainer в массиве
-UEPtr<NNeuronTrainer> CurrentNT;
+std::shared_ptr<NNeuronTrainer> CurrentNT;
 
 /// Номер текущего слоя
 int CurrentLayer;
@@ -91,16 +91,16 @@ double yShift;
 double SideWeight;
 
 ///Пройденные элементы траектории
-std::vector<UEPtr<NTrajectoryElement>> PassedTEs;
+std::vector<std::shared_ptr<NTrajectoryElement>> PassedTEs;
 
 ///Текущий элемент траектории
-UEPtr<NTrajectoryElement> BaseTE;
+std::shared_ptr<NTrajectoryElement> BaseTE;
 
 ///MultiPC, соответствующий текущему элементу траектории
-UEPtr<NMultiPositionControl> BaseMPC;
+std::shared_ptr<NMultiPositionControl> BaseMPC;
 
 ///Предыдущий элемент траектории
-UEPtr<NTrajectoryElement> PrevTE;
+std::shared_ptr<NTrajectoryElement> PrevTE;
 
 ///Флаг ожидания завершения обучения NeuronTrainer
 ///(ждем, пока обучится NT, чтобы завершить обработку ситуации)
@@ -127,8 +127,8 @@ int WaitForAnswerCnt;
 
 
 //Компоненты, которые нужно будет удалить
-UEPtr<NTrajectoryElement> TEToDelete;
-UEPtr<NMultiPositionControl> MPCToDelete;
+std::shared_ptr<NTrajectoryElement> TEToDelete;
+std::shared_ptr<NMultiPositionControl> MPCToDelete;
 
 
 public: // Методы
@@ -188,13 +188,13 @@ protected:
 // при добавлении дочернего компонента в этот объект
 // Метод будет вызван только если comp был
 // успешно добавлен в список компонент
-virtual bool AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer=0);
+virtual bool AAddComponent(std::shared_ptr<UContainer> comp, std::shared_ptr<UIPointer> pointer=0);
 
 // Выполняет предварительные пользовательские действия
 // при удалении дочернего компонента из этого объекта
 // Метод будет вызван только если comp
 // существует в списке компонент
-virtual bool ADelComponent(UEPtr<UContainer> comp);
+virtual bool ADelComponent(std::shared_ptr<UContainer> comp);
 // --------------------------
 
 
@@ -220,11 +220,11 @@ virtual bool ACalculate(void);
 
 //Создание новой точки маршрута (варианта действия), т.е.
 //построение связки TrajectoryElement+MultiPC
-UEPtr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
+std::shared_ptr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
 
 //Построение связей между новой точкой маршрута (вариантом действия)
 // и остальными блокмаи сети
-bool LinkPoint(UEPtr<NTrajectoryElement> traj_el,  MVector<double,3> base_coords, int option_num);
+bool LinkPoint(std::shared_ptr<NTrajectoryElement> traj_el,  MVector<double,3> base_coords, int option_num);
 
 //Слияние совпадающих элементов траектории
 //Принимает на вход порядковый номер ТЕ в векторе TrajectoryElements,
@@ -239,7 +239,7 @@ bool UpdateCurrentTE();
 int CheckActivePIs();
 
 //Проверяет, есть ли активные элементы траектории среди возможных вариантов действий
-bool CheckActiveForwards(UEPtr<NTrajectoryElement> t_element);
+bool CheckActiveForwards(std::shared_ptr<NTrajectoryElement> t_element);
 
 //Ищем непроверенные варианты ниже по дереву
 //(переключаем активность на PreControl нейрон и проверяем,

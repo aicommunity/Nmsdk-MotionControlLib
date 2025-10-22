@@ -38,9 +38,9 @@ NSignalEstimation::~NSignalEstimation(void) {}
 
 
 // --------------------------
-// Системные методы управления объектом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 NSignalEstimation* NSignalEstimation::New(void)
 {
  return new NSignalEstimation;
@@ -49,21 +49,21 @@ NSignalEstimation* NSignalEstimation::New(void)
 
 
 // --------------------------
-// Скрытые методы управления компонентами
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 
-/// Выполняет завершающие пользовательские действия
-/// при добавлении дочернего компонента в этот объект
-// Метод будет вызван только если comp был успешно добавлен в список компонент
-bool NSignalEstimation::AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer)
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ comp пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+bool NSignalEstimation::AAddComponent(std::shared_ptr<UContainer> comp, std::shared_ptr<UIPointer> pointer)
 {
  return true;
 }
 
-/// Выполняет предварительные пользовательские действия
-/// при удалении дочернего компонента из этого объекта
-// Метод будет вызван только если comp существует в списке компонент
-bool NSignalEstimation::ADelComponent(UEPtr<UContainer> comp)
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ comp пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+bool NSignalEstimation::ADelComponent(std::shared_ptr<UContainer> comp)
 {
  return true;
 }
@@ -72,24 +72,24 @@ bool NSignalEstimation::ADelComponent(UEPtr<UContainer> comp)
 
 
 // --------------------------
-// Методы управления общедоступными свойствами
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 
-/// Установка имени класса нейронов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::SetNeuronClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка имени класса генераторов импульсов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::SetGeneratorClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка длительности импульсов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::SetPulseLength(const double &value)
 {
  if(value <= 0)
@@ -104,7 +104,7 @@ bool NSignalEstimation::SetPulseLength(const double &value)
  return true;
 }
 
-/// Установка амплитуды импульсов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::SetAmplitude(const double &value)
 {
  if(value <= 0)
@@ -119,7 +119,7 @@ bool NSignalEstimation::SetAmplitude(const double &value)
  return true;
 }
 
-/// Установка частоты генерации (Гц) всех компонентов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ) пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::SetFrequency(const double &value)
 {
  if(value < 0)
@@ -134,7 +134,7 @@ bool NSignalEstimation::SetFrequency(const double &value)
  return true;
 }
 
-/// Установка используемого порога низкопороговой зоны нейронов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::SetLTZThreshold(const double &value)
 {
  if(value <= 0)
@@ -145,7 +145,7 @@ bool NSignalEstimation::SetLTZThreshold(const double &value)
   if (!ZoneNeurons[i])
    continue;
 
-  UEPtr<NLTZone> ltzone = ZoneNeurons[i]->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
+  std::shared_ptr<NLTZone> ltzone = ZoneNeurons[i]->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
   if(!ltzone)
    continue;
 
@@ -155,7 +155,7 @@ bool NSignalEstimation::SetLTZThreshold(const double &value)
  return true;
 }
 
-/// Установка задержки сигнала, который будет зонироваться
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::SetDelaySignal(const double &value)
 {
  if(value < 0.0)
@@ -167,7 +167,7 @@ bool NSignalEstimation::SetDelaySignal(const double &value)
  return true;
 }
 
-/// Установка задержки синхронизирующего импульса
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::SetDelaySinchro(const double &value)
 {
  if(value < 0.0)
@@ -179,7 +179,7 @@ bool NSignalEstimation::SetDelaySinchro(const double &value)
  return true;
 }
 
-/// Установка количества областей, на которые будет зонироваться сигнал
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::SetNumZones(const int &value)
 {
  if(value < 2)
@@ -193,7 +193,7 @@ bool NSignalEstimation::SetNumZones(const int &value)
  return true;
 }
 
-/// Установка верхних ограничений для каждой из областей зонирования
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::SetUpperLimitsOfZones(const MDMatrix<double> &value)
 {
  bool res = true;
@@ -202,7 +202,7 @@ bool NSignalEstimation::SetUpperLimitsOfZones(const MDMatrix<double> &value)
  return res;
 }
 
-/// Установка необходимости транзита зонируемого сигнала от внешнего источника
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::SetUseTransitSignal(const bool &value)
 {
  SignalGen->UseTransitSignal = value;
@@ -221,7 +221,7 @@ bool NSignalEstimation::SetUseTransitSignal(const bool &value)
  return true;
 }
 
-/// Установка необходимости транзита сигнала на синхронизирующий генератор от внешнего источника
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::SetUseTransitSinchro(const bool &value)
 {
  SinchroGen->UseTransitSignal = value;
@@ -245,7 +245,7 @@ bool NSignalEstimation::SetUseTransitSinchro(const bool &value)
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::ADefault(void)
 {
  NeuronClassName = "NSPNeuronGen";
@@ -276,20 +276,20 @@ bool NSignalEstimation::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Reset() пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Ready пїЅ true
+// пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 bool NSignalEstimation::ABuild(void)
 {
  bool res = true;
 
- // Инициализируем генератор зонируемого сигнала
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  SignalGen = AddMissingComponent<NPulseGeneratorTransit>(std::string("Signal"), GeneratorClassName);
  SignalGen->SetCoord(MVector<double,3>(4, 1.67, 0));
  SignalGen->DisconnectAll("Output");
 
- // Инициализируем генератор синхронизирующего сигнала
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  SinchroGen = AddMissingComponent<NPulseGeneratorTransit>(std::string("Sinchro"), GeneratorClassName);
  SinchroGen->SetCoord(MVector<double,3>(4, 4, 0));
  SinchroGen->DisconnectAll("Output");
@@ -297,11 +297,11 @@ bool NSignalEstimation::ABuild(void)
 
  ZoneNeurons.resize(NumZones);
 
- // Удаляем зонирующие нейроны
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for(int i = 0; i < OldNumZones; i++)
   DelComponent(std::string("Zone_")+sntoa(i+1));
 
- // Инициализируем зонирующие нейроны
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for (int i = 0; i < NumZones; i++)
  {
   ZoneNeurons[i] = AddMissingComponent<NPulseNeuron>(std::string("Zone_")+sntoa(i+1), NeuronClassName);
@@ -310,10 +310,10 @@ bool NSignalEstimation::ABuild(void)
   ZoneNeurons[i]->NumSomaMembraneParts = 2;
   ZoneNeurons[i]->Reset();
 
-  // На каждой соме устанавливаем дополнительные торм. синапсы для обратных связей м/у нейронами
+  // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ/пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   for (int j = 1; j <= 2; j++)
   {
-   UEPtr<NPulseMembrane> soma = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Soma" + sntoa(j), true);
+   std::shared_ptr<NPulseMembrane> soma = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Soma" + sntoa(j), true);
    if (soma)
    {
     soma->NumInhibitorySynapses = NumZones - 1;
@@ -321,7 +321,7 @@ bool NSignalEstimation::ABuild(void)
    }
   }
 
-  // Устанавливаем число дендритов = задержки для каждой зоны
+  // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ = пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
   if(ZoneNeurons[i]->StructureBuildMode != 2)
    ZoneNeurons[i]->NumDendriteMembraneParts = 2;
   else
@@ -335,20 +335,20 @@ bool NSignalEstimation::ABuild(void)
   ZoneNeurons[i]->Reset();
  }
 
- // Строим связи с генераторов на нейроны
+ // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for (int i = 0; i < NumZones; i++)
  {
   int dendrite_num = int(UpperLimitsOfZones[NumZones - i - 1] / 0.01 - 1);
-  UEPtr<NPulseMembrane> dendrite = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Dendrite1_"+sntoa(dendrite_num), true);
+  std::shared_ptr<NPulseMembrane> dendrite = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Dendrite1_"+sntoa(dendrite_num), true);
   if (!dendrite)
    continue;
   NPulseSynapseCommon *synapse = dendrite->GetExcitatorySynapses(0);
   if (!synapse)
    continue;
 
-  // Создаём связь c генератора сигнала SignalGen на первый дендрит
-  if (!CheckLink(SignalGen->GetLongName(this), "Output", synapse->GetLongName(this), "Input"))
-   res &= CreateLink(SignalGen->GetLongName(this), "Output", synapse->GetLongName(this), "Input");
+  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ c пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ SignalGen пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+  if (!CheckLink(SignalGen->GetLongName(GetThisAsSharedContainer()), "Output", synapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink(SignalGen->GetLongName(GetThisAsSharedContainer()), "Output", synapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
 
   dendrite = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Dendrite2_1", true);
@@ -358,17 +358,17 @@ bool NSignalEstimation::ABuild(void)
   if (!synapse)
    continue;
 
-  // Создаём связь c генератора синхронизирующего импульса SinchroGen на первый дендрит
-  if (!CheckLink(SinchroGen->GetLongName(this), "Output", synapse->GetLongName(this), "Input"))
-   res &= CreateLink(SinchroGen->GetLongName(this), "Output", synapse->GetLongName(this), "Input");
+  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ c пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ SinchroGen пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+  if (!CheckLink(SinchroGen->GetLongName(GetThisAsSharedContainer()), "Output", synapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink(SinchroGen->GetLongName(GetThisAsSharedContainer()), "Output", synapse->GetLongName(GetThisAsSharedContainer()), "Input");
  }
 
 
- // Строим обратные тормозные связи между нейронами
+ // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for (int i = 0; i < NumZones; i++)
  {
-  UEPtr<NPulseMembrane> soma1 = ZoneNeurons[i]->GetComponentL<NPulseMembrane>(std::string("Soma1"), true);
-  UEPtr<NPulseMembrane> soma2 = ZoneNeurons[i]->GetComponentL<NPulseMembrane>(std::string("Soma2"), true);
+  std::shared_ptr<NPulseMembrane> soma1 = ZoneNeurons[i]->GetComponentL<NPulseMembrane>(std::string("Soma1"), true);
+  std::shared_ptr<NPulseMembrane> soma2 = ZoneNeurons[i]->GetComponentL<NPulseMembrane>(std::string("Soma2"), true);
   if(!soma1 || !soma2)
    continue;
 
@@ -379,16 +379,16 @@ bool NSignalEstimation::ABuild(void)
    if (i == j)
     continue;
 
-   UEPtr<NPulseSynapse> soma1_synapse = soma1->GetComponentL<NPulseSynapse>(std::string("InhSynapse" + sntoa(index_synapse)), true);
-   UEPtr<NPulseSynapse> soma2_synapse = soma2->GetComponentL<NPulseSynapse>(std::string("InhSynapse" + sntoa(index_synapse)), true);
+   std::shared_ptr<NPulseSynapse> soma1_synapse = soma1->GetComponentL<NPulseSynapse>(std::string("InhSynapse" + sntoa(index_synapse)), true);
+   std::shared_ptr<NPulseSynapse> soma2_synapse = soma2->GetComponentL<NPulseSynapse>(std::string("InhSynapse" + sntoa(index_synapse)), true);
    if(!soma1_synapse || !soma2_synapse)
        return true;
 
-   if (!CheckLink(ZoneNeurons[j]->GetLongName(this), "Output", soma1_synapse->GetLongName(this), "Input"))
-    res &= CreateLink(ZoneNeurons[j]->GetLongName(this), "Output", soma1_synapse->GetLongName(this), "Input");
+   if (!CheckLink(ZoneNeurons[j]->GetLongName(GetThisAsSharedContainer()), "Output", soma1_synapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink(ZoneNeurons[j]->GetLongName(GetThisAsSharedContainer()), "Output", soma1_synapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-   if (!CheckLink(ZoneNeurons[j]->GetLongName(this), "Output", soma2_synapse->GetLongName(this), "Input"))
-    res &= CreateLink(ZoneNeurons[j]->GetLongName(this), "Output", soma2_synapse->GetLongName(this), "Input");
+   if (!CheckLink(ZoneNeurons[j]->GetLongName(GetThisAsSharedContainer()), "Output", soma2_synapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink(ZoneNeurons[j]->GetLongName(GetThisAsSharedContainer()), "Output", soma2_synapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
    index_synapse++;
   }
@@ -403,8 +403,8 @@ bool NSignalEstimation::AReset(void)
 {
  bool res = true;
 
- // Настраиваем генераторы - общие настройки
- UEPtr <NPulseGeneratorTransit> generators[2]{SignalGen, SinchroGen};
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ - пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ std::shared_ptr <NPulseGeneratorTransit> generators[2]{SignalGen, SinchroGen};
  for (int i = 0; i < 2; i++)
  {
   if(generators[i])
@@ -413,7 +413,7 @@ bool NSignalEstimation::AReset(void)
    generators[i]->PulseLength = PulseLength;
   }
  }
- // Отдельно генератор зорнируемого сигнала
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  if (UseTransitSignal)
  {
   SignalGen->Frequency = 0;
@@ -424,7 +424,7 @@ bool NSignalEstimation::AReset(void)
   SignalGen->Frequency = Frequency;
   SignalGen->Delay = DelaySignal;
  }
- // Отдельно генератор синхронизирующий генератор
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  if (UseTransitSinchro)
  {
   SinchroGen->Frequency = 0;
@@ -437,31 +437,31 @@ bool NSignalEstimation::AReset(void)
  }
 
 
- // Настраиваем нейроны
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for (int i = 0; i < NumZones; i++)
  {
   if(!ZoneNeurons[i])
    continue;
-  UEPtr<NLTZone> ltzone = ZoneNeurons[i]->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
+  std::shared_ptr<NLTZone> ltzone = ZoneNeurons[i]->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
   if(!ltzone)
    continue;
   ltzone->Threshold = LTZThreshold;
  }
 
 
- // Необходимые сопротивления для синапсов на дендритах от 1 до 31
- // Для первого по умолчанию 86к, но здесь эмпирически выведено необх. знач. 50к
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 1 пїЅпїЅ 31
+ // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 86пїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅ. 50пїЅ
  vector<double> synapse_resistance = {50.0, 55.0, 43.0, 37.0, 32.5, 29.5, 27.0, 25.0,
                                       23.7, 22.5, 21.5, 20.5, 19.6, 18.9, 18.2, 17.6,
                                       17.0, 16.5, 16.1, 15.7, 15.3, 14.9, 14.6, 14.3,
                                       14.0, 13.7, 13.4, 13.2, 13.0, 12.8, 12.5};
 
- // Настраиваем синапсы на дендритах
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  for (int i = 0; i < NumZones; i++)
  {
-  // Первый дендрит
+  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   int dendrite_num = int(UpperLimitsOfZones[NumZones - i - 1] / 0.01 - 1);
-  UEPtr<NPulseMembrane> dendrite = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Dendrite1_"+sntoa(dendrite_num), true);
+  std::shared_ptr<NPulseMembrane> dendrite = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Dendrite1_"+sntoa(dendrite_num), true);
   if (!dendrite)
    continue;
   NPulseSynapseCommon *synapse = dendrite->GetExcitatorySynapses(0);
@@ -469,7 +469,7 @@ bool NSignalEstimation::AReset(void)
    continue;
   synapse->Resistance = synapse_resistance[dendrite_num - 1] * 1000000;
 
-  // Второй дендрит
+  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
   dendrite = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Dendrite2_1", true);
   if (!dendrite)
    continue;
@@ -487,8 +487,8 @@ bool NSignalEstimation::ACalculate(void)
 {
  bool res = true;
 
- // Передаём входную информацию со входов компонента на внутренние источники,
- // если подняты соответствующие флаги
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ,
+ // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
  if (UseTransitSignal)
   *SignalGen->Input = *Input;
 

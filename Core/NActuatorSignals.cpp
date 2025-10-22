@@ -59,9 +59,9 @@ NActuatorSignals::~NActuatorSignals(void)
 
 
 // --------------------------
-// Системные методы управления объектом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 NActuatorSignals* NActuatorSignals::New(void)
 {
  return new NActuatorSignals;
@@ -70,21 +70,21 @@ NActuatorSignals* NActuatorSignals::New(void)
 
 
 // --------------------------
-// Скрытые методы управления компонентами
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 
-/// Выполняет завершающие пользовательские действия
-/// при добавлении дочернего компонента в этот объект
-// Метод будет вызван только если comp был успешно добавлен в список компонент
-bool NActuatorSignals::AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer)
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ comp пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+bool NActuatorSignals::AAddComponent(std::shared_ptr<UContainer> comp, std::shared_ptr<UIPointer> pointer)
 {
  return true;
 }
 
-/// Выполняет предварительные пользовательские действия
-/// при удалении дочернего компонента из этого объекта
-// Метод будет вызван только если comp существует в списке компонент
-bool NActuatorSignals::ADelComponent(UEPtr<UContainer> comp)
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+/// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ comp пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+bool NActuatorSignals::ADelComponent(std::shared_ptr<UContainer> comp)
 {
  return true;
 }
@@ -93,38 +93,38 @@ bool NActuatorSignals::ADelComponent(UEPtr<UContainer> comp)
 
 
 // --------------------------
-// Методы управления общедоступными свойствами
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 
-/// Установка имени класса нейрона
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::SetNeuronClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка имени класса генераторов импульсов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::SetGeneratorClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка имени класса блока задержки сигнала
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::SetDelayClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка длительности импульсов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::SetPulseLength(const double &value)
 {
  if(value <= 0)
   return false;
 
- // Настраиваем генераторы
- UEPtr <NPulseGeneratorTransit> generators[5]{LeftEngine, RightEngine, Sinchro1, Sinchro2, NOTGenerator};
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ std::shared_ptr <NPulseGeneratorTransit> generators[5]{LeftEngine, RightEngine, Sinchro1, Sinchro2, NOTGenerator};
 
  for (int i = 0; i < 5; i++)
  {
@@ -135,14 +135,14 @@ bool NActuatorSignals::SetPulseLength(const double &value)
  return true;
 }
 
-/// Установка амплитуды импульсов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::SetAmplitude(const double &value)
 {
  if(value <= 0)
   return false;
 
- // Настраиваем генераторы
- UEPtr <NPulseGeneratorTransit> generators[5]{LeftEngine, RightEngine, Sinchro1, Sinchro2, NOTGenerator};
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ std::shared_ptr <NPulseGeneratorTransit> generators[5]{LeftEngine, RightEngine, Sinchro1, Sinchro2, NOTGenerator};
 
  for (int i = 0; i < 5; i++)
  {
@@ -153,14 +153,14 @@ bool NActuatorSignals::SetAmplitude(const double &value)
  return true;
 }
 
-/// Установка частоты генерации (Гц) всех компонентов
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅ) пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::SetFrequency(const double &value)
 {
  if(value < 0)
   return false;
 
- // Настраиваем генераторы
- UEPtr <NPulseGeneratorTransit> generators[5]{LeftEngine, RightEngine, Sinchro1, Sinchro2, NOTGenerator};
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ std::shared_ptr <NPulseGeneratorTransit> generators[5]{LeftEngine, RightEngine, Sinchro1, Sinchro2, NOTGenerator};
 
  for (int i = 0; i < 5; i++)
  {
@@ -171,7 +171,7 @@ bool NActuatorSignals::SetFrequency(const double &value)
  return true;
 }
 
-/// Установка задержки для левого двигателя
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::SetLeftDelay(const double &value)
 {
  if(value < 0)
@@ -183,7 +183,7 @@ bool NActuatorSignals::SetLeftDelay(const double &value)
  return true;
 }
 
-/// Установка задержки для правого двигателя
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::SetRightDelay(const double &value)
 {
  if(value < 0)
@@ -195,7 +195,7 @@ bool NActuatorSignals::SetRightDelay(const double &value)
  return true;
 }
 
-/// Установка задержки синхронизирующего импульса, должен быть аналогом вращения назад
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::SetSinchro1Delay(const double &value)
 {
  if(value < 0)
@@ -210,7 +210,7 @@ bool NActuatorSignals::SetSinchro1Delay(const double &value)
  return true;
 }
 
-/// Установка задержки синхронизирующего импульса, должен быть аналогом вращения вперед
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::SetSinchro2Delay(const double &value)
 {
  if(value < 0)
@@ -229,7 +229,7 @@ bool NActuatorSignals::SetSinchro2Delay(const double &value)
 }
 
 
-/// Установка необходимости транзита сигнала на двигатели от внешнего источника
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::SetUseTransitEngineSignal(const bool &value)
 {
  LeftEngine->UseTransitSignal = value;
@@ -249,7 +249,7 @@ bool NActuatorSignals::SetUseTransitEngineSignal(const bool &value)
  return true;
 }
 
-/// Установка необходимости транзита сигнала на синхронизирующие генераторы от внешнего источника
+/// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::SetUseTransitSinchroSignal(const bool &value)
 {
  Sinchro1->UseTransitSignal = value;
@@ -275,7 +275,7 @@ bool NActuatorSignals::SetUseTransitSinchroSignal(const bool &value)
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::ADefault(void)
 {
  NeuronClassName = "NSPNeuronGen";
@@ -303,52 +303,52 @@ bool NActuatorSignals::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Reset() пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Ready пїЅ true
+// пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 bool NActuatorSignals::ABuild(void)
 {
  bool res = true;
 
- UEPtr<NPulseMembrane> soma, dendrite;
+ std::shared_ptr<NPulseMembrane> soma, dendrite;
  NPulseSynapseCommon *excsynapse, *inhsynapse;
 
- // Инициализируем компоненты
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  {
- // Инициализируем источник сигнала левого двигателя
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  LeftEngine = AddMissingComponent<NPulseGeneratorTransit>(std::string("LeftEngine"), GeneratorClassName);
  LeftEngine->SetCoord(MVector<double,3>(4, 2.33, 0));
  LeftEngine->DisconnectAll("Output");
 
- // Инициализируем источник сигнала правого двигателя
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  RightEngine = AddMissingComponent<NPulseGeneratorTransit>(std::string("RightEngine"), GeneratorClassName);
  RightEngine->SetCoord(MVector<double,3>(4, 5, 0));
  RightEngine->DisconnectAll("Output");
 
- // Инициализируем источник синхронизирующего сигнала 1 - аналога вращения назад
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
  Sinchro1 = AddMissingComponent<NPulseGeneratorTransit>(std::string("Sinchro1"), GeneratorClassName);
  Sinchro1->SetCoord(MVector<double,3>(4, 10.33, 0));
  Sinchro1->DisconnectAll("Output");
 
- // Инициализируем источник синхронизирующего сигнала 2 - аналога вращения вперед
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 2 - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
  Sinchro2 = AddMissingComponent<NPulseGeneratorTransit>(std::string("Sinchro2"), GeneratorClassName);
  Sinchro2->SetCoord(MVector<double,3>(4, 13, 0));
  Sinchro2->DisconnectAll("Output");
 
- // Инициализируем генератор для нейрона NOTNeuron
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ NOTNeuron
  NOTGenerator = AddMissingComponent<NPulseGeneratorTransit>(std::string("NOTGenerator"), GeneratorClassName);
  NOTGenerator->SetCoord(MVector<double,3>(21.33, 2.33, 0));
  NOTGenerator->DisconnectAll("Output");
 
 
- // Инициализируем блок задержки
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  Delay1To2 = AddMissingComponent<NPulseDelay>(std::string("Delay1To2"), DelayClassName);
  Delay1To2->SetCoord(MVector<double,3>(21.33, 11.66, 0));
  Delay1To2->DisconnectAll("Output");
 
 
- // Инициализируем нейрон ИЛИ
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
  ORNeuron = AddMissingComponent<NPulseNeuron>(std::string("ORNeuron"), NeuronClassName);
  ORNeuron->SetCoord(MVector<double,3>(21.33, 7.66, 0));
  ORNeuron->DisconnectAll("Output");
@@ -359,7 +359,7 @@ bool NActuatorSignals::ABuild(void)
   soma->Build();
  }
 
- // Инициализируем нейрон НЕ
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ
  NOTNeuron = AddMissingComponent<NPulseNeuron>(std::string("NOTNeuron"), NeuronClassName);
  NOTNeuron->SetCoord(MVector<double,3>(21.33, 5, 0));
  NOTNeuron->DisconnectAll("Output");
@@ -374,21 +374,21 @@ bool NActuatorSignals::ABuild(void)
  NOTNeuron->Reset();
 
 
- // Инициализируем нейрон, определяющий движение вперёд
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
  IsForwardNeuron = AddMissingComponent<NPulseNeuron>(std::string("IsForward"), NeuronClassName);
  IsForwardNeuron->SetCoord(MVector<double,3>(12.66, 3.66, 0));
  IsForwardNeuron->DisconnectAll("Output");
  IsForwardNeuron->NumSomaMembraneParts = 2;
  IsForwardNeuron->Build();
 
- // Инициализируем нейрон, определяющий движение назад
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
  IsBackNeuron = AddMissingComponent<NPulseNeuron>(std::string("IsBack"), NeuronClassName);
  IsBackNeuron->SetCoord(MVector<double,3>(12.66, 11.66, 0));
  IsBackNeuron->DisconnectAll("Output");
  IsBackNeuron->NumSomaMembraneParts = 2;
  IsBackNeuron->Build();
 
- // Инициализируем нейрон, определяющий поворот налево
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
  IsLeftNeuron = AddMissingComponent<NPulseNeuron>(std::string("IsLeft"), NeuronClassName);
  IsLeftNeuron->SetCoord(MVector<double,3>(12.66, 6.33, 0));
  IsLeftNeuron->DisconnectAll("Output");
@@ -404,7 +404,7 @@ bool NActuatorSignals::ABuild(void)
  }
  IsLeftNeuron->Build();
 
- // Инициализируем нейрон, определяющий поворот направо
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  IsRightNeuron = AddMissingComponent<NPulseNeuron>(std::string("IsRight"), NeuronClassName);
  IsRightNeuron->SetCoord(MVector<double,3>(12.66, 9, 0));
  IsRightNeuron->DisconnectAll("Output");
@@ -421,220 +421,220 @@ bool NActuatorSignals::ABuild(void)
  IsRightNeuron->Build();
 
 
- // Инициализируем выходной нейрон, сигнализирующий об остановке
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  StayNeuron = AddMissingComponent<NPulseNeuron>(std::string("Stay"), NeuronClassName);
  StayNeuron->SetCoord(MVector<double,3>(30, 2.33, 0));
  StayNeuron->DisconnectAll("Output");
 
- // Инициализируем выходной нейрон, сигнализирующий о движении вперёд
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
  ForwardNeuron = AddMissingComponent<NPulseNeuron>(std::string("Forward"), NeuronClassName);
  ForwardNeuron->SetCoord(MVector<double,3>(30, 5, 0));
  ForwardNeuron->DisconnectAll("Output");
 
- // Инициализируем выходной нейрон, сигнализирующий о повороте налево
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
  LeftNeuron = AddMissingComponent<NPulseNeuron>(std::string("Left"), NeuronClassName);
  LeftNeuron->SetCoord(MVector<double,3>(30, 7.66, 0));
  LeftNeuron->DisconnectAll("Output");
 
- // Инициализируем выходной нейрон, сигнализирующий о повороте направо
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  RightNeuron = AddMissingComponent<NPulseNeuron>(std::string("Right"), NeuronClassName);
  RightNeuron->SetCoord(MVector<double,3>(30, 10.33, 0));
  RightNeuron->DisconnectAll("Output");
 
- // Инициализируем выходной нейрон, сигнализирующий о движении назад
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
  BackNeuron = AddMissingComponent<NPulseNeuron>(std::string("Back"), NeuronClassName);
  BackNeuron->SetCoord(MVector<double,3>(30, 13, 0));
  BackNeuron->DisconnectAll("Output");
 }
 
 
- // Строим связи между компонентами
+ // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  {
- // Связи на IsForward
+ // пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ IsForward
  {
   soma = IsForwardNeuron->GetComponent<NPulseMembrane>("Soma1", true);
   excsynapse = soma->GetExcitatorySynapses(0);
   inhsynapse = soma->GetInhibitorySynapses(0);
 
-  // Создаём связь c LeftEngine
-  if (!CheckLink("LeftEngine", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(this), "Input");
+  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ c LeftEngine
+  if (!CheckLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  // Создаём связь c Sinchro1
-  if (!CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(this), "Input");
+  //   c Sinchro1
+  if (!CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
 
   soma = IsForwardNeuron->GetComponent<NPulseMembrane>("Soma2", true);
   excsynapse = soma->GetExcitatorySynapses(0);
   inhsynapse = soma->GetInhibitorySynapses(0);
 
-  // Создаём связь c RightEngine
-  if (!CheckLink("RightEngine", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(this), "Input");
+  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ c RightEngine
+  if (!CheckLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  // Создаём связь c Sinchro1
-  if (!CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(this), "Input");
+  //   c Sinchro1
+  if (!CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
  }
 
- // Связи на IsLeft
+ //   IsLeft
  {
   dendrite = IsLeftNeuron->GetComponent<NPulseMembrane>("Dendrite1_10", true);
   excsynapse = dendrite->GetExcitatorySynapses(0);
   inhsynapse = dendrite ->GetInhibitorySynapses(0);
 
-  // Создаём связь c LeftEngine
-  if (!CheckLink("LeftEngine", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(this), "Input");
+  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ c LeftEngine
+  if (!CheckLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  // Создаём связь c Sinchro2
-  if (!CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(this), "Input");
+  //   c Sinchro2
+  if (!CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
 
   soma = IsLeftNeuron->GetComponent<NPulseMembrane>("Soma2", true);
   excsynapse = soma->GetExcitatorySynapses(0);
   inhsynapse = soma->GetInhibitorySynapses(0);
 
-  // Создаём связь c RightEngine
-  if (!CheckLink("RightEngine", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(this), "Input");
+  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ c RightEngine
+  if (!CheckLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  // Создаём связь c Sinchro1
-  if (!CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(this), "Input");
+  //   c Sinchro1
+  if (!CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
  }
 
- // Связи на IsRight
+ //   IsRight
  {
   dendrite = IsRightNeuron->GetComponent<NPulseMembrane>("Dendrite2_10", true);
   excsynapse = dendrite->GetExcitatorySynapses(0);
   inhsynapse = dendrite ->GetInhibitorySynapses(0);
 
-  // Создаём связь c RightEngine
-  if (!CheckLink("RightEngine", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(this), "Input");
+  // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ c RightEngine
+  if (!CheckLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  // Создаём связь c Sinchro2
-  if (!CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(this), "Input");
+  //   c Sinchro2
+  if (!CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
 
   soma = IsRightNeuron->GetComponent<NPulseMembrane>("Soma1", true);
   excsynapse = soma->GetExcitatorySynapses(0);
   inhsynapse = soma->GetInhibitorySynapses(0);
 
-  // Создаём связь c LeftEngine
-  if (!CheckLink("LeftEngine", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(this), "Input");
+  //   c LeftEngine
+  if (!CheckLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  // Создаём связь c Sinchro1
-  if (!CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(this), "Input");
+  //   c Sinchro1
+  if (!CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
  }
 
- // Связи на IsBack
+ //   IsBack
  {
   soma = IsBackNeuron->GetComponent<NPulseMembrane>("Soma1", true);
   excsynapse = soma->GetExcitatorySynapses(0);
   inhsynapse = soma->GetInhibitorySynapses(0);
 
-  // Создаём связь c LeftEngine
-  if (!CheckLink("LeftEngine", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(this), "Input");
+  //   c LeftEngine
+  if (!CheckLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  // Создаём связь c Sinchro2
-  if (!CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(this), "Input");
+  //   c Sinchro2
+  if (!CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
 
   soma = IsBackNeuron->GetComponent<NPulseMembrane>("Soma2", true);
   excsynapse = soma->GetExcitatorySynapses(0);
   inhsynapse = soma->GetInhibitorySynapses(0);
 
-  // Создаём связь c RightEngine
-  if (!CheckLink("RightEngine", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(this), "Input");
+  //   c RightEngine
+  if (!CheckLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  // Создаём связь c Sinchro2
-  if (!CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(this), "Input");
+  //   c Sinchro2
+  if (!CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
  }
 
- // Связи на ORNeuron
+ //   ORNeuron
  {
   soma = ORNeuron->GetComponent<NPulseMembrane>("Soma1", true);
 
-  // Создаём связь c IsForward
+  //   c IsForward
   excsynapse = soma->GetExcitatorySynapses(0);
-  if (!CheckLink("IsForward", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("IsForward", "Output", excsynapse->GetLongName(this), "Input");
+  if (!CheckLink("IsForward", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("IsForward", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  // Создаём связь c IsLeft
+  //   c IsLeft
   excsynapse = soma->GetExcitatorySynapses(1);
-  if (!CheckLink("IsLeft", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("IsLeft", "Output", excsynapse->GetLongName(this), "Input");
+  if (!CheckLink("IsLeft", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("IsLeft", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  // Создаём связь c IsRight
+  //   c IsRight
   excsynapse = soma->GetExcitatorySynapses(2);
-  if (!CheckLink("IsRight", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("IsRight", "Output", excsynapse->GetLongName(this), "Input");
+  if (!CheckLink("IsRight", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("IsRight", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  // Создаём связь c Delay1To2
+  //   c Delay1To2
   excsynapse = soma->GetExcitatorySynapses(3);
-  if (!CheckLink("Delay1To2", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("Delay1To2", "Output", excsynapse->GetLongName(this), "Input");
+  if (!CheckLink("Delay1To2", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("Delay1To2", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
  }
 
- // Связи на NOTNeuron
+ //   NOTNeuron
  {
-  // Создаём связь c ORNeuron
+  //   c ORNeuron
   soma = NOTNeuron->GetComponent<NPulseMembrane>("Soma1", true);
   inhsynapse = soma->GetInhibitorySynapses(0);
-  if (!CheckLink("ORNeuron", "Output", inhsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("ORNeuron", "Output", inhsynapse->GetLongName(this), "Input");
+  if (!CheckLink("ORNeuron", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("ORNeuron", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  // Создаём связь c NOTGenerator
+  //   c NOTGenerator
   dendrite = NOTNeuron->GetComponent<NPulseMembrane>("Dendrite1_2", true);
   excsynapse = dendrite->GetExcitatorySynapses(0);
-  if (!CheckLink("NOTGenerator", "Output", excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink("NOTGenerator", "Output", excsynapse->GetLongName(this), "Input");
+  if (!CheckLink("NOTGenerator", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("NOTGenerator", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
  }
 
- // Связь c IsBack на Delay1To2
+ //  c IsBack  Delay1To2
  if (!CheckLink("IsBack", "Output", "Delay1To2", "Input"))
   res &= CreateLink("IsBack", "Output", "Delay1To2", "Input");
 
- // Связь с NOTNeuron на Stay
+ //  NOTNeuron  Stay
  soma = StayNeuron->GetComponent<NPulseMembrane>("Soma1", true);
  excsynapse = soma->GetExcitatorySynapses(0);
- if (!CheckLink("NOTNeuron", "Output", excsynapse->GetLongName(this), "Input"))
-  res &= CreateLink("NOTNeuron", "Output", excsynapse->GetLongName(this), "Input");
+ if (!CheckLink("NOTNeuron", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+  res &= CreateLink("NOTNeuron", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
- // Связь с IsForward на Forward
+ //  IsForward  Forward
  soma = ForwardNeuron->GetComponent<NPulseMembrane>("Soma1", true);
  excsynapse = soma->GetExcitatorySynapses(0);
- if (!CheckLink("IsForward", "Output", excsynapse->GetLongName(this), "Input"))
-  res &= CreateLink("IsForward", "Output", excsynapse->GetLongName(this), "Input");
+ if (!CheckLink("IsForward", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+  res &= CreateLink("IsForward", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
- // Связь с IsLeft на Left
+ //  IsLeft  Left
  soma = LeftNeuron->GetComponent<NPulseMembrane>("Soma1", true);
  excsynapse = soma->GetExcitatorySynapses(0);
- if (!CheckLink("IsLeft", "Output", excsynapse->GetLongName(this), "Input"))
-  res &= CreateLink("IsLeft", "Output", excsynapse->GetLongName(this), "Input");
+ if (!CheckLink("IsLeft", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+  res &= CreateLink("IsLeft", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
- // Связь с IsRight на Right
+ //  IsRight  Right
  soma = RightNeuron->GetComponent<NPulseMembrane>("Soma1", true);
  excsynapse = soma->GetExcitatorySynapses(0);
- if (!CheckLink("IsRight", "Output", excsynapse->GetLongName(this), "Input"))
-  res &= CreateLink("IsRight", "Output", excsynapse->GetLongName(this), "Input");
+ if (!CheckLink("IsRight", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+  res &= CreateLink("IsRight", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
- // Связь с Delay1To2 на Back
+ //  Delay1To2  Back
  soma = BackNeuron->GetComponent<NPulseMembrane>("Soma1", true);
  excsynapse = soma->GetExcitatorySynapses(0);
- if (!CheckLink("Delay1To2", "Output", excsynapse->GetLongName(this), "Input"))
-  res &= CreateLink("Delay1To2", "Output", excsynapse->GetLongName(this), "Input");
+ if (!CheckLink("Delay1To2", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+  res &= CreateLink("Delay1To2", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 }
 
  return res;
@@ -646,15 +646,15 @@ bool NActuatorSignals::AReset(void)
 {
  bool res = true;
 
- // Сбрасываем выходные сигналы
+ //   
  Stay.ToZero();
  Forward.ToZero();
  Back.ToZero();
  Left.ToZero();
  Right.ToZero();
 
- // Настраиваем генераторы
- UEPtr <NPulseGeneratorTransit> generators[5]{LeftEngine, RightEngine, Sinchro1, Sinchro2, NOTGenerator};
+ //  
+ std::shared_ptr <NPulseGeneratorTransit> generators[5]{LeftEngine, RightEngine, Sinchro1, Sinchro2, NOTGenerator};
  for (int i = 0; i < 5; i++)
  {
   generators[i]->Amplitude = Amplitude;
@@ -667,14 +667,14 @@ bool NActuatorSignals::AReset(void)
  Sinchro2->Delay = Sinchro2Delay;
  NOTGenerator->Delay = Sinchro2Delay;
 
- // Настраиваем блок задержки
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  Delay1To2->DelayTime = Sinchro2Delay - Sinchro1Delay;
 
- // Настраиваем пороги нейронов
- UEPtr<NLTZone> ltzone = NOTNeuron->GetComponentL<NLTZone>("LTZone", true);
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+ std::shared_ptr<NLTZone> ltzone = NOTNeuron->GetComponentL<NLTZone>("LTZone", true);
  ltzone->Threshold = 0.01;
 
- UEPtr <NPulseNeuron> is_neurons[4]{IsForwardNeuron, IsLeftNeuron, IsRightNeuron, IsBackNeuron};
+ std::shared_ptr <NPulseNeuron> is_neurons[4]{IsForwardNeuron, IsLeftNeuron, IsRightNeuron, IsBackNeuron};
  for (int i = 0; i < 4; i++)
  {
   ltzone = is_neurons[i]->GetComponentL<NLTZone>("LTZone", true);
@@ -689,7 +689,7 @@ bool NActuatorSignals::ACalculate(void)
 {
  bool res = true;
 
- // Передаём информацию на выходы
+ // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
  Stay = StayNeuron->Output;
  Forward = ForwardNeuron->Output;
  Back = BackNeuron->Output;

@@ -76,57 +76,57 @@ UPropertyOutputData<MDMatrix<double>, NActuatorSignals, ptOutput | ptPubState> R
 protected: // Данные
 
  /// Источник сигнала левого двигателя
- UEPtr <NPulseGeneratorTransit> LeftEngine;
+ std::shared_ptr <NPulseGeneratorTransit> LeftEngine;
 
  /// Источник сигнала правого двигателя
- UEPtr <NPulseGeneratorTransit> RightEngine;
+ std::shared_ptr <NPulseGeneratorTransit> RightEngine;
 
  /// Источник синхронизирующего сигнала 1 - аналога вращения назад
- UEPtr <NPulseGeneratorTransit> Sinchro1;
+ std::shared_ptr <NPulseGeneratorTransit> Sinchro1;
 
  /// Источник синхронизирующего сигнала 2 - аналога вращения вперед
- UEPtr <NPulseGeneratorTransit> Sinchro2;
+ std::shared_ptr <NPulseGeneratorTransit> Sinchro2;
 
  /// Генератор для нейрона NOTNeuron
- UEPtr <NPulseGeneratorTransit> NOTGenerator;
+ std::shared_ptr <NPulseGeneratorTransit> NOTGenerator;
 
 
  /// Блок задержки
- UEPtr <NPulseDelay> Delay1To2;
+ std::shared_ptr <NPulseDelay> Delay1To2;
 
  /// Нейрон ИЛИ
- UEPtr <NPulseNeuron> ORNeuron;
+ std::shared_ptr <NPulseNeuron> ORNeuron;
 
  /// Нейрон НЕ
- UEPtr <NPulseNeuron> NOTNeuron;
+ std::shared_ptr <NPulseNeuron> NOTNeuron;
 
 
  /// Нейрон, определяющий движение вперёд
- UEPtr <NPulseNeuron> IsForwardNeuron;
+ std::shared_ptr <NPulseNeuron> IsForwardNeuron;
 
  /// Нейрон, определяющий поворот налево
- UEPtr <NPulseNeuron> IsLeftNeuron;
+ std::shared_ptr <NPulseNeuron> IsLeftNeuron;
 
  /// Нейрон, определяющий поворот направо
- UEPtr <NPulseNeuron> IsRightNeuron;
+ std::shared_ptr <NPulseNeuron> IsRightNeuron;
 
  /// Нейрон, определяющий движение назад
- UEPtr <NPulseNeuron> IsBackNeuron;
+ std::shared_ptr <NPulseNeuron> IsBackNeuron;
 
  /// Выходной нейрон, сигнализирующий об остановке
- UEPtr <NPulseNeuron> StayNeuron;
+ std::shared_ptr <NPulseNeuron> StayNeuron;
 
  /// Выходной нейрон, сигнализирующий о движении вперёд
- UEPtr <NPulseNeuron> ForwardNeuron;
+ std::shared_ptr <NPulseNeuron> ForwardNeuron;
 
  /// Выходной нейрон, сигнализирующий о повороте налево
- UEPtr <NPulseNeuron> LeftNeuron;
+ std::shared_ptr <NPulseNeuron> LeftNeuron;
 
  /// Выходной нейрон, сигнализирующий о повороте направо
- UEPtr <NPulseNeuron> RightNeuron;
+ std::shared_ptr <NPulseNeuron> RightNeuron;
 
  /// Выходной нейрон, сигнализирующий о движении назад
- UEPtr <NPulseNeuron> BackNeuron;
+ std::shared_ptr <NPulseNeuron> BackNeuron;
 
 
 protected: // Временные переменные
@@ -155,12 +155,12 @@ protected:
  /// Выполняет завершающие пользовательские действия
  /// при добавлении дочернего компонента в этот объект
  // Метод будет вызван только если comp был успешно добавлен в список компонент
- virtual bool AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer = 0);
+ virtual bool AAddComponent(std::shared_ptr<UContainer> comp, std::shared_ptr<UIPointer> pointer = 0);
 
  /// Выполняет предварительные пользовательские действия
  /// при удалении дочернего компонента из этого объекта
  // Метод будет вызван только если comp существует в списке компонент
- virtual bool ADelComponent(UEPtr<UContainer> comp);
+ virtual bool ADelComponent(std::shared_ptr<UContainer> comp);
 
  // --------------------------
 

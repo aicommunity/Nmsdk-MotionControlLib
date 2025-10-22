@@ -72,7 +72,7 @@ bool NPCNElement::ADefault(void)
 // � ������ �������� ������
 bool NPCNElement::ABuild(void)
 {
- MotionControlElement = dynamic_cast<NEngineMotionControl*>(MotionControl.GetItem());
+ MotionControlElement = std::shared_ptr<NEngineMotionControl>(dynamic_cast<NEngineMotionControl*>(MotionControl.GetItem()), RDK::NonOwningDeleter());
  CurrentPosition->Assign(2,1,0.0);
  if(MotionControlElement)
   TargetPosition->Assign(MotionControlElement->GetNumControlLoops(),2*MotionControlElement->NumMotionElements,0.0);
@@ -120,8 +120,8 @@ bool NPCNElement::ACalculate(void)
     continue;
    for(int j=0;j<melem->NumControlLoops;j++)
    {
-    UEPtr<NPulseLTZoneCommon> ltzoneL=dynamic_pointer_cast<NPulseLTZoneCommon>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
-    UEPtr<NPulseLTZoneCommon> ltzoneR=dynamic_pointer_cast<NPulseLTZoneCommon>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
+    std::shared_ptr<NPulseLTZoneCommon> ltzoneL=dynamic_pointer_cast<NPulseLTZoneCommon>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
+    std::shared_ptr<NPulseLTZoneCommon> ltzoneR=dynamic_pointer_cast<NPulseLTZoneCommon>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
     double temp=0;
     temp=ltzoneL->OutputFrequency->Double[0];
     (*CurrentPosition)(j,2*i)=temp;
@@ -147,8 +147,8 @@ bool NPCNElement::CreateNeurons()
 {
  if(!MotionControlElement)
   return false;
-   UEPtr<UContainer> cont;
-   UEPtr<UStorage> storage(GetStorage().get());
+   std::shared_ptr<UContainer> cont;
+   std::shared_ptr<UStorage> storage(GetStorage().get());
    bool res(true);
     vector<NMotionElement*> Motions = MotionControlElement->GetMotion();
    //Creating InputNeurons
@@ -163,27 +163,27 @@ bool NPCNElement::CreateNeurons()
     RightAfferentNeurons.resize(melem->NumControlLoops);
     for(int j=0;j<melem->NumControlLoops;j++)
     {
-        UEPtr<UItem> ltzoneL=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
-        UEPtr<UItem> ltzoneR=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
+        std::shared_ptr<UItem> ltzoneL=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
+        std::shared_ptr<UItem> ltzoneR=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
      //
-     UEPtr<NNet> afferentL=dynamic_pointer_cast<NNet>(melem->GetComponentL("AfferentL"+sntoa(j+1)));
-     UEPtr<NNet> afferentR=dynamic_pointer_cast<NNet>(melem->GetComponentL("AfferentR"+sntoa(j+1)));
+     std::shared_ptr<NNet> afferentL=dynamic_pointer_cast<NNet>(melem->GetComponentL("AfferentL"+sntoa(j+1)));
+     std::shared_ptr<NNet> afferentR=dynamic_pointer_cast<NNet>(melem->GetComponentL("AfferentR"+sntoa(j+1)));
      //
      UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
      string ltzoneLName,ltzoneRName;
-     ltzoneL->GetLongName(owner, ltzoneLName);
-     LeftAfferentNeurons[j].push_back(static_pointer_cast<NNet>(afferentL));
-     ltzoneR->GetLongName(owner, ltzoneRName);
-     RightAfferentNeurons[j].push_back(static_pointer_cast<NNet>(afferentR));
+     ltzoneL->GetLongName(GetThisAsSharedContainer(), ltzoneLName);
+     LeftAfferentNeurons[j].push_back(static_pointer_cast<NNet>(afferentL).get());
+     ltzoneR->GetLongName(GetThisAsSharedContainer(), ltzoneRName);
+     RightAfferentNeurons[j].push_back(static_pointer_cast<NNet>(afferentR).get());
      string inputNeuronLName = "InputNeuronL"+sntoa(i+1)+sntoa(j+1);
      string inputNeuronRName = "InputNeuronR"+sntoa(i+1)+sntoa(j+1);
      string inputLName,inputRName;
 
      if(CheckComponentL(inputNeuronLName))
      {
-      NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronLName));
+      NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronLName)).get();
       InputNeurons.push_back(inputNeuron);
-      inputNeuron->GetLongName(owner, inputLName);
+      inputNeuron->GetLongName(GetThisAsSharedContainer(), inputLName);
       LeftInputNeurons[j].push_back(inputNeuron);
      }
      else
@@ -193,16 +193,16 @@ bool NPCNElement::CreateNeurons()
        return false;
       cont->SetName(inputNeuronLName);
          res&=(AddComponent(cont) != ForbiddenId);
-      InputNeurons.push_back(static_pointer_cast<NNet>(cont));
-      cont->GetLongName(owner, inputLName);
-      LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
+      InputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      cont->GetLongName(GetThisAsSharedContainer(), inputLName);
+      LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(cont).get());
      }
 
      if(CheckComponentL(inputNeuronRName))
      {
-      NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronRName));
-      InputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
-      inputNeuron->GetLongName(owner, inputRName);
+      NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronRName)).get();
+      InputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)).get());
+      inputNeuron->GetLongName(GetThisAsSharedContainer(), inputRName);
       RightInputNeurons[j].push_back(inputNeuron);
      }
      else
@@ -212,9 +212,9 @@ bool NPCNElement::CreateNeurons()
        return false;
       cont->SetName(inputNeuronRName);
          res&=(AddComponent(cont) != ForbiddenId);
-      InputNeurons.push_back(static_pointer_cast<NNet>(cont));
-      cont->GetLongName(owner, inputRName);
-      RightInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
+      InputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      cont->GetLongName(GetThisAsSharedContainer(), inputRName);
+      RightInputNeurons[j].push_back(static_pointer_cast<NNet>(cont).get());
      }
 
         owner->CreateLink(ltzoneLName,"Output",inputLName+".Soma1.ExcChannel", "SynapticInputs");
@@ -240,19 +240,19 @@ bool NPCNElement::CreateNeurons()
     RightPostAfferentNeurons.resize(melem->NumControlLoops);
     for(int j=0;j<melem->NumControlLoops;j++)
     {
-        UEPtr<UItem> postAfferentL=dynamic_pointer_cast<UItem>(melem->GetComponentL("PostAfferentL"+sntoa(j+1)));
-        UEPtr<UItem> postAfferentR=dynamic_pointer_cast<UItem>(melem->GetComponentL("PostAfferentR"+sntoa(j+1)));
+        std::shared_ptr<UItem> postAfferentL=dynamic_pointer_cast<UItem>(melem->GetComponentL("PostAfferentL"+sntoa(j+1)));
+        std::shared_ptr<UItem> postAfferentR=dynamic_pointer_cast<UItem>(melem->GetComponentL("PostAfferentR"+sntoa(j+1)));
      //
-     UEPtr<NNet> postafferentL=dynamic_pointer_cast<NNet>(melem->GetComponentL("PostAfferentL"+sntoa(j+1)));
-     UEPtr<NNet> postafferentR=dynamic_pointer_cast<NNet>(melem->GetComponentL("PostAfferentR"+sntoa(j+1)));
+     std::shared_ptr<NNet> postafferentL=dynamic_pointer_cast<NNet>(melem->GetComponentL("PostAfferentL"+sntoa(j+1)));
+     std::shared_ptr<NNet> postafferentR=dynamic_pointer_cast<NNet>(melem->GetComponentL("PostAfferentR"+sntoa(j+1)));
      //
      UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
      string postAfferentLName,postAfferentRName;
 
-     postAfferentL->GetLongName(owner, postAfferentLName);
-     LeftPostAfferentNeurons[j].push_back(static_pointer_cast<NNet>(postafferentL));
-     postAfferentR->GetLongName(owner, postAfferentRName);
-     RightPostAfferentNeurons[j].push_back(static_pointer_cast<NNet>(postafferentR));
+     postAfferentL->GetLongName(GetThisAsSharedContainer(), postAfferentLName);
+     LeftPostAfferentNeurons[j].push_back(static_pointer_cast<NNet>(postafferentL).get());
+     postAfferentR->GetLongName(GetThisAsSharedContainer(), postAfferentRName);
+     RightPostAfferentNeurons[j].push_back(static_pointer_cast<NNet>(postafferentR).get());
 
      string controlNeuronLName = "ControlNeuronL"+sntoa(i+1)+sntoa(j+1);
      string controlNeuronRName = "ControlNeuronR"+sntoa(i+1)+sntoa(j+1);
@@ -260,9 +260,9 @@ bool NPCNElement::CreateNeurons()
 
      if(CheckComponentL(controlNeuronLName))
      {
-      NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronLName));
-      ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
-      controlNeuron->GetLongName(owner, controlLName);
+      NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronLName)).get();
+      ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)).get());
+      controlNeuron->GetLongName(GetThisAsSharedContainer(), controlLName);
       LeftControlNeurons[j].push_back(controlNeuron);
      }
      else
@@ -272,15 +272,15 @@ bool NPCNElement::CreateNeurons()
        return false;
       cont->SetName(controlNeuronLName);
          res&=(AddComponent(cont) != ForbiddenId);
-      ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
-      cont->GetLongName(owner, controlLName);
-      LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(cont));
+      ControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      cont->GetLongName(GetThisAsSharedContainer(), controlLName);
+      LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(cont).get());
      }
      if(CheckComponentL(controlNeuronRName))
      {
-      NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronRName));
-      ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
-      controlNeuron->GetLongName(owner, controlRName);
+      NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronRName)).get();
+      ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)).get());
+      controlNeuron->GetLongName(GetThisAsSharedContainer(), controlRName);
       RightControlNeurons[j].push_back(controlNeuron);
      }
      else
@@ -290,9 +290,9 @@ bool NPCNElement::CreateNeurons()
        return false;
       cont->SetName(controlNeuronRName);
          res&=(AddComponent(cont) != ForbiddenId);
-      ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
-      cont->GetLongName(owner, controlRName);
-      RightControlNeurons[j].push_back(static_pointer_cast<NNet>(cont));
+      ControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
+      cont->GetLongName(GetThisAsSharedContainer(), controlRName);
+      RightControlNeurons[j].push_back(static_pointer_cast<NNet>(cont).get());
      }
         owner->CreateLink(controlLName+".LTZone","Output",postAfferentLName+".Soma1.ExcChannel", "SynapticInputs");
         owner->CreateLink(controlLName+".LTZone","Output",postAfferentRName+".Soma1.InhChannel", "SynapticInputs");
@@ -380,8 +380,8 @@ bool NPCNElement::CreateExternalControlElements(void)
 {
  if(!MotionControlElement)
   return false;
- UEPtr<UContainer> cont;
- UEPtr<UStorage> storage(GetStorage().get());
+ std::shared_ptr<UContainer> cont;
+ std::shared_ptr<UStorage> storage(GetStorage().get());
  bool res(true);
  vector<NMotionElement*> Motions = MotionControlElement->GetMotion();
 
@@ -399,8 +399,8 @@ bool NPCNElement::CreateExternalControlElements(void)
 
    if(CheckComponentL(generatorLName))
    {
-    Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)));
-    LeftGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)));
+    Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)).get());
+    LeftGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)).get());
    }
    else
    {
@@ -409,13 +409,13 @@ bool NPCNElement::CreateExternalControlElements(void)
      return false;
     cont->SetName(generatorLName);
        res&=(AddComponent(cont) != ForbiddenId);
-    Generators.push_back(static_pointer_cast<NNet>(cont));
-    LeftGenerators[j].push_back(static_pointer_cast<NNet>(cont));
+    Generators.push_back(static_pointer_cast<NNet>(cont).get());
+    LeftGenerators[j].push_back(static_pointer_cast<NNet>(cont).get());
    }
    if(CheckComponentL(generatorRName))
    {
-    Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)));
-    RightGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)));
+    Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)).get());
+    RightGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)).get());
    }
    else
    {
@@ -424,8 +424,8 @@ bool NPCNElement::CreateExternalControlElements(void)
      return false;
     cont->SetName(generatorRName);
        res&=(AddComponent(cont) != ForbiddenId);
-    Generators.push_back(static_pointer_cast<NNet>(cont));
-    RightGenerators[j].push_back(static_pointer_cast<NNet>(cont));
+    Generators.push_back(static_pointer_cast<NNet>(cont).get());
+    RightGenerators[j].push_back(static_pointer_cast<NNet>(cont).get());
    }
   }
  }
@@ -440,27 +440,27 @@ bool NPCNElement::LinkNeurons(vector <NNet*> start, vector <NNet*> finish)
 	for(size_t j=0;j<finish.size();j++)
 	{
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
-	  UEPtr<NPulseMembraneCommon> branch;
+	  std::shared_ptr<NPulseMembraneCommon> branch;
 	  bool hasEmptyMembrane=false;
 	  for(size_t k=0;k<neuron->GetNumMembranes();k++)
 	  {
 	   NPulseMembrane* membr = neuron->GetMembrane(k);
 	   if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
 	   {
-     branch=neuron->GetMembrane(k);
+     branch=std::shared_ptr<NPulseMembraneCommon>(neuron->GetMembrane(k), RDK::NonOwningDeleter());
      hasEmptyMembrane=true;
      break;
 	   }
 	  }
 	  if(!hasEmptyMembrane)
-	   branch=neuron->BranchDendrite("Soma1",false);
+	   branch=std::shared_ptr<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false), RDK::NonOwningDeleter());
 	  NameT finishName;
-	  branch->GetLongName(owner, finishName);
+	  branch->GetLongName(GetThisAsSharedContainer(), finishName);
 	  finishName += ".ExcChannel";
 	  for(size_t i=0;i<start.size();i++)
 	  {
 	   NameT startName;
-	   start[i]->GetLongName(owner, startName);
+	   start[i]->GetLongName(GetThisAsSharedContainer(), startName);
 	   startName += ".LTZone";
 	   if(!owner->CheckLink(startName,finishName))
         owner->CreateLink(startName, "Output", finishName, "SynapticInputs");
@@ -479,27 +479,27 @@ bool NPCNElement::LinkNeuronsNeg(vector <NNet*> start, vector <NNet*> finish)
 	for(size_t j=0;j<finish.size();j++)
 	{
 	  NPulseNeuron* neuron=dynamic_cast<NPulseNeuron*>(finish[j]);
-	  UEPtr<NPulseMembraneCommon> branch;
+	  std::shared_ptr<NPulseMembraneCommon> branch;
 	  bool hasEmptyMembrane=false;
 	  for(size_t k=0;k<neuron->GetNumMembranes();k++)
 	  {
 	   NPulseMembrane* membr = neuron->GetMembrane(k);
 	   if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
 	   {
-		 branch=neuron->GetMembrane(k);
+		 branch=std::shared_ptr<NPulseMembraneCommon>(neuron->GetMembrane(k), RDK::NonOwningDeleter());
 		 hasEmptyMembrane=true;
 		 break;
 	   }
 	  }
 	  if(!hasEmptyMembrane)
-	   branch=neuron->BranchDendrite("Soma1",false);
+	   branch=std::shared_ptr<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false), RDK::NonOwningDeleter());
 	  NameT finishName;
-	  branch->GetLongName(owner, finishName);
+	  branch->GetLongName(GetThisAsSharedContainer(), finishName);
 	  finishName += ".ExcChannel";
 	  for(size_t i=0;i<start.size();i++)
 	  {
 	   NameT startName;
-	   start[i]->GetLongName(owner, startName);
+	   start[i]->GetLongName(GetThisAsSharedContainer(), startName);
 	   startName += ".LTZone";
 	   if(!owner->CheckLink(startName,finishName))
         owner->CreateLink(startName, "Output", finishName, "SynapticInputs");
@@ -589,8 +589,8 @@ bool NPCNElement::LinkNegative(vector <NNet*> start, vector <NNet*> finish)
      string inputNeuronRName = "InputNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone";
      string postInputNeuronLName = "PostInputNeuronL"+sntoa(i+1)+sntoa(j+1);
      string postInputNeuronRName = "PostInputNeuronR"+sntoa(i+1)+sntoa(j+1);
-     UEPtr<NPulseNeuron> neuronL=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronLName));
-     UEPtr<NPulseNeuron> neuronR=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronRName));
+     std::shared_ptr<NPulseNeuron> neuronL=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronLName));
+     std::shared_ptr<NPulseNeuron> neuronR=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronRName));
      for(size_t m=0;m<neuronL->GetNumMembranes();m++)
      {
       NPulseMembrane* membr = neuronL->GetMembrane(m);
@@ -610,13 +610,13 @@ bool NPCNElement::LinkNegative(vector <NNet*> start, vector <NNet*> finish)
     for(size_t l=0;l<membrToConnectL.size();l++)
     {
      string membrLName;
-     membrToConnectL[l]->GetLongName(this,membrLName);
+     membrToConnectL[l]->GetLongName(GetThisAsSharedContainer(),membrLName);
         CreateLink(start[c]->GetName()+".LTZone","Output",membrLName+".InhChannel", "SynapticInputs");
     }
     for(size_t k=0;k<membrToConnectR.size();k++)
     {
      string membrRName;
-     membrToConnectR[k]->GetLongName(this,membrRName);
+     membrToConnectR[k]->GetLongName(GetThisAsSharedContainer(),membrRName);
         CreateLink(start[c]->GetName()+".LTZone","Output",membrRName+".InhChannel", "SynapticInputs");
     }
    }

@@ -74,19 +74,19 @@ UPropertyOutputData<MDMatrix<double>, NSuppressionUnit, ptOutput | ptPubState> O
 
 protected: // Данные
  /// Генераторы входных импульсов
- UEPtr <NPulseGeneratorTransit> SourceGenerator;
+ std::shared_ptr <NPulseGeneratorTransit> SourceGenerator;
 
  /// Генераторы задержек
- std::vector<UEPtr<NPulseGeneratorTransit>> DelayGenerators;
+ std::vector<std::shared_ptr<NPulseGeneratorTransit>> DelayGenerators;
 
  /// Нейрон ИЛИ
- UEPtr <NPulseNeuron> ORNeuron;
+ std::shared_ptr <NPulseNeuron> ORNeuron;
 
  /// Генератор подавляющих импульсов
- UEPtr <NPulseGeneratorTransit> ControlledGenerator;
+ std::shared_ptr <NPulseGeneratorTransit> ControlledGenerator;
 
  /// Нейрон
- UEPtr <NPulseNeuron> Neuron;
+ std::shared_ptr <NPulseNeuron> Neuron;
 
 protected: // Временные переменные
 
@@ -114,12 +114,12 @@ protected:
  /// Выполняет завершающие пользовательские действия
  /// при добавлении дочернего компонента в этот объект
  // Метод будет вызван только если comp был успешно добавлен в список компонент
- virtual bool AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer = 0);
+ virtual bool AAddComponent(std::shared_ptr<UContainer> comp, std::shared_ptr<UIPointer> pointer = 0);
 
  /// Выполняет предварительные пользовательские действия
  /// при удалении дочернего компонента из этого объекта
  // Метод будет вызван только если comp существует в списке компонент
- virtual bool ADelComponent(UEPtr<UContainer> comp);
+ virtual bool ADelComponent(std::shared_ptr<UContainer> comp);
 
  // --------------------------
 

@@ -19,7 +19,7 @@ See file license.txt for more information
 namespace NMSDK {
 
 // --------------------------
-// Конструкторы и деструкторы
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 NTrajectoryElement::NTrajectoryElement(void)
 : NeuronClassName("NeuronClassName",this, &NTrajectoryElement::SetNeuronClassName),
@@ -38,7 +38,7 @@ NTrajectoryElement::~NTrajectoryElement(void)
 // --------------------------
 
 // --------------------------
-// Методы управления параметрами
+// пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
 bool NTrajectoryElement::SetNeuronClassName(const std::string &value)
 {
@@ -57,9 +57,9 @@ bool NTrajectoryElement::SetLayer(const int &value)
 
 
 // --------------------------
-// Системные методы управления объектом
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 NTrajectoryElement* NTrajectoryElement::New(void)
 {
  return new NTrajectoryElement;
@@ -69,7 +69,7 @@ NTrajectoryElement* NTrajectoryElement::New(void)
 // --------------------------
 // Proctected computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 bool NTrajectoryElement::ADefault(void)
 {
  NeuronClassName = "NSPNeuronGen"; //NNewSPNeuron
@@ -86,17 +86,17 @@ bool NTrajectoryElement::ADefault(void)
 }
 
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ Reset() пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Ready пїЅ true
+// пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 bool NTrajectoryElement::ABuild(void)
 {
- //Координаты для размещения нейронов
+ //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  int y_base = 2;
  int y_shift = 2;
 
- //Создаем нейроны
+ //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
  Neurons.resize(2);
  for (int i = 0; i<2; i++)
  {
@@ -114,37 +114,37 @@ bool NTrajectoryElement::ABuild(void)
    Neurons[1]->Reset();
 
 
- //Строим связи
+ //пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
  bool res(true);
 
- //НОВАЯ КОНФИГУРАЦИЯ (подобрана для обновленной NNewSPNeuron)
- //От N1 к N2
- UEPtr<NPulseLTZoneCommon> ltzone1 = Neurons[0]->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+ //пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ NNewSPNeuron)
+ //пїЅпїЅ N1 пїЅ N2
+ std::shared_ptr<NPulseLTZoneCommon> ltzone1 = Neurons[0]->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
  if(!ltzone1)
      return true;
 
- UEPtr<NPulseSynapse> n2_s1_d1 = Neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_1.ExcSynapse1",true);
- res&=CreateLink(ltzone1->GetLongName(this),"Output",n2_s1_d1->GetLongName(this),"Input");
+ std::shared_ptr<NPulseSynapse> n2_s1_d1 = Neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_1.ExcSynapse1",true);
+ res&=CreateLink(ltzone1->GetLongName(GetThisAsSharedContainer()),"Output",n2_s1_d1->GetLongName(GetThisAsSharedContainer()),"Input");
  if(!res)
   return true;
 
- UEPtr<NPulseSynapse> n2_s1_d3 = Neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_3.ExcSynapse1",true);
- res&=CreateLink(ltzone1->GetLongName(this),"Output",n2_s1_d3->GetLongName(this),"Input");
+ std::shared_ptr<NPulseSynapse> n2_s1_d3 = Neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_3.ExcSynapse1",true);
+ res&=CreateLink(ltzone1->GetLongName(GetThisAsSharedContainer()),"Output",n2_s1_d3->GetLongName(GetThisAsSharedContainer()),"Input");
  if(!res)
   return true;
 
- //От N2 к N1
- UEPtr<NLTZone> ltzone2 = Neurons[1]->GetComponentL<NLTZone>("LTZone", true);
+ //пїЅпїЅ N2 пїЅ N1
+ std::shared_ptr<NLTZone> ltzone2 = Neurons[1]->GetComponentL<NLTZone>("LTZone", true);
  if(!ltzone2)
      return true;
 
- UEPtr<NPulseSynapse> n1_s1_d1 = Neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_1.ExcSynapse1",true);
- res&=CreateLink(ltzone2->GetLongName(this),"Output",n1_s1_d1->GetLongName(this),"Input");
+ std::shared_ptr<NPulseSynapse> n1_s1_d1 = Neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_1.ExcSynapse1",true);
+ res&=CreateLink(ltzone2->GetLongName(GetThisAsSharedContainer()),"Output",n1_s1_d1->GetLongName(GetThisAsSharedContainer()),"Input");
  if(!res)
   return true;
 
- UEPtr<NPulseSynapse> n1_s1_d3 = Neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_3.ExcSynapse1",true);
- res&=CreateLink(ltzone2->GetLongName(this),"Output",n1_s1_d3->GetLongName(this),"Input");
+ std::shared_ptr<NPulseSynapse> n1_s1_d3 = Neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_3.ExcSynapse1",true);
+ res&=CreateLink(ltzone2->GetLongName(GetThisAsSharedContainer()),"Output",n1_s1_d3->GetLongName(GetThisAsSharedContainer()),"Input");
  if(!res)
   return true;
 
@@ -162,7 +162,7 @@ bool NTrajectoryElement::AReset(void)
 // Execute math. computations of current object on current step
 bool NTrajectoryElement::ACalculate(void)
 {
- //Передача сигнала к выходу блока
+ //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
   Output = Neurons[0]->Output;
 
  return true;

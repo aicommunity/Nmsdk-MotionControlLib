@@ -61,7 +61,7 @@ NSuppressionUnit* NSuppressionUnit::New(void)
 /// ��������� ����������� ���������������� ��������
 /// ��� ���������� ��������� ���������� � ���� ������
 // ����� ����� ������ ������ ���� comp ��� ������� �������� � ������ ���������
-bool NSuppressionUnit::AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer)
+bool NSuppressionUnit::AAddComponent(std::shared_ptr<UContainer> comp, std::shared_ptr<UIPointer> pointer)
 {
  return true;
 }
@@ -69,7 +69,7 @@ bool NSuppressionUnit::AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> po
 /// ��������� ��������������� ���������������� ��������
 /// ��� �������� ��������� ���������� �� ����� �������
 // ����� ����� ������ ������ ���� comp ���������� � ������ ���������
-bool NSuppressionUnit::ADelComponent(UEPtr<UContainer> comp)
+bool NSuppressionUnit::ADelComponent(std::shared_ptr<UContainer> comp)
 {
  return true;
 }
@@ -172,7 +172,7 @@ bool NSuppressionUnit::SetLTZThreshold(const double &value)
  if (!Neuron)
   return true;
 
- UEPtr<NLTZone> ltzone = Neuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
+ std::shared_ptr<NLTZone> ltzone = Neuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
  if(!ltzone)
   return true;
 
@@ -336,7 +336,7 @@ bool NSuppressionUnit::ABuild(void)
  ORNeuron = AddMissingComponent<NPulseNeuron>(std::string("ORNeuron"), NeuronClassName);
  ORNeuron->SetCoord(MVector<double,3>(11.33, 7, 0));
  ORNeuron->DisconnectAll("Output");
- UEPtr<NPulseMembrane> or_soma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
+ std::shared_ptr<NPulseMembrane> or_soma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
  if (or_soma)
  {
   or_soma->NumExcitatorySynapses = 2;
@@ -353,7 +353,7 @@ bool NSuppressionUnit::ABuild(void)
  Neuron = AddMissingComponent<NPulseNeuron>(std::string("Neuron"), NeuronClassName);
  Neuron->SetCoord(MVector<double,3>(18, 3, 0));
 
- UEPtr<NLTZone> ltzone = Neuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
+ std::shared_ptr<NLTZone> ltzone = Neuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
  if(!ltzone)
   return true;
  ltzone->Threshold = LTZThreshold;
@@ -367,7 +367,7 @@ bool NSuppressionUnit::ABuild(void)
 
 
  // ������� ������ �������� � Neuron
- UEPtr<NPulseMembrane> soma = Neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+ std::shared_ptr<NPulseMembrane> soma = Neuron->GetComponentL<NPulseMembrane>("Soma1", true);
  if(!soma)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because Soma1 isn't exists: "));
@@ -382,12 +382,12 @@ bool NSuppressionUnit::ABuild(void)
  }
 
  // ������ ����� ����� ControlledGenerator � ��������� �������� ���� Neuron
- if (!CheckLink("ControlledGenerator", "Output", inhsynapse->GetLongName(this), "Input"))
-  res &= CreateLink("ControlledGenerator", "Output", inhsynapse->GetLongName(this), "Input");
+ if (!CheckLink("ControlledGenerator", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+  res &= CreateLink("ControlledGenerator", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
  // ������ ����� ����� ���������� �������� ������� Source � �������� ���� Neuron
- if (!CheckLink("Source", "Output", excsynapse->GetLongName(this), "Input"))
-  res &= CreateLink("Source", "Output", excsynapse->GetLongName(this), "Input");
+ if (!CheckLink("Source", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+  res &= CreateLink("Source", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
 
  // ������� ������������ ���������� ORNeuron
@@ -408,8 +408,8 @@ bool NSuppressionUnit::ABuild(void)
   }
 
   // ������ �����
-  if (!CheckLink(DelayGenerators[i]->GetLongName(this), "Output", or_excsynapse->GetLongName(this), "Input"))
-   res &= CreateLink(DelayGenerators[i]->GetLongName(this), "Output", or_excsynapse->GetLongName(this), "Input");
+  if (!CheckLink(DelayGenerators[i]->GetLongName(GetThisAsSharedContainer()), "Output", or_excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink(DelayGenerators[i]->GetLongName(GetThisAsSharedContainer()), "Output", or_excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
  }
 
  return res;

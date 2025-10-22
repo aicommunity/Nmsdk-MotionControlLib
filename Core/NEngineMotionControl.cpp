@@ -643,7 +643,7 @@ bool NEngineMotionControl::AReset(void)
  for(int n=0;n<NumMotionElements;n++)
  {
   receptors[n].resize(6);
-  UContainer* cont=GetComponent(string("MotionElement")+RDK::sntoa(n),true);
+  UContainer* cont=GetComponent(string("MotionElement")+RDK::sntoa(n),true).get();
   if(!cont)
    continue;
 
@@ -657,7 +657,9 @@ bool NEngineMotionControl::AReset(void)
   }
   catch (EComponentNameNotExist &exc)
   {
-   continue;
+   std::string msg;
+   exc.Explain(msg);
+   LogMessage(RDK_EX_WARNING,msg);
   }*/
 
 //  LastAdaptiveTime=0.0;
@@ -698,8 +700,8 @@ bool NEngineMotionControl::ACalculate(void)
  vector<double> measure;
 
  measure.resize(NumControlLoops);
- //UEPtr<UNet> source;
- UEPtr<NControlObjectSource> source;
+ //std::shared_ptr<UNet> source;
+ std::shared_ptr<NControlObjectSource> source;
  for(int i=0;i<NumControlLoops;i++)
  {
     source=dynamic_pointer_cast<NControlObjectSource>(GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/));
@@ -817,7 +819,6 @@ bool NEngineMotionControl::ACalculate(void)
  // Receptors
  for(int i=0;i<NumMotionElements;i++)
  {
-  try {
 /*  if(receptors[i][0] && receptors[i][0]->GetInputData(size_t(0))->Double[0] > 0)
    ++pos_speed;
   if(receptors[i][1] && receptors[i][1]->GetInputData(size_t(0))->Double[0] > 0)
@@ -832,12 +833,6 @@ bool NEngineMotionControl::ACalculate(void)
    ++pos_angle;
   if(receptors[i][5] && receptors[i][5]->GetInputData(size_t(0)) && receptors[i][5]->GetInputData(size_t(0))->Double[0] > 0)
    ++neg_angle;*/
-  }
-  catch (UEPtr<NReceptor>::EUsingZeroPtr &)
-  {
-   continue;
-  }
-
  }
 
 // POutputData[0].Double[0]=pos_angle;
@@ -929,8 +924,8 @@ bool NEngineMotionControl::Create(bool full_recreate)
 
 
  auto storage_sp = Storage.lock();
- UEPtr<UStorage> storage(storage_sp.get());
- UEPtr<UStatisticMatrix<double> > stats=AddMissingComponent<UStatisticMatrix<double> >("StatisticDoubleMatrix", "UStatisticDoubleMatrix");
+ std::shared_ptr<UStorage> storage(storage_sp.get());
+ std::shared_ptr<UStatisticMatrix<double> > stats=AddMissingComponent<UStatisticMatrix<double> >("StatisticDoubleMatrix", "UStatisticDoubleMatrix");
  stats->SetCoord(MVector<double,3>(5.0, 13.0, 10));
  stats->ManualModeEnabled=true;
  return true;
@@ -961,7 +956,7 @@ bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
 		== "MotionElement" && found_motion_elements<expected_num_motion_elements)
 	++found_motion_elements;
    else
-	DelComponent(UEPtr<UContainer>(PComponents[i].get()),true);
+	DelComponent(std::shared_ptr<UContainer>(PComponents[i].get()),true);
   }
  }
  return true;
@@ -1202,7 +1197,7 @@ void NEngineMotionControl::SetupPacRange(void)
 {
  if(NumMotionElements <= 0)
   return;
- UEPtr<NPac> cont;
+ std::shared_ptr<NPac> cont;
   cont=dynamic_pointer_cast<NPac>(GetComponentL("Pac",true));
 
  if(!cont)
@@ -1292,9 +1287,9 @@ void NEngineMotionControl::SetupPacRange(void)
 }
 
 // ��������� ��������������� ������-������
-void NEngineMotionControl::AACSetup(UEPtr<UNet> net, double gain_value)
+void NEngineMotionControl::AACSetup(std::shared_ptr<UNet> net, double gain_value)
 {
- UEPtr<NPac> pac = net->AddMissingComponent<NPac>("Pac", PacObjectName);
+ std::shared_ptr<NPac> pac = net->AddMissingComponent<NPac>("Pac", PacObjectName);
  if(!pac)
   return;
  pac->Mode=0;
@@ -1323,11 +1318,11 @@ void NEngineMotionControl::AACSetup(UEPtr<UNet> net, double gain_value)
 
 
 // ������� ��������������� ���������
-void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UNet> net)
+void NEngineMotionControl::AdditionalComponentsSetup(std::shared_ptr<UNet> net)
 {
  if(CheckName("IIPosAfferentGenerator"))
  {
-  UEPtr<NPulseGenerator> gen=net->AddMissingComponent<NPulseGenerator>("IIPosAfferentGenerator", "NPGenerator");
+  std::shared_ptr<NPulseGenerator> gen=net->AddMissingComponent<NPulseGenerator>("IIPosAfferentGenerator", "NPGenerator");
   if(!gen)
    return;
   gen->Amplitude=1;
@@ -1337,7 +1332,7 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UNet> net)
 
  if(CheckName("IINegAfferentGenerator"))
  {
-  UEPtr<NPulseGenerator> gen=net->AddMissingComponent<NPulseGenerator>("IINegAfferentGenerator", "NPGenerator");
+  std::shared_ptr<NPulseGenerator> gen=net->AddMissingComponent<NPulseGenerator>("IINegAfferentGenerator", "NPGenerator");
   if(!gen)
    return;
   gen->Amplitude=1;
@@ -1347,7 +1342,7 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UNet> net)
 
  if(CheckName("AfferentSource1"))
  {
-  UEPtr<NConstGenerator> gen=net->AddMissingComponent<NConstGenerator>("AfferentSource1", "NCGenerator");
+  std::shared_ptr<NConstGenerator> gen=net->AddMissingComponent<NConstGenerator>("AfferentSource1", "NCGenerator");
   if(!gen)
    return;
 
@@ -1366,7 +1361,7 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UNet> net)
   std::string name="NManipulatorSource1";
   if(CheckName(name))
   {
-   UEPtr<NControlObjectSource> cont2=net->AddMissingComponent<NControlObjectSource>(name, ObjectControlInterfaceClassName);
+   std::shared_ptr<NControlObjectSource> cont2=net->AddMissingComponent<NControlObjectSource>(name, ObjectControlInterfaceClassName);
    if(!cont2)
     return;
 
@@ -1377,7 +1372,7 @@ void NEngineMotionControl::AdditionalComponentsSetup(UEPtr<UNet> net)
 
  if(CheckName("NManipulatorInput1"))
  {     
-  UEPtr<NManipulatorInput> cont=net->AddMissingComponent<NManipulatorInput>("NManipulatorInput1", "NManipulatorInput");
+  std::shared_ptr<NManipulatorInput> cont=net->AddMissingComponent<NManipulatorInput>("NManipulatorInput1", "NManipulatorInput");
   if(!cont)
    return;
   cont->SetCoord(MVector<double,3>(35.0, 7.0, 6.0));
@@ -1417,7 +1412,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
 
  bool res(true);
  auto storage_sp2 = Storage.lock();
- UEPtr<UStorage> storage(storage_sp2.get());
+ std::shared_ptr<UStorage> storage(storage_sp2.get());
  size_t num_motions=NumMotionElements;
 
  // ����� ����������������� ����������
@@ -1459,12 +1454,12 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
   return 0;
 
  // ������������ ��������
- NewMotionElementsSetup(net);
+ NewMotionElementsSetup(std::shared_ptr<UNet>(net, RDK::NonOwningDeleter()));
 
- AdditionalComponentsSetup(net);
+ AdditionalComponentsSetup(std::shared_ptr<UNet>(net, RDK::NonOwningDeleter()));
  if(CreationMode == 10)
  {
-  AACSetup(net, 100);
+  AACSetup(std::shared_ptr<UNet>(net, RDK::NonOwningDeleter()), 100);
  }
  else
  {
@@ -1494,7 +1489,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
 }
 
 // ��������� ����������
-void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UNet> net)
+void NEngineMotionControl::NewMotionElementsSetup(std::shared_ptr<UNet> net)
 {
  Motions.clear();
 
@@ -1511,11 +1506,11 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UNet> net)
 
  for(int i=0;i<NumMotionElements;i++)
  {
-  UEPtr<NMotionElement> motion_elem = AddMissingComponent<NMotionElement>(string("MotionElement")+RDK::sntoa(i), MotionElementClassName);
+  std::shared_ptr<NMotionElement> motion_elem = AddMissingComponent<NMotionElement>(string("MotionElement")+RDK::sntoa(i), MotionElementClassName);
   if(!motion_elem)
    continue;
   motion_elem->SetCoord(MVector<double,3>(22.0, 7+(5*i), 6.0));
-  Motions.push_back(motion_elem);
+  Motions.push_back(motion_elem.get());
 
   motion_elem->NeuroObjectName = MCNeuroObjectName;
   motion_elem->AfferentObjectName = MCAfferentObjectName;
@@ -1543,8 +1538,8 @@ void NEngineMotionControl::NewMotionElementsSetup(UEPtr<UNet> net)
   //Adding synapses for link to ControlNeurons in PositionControlElement
   for (int k=0; k< motion_elem->NumControlLoops; k++)
   {
-   UEPtr<NPulseMembrane> post_afL_soma = motion_elem->GetComponentL<NPulseMembrane>("PostAfferentL1.Soma1",true);
-   UEPtr<NPulseMembrane> post_afR_soma = motion_elem->GetComponentL<NPulseMembrane>("PostAfferentR1.Soma1",true);
+   std::shared_ptr<NPulseMembrane> post_afL_soma = motion_elem->GetComponentL<NPulseMembrane>("PostAfferentL1.Soma1",true);
+   std::shared_ptr<NPulseMembrane> post_afR_soma = motion_elem->GetComponentL<NPulseMembrane>("PostAfferentR1.Soma1",true);
    if(post_afL_soma)
    {
        post_afL_soma->NumExcitatorySynapses=2;
@@ -1566,7 +1561,7 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
  if(PacObjectName->empty())
   return;
 
- UEPtr<NPac> pac=AddMissingComponent<NPac>("Pac", PacObjectName);
+ std::shared_ptr<NPac> pac=AddMissingComponent<NPac>("Pac", PacObjectName);
 
  if(!pac)
   return;
@@ -1621,7 +1616,7 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
 /// ��������� ��������� Pac
 void NEngineMotionControl::UpdatePacTCParameters(void)
 {
- UEPtr<NPac> pac=GetComponentL<NPac>("Pac",true);
+ std::shared_ptr<NPac> pac=GetComponentL<NPac>("Pac",true);
  if(!pac)
   return;
 
@@ -1685,7 +1680,7 @@ for (int j=0; j < NumMotionElements ; j++)
  {
   if (!CheckComponentL((std::string("NegIntervalSeparator")+sntoa(j+1)+sntoa(i+1)).c_str()))
   {
-   UEPtr<NIntervalSeparator> separator=AddMissingComponent<NIntervalSeparator>(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), "NIntervalSeparator");
+   std::shared_ptr<NIntervalSeparator> separator=AddMissingComponent<NIntervalSeparator>(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), "NIntervalSeparator");
    if(!separator)
     continue;
    separator->SetCoord(MVector<double,3>(15.0, (8.0+(j*5)), 9.0));
@@ -1696,7 +1691,7 @@ for (int j=0; j < NumMotionElements ; j++)
    separator->MinRange=left_value;
    separator->MaxRange=right_value;
 
-   UEPtr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentR"+RDK::sntoa(i+1)+".Receptor", true));
+   std::shared_ptr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentR"+RDK::sntoa(i+1)+".Receptor", true));
    if(receptor)
    {
     receptor->MinInputRange=0;
@@ -1711,7 +1706,7 @@ for (int j=0; j < NumMotionElements ; j++)
 
   if (!CheckComponentL((std::string("PosIntervalSeparator")+sntoa(j+1)+sntoa(i+1)).c_str()))
   {
-   UEPtr<NIntervalSeparator> separator=AddMissingComponent<NIntervalSeparator>(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), "NIntervalSeparator");
+   std::shared_ptr<NIntervalSeparator> separator=AddMissingComponent<NIntervalSeparator>(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), "NIntervalSeparator");
    if(!separator)
     continue;
    separator->SetCoord(MVector<double,3>(15.0, (6.0+(j*5)), 10.0));
@@ -1722,7 +1717,7 @@ for (int j=0; j < NumMotionElements ; j++)
    separator->MinRange=left_value;
    separator->MaxRange=right_value;
 
-   UEPtr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentL"+RDK::sntoa(i+1)+".Receptor", true));
+   std::shared_ptr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentL"+RDK::sntoa(i+1)+".Receptor", true));
    if(receptor)
    {
     receptor->MinInputRange=0;
@@ -1764,7 +1759,7 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
 	 if(melem)
 	 for(int i=0;i<melem->NumControlLoops;i++)
 	  {
-       UEPtr<NIntervalSeparator> separator;
+       std::shared_ptr<NIntervalSeparator> separator;
        separator=GetComponent<NIntervalSeparator>(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), true);
        if(separator)
        {
@@ -1775,7 +1770,7 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
         separator->MinRange=left_value;
         separator->MaxRange=right_value;
 
-        UEPtr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentR"+RDK::sntoa(i+1)+".Receptor", true));
+        std::shared_ptr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentR"+RDK::sntoa(i+1)+".Receptor", true));
         if(receptor)
         {
          receptor->MinInputRange=0;
@@ -1793,7 +1788,7 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
         separator->MinRange=left_value;
         separator->MaxRange=right_value;
 
-        UEPtr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentL"+RDK::sntoa(i+1)+".Receptor", true));
+        std::shared_ptr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentL"+RDK::sntoa(i+1)+".Receptor", true));
         if(receptor)
         {
          receptor->MinInputRange=0;

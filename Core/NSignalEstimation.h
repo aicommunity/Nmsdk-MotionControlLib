@@ -67,13 +67,13 @@ public: // Входы и выходы
 
 protected: // Данные
  /// Генератор зонируемого сигнала
- UEPtr <NPulseGeneratorTransit> SignalGen;
+ std::shared_ptr <NPulseGeneratorTransit> SignalGen;
 
  /// Генератор синхронизирующего сигнала
- UEPtr <NPulseGeneratorTransit> SinchroGen;
+ std::shared_ptr <NPulseGeneratorTransit> SinchroGen;
 
  ///Зонирующие нейроны
- std::vector<UEPtr <NPulseNeuron>> ZoneNeurons;
+ std::vector<std::shared_ptr <NPulseNeuron>> ZoneNeurons;
 
  /// Старое значение количества зон, необходимое для перестраивания компонента
  int OldNumZones;
@@ -104,12 +104,12 @@ protected:
  /// Выполняет завершающие пользовательские действия
  /// при добавлении дочернего компонента в этот объект
  // Метод будет вызван только если comp был успешно добавлен в список компонент
- virtual bool AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer = 0);
+ virtual bool AAddComponent(std::shared_ptr<UContainer> comp, std::shared_ptr<UIPointer> pointer = 0);
 
  /// Выполняет предварительные пользовательские действия
  /// при удалении дочернего компонента из этого объекта
  // Метод будет вызван только если comp существует в списке компонент
- virtual bool ADelComponent(UEPtr<UContainer> comp);
+ virtual bool ADelComponent(std::shared_ptr<UContainer> comp);
 
  // --------------------------
 

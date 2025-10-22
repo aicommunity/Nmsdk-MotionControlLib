@@ -14,7 +14,7 @@ See file license.txt for more information
 
 #include "NEngineMotionControl.h"
 #include "NMotionElement.h"
-#include "UEPtr.h"
+#include <memory>
 #include "ModernSmartPointers.h"
 #include <memory>
 #include <mutex>
