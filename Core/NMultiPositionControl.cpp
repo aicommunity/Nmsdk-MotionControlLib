@@ -131,7 +131,7 @@ bool NMultiPositionControl::ABuild(void)
   PositionControlElement.resize(PositionControl.size());
 
   for(size_t i=0;i<PositionControl.size();i++)
-    PositionControlElement[i] = std::shared_ptr<NPositionControlElement>(dynamic_cast<NPositionControlElement*>(PositionControl.GetItem(int(i))), RDK::NonOwningDeleter());
+    PositionControlElement[i] = safe_shared_cast<NPositionControlElement>(dynamic_cast<NPositionControlElement*>(PositionControl.GetItem(int(i))));
 
   if (IsNeedToRebuild)
   {

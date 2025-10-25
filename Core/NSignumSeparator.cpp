@@ -118,7 +118,7 @@ bool NSignumSeparator::ACalculate(void)
  int input_data_size=Input->GetCols();
  std::shared_ptr<const MDMatrix<double> > input_data_matrix;
  if(Input.IsConnected())
-  input_data_matrix=std::shared_ptr<const MDMatrix<double>>(Input.operator->(), RDK::NonOwningDeleter());
+  input_data_matrix=safe_shared_cast<const MDMatrix<double>>(Input.operator->());
 
  output_data_matrix.Resize(1,int(input_data_size));
 

@@ -1454,12 +1454,12 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
   return 0;
 
  // ������������ ��������
- NewMotionElementsSetup(std::shared_ptr<UNet>(net, RDK::NonOwningDeleter()));
+ NewMotionElementsSetup(safe_shared_cast<UNet>(net));
 
- AdditionalComponentsSetup(std::shared_ptr<UNet>(net, RDK::NonOwningDeleter()));
+ AdditionalComponentsSetup(safe_shared_cast<UNet>(net));
  if(CreationMode == 10)
  {
-  AACSetup(std::shared_ptr<UNet>(net, RDK::NonOwningDeleter()), 100);
+  AACSetup(safe_shared_cast<UNet>(net), 100);
  }
  else
  {

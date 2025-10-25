@@ -150,7 +150,7 @@ bool NPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> f
 	   NPulseMembrane* membr = neuron->GetMembrane(k);
 	   if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
 	   {
-		 branch=std::shared_ptr<NPulseMembrane>(neuron->GetMembrane(k), RDK::NonOwningDeleter());
+		 branch=safe_shared_cast<NPulseMembrane>(neuron->GetMembrane(k));
 		 hasEmptyMembrane=true;
 		 break;
 	   }

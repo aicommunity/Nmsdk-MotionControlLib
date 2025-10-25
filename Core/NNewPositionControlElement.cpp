@@ -88,7 +88,7 @@ bool NNewPositionControlElement::ADefault(void)
 // � ������ �������� ������
 bool NNewPositionControlElement::ABuild(void)
 {
- MotionControlElement = std::shared_ptr<NEngineMotionControl>(dynamic_cast<NEngineMotionControl*>(MotionControl.GetItem()), RDK::NonOwningDeleter());
+ MotionControlElement = safe_shared_cast<NEngineMotionControl>(dynamic_cast<NEngineMotionControl*>(MotionControl.GetItem()));
  CurrentPosition->Assign(2,1,0.0);
 
  //�������� ������ ��������� ����� ������������, ���������
@@ -102,35 +102,35 @@ bool NNewPositionControlElement::ABuild(void)
     for (size_t i=i_min; i<i_max; i++)
     {
       //NameT check_name = InputNeurons[i]->GetName();
-      DelComponent(std::shared_ptr<UContainer>(InputNeurons[i], RDK::NonOwningDeleter()),true);
+      DelComponent(safe_shared_cast<UContainer>(InputNeurons[i]),true);
     }
 
     i_max = PostInputNeurons.size();
     for (size_t i=i_min; i<i_max; i++)
     {
       //NameT check_name = PostInputNeurons[i]->GetName();
-      DelComponent(std::shared_ptr<UContainer>(PostInputNeurons[i], RDK::NonOwningDeleter()),true);
+      DelComponent(safe_shared_cast<UContainer>(PostInputNeurons[i]),true);
     }
 
     i_max = PreControlNeurons.size();
     for (size_t i=i_min; i<i_max; i++)
     {
       //NameT check_name = PreControlNeurons[i]->GetName();
-      DelComponent(std::shared_ptr<UContainer>(PreControlNeurons[i], RDK::NonOwningDeleter()),true);
+      DelComponent(safe_shared_cast<UContainer>(PreControlNeurons[i]),true);
     }
 
     i_max = ControlNeurons.size();
     for (size_t i=i_min; i<i_max; i++)
     {
      //NameT check_name = ControlNeurons[i]->GetName();
-      DelComponent(std::shared_ptr<UContainer>(ControlNeurons[i], RDK::NonOwningDeleter()),true);
+      DelComponent(safe_shared_cast<UContainer>(ControlNeurons[i]),true);
     }
 
     i_max = Generators.size();
     for (size_t i=i_min; i<i_max; i++)
     {
       //NameT check_name = Generators[i]->GetName();
-      DelComponent(std::shared_ptr<UContainer>(Generators[i], RDK::NonOwningDeleter()),true);
+      DelComponent(safe_shared_cast<UContainer>(Generators[i]),true);
     }
   }
  }
@@ -780,7 +780,7 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
 	   NPulseMembrane* membr = neuron->GetMembrane(k);
 	   if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
 	   {
-     branch=std::shared_ptr<NPulseMembrane>(neuron->GetMembrane(k), RDK::NonOwningDeleter());
+     branch=safe_shared_cast<NPulseMembrane>(neuron->GetMembrane(k));
      hasEmptyMembrane=true;
      break;
 	   }
@@ -838,7 +838,7 @@ bool NNewPositionControlElement::LinkNeuronsNeg(vector <NNet*> start, vector <NN
 	   NPulseMembrane* membr = neuron->GetMembrane(k);
 	   if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
 	   {
-     branch=std::shared_ptr<NPulseMembrane>(neuron->GetMembrane(k), RDK::NonOwningDeleter());
+     branch=safe_shared_cast<NPulseMembrane>(neuron->GetMembrane(k));
      hasEmptyMembrane=true;
      break;
     }

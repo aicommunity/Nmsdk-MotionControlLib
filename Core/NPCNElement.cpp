@@ -72,7 +72,7 @@ bool NPCNElement::ADefault(void)
 // � ������ �������� ������
 bool NPCNElement::ABuild(void)
 {
- MotionControlElement = std::shared_ptr<NEngineMotionControl>(dynamic_cast<NEngineMotionControl*>(MotionControl.GetItem()), RDK::NonOwningDeleter());
+ MotionControlElement = safe_shared_cast<NEngineMotionControl>(dynamic_cast<NEngineMotionControl*>(MotionControl.GetItem()));
  CurrentPosition->Assign(2,1,0.0);
  if(MotionControlElement)
   TargetPosition->Assign(MotionControlElement->GetNumControlLoops(),2*MotionControlElement->NumMotionElements,0.0);
@@ -447,13 +447,13 @@ bool NPCNElement::LinkNeurons(vector <NNet*> start, vector <NNet*> finish)
 	   NPulseMembrane* membr = neuron->GetMembrane(k);
 	   if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
 	   {
-     branch=std::shared_ptr<NPulseMembraneCommon>(neuron->GetMembrane(k), RDK::NonOwningDeleter());
+     branch=safe_shared_cast<NPulseMembraneCommon>(neuron->GetMembrane(k));
      hasEmptyMembrane=true;
      break;
 	   }
 	  }
 	  if(!hasEmptyMembrane)
-	   branch=std::shared_ptr<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false), RDK::NonOwningDeleter());
+	   branch=safe_shared_cast<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false));
 	  NameT finishName;
 	  branch->GetLongName(GetThisAsSharedContainer(), finishName);
 	  finishName += ".ExcChannel";
@@ -486,13 +486,13 @@ bool NPCNElement::LinkNeuronsNeg(vector <NNet*> start, vector <NNet*> finish)
 	   NPulseMembrane* membr = neuron->GetMembrane(k);
 	   if((neuron->GetNumOfConnectedSynToPosCh(membr)==0)&&(membr->GetName()!="LTMembrane"))
 	   {
-		 branch=std::shared_ptr<NPulseMembraneCommon>(neuron->GetMembrane(k), RDK::NonOwningDeleter());
+		 branch=safe_shared_cast<NPulseMembraneCommon>(neuron->GetMembrane(k));
 		 hasEmptyMembrane=true;
 		 break;
 	   }
 	  }
 	  if(!hasEmptyMembrane)
-	   branch=std::shared_ptr<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false), RDK::NonOwningDeleter());
+	   branch=safe_shared_cast<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false));
 	  NameT finishName;
 	  branch->GetLongName(GetThisAsSharedContainer(), finishName);
 	  finishName += ".ExcChannel";

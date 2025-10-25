@@ -252,9 +252,9 @@ bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
   catch(UContainer::EComponentNameNotExist &){}
  }
  if(ltmembr)
-  branch=std::shared_ptr<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false), RDK::NonOwningDeleter());
+  branch=safe_shared_cast<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false));
  else
-  branch=std::shared_ptr<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",true), RDK::NonOwningDeleter());
+  branch=safe_shared_cast<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",true));
  channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
  bool res=net->CreateLink(source,"Output",
                  channel->GetLongName(net,tmpname),"ChannelInput");
@@ -284,9 +284,9 @@ bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
   catch(UContainer::EComponentNameNotExist &){}
  }
  if(ltmembr)
-  branch=std::shared_ptr<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false), RDK::NonOwningDeleter());
+  branch=safe_shared_cast<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false));
  else
-  branch=std::shared_ptr<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",true), RDK::NonOwningDeleter());
+  branch=safe_shared_cast<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",true));
 
  branch->GetLongName(neuron,branch_bame);
  channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
