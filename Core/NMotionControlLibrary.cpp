@@ -44,7 +44,7 @@ NMotionControlLibrary::NMotionControlLibrary(void)
 // �� ��������� ��������������� ������� ������� � ������ ������.
 void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 {
- std::shared_ptr<UContainer> cont;
+ std::shared_ptr<RDK::UContainer> cont;
 
  cont=std::make_shared<NDCEngine>();
  cont->SetName("DCEngine");
@@ -57,14 +57,14 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  UploadClass("NPendulumAndCart",cont);
 
 {
- std::shared_ptr<UContainer> generated_cont=std::make_shared<NAstaticGyro>();
+ std::shared_ptr<RDK::UContainer> generated_cont=std::make_shared<NAstaticGyro>();
  generated_cont->SetName("NAstaticGyro");
  generated_cont->Default();
  UploadClass("NAstaticGyro",generated_cont);
 }
 
 {
- std::shared_ptr<UContainer> generated_cont=std::make_shared<NManipulatorAndGyro>();
+ std::shared_ptr<RDK::UContainer> generated_cont=std::make_shared<NManipulatorAndGyro>();
  generated_cont->SetName("NManipulatorAndGyro");
  generated_cont->Default();
  UploadClass("NManipulatorAndGyro",generated_cont);
@@ -128,7 +128,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 
 
  // ����������� ����������� ������� �� ������������� � ������������� �����
- cont=dynamic_pointer_cast<UContainer>(dynamic_cast<UStorage*>(storage)->TakeObject("NSignumSeparator"));
+ cont=dynamic_pointer_cast<RDK::UContainer>(dynamic_cast<UStorage*>(storage)->TakeObject("NSignumSeparator"));
  cont->SetName("PosSignumSeparator");
  vector<double> signum;
  signum.assign(1,1.0);
@@ -137,7 +137,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  dynamic_pointer_cast<NSignumSeparator>(cont)->Sign=signum;
  UploadClass("NPosSignumSeparator",cont);
 
- cont=dynamic_pointer_cast<UContainer>(dynamic_cast<UStorage*>(storage)->TakeObject("NSignumSeparator"));
+ cont=dynamic_pointer_cast<RDK::UContainer>(dynamic_cast<UStorage*>(storage)->TakeObject("NSignumSeparator"));
  cont->SetName("NegSignumSeparator");
  signum.assign(1,-1.0);
 // signum.assign(1,-1.0/(2*M_PI));
@@ -261,49 +261,49 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 
 
 {
-  std::shared_ptr<UContainer> generated_cont=std::make_shared<NPositionControlElement>();
+  std::shared_ptr<RDK::UContainer> generated_cont=std::make_shared<NPositionControlElement>();
  generated_cont->SetName("NPositionControlElement");
  generated_cont->Default();
  UploadClass("NPositionControlElement",generated_cont);
 }
 
 {
-  std::shared_ptr<UContainer> generated_cont=std::make_shared<NNewPositionControlElement>();
+  std::shared_ptr<RDK::UContainer> generated_cont=std::make_shared<NNewPositionControlElement>();
  generated_cont->SetName("NNewPositionControlElement");
  generated_cont->Default();
  UploadClass("NNewPositionControlElement",generated_cont);
 }
 
 {
-  std::shared_ptr<UContainer> generated_cont=std::make_shared<NMultiPositionControl>();
+  std::shared_ptr<RDK::UContainer> generated_cont=std::make_shared<NMultiPositionControl>();
  generated_cont->SetName("NMultiPositionControl");
  generated_cont->Default();
  UploadClass("NMultiPositionControl",generated_cont);
 }
 
 {
-  std::shared_ptr<UContainer> generated_cont=std::make_shared<NTrajectoryElement>();
+  std::shared_ptr<RDK::UContainer> generated_cont=std::make_shared<NTrajectoryElement>();
  generated_cont->SetName("NTrajectoryElement");
  generated_cont->Default();
  UploadClass("NTrajectoryElement",generated_cont);
 }
 
 {
-  std::shared_ptr<UContainer> generated_cont=std::make_shared<NMazeMemory>();
+  std::shared_ptr<RDK::UContainer> generated_cont=std::make_shared<NMazeMemory>();
  generated_cont->SetName("NMazeMemory");
  generated_cont->Default();
  UploadClass("NMazeMemory",generated_cont);
 }
 
 {
-  std::shared_ptr<UContainer> generated_cont=std::make_shared<NMazeMemory_simplified>();
+  std::shared_ptr<RDK::UContainer> generated_cont=std::make_shared<NMazeMemory_simplified>();
  generated_cont->SetName("NMazeMemory_simplified");
  generated_cont->Default();
  UploadClass("NMazeMemory_simplified",generated_cont);
 }
 
 {
-  std::shared_ptr<UContainer> generated_cont=std::make_shared<NPCNElement>();
+  std::shared_ptr<RDK::UContainer> generated_cont=std::make_shared<NPCNElement>();
  generated_cont->SetName("NPCN");
  generated_cont->Default();
  UploadClass("NPCN",generated_cont);

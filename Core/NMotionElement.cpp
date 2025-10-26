@@ -240,7 +240,7 @@ bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
  std::shared_ptr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
  std::shared_ptr<NPulseMembraneCommon> branch;
  std::shared_ptr<NPulseChannel> channel;
- std::shared_ptr<UContainer> ltmembr;
+ std::shared_ptr<RDK::UContainer> ltmembr;
 
  bool ltmembr_found=neuron->CheckComponent("LTMembrane");
  if(ltmembr_found)
@@ -249,7 +249,7 @@ bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
   {
    ltmembr=neuron->GetComponent("LTMembrane");
   }
-  catch(UContainer::EComponentNameNotExist &){}
+  catch(RDK::UContainer::EComponentNameNotExist &){}
  }
  if(ltmembr)
   branch=safe_shared_cast<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false));
@@ -272,7 +272,7 @@ bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
  std::shared_ptr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
  std::shared_ptr<NPulseMembraneCommon> branch;
  std::shared_ptr<NPulseChannel> channel;
- std::shared_ptr<UContainer> ltmembr;
+ std::shared_ptr<RDK::UContainer> ltmembr;
 
  bool ltmembr_found=neuron->CheckComponent("LTMembrane");
  if(ltmembr_found)
@@ -281,7 +281,7 @@ bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
   {
    ltmembr=neuron->GetComponent("LTMembrane");
   }
-  catch(UContainer::EComponentNameNotExist &){}
+  catch(RDK::UContainer::EComponentNameNotExist &){}
  }
  if(ltmembr)
   branch=safe_shared_cast<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false));
@@ -305,7 +305,7 @@ bool CreateNeuronExsitedBranchLink(std::shared_ptr<UNet> net,const string &sourc
  std::shared_ptr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
  std::shared_ptr<NPulseMembrane> branch;
  std::shared_ptr<NPulseChannel> channel;
- std::shared_ptr<UContainer> ltmembr;
+ std::shared_ptr<RDK::UContainer> ltmembr;
 
  bool ltmembr_found=neuron->CheckComponent("LTMembrane");
  if(ltmembr_found)
@@ -314,13 +314,13 @@ bool CreateNeuronExsitedBranchLink(std::shared_ptr<UNet> net,const string &sourc
   {
    ltmembr=neuron->GetComponent("LTMembrane");
   }
-  catch(UContainer::EComponentNameNotExist &){}
+  catch(RDK::UContainer::EComponentNameNotExist &){}
  }
  try
  {
   branch=dynamic_pointer_cast<NPulseMembrane>(neuron->GetComponent(branch_name));
  }
- catch(UContainer::EComponentNameNotExist &)
+ catch(RDK::UContainer::EComponentNameNotExist &)
  {
   return false;
  }
@@ -433,7 +433,7 @@ bool CreateNeuronExsitedBranchLink(std::shared_ptr<UNet> net,const string &sourc
  // �������� ������
  bool NMotionElement::LinkMotoneurons()
  {
-   std::shared_ptr<UContainer> cont;
+   std::shared_ptr<RDK::UContainer> cont;
    std::shared_ptr<UStorage> storage(GetStorage().get());
    bool res = true;
 
