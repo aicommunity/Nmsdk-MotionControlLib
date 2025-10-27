@@ -758,7 +758,7 @@ bool NEngineMotionControl::ACalculate(void)
  {
   CurrentTransientState=true;
   TempTransientState=true;
-  auto env = Environment.lock();
+  auto env = Environment;
   TransientStartTime=env->GetTime().GetDoubleTime();
  }
  else
@@ -766,7 +766,7 @@ bool NEngineMotionControl::ACalculate(void)
  {
   if(TempTransientState)
   {
-   auto env2 = Environment.lock();
+   auto env2 = Environment;
    CurrentTransientTime=env2->GetTime().GetDoubleTime()-TransientStartTime;
   }
   TempTransientState=false;
@@ -923,8 +923,7 @@ bool NEngineMotionControl::Create(bool full_recreate)
  SetActiveContours(*ActiveContours);
 
 
- auto storage_sp = Storage.lock();
- std::shared_ptr<UStorage> storage(storage_sp.get());
+ UStorage* storage = Storage;
  std::shared_ptr<UStatisticMatrix<double> > stats=AddMissingComponent<UStatisticMatrix<double> >("StatisticDoubleMatrix", "UStatisticDoubleMatrix");
  stats->SetCoord(MVector<double,3>(5.0, 13.0, 10));
  stats->ManualModeEnabled=true;
@@ -1006,7 +1005,7 @@ void NEngineMotionControl::AdaptiveTuningSimple(const std::vector<double> &curre
  if(CurrentTransientState)
   return;
 
- auto env3 = Environment.lock();
+ auto env3 = Environment;
  double current_double_time=env3->GetTime().GetDoubleTime();
  double last_adaptive_time=LastAdaptiveTime;
  double transient_hist_time=*TransientHistoryTime;
@@ -1411,8 +1410,7 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
  ChangeLookupPropertyType("NumControlLoops", ptPubParameter);
 
  bool res(true);
- auto storage_sp2 = Storage.lock();
- std::shared_ptr<UStorage> storage(storage_sp2.get());
+ UStorage* storage = Storage;
  size_t num_motions=NumMotionElements;
 
  // ����� ����������������� ����������

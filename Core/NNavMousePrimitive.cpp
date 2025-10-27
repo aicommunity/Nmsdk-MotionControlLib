@@ -186,7 +186,7 @@ bool NNavMousePrimitive::AReset(void)
  vibriss_counters[1]=0;
  pain_counter=0;
 
- auto env = Environment.lock();
+ auto env = Environment;
  if(env)
   ResetTime = env->GetTime().GetDoubleTime();
  else
@@ -318,7 +318,7 @@ bool NNavMousePrimitive::ACalculate(void)
         for(int i=0; i<vibriss_counters.size();i++)
         {
             double Delay = VibrDelays[i];
-            if(Environment.lock()->GetTime().GetDoubleTime() - ResetTime < Delay)
+            if(Environment->GetTime().GetDoubleTime() - ResetTime < Delay)
                 continue;
 
             int &PulseCounter = vibriss_counters[i];
@@ -333,7 +333,7 @@ bool NNavMousePrimitive::ACalculate(void)
 
 
 
- double iter_time = Environment.lock()->GetTime().GetDoubleTime() - start_iter_time; // ������� ����� ��������
+ double iter_time = Environment->GetTime().GetDoubleTime() - start_iter_time; // ������� ����� ��������
  double iter_length = (1.0 / Frequency) - (1.0 / double(TimeStep)); // ����� ����� ��������
 
  //��������� �����
@@ -383,7 +383,7 @@ bool NNavMousePrimitive::ACalculate(void)
  for(int i=0; i<vibriss_counters.size();i++)
  {
   double Delay = VibrDelays[i];
-  if(Environment.lock()->GetTime().GetDoubleTime() - ResetTime < Delay)
+  if(Environment->GetTime().GetDoubleTime() - ResetTime < Delay)
    continue;
 
   int &PulseCounter = vibriss_counters[i];
@@ -409,7 +409,7 @@ bool NNavMousePrimitive::ACalculate(void)
 
  //���������� ������� "����"
  double Delay = PainDelay;
- if((Environment.lock()->GetTime().GetDoubleTime() - ResetTime) > Delay)
+ if((Environment->GetTime().GetDoubleTime() - ResetTime) > Delay)
  {
      int &PulseCounter = pain_counter;
      if(PulseCounter>0) // ���� ������� ����
@@ -443,7 +443,7 @@ bool NNavMousePrimitive::ACalculate(void)
      for(int i=0; i<vibriss_counters.size();i++)
      {
          double Delay = VibrDelays[i];
-         if(Environment.lock()->GetTime().GetDoubleTime() - ResetTime < Delay)
+         if(Environment->GetTime().GetDoubleTime() - ResetTime < Delay)
              continue;
 
          int &PulseCounter = vibriss_counters[i];
@@ -452,7 +452,7 @@ bool NNavMousePrimitive::ACalculate(void)
          PulseCounter = static_cast<int>(-int(Delay*TimeStep)); //static_cast<int>(-int(TimeStep/Frequency));
      }
      double Delay = PainDelay;
-     if((Environment.lock()->GetTime().GetDoubleTime() - ResetTime) > Delay)
+     if((Environment->GetTime().GetDoubleTime() - ResetTime) > Delay)
      {
       int &PulseCounter = pain_counter;
       if(PainState>0)
@@ -471,7 +471,7 @@ bool NNavMousePrimitive::ACalculate(void)
      BackwardSpikeTime=0.0;
      StopSpikeTime=0.0;
      //��� ���� ����, �� ������ ����, � �������� ��� ������-�� �������
-     start_iter_time = Environment.lock()->GetTime().GetDoubleTime();
+     start_iter_time = Environment->GetTime().GetDoubleTime();
  }
  return true;
 }
