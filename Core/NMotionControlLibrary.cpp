@@ -135,6 +135,8 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 // signum.assign(1,1.0/(2*M_PI));
  cont->Default();
  dynamic_pointer_cast<NSignumSeparator>(cont)->Sign=signum;
+ // Remove from ObjectsStorage before using as prototype - PopObject removes object from Storage
+ storage->PopObject(cont);
  UploadClass("NPosSignumSeparator",cont);
 
  cont=dynamic_pointer_cast<RDK::UContainer>(dynamic_cast<UStorage*>(storage)->TakeObject("NSignumSeparator"));
@@ -143,6 +145,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 // signum.assign(1,-1.0/(2*M_PI));
  cont->Default();
  dynamic_pointer_cast<NSignumSeparator>(cont)->Sign=signum;
+ storage->PopObject(cont);
  UploadClass("NNegSignumSeparator",cont);
 
   cont=std::make_shared<NEyeRetina>();
@@ -233,6 +236,9 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  cs->Create();
  net=cs;
  net->SetName("EngineControlSignumAfferent");
+ // Remove from ObjectsStorage before using as prototype
+ // Child components created via Create() remain in Storage, which is fine
+ storage->PopObject(net);
  UploadClass("NEngineControlSignumAfferent",net);
 
  // 1 - Range
@@ -245,6 +251,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  cs->Create();
  net=cs;
  net->SetName("EngineControlRangeAfferent");
+ storage->PopObject(net);
  UploadClass("NEngineControlRangeAfferent",net);
 
  // 14 - New net with parametric structure control
@@ -257,6 +264,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  cs->Create();
  net=cs;
  net->SetName("EngineControlRangeAfferent");
+ storage->PopObject(net);
  UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl",net);
 
 
