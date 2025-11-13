@@ -1446,18 +1446,19 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
 
 
 
- UNet *net=this;//dynamic_cast<UNet*>(storage->TakeObject(netclassname));
-// net = dynamic_cast<NMotionElement*>(this);
+ // NEngineMotionControl inherits from UNet, which inherits from UContainer (UComponent)
+ // Use shared_from_this() to get shared_ptr safely
+ std::shared_ptr<UNet> net = std::static_pointer_cast<UNet>(shared_from_this());
  if(!net)
   return 0;
 
  // ������������ ��������
- NewMotionElementsSetup(safe_shared_cast<UNet>(net));
+ NewMotionElementsSetup(net);
 
- AdditionalComponentsSetup(safe_shared_cast<UNet>(net));
+ AdditionalComponentsSetup(net);
  if(CreationMode == 10)
  {
-  AACSetup(safe_shared_cast<UNet>(net), 100);
+  AACSetup(net, 100);
  }
  else
  {
@@ -1483,7 +1484,8 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
  if(!res)
   return 0;
 
- return net;
+ // Method returns UNet* (raw pointer), so return .get() from shared_ptr
+ return net.get();
 }
 
 // ��������� ����������
