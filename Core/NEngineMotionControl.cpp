@@ -1699,6 +1699,11 @@ void NEngineMotionControl::NewIntervalSeparatorsSetup(int mode_value, int last_m
 
 for (int j=0; j < NumMotionElements ; j++)
 {
+ if(j >= Motions.size() || !Motions[j])
+ {
+  LOG(ERROR) << "NEngineMotionControl::NewIntervalSeparatorsSetup - invalid index j=" << j << " or nullptr in Motions[" << j << "]";
+  continue;
+ }
  NMotionElement *melem = Motions[j];
  if(!melem)
 	 continue;
@@ -1835,6 +1840,11 @@ void NEngineMotionControl::NewIntervalSeparatorLinksSetup()
 
 for(int i=0;i<NumMotionElements;i++)
 {
+ if(i >= Motions.size() || !Motions[i])
+ {
+  LOG(ERROR) << "NEngineMotionControl::NewIntervalSeparatorLinksSetup - invalid index i=" << i << " or nullptr in Motions[" << i << "]";
+  continue;
+ }
  NMotionElement *melem=Motions[i];
  //NMotionElement *melem=dynamic_cast<NMotionElement *>(Motions[i]);
  if(!melem)
