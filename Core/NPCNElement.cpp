@@ -148,7 +148,10 @@ bool NPCNElement::CreateNeurons()
  if(!MotionControlElement)
   return false;
    std::shared_ptr<UContainer> cont;
-   std::shared_ptr<UStorage> storage(GetStorage().get());
+   std::shared_ptr<UStorage> storage = GetStorage();
+   if (!storage) {
+     return false;
+   }
    bool res(true);
     vector<NMotionElement*> Motions = MotionControlElement->GetMotion();
    //Creating InputNeurons

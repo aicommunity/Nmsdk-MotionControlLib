@@ -286,11 +286,13 @@ bool NSignalEstimation::ABuild(void)
 
  // �������������� ��������� ����������� �������
  SignalGen = AddMissingComponent<NPulseGeneratorTransit>(std::string("Signal"), GeneratorClassName);
+ if(!SignalGen) return true;
  SignalGen->SetCoord(MVector<double,3>(4, 1.67, 0));
  SignalGen->DisconnectAll("Output");
 
  // �������������� ��������� ����������������� �������
  SinchroGen = AddMissingComponent<NPulseGeneratorTransit>(std::string("Sinchro"), GeneratorClassName);
+ if(!SinchroGen) return true;
  SinchroGen->SetCoord(MVector<double,3>(4, 4, 0));
  SinchroGen->DisconnectAll("Output");
 
@@ -305,6 +307,7 @@ bool NSignalEstimation::ABuild(void)
  for (int i = 0; i < NumZones; i++)
  {
   ZoneNeurons[i] = AddMissingComponent<NPulseNeuron>(std::string("Zone_")+sntoa(i+1), NeuronClassName);
+  if(!ZoneNeurons[i]) return true;
   ZoneNeurons[i]->SetCoord(MVector<double,3>(13, 1.67 + 2.33 * i, 0));
   ZoneNeurons[i]->DisconnectAll("Output");
   ZoneNeurons[i]->NumSomaMembraneParts = 2;

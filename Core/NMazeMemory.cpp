@@ -586,7 +586,10 @@ bool NMazeMemory::ACalculate(void)
 std::shared_ptr<NTrajectoryElement> NMazeMemory::CreatePoint(MVector<double,3> coords)
   {
    std::shared_ptr<UContainer> cont;
-   std::shared_ptr<UStorage> storage(GetStorage().get());
+   std::shared_ptr<UStorage> storage = GetStorage();
+   if (!storage) {
+     return nullptr;
+   }
    std::shared_ptr<NTrajectoryElement> traj_el;
 
 

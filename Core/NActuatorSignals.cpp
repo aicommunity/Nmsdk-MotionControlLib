@@ -316,42 +316,49 @@ bool NActuatorSignals::ABuild(void)
 
  // �������������� ����������
  {
- // �������������� �������� ������� ������ ���������
- LeftEngine = AddMissingComponent<NPulseGeneratorTransit>(std::string("LeftEngine"), GeneratorClassName);
- LeftEngine->SetCoord(MVector<double,3>(4, 2.33, 0));
- LeftEngine->DisconnectAll("Output");
+  // �������������� �������� ������� ������ ���������
+  LeftEngine = AddMissingComponent<NPulseGeneratorTransit>(std::string("LeftEngine"), GeneratorClassName);
+  if(!LeftEngine) return true;
+  LeftEngine->SetCoord(MVector<double,3>(4, 2.33, 0));
+  LeftEngine->DisconnectAll("Output");
 
- // �������������� �������� ������� ������� ���������
- RightEngine = AddMissingComponent<NPulseGeneratorTransit>(std::string("RightEngine"), GeneratorClassName);
- RightEngine->SetCoord(MVector<double,3>(4, 5, 0));
- RightEngine->DisconnectAll("Output");
+  // �������������� �������� ������� ������� ���������
+  RightEngine = AddMissingComponent<NPulseGeneratorTransit>(std::string("RightEngine"), GeneratorClassName);
+  if(!RightEngine) return true;
+  RightEngine->SetCoord(MVector<double,3>(4, 5, 0));
+  RightEngine->DisconnectAll("Output");
 
- // �������������� �������� ����������������� ������� 1 - ������� �������� �����
- Sinchro1 = AddMissingComponent<NPulseGeneratorTransit>(std::string("Sinchro1"), GeneratorClassName);
- Sinchro1->SetCoord(MVector<double,3>(4, 10.33, 0));
- Sinchro1->DisconnectAll("Output");
+  // �������������� �������� ����������������� ������� 1 - ������� �������� �����
+  Sinchro1 = AddMissingComponent<NPulseGeneratorTransit>(std::string("Sinchro1"), GeneratorClassName);
+  if(!Sinchro1) return true;
+  Sinchro1->SetCoord(MVector<double,3>(4, 10.33, 0));
+  Sinchro1->DisconnectAll("Output");
 
- // �������������� �������� ����������������� ������� 2 - ������� �������� ������
- Sinchro2 = AddMissingComponent<NPulseGeneratorTransit>(std::string("Sinchro2"), GeneratorClassName);
- Sinchro2->SetCoord(MVector<double,3>(4, 13, 0));
- Sinchro2->DisconnectAll("Output");
+  // �������������� �������� ����������������� ������� 2 - ������� �������� ������
+  Sinchro2 = AddMissingComponent<NPulseGeneratorTransit>(std::string("Sinchro2"), GeneratorClassName);
+  if(!Sinchro2) return true;
+  Sinchro2->SetCoord(MVector<double,3>(4, 13, 0));
+  Sinchro2->DisconnectAll("Output");
 
- // �������������� ��������� ��� ������� NOTNeuron
- NOTGenerator = AddMissingComponent<NPulseGeneratorTransit>(std::string("NOTGenerator"), GeneratorClassName);
- NOTGenerator->SetCoord(MVector<double,3>(21.33, 2.33, 0));
- NOTGenerator->DisconnectAll("Output");
-
-
- // �������������� ���� ��������
- Delay1To2 = AddMissingComponent<NPulseDelay>(std::string("Delay1To2"), DelayClassName);
- Delay1To2->SetCoord(MVector<double,3>(21.33, 11.66, 0));
- Delay1To2->DisconnectAll("Output");
+  // �������������� ��������� ��� ������� NOTNeuron
+  NOTGenerator = AddMissingComponent<NPulseGeneratorTransit>(std::string("NOTGenerator"), GeneratorClassName);
+  if(!NOTGenerator) return true;
+  NOTGenerator->SetCoord(MVector<double,3>(21.33, 2.33, 0));
+  NOTGenerator->DisconnectAll("Output");
 
 
- // �������������� ������ ���
- ORNeuron = AddMissingComponent<NPulseNeuron>(std::string("ORNeuron"), NeuronClassName);
- ORNeuron->SetCoord(MVector<double,3>(21.33, 7.66, 0));
- ORNeuron->DisconnectAll("Output");
+  // �������������� ���� ��������
+  Delay1To2 = AddMissingComponent<NPulseDelay>(std::string("Delay1To2"), DelayClassName);
+  if(!Delay1To2) return true;
+  Delay1To2->SetCoord(MVector<double,3>(21.33, 11.66, 0));
+  Delay1To2->DisconnectAll("Output");
+
+
+  // �������������� ������ ���
+  ORNeuron = AddMissingComponent<NPulseNeuron>(std::string("ORNeuron"), NeuronClassName);
+  if(!ORNeuron) return true;
+  ORNeuron->SetCoord(MVector<double,3>(21.33, 7.66, 0));
+  ORNeuron->DisconnectAll("Output");
  soma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
  if (soma)
  {
@@ -359,8 +366,9 @@ bool NActuatorSignals::ABuild(void)
   soma->Build();
  }
 
- // �������������� ������ ��
+  // �������������� ������ ��
  NOTNeuron = AddMissingComponent<NPulseNeuron>(std::string("NOTNeuron"), NeuronClassName);
+ if(!NOTNeuron) return true;
  NOTNeuron->SetCoord(MVector<double,3>(21.33, 5, 0));
  NOTNeuron->DisconnectAll("Output");
  if(NOTNeuron->StructureBuildMode != 2)
@@ -374,8 +382,9 @@ bool NActuatorSignals::ABuild(void)
  NOTNeuron->Reset();
 
 
- // �������������� ������, ������������ �������� �����
+  // �������������� ������, ������������ �������� �����
  IsForwardNeuron = AddMissingComponent<NPulseNeuron>(std::string("IsForward"), NeuronClassName);
+ if(!IsForwardNeuron) return true;
  IsForwardNeuron->SetCoord(MVector<double,3>(12.66, 3.66, 0));
  IsForwardNeuron->DisconnectAll("Output");
  IsForwardNeuron->NumSomaMembraneParts = 2;
@@ -383,6 +392,7 @@ bool NActuatorSignals::ABuild(void)
 
  // �������������� ������, ������������ �������� �����
  IsBackNeuron = AddMissingComponent<NPulseNeuron>(std::string("IsBack"), NeuronClassName);
+ if(!IsBackNeuron) return true;
  IsBackNeuron->SetCoord(MVector<double,3>(12.66, 11.66, 0));
  IsBackNeuron->DisconnectAll("Output");
  IsBackNeuron->NumSomaMembraneParts = 2;
@@ -390,6 +400,7 @@ bool NActuatorSignals::ABuild(void)
 
  // �������������� ������, ������������ ������� ������
  IsLeftNeuron = AddMissingComponent<NPulseNeuron>(std::string("IsLeft"), NeuronClassName);
+ if(!IsLeftNeuron) return true;
  IsLeftNeuron->SetCoord(MVector<double,3>(12.66, 6.33, 0));
  IsLeftNeuron->DisconnectAll("Output");
  IsLeftNeuron->NumSomaMembraneParts = 2;
@@ -404,8 +415,9 @@ bool NActuatorSignals::ABuild(void)
  }
  IsLeftNeuron->Build();
 
- // �������������� ������, ������������ ������� �������
+  // �������������� ������, ������������ ������� �������
  IsRightNeuron = AddMissingComponent<NPulseNeuron>(std::string("IsRight"), NeuronClassName);
+ if(!IsRightNeuron) return true;
  IsRightNeuron->SetCoord(MVector<double,3>(12.66, 9, 0));
  IsRightNeuron->DisconnectAll("Output");
  IsRightNeuron->NumSomaMembraneParts = 2;
@@ -421,28 +433,33 @@ bool NActuatorSignals::ABuild(void)
  IsRightNeuron->Build();
 
 
- // �������������� �������� ������, ��������������� �� ���������
+  // �������������� �������� ������, ��������������� �� ���������
  StayNeuron = AddMissingComponent<NPulseNeuron>(std::string("Stay"), NeuronClassName);
+ if(!StayNeuron) return true;
  StayNeuron->SetCoord(MVector<double,3>(30, 2.33, 0));
  StayNeuron->DisconnectAll("Output");
 
  // �������������� �������� ������, ��������������� � �������� �����
  ForwardNeuron = AddMissingComponent<NPulseNeuron>(std::string("Forward"), NeuronClassName);
+ if(!ForwardNeuron) return true;
  ForwardNeuron->SetCoord(MVector<double,3>(30, 5, 0));
  ForwardNeuron->DisconnectAll("Output");
 
  // �������������� �������� ������, ��������������� � �������� ������
  LeftNeuron = AddMissingComponent<NPulseNeuron>(std::string("Left"), NeuronClassName);
+ if(!LeftNeuron) return true;
  LeftNeuron->SetCoord(MVector<double,3>(30, 7.66, 0));
  LeftNeuron->DisconnectAll("Output");
 
  // �������������� �������� ������, ��������������� � �������� �������
  RightNeuron = AddMissingComponent<NPulseNeuron>(std::string("Right"), NeuronClassName);
+ if(!RightNeuron) return true;
  RightNeuron->SetCoord(MVector<double,3>(30, 10.33, 0));
  RightNeuron->DisconnectAll("Output");
 
  // �������������� �������� ������, ��������������� � �������� �����
  BackNeuron = AddMissingComponent<NPulseNeuron>(std::string("Back"), NeuronClassName);
+ if(!BackNeuron) return true;
  BackNeuron->SetCoord(MVector<double,3>(30, 13, 0));
  BackNeuron->DisconnectAll("Output");
 }

@@ -7,6 +7,10 @@ find_package(GTest REQUIRED)
 # Create test executable for MotionControlLib tests
 add_executable(NmsdkMotionControlLibTests
     TestMotionComponents.cpp
+    TestMotionComponentsWithoutCreateSamples.cpp
+    TestMotionControlLibRegistration.cpp
+    TestMotionControlNeurons.cpp
+    TestMotionControlActuators.cpp
     ${CMAKE_SOURCE_DIR}/Libraries/Libraries_con.cpp
 )
 

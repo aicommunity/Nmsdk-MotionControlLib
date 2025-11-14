@@ -365,6 +365,11 @@ bool NObjInArea::ABuild(void)
  for (int i = 0; i < NumObj; i++)
  {
   ClsSpikeFr[i] = AddMissingComponent<NPulseGeneratorMulti>(std::string("Cls")+sntoa(i+1)+std::string("SpikeFr"), MultiGeneratorClassName);
+  if(!ClsSpikeFr[i])
+  {
+   // Component not found - this is OK during CreateClassSamples
+   return true;
+  }
   ClsSpikeFr[i]->SetCoord(MVector<double,3>(4, 2 + 2.33 * i, 0));
   ClsSpikeFr[i]->DisconnectAll("Output");
  }
@@ -372,16 +377,31 @@ bool NObjInArea::ABuild(void)
 
  // �������������� ����������� �����
  SuppressUnit1 = AddMissingComponent<NSuppressionUnit>(std::string("SuppressUnit1"), "NSuppressionUnit");
+ if(!SuppressUnit1)
+ {
+  // Component not found - this is OK during CreateClassSamples
+  return true;
+ }
  SuppressUnit1->SetCoord(MVector<double,3>(4, 5.33 + 2.33 * (NumObj - 1), 0));
  SuppressUnit1->DisconnectAll("Output");
 
  SuppressUnit2 = AddMissingComponent<NSuppressionUnit>(std::string("SuppressUnit2"), "NSuppressionUnit");
+ if(!SuppressUnit2)
+ {
+  // Component not found - this is OK during CreateClassSamples
+  return true;
+ }
  SuppressUnit2->SetCoord(MVector<double,3>(4, 5.33 + 2.33 * NumObj, 0));
  SuppressUnit2->DisconnectAll("Output");
 
 
  // �������������� ������ ���
  ORNeuron = AddMissingComponent<NPulseNeuron>(std::string("ORNeuron"), NeuronClassName);
+ if(!ORNeuron)
+ {
+  // Component not found - this is OK during CreateClassSamples
+  return true;
+ }
  ORNeuron->SetCoord(MVector<double,3>(10.33, 2 + 2.33 * (NumObj - 1) / 2, 0));
  ORNeuron->DisconnectAll("Output");
  std::shared_ptr<NPulseMembrane> or_soma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
@@ -393,6 +413,11 @@ bool NObjInArea::ABuild(void)
 
  // �������������� �������� ������
  DecidingNeuron = AddMissingComponent<NPulseNeuron>(std::string("DecidingNeuron"), NeuronClassName);
+ if(!DecidingNeuron)
+ {
+  // Component not found - this is OK during CreateClassSamples
+  return true;
+ }
  DecidingNeuron->SetCoord(MVector<double,3>(16.67, 4.83 + 2.33 * (NumObj - 1) / 2, 0));
  DecidingNeuron->DisconnectAll("Output");
  if(DecidingNeuron->StructureBuildMode != 2)

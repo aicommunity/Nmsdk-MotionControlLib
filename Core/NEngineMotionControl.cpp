@@ -1,4 +1,5 @@
 #include "NEngineMotionControl.h"
+#include <glog/logging.h>
 #include "../../Nmsdk-PulseLib/Core/NNet.h"
 #include "../../Nmsdk-PulseLib/Core/NConstGenerator.h"
 #include "../../Nmsdk-PulseLib/Core/NPulseGenerator.h"
@@ -706,6 +707,8 @@ bool NEngineMotionControl::ACalculate(void)
  {
     source=dynamic_pointer_cast<NControlObjectSource>(GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/));
  // source=dynamic_pointer_cast<UNet>(GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/));
+    if(!source)
+     continue;
     source->SetCoord(MVector<double,3>(8.0, 6.0, 5.0));
 
   MMatrixSize source_size = source->Output->GetMatrixSize();
@@ -877,6 +880,15 @@ bool NEngineMotionControl::ACalculate(void)
 // ����� ��������� �� ���������
 bool NEngineMotionControl::Create(bool full_recreate)
 {
+ // Log entry for debugging bad_weak_ptr
+ std::string obj_name = "unknown";
+ try {
+  obj_name = GetName();
+ } catch (...) {
+  obj_name = "<error>";
+ }
+ LOG(INFO) << "NEngineMotionControl::Create - starting, name=" << obj_name << " full_recreate=" << full_recreate;
+ 
  // ������� ��� ����� ������������ ���������
  if(full_recreate)
   ClearStructure(0);
@@ -925,8 +937,11 @@ bool NEngineMotionControl::Create(bool full_recreate)
 
  UStorage* storage = Storage;
  std::shared_ptr<UStatisticMatrix<double> > stats=AddMissingComponent<UStatisticMatrix<double> >("StatisticDoubleMatrix", "UStatisticDoubleMatrix");
- stats->SetCoord(MVector<double,3>(5.0, 13.0, 10));
- stats->ManualModeEnabled=true;
+ if(stats)
+ {
+  stats->SetCoord(MVector<double,3>(5.0, 13.0, 10));
+  stats->ManualModeEnabled=true;
+ }
  return true;
 }
 
@@ -1448,7 +1463,15 @@ UNet* NEngineMotionControl::CreateNewEngineControl2NeuronsSimplest(bool crosslin
 
  // NEngineMotionControl inherits from UNet, which inherits from UContainer (UComponent)
  // Use shared_from_this() to get shared_ptr safely
- std::shared_ptr<UNet> net = std::static_pointer_cast<UNet>(shared_from_this());
+ std::shared_ptr<UNet> net;
+ try {
+  net = std::static_pointer_cast<UNet>(shared_from_this());
+ } catch (const std::bad_weak_ptr&) {
+  // Object is not managed by shared_ptr - this should not happen
+  // but can occur if object was created incorrectly
+  LOG(ERROR) << "NEngineMotionControl::Create - bad_weak_ptr exception, object not managed by shared_ptr";
+  return 0;
+ }
  if(!net)
   return 0;
 
@@ -1497,7 +1520,10 @@ void NEngineMotionControl::NewMotionElementsSetup(std::shared_ptr<UNet> net)
  try
  {
   InternalGenerator=AddMissingComponent<NPulseGenerator>("InternalGenerator", "NPGenerator");
-  InternalGenerator->SetCoord(MVector<double,3>(5.0, 19.0, 6.0));
+  if(InternalGenerator)
+  {
+   InternalGenerator->SetCoord(MVector<double,3>(5.0, 19.0, 6.0));
+  }
  }
  catch (EComponentNameNotExist &)
  {

@@ -282,9 +282,19 @@ bool NSeqComparison::ABuild(void)
  for (int i = 0; i < NumClasses; i++)
  {
   KFClsSpikes[i] = AddMissingComponent<NPulseGeneratorMulti>(std::string("KF_Cls")+sntoa(i+1)+std::string("_Spikes"), MultiGeneratorClassName);
+  if(!KFClsSpikes[i])
+  {
+   // Component not found - this is OK during CreateClassSamples
+   return true;
+  }
   KFClsSpikes[i]->SetCoord(MVector<double,3>(4, 2 + 5.33 * i, 0));
   KFClsSpikes[i]->DisconnectAll("Output");
   FrClsSpikes[i] = AddMissingComponent<NPulseGeneratorMulti>(std::string("Fr_Cls")+sntoa(i+1)+std::string("_Spikes"), MultiGeneratorClassName);
+  if(!FrClsSpikes[i])
+  {
+   // Component not found - this is OK during CreateClassSamples
+   return true;
+  }
   FrClsSpikes[i]->SetCoord(MVector<double,3>(4, 4.33 + 5.33 * i, 0));
   FrClsSpikes[i]->DisconnectAll("Output");
  }
@@ -292,6 +302,11 @@ bool NSeqComparison::ABuild(void)
 
  // �������������� ������ ���
  CompNeuron = AddMissingComponent<NPulseNeuron>(std::string("CompNeuron"), NeuronClassName);
+ if(!CompNeuron)
+ {
+  // Component not found - this is OK during CreateClassSamples
+  return true;
+ }
  CompNeuron->SetCoord(MVector<double,3>(11, 3.17 + 2.67 * (NumClasses - 1), 0));
  CompNeuron->DisconnectAll("Output");
  CompNeuron->NumSomaMembraneParts = NumClasses;

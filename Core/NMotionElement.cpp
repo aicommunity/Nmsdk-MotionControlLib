@@ -202,7 +202,11 @@ bool NMotionElement::ACalculate(void)
 void NMotionElement::CreateStructure(void)
 {
   DelAllComponents();
-  if(!GetStorage())
+  // IMPORTANT: Don't use GetStorage() here because it creates shared_ptr from raw pointer
+  // with enable_shared_from_this, which causes segfault if Storage is dangling or wasn't created via shared_ptr
+  // Use Storage directly (raw pointer) - if it's nullptr, we've already checked
+  // If Storage is dangling, AddressSanitizer will catch it
+  if(!Storage)
    return;
   if(NeuroObjectName->empty()||AfferentObjectName->empty())
    return;
@@ -434,7 +438,13 @@ bool CreateNeuronExsitedBranchLink(std::shared_ptr<UNet> net,const string &sourc
  bool NMotionElement::LinkMotoneurons()
  {
    std::shared_ptr<RDK::UContainer> cont;
-   std::shared_ptr<UStorage> storage(GetStorage().get());
+   // IMPORTANT: Don't create shared_ptr from raw pointer via .get()
+   // Use GetStorage() directly or use raw Storage pointer
+   // GetStorage() returns shared_ptr with non-owning deleter, which is safe for temporary use
+   std::shared_ptr<UStorage> storage = GetStorage();
+   if (!storage) {
+     return false;
+   }
    bool res = true;
 
    ULongId item,conn;

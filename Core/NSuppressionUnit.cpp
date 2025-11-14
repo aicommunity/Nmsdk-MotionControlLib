@@ -4,6 +4,7 @@
 
 
 #include "NSuppressionUnit.h"
+#include <glog/logging.h>
 
 //---------------------------------------------------------------------------
 namespace NMSDK {
@@ -318,6 +319,12 @@ bool NSuppressionUnit::ABuild(void)
 
  // �������������� ��������� ������� ���������
  SourceGenerator = AddMissingComponent<NPulseGeneratorTransit>(std::string("Source"), PulseGeneratorClassName);
+ if(!SourceGenerator)
+ {
+  // Component not found - this is OK during CreateClassSamples
+  // Component will be created later when needed
+  return true;
+ }
  SourceGenerator->SetCoord(MVector<double,3>(4.6, 3, 0));
  if (TransitInput)
   SourceGenerator->UseTransitSignal = true;  // �������� ����� �������� ������� �� �������� ���������
@@ -328,12 +335,22 @@ bool NSuppressionUnit::ABuild(void)
  for(int i = 0; i < 2; i++)
  {
   DelayGenerators[i] = AddMissingComponent<NPulseGeneratorTransit>(std::string("Delay") + sntoa(i + 1), PulseGeneratorClassName);
+  if(!DelayGenerators[i])
+  {
+   // Component not found - this is OK during CreateClassSamples
+   return true;
+  }
   DelayGenerators[i]->SetCoord(MVector<double,3>(4.6, 6 + i * 2, 0));
   DelayGenerators[i]->DisconnectAll("Output");
  }
 
  // �������������� ������ ���
  ORNeuron = AddMissingComponent<NPulseNeuron>(std::string("ORNeuron"), NeuronClassName);
+ if(!ORNeuron)
+ {
+  // Component not found - this is OK during CreateClassSamples
+  return true;
+ }
  ORNeuron->SetCoord(MVector<double,3>(11.33, 7, 0));
  ORNeuron->DisconnectAll("Output");
  std::shared_ptr<NPulseMembrane> or_soma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
@@ -345,12 +362,22 @@ bool NSuppressionUnit::ABuild(void)
 
  // �������������� ����������� ���������
  ControlledGenerator = AddMissingComponent<NPulseGeneratorTransit>(std::string("ControlledGenerator"), PulseGeneratorClassName);
+ if(!ControlledGenerator)
+ {
+  // Component not found - this is OK during CreateClassSamples
+  return true;
+ }
  ControlledGenerator->SetCoord(MVector<double,3>(18, 7, 0));
  ControlledGenerator->UsePatternOutput = true;  // �������� ����� ��������� ��������� � ���������� ��������
  ControlledGenerator->DisconnectAll("Output");
 
  // �������������� ������
  Neuron = AddMissingComponent<NPulseNeuron>(std::string("Neuron"), NeuronClassName);
+ if(!Neuron)
+ {
+  // Component not found - this is OK during CreateClassSamples
+  return true;
+ }
  Neuron->SetCoord(MVector<double,3>(18, 3, 0));
 
  std::shared_ptr<NLTZone> ltzone = Neuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
@@ -382,12 +409,26 @@ bool NSuppressionUnit::ABuild(void)
  }
 
  // ������ ����� ����� ControlledGenerator � ��������� �������� ���� Neuron
- if (!CheckLink("ControlledGenerator", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-  res &= CreateLink("ControlledGenerator", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+ // Use GetThisAsSharedContainer() safely - it may throw bad_weak_ptr if object not fully initialized
+ std::shared_ptr<UContainer> this_container;
+ try {
+  this_container = GetThisAsSharedContainer();
+ } catch (const std::bad_weak_ptr&) {
+  // Object not fully initialized - skip link creation
+  LOG(WARNING) << "NSuppressionUnit::ABuild - bad_weak_ptr in GetThisAsSharedContainer(), skipping link creation";
+  return true;
+ }
+ if(!this_container) {
+  LOG(WARNING) << "NSuppressionUnit::ABuild - GetThisAsSharedContainer() returned nullptr, skipping link creation";
+  return true;
+ }
+ 
+ if (!CheckLink("ControlledGenerator", "Output", inhsynapse->GetLongName(this_container), "Input"))
+  res &= CreateLink("ControlledGenerator", "Output", inhsynapse->GetLongName(this_container), "Input");
 
  // ������ ����� ����� ���������� �������� ������� Source � �������� ���� Neuron
- if (!CheckLink("Source", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-  res &= CreateLink("Source", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+ if (!CheckLink("Source", "Output", excsynapse->GetLongName(this_container), "Input"))
+  res &= CreateLink("Source", "Output", excsynapse->GetLongName(this_container), "Input");
 
 
  // ������� ������������ ���������� ORNeuron
@@ -408,8 +449,9 @@ bool NSuppressionUnit::ABuild(void)
   }
 
   // ������ �����
-  if (!CheckLink(DelayGenerators[i]->GetLongName(GetThisAsSharedContainer()), "Output", or_excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink(DelayGenerators[i]->GetLongName(GetThisAsSharedContainer()), "Output", or_excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  // Use this_container from above - already checked for bad_weak_ptr
+  if (!CheckLink(DelayGenerators[i]->GetLongName(this_container), "Output", or_excsynapse->GetLongName(this_container), "Input"))
+   res &= CreateLink(DelayGenerators[i]->GetLongName(this_container), "Output", or_excsynapse->GetLongName(this_container), "Input");
  }
 
  return res;

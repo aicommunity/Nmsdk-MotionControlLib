@@ -406,7 +406,12 @@ return true;
 std::shared_ptr<NTrajectoryElement> NMazeMemory_simplified::CreatePoint(MVector<double,3> coords)
 {
  std::shared_ptr<UContainer> cont;
- std::shared_ptr<UStorage> storage(GetStorage().get());
+ // IMPORTANT: Don't create shared_ptr from raw pointer via .get()
+ // Use GetStorage() directly
+ std::shared_ptr<UStorage> storage = GetStorage();
+ if (!storage) {
+   return nullptr;
+ }
  std::shared_ptr<NTrajectoryElement> traj_el;
 
  int te_num = int(TrajectoryElements.size());

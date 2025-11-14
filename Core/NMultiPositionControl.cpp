@@ -147,7 +147,10 @@ bool NMultiPositionControl::ABuild(void)
       if (PrebuildStructure)
       {
         std::shared_ptr<UContainer> cont;
-        std::shared_ptr<UStorage> storage(GetStorage().get());
+        std::shared_ptr<UStorage> storage = GetStorage();
+        if (!storage) {
+          return false;
+        }
         vector<NNet*> postInputs, preControls;
 
         //Adding PreControlNeuron

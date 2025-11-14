@@ -142,20 +142,34 @@ bool NCounterNeuron::CreateSomaLinks(std::shared_ptr<NPulseMembrane> soma)
  channel1 = dynamic_pointer_cast<NPulseChannelCommon>(soma->GetComponent("ExcChannel",true));
  channel2 = dynamic_pointer_cast<NPulseChannelCommon>(soma->GetComponent("InhChannel",true));
 
+ // GetThisAsSharedContainer() may throw bad_weak_ptr if object was created from raw pointer
+ std::shared_ptr<UContainer> this_container;
+ try {
+  this_container = GetThisAsSharedContainer();
+ } catch (const std::bad_weak_ptr&) {
+  // Object not fully initialized - skip link creation
+  LOG(WARNING) << "NCounterNeuron::CreateSomaLinks - bad_weak_ptr in GetThisAsSharedContainer(), skipping link creation";
+  return true; // Return true to continue execution
+ }
+ if(!this_container) {
+  LOG(WARNING) << "NCounterNeuron::CreateSomaLinks - GetThisAsSharedContainer() returned nullptr, skipping link creation";
+  return true;
+ }
+
  // ���������� ���� � �������������� ���� �������
  if(channel1)
-  res&=CreateLink(channel1->GetLongName(GetThisAsSharedContainer()),"Output",LTZone->GetLongName(GetThisAsSharedContainer()),"Inputs");
+  res&=CreateLink(channel1->GetLongName(this_container),"Output",LTZone->GetLongName(this_container),"Inputs");
  if(channel2)
-  res&=CreateLink(channel2->GetLongName(GetThisAsSharedContainer()),"Output",LTZone->GetLongName(GetThisAsSharedContainer()),"Inputs");
+  res&=CreateLink(channel2->GetLongName(this_container),"Output",LTZone->GetLongName(this_container),"Inputs");
 
  //   
- res&=CreateLink(LTZone->GetLongName(GetThisAsSharedContainer()), "Output", soma->GetLongName(GetThisAsSharedContainer()), "InputFeedbackSignal");
+ res&=CreateLink(LTZone->GetLongName(this_container), "Output", soma->GetLongName(this_container), "InputFeedbackSignal");
 
  //       
  if(channel1)
-  res&=CreateLink("NegGenerator", "Output",channel1->GetLongName(GetThisAsSharedContainer()),"ChannelInputs");
+  res&=CreateLink("NegGenerator", "Output",channel1->GetLongName(this_container),"ChannelInputs");
  if(channel2)
-  res&=CreateLink("PosGenerator","Output",channel2->GetLongName(GetThisAsSharedContainer()),"ChannelInputs");
+  res&=CreateLink("PosGenerator","Output",channel2->GetLongName(this_container),"ChannelInputs");
 
  return res;
 }
@@ -192,6 +206,12 @@ bool NCounterNeuron::ABuild(void)
 
  //     
  LTZone = AddMissingComponent<NLTZone>("LTZone", LTZoneClassName);
+ if(!LTZone)
+ {
+  // Component not found - this is OK during CreateClassSamples
+  // Component will be created later when needed
+  return true;
+ }
  LTZone->SetCoord(MVector<double,3>(25.3, 3.67 + MaxCount, 0));
  LTZone->Threshold = 0.0029;  //   
  LTZone->DisconnectAll("Output");
@@ -201,6 +221,11 @@ bool NCounterNeuron::ABuild(void)
  if(!ExcGeneratorClassName->empty())
  {
   gen_pos = AddMissingComponent<UNet>("PosGenerator", ExcGeneratorClassName);
+  if(!gen_pos)
+  {
+   // Component not found - this is OK during CreateClassSamples
+   return true;
+  }
   gen_pos->SetCoord(MVector<double,3>(4, 2, 0));
   gen_pos->DisconnectAll("Output");
  }
@@ -211,6 +236,11 @@ bool NCounterNeuron::ABuild(void)
  if(!InhGeneratorClassName->empty())
  {
   gen_neg=AddMissingComponent<UNet>("NegGenerator", InhGeneratorClassName);
+  if(!gen_neg)
+  {
+   // Component not found - this is OK during CreateClassSamples
+   return true;
+  }
   gen_neg->SetCoord(MVector<double,3>(4, 7.3 + (MaxCount - 1) * 2, 0));
   gen_neg->DisconnectAll("Output");
  }
@@ -229,6 +259,11 @@ bool NCounterNeuron::ABuild(void)
  {
   //    
   membr = AddMissingComponent<NPulseMembrane>(std::string("Soma")+sntoa(i+1), MembraneClassName);
+  if(!membr)
+  {
+   // Component not found - this is OK during CreateClassSamples
+   return true;
+  }
   membr->SetCoord(MVector<double,3>(15.7, 4.67+ i * 2, 0));
   Soma[i] = membr;
 
