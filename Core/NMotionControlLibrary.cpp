@@ -147,38 +147,45 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 
  // ����������� ����������� ������� �� ������������� � ������������� �����
  cont=dynamic_pointer_cast<RDK::UContainer>(dynamic_cast<UStorage*>(storage)->TakeObject("NSignumSeparator"));
- cont->SetName("PosSignumSeparator");
- vector<double> signum;
- signum.assign(1,1.0);
+ if(cont)
+ {
+  cont->SetName("PosSignumSeparator");
+  vector<double> signum;
+  signum.assign(1,1.0);
 // signum.assign(1,1.0/(2*M_PI));
- cont->Default();
- dynamic_pointer_cast<NSignumSeparator>(cont)->Sign=signum;
- // Remove from ObjectsStorage before using as prototype - PopObject removes object from Storage
- storage->PopObject(cont);
- UploadClass("NPosSignumSeparator",cont);
- 
- // IMPORTANT: After UploadClass, factory holds shared_ptr to cont
- // We need to keep cont alive until function ends, or reset it explicitly
- // to avoid destroying object that factory still uses
- // Reset cont to release local reference - factory still holds the object
- LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - after UploadClass NPosSignumSeparator, cont use_count=" << cont.use_count();
- cont.reset(); // Release local reference - factory still holds the object
- LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - after reset cont for NPosSignumSeparator";
+  cont->Default();
+  dynamic_pointer_cast<NSignumSeparator>(cont)->Sign=signum;
+  // Remove from ObjectsStorage before using as prototype - PopObject removes object from Storage
+  storage->PopObject(cont);
+  UploadClass("NPosSignumSeparator",cont);
+  
+  // IMPORTANT: After UploadClass, factory holds shared_ptr to cont
+  // We need to keep cont alive until function ends, or reset it explicitly
+  // to avoid destroying object that factory still uses
+  // Reset cont to release local reference - factory still holds the object
+  LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - after UploadClass NPosSignumSeparator, cont use_count=" << cont.use_count();
+  cont.reset(); // Release local reference - factory still holds the object
+  LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - after reset cont for NPosSignumSeparator";
+ }
 
  cont=dynamic_pointer_cast<RDK::UContainer>(dynamic_cast<UStorage*>(storage)->TakeObject("NSignumSeparator"));
- cont->SetName("NegSignumSeparator");
- signum.assign(1,-1.0);
+ if(cont)
+ {
+  cont->SetName("NegSignumSeparator");
+  vector<double> signum;
+  signum.assign(1,-1.0);
 // signum.assign(1,-1.0/(2*M_PI));
- cont->Default();
- dynamic_pointer_cast<NSignumSeparator>(cont)->Sign=signum;
- storage->PopObject(cont);
- UploadClass("NNegSignumSeparator",cont);
- 
- // IMPORTANT: After UploadClass, factory holds shared_ptr to cont
- // Reset cont to release local reference - factory still holds the object
- LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - after UploadClass NNegSignumSeparator, cont use_count=" << cont.use_count();
- cont.reset(); // Release local reference - factory still holds the object
- LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - after reset cont for NNegSignumSeparator";
+  cont->Default();
+  dynamic_pointer_cast<NSignumSeparator>(cont)->Sign=signum;
+  storage->PopObject(cont);
+  UploadClass("NNegSignumSeparator",cont);
+  
+  // IMPORTANT: After UploadClass, factory holds shared_ptr to cont
+  // Reset cont to release local reference - factory still holds the object
+  LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - after UploadClass NNegSignumSeparator, cont use_count=" << cont.use_count();
+  cont.reset(); // Release local reference - factory still holds the object
+  LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - after reset cont for NNegSignumSeparator";
+ }
 
   cont=std::make_shared<NEyeRetina>();
  cont->SetStorage(storage);
@@ -264,8 +271,9 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - before creating NEngineMotionControl";
  std::shared_ptr<NEngineMotionControl> cs=0;
   cs=std::make_shared<NEngineMotionControl>();
- cs->Default();
+ cs->SetStorage(storage);
  cs->SetName("EngineMotionControl");
+ cs->Default();
  LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - before UploadClass NEngineMotionControl";
  UploadClass("NEngineMotionControl",cs);
  LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - after UploadClass NEngineMotionControl";
@@ -316,29 +324,35 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 
  // 1 - Range
  cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
- cs->NumMotionElements=1;
- cs->CreationMode=0;
- cs->MotionElementClassName="NNewMotionElement";
- cs->MCNeuroObjectName="NNewSPNeuron";
- cs->ObjectControlInterfaceClassName="NControlObjectSource";
- cs->Create();
- net=cs;
- net->SetName("EngineControlRangeAfferent");
- storage->PopObject(net);
- UploadClass("NEngineControlRangeAfferent",net);
+ if(cs)
+ {
+  cs->NumMotionElements=1;
+  cs->CreationMode=0;
+  cs->MotionElementClassName="NNewMotionElement";
+  cs->MCNeuroObjectName="NNewSPNeuron";
+  cs->ObjectControlInterfaceClassName="NControlObjectSource";
+  cs->Create();
+  net=cs;
+  net->SetName("EngineControlRangeAfferent");
+  storage->PopObject(net);
+  UploadClass("NEngineControlRangeAfferent",net);
+ }
 
  // 14 - New net with parametric structure control
  cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
- cs->NumMotionElements=1;
- cs->CreationMode=14;
- cs->MotionElementClassName="NNewMotionElement";
- cs->MCNeuroObjectName="NNewSPNeuron";
- cs->ObjectControlInterfaceClassName="NControlObjectSource";
- cs->Create();
- net=cs;
- net->SetName("EngineControlRangeAfferent");
- storage->PopObject(net);
- UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl",net);
+ if(cs)
+ {
+  cs->NumMotionElements=1;
+  cs->CreationMode=14;
+  cs->MotionElementClassName="NNewMotionElement";
+  cs->MCNeuroObjectName="NNewSPNeuron";
+  cs->ObjectControlInterfaceClassName="NControlObjectSource";
+  cs->Create();
+  net=cs;
+  net->SetName("EngineControlRangeAfferent");
+  storage->PopObject(net);
+  UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl",net);
+ }
 
 
 {
