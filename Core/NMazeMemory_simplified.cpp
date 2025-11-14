@@ -197,6 +197,12 @@ bool NMazeMemory_simplified::ABuild(void)
       //��������� �������� ������� ����������
       MVector<double,3> root_coords = {5.0, 5.0, 0};
       std::shared_ptr<NTrajectoryElement> root = CreatePoint(root_coords);
+      if(!root)
+      {
+        // During CreateClassSamples, NTrajectoryElement may not be registered yet
+        // Skip creating root point during initialization
+        return true;
+      }
    }
 
  return true;
@@ -263,6 +269,12 @@ bool NMazeMemory_simplified::ACalculate(void)
           double y = (double)(option_num-1)*yShift + base_coords[1];
           MVector<double,3> coords = {x, y, 0.0};
           traj_el = CreatePoint(coords);//���������� ������
+          if(!traj_el)
+          {
+            // During CreateClassSamples, NTrajectoryElement may not be registered yet
+            // Skip creating trajectory element during initialization
+            continue;
+          }
           traj_el->Reset();
           BaseTE->Forwards.push_back(traj_el);
           traj_el->Layer = CurrentLayer;
@@ -419,6 +431,11 @@ std::shared_ptr<NTrajectoryElement> NMazeMemory_simplified::CreatePoint(MVector<
 
  //��������� ������� ����������
  traj_el = AddMissingComponent<NTrajectoryElement>(std::string("NTrajectoryElement"+sntoa(te_num)), "NTrajectoryElement");
+ if(!traj_el)
+ {
+   LOG(ERROR) << "NMazeMemory_simplified::CreatePoint - Failed to create NTrajectoryElement, class may not be registered yet";
+   return nullptr;
+ }
  traj_el->SetCoord(coords);
  TrajectoryElements.push_back(traj_el);
 

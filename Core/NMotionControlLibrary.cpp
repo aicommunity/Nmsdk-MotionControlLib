@@ -405,8 +405,12 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  generated_cont->SetStorage(storage);
  cont->SetStorage(storage);
  generated_cont->SetName("NMazeMemory_simplified");
- generated_cont->Default();
+ // Don't call Default() during CreateClassSamples - it calls ABuild() which tries to create NTrajectoryElement
+ // NTrajectoryElement is already registered above, but Default() should be called after all classes are registered
+ // For now, skip Default() call - it will be called when the object is actually used via TakeObject()
+ // generated_cont->Default();
  UploadClass("NMazeMemory_simplified",generated_cont);
+ LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - NMazeMemory_simplified registered (Default() skipped to avoid dependency issues)";
 }
 
 {
