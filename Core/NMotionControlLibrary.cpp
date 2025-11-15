@@ -277,6 +277,20 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - before UploadClass NEngineMotionControl";
  UploadClass("NEngineMotionControl",cs);
  LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - after UploadClass NEngineMotionControl";
+ 
+ // Проверка регистрации класса после UploadClass
+ UStorage* storage_ptr = dynamic_cast<UStorage*>(storage);
+ if(storage_ptr)
+ {
+  UId class_id = storage_ptr->FindClassId("NEngineMotionControl");
+  LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - FindClassId('NEngineMotionControl') returned: " << class_id;
+  bool class_exists = storage_ptr->CheckClass("NEngineMotionControl");
+  LOG(INFO) << "NMotionControlLibrary::CreateClassSamples - CheckClass('NEngineMotionControl') returned: " << (class_exists ? "true" : "false");
+  if(!class_exists)
+  {
+   LOG(ERROR) << "NMotionControlLibrary::CreateClassSamples - NEngineMotionControl class not found after UploadClass!";
+  }
+ }
 
  // ����� ������������ ����
 
