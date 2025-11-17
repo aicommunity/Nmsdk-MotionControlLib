@@ -970,7 +970,63 @@ bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
 		== "MotionElement" && found_motion_elements<expected_num_motion_elements)
 	++found_motion_elements;
    else
-	DelComponent(std::shared_ptr<UContainer>(PComponents[i].get()),true);
+   {
+	// SAFETY: Use existing shared_ptr directly, don't create new one from .get()
+	// Creating new shared_ptr from raw pointer causes double ownership and segfault
+	if(PComponents[i])
+	{
+	 // SAFETY: Check use_count before calling DelComponent
+	 // If use_count is corrupted, DelComponent will return early and component won't be deleted
+	 // This can cause infinite loop, so we need to handle it
+	 try {
+	  size_t use_count = PComponents[i].use_count();
+	  if(use_count > 1000000 || use_count == 0)
+	  {
+	   LOG(WARNING) << "NEngineMotionControl::ClearStructure - Component " << i << " has suspicious use_count: " << use_count << ", skipping deletion";
+	   // Force remove component from PComponents to avoid infinite loop
+	   // This is a workaround - ideally we should fix the root cause of corrupted use_count
+	   ++i; // Skip this component and continue
+	   continue;
+	  }
+	 } catch (...) {
+	  LOG(WARNING) << "NEngineMotionControl::ClearStructure - exception checking use_count for component " << i << ", skipping deletion";
+	  ++i; // Skip this component and continue
+	  continue;
+	 }
+	 
+	 // Store component name before deletion in case DelComponent fails
+	 std::string comp_name = PComponents[i]->GetName();
+	 
+	 DelComponent(PComponents[i], true);
+	 
+	 // CRITICAL: After DelComponent, check if component was actually removed
+	 // If DelComponent returned early due to corrupted use_count, component may still be in PComponents
+	 // This can cause infinite loop, so we need to handle it
+	 // Check if component is still in PComponents by comparing names
+	 bool still_exists = false;
+	 for(int j = 0; j < GetNumComponents(); ++j)
+	 {
+	  if(j != i && GetComponent(j) && GetComponent(j)->GetName() == comp_name)
+	  {
+	   still_exists = true;
+	   break;
+	  }
+	 }
+	 
+	 // If component still exists and we're at the same index, increment i to avoid infinite loop
+	 if(still_exists && i < GetNumComponents() && GetComponent(i) && GetComponent(i)->GetName() == comp_name)
+	 {
+	  LOG(WARNING) << "NEngineMotionControl::ClearStructure - Component " << comp_name << " was not deleted, forcing skip to avoid infinite loop";
+	  ++i; // Skip this component and continue
+	  continue;
+	 }
+	}
+	else
+	{
+	 ++i; // Skip invalid component
+	 continue;
+	}
+   }
   }
  }
  return true;

@@ -337,15 +337,35 @@ bool NSeqComparison::ABuild(void)
  {
   std::shared_ptr<NPulseMembrane> dendrite = CompNeuron->GetComponentL<NPulseMembrane>("Dendrite" + sntoa(i+1) + "_1", true);
   std::shared_ptr<NPulseMembrane> soma = CompNeuron->GetComponentL<NPulseMembrane>("Soma" + sntoa(i+1), true);
+  
+  // SAFETY: Check if soma is valid before accessing it
+  if(!soma)
+  {
+   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because Soma component doesn't exist: Soma" + sntoa(i+1)));
+   continue; // Skip this iteration
+  }
+  
   // �������� excsynapse, ���� ����� ������� ����� �� �������
 //  NPulseSynapseCommon *excsynapse = dendrite->GetExcitatorySynapses(0);
-  NPulseSynapseCommon *excsynapse = soma->GetExcitatorySynapses(0);
-  NPulseSynapseCommon *inhsynapse = soma->GetInhibitorySynapses(0);
+  NPulseSynapseCommon *excsynapse = nullptr;
+  NPulseSynapseCommon *inhsynapse = nullptr;
+  
+  // SAFETY: Check if soma is still valid before calling methods
+  if(soma)
+  {
+   try {
+    excsynapse = soma->GetExcitatorySynapses(0);
+    inhsynapse = soma->GetInhibitorySynapses(0);
+   } catch (...) {
+    LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Exception getting synapses from Soma" + sntoa(i+1)));
+    continue; // Skip this iteration
+   }
+  }
 
   if(!excsynapse || !inhsynapse)
   {
    LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because Synapse in CompNeuron isn't exists: "));
-   return true;
+   continue; // Skip this iteration instead of returning
   }
 
   if (!CheckLink(KFClsSpikes[i]->GetLongName(GetThisAsSharedContainer()), "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))

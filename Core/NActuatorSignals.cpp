@@ -470,153 +470,236 @@ bool NActuatorSignals::ABuild(void)
  // ����� �� IsForward
  {
   soma = IsForwardNeuron->GetComponent<NPulseMembrane>("Soma1", true);
-  excsynapse = soma->GetExcitatorySynapses(0);
-  inhsynapse = soma->GetInhibitorySynapses(0);
+  
+  // SAFETY: Check if soma is valid before accessing it
+  if(!soma)
+  {
+   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because Soma1 component doesn't exist in IsForwardNeuron"));
+   // Skip this section
+  }
+  else
+  {
+   excsynapse = soma->GetExcitatorySynapses(0);
+   inhsynapse = soma->GetInhibitorySynapses(0);
 
-  // ������ ����� c LeftEngine
-  if (!CheckLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   // ������ ����� c LeftEngine
+   if(excsynapse && !CheckLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  //   c Sinchro1
-  if (!CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c Sinchro1
+   if(inhsynapse && !CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  }
 
 
   soma = IsForwardNeuron->GetComponent<NPulseMembrane>("Soma2", true);
-  excsynapse = soma->GetExcitatorySynapses(0);
-  inhsynapse = soma->GetInhibitorySynapses(0);
+  
+  // SAFETY: Check if soma is valid before accessing it
+  if(!soma)
+  {
+   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because Soma2 component doesn't exist in IsForwardNeuron"));
+   // Skip this section
+  }
+  else
+  {
+   excsynapse = soma->GetExcitatorySynapses(0);
+   inhsynapse = soma->GetInhibitorySynapses(0);
 
-  // ������ ����� c RightEngine
-  if (!CheckLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   // ������ ����� c RightEngine
+   if(excsynapse && !CheckLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  //   c Sinchro1
-  if (!CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c Sinchro1
+   if(inhsynapse && !CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  }
  }
 
  //   IsLeft
  {
   dendrite = IsLeftNeuron->GetComponent<NPulseMembrane>("Dendrite1_10", true);
-  excsynapse = dendrite->GetExcitatorySynapses(0);
-  inhsynapse = dendrite ->GetInhibitorySynapses(0);
+  
+  // SAFETY: Check if dendrite is valid before accessing it
+  if(!dendrite)
+  {
+   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because Dendrite1_10 component doesn't exist in IsLeftNeuron"));
+   // Skip this section
+  }
+  else
+  {
+   excsynapse = dendrite->GetExcitatorySynapses(0);
+   inhsynapse = dendrite ->GetInhibitorySynapses(0);
 
-  // ������ ����� c LeftEngine
-  if (!CheckLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   // ������ ����� c LeftEngine
+   if(excsynapse && !CheckLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  //   c Sinchro2
-  if (!CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c Sinchro2
+   if(inhsynapse && !CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  }
 
 
   soma = IsLeftNeuron->GetComponent<NPulseMembrane>("Soma2", true);
-  excsynapse = soma->GetExcitatorySynapses(0);
-  inhsynapse = soma->GetInhibitorySynapses(0);
+  
+  // SAFETY: Check if soma is valid before accessing it
+  if(!soma)
+  {
+   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because Soma2 component doesn't exist in IsLeftNeuron"));
+   // Skip this section
+  }
+  else
+  {
+   excsynapse = soma->GetExcitatorySynapses(0);
+   inhsynapse = soma->GetInhibitorySynapses(0);
 
-  // ������ ����� c RightEngine
-  if (!CheckLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   // ������ ����� c RightEngine
+   if(excsynapse && !CheckLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  //   c Sinchro1
-  if (!CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c Sinchro1
+   if(inhsynapse && !CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  }
  }
 
  //   IsRight
  {
   dendrite = IsRightNeuron->GetComponent<NPulseMembrane>("Dendrite2_10", true);
-  excsynapse = dendrite->GetExcitatorySynapses(0);
-  inhsynapse = dendrite ->GetInhibitorySynapses(0);
+  
+  // SAFETY: Check if dendrite is valid before accessing it
+  if(!dendrite)
+  {
+   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because Dendrite2_10 component doesn't exist in IsRightNeuron"));
+   // Skip this section
+  }
+  else
+  {
+   excsynapse = dendrite->GetExcitatorySynapses(0);
+   inhsynapse = dendrite ->GetInhibitorySynapses(0);
 
-  // ������ ����� c RightEngine
-  if (!CheckLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   // ������ ����� c RightEngine
+   if(excsynapse && !CheckLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  //   c Sinchro2
-  if (!CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c Sinchro2
+   if(inhsynapse && !CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  }
 
 
   soma = IsRightNeuron->GetComponent<NPulseMembrane>("Soma1", true);
-  excsynapse = soma->GetExcitatorySynapses(0);
-  inhsynapse = soma->GetInhibitorySynapses(0);
+  
+  // SAFETY: Check if soma is valid before accessing it
+  if(!soma)
+  {
+   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because Soma1 component doesn't exist in IsRightNeuron"));
+   // Skip this section - we're in a block, not a loop, so we just skip the code below
+  }
+  else
+  {
+   excsynapse = soma->GetExcitatorySynapses(0);
+   inhsynapse = soma->GetInhibitorySynapses(0);
 
-  //   c LeftEngine
-  if (!CheckLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c LeftEngine
+   if(excsynapse && !CheckLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  //   c Sinchro1
-  if (!CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c Sinchro1
+   if(inhsynapse && !CheckLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("Sinchro1", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  }
  }
 
  //   IsBack
  {
   soma = IsBackNeuron->GetComponent<NPulseMembrane>("Soma1", true);
-  excsynapse = soma->GetExcitatorySynapses(0);
-  inhsynapse = soma->GetInhibitorySynapses(0);
+  
+  // SAFETY: Check if soma is valid before accessing it
+  if(soma)
+  {
+   excsynapse = soma->GetExcitatorySynapses(0);
+   inhsynapse = soma->GetInhibitorySynapses(0);
 
-  //   c LeftEngine
-  if (!CheckLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c LeftEngine
+   if(excsynapse && !CheckLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("LeftEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  //   c Sinchro2
-  if (!CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
-
+   //   c Sinchro2
+   if(inhsynapse && !CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  }
 
   soma = IsBackNeuron->GetComponent<NPulseMembrane>("Soma2", true);
-  excsynapse = soma->GetExcitatorySynapses(0);
-  inhsynapse = soma->GetInhibitorySynapses(0);
+  
+  // SAFETY: Check if soma is valid before accessing it
+  if(soma)
+  {
+   excsynapse = soma->GetExcitatorySynapses(0);
+   inhsynapse = soma->GetInhibitorySynapses(0);
 
-  //   c RightEngine
-  if (!CheckLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c RightEngine
+   if(excsynapse && !CheckLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("RightEngine", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  //   c Sinchro2
-  if (!CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c Sinchro2
+   if(inhsynapse && !CheckLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  }
  }
 
  //   ORNeuron
  {
   soma = ORNeuron->GetComponent<NPulseMembrane>("Soma1", true);
 
-  //   c IsForward
-  excsynapse = soma->GetExcitatorySynapses(0);
-  if (!CheckLink("IsForward", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("IsForward", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  // SAFETY: Check if soma is valid before accessing it
+  if(soma)
+  {
+   //   c IsForward
+   excsynapse = soma->GetExcitatorySynapses(0);
+   if(excsynapse && !CheckLink("IsForward", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("IsForward", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  //   c IsLeft
-  excsynapse = soma->GetExcitatorySynapses(1);
-  if (!CheckLink("IsLeft", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("IsLeft", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c IsLeft
+   excsynapse = soma->GetExcitatorySynapses(1);
+   if(excsynapse && !CheckLink("IsLeft", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("IsLeft", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  //   c IsRight
-  excsynapse = soma->GetExcitatorySynapses(2);
-  if (!CheckLink("IsRight", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("IsRight", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c IsRight
+   excsynapse = soma->GetExcitatorySynapses(2);
+   if(excsynapse && !CheckLink("IsRight", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("IsRight", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
-  //   c Delay1To2
-  excsynapse = soma->GetExcitatorySynapses(3);
-  if (!CheckLink("Delay1To2", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("Delay1To2", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+   //   c Delay1To2
+   excsynapse = soma->GetExcitatorySynapses(3);
+   if(excsynapse && !CheckLink("Delay1To2", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("Delay1To2", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  }
  }
 
  //   NOTNeuron
  {
   //   c ORNeuron
   soma = NOTNeuron->GetComponent<NPulseMembrane>("Soma1", true);
-  inhsynapse = soma->GetInhibitorySynapses(0);
-  if (!CheckLink("ORNeuron", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("ORNeuron", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  
+  // SAFETY: Check if soma is valid before accessing it
+  if(soma)
+  {
+   inhsynapse = soma->GetInhibitorySynapses(0);
+   if(inhsynapse && !CheckLink("ORNeuron", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("ORNeuron", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  }
 
   //   c NOTGenerator
   dendrite = NOTNeuron->GetComponent<NPulseMembrane>("Dendrite1_2", true);
-  excsynapse = dendrite->GetExcitatorySynapses(0);
-  if (!CheckLink("NOTGenerator", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-   res &= CreateLink("NOTGenerator", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  
+  // SAFETY: Check if dendrite is valid before accessing it
+  if(dendrite)
+  {
+   excsynapse = dendrite->GetExcitatorySynapses(0);
+   if(excsynapse && !CheckLink("NOTGenerator", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+    res &= CreateLink("NOTGenerator", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+  }
  }
 
  //  c IsBack  Delay1To2
@@ -625,34 +708,50 @@ bool NActuatorSignals::ABuild(void)
 
  //  NOTNeuron  Stay
  soma = StayNeuron->GetComponent<NPulseMembrane>("Soma1", true);
- excsynapse = soma->GetExcitatorySynapses(0);
- if (!CheckLink("NOTNeuron", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-  res &= CreateLink("NOTNeuron", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+ if(soma)
+ {
+  excsynapse = soma->GetExcitatorySynapses(0);
+  if(excsynapse && !CheckLink("NOTNeuron", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("NOTNeuron", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+ }
 
  //  IsForward  Forward
  soma = ForwardNeuron->GetComponent<NPulseMembrane>("Soma1", true);
- excsynapse = soma->GetExcitatorySynapses(0);
- if (!CheckLink("IsForward", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-  res &= CreateLink("IsForward", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+ if(soma)
+ {
+  excsynapse = soma->GetExcitatorySynapses(0);
+  if(excsynapse && !CheckLink("IsForward", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("IsForward", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+ }
 
  //  IsLeft  Left
  soma = LeftNeuron->GetComponent<NPulseMembrane>("Soma1", true);
- excsynapse = soma->GetExcitatorySynapses(0);
- if (!CheckLink("IsLeft", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-  res &= CreateLink("IsLeft", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+ if(soma)
+ {
+  excsynapse = soma->GetExcitatorySynapses(0);
+  if(excsynapse && !CheckLink("IsLeft", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("IsLeft", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+ }
 
  //  IsRight  Right
  soma = RightNeuron->GetComponent<NPulseMembrane>("Soma1", true);
- excsynapse = soma->GetExcitatorySynapses(0);
- if (!CheckLink("IsRight", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-  res &= CreateLink("IsRight", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+ if(soma)
+ {
+  excsynapse = soma->GetExcitatorySynapses(0);
+  if(excsynapse && !CheckLink("IsRight", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("IsRight", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+ }
 
  //  Delay1To2  Back
  soma = BackNeuron->GetComponent<NPulseMembrane>("Soma1", true);
- excsynapse = soma->GetExcitatorySynapses(0);
- if (!CheckLink("Delay1To2", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
-  res &= CreateLink("Delay1To2", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
-}
+ if(soma)
+ {
+  excsynapse = soma->GetExcitatorySynapses(0);
+  if(excsynapse && !CheckLink("Delay1To2", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input"))
+   res &= CreateLink("Delay1To2", "Output", excsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
+ }
+
+ } // Close block opened at line 469
 
  return res;
 }
