@@ -175,7 +175,12 @@ bool NPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*> f
 
           for (int m = 0; m<syns_max; m++)
           {
-              std::shared_ptr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma1.ExcSynapse"+sntoa(m+1),true);
+              std::weak_ptr<RDK::UContainer> syn_weak = finish[j]->GetComponentL("Soma1.ExcSynapse"+sntoa(m+1),true);
+              std::shared_ptr<NPulseSynapse> syn;
+              if(!syn_weak.expired())
+               syn = std::dynamic_pointer_cast<NPulseSynapse>(syn_weak.lock());
+              else
+               syn = nullptr;
               if(!syn)
                 return true;
 

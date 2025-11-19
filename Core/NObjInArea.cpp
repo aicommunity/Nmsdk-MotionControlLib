@@ -402,10 +402,14 @@ bool NObjInArea::ABuild(void)
   // Component not found - this is OK during CreateClassSamples
   return true;
  }
- ORNeuron->SetCoord(MVector<double,3>(10.33, 2 + 2.33 * (NumObj - 1) / 2, 0));
- ORNeuron->DisconnectAll("Output");
- std::shared_ptr<NPulseMembrane> or_soma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
- if (or_soma)
+ORNeuron->SetCoord(MVector<double,3>(10.33, 2 + 2.33 * (NumObj - 1) / 2, 0));
+ORNeuron->DisconnectAll("Output");
+// CRITICAL: GetComponentL now returns weak_ptr, need to lock
+std::weak_ptr<RDK::UContainer> or_soma_weak = ORNeuron->GetComponentL("Soma1", true);
+std::shared_ptr<NPulseMembrane> or_soma;
+if(!or_soma_weak.expired())
+ or_soma = std::dynamic_pointer_cast<NPulseMembrane>(or_soma_weak.lock());
+if (or_soma)
  {
   or_soma->NumExcitatorySynapses = NumObj;
   or_soma->Build();
@@ -428,11 +432,19 @@ bool NObjInArea::ABuild(void)
   dend.assign(1, 1);
   DecidingNeuron->NumDendriteMembranePartsVec = dend;
  }
- DecidingNeuron->Reset();
+DecidingNeuron->Reset();
 
- std::shared_ptr<NPulseMembrane> decidning_dend = DecidingNeuron->GetComponentL<NPulseMembrane>("Dendrite1_1", true);
- std::shared_ptr<NPulseMembrane> deciding_soma = DecidingNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
- if (deciding_soma)
+// CRITICAL: GetComponentL now returns weak_ptr, need to lock
+std::weak_ptr<RDK::UContainer> decidning_dend_weak = DecidingNeuron->GetComponentL("Dendrite1_1", true);
+std::shared_ptr<NPulseMembrane> decidning_dend;
+if(!decidning_dend_weak.expired())
+ decidning_dend = std::dynamic_pointer_cast<NPulseMembrane>(decidning_dend_weak.lock());
+// CRITICAL: GetComponentL now returns weak_ptr, need to lock
+std::weak_ptr<RDK::UContainer> deciding_soma_weak = DecidingNeuron->GetComponentL("Soma1", true);
+std::shared_ptr<NPulseMembrane> deciding_soma;
+if(!deciding_soma_weak.expired())
+ deciding_soma = std::dynamic_pointer_cast<NPulseMembrane>(deciding_soma_weak.lock());
+if (deciding_soma)
  {
   deciding_soma->NumInhibitorySynapses = 2;
   deciding_soma->Build();
@@ -509,8 +521,16 @@ bool NObjInArea::ABuild(void)
 
 
  // ������� ������������ ���������� ANDNeuron
- std::shared_ptr<NPulseMembrane> and_soma1 = ANDNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
- std::shared_ptr<NPulseMembrane> and_soma2 = ANDNeuron->GetComponentL<NPulseMembrane>("Soma2", true);
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> and_soma1_weak = ANDNeuron->GetComponentL("Soma1", true);
+ std::shared_ptr<NPulseMembrane> and_soma1;
+ if(!and_soma1_weak.expired())
+  and_soma1 = std::dynamic_pointer_cast<NPulseMembrane>(and_soma1_weak.lock());
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> and_soma2_weak = ANDNeuron->GetComponentL("Soma2", true);
+ std::shared_ptr<NPulseMembrane> and_soma2;
+ if(!and_soma2_weak.expired())
+  and_soma2 = std::dynamic_pointer_cast<NPulseMembrane>(and_soma2_weak.lock());
  if(!and_soma1 || !and_soma2)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because ANDNeuron->Soma1 or ANDNeuron->Soma2 isn't exists: "));
@@ -529,7 +549,11 @@ bool NObjInArea::ABuild(void)
   res &= CreateLink("ExcitatoryGen", "Output", and_excsynapse11->GetLongName(GetThisAsSharedContainer()), "Input");
 
  // ������� �������� �������� � ������ t=T
- std::shared_ptr<NPulseGeneratorTransit> delay_T = SuppressUnit2->GetComponentL<NPulseGeneratorTransit>("Delay2", true);
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> delay_T_weak = SuppressUnit2->GetComponentL("Delay2", true);
+ std::shared_ptr<NPulseGeneratorTransit> delay_T;
+ if(!delay_T_weak.expired())
+  delay_T = std::dynamic_pointer_cast<NPulseGeneratorTransit>(delay_T_weak.lock());
  if(!delay_T)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because SuppressUnit2->Delay2 isn't exists: "));
@@ -599,8 +623,13 @@ bool NObjInArea::AReset(void)
  ExcitatoryGen->PatternFrequency = HighFreq;
 
  // ����������� ����� ������������ ���� ������� �
- std::shared_ptr<NLTZone> ltzone = ANDNeuron->GetComponentL<NLTZone>("LTZone", true);
- ltzone->Threshold = 0.048;
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> ltzone_weak = ANDNeuron->GetComponentL("LTZone", true);
+ std::shared_ptr<NLTZone> ltzone;
+ if(!ltzone_weak.expired())
+  ltzone = std::dynamic_pointer_cast<NLTZone>(ltzone_weak.lock());
+ if(ltzone)
+  ltzone->Threshold = 0.048;
 
  return res;
 }
@@ -618,11 +647,15 @@ bool NObjInArea::ACalculate(void)
  if (ExcitatoryGen->IsInPatternMode && !Relinked)
  {
   if(CheckLink("DecidingNeuron", "Output", "ExcitatoryGen", "Input"))
-   res &= BreakLink("DecidingNeuron", "Output", "ExcitatoryGen", "Input");
+  res &= BreakLink("DecidingNeuron", "Output", "ExcitatoryGen", "Input");
 
-  std::shared_ptr<NPulseGeneratorTransit> delay_T = SuppressUnit2->GetComponentL<NPulseGeneratorTransit>("Delay2", true);
-  if(delay_T && !CheckLink(delay_T->GetLongName(GetThisAsSharedContainer()), "Output", "ExcitatoryGen", "Input"))
-   res &= CreateLink(delay_T->GetLongName(GetThisAsSharedContainer()), "Output", "ExcitatoryGen", "Input");
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> delay_T_weak = SuppressUnit2->GetComponentL("Delay2", true);
+ std::shared_ptr<NPulseGeneratorTransit> delay_T;
+ if(!delay_T_weak.expired())
+  delay_T = std::dynamic_pointer_cast<NPulseGeneratorTransit>(delay_T_weak.lock());
+ if(delay_T && !CheckLink(delay_T->GetLongName(GetThisAsSharedContainer()), "Output", "ExcitatoryGen", "Input"))
+  res &= CreateLink(delay_T->GetLongName(GetThisAsSharedContainer()), "Output", "ExcitatoryGen", "Input");
   Relinked = true;
  }
 
@@ -630,7 +663,11 @@ bool NObjInArea::ACalculate(void)
  // ������� ��������� ����� � SuppressUnit2->Delay2 � ������������ � DecidingNeuron ����� ��������� ���������
  if (!ExcitatoryGen->IsInPatternMode && Relinked)
  {
-  std::shared_ptr<NPulseGeneratorTransit> delay_T = SuppressUnit2->GetComponentL<NPulseGeneratorTransit>("Delay2", true);
+  // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+  std::weak_ptr<RDK::UContainer> delay_T_weak_2 = SuppressUnit2->GetComponentL("Delay2", true);
+  std::shared_ptr<NPulseGeneratorTransit> delay_T;
+  if(!delay_T_weak_2.expired())
+   delay_T = std::dynamic_pointer_cast<NPulseGeneratorTransit>(delay_T_weak_2.lock());
   if(delay_T && CheckLink(delay_T->GetLongName(GetThisAsSharedContainer()), "Output", "ExcitatoryGen", "Input"))
    res &= BreakLink(delay_T->GetLongName(GetThisAsSharedContainer()), "Output", "ExcitatoryGen", "Input");
 

@@ -145,7 +145,12 @@ bool NSignalEstimation::SetLTZThreshold(const double &value)
   if (!ZoneNeurons[i])
    continue;
 
-  std::shared_ptr<NLTZone> ltzone = ZoneNeurons[i]->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
+  std::weak_ptr<RDK::UContainer> ltzone_weak = ZoneNeurons[i]->GetComponentL("LTZone");  // GetLTZone();
+  std::shared_ptr<NLTZone> ltzone;
+  if(!ltzone_weak.expired())
+   ltzone = std::dynamic_pointer_cast<NLTZone>(ltzone_weak.lock());
+  else
+   ltzone = nullptr;
   if(!ltzone)
    continue;
 
@@ -316,7 +321,12 @@ bool NSignalEstimation::ABuild(void)
   // �� ������ ���� ������������� �������������� ����. ������� ��� �������� ������ �/� ���������
   for (int j = 1; j <= 2; j++)
   {
-   std::shared_ptr<NPulseMembrane> soma = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Soma" + sntoa(j), true);
+   std::weak_ptr<RDK::UContainer> soma_weak = ZoneNeurons[i]->GetComponentL("Soma" + sntoa(j), true);
+   std::shared_ptr<NPulseMembrane> soma;
+   if(!soma_weak.expired())
+    soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak.lock());
+   else
+    soma = nullptr;
    if (soma)
    {
     soma->NumInhibitorySynapses = NumZones - 1;
@@ -342,7 +352,12 @@ bool NSignalEstimation::ABuild(void)
  for (int i = 0; i < NumZones; i++)
  {
   int dendrite_num = int(UpperLimitsOfZones[NumZones - i - 1] / 0.01 - 1);
-  std::shared_ptr<NPulseMembrane> dendrite = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Dendrite1_"+sntoa(dendrite_num), true);
+  std::weak_ptr<RDK::UContainer> dendrite_weak = ZoneNeurons[i]->GetComponentL("Dendrite1_"+sntoa(dendrite_num), true);
+  std::shared_ptr<NPulseMembrane> dendrite;
+  if(!dendrite_weak.expired())
+   dendrite = std::dynamic_pointer_cast<NPulseMembrane>(dendrite_weak.lock());
+  else
+   dendrite = nullptr;
   if (!dendrite)
    continue;
   NPulseSynapseCommon *synapse = dendrite->GetExcitatorySynapses(0);
@@ -354,7 +369,11 @@ bool NSignalEstimation::ABuild(void)
    res &= CreateLink(SignalGen->GetLongName(GetThisAsSharedContainer()), "Output", synapse->GetLongName(GetThisAsSharedContainer()), "Input");
 
 
-  dendrite = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Dendrite2_1", true);
+  std::weak_ptr<RDK::UContainer> dendrite_weak2 = ZoneNeurons[i]->GetComponentL("Dendrite2_1", true);
+  if(!dendrite_weak2.expired())
+   dendrite = std::dynamic_pointer_cast<NPulseMembrane>(dendrite_weak2.lock());
+  else
+   dendrite = nullptr;
   if (!dendrite)
    continue;
   synapse = dendrite->GetExcitatorySynapses(0);
@@ -370,8 +389,18 @@ bool NSignalEstimation::ABuild(void)
  // ������ �������� ��������� ����� ����� ���������
  for (int i = 0; i < NumZones; i++)
  {
-  std::shared_ptr<NPulseMembrane> soma1 = ZoneNeurons[i]->GetComponentL<NPulseMembrane>(std::string("Soma1"), true);
-  std::shared_ptr<NPulseMembrane> soma2 = ZoneNeurons[i]->GetComponentL<NPulseMembrane>(std::string("Soma2"), true);
+  std::weak_ptr<RDK::UContainer> soma1_weak = ZoneNeurons[i]->GetComponentL(std::string("Soma1"), true);
+  std::shared_ptr<NPulseMembrane> soma1;
+  if(!soma1_weak.expired())
+   soma1 = std::dynamic_pointer_cast<NPulseMembrane>(soma1_weak.lock());
+  else
+   soma1 = nullptr;
+  std::weak_ptr<RDK::UContainer> soma2_weak = ZoneNeurons[i]->GetComponentL(std::string("Soma2"), true);
+  std::shared_ptr<NPulseMembrane> soma2;
+  if(!soma2_weak.expired())
+   soma2 = std::dynamic_pointer_cast<NPulseMembrane>(soma2_weak.lock());
+  else
+   soma2 = nullptr;
   if(!soma1 || !soma2)
    continue;
 
@@ -382,8 +411,18 @@ bool NSignalEstimation::ABuild(void)
    if (i == j)
     continue;
 
-   std::shared_ptr<NPulseSynapse> soma1_synapse = soma1->GetComponentL<NPulseSynapse>(std::string("InhSynapse" + sntoa(index_synapse)), true);
-   std::shared_ptr<NPulseSynapse> soma2_synapse = soma2->GetComponentL<NPulseSynapse>(std::string("InhSynapse" + sntoa(index_synapse)), true);
+   std::weak_ptr<RDK::UContainer> soma1_synapse_weak = soma1->GetComponentL(std::string("InhSynapse" + sntoa(index_synapse)), true);
+   std::shared_ptr<NPulseSynapse> soma1_synapse;
+   if(!soma1_synapse_weak.expired())
+    soma1_synapse = std::dynamic_pointer_cast<NPulseSynapse>(soma1_synapse_weak.lock());
+   else
+    soma1_synapse = nullptr;
+   std::weak_ptr<RDK::UContainer> soma2_synapse_weak = soma2->GetComponentL(std::string("InhSynapse" + sntoa(index_synapse)), true);
+   std::shared_ptr<NPulseSynapse> soma2_synapse;
+   if(!soma2_synapse_weak.expired())
+    soma2_synapse = std::dynamic_pointer_cast<NPulseSynapse>(soma2_synapse_weak.lock());
+   else
+    soma2_synapse = nullptr;
    if(!soma1_synapse || !soma2_synapse)
        return true;
 
@@ -445,7 +484,12 @@ bool NSignalEstimation::AReset(void)
  {
   if(!ZoneNeurons[i])
    continue;
-  std::shared_ptr<NLTZone> ltzone = ZoneNeurons[i]->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
+  std::weak_ptr<RDK::UContainer> ltzone_weak = ZoneNeurons[i]->GetComponentL("LTZone");  // GetLTZone();
+  std::shared_ptr<NLTZone> ltzone;
+  if(!ltzone_weak.expired())
+   ltzone = std::dynamic_pointer_cast<NLTZone>(ltzone_weak.lock());
+  else
+   ltzone = nullptr;
   if(!ltzone)
    continue;
   ltzone->Threshold = LTZThreshold;
@@ -464,7 +508,12 @@ bool NSignalEstimation::AReset(void)
  {
   // ������ �������
   int dendrite_num = int(UpperLimitsOfZones[NumZones - i - 1] / 0.01 - 1);
-  std::shared_ptr<NPulseMembrane> dendrite = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Dendrite1_"+sntoa(dendrite_num), true);
+  std::weak_ptr<RDK::UContainer> dendrite_weak = ZoneNeurons[i]->GetComponentL("Dendrite1_"+sntoa(dendrite_num), true);
+  std::shared_ptr<NPulseMembrane> dendrite;
+  if(!dendrite_weak.expired())
+   dendrite = std::dynamic_pointer_cast<NPulseMembrane>(dendrite_weak.lock());
+  else
+   dendrite = nullptr;
   if (!dendrite)
    continue;
   NPulseSynapseCommon *synapse = dendrite->GetExcitatorySynapses(0);
@@ -473,7 +522,11 @@ bool NSignalEstimation::AReset(void)
   synapse->Resistance = synapse_resistance[dendrite_num - 1] * 1000000;
 
   // ������ �������
-  dendrite = ZoneNeurons[i]->GetComponentL<NPulseMembrane>("Dendrite2_1", true);
+  std::weak_ptr<RDK::UContainer> dendrite_weak2 = ZoneNeurons[i]->GetComponentL("Dendrite2_1", true);
+  if(!dendrite_weak2.expired())
+   dendrite = std::dynamic_pointer_cast<NPulseMembrane>(dendrite_weak2.lock());
+  else
+   dendrite = nullptr;
   if (!dendrite)
    continue;
   synapse = dendrite->GetExcitatorySynapses(0);

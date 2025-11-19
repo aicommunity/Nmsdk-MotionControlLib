@@ -187,8 +187,16 @@ bool NNewPositionControlElement::ACalculate(void)
     continue;
    for(int j=0;j<melem->NumControlLoops;j++)
    {
-    std::shared_ptr<NPulseLTZoneCommon> ltzoneL=dynamic_pointer_cast<NPulseLTZoneCommon>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
-    std::shared_ptr<NPulseLTZoneCommon> ltzoneR=dynamic_pointer_cast<NPulseLTZoneCommon>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> ltzoneL_weak = melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone");
+    std::shared_ptr<NPulseLTZoneCommon> ltzoneL;
+    if(!ltzoneL_weak.expired())
+     ltzoneL = std::dynamic_pointer_cast<NPulseLTZoneCommon>(ltzoneL_weak.lock());
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> ltzoneR_weak = melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone");
+    std::shared_ptr<NPulseLTZoneCommon> ltzoneR;
+    if(!ltzoneR_weak.expired())
+     ltzoneR = std::dynamic_pointer_cast<NPulseLTZoneCommon>(ltzoneR_weak.lock());
 
     double temp=0;
     temp=ltzoneL->OutputFrequency->As<double>(0);
@@ -209,10 +217,28 @@ bool NNewPositionControlElement::ACalculate(void)
     continue;
    for(int j=0;j<melem->NumControlLoops;j++)
    {
-    std::shared_ptr<NPulseLTZoneCommon> controlLTZoneL=dynamic_pointer_cast<NPulseLTZoneCommon>(GetComponentL("ControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
-    std::shared_ptr<NPulseLTZoneCommon> controlLTZoneR=dynamic_pointer_cast<NPulseLTZoneCommon>(GetComponentL("ControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
-    std::shared_ptr<NPulseLTZoneCommon> preControlLTZoneL=dynamic_pointer_cast<NPulseLTZoneCommon>(GetComponentL("PreControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
-    std::shared_ptr<NPulseLTZoneCommon> preControlLTZoneR=dynamic_pointer_cast<NPulseLTZoneCommon>(GetComponentL("PreControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone"));
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> controlLTZoneL_weak = GetComponentL("ControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".LTZone");
+    std::shared_ptr<NPulseLTZoneCommon> controlLTZoneL;
+    if(!controlLTZoneL_weak.expired())
+     controlLTZoneL = std::dynamic_pointer_cast<NPulseLTZoneCommon>(controlLTZoneL_weak.lock());
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> controlLTZoneR_weak = GetComponentL("ControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone");
+    std::shared_ptr<NPulseLTZoneCommon> controlLTZoneR;
+    if(!controlLTZoneR_weak.expired())
+     controlLTZoneR = std::dynamic_pointer_cast<NPulseLTZoneCommon>(controlLTZoneR_weak.lock());
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> preControlLTZoneL_weak = GetComponentL("PreControlNeuronL"+sntoa(i+1)+sntoa(j+1)+".LTZone");
+    std::shared_ptr<NPulseLTZoneCommon> preControlLTZoneL;
+    if(!preControlLTZoneL_weak.expired())
+     preControlLTZoneL = std::dynamic_pointer_cast<NPulseLTZoneCommon>(preControlLTZoneL_weak.lock());
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> preControlLTZoneR_weak = GetComponentL("PreControlNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone");
+    std::shared_ptr<NPulseLTZoneCommon> preControlLTZoneR;
+    if(!preControlLTZoneR_weak.expired())
+     preControlLTZoneR = std::dynamic_pointer_cast<NPulseLTZoneCommon>(preControlLTZoneR_weak.lock());
+    if(!controlLTZoneL || !controlLTZoneR || !preControlLTZoneL || !preControlLTZoneR)
+     continue;
 
     (*Delta)(j,2*i)= controlLTZoneL->OutputFrequency->As<double>(0)-preControlLTZoneL->OutputFrequency->As<double>(0);
     (*Delta)(j,2*i+1)= controlLTZoneR->OutputFrequency->As<double>(0)-preControlLTZoneR->OutputFrequency->As<double>(0);
@@ -226,7 +252,13 @@ bool NNewPositionControlElement::ACalculate(void)
 
    for(size_t i=0;i<InputNeurons.size();i++)
    {
-    std::shared_ptr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(InputNeurons[i]->GetComponentL("LTZone"));
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> ltzone_weak = InputNeurons[i]->GetComponentL("LTZone");
+    std::shared_ptr<NPulseLTZoneCommon> ltzone;
+    if(!ltzone_weak.expired())
+     ltzone = std::dynamic_pointer_cast<NPulseLTZoneCommon>(ltzone_weak.lock());
+    if(!ltzone)
+     continue;
     if(ltzone->OutputFrequency->As<double>(0)>0)
     {
         //NameT check_input_name = InputNeurons[i]->GetName();
@@ -236,7 +268,13 @@ bool NNewPositionControlElement::ACalculate(void)
    }
    for(size_t c=0;c<PreControlNeurons.size();c++)
    {
-    std::shared_ptr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(ControlNeurons[c]->GetComponentL("LTZone"));
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> ltzone_weak = ControlNeurons[c]->GetComponentL("LTZone");
+    std::shared_ptr<NPulseLTZoneCommon> ltzone;
+    if(!ltzone_weak.expired())
+     ltzone = std::dynamic_pointer_cast<NPulseLTZoneCommon>(ltzone_weak.lock());
+    if(!ltzone)
+     continue;
     if(ltzone->OutputFrequency->As<double>(0)>0)
     {
         //NameT check_postInputs_name = PostInputNeurons[c]->GetName();
@@ -291,9 +329,29 @@ bool NNewPositionControlElement::CreateNeurons()
     RightInputNeurons.resize(melem->NumControlLoops);
     for(int j=0;j<melem->NumControlLoops;j++)
     {
-     std::shared_ptr<UItem> ltzoneL=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone"));
-     std::shared_ptr<UItem> ltzoneR=dynamic_pointer_cast<UItem>(melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone"));
-     UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
+     // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+     std::weak_ptr<RDK::UContainer> ltzoneL_weak = melem->GetComponentL("AfferentL"+sntoa(j+1)+".LTZone");
+     std::shared_ptr<UItem> ltzoneL;
+     if(!ltzoneL_weak.expired())
+      ltzoneL = std::dynamic_pointer_cast<UItem>(ltzoneL_weak.lock());
+     // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+     std::weak_ptr<RDK::UContainer> ltzoneR_weak = melem->GetComponentL("AfferentR"+sntoa(j+1)+".LTZone");
+     std::shared_ptr<UItem> ltzoneR;
+     if(!ltzoneR_weak.expired())
+      ltzoneR = std::dynamic_pointer_cast<UItem>(ltzoneR_weak.lock());
+     if(!ltzoneL || !ltzoneR)
+      continue;
+     // CRITICAL: GetOwner now returns weak_ptr, need to lock
+     std::weak_ptr<RDK::UContainer> owner_weak = GetOwner();
+     UNet *owner = nullptr;
+     if(!owner_weak.expired())
+     {
+      std::shared_ptr<RDK::UContainer> owner_shared = owner_weak.lock();
+      if(owner_shared)
+       owner = std::dynamic_pointer_cast<UNet>(owner_shared).get();
+     }
+     if(!owner)
+      continue;
      string ltzoneLName,ltzoneRName;
      ltzoneL->GetLongName(GetThisAsSharedContainer(), ltzoneLName);
      ltzoneR->GetLongName(GetThisAsSharedContainer(), ltzoneRName);
@@ -303,10 +361,20 @@ bool NNewPositionControlElement::CreateNeurons()
 
      if(CheckComponentL(inputNeuronLName))
      {
-      NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronLName)).get();
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> inputNeuron_weak = GetComponent(inputNeuronLName);
+      NNet *inputNeuron = nullptr;
+      if(!inputNeuron_weak.expired())
+      {
+       std::shared_ptr<RDK::UContainer> inputNeuron_shared = inputNeuron_weak.lock();
+       if(inputNeuron_shared)
+        inputNeuron = std::dynamic_pointer_cast<NNet>(inputNeuron_shared).get();
+      }
+      if(!inputNeuron)
+       continue;
       InputNeurons.push_back(inputNeuron);
       inputNeuron->GetLongName(GetThisAsSharedContainer(), inputLName);
-      LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronLName)).get());
+      LeftInputNeurons[j].push_back(inputNeuron);
      }
      else
      {
@@ -317,15 +385,32 @@ bool NNewPositionControlElement::CreateNeurons()
          res&=(AddComponent(cont) != ForbiddenId);
       InputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
       cont->GetLongName(GetThisAsSharedContainer(), inputLName);
-      LeftInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronLName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> inputNeuron_weak_2 = GetComponent(inputNeuronLName);
+      if(!inputNeuron_weak_2.expired())
+      {
+       std::shared_ptr<RDK::UContainer> inputNeuron_shared_2 = inputNeuron_weak_2.lock();
+       if(inputNeuron_shared_2)
+        LeftInputNeurons[j].push_back(std::dynamic_pointer_cast<NNet>(inputNeuron_shared_2).get());
+      }
      }
 
      if(CheckComponentL(inputNeuronRName))
      {
-      NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronRName)).get();
-      InputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> inputNeuron_weak_r = GetComponent(inputNeuronRName);
+      NNet *inputNeuron = nullptr;
+      if(!inputNeuron_weak_r.expired())
+      {
+       std::shared_ptr<RDK::UContainer> inputNeuron_shared_r = inputNeuron_weak_r.lock();
+       if(inputNeuron_shared_r)
+        inputNeuron = std::dynamic_pointer_cast<NNet>(inputNeuron_shared_r).get();
+      }
+      if(!inputNeuron)
+       continue;
+      InputNeurons.push_back(inputNeuron);
       inputNeuron->GetLongName(GetThisAsSharedContainer(), inputRName);
-      RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)).get());
+      RightInputNeurons[j].push_back(inputNeuron);
      }
      else
      {
@@ -336,7 +421,14 @@ bool NNewPositionControlElement::CreateNeurons()
          res&=(AddComponent(cont) != ForbiddenId);
       InputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
       cont->GetLongName(GetThisAsSharedContainer(), inputRName);
-      RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> inputNeuron_weak_r2 = GetComponent(inputNeuronRName);
+      if(!inputNeuron_weak_r2.expired())
+      {
+       std::shared_ptr<RDK::UContainer> inputNeuron_shared_r2 = inputNeuron_weak_r2.lock();
+       if(inputNeuron_shared_r2)
+        RightInputNeurons[j].push_back(std::dynamic_pointer_cast<NNet>(inputNeuron_shared_r2).get());
+      }
      }
 
         //���������� ������ �� ����������� �������� � EngineMotionControl->MotionElement
@@ -364,9 +456,29 @@ bool NNewPositionControlElement::CreateNeurons()
 
     for(int j=0;j<melem->NumControlLoops;j++)
     {
-        std::shared_ptr<UItem> postAfferentL=dynamic_pointer_cast<UItem>(melem->GetComponentL("PostAfferentL"+sntoa(j+1)));
-        std::shared_ptr<UItem> postAfferentR=dynamic_pointer_cast<UItem>(melem->GetComponentL("PostAfferentR"+sntoa(j+1)));
-     UNet *owner=dynamic_pointer_cast<UNet>(GetOwner()).get();
+        // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+        std::weak_ptr<RDK::UContainer> postAfferentL_weak = melem->GetComponentL("PostAfferentL"+sntoa(j+1));
+        std::shared_ptr<UItem> postAfferentL;
+        if(!postAfferentL_weak.expired())
+         postAfferentL = std::dynamic_pointer_cast<UItem>(postAfferentL_weak.lock());
+        // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+        std::weak_ptr<RDK::UContainer> postAfferentR_weak = melem->GetComponentL("PostAfferentR"+sntoa(j+1));
+        std::shared_ptr<UItem> postAfferentR;
+        if(!postAfferentR_weak.expired())
+         postAfferentR = std::dynamic_pointer_cast<UItem>(postAfferentR_weak.lock());
+        if(!postAfferentL || !postAfferentR)
+         continue;
+        // CRITICAL: GetOwner now returns weak_ptr, need to lock
+        std::weak_ptr<RDK::UContainer> owner_weak = GetOwner();
+        UNet *owner = nullptr;
+        if(!owner_weak.expired())
+        {
+         std::shared_ptr<RDK::UContainer> owner_shared = owner_weak.lock();
+         if(owner_shared)
+          owner = std::dynamic_pointer_cast<UNet>(owner_shared).get();
+        }
+        if(!owner)
+         continue;
      string postAfferentLName,postAfferentRName;
      postAfferentL->GetLongName(GetThisAsSharedContainer(), postAfferentLName);
      postAfferentR->GetLongName(GetThisAsSharedContainer(), postAfferentRName);
@@ -376,12 +488,26 @@ bool NNewPositionControlElement::CreateNeurons()
 
      if(CheckComponentL(controlNeuronLName))
      {
-      NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronLName)).get();
-         ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> controlNeuron_weak = GetComponent(controlNeuronLName);
+      NNet *controlNeuron = nullptr;
+      if(!controlNeuron_weak.expired())
+      {
+       std::shared_ptr<RDK::UContainer> controlNeuron_shared = controlNeuron_weak.lock();
+       if(controlNeuron_shared)
+        controlNeuron = std::dynamic_pointer_cast<NNet>(controlNeuron_shared).get();
+      }
+      if(!controlNeuron)
+       continue;
+         ControlNeurons.push_back(controlNeuron);
       controlNeuron->GetLongName(GetThisAsSharedContainer(), controlLName);
-      LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)).get());
+      LeftControlNeurons[j].push_back(controlNeuron);
          //Adding synapses for links to PrecontrolNeurons, ���������
-         std::shared_ptr<NPulseMembrane> soma = controlNeuron->GetComponentL<NPulseMembrane>("Soma1",true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> soma_weak = controlNeuron->GetComponentL("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma;
+         if(!soma_weak.expired())
+          soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak.lock());
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -396,9 +522,20 @@ bool NNewPositionControlElement::CreateNeurons()
          res&=(AddComponent(cont) != ForbiddenId);
       ControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
       cont->GetLongName(GetThisAsSharedContainer(), controlLName);
-         LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)).get());
+         // CRITICAL: GetComponent now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> controlNeuron_weak_2 = GetComponent(controlNeuronLName);
+         if(!controlNeuron_weak_2.expired())
+         {
+          std::shared_ptr<RDK::UContainer> controlNeuron_shared_2 = controlNeuron_weak_2.lock();
+          if(controlNeuron_shared_2)
+           LeftControlNeurons[j].push_back(std::dynamic_pointer_cast<NNet>(controlNeuron_shared_2).get());
+         }
          //Adding synapses for links to PrecontrolNeurons, ���������
-         std::shared_ptr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> soma_weak = cont->GetComponentL("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma;
+         if(!soma_weak.expired())
+          soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak.lock());
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -408,12 +545,26 @@ bool NNewPositionControlElement::CreateNeurons()
 
      if(CheckComponentL(controlNeuronRName))
      {
-      NNet *controlNeuron = static_pointer_cast<NNet>(GetComponent(controlNeuronRName)).get();
-      ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> controlNeuron_weak_r = GetComponent(controlNeuronRName);
+      NNet *controlNeuron = nullptr;
+      if(!controlNeuron_weak_r.expired())
+      {
+       std::shared_ptr<RDK::UContainer> controlNeuron_shared_r = controlNeuron_weak_r.lock();
+       if(controlNeuron_shared_r)
+        controlNeuron = std::dynamic_pointer_cast<NNet>(controlNeuron_shared_r).get();
+      }
+      if(!controlNeuron)
+       continue;
+      ControlNeurons.push_back(controlNeuron);
       controlNeuron->GetLongName(GetThisAsSharedContainer(), controlRName);
-      RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)).get());
+      RightControlNeurons[j].push_back(controlNeuron);
          //Adding synapses for links to PrecontrolNeurons, ���������
-         std::shared_ptr<NPulseMembrane> soma = controlNeuron->GetComponentL<NPulseMembrane>("Soma1",true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> soma_weak_r = controlNeuron->GetComponentL("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma;
+         if(!soma_weak_r.expired())
+          soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak_r.lock());
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -428,9 +579,20 @@ bool NNewPositionControlElement::CreateNeurons()
          res&=(AddComponent(cont) != ForbiddenId);
       ControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
       cont->GetLongName(GetThisAsSharedContainer(), controlRName);
-      RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> controlNeuron_weak_r2 = GetComponent(controlNeuronRName);
+      if(!controlNeuron_weak_r2.expired())
+      {
+       std::shared_ptr<RDK::UContainer> controlNeuron_shared_r2 = controlNeuron_weak_r2.lock();
+       if(controlNeuron_shared_r2)
+        RightControlNeurons[j].push_back(std::dynamic_pointer_cast<NNet>(controlNeuron_shared_r2).get());
+      }
          //Adding synapses for links to PrecontrolNeurons, ���������
-         std::shared_ptr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> soma_weak_r2 = cont->GetComponentL("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma;
+         if(!soma_weak_r2.expired())
+          soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak_r2.lock());
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -471,10 +633,25 @@ bool NNewPositionControlElement::CreateNeurons()
         //Left PreControl Neurons
      if(CheckComponentL(preControlNeuronLName))
      {
-      PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)).get());
-      LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> preControlNeuron_weak_l = GetComponent(preControlNeuronLName);
+      NNet *preControlNeuron_l = nullptr;
+      if(!preControlNeuron_weak_l.expired())
+      {
+       std::shared_ptr<RDK::UContainer> preControlNeuron_shared_l = preControlNeuron_weak_l.lock();
+       if(preControlNeuron_shared_l)
+        preControlNeuron_l = std::dynamic_pointer_cast<NNet>(preControlNeuron_shared_l).get();
+      }
+      if(!preControlNeuron_l)
+       continue;
+      PreControlNeurons.push_back(preControlNeuron_l);
+      LeftPreControlNeurons[j].push_back(preControlNeuron_l);
          //Adding synapses for links from Control Neurons in NMultiPositionControl, ���������
-         std::shared_ptr<NPulseMembrane> soma = GetComponent(preControlNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> soma_weak_pre_l = preControlNeuron_l->GetComponentL("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma;
+         if(!soma_weak_pre_l.expired())
+          soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak_pre_l.lock());
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = 2;
@@ -488,22 +665,56 @@ bool NNewPositionControlElement::CreateNeurons()
       cont->SetName(preControlNeuronLName);
          res&=(AddComponent(cont) != ForbiddenId);
       PreControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
-      LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> preControlNeuron_weak_l2 = GetComponent(preControlNeuronLName);
+      if(!preControlNeuron_weak_l2.expired())
+      {
+       std::shared_ptr<RDK::UContainer> preControlNeuron_shared_l2 = preControlNeuron_weak_l2.lock();
+       if(preControlNeuron_shared_l2)
+        LeftPreControlNeurons[j].push_back(std::dynamic_pointer_cast<NNet>(preControlNeuron_shared_l2).get());
+      }
          //Adding synapses for links from Control Neurons in NMultiPositionControl, ���������
-         std::shared_ptr<NPulseMembrane> soma = GetComponent(preControlNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
-         if(!soma)
-          return true;
-         soma->NumExcitatorySynapses = 2;
-         soma->Build();
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> preControlNeuron_weak_l3 = GetComponent(preControlNeuronLName);
+         if(!preControlNeuron_weak_l3.expired())
+         {
+          std::shared_ptr<RDK::UContainer> preControlNeuron_shared_l3 = preControlNeuron_weak_l3.lock();
+          if(preControlNeuron_shared_l3)
+          {
+           std::weak_ptr<RDK::UContainer> soma_weak_pre_l2 = preControlNeuron_shared_l3->GetComponentL("Soma1",true);
+           std::shared_ptr<NPulseMembrane> soma;
+           if(!soma_weak_pre_l2.expired())
+            soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak_pre_l2.lock());
+           if(!soma)
+            return true;
+           soma->NumExcitatorySynapses = 2;
+           soma->Build();
+          }
+         }
      }
 
         //Right PreControl Neurons
      if(CheckComponentL(preControlNeuronRName))
      {
-      PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)).get());
-      RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> preControlNeuron_weak_r = GetComponent(preControlNeuronRName);
+      NNet *preControlNeuron_r = nullptr;
+      if(!preControlNeuron_weak_r.expired())
+      {
+       std::shared_ptr<RDK::UContainer> preControlNeuron_shared_r = preControlNeuron_weak_r.lock();
+       if(preControlNeuron_shared_r)
+        preControlNeuron_r = std::dynamic_pointer_cast<NNet>(preControlNeuron_shared_r).get();
+      }
+      if(!preControlNeuron_r)
+       continue;
+      PreControlNeurons.push_back(preControlNeuron_r);
+      RightPreControlNeurons[j].push_back(preControlNeuron_r);
          //Adding synapses for links from Control Neurons in NMultiPositionControl, ���������
-         std::shared_ptr<NPulseMembrane> soma = GetComponent(preControlNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> soma_weak_pre_r = preControlNeuron_r->GetComponentL("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma;
+         if(!soma_weak_pre_r.expired())
+          soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak_pre_r.lock());
          if(!soma)
           return true;
          soma->NumExcitatorySynapses = 2;
@@ -517,13 +728,32 @@ bool NNewPositionControlElement::CreateNeurons()
       cont->SetName(preControlNeuronRName);
          res&=(AddComponent(cont) != ForbiddenId);
       PreControlNeurons.push_back(static_pointer_cast<NNet>(cont).get());
-      RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> preControlNeuron_weak_r2 = GetComponent(preControlNeuronRName);
+      if(!preControlNeuron_weak_r2.expired())
+      {
+       std::shared_ptr<RDK::UContainer> preControlNeuron_shared_r2 = preControlNeuron_weak_r2.lock();
+       if(preControlNeuron_shared_r2)
+        RightPreControlNeurons[j].push_back(std::dynamic_pointer_cast<NNet>(preControlNeuron_shared_r2).get());
+      }
          //Adding synapses for links from Control Neurons in NMultiPositionControl, ���������
-         std::shared_ptr<NPulseMembrane> soma = GetComponent(preControlNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
-         if(!soma)
-          return true;
-         soma->NumExcitatorySynapses = 2;
-         soma->Build();
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> preControlNeuron_weak_r3 = GetComponent(preControlNeuronRName);
+         if(!preControlNeuron_weak_r3.expired())
+         {
+          std::shared_ptr<RDK::UContainer> preControlNeuron_shared_r3 = preControlNeuron_weak_r3.lock();
+          if(preControlNeuron_shared_r3)
+          {
+           std::weak_ptr<RDK::UContainer> soma_weak_pre_r2 = preControlNeuron_shared_r3->GetComponentL("Soma1",true);
+           std::shared_ptr<NPulseMembrane> soma;
+           if(!soma_weak_pre_r2.expired())
+            soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak_pre_r2.lock());
+           if(!soma)
+            return true;
+           soma->NumExcitatorySynapses = 2;
+           soma->Build();
+          }
+         }
      }
     }
    }
@@ -547,10 +777,25 @@ bool NNewPositionControlElement::CreateNeurons()
 
      if(CheckComponentL(postInputNeuronLName))
      {
-      PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)).get());
-      LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> postInputNeuron_weak_l = GetComponent(postInputNeuronLName);
+      NNet *postInputNeuron_l = nullptr;
+      if(!postInputNeuron_weak_l.expired())
+      {
+       std::shared_ptr<RDK::UContainer> postInputNeuron_shared_l = postInputNeuron_weak_l.lock();
+       if(postInputNeuron_shared_l)
+        postInputNeuron_l = std::dynamic_pointer_cast<NNet>(postInputNeuron_shared_l).get();
+      }
+      if(!postInputNeuron_l)
+       continue;
+      PostInputNeurons.push_back(postInputNeuron_l);
+      LeftPostInputNeurons[j].push_back(postInputNeuron_l);
          //Adding synapses for links from InputNeurons, ���������
-         std::shared_ptr<NPulseMembrane> soma = GetComponent(postInputNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> soma_weak_post_l = postInputNeuron_l->GetComponentL("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma;
+         if(!soma_weak_post_l.expired())
+          soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak_post_l.lock());
          if(!soma)
           return true;
          soma->NumInhibitorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -566,7 +811,11 @@ bool NNewPositionControlElement::CreateNeurons()
       PostInputNeurons.push_back(static_pointer_cast<NNet>(cont).get());
       LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont).get());
          //Adding synapses for links from InputNeurons, ���������
-         std::shared_ptr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> soma_weak_post_l2 = cont->GetComponentL("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma;
+         if(!soma_weak_post_l2.expired())
+          soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak_post_l2.lock());
          if(!soma)
           return true;
          soma->NumInhibitorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -576,10 +825,25 @@ bool NNewPositionControlElement::CreateNeurons()
 
      if(CheckComponentL(postInputNeuronRName))
      {
-      PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)).get());
-      RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> postInputNeuron_weak_r = GetComponent(postInputNeuronRName);
+      NNet *postInputNeuron_r = nullptr;
+      if(!postInputNeuron_weak_r.expired())
+      {
+       std::shared_ptr<RDK::UContainer> postInputNeuron_shared_r = postInputNeuron_weak_r.lock();
+       if(postInputNeuron_shared_r)
+        postInputNeuron_r = std::dynamic_pointer_cast<NNet>(postInputNeuron_shared_r).get();
+      }
+      if(!postInputNeuron_r)
+       continue;
+      PostInputNeurons.push_back(postInputNeuron_r);
+      RightPostInputNeurons[j].push_back(postInputNeuron_r);
          //Adding synapses for links from InputNeurons, ���������
-         std::shared_ptr<NPulseMembrane> soma = GetComponent(postInputNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> soma_weak_post_r = postInputNeuron_r->GetComponentL("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma;
+         if(!soma_weak_post_r.expired())
+          soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak_post_r.lock());
          if(!soma)
           return true;
          soma->NumInhibitorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -596,7 +860,11 @@ bool NNewPositionControlElement::CreateNeurons()
       RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont).get());
 
          //Adding synapses for links from InputNeurons, ���������
-         std::shared_ptr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+         std::weak_ptr<RDK::UContainer> soma_weak_post_r3 = cont->GetComponentL("Soma1",true);
+         std::shared_ptr<NPulseMembrane> soma;
+         if(!soma_weak_post_r3.expired())
+          soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak_post_r3.lock());
          if(!soma)
           return true;
          soma->NumInhibitorySynapses = (MotionControlElement->NumMotionElements-i);
@@ -739,8 +1007,19 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
 
      if(CheckComponentL(generatorLName))
      {
-      Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)).get());
-      LeftGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorLName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> generator_weak_l = GetComponent(generatorLName);
+      NNet *generator_l = nullptr;
+      if(!generator_weak_l.expired())
+      {
+       std::shared_ptr<RDK::UContainer> generator_shared_l = generator_weak_l.lock();
+       if(generator_shared_l)
+        generator_l = std::dynamic_pointer_cast<NNet>(generator_shared_l).get();
+      }
+      if(!generator_l)
+       continue;
+      Generators.push_back(generator_l);
+      LeftGenerators[j].push_back(generator_l);
      }
      else
      {
@@ -754,8 +1033,19 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
      }
      if(CheckComponentL(generatorRName))
      {
-      Generators.push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)).get());
-      RightGenerators[j].push_back(static_pointer_cast<NNet>(GetComponent(generatorRName)).get());
+      // CRITICAL: GetComponent now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> generator_weak_r = GetComponent(generatorRName);
+      NNet *generator_r = nullptr;
+      if(!generator_weak_r.expired())
+      {
+       std::shared_ptr<RDK::UContainer> generator_shared_r = generator_weak_r.lock();
+       if(generator_shared_r)
+        generator_r = std::dynamic_pointer_cast<NNet>(generator_shared_r).get();
+      }
+      if(!generator_r)
+       continue;
+      Generators.push_back(generator_r);
+      RightGenerators[j].push_back(generator_r);
      }
      else
      {
@@ -809,7 +1099,11 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
 
     for (int m = 0; m<syns_max; m++)
     {
-     std::shared_ptr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma1.ExcSynapse"+sntoa(m+1),true);
+     // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+     std::weak_ptr<RDK::UContainer> syn_weak = finish[j]->GetComponentL("Soma1.ExcSynapse"+sntoa(m+1),true);
+     std::shared_ptr<NPulseSynapse> syn;
+     if(!syn_weak.expired())
+      syn = std::dynamic_pointer_cast<NPulseSynapse>(syn_weak.lock());
      if(!syn)
        return true;
 
@@ -867,7 +1161,11 @@ bool NNewPositionControlElement::LinkNeuronsNeg(vector <NNet*> start, vector <NN
 
    for (int m = 0; m<syns_max; m++)
    {
-    std::shared_ptr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma1.InhSynapse"+sntoa(m+1),true);
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> syn_weak = finish[j]->GetComponentL("Soma1.InhSynapse"+sntoa(m+1),true);
+    std::shared_ptr<NPulseSynapse> syn;
+    if(!syn_weak.expired())
+     syn = std::dynamic_pointer_cast<NPulseSynapse>(syn_weak.lock());
     if(!syn)
       return true;
 
@@ -1001,8 +1299,17 @@ bool NNewPositionControlElement::LinkNegative(vector <NNet*> start, vector <NNet
      string inputNeuronRName = "InputNeuronR"+sntoa(i+1)+sntoa(j+1)+".LTZone";
      string postInputNeuronLName = "PostInputNeuronL"+sntoa(i+1)+sntoa(j+1);
      string postInputNeuronRName = "PostInputNeuronR"+sntoa(i+1)+sntoa(j+1);
-     std::shared_ptr<NPulseNeuron> neuronL=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronLName));
-     std::shared_ptr<NPulseNeuron> neuronR=static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronRName));
+     // CRITICAL: GetComponent now returns weak_ptr, need to lock
+     std::weak_ptr<RDK::UContainer> neuronL_weak = GetComponent(postInputNeuronLName);
+     std::shared_ptr<NPulseNeuron> neuronL;
+     if(!neuronL_weak.expired())
+      neuronL = std::dynamic_pointer_cast<NPulseNeuron>(neuronL_weak.lock());
+     std::weak_ptr<RDK::UContainer> neuronR_weak = GetComponent(postInputNeuronRName);
+     std::shared_ptr<NPulseNeuron> neuronR;
+     if(!neuronR_weak.expired())
+      neuronR = std::dynamic_pointer_cast<NPulseNeuron>(neuronR_weak.lock());
+     if(!neuronL || !neuronR)
+      continue;
 
      for(size_t m=0;m<neuronL->GetNumMembranes();m++)
      {
@@ -1055,7 +1362,8 @@ vector<NNet*> NNewPositionControlElement::GetControlNeurons(void)
  return ControlNeurons;
 }
 
-}
+} // namespace NMSDK
+
 #endif
 
 

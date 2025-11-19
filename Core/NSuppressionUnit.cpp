@@ -173,7 +173,12 @@ bool NSuppressionUnit::SetLTZThreshold(const double &value)
  if (!Neuron)
   return true;
 
- std::shared_ptr<NLTZone> ltzone = Neuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
+ std::weak_ptr<RDK::UContainer> ltzone_weak = Neuron->GetComponentL("LTZone");  // GetLTZone();
+ std::shared_ptr<NLTZone> ltzone;
+ if(!ltzone_weak.expired())
+  ltzone = std::dynamic_pointer_cast<NLTZone>(ltzone_weak.lock());
+ else
+  ltzone = nullptr;
  if(!ltzone)
   return true;
 
@@ -353,7 +358,12 @@ bool NSuppressionUnit::ABuild(void)
  }
  ORNeuron->SetCoord(MVector<double,3>(11.33, 7, 0));
  ORNeuron->DisconnectAll("Output");
- std::shared_ptr<NPulseMembrane> or_soma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
+ std::weak_ptr<RDK::UContainer> or_soma_weak = ORNeuron->GetComponentL("Soma1", true);
+ std::shared_ptr<NPulseMembrane> or_soma;
+ if(!or_soma_weak.expired())
+  or_soma = std::dynamic_pointer_cast<NPulseMembrane>(or_soma_weak.lock());
+ else
+  or_soma = nullptr;
  if (or_soma)
  {
   or_soma->NumExcitatorySynapses = 2;
@@ -380,7 +390,12 @@ bool NSuppressionUnit::ABuild(void)
  }
  Neuron->SetCoord(MVector<double,3>(18, 3, 0));
 
- std::shared_ptr<NLTZone> ltzone = Neuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
+ std::weak_ptr<RDK::UContainer> ltzone_weak = Neuron->GetComponentL("LTZone");  // GetLTZone();
+ std::shared_ptr<NLTZone> ltzone;
+ if(!ltzone_weak.expired())
+  ltzone = std::dynamic_pointer_cast<NLTZone>(ltzone_weak.lock());
+ else
+  ltzone = nullptr;
  if(!ltzone)
   return true;
  ltzone->Threshold = LTZThreshold;
@@ -394,7 +409,12 @@ bool NSuppressionUnit::ABuild(void)
 
 
  // ������� ������ �������� � Neuron
- std::shared_ptr<NPulseMembrane> soma = Neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+ std::weak_ptr<RDK::UContainer> soma_weak = Neuron->GetComponentL("Soma1", true);
+ std::shared_ptr<NPulseMembrane> soma;
+ if(!soma_weak.expired())
+  soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak.lock());
+ else
+  soma = nullptr;
  if(!soma)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because Soma1 isn't exists: "));

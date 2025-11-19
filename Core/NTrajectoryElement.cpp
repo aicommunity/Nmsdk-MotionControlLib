@@ -119,31 +119,69 @@ bool NTrajectoryElement::ABuild(void)
 
  //����� ������������ (��������� ��� ����������� NNewSPNeuron)
  //�� N1 � N2
- std::shared_ptr<NPulseLTZoneCommon> ltzone1 = Neurons[0]->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+ std::weak_ptr<RDK::UContainer> ltzone1_weak = Neurons[0]->GetComponentL("LTZone", true);
+ std::shared_ptr<NPulseLTZoneCommon> ltzone1;
+ if(!ltzone1_weak.expired())
+  ltzone1 = std::dynamic_pointer_cast<NPulseLTZoneCommon>(ltzone1_weak.lock());
+ else
+  ltzone1 = nullptr;
  if(!ltzone1)
      return true;
 
- std::shared_ptr<NPulseSynapse> n2_s1_d1 = Neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_1.ExcSynapse1",true);
+ std::weak_ptr<RDK::UContainer> n2_s1_d1_weak = Neurons[1]->GetComponentL("Dendrite1_1.ExcSynapse1",true);
+ std::shared_ptr<NPulseSynapse> n2_s1_d1;
+ if(!n2_s1_d1_weak.expired())
+  n2_s1_d1 = std::dynamic_pointer_cast<NPulseSynapse>(n2_s1_d1_weak.lock());
+ else
+  n2_s1_d1 = nullptr;
+ if(!n2_s1_d1)
+  return true;
  res&=CreateLink(ltzone1->GetLongName(GetThisAsSharedContainer()),"Output",n2_s1_d1->GetLongName(GetThisAsSharedContainer()),"Input");
  if(!res)
   return true;
 
- std::shared_ptr<NPulseSynapse> n2_s1_d3 = Neurons[1]->GetComponentL<NPulseSynapse>("Dendrite1_3.ExcSynapse1",true);
+ std::weak_ptr<RDK::UContainer> n2_s1_d3_weak = Neurons[1]->GetComponentL("Dendrite1_3.ExcSynapse1",true);
+ std::shared_ptr<NPulseSynapse> n2_s1_d3;
+ if(!n2_s1_d3_weak.expired())
+  n2_s1_d3 = std::dynamic_pointer_cast<NPulseSynapse>(n2_s1_d3_weak.lock());
+ else
+  n2_s1_d3 = nullptr;
+ if(!n2_s1_d3)
+  return true;
  res&=CreateLink(ltzone1->GetLongName(GetThisAsSharedContainer()),"Output",n2_s1_d3->GetLongName(GetThisAsSharedContainer()),"Input");
  if(!res)
   return true;
 
  //�� N2 � N1
- std::shared_ptr<NLTZone> ltzone2 = Neurons[1]->GetComponentL<NLTZone>("LTZone", true);
+ std::weak_ptr<RDK::UContainer> ltzone2_weak = Neurons[1]->GetComponentL("LTZone", true);
+ std::shared_ptr<NLTZone> ltzone2;
+ if(!ltzone2_weak.expired())
+  ltzone2 = std::dynamic_pointer_cast<NLTZone>(ltzone2_weak.lock());
+ else
+  ltzone2 = nullptr;
  if(!ltzone2)
      return true;
 
- std::shared_ptr<NPulseSynapse> n1_s1_d1 = Neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_1.ExcSynapse1",true);
+ std::weak_ptr<RDK::UContainer> n1_s1_d1_weak = Neurons[0]->GetComponentL("Dendrite1_1.ExcSynapse1",true);
+ std::shared_ptr<NPulseSynapse> n1_s1_d1;
+ if(!n1_s1_d1_weak.expired())
+  n1_s1_d1 = std::dynamic_pointer_cast<NPulseSynapse>(n1_s1_d1_weak.lock());
+ else
+  n1_s1_d1 = nullptr;
+ if(!n1_s1_d1)
+  return true;
  res&=CreateLink(ltzone2->GetLongName(GetThisAsSharedContainer()),"Output",n1_s1_d1->GetLongName(GetThisAsSharedContainer()),"Input");
  if(!res)
   return true;
 
- std::shared_ptr<NPulseSynapse> n1_s1_d3 = Neurons[0]->GetComponentL<NPulseSynapse>("Dendrite1_3.ExcSynapse1",true);
+ std::weak_ptr<RDK::UContainer> n1_s1_d3_weak = Neurons[0]->GetComponentL("Dendrite1_3.ExcSynapse1",true);
+ std::shared_ptr<NPulseSynapse> n1_s1_d3;
+ if(!n1_s1_d3_weak.expired())
+  n1_s1_d3 = std::dynamic_pointer_cast<NPulseSynapse>(n1_s1_d3_weak.lock());
+ else
+  n1_s1_d3 = nullptr;
+ if(!n1_s1_d3)
+  return true;
  res&=CreateLink(ltzone2->GetLongName(GetThisAsSharedContainer()),"Output",n1_s1_d3->GetLongName(GetThisAsSharedContainer()),"Input");
  if(!res)
   return true;

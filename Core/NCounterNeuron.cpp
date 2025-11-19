@@ -139,8 +139,17 @@ bool NCounterNeuron::CreateSomaLinks(std::shared_ptr<NPulseMembrane> soma)
  std::shared_ptr<NPulseChannelCommon> channel1, channel2;
 
  // ������� ������ ��������
- channel1 = dynamic_pointer_cast<NPulseChannelCommon>(soma->GetComponent("ExcChannel",true));
- channel2 = dynamic_pointer_cast<NPulseChannelCommon>(soma->GetComponent("InhChannel",true));
+ // CRITICAL: GetComponent now returns weak_ptr, need to lock
+ std::weak_ptr<UContainer> channel1_weak = soma->GetComponent("ExcChannel",true);
+ if(!channel1_weak.expired())
+  channel1 = std::dynamic_pointer_cast<NPulseChannelCommon>(channel1_weak.lock());
+ else
+  channel1 = nullptr;
+ std::weak_ptr<UContainer> channel2_weak = soma->GetComponent("InhChannel",true);
+ if(!channel2_weak.expired())
+  channel2 = std::dynamic_pointer_cast<NPulseChannelCommon>(channel2_weak.lock());
+ else
+  channel2 = nullptr;
 
  // GetThisAsSharedContainer() may throw bad_weak_ptr if object was created from raw pointer
  std::shared_ptr<UContainer> this_container;
@@ -273,8 +282,19 @@ bool NCounterNeuron::ABuild(void)
   //     
   else
   {
-   std::shared_ptr<NPulseChannelCommon> channel1 = dynamic_pointer_cast<NPulseChannelCommon>(membr->GetComponent("ExcChannel",true));
-   std::shared_ptr<NPulseChannelCommon> channel2 = dynamic_pointer_cast<NPulseChannelCommon>(membr->GetComponent("InhChannel",true));
+   // CRITICAL: GetComponent now returns weak_ptr, need to lock
+   std::weak_ptr<UContainer> channel1_weak = membr->GetComponent("ExcChannel",true);
+   std::shared_ptr<NPulseChannelCommon> channel1;
+   if(!channel1_weak.expired())
+    channel1 = std::dynamic_pointer_cast<NPulseChannelCommon>(channel1_weak.lock());
+   else
+    channel1 = nullptr;
+   std::weak_ptr<UContainer> channel2_weak = membr->GetComponent("InhChannel",true);
+   std::shared_ptr<NPulseChannelCommon> channel2;
+   if(!channel2_weak.expired())
+    channel2 = std::dynamic_pointer_cast<NPulseChannelCommon>(channel2_weak.lock());
+   else
+    channel2 = nullptr;
    channel1->DisconnectAll("Output");
    channel2->DisconnectAll("Output");
   }

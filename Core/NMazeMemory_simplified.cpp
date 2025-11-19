@@ -80,7 +80,13 @@ bool NMazeMemory_simplified::SetSituationCoords(const MDMatrix<double> &value)
 {
 //    for (int j = 0; j<int(MultiPCs.size()); j++)
 //    {
-//      std::shared_ptr<NNeuronTrainer> neuron_trainer = MultiPCs[j]->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
+//      // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+//      std::weak_ptr<RDK::UContainer> neuron_trainer_weak = MultiPCs[j]->GetComponentL("InputNeuron1-1", true);
+//      std::shared_ptr<NNeuronTrainer> neuron_trainer;
+//      if(!neuron_trainer_weak.expired())
+//       neuron_trainer = std::dynamic_pointer_cast<NNeuronTrainer>(neuron_trainer_weak.lock());
+//      else
+//       neuron_trainer = nullptr;
 //      int cnt = 0;
 //      int cnt_max = value.GetRows();
 //      MDMatrix<double> pattern;
@@ -239,20 +245,74 @@ bool NMazeMemory_simplified::ACalculate(void)
 
          CurrentLayer++;
 
-         std::shared_ptr<NPulseNeuron> base_neuron = TrajectoryElements[CurrentTE]->GetComponentL<NPulseNeuron>("Neuron1", true);
-         std::shared_ptr<NLTZone> ltzone_te = base_neuron->GetComponentL<NLTZone>("LTZone", true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+
+         std::weak_ptr<RDK::UContainer> base_neuron_weak = TrajectoryElements[CurrentTE]->GetComponentL("Neuron1", true);
+
+
+         std::shared_ptr<NPulseNeuron> base_neuron;
+
+
+         if(!base_neuron_weak.expired())
+
+
+          base_neuron = std::dynamic_pointer_cast<NPulseNeuron>(base_neuron_weak.lock());
+
+
+         else
+
+
+          base_neuron = nullptr;
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+         std::weak_ptr<RDK::UContainer> ltzone_te_weak = base_neuron->GetComponentL("LTZone", true);
+
+         std::shared_ptr<NLTZone> ltzone_te;
+
+         if(!ltzone_te_weak.expired())
+
+          ltzone_te = std::dynamic_pointer_cast<NLTZone>(ltzone_te_weak.lock());
+
+         else
+
+          ltzone_te = nullptr;
          if(!ltzone_te)
           return true;
 
          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-         std::shared_ptr<NPulseMembrane> base_soma = base_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+         std::weak_ptr<RDK::UContainer> base_soma_weak = base_neuron->GetComponentL("Soma1", true);
+
+         std::shared_ptr<NPulseMembrane> base_soma;
+
+         if(!base_soma_weak.expired())
+
+          base_soma = std::dynamic_pointer_cast<NPulseMembrane>(base_soma_weak.lock());
+
+         else
+
+          base_soma = nullptr;
          if (CurrentTE==0)
              base_soma->NumExcitatorySynapses = OptionsNum+1; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ - ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
          else
              base_soma->NumExcitatorySynapses = OptionsNum;
          base_soma->Reset();
          //ï¿½ï¿½ N1_D1_2
-         std::shared_ptr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
+         // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+         std::weak_ptr<RDK::UContainer> base_dend_weak = base_neuron->GetComponentL("Dendrite1_2", true);
+
+         std::shared_ptr<NPulseMembrane> base_dend;
+
+         if(!base_dend_weak.expired())
+
+          base_dend = std::dynamic_pointer_cast<NPulseMembrane>(base_dend_weak.lock());
+
+         else
+
+          base_dend = nullptr;
          base_dend->NumExcitatorySynapses = OptionsNum;
          base_dend->Reset();
 
@@ -282,8 +342,20 @@ bool NMazeMemory_simplified::ACalculate(void)
 //          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //          bool res(true);
 //          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ N1_D5_syn1
-//          std::shared_ptr<NPulseNeuron> input_neuron = traj_el->GetComponentL<NPulseNeuron>("Neuron1", true);
-//          std::shared_ptr<NPulseSynapse> synapse = input_neuron->GetComponentL<NPulseSynapse>("Dendrite1_5.ExcSynapse1",true);
+//          // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+          std::weak_ptr<RDK::UContainer> input_neuron_weak = traj_el->GetComponentL("Neuron1", true);
+          std::shared_ptr<NPulseNeuron> input_neuron;
+          if(!input_neuron_weak.expired())
+           input_neuron = std::dynamic_pointer_cast<NPulseNeuron>(input_neuron_weak.lock());
+          else
+           input_neuron = nullptr;
+//          // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+          std::weak_ptr<RDK::UContainer> synapse_weak = input_neuron->GetComponentL("Dendrite1_5.ExcSynapse1",true);
+          std::shared_ptr<NPulseSynapse> synapse;
+          if(!synapse_weak.expired())
+           synapse = std::dynamic_pointer_cast<NPulseSynapse>(synapse_weak.lock());
+          else
+           synapse = nullptr;
 //          if (option_num>1)
 //          {
 //            synapse->Weight = SideWeight;
@@ -301,13 +373,28 @@ bool NMazeMemory_simplified::ACalculate(void)
 //          BaseTE->Paths.push_back(synapse);
 
 //          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ N1_S1_syn1
-//          synapse = input_neuron->GetComponentL<NPulseSynapse>("Soma1.InhSynapse1",true);
+//          // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+//          std::weak_ptr<RDK::UContainer> synapse_weak_assign = input_neuron->GetComponentL("Soma1.InhSynapse1",true);
+//          if(!synapse_weak_assign.expired())
+//           synapse = std::dynamic_pointer_cast<NPulseSynapse>(synapse_weak_assign.lock());
+//          else
+//           synapse = nullptr;
 //          res&=CreateLink(BaseTE->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
 //          if(!res)
 //           return true;
 //          //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ N2_S1_syn1
-//          input_neuron = traj_el->GetComponentL<NPulseNeuron>("Neuron2", true);
-//          synapse = input_neuron->GetComponentL<NPulseSynapse>("Soma1.InhSynapse1",true);
+//          // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+          std::weak_ptr<RDK::UContainer> input_neuron_weak_assign = traj_el->GetComponentL("Neuron2", true);
+          if(!input_neuron_weak_assign.expired())
+           input_neuron = std::dynamic_pointer_cast<NPulseNeuron>(input_neuron_weak_assign.lock());
+          else
+           input_neuron = nullptr;
+//          // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+//          std::weak_ptr<RDK::UContainer> synapse_weak_assign = input_neuron->GetComponentL("Soma1.InhSynapse1",true);
+//          if(!synapse_weak_assign.expired())
+//           synapse = std::dynamic_pointer_cast<NPulseSynapse>(synapse_weak_assign.lock());
+//          else
+//           synapse = nullptr;
 //          res&=CreateLink(BaseTE->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
 //          if(!res)
 //           return true;
@@ -343,12 +430,36 @@ bool NMazeMemory_simplified::ACalculate(void)
 //          for (int j=0; j<passed_max; j++)
 //          {
 //           std::shared_ptr<NMultiPositionControl> output_mpc = MultiPCs[j];
-//           std::shared_ptr<NPulseNeuron> output_postinputn = output_mpc->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
-//           std::shared_ptr<NLTZone> output_ltzone = output_postinputn->GetComponentL<NLTZone>("LTZone", true);
+//           // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+////           std::weak_ptr<RDK::UContainer> output_postinputn_weak = output_mpc->GetComponentL("PreControlNeuron1", true);
+//           std::shared_ptr<NPulseNeuron> output_postinputn;
+//           if(!output_postinputn_weak.expired())
+//            output_postinputn = std::dynamic_pointer_cast<NPulseNeuron>(output_postinputn_weak.lock());
+//           else
+//            output_postinputn = nullptr;
+//           // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+//           std::weak_ptr<RDK::UContainer> output_ltzone_weak = output_postinputn->GetComponentL("LTZone", true);
+//           std::shared_ptr<NLTZone> output_ltzone;
+//           if(!output_ltzone_weak.expired())
+//            output_ltzone = std::dynamic_pointer_cast<NLTZone>(output_ltzone_weak.lock());
+//           else
+//            output_ltzone = nullptr;
 
 //           std::shared_ptr<NMultiPositionControl> input_mpc = MultiPCs[CurrentTE+option_num];//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-//           std::shared_ptr<NPulseNeuron> input_precontroln = input_mpc->GetComponentL<NPulseNeuron>("PreControlNeuron1", true);
-//           std::shared_ptr<NPulseMembrane> input_soma = input_precontroln->GetComponentL<NPulseMembrane>("Soma1", true);
+//           // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+//           std::weak_ptr<RDK::UContainer> input_precontroln_weak = input_mpc->GetComponentL("PreControlNeuron1", true);
+//           std::shared_ptr<NPulseNeuron> input_precontroln;
+//           if(!input_precontroln_weak.expired())
+//            input_precontroln = std::dynamic_pointer_cast<NPulseNeuron>(input_precontroln_weak.lock());
+//           else
+//            input_precontroln = nullptr;
+//           // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+//           std::weak_ptr<RDK::UContainer> input_soma_weak = input_precontroln->GetComponentL("Soma1", true);
+//           std::shared_ptr<NPulseMembrane> input_soma;
+//           if(!input_soma_weak.expired())
+//            input_soma = std::dynamic_pointer_cast<NPulseMembrane>(input_soma_weak.lock());
+//           else
+//            input_soma = nullptr;
 
 //           int syn_num = input_soma->NumExcitatorySynapses;
 //           for (int i = 1; i<=syn_num; i++)
@@ -378,7 +489,13 @@ bool NMazeMemory_simplified::ACalculate(void)
 //          }
 
 //          //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-//          std::shared_ptr<NPulseMembrane> action_soma = ActionNeurons[input_action]->GetComponentL<NPulseMembrane>("Soma1",true);
+//          // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+          std::weak_ptr<RDK::UContainer> action_soma_weak = ActionNeurons[input_action]->GetComponentL("Soma1",true);
+          std::shared_ptr<NPulseMembrane> action_soma;
+          if(!action_soma_weak.expired())
+           action_soma = std::dynamic_pointer_cast<NPulseMembrane>(action_soma_weak.lock());
+          else
+           action_soma = nullptr;
 //          int syn_max_num = action_soma->NumExcitatorySynapses;
 //          for (int i = 1; i<=syn_max_num; i++)
 //          {
@@ -459,7 +576,19 @@ std::shared_ptr<NTrajectoryElement> NMazeMemory_simplified::CreatePoint(MVector<
  multi_pc->Reset();
  if ("NNeuronTrainer"==string(multi_pc->InputNeuronType))
  {
-     std::shared_ptr<NNeuronTrainer> neuron_tr = multi_pc->GetComponentL<NNeuronTrainer>("InputNeuron1-1", true);
+     // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+     std::weak_ptr<RDK::UContainer> neuron_tr_weak = multi_pc->GetComponentL("InputNeuron1-1", true);
+
+     std::shared_ptr<NNeuronTrainer> neuron_tr;
+
+     if(!neuron_tr_weak.expired())
+
+      neuron_tr = std::dynamic_pointer_cast<NNeuronTrainer>(neuron_tr_weak.lock());
+
+     else
+
+      neuron_tr = nullptr;
      if(neuron_tr)
      {
          neuron_tr->NumInputDendrite = FeaturesNum+1;//ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ InputNeuron, ï¿½ï¿½ï¿½ï¿½ InputNeuronsType = NNeuronTrainer (ï¿½.ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
@@ -473,29 +602,143 @@ std::shared_ptr<NTrajectoryElement> NMazeMemory_simplified::CreatePoint(MVector<
  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ PostInputNeuron ï¿½ TrajectoryElement
  bool res(true);
 
- std::shared_ptr<NPulseNeuron> postinput = multi_pc->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
- std::shared_ptr<NPulseLTZoneCommon> ltzone = postinput->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+
+ std::weak_ptr<RDK::UContainer> postinput_weak = multi_pc->GetComponentL("PostInputNeuron1", true);
+
+
+ std::shared_ptr<NPulseNeuron> postinput;
+
+
+ if(!postinput_weak.expired())
+
+
+  postinput = std::dynamic_pointer_cast<NPulseNeuron>(postinput_weak.lock());
+
+
+ else
+
+
+  postinput = nullptr;
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+ std::weak_ptr<RDK::UContainer> ltzone_weak = postinput->GetComponentL("LTZone", true);
+
+ std::shared_ptr<NPulseLTZoneCommon> ltzone;
+
+ if(!ltzone_weak.expired())
+
+  ltzone = std::dynamic_pointer_cast<NPulseLTZoneCommon>(ltzone_weak.lock());
+
+ else
+
+  ltzone = nullptr;
 //       if(!ltzone)
 //           return true;
 
- std::shared_ptr<NPulseNeuron> neuron1 = traj_el->GetComponentL<NPulseNeuron>("Neuron1", true);
- std::shared_ptr<NPulseSynapse> synapse = neuron1->GetComponentL<NPulseSynapse>("Dendrite1_1.InhSynapse1",true);
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+
+ std::weak_ptr<RDK::UContainer> neuron1_weak = traj_el->GetComponentL("Neuron1", true);
+
+
+ std::shared_ptr<NPulseNeuron> neuron1;
+
+
+ if(!neuron1_weak.expired())
+
+
+  neuron1 = std::dynamic_pointer_cast<NPulseNeuron>(neuron1_weak.lock());
+
+
+ else
+
+
+  neuron1 = nullptr;
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+ std::weak_ptr<RDK::UContainer> synapse_weak = neuron1->GetComponentL("Dendrite1_1.InhSynapse1",true);
+
+ std::shared_ptr<NPulseSynapse> synapse;
+
+ if(!synapse_weak.expired())
+
+  synapse = std::dynamic_pointer_cast<NPulseSynapse>(synapse_weak.lock());
+
+ else
+
+  synapse = nullptr;
  res&=CreateLink(ltzone->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
  //      if(!res)
  //       return true;
 
- synapse = neuron1->GetComponentL<NPulseSynapse>("Dendrite1_3.InhSynapse1",true);
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+
+ std::weak_ptr<RDK::UContainer> synapse_weak_assign_d13 = neuron1->GetComponentL("Dendrite1_3.InhSynapse1",true);
+
+
+ if(!synapse_weak_assign_d13.expired())
+
+
+  synapse = std::dynamic_pointer_cast<NPulseSynapse>(synapse_weak_assign_d13.lock());
+
+
+ else
+
+
+  synapse = nullptr;
  res&=CreateLink(ltzone->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
  //      if(!res)
  //       return true;
 
- std::shared_ptr<NPulseNeuron> neuron2 = traj_el->GetComponentL<NPulseNeuron>("Neuron2", true);
- synapse = neuron2->GetComponentL<NPulseSynapse>("Dendrite1_1.InhSynapse1",true);
- res&=CreateLink(ltzone->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+
+ std::weak_ptr<RDK::UContainer> neuron2_weak = traj_el->GetComponentL("Neuron2", true);
+
+
+ std::shared_ptr<NPulseNeuron> neuron2;
+ std::weak_ptr<RDK::UContainer> synapse_weak_d11_neuron2;
+
+ if(!neuron2_weak.expired())
+ {
+  neuron2 = std::dynamic_pointer_cast<NPulseNeuron>(neuron2_weak.lock());
+  if(neuron2)
+  {
+   // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+   synapse_weak_d11_neuron2 = neuron2->GetComponentL("Dendrite1_1.InhSynapse1",true);
+  }
+ }
+ else
+ {
+  neuron2 = nullptr;
+ }
+
+ if(!synapse_weak_d11_neuron2.expired())
+  synapse = std::dynamic_pointer_cast<NPulseSynapse>(synapse_weak_d11_neuron2.lock());
+ else
+  synapse = nullptr;
+
+ if(synapse)
+  res&=CreateLink(ltzone->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
  //      if(!res)
  //       return true;
 
- synapse = neuron2->GetComponentL<NPulseSynapse>("Dendrite1_3.InhSynapse1",true);
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> synapse_weak_assign_d13_2;
+ if(neuron2)
+  synapse_weak_assign_d13_2 = neuron2->GetComponentL("Dendrite1_3.InhSynapse1",true);
+
+ if(!synapse_weak_assign_d13_2.expired())
+  synapse = std::dynamic_pointer_cast<NPulseSynapse>(synapse_weak_assign_d13_2.lock());
+
+
+ else
+
+
+  synapse = nullptr;
  res&=CreateLink(ltzone->GetLongName(GetThisAsSharedContainer()),"Output",synapse->GetLongName(GetThisAsSharedContainer()),"Input");
  //      if(!res)
  //       return true;
@@ -508,8 +751,28 @@ bool NMazeMemory_simplified::CheckActiveForwards(std::shared_ptr<NTrajectoryElem
   int max = int(t_element->Forwards.size());
   for(int i = 0; i<max; i++)
   {
-    std::shared_ptr<NPulseNeuron> neuron = t_element->Forwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
-    std::shared_ptr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> neuron_weak = t_element->Forwards[i]->GetComponentL("Neuron1", true);
+    std::shared_ptr<NPulseNeuron> neuron;
+    if(!neuron_weak.expired())
+     neuron = std::dynamic_pointer_cast<NPulseNeuron>(neuron_weak.lock());
+    else
+     neuron = nullptr;
+    if(!neuron)
+     continue;
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+    std::weak_ptr<RDK::UContainer> ltzone_weak = neuron->GetComponentL("LTZone", true);
+
+    std::shared_ptr<NPulseLTZoneCommon> ltzone;
+
+    if(!ltzone_weak.expired())
+
+     ltzone = std::dynamic_pointer_cast<NPulseLTZoneCommon>(ltzone_weak.lock());
+
+    else
+
+     ltzone = nullptr;
 //    if(!ltzone)
 //      return false;
 
@@ -527,8 +790,32 @@ std::vector<std::shared_ptr<NTrajectoryElement>> NMazeMemory_simplified::CheckAc
   std::vector<std::shared_ptr<NTrajectoryElement>> active_PIs;
   for(int i = 0; i<CurrentTE; i++)
   {
-    std::shared_ptr<NPulseNeuron> neuron = MultiPCs[i]->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
-    std::shared_ptr<NPulseLTZoneCommon> ltzone = neuron->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+    std::weak_ptr<RDK::UContainer> neuron_weak = MultiPCs[i]->GetComponentL("PostInputNeuron1", true);
+
+    std::shared_ptr<NPulseNeuron> neuron;
+
+    if(!neuron_weak.expired())
+
+     neuron = std::dynamic_pointer_cast<NPulseNeuron>(neuron_weak.lock());
+
+    else
+
+     neuron = nullptr;
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+    std::weak_ptr<RDK::UContainer> ltzone_weak = neuron->GetComponentL("LTZone", true);
+
+    std::shared_ptr<NPulseLTZoneCommon> ltzone;
+
+    if(!ltzone_weak.expired())
+
+     ltzone = std::dynamic_pointer_cast<NPulseLTZoneCommon>(ltzone_weak.lock());
+
+    else
+
+     ltzone = nullptr;
 //    if(!ltzone)
 //      return active_PIs;
 
@@ -560,12 +847,42 @@ bool NMazeMemory_simplified::MergingTEs(int active_num)
       NameT finish;
 
       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ N1_D1_5
-      std::shared_ptr<NPulseNeuron> fin_neuron = ActivePIs[j]->GetComponentL<NPulseNeuron>("Neuron1", true);
-      std::shared_ptr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_5", true);
+      // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+      std::weak_ptr<RDK::UContainer> fin_neuron_weak = ActivePIs[j]->GetComponentL("Neuron1", true);
+
+      std::shared_ptr<NPulseNeuron> fin_neuron;
+
+      if(!fin_neuron_weak.expired())
+
+       fin_neuron = std::dynamic_pointer_cast<NPulseNeuron>(fin_neuron_weak.lock());
+
+      else
+
+       fin_neuron = nullptr;
+      // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+      std::weak_ptr<RDK::UContainer> fin_dend_weak = fin_neuron->GetComponentL("Dendrite1_5", true);
+
+      std::shared_ptr<NPulseMembrane> fin_dend;
+
+      if(!fin_dend_weak.expired())
+
+       fin_dend = std::dynamic_pointer_cast<NPulseMembrane>(fin_dend_weak.lock());
+
+      else
+
+       fin_dend = nullptr;
       int dend_syns = fin_dend->NumExcitatorySynapses;
       for (int n = 1; n<=dend_syns; n++)
       {
-        std::shared_ptr<NPulseSynapse> syn = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
+        // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+        std::weak_ptr<RDK::UContainer> syn_weak = fin_dend->GetComponentL("ExcSynapse"+sntoa(n),true);
+        std::shared_ptr<NPulseSynapse> syn;
+        if(!syn_weak.expired())
+         syn = std::dynamic_pointer_cast<NPulseSynapse>(syn_weak.lock());
+        else
+         syn = nullptr;
         if(!syn)
           return true;
 
@@ -591,11 +908,29 @@ bool NMazeMemory_simplified::MergingTEs(int active_num)
       }
 
       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ N1_S1
-      std::shared_ptr<NPulseMembrane> fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+      // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+      std::weak_ptr<RDK::UContainer> fin_soma_weak = fin_neuron->GetComponentL("Soma1", true);
+
+      std::shared_ptr<NPulseMembrane> fin_soma;
+
+      if(!fin_soma_weak.expired())
+
+       fin_soma = std::dynamic_pointer_cast<NPulseMembrane>(fin_soma_weak.lock());
+
+      else
+
+       fin_soma = nullptr;
       int soma_syn = fin_soma->NumInhibitorySynapses;
       for (int n = 1; n<=soma_syn; n++)
       {
-       std::shared_ptr<NPulseSynapse> syn = fin_soma->GetComponentL<NPulseSynapse>("InhSynapse"+sntoa(n),true);
+       // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+       std::weak_ptr<RDK::UContainer> syn_weak = fin_soma->GetComponentL("InhSynapse"+sntoa(n),true);
+       std::shared_ptr<NPulseSynapse> syn;
+       if(!syn_weak.expired())
+        syn = std::dynamic_pointer_cast<NPulseSynapse>(syn_weak.lock());
+       else
+        syn = nullptr;
        if(!syn)
          return true;
 
@@ -621,12 +956,38 @@ bool NMazeMemory_simplified::MergingTEs(int active_num)
       }
 
       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ N2_S1
-      fin_neuron = ActivePIs[j]->GetComponentL<NPulseNeuron>("Neuron2", true);
-      fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+      // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+      std::weak_ptr<RDK::UContainer> fin_neuron_weak_assign = ActivePIs[j]->GetComponentL("Neuron2", true);
+
+      if(!fin_neuron_weak_assign.expired())
+
+       fin_neuron = std::dynamic_pointer_cast<NPulseNeuron>(fin_neuron_weak_assign.lock());
+
+      else
+
+       fin_neuron = nullptr;
+      // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+      std::weak_ptr<RDK::UContainer> fin_soma_weak_assign = fin_neuron->GetComponentL("Soma1", true);
+
+      if(!fin_soma_weak_assign.expired())
+
+       fin_soma = std::dynamic_pointer_cast<NPulseMembrane>(fin_soma_weak_assign.lock());
+
+      else
+
+       fin_soma = nullptr;
       soma_syn = fin_soma->NumInhibitorySynapses;
       for (int n = 1; n<=soma_syn; n++)
       {
-        std::shared_ptr<NPulseSynapse> syn = fin_soma->GetComponentL<NPulseSynapse>("InhSynapse"+sntoa(n),true);
+        // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+        std::weak_ptr<RDK::UContainer> syn_weak = fin_soma->GetComponentL("InhSynapse"+sntoa(n),true);
+        std::shared_ptr<NPulseSynapse> syn;
+        if(!syn_weak.expired())
+         syn = std::dynamic_pointer_cast<NPulseSynapse>(syn_weak.lock());
+        else
+         syn = nullptr;
         if(!syn)
           return true;
 
@@ -658,12 +1019,37 @@ bool NMazeMemory_simplified::MergingTEs(int active_num)
       for (size_t i = 0; i<back_max; i++)
       {
         //ï¿½ï¿½ N1_D1_2
-        std::shared_ptr<NPulseNeuron> fin_neuron = BaseTE->Backwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
-        std::shared_ptr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
+        // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+        std::weak_ptr<RDK::UContainer> fin_neuron_weak = BaseTE->Backwards[i]->GetComponentL("Neuron1", true);
+        std::shared_ptr<NPulseNeuron> fin_neuron;
+        if(!fin_neuron_weak.expired())
+         fin_neuron = std::dynamic_pointer_cast<NPulseNeuron>(fin_neuron_weak.lock());
+        else
+         fin_neuron = nullptr;
+        if(!fin_neuron)
+         continue;
+
+        std::weak_ptr<RDK::UContainer> fin_dend_weak = fin_neuron->GetComponentL("Dendrite1_2", true);
+
+        std::shared_ptr<NPulseMembrane> fin_dend;
+
+        if(!fin_dend_weak.expired())
+
+         fin_dend = std::dynamic_pointer_cast<NPulseMembrane>(fin_dend_weak.lock());
+
+        else
+
+         fin_dend = nullptr;
         int dend_syns = fin_dend->NumExcitatorySynapses;
         for (int n = 1; n<=dend_syns; n++)
         {
-          std::shared_ptr<NPulseSynapse> syn = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
+          // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+          std::weak_ptr<RDK::UContainer> syn_weak = fin_dend->GetComponentL("ExcSynapse"+sntoa(n),true);
+          std::shared_ptr<NPulseSynapse> syn;
+          if(!syn_weak.expired())
+           syn = std::dynamic_pointer_cast<NPulseSynapse>(syn_weak.lock());
+          else
+           syn = nullptr;
           if(!syn)
             return true;
 
@@ -691,13 +1077,35 @@ bool NMazeMemory_simplified::MergingTEs(int active_num)
 
 
         //ï¿½ï¿½ N1_S1
-        fin_neuron = BaseTE->Backwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
-        fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+        // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+        std::weak_ptr<RDK::UContainer> fin_neuron_weak_2 = BaseTE->Backwards[i]->GetComponentL("Neuron1", true);
+        if(!fin_neuron_weak_2.expired())
+         fin_neuron = std::dynamic_pointer_cast<NPulseNeuron>(fin_neuron_weak_2.lock());
+        else
+         fin_neuron = nullptr;
+        if(!fin_neuron)
+         continue;
+
+        std::weak_ptr<RDK::UContainer> fin_soma_weak_assign = fin_neuron->GetComponentL("Soma1", true);
+
+        if(!fin_soma_weak_assign.expired())
+
+         fin_soma = std::dynamic_pointer_cast<NPulseMembrane>(fin_soma_weak_assign.lock());
+
+        else
+
+         fin_soma = nullptr;
 
         soma_syn = fin_soma->NumExcitatorySynapses;
         for (int n = 1; n<=soma_syn; n++)
         {
-          std::shared_ptr<NPulseSynapse> syn = fin_soma->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
+          // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+          std::weak_ptr<RDK::UContainer> syn_weak = fin_soma->GetComponentL("ExcSynapse"+sntoa(n),true);
+          std::shared_ptr<NPulseSynapse> syn;
+          if(!syn_weak.expired())
+           syn = std::dynamic_pointer_cast<NPulseSynapse>(syn_weak.lock());
+          else
+           syn = nullptr;
           if(!syn)
             return true;
 
@@ -751,13 +1159,45 @@ bool NMazeMemory_simplified::LastUsedLink()
     //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½, w = 0,2
     //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ - ï¿½.ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ TE
     bool found = false;
-    std::shared_ptr<NPulseNeuron> neuron1 = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+    std::weak_ptr<RDK::UContainer> neuron1_weak = BaseTE->GetComponentL("Neuron1", true);
+
+    std::shared_ptr<NPulseNeuron> neuron1;
+
+    if(!neuron1_weak.expired())
+
+     neuron1 = std::dynamic_pointer_cast<NPulseNeuron>(neuron1_weak.lock());
+
+    else
+
+     neuron1 = nullptr;
 
     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ N1_D1_5
-    std::shared_ptr<NPulseMembrane> dend1_5 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_5",true);
+    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+    std::weak_ptr<RDK::UContainer> dend1_5_weak = neuron1->GetComponentL("Dendrite1_5",true);
+
+    std::shared_ptr<NPulseMembrane> dend1_5;
+
+    if(!dend1_5_weak.expired())
+
+     dend1_5 = std::dynamic_pointer_cast<NPulseMembrane>(dend1_5_weak.lock());
+
+    else
+
+     dend1_5 = nullptr;
     for (int i = 1; i<=(dend1_5->NumExcitatorySynapses); i++)
     {
-      std::shared_ptr<NPulseSynapse> synapse = dend1_5->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
+      // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+      std::weak_ptr<RDK::UContainer> synapse_weak = dend1_5->GetComponentL("ExcSynapse"+sntoa(i),true);
+      std::shared_ptr<NPulseSynapse> synapse;
+      if(!synapse_weak.expired())
+       synapse = std::dynamic_pointer_cast<NPulseSynapse>(synapse_weak.lock());
+      else
+       synapse = nullptr;
+      if(!synapse)
+       continue;
       if (synapse->Output().As<double>(0)>0)
       {
           synapse->Weight=0.2; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!
@@ -769,10 +1209,30 @@ bool NMazeMemory_simplified::LastUsedLink()
     if (!found)
     {
       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ N1_D1_2)
-      std::shared_ptr<NPulseMembrane> dend1_2 = neuron1->GetComponentL<NPulseMembrane>("Dendrite1_2",true);
+      // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+      std::weak_ptr<RDK::UContainer> dend1_2_weak = neuron1->GetComponentL("Dendrite1_2",true);
+
+      std::shared_ptr<NPulseMembrane> dend1_2;
+
+      if(!dend1_2_weak.expired())
+
+       dend1_2 = std::dynamic_pointer_cast<NPulseMembrane>(dend1_2_weak.lock());
+
+      else
+
+       dend1_2 = nullptr;
       for (int i = 1; i<=(dend1_2->NumExcitatorySynapses); i++)
       {
-        std::shared_ptr<NPulseSynapse> synapse = dend1_2->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
+        // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+        std::weak_ptr<RDK::UContainer> synapse_weak = dend1_2->GetComponentL("ExcSynapse"+sntoa(i),true);
+        std::shared_ptr<NPulseSynapse> synapse;
+        if(!synapse_weak.expired())
+         synapse = std::dynamic_pointer_cast<NPulseSynapse>(synapse_weak.lock());
+        else
+         synapse = nullptr;
+        if(!synapse)
+         continue;
         if (synapse->Output().As<double>(0)>0)
         {
             synapse->Weight=0.2; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!
@@ -782,10 +1242,28 @@ bool NMazeMemory_simplified::LastUsedLink()
       }
 
       //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ N1_S1)
-      std::shared_ptr<NPulseMembrane> soma1 = neuron1->GetComponentL<NPulseMembrane>("Soma1",true);
+      // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+
+      std::weak_ptr<RDK::UContainer> soma1_weak = neuron1->GetComponentL("Soma1",true);
+
+      std::shared_ptr<NPulseMembrane> soma1;
+
+      if(!soma1_weak.expired())
+
+       soma1 = std::dynamic_pointer_cast<NPulseMembrane>(soma1_weak.lock());
+
+      else
+
+       soma1 = nullptr;
       for (int i = 1; i<=(soma1->NumExcitatorySynapses); i++)
       {
-        std::shared_ptr<NPulseSynapse> synapse = soma1->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(i),true);
+        // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+        std::weak_ptr<UContainer> synapse_weak = soma1->GetComponentL("ExcSynapse"+sntoa(i),true);
+        std::shared_ptr<NPulseSynapse> synapse;
+        if(!synapse_weak.expired())
+         synapse = std::dynamic_pointer_cast<NPulseSynapse>(synapse_weak.lock());
+        else
+         synapse = nullptr;
         if (synapse->Output().As<double>(0)>0)
         {
             synapse->Weight=0.2; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½!
@@ -812,9 +1290,27 @@ bool NMazeMemory_simplified::DeadlockProcessing()//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï
 //    }
 //    NameT start_name = PrevTE->GetName()+".Output";
 
-//    std::shared_ptr<NPulseNeuron> fin_neuron = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
-//    std::shared_ptr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
-//    std::shared_ptr<NPulseMembrane> fin_soma = fin_neuron->GetComponentL<NPulseMembrane>("Soma1", true);
+//    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> fin_neuron_weak = BaseTE->GetComponentL("Neuron1", true);
+    std::shared_ptr<NPulseNeuron> fin_neuron;
+    if(!fin_neuron_weak.expired())
+     fin_neuron = std::dynamic_pointer_cast<NPulseNeuron>(fin_neuron_weak.lock());
+    else
+     fin_neuron = nullptr;
+//    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> fin_dend_weak = fin_neuron->GetComponentL("Dendrite1_2", true);
+    std::shared_ptr<NPulseMembrane> fin_dend;
+    if(!fin_dend_weak.expired())
+     fin_dend = std::dynamic_pointer_cast<NPulseMembrane>(fin_dend_weak.lock());
+    else
+     fin_dend = nullptr;
+//    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> fin_soma_weak = fin_neuron->GetComponentL("Soma1", true);
+    std::shared_ptr<NPulseMembrane> fin_soma;
+    if(!fin_soma_weak.expired())
+     fin_soma = std::dynamic_pointer_cast<NPulseMembrane>(fin_soma_weak.lock());
+    else
+     fin_soma = nullptr;
 //    int check_dmax = fin_dend->NumExcitatorySynapses();
 
 //    for(int i=0; i< fin_dend->NumExcitatorySynapses(); i++)
@@ -831,8 +1327,20 @@ bool NMazeMemory_simplified::DeadlockProcessing()//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï
 //    }
 
 //    //w ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½(i) = 0,2
-//    std::shared_ptr<NPulseNeuron> base_neuron = BaseTE->GetComponentL<NPulseNeuron>("Neuron1", true);
-//    std::shared_ptr<NPulseMembrane> base_dend = base_neuron->GetComponentL<NPulseMembrane>("Dendrite1_5", true);
+//    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> base_neuron_weak = BaseTE->GetComponentL("Neuron1", true);
+    std::shared_ptr<NPulseNeuron> base_neuron;
+    if(!base_neuron_weak.expired())
+     base_neuron = std::dynamic_pointer_cast<NPulseNeuron>(base_neuron_weak.lock());
+    else
+     base_neuron = nullptr;
+//    // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+    std::weak_ptr<RDK::UContainer> base_dend_weak = base_neuron->GetComponentL("Dendrite1_5", true);
+    std::shared_ptr<NPulseMembrane> base_dend;
+    if(!base_dend_weak.expired())
+     base_dend = std::dynamic_pointer_cast<NPulseMembrane>(base_dend_weak.lock());
+    else
+     base_dend = nullptr;
 //    for (int j=0; j<base_dend->NumExcitatorySynapses; j++)
 //    {
 //      std::shared_ptr<NPulseSynapse> base_synapse = base_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(j), true);

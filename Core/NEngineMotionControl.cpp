@@ -644,7 +644,11 @@ bool NEngineMotionControl::AReset(void)
  for(int n=0;n<NumMotionElements;n++)
  {
   receptors[n].resize(6);
-  UContainer* cont=GetComponent(string("MotionElement")+RDK::sntoa(n),true).get();
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> cont_weak=GetComponent(string("MotionElement")+RDK::sntoa(n),true);
+  if(cont_weak.expired())
+   continue;
+  std::shared_ptr<UContainer> cont=cont_weak.lock();
   if(!cont)
    continue;
 
@@ -705,7 +709,12 @@ bool NEngineMotionControl::ACalculate(void)
  std::shared_ptr<NControlObjectSource> source;
  for(int i=0;i<NumControlLoops;i++)
  {
-    source=dynamic_pointer_cast<NControlObjectSource>(GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/));
+    // CRITICAL: GetComponent now returns weak_ptr, need to lock
+    std::weak_ptr<UContainer> source_weak=GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/);
+    if(!source_weak.expired())
+     source=std::dynamic_pointer_cast<NControlObjectSource>(source_weak.lock());
+    else
+     source=nullptr;
  // source=dynamic_pointer_cast<UNet>(GetComponent("NManipulatorSource1"/*+sntoa(i+1)*/));
     if(!source)
      continue;
@@ -953,33 +962,47 @@ bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
  int found_motion_elements=0;
  while(i<GetNumComponents())
  {
-  if(PComponents[i]->GetName() == "IIPosAfferentGenerator" ||
-	 PComponents[i]->GetName() == "IINegAfferentGenerator" ||
-	 PComponents[i]->GetName() == "AfferentSource1" ||
-	 (PComponents[i]->GetName() == "NManipulatorSource1" && PComponents[i]->GetCompClassName() == *ObjectControlInterfaceClassName) ||
-	 PComponents[i]->GetName() == "NManipulatorInput1" ||
-	 PComponents[i]->GetName() == "StatisticDoubleMatrix")// ||
-//	 PComponents[i]->GetName() == "Pac")
+  // CRITICAL: PComponents now points to weak_ptr, need to lock before use
+  // Use GetComponentByIndex instead of direct Components access
+  std::weak_ptr<UContainer> comp_weak = GetComponentByIndex(i);
+  if(comp_weak.expired())
+  {
+   i++;
+   continue;
+  }
+  std::shared_ptr<UContainer> comp_locked=comp_weak.lock();
+  if(!comp_locked)
+  {
+   i++;
+   continue;
+  }
+  if(comp_locked->GetName() == "IIPosAfferentGenerator" ||
+	 comp_locked->GetName() == "IINegAfferentGenerator" ||
+	 comp_locked->GetName() == "AfferentSource1" ||
+	 (comp_locked->GetName() == "NManipulatorSource1" && comp_locked->GetCompClassName() == *ObjectControlInterfaceClassName) ||
+	 comp_locked->GetName() == "NManipulatorInput1" ||
+	 comp_locked->GetName() == "StatisticDoubleMatrix")// ||
+//	 comp_locked->GetName() == "Pac")
   {
    ++i;
    continue;
   }
   else
   {
-   if(PComponents[i]->GetName().substr(0,std::string("MotionElement").size())
+   if(comp_locked->GetName().substr(0,std::string("MotionElement").size())
 		== "MotionElement" && found_motion_elements<expected_num_motion_elements)
 	++found_motion_elements;
    else
    {
 	// SAFETY: Use existing shared_ptr directly, don't create new one from .get()
 	// Creating new shared_ptr from raw pointer causes double ownership and segfault
-	if(PComponents[i])
+	if(comp_locked)
 	{
 	 // SAFETY: Check use_count before calling DelComponent
 	 // If use_count is corrupted, DelComponent will return early and component won't be deleted
 	 // This can cause infinite loop, so we need to handle it
 	 try {
-	  size_t use_count = PComponents[i].use_count();
+	  size_t use_count = comp_locked.use_count();
 	  if(use_count > 1000000 || use_count == 0)
 	  {
 	   LOG(WARNING) << "NEngineMotionControl::ClearStructure - Component " << i << " has suspicious use_count: " << use_count << ", skipping deletion";
@@ -995,9 +1018,9 @@ bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
 	 }
 	 
 	 // Store component name before deletion in case DelComponent fails
-	 std::string comp_name = PComponents[i]->GetName();
+	 std::string comp_name = comp_locked->GetName();
 	 
-	 DelComponent(PComponents[i], true);
+	 DelComponent(comp_weak, true);
 	 
 	 // CRITICAL: After DelComponent, check if component was actually removed
 	 // If DelComponent returned early due to corrupted use_count, component may still be in PComponents
@@ -1006,7 +1029,13 @@ bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
 	 bool still_exists = false;
 	 for(int j = 0; j < GetNumComponents(); ++j)
 	 {
-	  if(j != i && GetComponent(j) && GetComponent(j)->GetName() == comp_name)
+	  if(j == i)
+	   continue;
+	  std::weak_ptr<UContainer> check_comp_weak = GetComponentByIndex(j);
+	  if(check_comp_weak.expired())
+	   continue;
+	  std::shared_ptr<UContainer> check_comp = check_comp_weak.lock();
+	  if(check_comp && check_comp->GetName() == comp_name)
 	  {
 	   still_exists = true;
 	   break;
@@ -1014,20 +1043,26 @@ bool NEngineMotionControl::ClearStructure(int expected_num_motion_elements)
 	 }
 	 
 	 // If component still exists and we're at the same index, increment i to avoid infinite loop
-	 if(still_exists && i < GetNumComponents() && GetComponent(i) && GetComponent(i)->GetName() == comp_name)
+	 if(still_exists && i < GetNumComponents())
 	 {
-	  LOG(WARNING) << "NEngineMotionControl::ClearStructure - Component " << comp_name << " was not deleted, forcing skip to avoid infinite loop";
-	  ++i; // Skip this component and continue
-	  continue;
+	  std::weak_ptr<UContainer> check_comp_weak2 = GetComponentByIndex(i);
+	  if(!check_comp_weak2.expired())
+	  {
+	   std::shared_ptr<UContainer> check_comp2 = check_comp_weak2.lock();
+	   if(check_comp2 && check_comp2->GetName() == comp_name)
+	   {
+	    LOG(WARNING) << "NEngineMotionControl::ClearStructure - Component " << comp_name << " was not deleted, forcing skip to avoid infinite loop";
+	    ++i; // Skip this component and continue
+	    continue;
+	   }
+	  }
 	 }
-	}
-	else
-	{
-	 ++i; // Skip invalid component
-	 continue;
-	}
+	 
+	 // Component was successfully deleted or doesn't exist, increment i
+	 ++i;
    }
   }
+ }
  }
  return true;
 }
@@ -1267,8 +1302,13 @@ void NEngineMotionControl::SetupPacRange(void)
 {
  if(NumMotionElements <= 0)
   return;
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> cont_weak = GetComponentL("Pac",true);
  std::shared_ptr<NPac> cont;
-  cont=dynamic_pointer_cast<NPac>(GetComponentL("Pac",true));
+ if(!cont_weak.expired())
+  cont = std::dynamic_pointer_cast<NPac>(cont_weak.lock());
+ else
+  cont = nullptr;
 
  if(!cont)
   return;
@@ -1620,8 +1660,19 @@ void NEngineMotionControl::NewMotionElementsSetup(std::shared_ptr<UNet> net)
   //Adding synapses for link to ControlNeurons in PositionControlElement
   for (int k=0; k< motion_elem->NumControlLoops; k++)
   {
-   std::shared_ptr<NPulseMembrane> post_afL_soma = motion_elem->GetComponentL<NPulseMembrane>("PostAfferentL1.Soma1",true);
-   std::shared_ptr<NPulseMembrane> post_afR_soma = motion_elem->GetComponentL<NPulseMembrane>("PostAfferentR1.Soma1",true);
+   // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+   std::weak_ptr<RDK::UContainer> post_afL_soma_weak = motion_elem->GetComponentL("PostAfferentL1.Soma1",true);
+   std::shared_ptr<NPulseMembrane> post_afL_soma;
+   if(!post_afL_soma_weak.expired())
+    post_afL_soma = std::dynamic_pointer_cast<NPulseMembrane>(post_afL_soma_weak.lock());
+   else
+    post_afL_soma = nullptr;
+   std::weak_ptr<RDK::UContainer> post_afR_soma_weak = motion_elem->GetComponentL("PostAfferentR1.Soma1",true);
+   std::shared_ptr<NPulseMembrane> post_afR_soma;
+   if(!post_afR_soma_weak.expired())
+    post_afR_soma = std::dynamic_pointer_cast<NPulseMembrane>(post_afR_soma_weak.lock());
+   else
+    post_afR_soma = nullptr;
    if(post_afL_soma)
    {
        post_afL_soma->NumExcitatorySynapses=2;
@@ -1698,7 +1749,13 @@ void NEngineMotionControl::NewPACSetup(double pulse_amplitude, double secretion_
 /// ��������� ��������� Pac
 void NEngineMotionControl::UpdatePacTCParameters(void)
 {
- std::shared_ptr<NPac> pac=GetComponentL<NPac>("Pac",true);
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> pac_weak = GetComponentL("Pac",true);
+ std::shared_ptr<NPac> pac;
+ if(!pac_weak.expired())
+  pac = std::dynamic_pointer_cast<NPac>(pac_weak.lock());
+ else
+  pac = nullptr;
  if(!pac)
   return;
 
@@ -1778,7 +1835,13 @@ for (int j=0; j < NumMotionElements ; j++)
    separator->MinRange=left_value;
    separator->MaxRange=right_value;
 
-   std::shared_ptr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentR"+RDK::sntoa(i+1)+".Receptor", true));
+   // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+   std::weak_ptr<RDK::UContainer> receptor_weak = Motions[j]->GetComponentL("AfferentR"+RDK::sntoa(i+1)+".Receptor", true);
+   std::shared_ptr<NReceptor> receptor;
+   if(!receptor_weak.expired())
+    receptor = std::dynamic_pointer_cast<NReceptor>(receptor_weak.lock());
+   else
+    receptor = nullptr;
    if(receptor)
    {
     receptor->MinInputRange=0;
@@ -1804,7 +1867,13 @@ for (int j=0; j < NumMotionElements ; j++)
    separator->MinRange=left_value;
    separator->MaxRange=right_value;
 
-   std::shared_ptr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentL"+RDK::sntoa(i+1)+".Receptor", true));
+   // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+   std::weak_ptr<RDK::UContainer> receptor_weak_L_final = Motions[j]->GetComponentL("AfferentL"+RDK::sntoa(i+1)+".Receptor", true);
+   std::shared_ptr<NReceptor> receptor;
+   if(!receptor_weak_L_final.expired())
+    receptor = std::dynamic_pointer_cast<NReceptor>(receptor_weak_L_final.lock());
+   else
+    receptor = nullptr;
    if(receptor)
    {
     receptor->MinInputRange=0;
@@ -1846,8 +1915,13 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
 	 if(melem)
 	 for(int i=0;i<melem->NumControlLoops;i++)
 	  {
+       // CRITICAL: GetComponent now returns weak_ptr, need to lock
+       std::weak_ptr<RDK::UContainer> separator_weak_neg = GetComponent(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), true);
        std::shared_ptr<NIntervalSeparator> separator;
-       separator=GetComponent<NIntervalSeparator>(string("NegIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), true);
+       if(!separator_weak_neg.expired())
+        separator = std::dynamic_pointer_cast<NIntervalSeparator>(separator_weak_neg.lock());
+       else
+        separator = nullptr;
        if(separator)
        {
         separator->Mode=mode;
@@ -1857,7 +1931,13 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
         separator->MinRange=left_value;
         separator->MaxRange=right_value;
 
-        std::shared_ptr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentR"+RDK::sntoa(i+1)+".Receptor", true));
+        // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+   std::weak_ptr<RDK::UContainer> receptor_weak = Motions[j]->GetComponentL("AfferentR"+RDK::sntoa(i+1)+".Receptor", true);
+   std::shared_ptr<NReceptor> receptor;
+   if(!receptor_weak.expired())
+    receptor = std::dynamic_pointer_cast<NReceptor>(receptor_weak.lock());
+   else
+    receptor = nullptr;
         if(receptor)
         {
          receptor->MinInputRange=0;
@@ -1865,7 +1945,12 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
         }
        }
 
-       separator=GetComponent<NIntervalSeparator>(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), true);
+       // CRITICAL: GetComponent now returns weak_ptr, need to lock
+       std::weak_ptr<RDK::UContainer> separator_weak_pos = GetComponent(string("PosIntervalSeparator")+RDK::sntoa(j+1)+RDK::sntoa(i+1), true);
+       if(!separator_weak_pos.expired())
+        separator = std::dynamic_pointer_cast<NIntervalSeparator>(separator_weak_pos.lock());
+       else
+        separator = nullptr;
        if(separator)
        {
         separator->Mode=mode;
@@ -1875,7 +1960,13 @@ void NEngineMotionControl::NewIntervalSeparatorsUpdate(int mode_value, int last_
         separator->MinRange=left_value;
         separator->MaxRange=right_value;
 
-        std::shared_ptr<NReceptor> receptor=dynamic_pointer_cast<NReceptor>(Motions[j]->GetComponentL("AfferentL"+RDK::sntoa(i+1)+".Receptor", true));
+        // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+        std::weak_ptr<RDK::UContainer> receptor_weak_L2 = Motions[j]->GetComponentL("AfferentL"+RDK::sntoa(i+1)+".Receptor", true);
+        std::shared_ptr<NReceptor> receptor;
+        if(!receptor_weak_L2.expired())
+         receptor = std::dynamic_pointer_cast<NReceptor>(receptor_weak_L2.lock());
+        else
+         receptor = nullptr;
         if(receptor)
         {
          receptor->MinInputRange=0;

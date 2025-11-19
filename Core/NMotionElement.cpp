@@ -241,7 +241,13 @@ bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
 	const string &target_head, const string &target_tail)
 {
  string tmpname;
- std::shared_ptr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
+ // CRITICAL: GetComponent now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> neuron_weak=net->GetComponent(target_head);
+ std::shared_ptr<NPulseNeuron> neuron;
+ if(!neuron_weak.expired())
+  neuron=std::dynamic_pointer_cast<NPulseNeuron>(neuron_weak.lock());
+ else
+  neuron=nullptr;
  std::shared_ptr<NPulseMembraneCommon> branch;
  std::shared_ptr<NPulseChannel> channel;
  std::shared_ptr<RDK::UContainer> ltmembr;
@@ -251,7 +257,12 @@ bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
  {
   try
   {
-   ltmembr=neuron->GetComponent("LTMembrane");
+   // CRITICAL: GetComponent now returns weak_ptr, need to lock
+   std::weak_ptr<RDK::UContainer> ltmembr_weak=neuron->GetComponent("LTMembrane");
+   if(!ltmembr_weak.expired())
+    ltmembr=ltmembr_weak.lock();
+   else
+    ltmembr=nullptr;
   }
   catch(RDK::UContainer::EComponentNameNotExist &){}
  }
@@ -259,7 +270,12 @@ bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
   branch=safe_shared_cast<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",false));
  else
   branch=safe_shared_cast<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",true));
- channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> channel_weak=branch->GetComponentL(target_tail);
+ if(!channel_weak.expired())
+  channel=std::dynamic_pointer_cast<NPulseChannel>(channel_weak.lock());
+ else
+  channel=nullptr;
  bool res=net->CreateLink(source,"Output",
                  channel->GetLongName(net,tmpname),"ChannelInput");
  return res;
@@ -273,7 +289,13 @@ bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
 	const string &target_head, const string &target_tail, string &branch_bame)
 {
  string tmpname;
- std::shared_ptr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
+ // CRITICAL: GetComponent now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> neuron_weak=net->GetComponent(target_head);
+ std::shared_ptr<NPulseNeuron> neuron;
+ if(!neuron_weak.expired())
+  neuron=std::dynamic_pointer_cast<NPulseNeuron>(neuron_weak.lock());
+ else
+  neuron=nullptr;
  std::shared_ptr<NPulseMembraneCommon> branch;
  std::shared_ptr<NPulseChannel> channel;
  std::shared_ptr<RDK::UContainer> ltmembr;
@@ -283,7 +305,12 @@ bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
  {
   try
   {
-   ltmembr=neuron->GetComponent("LTMembrane");
+   // CRITICAL: GetComponent now returns weak_ptr, need to lock
+   std::weak_ptr<RDK::UContainer> ltmembr_weak=neuron->GetComponent("LTMembrane");
+   if(!ltmembr_weak.expired())
+    ltmembr=ltmembr_weak.lock();
+   else
+    ltmembr=nullptr;
   }
   catch(RDK::UContainer::EComponentNameNotExist &){}
  }
@@ -293,7 +320,12 @@ bool CreateNeuronBranchLink(std::shared_ptr<UNet> net,const string &source,
   branch=safe_shared_cast<NPulseMembraneCommon>(neuron->BranchDendrite("Soma1",true));
 
  branch->GetLongName(neuron,branch_bame);
- channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> channel_weak=branch->GetComponentL(target_tail);
+ if(!channel_weak.expired())
+  channel=std::dynamic_pointer_cast<NPulseChannel>(channel_weak.lock());
+ else
+  channel=nullptr;
  bool res=net->CreateLink(source,"Output",
                  channel->GetLongName(net,tmpname), "ChannelInput");
  return res;
@@ -306,7 +338,13 @@ bool CreateNeuronExsitedBranchLink(std::shared_ptr<UNet> net,const string &sourc
 	const string &target_head, const string &target_tail, const string &branch_name)
 {
  string tmpname;
- std::shared_ptr<NPulseNeuron> neuron=dynamic_pointer_cast<NPulseNeuron>(net->GetComponent(target_head));
+ // CRITICAL: GetComponent now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> neuron_weak=net->GetComponent(target_head);
+ std::shared_ptr<NPulseNeuron> neuron;
+ if(!neuron_weak.expired())
+  neuron=std::dynamic_pointer_cast<NPulseNeuron>(neuron_weak.lock());
+ else
+  neuron=nullptr;
  std::shared_ptr<NPulseMembrane> branch;
  std::shared_ptr<NPulseChannel> channel;
  std::shared_ptr<RDK::UContainer> ltmembr;
@@ -316,19 +354,34 @@ bool CreateNeuronExsitedBranchLink(std::shared_ptr<UNet> net,const string &sourc
  {
   try
   {
-   ltmembr=neuron->GetComponent("LTMembrane");
+   // CRITICAL: GetComponent now returns weak_ptr, need to lock
+   std::weak_ptr<RDK::UContainer> ltmembr_weak=neuron->GetComponent("LTMembrane");
+   if(!ltmembr_weak.expired())
+    ltmembr=ltmembr_weak.lock();
+   else
+    ltmembr=nullptr;
   }
   catch(RDK::UContainer::EComponentNameNotExist &){}
  }
  try
  {
-  branch=dynamic_pointer_cast<NPulseMembrane>(neuron->GetComponent(branch_name));
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<RDK::UContainer> branch_weak=neuron->GetComponent(branch_name);
+  if(!branch_weak.expired())
+   branch=std::dynamic_pointer_cast<NPulseMembrane>(branch_weak.lock());
+  else
+   branch=nullptr;
  }
  catch(RDK::UContainer::EComponentNameNotExist &)
  {
   return false;
  }
- channel=dynamic_pointer_cast<NPulseChannel>(branch->GetComponentL(target_tail));
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<RDK::UContainer> channel_weak=branch->GetComponentL(target_tail);
+ if(!channel_weak.expired())
+  channel=std::dynamic_pointer_cast<NPulseChannel>(channel_weak.lock());
+ else
+  channel=nullptr;
  bool res=net->CreateLink(source,"Output",
                  channel->GetLongName(net,tmpname), "ChannelInput");
  return res;

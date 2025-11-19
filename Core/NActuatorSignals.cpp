@@ -359,7 +359,12 @@ bool NActuatorSignals::ABuild(void)
   if(!ORNeuron) return true;
   ORNeuron->SetCoord(MVector<double,3>(21.33, 7.66, 0));
   ORNeuron->DisconnectAll("Output");
- soma = ORNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<UContainer> soma_weak = ORNeuron->GetComponentL("Soma1", true);
+ if(!soma_weak.expired())
+  soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak.lock());
+ else
+  soma = nullptr;
  if (soma)
  {
   soma->NumExcitatorySynapses = 4;
@@ -469,7 +474,12 @@ bool NActuatorSignals::ABuild(void)
  {
  // ����� �� IsForward
  {
-  soma = IsForwardNeuron->GetComponent<NPulseMembrane>("Soma1", true);
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> soma_weak = IsForwardNeuron->GetComponent("Soma1", true);
+  if(!soma_weak.expired())
+   soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak.lock());
+  else
+   soma = nullptr;
   
   // SAFETY: Check if soma is valid before accessing it
   if(!soma)
@@ -492,7 +502,12 @@ bool NActuatorSignals::ABuild(void)
   }
 
 
-  soma = IsForwardNeuron->GetComponent<NPulseMembrane>("Soma2", true);
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> soma_weak_soma2 = IsForwardNeuron->GetComponent("Soma2", true);
+  if(!soma_weak_soma2.expired())
+   soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak_soma2.lock());
+  else
+   soma = nullptr;
   
   // SAFETY: Check if soma is valid before accessing it
   if(!soma)
@@ -517,7 +532,12 @@ bool NActuatorSignals::ABuild(void)
 
  //   IsLeft
  {
-  dendrite = IsLeftNeuron->GetComponent<NPulseMembrane>("Dendrite1_10", true);
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> dendrite_weak = IsLeftNeuron->GetComponent("Dendrite1_10", true);
+  if(!dendrite_weak.expired())
+   dendrite = std::dynamic_pointer_cast<NPulseMembrane>(dendrite_weak.lock());
+  else
+   dendrite = nullptr;
   
   // SAFETY: Check if dendrite is valid before accessing it
   if(!dendrite)
@@ -540,7 +560,12 @@ bool NActuatorSignals::ABuild(void)
   }
 
 
-  soma = IsLeftNeuron->GetComponent<NPulseMembrane>("Soma2", true);
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> soma_weak2 = IsLeftNeuron->GetComponent("Soma2", true);
+  if(!soma_weak2.expired())
+   soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak2.lock());
+  else
+   soma = nullptr;
   
   // SAFETY: Check if soma is valid before accessing it
   if(!soma)
@@ -565,7 +590,12 @@ bool NActuatorSignals::ABuild(void)
 
  //   IsRight
  {
-  dendrite = IsRightNeuron->GetComponent<NPulseMembrane>("Dendrite2_10", true);
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> dendrite_weak2 = IsRightNeuron->GetComponent("Dendrite2_10", true);
+  if(!dendrite_weak2.expired())
+   dendrite = std::dynamic_pointer_cast<NPulseMembrane>(dendrite_weak2.lock());
+  else
+   dendrite = nullptr;
   
   // SAFETY: Check if dendrite is valid before accessing it
   if(!dendrite)
@@ -588,7 +618,12 @@ bool NActuatorSignals::ABuild(void)
   }
 
 
-  soma = IsRightNeuron->GetComponent<NPulseMembrane>("Soma1", true);
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> soma_weak3 = IsRightNeuron->GetComponent("Soma1", true);
+  if(!soma_weak3.expired())
+   soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak3.lock());
+  else
+   soma = nullptr;
   
   // SAFETY: Check if soma is valid before accessing it
   if(!soma)
@@ -613,7 +648,12 @@ bool NActuatorSignals::ABuild(void)
 
  //   IsBack
  {
-  soma = IsBackNeuron->GetComponent<NPulseMembrane>("Soma1", true);
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> soma_weak4 = IsBackNeuron->GetComponent("Soma1", true);
+  if(!soma_weak4.expired())
+   soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak4.lock());
+  else
+   soma = nullptr;
   
   // SAFETY: Check if soma is valid before accessing it
   if(soma)
@@ -630,7 +670,12 @@ bool NActuatorSignals::ABuild(void)
     res &= CreateLink("Sinchro2", "Output", inhsynapse->GetLongName(GetThisAsSharedContainer()), "Input");
   }
 
-  soma = IsBackNeuron->GetComponent<NPulseMembrane>("Soma2", true);
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> soma_weak5 = IsBackNeuron->GetComponent("Soma2", true);
+  if(!soma_weak5.expired())
+   soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak5.lock());
+  else
+   soma = nullptr;
   
   // SAFETY: Check if soma is valid before accessing it
   if(soma)
@@ -650,7 +695,12 @@ bool NActuatorSignals::ABuild(void)
 
  //   ORNeuron
  {
-  soma = ORNeuron->GetComponent<NPulseMembrane>("Soma1", true);
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> soma_weak6 = ORNeuron->GetComponent("Soma1", true);
+  if(!soma_weak6.expired())
+   soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak6.lock());
+  else
+   soma = nullptr;
 
   // SAFETY: Check if soma is valid before accessing it
   if(soma)
@@ -680,7 +730,12 @@ bool NActuatorSignals::ABuild(void)
  //   NOTNeuron
  {
   //   c ORNeuron
-  soma = NOTNeuron->GetComponent<NPulseMembrane>("Soma1", true);
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> soma_weak7 = NOTNeuron->GetComponent("Soma1", true);
+  if(!soma_weak7.expired())
+   soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak7.lock());
+  else
+   soma = nullptr;
   
   // SAFETY: Check if soma is valid before accessing it
   if(soma)
@@ -691,7 +746,12 @@ bool NActuatorSignals::ABuild(void)
   }
 
   //   c NOTGenerator
-  dendrite = NOTNeuron->GetComponent<NPulseMembrane>("Dendrite1_2", true);
+  // CRITICAL: GetComponent now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> dendrite_weak3 = NOTNeuron->GetComponent("Dendrite1_2", true);
+  if(!dendrite_weak3.expired())
+   dendrite = std::dynamic_pointer_cast<NPulseMembrane>(dendrite_weak3.lock());
+  else
+   dendrite = nullptr;
   
   // SAFETY: Check if dendrite is valid before accessing it
   if(dendrite)
@@ -707,7 +767,12 @@ bool NActuatorSignals::ABuild(void)
   res &= CreateLink("IsBack", "Output", "Delay1To2", "Input");
 
  //  NOTNeuron  Stay
- soma = StayNeuron->GetComponent<NPulseMembrane>("Soma1", true);
+ // CRITICAL: GetComponent now returns weak_ptr, need to lock
+ std::weak_ptr<UContainer> soma_weak8 = StayNeuron->GetComponent("Soma1", true);
+ if(!soma_weak8.expired())
+  soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak8.lock());
+ else
+  soma = nullptr;
  if(soma)
  {
   excsynapse = soma->GetExcitatorySynapses(0);
@@ -716,7 +781,12 @@ bool NActuatorSignals::ABuild(void)
  }
 
  //  IsForward  Forward
- soma = ForwardNeuron->GetComponent<NPulseMembrane>("Soma1", true);
+ // CRITICAL: GetComponent now returns weak_ptr, need to lock
+ std::weak_ptr<UContainer> soma_weak9 = ForwardNeuron->GetComponent("Soma1", true);
+ if(!soma_weak9.expired())
+  soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak9.lock());
+ else
+  soma = nullptr;
  if(soma)
  {
   excsynapse = soma->GetExcitatorySynapses(0);
@@ -725,7 +795,12 @@ bool NActuatorSignals::ABuild(void)
  }
 
  //  IsLeft  Left
- soma = LeftNeuron->GetComponent<NPulseMembrane>("Soma1", true);
+ // CRITICAL: GetComponent now returns weak_ptr, need to lock
+ std::weak_ptr<UContainer> soma_weak10 = LeftNeuron->GetComponent("Soma1", true);
+ if(!soma_weak10.expired())
+  soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak10.lock());
+ else
+  soma = nullptr;
  if(soma)
  {
   excsynapse = soma->GetExcitatorySynapses(0);
@@ -734,7 +809,12 @@ bool NActuatorSignals::ABuild(void)
  }
 
  //  IsRight  Right
- soma = RightNeuron->GetComponent<NPulseMembrane>("Soma1", true);
+ // CRITICAL: GetComponent now returns weak_ptr, need to lock
+ std::weak_ptr<UContainer> soma_weak11 = RightNeuron->GetComponent("Soma1", true);
+ if(!soma_weak11.expired())
+  soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak11.lock());
+ else
+  soma = nullptr;
  if(soma)
  {
   excsynapse = soma->GetExcitatorySynapses(0);
@@ -743,7 +823,12 @@ bool NActuatorSignals::ABuild(void)
  }
 
  //  Delay1To2  Back
- soma = BackNeuron->GetComponent<NPulseMembrane>("Soma1", true);
+ // CRITICAL: GetComponent now returns weak_ptr, need to lock
+ std::weak_ptr<UContainer> soma_weak12 = BackNeuron->GetComponent("Soma1", true);
+ if(!soma_weak12.expired())
+  soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak12.lock());
+ else
+  soma = nullptr;
  if(soma)
  {
   excsynapse = soma->GetExcitatorySynapses(0);
@@ -787,14 +872,25 @@ bool NActuatorSignals::AReset(void)
  Delay1To2->DelayTime = Sinchro2Delay - Sinchro1Delay;
 
  // ����������� ������ ��������
- std::shared_ptr<NLTZone> ltzone = NOTNeuron->GetComponentL<NLTZone>("LTZone", true);
- ltzone->Threshold = 0.01;
+ // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+ std::weak_ptr<UContainer> ltzone_weak = NOTNeuron->GetComponentL("LTZone", true);
+ std::shared_ptr<NLTZone> ltzone;
+ if(!ltzone_weak.expired())
+  ltzone = std::dynamic_pointer_cast<NLTZone>(ltzone_weak.lock());
+ if(ltzone)
+  ltzone->Threshold = 0.01;
 
  std::shared_ptr <NPulseNeuron> is_neurons[4]{IsForwardNeuron, IsLeftNeuron, IsRightNeuron, IsBackNeuron};
  for (int i = 0; i < 4; i++)
  {
-  ltzone = is_neurons[i]->GetComponentL<NLTZone>("LTZone", true);
-  ltzone->Threshold = 0.013;
+  // CRITICAL: GetComponentL now returns weak_ptr, need to lock
+  std::weak_ptr<UContainer> ltzone_weak = is_neurons[i]->GetComponentL("LTZone", true);
+  if(!ltzone_weak.expired())
+   ltzone = std::dynamic_pointer_cast<NLTZone>(ltzone_weak.lock());
+  else
+   ltzone = nullptr;
+  if(ltzone)
+   ltzone->Threshold = 0.013;
  }
 
  return res;

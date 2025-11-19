@@ -151,7 +151,12 @@ bool NSeqComparison::SetLTZThreshold(const double &value)
  if (!CompNeuron)
   return true;
 
- std::shared_ptr<NLTZone> ltzone = CompNeuron->GetComponentL<NLTZone>("LTZone");  // GetLTZone();
+ std::weak_ptr<RDK::UContainer> ltzone_weak = CompNeuron->GetComponentL("LTZone");  // GetLTZone();
+ std::shared_ptr<NLTZone> ltzone;
+ if(!ltzone_weak.expired())
+  ltzone = std::dynamic_pointer_cast<NLTZone>(ltzone_weak.lock());
+ else
+  ltzone = nullptr;
  if(!ltzone)
   return true;
 
@@ -335,8 +340,18 @@ bool NSeqComparison::ABuild(void)
  // ������ ����� ����� ������������ � ��������� �������
  for (int i = 0; i < NumClasses; i++)
  {
-  std::shared_ptr<NPulseMembrane> dendrite = CompNeuron->GetComponentL<NPulseMembrane>("Dendrite" + sntoa(i+1) + "_1", true);
-  std::shared_ptr<NPulseMembrane> soma = CompNeuron->GetComponentL<NPulseMembrane>("Soma" + sntoa(i+1), true);
+  std::weak_ptr<RDK::UContainer> dendrite_weak = CompNeuron->GetComponentL("Dendrite" + sntoa(i+1) + "_1", true);
+  std::shared_ptr<NPulseMembrane> dendrite;
+  if(!dendrite_weak.expired())
+   dendrite = std::dynamic_pointer_cast<NPulseMembrane>(dendrite_weak.lock());
+  else
+   dendrite = nullptr;
+  std::weak_ptr<RDK::UContainer> soma_weak = CompNeuron->GetComponentL("Soma" + sntoa(i+1), true);
+  std::shared_ptr<NPulseMembrane> soma;
+  if(!soma_weak.expired())
+   soma = std::dynamic_pointer_cast<NPulseMembrane>(soma_weak.lock());
+  else
+   soma = nullptr;
   
   // SAFETY: Check if soma is valid before accessing it
   if(!soma)
@@ -405,7 +420,14 @@ bool NSeqComparison::AReset(void)
  }
 
  // ����������� ����� ������������ ���� ������� �
- std::shared_ptr<NLTZone> ltzone = CompNeuron->GetComponentL<NLTZone>("LTZone", true);
+ std::weak_ptr<RDK::UContainer> ltzone_weak = CompNeuron->GetComponentL("LTZone", true);
+ std::shared_ptr<NLTZone> ltzone;
+ if(!ltzone_weak.expired())
+  ltzone = std::dynamic_pointer_cast<NLTZone>(ltzone_weak.lock());
+ else
+  ltzone = nullptr;
+ if(!ltzone)
+  return false;
  ltzone->Threshold = LTZThreshold;
  CompNeuron->UseAverageLTZonePotential = false;
  CompNeuron->Reset();
