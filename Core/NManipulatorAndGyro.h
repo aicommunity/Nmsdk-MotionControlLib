@@ -14,59 +14,59 @@ using namespace RDK;
 
 class RDK_LIB_TYPE NManipulatorAndGyro: public UNet
 {
-public: // Свойства
-ULProperty<double, NManipulatorAndGyro, ptPubParameter> Mass;
+public: // 
+UProperty<double, NManipulatorAndGyro, ptPubParameter> Mass;
 
-ULProperty<double, NManipulatorAndGyro, ptPubParameter> Length;
+UProperty<double, NManipulatorAndGyro, ptPubParameter> Length;
 
-public: // Входы и выходы
-/// Внешний момент
-UPropertyInputData<MDMatrix<double>, NManipulatorAndGyro, ptInput | ptPubState> InputMomentumExt;
+public: //   
+///  
+UProperty<MDMatrix<double>, NManipulatorAndGyro, ptInput | ptPubState> InputMomentumExt;
 
-/// Момент на валу двигателя
-UPropertyInputData<MDMatrix<double>, NManipulatorAndGyro, ptInput | ptPubState> InputMomentum;
+///    
+UProperty<MDMatrix<double>, NManipulatorAndGyro, ptInput | ptPubState> InputMomentum;
 
-/// Текущий угол поворота вала
-UPropertyInputData<MDMatrix<double>, NManipulatorAndGyro, ptInput | ptPubState> InputAngle;
+///    
+UProperty<MDMatrix<double>, NManipulatorAndGyro, ptInput | ptPubState> InputAngle;
 
-UPropertyOutputData<MDMatrix<double>, NManipulatorAndGyro, ptOutput | ptPubState> Output;
+UProperty<MDMatrix<double>, NManipulatorAndGyro, ptOutput | ptPubState> Output;
 
 
-protected: // Переменные состояния
+protected: //  
  double gravity_constant;
 
- public: // Методы
+ public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NManipulatorAndGyro(void);
 virtual ~NManipulatorAndGyro(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NManipulatorAndGyro* New(void);
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом 
+//     
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
-// Сброс процесса счета без потери настроек
+//      
 virtual bool AReset(void);
 
-// Выполняет расчет этого объекта
+//    
 virtual bool ACalculate(void);
 // --------------------------
 };

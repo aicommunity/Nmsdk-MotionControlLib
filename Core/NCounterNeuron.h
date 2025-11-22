@@ -16,101 +16,101 @@ using namespace RDK;
 /* *************************************************************************** */
 class RDK_LIB_TYPE NCounterNeuron: public NPulseNeuronCommon
 {
-public: // Общедоступные свойства
+public: //  
 
- /// Имя класса участка мембраны
- ULProperty<std::string, NCounterNeuron, ptPubParameter> MembraneClassName;
+ ///    
+ UProperty<std::string, NCounterNeuron, ptPubParameter> MembraneClassName;
 
- /// Имя класса генераторной зоны
- ULProperty<std::string, NCounterNeuron, ptPubParameter> LTZoneClassName;
+ ///    
+ UProperty<std::string, NCounterNeuron, ptPubParameter> LTZoneClassName;
 
- /// Имя класса источника, задающего сигнал для возбуждающего ионного механизма
- ULProperty<std::string, NCounterNeuron, ptPubParameter> ExcGeneratorClassName;
+ ///   ,      
+ UProperty<std::string, NCounterNeuron, ptPubParameter> ExcGeneratorClassName;
 
- /// Имя класса источника, задающего сигнал для тормозного ионного механизма
- ULProperty<std::string, NCounterNeuron, ptPubParameter> InhGeneratorClassName;
-
-
- /// До скольки будет считать счётчик
- /// и в то же время число участков мембраны, которое будет у тела нейрона
- ULProperty<int, NCounterNeuron, ptPubParameter> MaxCount;
-
- /// До скольки уже досчитал счётчик
- /// и в то же время число участков мембраны тела нейрона уже подключено
- ULProperty<int, NCounterNeuron, ptPubParameter> CurCount;
+ ///   ,      
+ UProperty<std::string, NCounterNeuron, ptPubParameter> InhGeneratorClassName;
 
 
-public: // Входы и выходы
- /// Входной сигнал на компонент
- UPropertyInputData<MDMatrix<double>, NCounterNeuron, ptInput | ptPubState> Input;
+ ///     
+ ///        ,     
+ UProperty<int, NCounterNeuron, ptPubParameter> MaxCount;
 
-protected: // Данные
+ ///     
+ ///            
+ UProperty<int, NCounterNeuron, ptPubParameter> CurCount;
 
-/// Участки мембраны нейрона
+
+public: //   
+ ///    
+ UProperty<MDMatrix<double>, NCounterNeuron, ptInput | ptPubState> Input;
+
+protected: // 
+
+///   
 vector<UEPtr<NPulseMembrane> > Soma;
 
-/// Старое значение количества участков мембраны, необходимое для перестраивания компонента
+///     ,    
 int OldNumSoma;
 
-protected: // Временные переменные
-/// Метка, что на входе фиксируется тот же импульс, что и на предыдущем такте
-/// За время импульса происходит несколько тактов, и поэтому входное значение > 0
-/// на очередном такте не должно воприниматься как новый импульс, если TheSamePulse == true
+protected: //  
+/// ,       ,     
+///      ,     > 0
+///         ,  TheSamePulse == true
 bool TheSamePulse = false;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NCounterNeuron(void);
 virtual ~NCounterNeuron(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NCounterNeuron* New(void);
 // --------------------------
 
 protected:
  // --------------------------
- // Скрытые методы управления компонентами
+ //    
  // --------------------------
 
- /// Выполняет завершающие пользовательские действия
- /// при добавлении дочернего компонента в этот объект
- // Метод будет вызван только если comp был успешно добавлен в список компонент
+ ///    
+ ///       
+ //      comp      
  virtual bool AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer = 0);
 
- /// Выполняет предварительные пользовательские действия
- /// при удалении дочернего компонента из этого объекта
- // Метод будет вызван только если comp существует в списке компонент
+ ///    
+ ///       
+ //      comp    
  virtual bool ADelComponent(UEPtr<UContainer> comp);
 
  // --------------------------
 
 protected:
 // --------------------------
-// Методы управления общедоступными свойствами
+//    
 // --------------------------
 
-/// Установка имени класса участка мембраны
+///     
 bool SetMembraneClassName(const std::string &value);
 
-/// Установка имени класса генераторной зоны
+///     
 bool SetLTZoneClassName(const std::string &value);
 
-/// Установка имени класса источника, задающего сигнал для возбуждающего ионного механизма
+///    ,      
 bool SetExcGeneratorClassName(const std::string &value);
 
-/// Установка имени класса источника, задающего сигнал для тормозного ионного механизма
+///    ,      
 bool SetInhGeneratorClassName(const std::string &value);
 
-/// Установка ограничения для счётчика
+///    
 bool SetMaxCount(const int &value);
 
-/// Установка начала отсчёта для счётчика
+///     
 bool SetCurCount(const int &value);
 
 // --------------------------
@@ -118,13 +118,13 @@ bool SetCurCount(const int &value);
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
 // Reset computation
@@ -133,7 +133,7 @@ virtual bool AReset(void);
 // Execute math. computations of current object on current step
 virtual bool ACalculate(void);
 
-/// Создание необходимых связей в нейроне для переданной сомы
+///        
 bool CreateSomaLinks(UEPtr<NPulseMembrane> soma);
 
 // --------------------------

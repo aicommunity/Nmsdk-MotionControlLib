@@ -20,16 +20,16 @@ namespace NMSDK {
 //class NEngineMotionControl;
 class RDK_LIB_TYPE NPositionControlElement: public UNet
 {
-public: // Свойства
-RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> CurrentPosition;
-RDK::ULProperty<MDMatrix<double>, NPositionControlElement> TargetPosition;
-RDK::ULProperty<string, NPositionControlElement> InputNeuronType;
-RDK::ULProperty<string, NPositionControlElement> ControlNeuronType;
-RDK::ULProperty<bool, NPositionControlElement> ExternalControl;
-RDK::ULProperty<bool, NPositionControlElement, ptPubState> RememberState;
-RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> Delta;
+public: // 
+RDK::UProperty<MDMatrix<double>, NPositionControlElement, ptPubState> CurrentPosition;
+RDK::UProperty<MDMatrix<double>, NPositionControlElement, ptPubParameter> TargetPosition;
+RDK::UProperty<string, NPositionControlElement, ptPubParameter> InputNeuronType;
+RDK::UProperty<string, NPositionControlElement, ptPubParameter> ControlNeuronType;
+RDK::UProperty<bool, NPositionControlElement, ptPubParameter> ExternalControl;
+RDK::UProperty<bool, NPositionControlElement, ptPubState> RememberState;
+RDK::UProperty<MDMatrix<double>, NPositionControlElement, ptPubState> Delta;
 
-public: // Переменные состояния
+public: //  
 vector<NNet*> InputNeurons;
 vector<NNet*> ControlNeurons;
 vector<NNet*> PreControlNeurons;
@@ -38,16 +38,16 @@ vector<NNet*> PostInputNeurons;
 
 vector<UNet*> Generators;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NPositionControlElement(void);
 virtual ~NPositionControlElement(void);
 // --------------------------
 
 // ---------------------
-// Методы управления параметрами
+//   
 // ---------------------
 bool SetInputNeuronType(const string &value);
 bool SetControlNeuronType(const string &value);
@@ -55,34 +55,34 @@ bool SetExternalControl(const bool &value);
 // ---------------------
 
 // ---------------------
-// Методы управления переменными состояния
+//    
 // ---------------------
 // ---------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NPositionControlElement* New(void);
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом
+//    
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
-// Сброс процесса счета без потери настроек
+//      
 virtual bool AReset(void);
 
-// Выполняет расчет этого объекта
+//    
 virtual bool ACalculate(void);
 // --------------------------
 template <typename T>

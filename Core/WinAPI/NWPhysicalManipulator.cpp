@@ -57,39 +57,39 @@ NWPhysicalManipulator::NWPhysicalManipulator(void)
  DMFreeServo=0;
  DMSetMinPWM=0;
 
-// Диапазоны по току (моменту)
+// Р”РёР°РїР°Р·РѕРЅС‹ РїРѕ С‚РѕРєСѓ (РјРѕРјРµРЅС‚Сѓ)
  AddLookupProperty("MinMoment",ptPubParameter,new UVProperty<double,NWPhysicalManipulator>(this,&MinMoment));
  AddLookupProperty("MaxMoment",ptPubParameter,new UVProperty<double,NWPhysicalManipulator>(this,&MaxMoment));
 
-// Диапазоны по углу
+// Р”РёР°РїР°Р·РѕРЅС‹ РїРѕ СѓРіР»Сѓ
  AddLookupProperty("MinAngle",ptPubParameter,new UVProperty<double,NWPhysicalManipulator>(this,&MinAngle));
  AddLookupProperty("MaxAngle",ptPubParameter,new UVProperty<double,NWPhysicalManipulator>(this,&MaxAngle));
 
-//Дипазоны по входному напряжению
+//Р”РёРїР°Р·РѕРЅС‹ РїРѕ РІС…РѕРґРЅРѕРјСѓ РЅР°РїСЂСЏР¶РµРЅРёСЋ
  AddLookupProperty("MinVoltage",ptPubParameter,new UVProperty<double,NWPhysicalManipulator>(this,&MinVoltage));
  AddLookupProperty("MaxVoltage",ptPubParameter,new UVProperty<double,NWPhysicalManipulator>(this,&MaxVoltage));
 
-// Найденные диапазоны по току
+// РќР°Р№РґРµРЅРЅС‹Рµ РґРёР°РїР°Р·РѕРЅС‹ РїРѕ С‚РѕРєСѓ
  AddLookupProperty("FoundMinForce",ptPubState,new UVProperty<double,NWPhysicalManipulator>(this,&FoundMinForce));
  AddLookupProperty("FoundMaxForce",ptPubState,new UVProperty<double,NWPhysicalManipulator>(this,&FoundMaxForce));
 
-// Найденные диапазоны по скорости
+// РќР°Р№РґРµРЅРЅС‹Рµ РґРёР°РїР°Р·РѕРЅС‹ РїРѕ СЃРєРѕСЂРѕСЃС‚Рё
  AddLookupProperty("FoundMinSpeed",ptPubState,new UVProperty<double,NWPhysicalManipulator>(this,&FoundMinSpeed));
  AddLookupProperty("FoundMaxSpeed",ptPubState,new UVProperty<double,NWPhysicalManipulator>(this,&FoundMaxSpeed));
 
-// Множитель выходного упрвляющего напряжения
+// РњРЅРѕР¶РёС‚РµР»СЊ РІС‹С…РѕРґРЅРѕРіРѕ СѓРїСЂРІР»СЏСЋС‰РµРіРѕ РЅР°РїСЂСЏР¶РµРЅРёСЏ
  AddLookupProperty("OutputMul",ptPubParameter,new UVProperty<double,NWPhysicalManipulator>(this,&OutputMul));
 
-// Длительность управляющего воздействия
+// Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ СѓРїСЂР°РІР»СЏСЋС‰РµРіРѕ РІРѕР·РґРµР№СЃС‚РІРёСЏ
  AddLookupProperty("TimeDuration",ptPubParameter,new UVProperty<double,NWPhysicalManipulator>(this,&TimeDuration));
 
-// Минимальная величина управляющего воздействия
+// РњРёРЅРёРјР°Р»СЊРЅР°СЏ РІРµР»РёС‡РёРЅР° СѓРїСЂР°РІР»СЏСЋС‰РµРіРѕ РІРѕР·РґРµР№СЃС‚РІРёСЏ
  AddLookupProperty("MinControlVoltage",ptPubParameter,new UVProperty<double,NWPhysicalManipulator>(this,&MinControlVoltage));
 
-// Шаг по накоплению в контроллере за 1мс
+// РЁР°Рі РїРѕ РЅР°РєРѕРїР»РµРЅРёСЋ РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ Р·Р° 1РјСЃ
  AddLookupProperty("AccumulationStep",ptPubParameter,new UVProperty<int,NWPhysicalManipulator>(this,&NWPhysicalManipulator::SetAccumulationStep,&NWPhysicalManipulator::GetAccumulationStep));
 
-// Шаг по разряду в контроллере за 1мс
+// РЁР°Рі РїРѕ СЂР°Р·СЂСЏРґСѓ РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ Р·Р° 1РјСЃ
  AddLookupProperty("DissociationStep",ptPubParameter,new UVProperty<int,NWPhysicalManipulator>(this,&NWPhysicalManipulator::SetDissociationStep,&NWPhysicalManipulator::GetDissociationStep));
 
  AddLookupProperty("EmulatorMode",ptPubParameter,new UVProperty<bool,NWPhysicalManipulator>(this,&EmulatorMode));
@@ -98,17 +98,17 @@ NWPhysicalManipulator::NWPhysicalManipulator(void)
 
  AddLookupProperty("ServoNumber",ptPubParameter,new UVProperty<int ,NWPhysicalManipulator>(this,&ServoNumber));
 
-// Режим работы dll манипулятора
+// Р РµР¶РёРј СЂР°Р±РѕС‚С‹ dll РјР°РЅРёРїСѓР»СЏС‚РѕСЂР°
  AddLookupProperty("DllManipulatorMode",ptPubParameter,new UVProperty<int ,NWPhysicalManipulator>(this,&DllManipulatorMode));
 
-// Максимум счетчика пропусков задания управляющего воздействия
+// РњР°РєСЃРёРјСѓРј СЃС‡РµС‚С‡РёРєР° РїСЂРѕРїСѓСЃРєРѕРІ Р·Р°РґР°РЅРёСЏ СѓРїСЂР°РІР»СЏСЋС‰РµРіРѕ РІРѕР·РґРµР№СЃС‚РІРёСЏ
  AddLookupProperty("MaxSendCounter",ptPubParameter,new UVProperty<int ,NWPhysicalManipulator>(this,&MaxSendCounter));
 
-// Максимум счетчика пропусков считывания данных
+// РњР°РєСЃРёРјСѓРј СЃС‡РµС‚С‡РёРєР° РїСЂРѕРїСѓСЃРєРѕРІ СЃС‡РёС‚С‹РІР°РЅРёСЏ РґР°РЅРЅС‹С…
  AddLookupProperty("MaxReadCounter",ptPubParameter,new UVProperty<int ,NWPhysicalManipulator>(this,&MaxReadCounter));
 
 
-// Состояния выходных нейронов
+// РЎРѕСЃС‚РѕСЏРЅРёСЏ РІС‹С…РѕРґРЅС‹С… РЅРµР№СЂРѕРЅРѕРІ
  AddLookupProperty("PulseState",ptPubState,new UVProperty<vector<int> ,NWPhysicalManipulator>(this,&PulseState));
 
  AddLookupProperty("PreviousAngles",ptPubState,new UVProperty<vector<double> ,NWPhysicalManipulator>(this,&PreviousAngles));
@@ -121,10 +121,10 @@ NWPhysicalManipulator::NWPhysicalManipulator(void)
 
  AddLookupProperty("AngleSpeed",ptPubState,new UVProperty<double ,NWPhysicalManipulator>(this,&AngleSpeed));
 
-// Выходное управляющее напряжение
+// Р’С‹С…РѕРґРЅРѕРµ СѓРїСЂР°РІР»СЏСЋС‰РµРµ РЅР°РїСЂСЏР¶РµРЅРёРµ
  AddLookupProperty("OutputVoltage",ptPubState,new UVProperty<double ,NWPhysicalManipulator>(this,&OutputVoltage));
 
-// Входное управляющее напряжение
+// Р’С…РѕРґРЅРѕРµ СѓРїСЂР°РІР»СЏСЋС‰РµРµ РЅР°РїСЂСЏР¶РµРЅРёРµ
  AddLookupProperty("InputVoltage",ptPubState,new UVProperty<double ,NWPhysicalManipulator>(this,&InputVoltage));
 }
 
@@ -134,9 +134,9 @@ NWPhysicalManipulator::~NWPhysicalManipulator(void)
 // --------------------------
 
 // --------------------------
-// Методы управления железом
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ Р¶РµР»РµР·РѕРј
 // --------------------------
-// Загрузка DLL
+// Р—Р°РіСЂСѓР·РєР° DLL
 bool NWPhysicalManipulator::LoadManipulatorDll(void)
 {
  if(!WindowHandle)
@@ -145,7 +145,7 @@ bool NWPhysicalManipulator::LoadManipulatorDll(void)
  if(ManipulatorDLL)
   return true;
 
- // Идентификатор библиотеки
+ // РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ Р±РёР±Р»РёРѕС‚РµРєРё
  ManipulatorDLL=LoadLibraryA("RoboLib.dll");
 
  if(!ManipulatorDLL)
@@ -182,7 +182,7 @@ bool NWPhysicalManipulator::LoadManipulatorDll(void)
  return true;
 }
 
-// Выгрузка DLL
+// Р’С‹РіСЂСѓР·РєР° DLL
 bool NWPhysicalManipulator::UnLoadManipulatorDll(void)
 {
  if(!ManipulatorDLL)
@@ -220,7 +220,7 @@ bool NWPhysicalManipulator::UnLoadManipulatorDll(void)
  return true;
 }
 
-// Инициализация манипулятора
+// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјР°РЅРёРїСѓР»СЏС‚РѕСЂР°
 bool NWPhysicalManipulator::InitManipulator(void)
 {
  if(!ManipulatorDLL)
@@ -235,7 +235,7 @@ bool NWPhysicalManipulator::InitManipulator(void)
  return res;
 }
 
-// Деинициализация манипулятора
+// Р”РµРёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РјР°РЅРёРїСѓР»СЏС‚РѕСЂР°
 bool NWPhysicalManipulator::UnInitManipulator(void)
 {
  if(!ManipulatorDLL)
@@ -247,7 +247,7 @@ bool NWPhysicalManipulator::UnInitManipulator(void)
  return true;
 }
 
-// Шаг по накоплению в контроллере за 1мс
+// РЁР°Рі РїРѕ РЅР°РєРѕРїР»РµРЅРёСЋ РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ Р·Р° 1РјСЃ
 const int& NWPhysicalManipulator::GetAccumulationStep(void) const
 {
  return AccumulationStep;
@@ -256,7 +256,7 @@ const int& NWPhysicalManipulator::GetAccumulationStep(void) const
 bool NWPhysicalManipulator::SetAccumulationStep(const int &value)
 {
  AccumulationStep=value;
- // Отправка
+ // РћС‚РїСЂР°РІРєР°
  if(ManipulatorDLL && !EmulatorMode && DMSetNeiroParam)
  {
   DMSetNeiroParam(AccumulationStep,DissociationStep);
@@ -265,7 +265,7 @@ bool NWPhysicalManipulator::SetAccumulationStep(const int &value)
  return true;
 }
 
-// Шаг по разряду в контроллере за 1мс
+// РЁР°Рі РїРѕ СЂР°Р·СЂСЏРґСѓ РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ Р·Р° 1РјСЃ
 const int& NWPhysicalManipulator::GetDissociationStep(void) const
 {
  return DissociationStep;
@@ -274,7 +274,7 @@ const int& NWPhysicalManipulator::GetDissociationStep(void) const
 bool NWPhysicalManipulator::SetDissociationStep(const int &value)
 {
  DissociationStep=value;
- // Отправка
+ // РћС‚РїСЂР°РІРєР°
  if(ManipulatorDLL && !EmulatorMode && DMSetNeiroParam)
  {
   DMSetNeiroParam(AccumulationStep,DissociationStep);
@@ -285,9 +285,9 @@ bool NWPhysicalManipulator::SetDissociationStep(const int &value)
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NWPhysicalManipulator* NWPhysicalManipulator::New(void)
 {
  return new NWPhysicalManipulator;
@@ -297,7 +297,7 @@ NWPhysicalManipulator* NWPhysicalManipulator::New(void)
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NWPhysicalManipulator::ADefault(void)
 {
  //TimeStep=1000;
@@ -305,10 +305,10 @@ bool NWPhysicalManipulator::ADefault(void)
 
 // Mode=0;
 
- // Шаг по накоплению в контроллере за 1мс
+ // РЁР°Рі РїРѕ РЅР°РєРѕРїР»РµРЅРёСЋ РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ Р·Р° 1РјСЃ
  AccumulationStep=100;
 
- // Шаг по разряду в контроллере за 1мс
+ // РЁР°Рі РїРѕ СЂР°Р·СЂСЏРґСѓ РІ РєРѕРЅС‚СЂРѕР»Р»РµСЂРµ Р·Р° 1РјСЃ
  DissociationStep=5;
 
  NumAnglesHistory=2;
@@ -316,15 +316,15 @@ bool NWPhysicalManipulator::ADefault(void)
 
  DllManipulatorMode=2;
 
- // Диапазоны по току (моменту)
+ // Р”РёР°РїР°Р·РѕРЅС‹ РїРѕ С‚РѕРєСѓ (РјРѕРјРµРЅС‚Сѓ)
  MinMoment=-0.7;
  MaxMoment=0.7;
 
- // Диапазоны по углу
+ // Р”РёР°РїР°Р·РѕРЅС‹ РїРѕ СѓРіР»Сѓ
  MinAngle=0;
  MaxAngle=190;
 
- //Дипазоны по входному напряжению
+ //Р”РёРїР°Р·РѕРЅС‹ РїРѕ РІС…РѕРґРЅРѕРјСѓ РЅР°РїСЂСЏР¶РµРЅРёСЋ
  MinVoltage=-5;
  MaxVoltage=5;
 
@@ -348,10 +348,10 @@ bool NWPhysicalManipulator::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NWPhysicalManipulator::ABuild(void)
 {
  return true;
@@ -426,7 +426,7 @@ bool NWPhysicalManipulator::ACalculate(void)
  return true;
 }
 
-/// Отправляет камере команду на движение
+/// РћС‚РїСЂР°РІР»СЏРµС‚ РєР°РјРµСЂРµ РєРѕРјР°РЅРґСѓ РЅР° РґРІРёР¶РµРЅРёРµ
 void NWPhysicalManipulator::SendCommand(void)
 {
  while (!SendThreadTerminated)
@@ -440,7 +440,7 @@ void NWPhysicalManipulator::SendCommand(void)
   {
    boost::mutex::scoped_lock lock(SendMutex);
    long long diff_time=CalcDiffTime(GetCurrentStartupTime(),LastSentTime);
-   if(DllManipulatorMode == 2 /* командный режим */ || EmulatorMode)
+   if(DllManipulatorMode == 2 /* РєРѕРјР°РЅРґРЅС‹Р№ СЂРµР¶РёРј */ || EmulatorMode)
    {
 	if(diff_time>MaxSendCounter)
 	{
@@ -452,7 +452,7 @@ void NWPhysicalManipulator::SendCommand(void)
 	 boost::this_thread::sleep(boost::posix_time::milliseconds(MaxSendCounter-int(diff_time)));
    }
 /*   else
-   if(DllManipulatorMode == 3) // Нейроуправление
+   if(DllManipulatorMode == 3) // РќРµР№СЂРѕСѓРїСЂР°РІР»РµРЅРёРµ
    {
 	if(NumInputs<1)
 	 return true;
@@ -529,9 +529,9 @@ void NWPhysicalManipulator::ReadData(void)
 
 
 // --------------------------
-// Вспомогательные методы
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РјРµС‚РѕРґС‹
 // --------------------------
-// Производит считывание входных данных
+// РџСЂРѕРёР·РІРѕРґРёС‚ СЃС‡РёС‚С‹РІР°РЅРёРµ РІС…РѕРґРЅС‹С… РґР°РЅРЅС‹С…
 bool NWPhysicalManipulator::ReadManipulatorData(void)
 {
  unsigned char buffer[100];
@@ -581,11 +581,11 @@ bool NWPhysicalManipulator::ReadManipulatorData(void)
 
 
   angle=(angle*3.141)/180-3.14/2;
-//  POutputData[1].Double[0]=((angle-MinAngle)*(3.14/2+3.14/2))/(MaxAngle-MinAngle)-3.14/2;  // Угол
-  SafeOutput[1]=angle;//(angle*3.141)/180-3.14/2;  // Угол
+//  POutputData[1].Double[0]=((angle-MinAngle)*(3.14/2+3.14/2))/(MaxAngle-MinAngle)-3.14/2;  // РЈРіРѕР»
+  SafeOutput[1]=angle;//(angle*3.141)/180-3.14/2;  // РЈРіРѕР»
 
   if(MaxMoment-MinMoment != 0)
-   SafeOutput[0]=(((force-MinMoment)*(10+10))/(MaxMoment-MinMoment)-10);  // Момент
+   SafeOutput[0]=(((force-MinMoment)*(10+10))/(MaxMoment-MinMoment)-10);  // РњРѕРјРµРЅС‚
 
   PreviousAngles.push_back(SafeOutput[1]);
   AnglesTimes.push_back(GetTickCount());
@@ -597,7 +597,7 @@ bool NWPhysicalManipulator::ReadManipulatorData(void)
   }
 
   if(PreviousAngles.size()<NumAnglesHistory)
-   SafeOutput[2]=speed; // Угловая скорость
+   SafeOutput[2]=speed; // РЈРіР»РѕРІР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ
   else
   {
    if(!EmulatorMode)
@@ -630,17 +630,17 @@ bool NWPhysicalManipulator::ReadManipulatorData(void)
 
    double minspeed=-max(fabs(FoundMinSpeed),fabs(FoundMaxSpeed));
    double maxspeed=-minspeed;
-   // Масштабируем
+   // РњР°СЃС€С‚Р°Р±РёСЂСѓРµРј
    if(maxspeed-minspeed != 0)
-	SafeOutput[2]=(((AngleSpeed-minspeed)*(2.0*M_PI+2.0*M_PI))/(maxspeed-minspeed)-2.0*M_PI);  // Момент
+	SafeOutput[2]=(((AngleSpeed-minspeed)*(2.0*M_PI+2.0*M_PI))/(maxspeed-minspeed)-2.0*M_PI);  // РњРѕРјРµРЅС‚
 
-//   POutputData[2].Double[0]=AngleSpeed; // Угловая скорость
+//   POutputData[2].Double[0]=AngleSpeed; // РЈРіР»РѕРІР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ
   }
  return true;
 }
 
 
-// Формирование управляющего сигнала манипулятором в командном режиме
+// Р¤РѕСЂРјРёСЂРѕРІР°РЅРёРµ СѓРїСЂР°РІР»СЏСЋС‰РµРіРѕ СЃРёРіРЅР°Р»Р° РјР°РЅРёРїСѓР»СЏС‚РѕСЂРѕРј РІ РєРѕРјР°РЅРґРЅРѕРј СЂРµР¶РёРјРµ
 bool NWPhysicalManipulator::MoveServoByCommand(void)
 {
  bool res=true;
@@ -685,11 +685,11 @@ bool NWPhysicalManipulator::MoveServoByCommand(void)
  return res;
 }
 
-// Формирование управляющего сигнала манипулятором в нейро режиме
+// Р¤РѕСЂРјРёСЂРѕРІР°РЅРёРµ СѓРїСЂР°РІР»СЏСЋС‰РµРіРѕ СЃРёРіРЅР°Р»Р° РјР°РЅРёРїСѓР»СЏС‚РѕСЂРѕРј РІ РЅРµР№СЂРѕ СЂРµР¶РёРјРµ
 bool NWPhysicalManipulator::MoveServoByNeuro(void)
 {
  bool res=true;
-   // Отправка
+   // РћС‚РїСЂР°РІРєР°
    for(int i=0;i<int(PulseState.size());i++)
    {
 	if(PulseState[i] >= 1)

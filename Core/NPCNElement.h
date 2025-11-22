@@ -12,110 +12,110 @@ namespace NMSDK {
 //class NEngineMotionControl;
 class RDK_LIB_TYPE NPCNElement: public NPositionControlElement
 {
-public: // Свойства
-RDK::UPropertyInputData<MDMatrix<double>,NPCNElement> MotionControl;
-RDK::ULProperty<bool, NPCNElement> SimControl;
+public: // 
+RDK::UProperty<MDMatrix<double>,NPCNElement, ptPubParameter> MotionControl;
+RDK::UProperty<bool, NPCNElement, ptPubParameter> SimControl;
 
-public: // Переменные состояния
+public: //  
 
 //vector<UNet*> Generators;
-// Нейроны обученные распознавать положения левых контуров в порядке
-// PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
-// PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
+//        
+// PIN(0,0) PIN(0,1), ..., PIN(0,M) -    0 
+// PIN(1,0) PIN(1,1), ..., PIN(1,M) -    1 
 vector<vector<NNet*> > LeftInputNeurons;
 
-// Нейроны обученные распознавать положения правых контуров в порядке
-// PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
-// PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
+//        
+// PIN(0,0) PIN(0,1), ..., PIN(0,M) -    0 
+// PIN(1,0) PIN(1,1), ..., PIN(1,M) -    1 
 vector<vector<NNet*> > RightInputNeurons;
 
-// Нейроны обученные распознавать положения левых контуров в порядке
-// PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
-// PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
+//        
+// PIN(0,0) PIN(0,1), ..., PIN(0,M) -    0 
+// PIN(1,0) PIN(1,1), ..., PIN(1,M) -    1 
 vector<vector<NNet*> > LeftControlNeurons;
 
-// Нейроны обученные распознавать положения правых контуров в порядке
-// PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
-// PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
+//        
+// PIN(0,0) PIN(0,1), ..., PIN(0,M) -    0 
+// PIN(1,0) PIN(1,1), ..., PIN(1,M) -    1 
 vector<vector<NNet*> > RightControlNeurons;
 
-// Нейроны обученные распознавать положения левых контуров в порядке
-// PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
-// PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
+//        
+// PIN(0,0) PIN(0,1), ..., PIN(0,M) -    0 
+// PIN(1,0) PIN(1,1), ..., PIN(1,M) -    1 
 vector<vector<NNet*> > LeftAfferentNeurons;
 
-// Нейроны обученные распознавать положения правых контуров в порядке
-// PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
-// PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
+//        
+// PIN(0,0) PIN(0,1), ..., PIN(0,M) -    0 
+// PIN(1,0) PIN(1,1), ..., PIN(1,M) -    1 
 vector<vector<NNet*> > RightAfferentNeurons;
 
-// Нейроны обученные распознавать положения левых контуров в порядке
-// PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
-// PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
+//        
+// PIN(0,0) PIN(0,1), ..., PIN(0,M) -    0 
+// PIN(1,0) PIN(1,1), ..., PIN(1,M) -    1 
 vector<vector<NNet*> > LeftPostAfferentNeurons;
 
-// Нейроны обученные распознавать положения правых контуров в порядке
-// PIN(0,0) PIN(0,1), ..., PIN(0,M) - нейроны всех УЭ 0 контура
-// PIN(1,0) PIN(1,1), ..., PIN(1,M) - нейроны всех УЭ 1 контура
+//        
+// PIN(0,0) PIN(0,1), ..., PIN(0,M) -    0 
+// PIN(1,0) PIN(1,1), ..., PIN(1,M) -    1 
 vector<vector<NNet*> > RightPostAfferentNeurons;
 
-// Генераторы левых контуров в порядке
-// G(0,0) G(0,1), ..., G(0,M) - генераторы всех УЭ 0 контура
-// G(1,0) G(1,1), ..., G(1,M) - генераторы всех УЭ 1 контура
+//     
+// G(0,0) G(0,1), ..., G(0,M) -    0 
+// G(1,0) G(1,1), ..., G(1,M) -    1 
 vector<vector<UNet*> > LeftGenerators;
 
-// Генераторы правых контуров в порядке
-// G(0,0) G(0,1), ..., G(0,M) - генераторы всех УЭ 0 контура
-// G(1,0) G(1,1), ..., G(1,M) - генераторы всех УЭ 1 контура
+//     
+// G(0,0) G(0,1), ..., G(0,M) -    0 
+// G(1,0) G(1,1), ..., G(1,M) -    1 
 vector<vector<UNet*> > RightGenerators;
 
 
 UEPtr<NEngineMotionControl> MotionControlElement;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NPCNElement(void);
 virtual ~NPCNElement(void);
 // --------------------------
 
 // ---------------------
-// Методы управления параметрами
+//   
 // ---------------------
 bool SetInputNeuronType(const string &value);
 bool SetControlNeuronType(const string &value);
 // ---------------------
 
 // ---------------------
-// Методы управления переменными состояния
+//    
 // ---------------------
 // ---------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NPCNElement* New(void);
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом
+//    
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
-// Сброс процесса счета без потери настроек
+//      
 virtual bool AReset(void);
 
-// Выполняет расчет этого объекта
+//    
 virtual bool ACalculate(void);
 // --------------------------
 bool CreateNeurons(void);

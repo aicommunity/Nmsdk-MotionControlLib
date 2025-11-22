@@ -4,7 +4,7 @@
 #include "NEyeRetinaMuscleCore.h"
 
 // --------------------------
-// Конструкторы и деструкторы
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
 // --------------------------
 NEyeRetinaMuscleCore::NEyeRetinaMuscleCore(void)
 {
@@ -26,9 +26,9 @@ NEyeRetinaMuscleCore::~NEyeRetinaMuscleCore(void)
 // --------------------------
 
 // --------------------------
-// Методы управления параметрами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°РјРё
 // --------------------------
-// Устанавливает разрешение сетчатки и ширину рецептивного поля мышцы
+// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЂР°Р·СЂРµС€РµРЅРёРµ СЃРµС‚С‡Р°С‚РєРё Рё С€РёСЂРёРЅСѓ СЂРµС†РµРїС‚РёРІРЅРѕРіРѕ РїРѕР»СЏ РјС‹С€С†С‹
 void NEyeRetinaMuscleCore::SetRetinaRecParams(size_t rwidth, size_t rheight, size_t mrecsize)
 {
  if(RetinaOutWidth == rwidth && RetinaOutHeight == rheight && MRecSize == mrecsize)
@@ -44,9 +44,9 @@ void NEyeRetinaMuscleCore::SetRetinaRecParams(size_t rwidth, size_t rheight, siz
 
 
 // --------------------------
-// Методы счета
+// РњРµС‚РѕРґС‹ СЃС‡РµС‚Р°
 // --------------------------
-// Установка значений указателей рецептивных полей
+// РЈСЃС‚Р°РЅРѕРІРєР° Р·РЅР°С‡РµРЅРёР№ СѓРєР°Р·Р°С‚РµР»РµР№ СЂРµС†РµРїС‚РёРІРЅС‹С… РїРѕР»РµР№
 void NEyeRetinaMuscleCore::SetMRecData(unsigned char *retinaout)
 {
  size_t i,j,k;
@@ -75,7 +75,7 @@ void NEyeRetinaMuscleCore::SetMRecData(unsigned char *retinaout)
    }
 }
 
-// Сброс модели (с сохранением настроек параметров)
+// РЎР±СЂРѕСЃ РјРѕРґРµР»Рё (СЃ СЃРѕС…СЂР°РЅРµРЅРёРµРј РЅР°СЃС‚СЂРѕРµРє РїР°СЂР°РјРµС‚СЂРѕРІ)
 void NEyeRetinaMuscleCore::Reset(void)
 {
  if(!ReadyState)
@@ -87,26 +87,26 @@ void NEyeRetinaMuscleCore::Reset(void)
  memset(RightInputs,0,sizeof(pbyte)*RetinaOutHeight*MRecSize);
 }
 
-// Сброс модели с восстановлением настроек по умолчанию
+// РЎР±СЂРѕСЃ РјРѕРґРµР»Рё СЃ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµРј РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 void NEyeRetinaMuscleCore::ResetDefaults(void)
 {
 
  Reset();
 }
 
-// Расчет
+// Р Р°СЃС‡РµС‚
 void NEyeRetinaMuscleCore::Calculate(void)
 {
- // Заглушка!
+ // Р—Р°РіР»СѓС€РєР°!
  CalcMuscles();
 }
 // --------------------------
 
 
 // --------------------------
-// Скрытые методы счета
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СЃС‡РµС‚Р°
 // --------------------------
-// Удаляет все структуры данных
+// РЈРґР°Р»СЏРµС‚ РІСЃРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ РґР°РЅРЅС‹С…
 void NEyeRetinaMuscleCore::DestroyDataStructure(void)
 {
  if(!ReadyState)
@@ -131,7 +131,7 @@ void NEyeRetinaMuscleCore::DestroyDataStructure(void)
  ReadyState=false;
 }
 
-// Создает структуры данных
+// РЎРѕР·РґР°РµС‚ СЃС‚СЂСѓРєС‚СѓСЂС‹ РґР°РЅРЅС‹С…
 void NEyeRetinaMuscleCore::CreateDataStructure(void)
 {
  if(ReadyState)
@@ -147,7 +147,7 @@ void NEyeRetinaMuscleCore::CreateDataStructure(void)
 }
 
 
-// Произодит расчет мышц
+// РџСЂРѕРёР·РѕРґРёС‚ СЂР°СЃС‡РµС‚ РјС‹С€С†
 void NEyeRetinaMuscleCore::CalcMuscles(void)
 {
     //

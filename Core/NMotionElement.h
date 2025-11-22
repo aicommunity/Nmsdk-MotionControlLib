@@ -20,94 +20,94 @@ namespace NMSDK {
 
 class RDK_LIB_TYPE NMotionElement: public UNet
 {
-public: // Параметры
-// Число контуров управления
-RDK::ULProperty<int, NMotionElement> NumControlLoops;
+public: // 
+//   
+RDK::UProperty<int, NMotionElement, ptPubParameter> NumControlLoops;
 
-// Массив флагов включения контуров управления
-RDK::ULProperty<std::vector<int>, NMotionElement> EnableControlLoopFlags;
+//     
+RDK::UProperty<std::vector<int>, NMotionElement, ptPubParameter> EnableControlLoopFlags;
 
-// Массив режимов связи между нейронами
-// 0 - прямая связь (без интернейронов)
-// 1 - связь через интернейроны
-// 2 - тормозная связь через интернейроны(L-R) + прямая возб. связь(L-L)
-// 3 - возб. связь через интернейроны(L-L) + прямая тормозная связь(L-R)
-// 4 - как 1, но нет перекрестного влияния на мотонейроны
-RDK::ULProperty<std::vector<int>, NMotionElement> LinkModes;
+//     
+// 0 -   ( )
+// 1 -   
+// 2 -    (L-R) +  . (L-L)
+// 3 - .   (L-L) +   (L-R)
+// 4 -  1,      
+RDK::UProperty<std::vector<int>, NMotionElement, ptPubParameter> LinkModes;
 
-// Режим наличия вставочных нейронов
-// Внимание, этот режим аналогичен тому, при котором каждый контур имеет
-// свой мотонейрон
-// 0 - вставочных нейронов нет
-// 1 - вставочные нейроны есть
-RDK::ULProperty<int, NMotionElement> InterneuronPresentMode;
+//    
+// ,    ,     
+//  
+// 0 -   
+// 1 -   
+RDK::UProperty<int, NMotionElement, ptPubParameter> InterneuronPresentMode;
 
-// Режим наличия клеток Реншоу
-// 0 - клеток Реншоу нет
-// 1 - клетки Реншоу есть
-RDK::ULProperty<int, NMotionElement> RenshowMode;
-// Режим наличия пейсмейкерных нейронов
-// 0 - пейсмейкерных нейронов нет
-// 1 - пейсмейкерные нейроны есть
-RDK::ULProperty<int, NMotionElement> PacemakerMode;
+//    
+// 0 -   
+// 1 -   
+RDK::UProperty<int, NMotionElement, ptPubParameter> RenshowMode;
+//    
+// 0 -   
+// 1 -   
+RDK::UProperty<int, NMotionElement, ptPubParameter> PacemakerMode;
 
-// Режим наличия возвратного торможения
-// 0 - возвратного торможения нет
-// 1 - возвратное торможение только на выходном (мотонейроне)
-// 2 - возвратное торможение индвидуально на каждом нейроне контура
-RDK::ULProperty<int, NMotionElement> RecurrentInhibitionMode;
+//    
+// 0 -   
+// 1 -      ()
+// 2 -       
+RDK::UProperty<int, NMotionElement, ptPubParameter> RecurrentInhibitionMode;
 
-// Режим ветвления мотонейрона при подключении возвратного торможения
-// 0 - возвратный тормозный вход на том же дендрите, что и контур управления
-// (если контуров N, то на каждый контур свой тормозный вход).
-// 1 - возвратный тормозный вход на отдельном дендрите нейрона
-RDK::ULProperty<int, NMotionElement> RecurrentInhibitionBranchMode;
+//       
+// 0 -       ,    
+// (  N,       ).
+// 1 -       
+RDK::UProperty<int, NMotionElement, ptPubParameter> RecurrentInhibitionBranchMode;
 
-// Режим ветвления мотонейрона при подключении контуров управления
-// 0 - все контура подключаются к одному участку мембраны
-// 1 - каждый контур имеет свой участок мембраны
-RDK::ULProperty<int, NMotionElement> MotoneuronBranchMode;
+//       
+// 0 -       
+// 1 -      
+RDK::UProperty<int, NMotionElement, ptPubParameter> MotoneuronBranchMode;
 
-// Режим подключения управления с верхних уровней
-// 0 - управление по контуру подключается соседним синапсом туда же куда идет
-// выход с афферента.
-// 1 - управление по контуру подключается на отдельный дендрит к тому же нейрону
-// который принимает выход с афферента
-RDK::ULProperty<int, NMotionElement> ExternalControlMode;
+//      
+// 0 -          
+//   .
+// 1 -           
+//     
+RDK::UProperty<int, NMotionElement, ptPubParameter> ExternalControlMode;
 
-// Имя объекта для нейронов
-RDK::ULProperty<string, NMotionElement> NeuroObjectName;
-// Имя объекта для афферентных нейронов
-RDK::ULProperty<string, NMotionElement> AfferentObjectName;
+//    
+RDK::UProperty<string, NMotionElement, ptPubParameter> NeuroObjectName;
+//     
+RDK::UProperty<string, NMotionElement, ptPubParameter> AfferentObjectName;
 
-public: // Переменные состояния
+public: //  
 
-// Флаг первоначальной инициализации количества контуров управления
+//      
 bool  isNumControlLoopsInitialized;
 
-public: // Временные переменные
-// Указатели на афферентные нейроны
+public: //  
+//    
 UCPointer<NAfferentNeuron, NMotionElement> Afferents;
 
-// Указатели на генераторы внешнего управления
+//     
 UCPointer<NPulseGenerator, NMotionElement> ExternalControlGenerators;
 
-// Указатели на результирующие нейроны (мотонейроны)
+//     ()
 UCPointer<NPulseNeuron, NMotionElement> Motoneurons;
 
 string netclassname;
 string neuron_class_name;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NMotionElement(void);
 virtual ~NMotionElement(void);
 // --------------------------
 
 // --------------------------
-// Методы управления параметрами
+//   
 // --------------------------
 bool SetNumControlLoops(const int &value);
 bool SetEnableControlLoopFlags(const std::vector<int> &value);
@@ -124,11 +124,11 @@ bool SetAfferentObjectName(const string &value);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 
 // --------------------------
 public:
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NMotionElement* New(void);
 // --------------------------
 
@@ -136,13 +136,13 @@ virtual NMotionElement* New(void);
 // Proctected computation methods
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
 // Reset computation
@@ -151,44 +151,44 @@ virtual bool AReset(void);
 // Execute math. computations of current object on current step
 virtual bool ACalculate(void);
 
-// Создает структуру в соответствии с текущими значениями параметров
-// Если структура существует, то пытается модифицировать ее с минимальными изменениями
+//        
+//   ,       
 void CreateStructure(void);
 
-// Создает внутренние связи в соответствии с текущими значениями параметров
+//         
 void CreateInternalLinks(void);
 
-// Сохраняет и восстанавливает внешние связи
+//     
 void BackupExternalLinks(void);
 void RestoreExternalLinks(void);
 // --------------------------
-// Методы создания элементов СУ
+//    
 // --------------------------
-// Создание пары мотонейронов
+//   
 bool CreateMotoneurons();
 
-// Создание связки афферентных нейронов
+//    
 bool CreateAfferents();
 
-// Создание интернейронов
+//  
 bool CreateInterneurons();
 
-// Создание связей между афферентными нейронами и мотонейронами
-// 0 - прямая связь (без интернейронов)
-// 1 - связь через интернейроны
-// 2 - связь через интернейроны(L-R) + прямая связь(L-L)
-// 3 - связь через интернейроны(L-L) + прямая связь(L-R)
+//       
+// 0 -   ( )
+// 1 -   
+// 2 -   (L-R) +  (L-L)
+// 3 -   (L-L) +  (L-R)
 bool LinkMotoneurons();
 
-// Создание связей с клетками Реншоу
+//     
 bool LinkRenshow();
 
-// Создание связей с пейсмейкерными нейронами
+//     
 bool LinkPM();
 
-// Создание связи между двумя нейронами
-// 0 - возбуждающая связь
-// 1 - тормозная связь
+//     
+// 0 -  
+// 1 -  
 bool LinkNeuron(const string &source, const string &sink, int mode, const string &branch = "Soma1");
 };
 

@@ -20,110 +20,110 @@ namespace NMSDK {
 
 class RDK_LIB_TYPE NTrajectoryElement: public UNet
 {
-public: // Параметры
-/// Имя класса нейрона
-ULProperty<std::string, NTrajectoryElement, ptPubParameter> NeuronClassName;
+public: // 
+///   
+UProperty<std::string, NTrajectoryElement, ptPubParameter> NeuronClassName;
 
-/// Выходной сигнал на следующий элемент траектории
-UPropertyOutputData<MDMatrix<double>, NTrajectoryElement, ptOutput | ptPubState> Output;
+///      
+UProperty<MDMatrix<double>, NTrajectoryElement, ptOutput | ptPubState> Output;
 
-///Номер слоя, к которому принадлежит элемент траетории
-/// (для использования в MazeMemory, по умолчанию = 0)
-ULProperty<int, NTrajectoryElement, ptPubParameter> Layer;
+/// ,     
+/// (   MazeMemory,   = 0)
+UProperty<int, NTrajectoryElement, ptPubParameter> Layer;
 
-//Input_u_top, Input_u_tcn и Input_y_pcn2 - перемычки от входа блока к синапсам соответсвующих сегментов дендритов (согласно схеме),
-//заданы для упрощения покдлючения блока NTrajectoryElement к внешним источникам.
-//Сейчас неактивны, т.к. нет возможности в коде подключить Input блока к Input синапса.
-//Могут быть полезны, если такая возможность появится - тогда в код необходимо добавить построение связей между
-//Input_u_top, Input_u_tcn и Input_y_pcn2 и соответствующими синапсами
+//Input_u_top, Input_u_tcn  Input_y_pcn2 -          ( ),
+//     NTrajectoryElement   .
+// , ..      Input   Input .
+//  ,     -        
+//Input_u_top, Input_u_tcn  Input_y_pcn2   
 
-/// Входной сигнал с высшего уровня управления (
-//UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_top;
+///       (
+//UProperty<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_top;
 
-/// Входной сигнал c предыдущего элемента траектории
-//UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_tcn;
+///   c   
+//UProperty<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_tcn;
 
-/// Входной сигнал с предыдущего уровня системы управления - PCN2 (блоки NMultiPositionControl),
-/// сигнализирует о выполнении текущего элемента траектории
-//UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_y_pcn2;
+///        - PCN2 ( NMultiPositionControl),
+///      
+//UProperty<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_y_pcn2;
 
-///Возможные направления движения из данного элемента траектории
-/// (возможные действия в данной ситуации)
-/// параметр необходим для использования в MazeMemory
+///      
+/// (    )
+///      MazeMemory
 std::vector<UEPtr<NTrajectoryElement>> Forwards;
 
-///Последнее выбранное направление движения
-/// (возможное действие)
-///параметр необходим для использования в MazeMemory
+///   
+/// ( )
+///     MazeMemory
 //int CurrentForward;
 
-///Обратные связи из данной точки
-///параметр необходим для использования в MazeMemory
+///    
+///     MazeMemory
 std::vector<UEPtr<NTrajectoryElement>> Backwards;
 
-///Последняя выбранная обратная связь
-///параметр необходим для использования в MazeMemory
+///   
+///     MazeMemory
 //int CurrentBackward;
 
-///Все связи из данной точки
-///параметр необходим для использования в MazeMemory
+///    
+///     MazeMemory
 std::vector<UEPtr<NPulseSynapse>> Paths;
 
-///Последняя выбранная связь (прямая или обратная)
-///параметр необходим для использования в MazeMemory
+///   (  )
+///     MazeMemory
 int LastUsedPath;
 
-///Связь, по которой попали из предыдущего TE в текущий
-///параметр необходим для использования в MazeMemory
+///,      TE  
+///     MazeMemory
 //int UsedPath;
 
 
 
 
 protected:
-///Внутренние нейроны элемента траектории
+///   
 std::vector<UEPtr<NPulseNeuron>> Neurons;
 
-///Размер сомы нейронов 1 и 2
+///   1  2
 int SomaSize;
 
-///Размер дендритов нейрона 1
+///   1
 std::vector<int> DendSizes1;
 
-///Размер дендритов нейрона 2
+///   2
 std::vector<int> DendSizes2;
 
 
 
 
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NTrajectoryElement(void);
 virtual ~NTrajectoryElement(void);
 // --------------------------
 
 // --------------------------
-// Методы управления параметрами
+//   
 // --------------------------
-/// Имя класса, создающего нейрон
+///  ,  
 bool SetNeuronClassName(const std::string &value);
 
-///Номер слоя, к которому принадлежит элемент траетории
-/// (для использования в MazeMemory, по умолчанию = 0)
+/// ,     
+/// (   MazeMemory,   = 0)
 bool SetLayer(const int &value);
 
 
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 
 // --------------------------
 public:
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NTrajectoryElement* New(void);
 // --------------------------
 
@@ -131,13 +131,13 @@ virtual NTrajectoryElement* New(void);
 // Proctected computation methods
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
 // Reset computation

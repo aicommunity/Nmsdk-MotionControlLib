@@ -25,69 +25,69 @@ using namespace RDK;
 /* *************************************************************************** */
 class RDK_LIB_TYPE NManipulator: public UNet
 {
-public: // Общедоступные свойства
-/// Электромагнитный коэффициент
-ULProperty<double, NManipulator, ptPubParameter> EMFactor;
+public: //  
+///  
+UProperty<double, NManipulator, ptPubParameter> EMFactor;
 
-/// Индуктивность
-ULProperty<double, NManipulator, ptPubParameter> Inductance;
+/// 
+UProperty<double, NManipulator, ptPubParameter> Inductance;
 
-/// Сопротивление
-ULProperty<double, NManipulator, ptPubParameter> Resistance;
+/// 
+UProperty<double, NManipulator, ptPubParameter> Resistance;
 
-public: // Входы и выходы
-/// Входной сигнал
-UPropertyInputData<MDMatrix<double>, NManipulator, ptInput | ptPubState> Input;
+public: //   
+///  
+UProperty<MDMatrix<double>, NManipulator, ptInput | ptPubState> Input;
 
-/// Выходой сигнал
-UPropertyOutputData<MDMatrix<double>, NManipulator, ptOutput | ptPubState> Output;
+///  
+UProperty<MDMatrix<double>, NManipulator, ptOutput | ptPubState> Output;
 
-protected: // Временные переменные
-// Ток якоря
+protected: //  
+//  
 double Current;
 
-// Класс рисования
+//  
 UGraphics Graphics;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NManipulator(void);
 virtual ~NManipulator(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NManipulator* New(void);
 // --------------------------
 
 protected:
 // --------------------------
-// Методы управления общедоступными свойствами
+//    
 // --------------------------
-// Электромагнитный коэффициент
+//  
 bool SetEMFactor(const double &value);
 
-// Индуктивность
+// 
 bool SetInductance(const double &value);
 
-// Сопротивление
+// 
 bool SetResistance(const double &value);
 // --------------------------
 
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
 // Reset computation

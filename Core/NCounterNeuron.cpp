@@ -32,9 +32,9 @@ NCounterNeuron::~NCounterNeuron(void)
 
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NCounterNeuron* NCounterNeuron::New(void)
 {
  return new NCounterNeuron;
@@ -43,20 +43,20 @@ NCounterNeuron* NCounterNeuron::New(void)
 
 
 // --------------------------
-// Скрытые методы управления компонентами
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РєРѕРјРїРѕРЅРµРЅС‚Р°РјРё
 // --------------------------
 
-/// Выполняет завершающие пользовательские действия
-/// при добавлении дочернего компонента в этот объект
-// Метод будет вызван только если comp был успешно добавлен в список компонент
+/// Р’С‹РїРѕР»РЅСЏРµС‚ Р·Р°РІРµСЂС€Р°СЋС‰РёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґРµР№СЃС‚РІРёСЏ
+/// РїСЂРё РґРѕР±Р°РІР»РµРЅРёРё РґРѕС‡РµСЂРЅРµРіРѕ РєРѕРјРїРѕРЅРµРЅС‚Р° РІ СЌС‚РѕС‚ РѕР±СЉРµРєС‚
+// РњРµС‚РѕРґ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ С‚РѕР»СЊРєРѕ РµСЃР»Рё comp Р±С‹Р» СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅ РІ СЃРїРёСЃРѕРє РєРѕРјРїРѕРЅРµРЅС‚
 bool NCounterNeuron::AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer)
 {
  return true;
 }
 
-/// Выполняет предварительные пользовательские действия
-/// при удалении дочернего компонента из этого объекта
-// Метод будет вызван только если comp существует в списке компонент
+/// Р’С‹РїРѕР»РЅСЏРµС‚ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґРµР№СЃС‚РІРёСЏ
+/// РїСЂРё СѓРґР°Р»РµРЅРёРё РґРѕС‡РµСЂРЅРµРіРѕ РєРѕРјРїРѕРЅРµРЅС‚Р° РёР· СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
+// РњРµС‚РѕРґ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ С‚РѕР»СЊРєРѕ РµСЃР»Рё comp СЃСѓС‰РµСЃС‚РІСѓРµС‚ РІ СЃРїРёСЃРєРµ РєРѕРјРїРѕРЅРµРЅС‚
 bool NCounterNeuron::ADelComponent(UEPtr<UContainer> comp)
 {
  return true;
@@ -66,38 +66,38 @@ bool NCounterNeuron::ADelComponent(UEPtr<UContainer> comp)
 
 
 // --------------------------
-// Методы управления общедоступными свойствами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±С‰РµРґРѕСЃС‚СѓРїРЅС‹РјРё СЃРІРѕР№СЃС‚РІР°РјРё
 // --------------------------
 
-/// Установка имени класса участка мембраны
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёРјРµРЅРё РєР»Р°СЃСЃР° СѓС‡Р°СЃС‚РєР° РјРµРјР±СЂР°РЅС‹
 bool NCounterNeuron::SetMembraneClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка имени класса генераторной зоны
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёРјРµРЅРё РєР»Р°СЃСЃР° РіРµРЅРµСЂР°С‚РѕСЂРЅРѕР№ Р·РѕРЅС‹
 bool NCounterNeuron::SetLTZoneClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка имени класса источника, задающего сигнал для возбуждающего ионного механизма
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёРјРµРЅРё РєР»Р°СЃСЃР° РёСЃС‚РѕС‡РЅРёРєР°, Р·Р°РґР°СЋС‰РµРіРѕ СЃРёРіРЅР°Р» РґР»СЏ РІРѕР·Р±СѓР¶РґР°СЋС‰РµРіРѕ РёРѕРЅРЅРѕРіРѕ РјРµС…Р°РЅРёР·РјР°
 bool NCounterNeuron::SetExcGeneratorClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка имени класса источника, задающего сигнал для тормозного ионного механизма
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёРјРµРЅРё РєР»Р°СЃСЃР° РёСЃС‚РѕС‡РЅРёРєР°, Р·Р°РґР°СЋС‰РµРіРѕ СЃРёРіРЅР°Р» РґР»СЏ С‚РѕСЂРјРѕР·РЅРѕРіРѕ РёРѕРЅРЅРѕРіРѕ РјРµС…Р°РЅРёР·РјР°
 bool NCounterNeuron::SetInhGeneratorClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка ограничения для счётчика
+/// РЈСЃС‚Р°РЅРѕРІРєР° РѕРіСЂР°РЅРёС‡РµРЅРёСЏ РґР»СЏ СЃС‡С‘С‚С‡РёРєР°
 bool NCounterNeuron::SetMaxCount(const int &value)
 {
  if(value < 1)
@@ -115,7 +115,7 @@ bool NCounterNeuron::SetMaxCount(const int &value)
  return true;
 }
 
-/// Установка начала отсчёта для счётчика
+/// РЈСЃС‚Р°РЅРѕРІРєР° РЅР°С‡Р°Р»Р° РѕС‚СЃС‡С‘С‚Р° РґР»СЏ СЃС‡С‘С‚С‡РёРєР°
 bool NCounterNeuron::SetCurCount(const int &value)
 {
  if(value < 0 || value > MaxCount)
@@ -132,26 +132,26 @@ bool NCounterNeuron::SetCurCount(const int &value)
 // Computation methods
 // --------------------------
 
-/// Создание необходимых связей в нейроне для переданной сомы
+/// РЎРѕР·РґР°РЅРёРµ РЅРµРѕР±С…РѕРґРёРјС‹С… СЃРІСЏР·РµР№ РІ РЅРµР№СЂРѕРЅРµ РґР»СЏ РїРµСЂРµРґР°РЅРЅРѕР№ СЃРѕРјС‹
 bool NCounterNeuron::CreateSomaLinks(UEPtr<NPulseMembrane> soma)
 {
  bool res = true;
  UEPtr<NPulseChannelCommon> channel1, channel2;
 
- // Находим каналы мембраны
+ // РќР°С…РѕРґРёРј РєР°РЅР°Р»С‹ РјРµРјР±СЂР°РЅС‹
  channel1 = dynamic_pointer_cast<NPulseChannelCommon>(soma->GetComponent("ExcChannel",true));
  channel2 = dynamic_pointer_cast<NPulseChannelCommon>(soma->GetComponent("InhChannel",true));
 
- // Подключаем сому к низкопороговой зоне нейрона
+ // РџРѕРґРєР»СЋС‡Р°РµРј СЃРѕРјСѓ Рє РЅРёР·РєРѕРїРѕСЂРѕРіРѕРІРѕР№ Р·РѕРЅРµ РЅРµР№СЂРѕРЅР°
  if(channel1)
   res&=CreateLink(channel1->GetLongName(this),"Output",LTZone->GetLongName(this),"Inputs");
  if(channel2)
   res&=CreateLink(channel2->GetLongName(this),"Output",LTZone->GetLongName(this),"Inputs");
 
- // Устанавливаем обратную связь
+ // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РѕР±СЂР°С‚РЅСѓСЋ СЃРІСЏР·СЊ
  res&=CreateLink(LTZone->GetLongName(this), "Output", soma->GetLongName(this), "InputFeedbackSignal");
 
- // Связываем начальные значения мощностей ионных каналов и каналы
+ // РЎРІСЏР·С‹РІР°РµРј РЅР°С‡Р°Р»СЊРЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ РјРѕС‰РЅРѕСЃС‚РµР№ РёРѕРЅРЅС‹С… РєР°РЅР°Р»РѕРІ Рё РєР°РЅР°Р»С‹
  if(channel1)
   res&=CreateLink("NegGenerator", "Output",channel1->GetLongName(this),"ChannelInputs");
  if(channel2)
@@ -160,7 +160,7 @@ bool NCounterNeuron::CreateSomaLinks(UEPtr<NPulseMembrane> soma)
  return res;
 }
 
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NCounterNeuron::ADefault(void)
 {
  if(!NPulseNeuronCommon::ADefault())
@@ -179,10 +179,10 @@ bool NCounterNeuron::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NCounterNeuron::ABuild(void)
 {
  bool res = true;
@@ -190,14 +190,14 @@ bool NCounterNeuron::ABuild(void)
  UEPtr<NPulseMembrane> membr;
  UEPtr<UNet> gen_pos, gen_neg;
 
- // Добавляем компонент генераторной зоны нейрона
+ // Р”РѕР±Р°РІР»СЏРµРј РєРѕРјРїРѕРЅРµРЅС‚ РіРµРЅРµСЂР°С‚РѕСЂРЅРѕР№ Р·РѕРЅС‹ РЅРµР№СЂРѕРЅР°
  LTZone = AddMissingComponent<NLTZone>("LTZone", LTZoneClassName);
  LTZone->SetCoord(MVector<double,3>(25.3, 3.67 + MaxCount, 0));
- LTZone->Threshold = 0.0029;  // Подобранное значение порога
+ LTZone->Threshold = 0.0029;  // РџРѕРґРѕР±СЂР°РЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ РїРѕСЂРѕРіР°
  LTZone->DisconnectAll("Output");
 
 
- // Добавляем источник, задающий сигнал для возбуждающего ионного механизма
+ // Р”РѕР±Р°РІР»СЏРµРј РёСЃС‚РѕС‡РЅРёРє, Р·Р°РґР°СЋС‰РёР№ СЃРёРіРЅР°Р» РґР»СЏ РІРѕР·Р±СѓР¶РґР°СЋС‰РµРіРѕ РёРѕРЅРЅРѕРіРѕ РјРµС…Р°РЅРёР·РјР°
  if(!ExcGeneratorClassName->empty())
  {
   gen_pos = AddMissingComponent<UNet>("PosGenerator", ExcGeneratorClassName);
@@ -207,7 +207,7 @@ bool NCounterNeuron::ABuild(void)
  else
   DelComponent("PosGenerator");
 
- // Добавляем источник, задающий сигнал для тормозного ионного механизма
+ // Р”РѕР±Р°РІР»СЏРµРј РёСЃС‚РѕС‡РЅРёРє, Р·Р°РґР°СЋС‰РёР№ СЃРёРіРЅР°Р» РґР»СЏ С‚РѕСЂРјРѕР·РЅРѕРіРѕ РёРѕРЅРЅРѕРіРѕ РјРµС…Р°РЅРёР·РјР°
  if(!InhGeneratorClassName->empty())
  {
   gen_neg=AddMissingComponent<UNet>("NegGenerator", InhGeneratorClassName);
@@ -218,24 +218,24 @@ bool NCounterNeuron::ABuild(void)
   DelComponent("NegGenerator");
 
 
- // Удаляем лишние участки мембраны
+ // РЈРґР°Р»СЏРµРј Р»РёС€РЅРёРµ СѓС‡Р°СЃС‚РєРё РјРµРјР±СЂР°РЅС‹
  for(int i = MaxCount; i < OldNumSoma; i++)
   DelComponent(std::string("Soma")+sntoa(i+1));
 
 
- // Добавляем участки мембраны
+ // Р”РѕР±Р°РІР»СЏРµРј СѓС‡Р°СЃС‚РєРё РјРµРјР±СЂР°РЅС‹
  Soma.resize(MaxCount);
  for(int i = 0; i < MaxCount; i++)
  {
-  // Добавляем компонент учатска мембраны
+  // Р”РѕР±Р°РІР»СЏРµРј РєРѕРјРїРѕРЅРµРЅС‚ СѓС‡Р°С‚СЃРєР° РјРµРјР±СЂР°РЅС‹
   membr = AddMissingComponent<NPulseMembrane>(std::string("Soma")+sntoa(i+1), MembraneClassName);
   membr->SetCoord(MVector<double,3>(15.7, 4.67+ i * 2, 0));
   Soma[i] = membr;
 
- // Устанавливаем связи только для первых CurCount сом
+ // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЃРІСЏР·Рё С‚РѕР»СЊРєРѕ РґР»СЏ РїРµСЂРІС‹С… CurCount СЃРѕРј
   if(i < CurCount)
    res &= CreateSomaLinks(membr);
-  // Удаляем лишние связи участков мембраны
+  // РЈРґР°Р»СЏРµРј Р»РёС€РЅРёРµ СЃРІСЏР·Рё СѓС‡Р°СЃС‚РєРѕРІ РјРµРјР±СЂР°РЅС‹
   else
   {
    UEPtr<NPulseChannelCommon> channel1 = dynamic_pointer_cast<NPulseChannelCommon>(membr->GetComponent("ExcChannel",true));
@@ -264,25 +264,25 @@ bool NCounterNeuron::AReset(void)
 bool NCounterNeuron::ACalculate(void)
 {
   bool res = true;
- // Передача информации со входа компонента на синапсы
- // !!! Нельзя подключаться к синапсам напрямую, тк возникает сбой в генераторе
+ // РџРµСЂРµРґР°С‡Р° РёРЅС„РѕСЂРјР°С†РёРё СЃРѕ РІС…РѕРґР° РєРѕРјРїРѕРЅРµРЅС‚Р° РЅР° СЃРёРЅР°РїСЃС‹
+ // !!! РќРµР»СЊР·СЏ РїРѕРґРєР»СЋС‡Р°С‚СЊСЃСЏ Рє СЃРёРЅР°РїСЃР°Рј РЅР°РїСЂСЏРјСѓСЋ, С‚Рє РІРѕР·РЅРёРєР°РµС‚ СЃР±РѕР№ РІ РіРµРЅРµСЂР°С‚РѕСЂРµ
  for(int i = 0; i < CurCount; i++)
  {
   NPulseSynapseCommon *synapse = Soma[i]->GetExcitatorySynapses(0);
   *synapse->Input = *Input;
  }
 
- // Фиксируем прохождение импульса
- if((Input()(0,0) >= 0.01) && (!TheSamePulse)) // Пришёл (первый) запускающий импульс
+ // Р¤РёРєСЃРёСЂСѓРµРј РїСЂРѕС…РѕР¶РґРµРЅРёРµ РёРјРїСѓР»СЊСЃР°
+ if((Input()(0,0) >= 0.01) && (!TheSamePulse)) // РџСЂРёС€С‘Р» (РїРµСЂРІС‹Р№) Р·Р°РїСѓСЃРєР°СЋС‰РёР№ РёРјРїСѓР»СЊСЃ
  {
-  TheSamePulse = true;  // Ставим метку: импульс начался
+  TheSamePulse = true;  // РЎС‚Р°РІРёРј РјРµС‚РєСѓ: РёРјРїСѓР»СЊСЃ РЅР°С‡Р°Р»СЃСЏ
  }
- else if ((Input()(0,0) <= 0.01) && (TheSamePulse))  // Сигнал на входе упал
+ else if ((Input()(0,0) <= 0.01) && (TheSamePulse))  // РЎРёРіРЅР°Р» РЅР° РІС…РѕРґРµ СѓРїР°Р»
  {
-  TheSamePulse = false;  // Ставим метку: импульс закончился
+  TheSamePulse = false;  // РЎС‚Р°РІРёРј РјРµС‚РєСѓ: РёРјРїСѓР»СЊСЃ Р·Р°РєРѕРЅС‡РёР»СЃСЏ
   if (CurCount < MaxCount)
   {
-   // Добавляем новую связь, увеличиваем счёт
+   // Р”РѕР±Р°РІР»СЏРµРј РЅРѕРІСѓСЋ СЃРІСЏР·СЊ, СѓРІРµР»РёС‡РёРІР°РµРј СЃС‡С‘С‚
    CurCount++;
    res &= CreateSomaLinks(Soma[CurCount - 1]);
   }

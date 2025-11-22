@@ -44,9 +44,9 @@ NSuppressionUnit::~NSuppressionUnit(void)
 
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NSuppressionUnit* NSuppressionUnit::New(void)
 {
  return new NSuppressionUnit;
@@ -55,20 +55,20 @@ NSuppressionUnit* NSuppressionUnit::New(void)
 
 
 // --------------------------
-// Скрытые методы управления компонентами
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РєРѕРјРїРѕРЅРµРЅС‚Р°РјРё
 // --------------------------
 
-/// Выполняет завершающие пользовательские действия
-/// при добавлении дочернего компонента в этот объект
-// Метод будет вызван только если comp был успешно добавлен в список компонент
+/// Р’С‹РїРѕР»РЅСЏРµС‚ Р·Р°РІРµСЂС€Р°СЋС‰РёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґРµР№СЃС‚РІРёСЏ
+/// РїСЂРё РґРѕР±Р°РІР»РµРЅРёРё РґРѕС‡РµСЂРЅРµРіРѕ РєРѕРјРїРѕРЅРµРЅС‚Р° РІ СЌС‚РѕС‚ РѕР±СЉРµРєС‚
+// РњРµС‚РѕРґ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ С‚РѕР»СЊРєРѕ РµСЃР»Рё comp Р±С‹Р» СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅ РІ СЃРїРёСЃРѕРє РєРѕРјРїРѕРЅРµРЅС‚
 bool NSuppressionUnit::AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer)
 {
  return true;
 }
 
-/// Выполняет предварительные пользовательские действия
-/// при удалении дочернего компонента из этого объекта
-// Метод будет вызван только если comp существует в списке компонент
+/// Р’С‹РїРѕР»РЅСЏРµС‚ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґРµР№СЃС‚РІРёСЏ
+/// РїСЂРё СѓРґР°Р»РµРЅРёРё РґРѕС‡РµСЂРЅРµРіРѕ РєРѕРјРїРѕРЅРµРЅС‚Р° РёР· СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
+// РњРµС‚РѕРґ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ С‚РѕР»СЊРєРѕ РµСЃР»Рё comp СЃСѓС‰РµСЃС‚РІСѓРµС‚ РІ СЃРїРёСЃРєРµ РєРѕРјРїРѕРЅРµРЅС‚
 bool NSuppressionUnit::ADelComponent(UEPtr<UContainer> comp)
 {
  return true;
@@ -78,30 +78,30 @@ bool NSuppressionUnit::ADelComponent(UEPtr<UContainer> comp)
 
 
 // --------------------------
-// Методы управления общедоступными свойствами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±С‰РµРґРѕСЃС‚СѓРїРЅС‹РјРё СЃРІРѕР№СЃС‚РІР°РјРё
 // --------------------------
-/// Установка имени класса генераторов импульсов
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёРјРµРЅРё РєР»Р°СЃСЃР° РіРµРЅРµСЂР°С‚РѕСЂРѕРІ РёРјРїСѓР»СЊСЃРѕРІ
 bool NSuppressionUnit::SetPulseGeneratorClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка имени класса нейрона
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёРјРµРЅРё РєР»Р°СЃСЃР° РЅРµР№СЂРѕРЅР°
 bool NSuppressionUnit::SetNeuronClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка имени класса синапсов
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёРјРµРЅРё РєР»Р°СЃСЃР° СЃРёРЅР°РїСЃРѕРІ
 bool NSuppressionUnit::SetSynapseClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка частоты импульсов подавляющего генератора
+/// РЈСЃС‚Р°РЅРѕРІРєР° С‡Р°СЃС‚РѕС‚С‹ РёРјРїСѓР»СЊСЃРѕРІ РїРѕРґР°РІР»СЏСЋС‰РµРіРѕ РіРµРЅРµСЂР°С‚РѕСЂР°
 bool NSuppressionUnit::SetSuppressionFreq(const double &value)
 {
  if(value < 0)
@@ -115,7 +115,7 @@ bool NSuppressionUnit::SetSuppressionFreq(const double &value)
  return true;
 }
 
-/// Установка длительности импульсов
+/// РЈСЃС‚Р°РЅРѕРІРєР° РґР»РёС‚РµР»СЊРЅРѕСЃС‚Рё РёРјРїСѓР»СЊСЃРѕРІ
 bool NSuppressionUnit::SetPulseLength(const double &value)
 {
  if(value <= 0)
@@ -139,7 +139,7 @@ bool NSuppressionUnit::SetPulseLength(const double &value)
  return true;
 }
 
-/// Установка амплитуды импульсов
+/// РЈСЃС‚Р°РЅРѕРІРєР° Р°РјРїР»РёС‚СѓРґС‹ РёРјРїСѓР»СЊСЃРѕРІ
 bool NSuppressionUnit::SetAmplitude(const double &value)
 {
  if(value <= 0)
@@ -163,7 +163,7 @@ bool NSuppressionUnit::SetAmplitude(const double &value)
  return true;
 }
 
-/// Установка используемого порога низкопороговой зоны нейрона
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёСЃРїРѕР»СЊР·СѓРµРјРѕРіРѕ РїРѕСЂРѕРіР° РЅРёР·РєРѕРїРѕСЂРѕРіРѕРІРѕР№ Р·РѕРЅС‹ РЅРµР№СЂРѕРЅР°
 bool NSuppressionUnit::SetLTZThreshold(const double &value)
 {
  if(value <= 0)
@@ -181,7 +181,7 @@ bool NSuppressionUnit::SetLTZThreshold(const double &value)
  return true;
 }
 
-/// Установка момента времени Т1, с которого начинается подавление сигнала
+/// РЈСЃС‚Р°РЅРѕРІРєР° РјРѕРјРµРЅС‚Р° РІСЂРµРјРµРЅРё Рў1, СЃ РєРѕС‚РѕСЂРѕРіРѕ РЅР°С‡РёРЅР°РµС‚СЃСЏ РїРѕРґР°РІР»РµРЅРёРµ СЃРёРіРЅР°Р»Р°
 bool NSuppressionUnit::SetDelay1(const double &value)
 {
  if (!DelayGenerators[0])
@@ -192,13 +192,13 @@ bool NSuppressionUnit::SetDelay1(const double &value)
  return true;
 }
 
-/// Установка момента времени Т2, до которого происходит подавление сигнала
+/// РЈСЃС‚Р°РЅРѕРІРєР° РјРѕРјРµРЅС‚Р° РІСЂРµРјРµРЅРё Рў2, РґРѕ РєРѕС‚РѕСЂРѕРіРѕ РїСЂРѕРёСЃС…РѕРґРёС‚ РїРѕРґР°РІР»РµРЅРёРµ СЃРёРіРЅР°Р»Р°
 bool NSuppressionUnit::SetDelay2(const double &value)
 {
  if (!DelayGenerators[1])
   return true;
 
- if (value < DelayGenerators[0]->Delay)  // 2-я задержка не может быть меньше 1-й
+ if (value < DelayGenerators[0]->Delay)  // 2-СЏ Р·Р°РґРµСЂР¶РєР° РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РјРµРЅСЊС€Рµ 1-Р№
   DelayGenerators[1]->Delay = DelayGenerators[0]->Delay;
  else
   DelayGenerators[1]->Delay = value;
@@ -206,7 +206,7 @@ bool NSuppressionUnit::SetDelay2(const double &value)
  return true;
 }
 
-/// Установка частоты источника подавляемого сигнала (и генераторов задержек)
+/// РЈСЃС‚Р°РЅРѕРІРєР° С‡Р°СЃС‚РѕС‚С‹ РёСЃС‚РѕС‡РЅРёРєР° РїРѕРґР°РІР»СЏРµРјРѕРіРѕ СЃРёРіРЅР°Р»Р° (Рё РіРµРЅРµСЂР°С‚РѕСЂРѕРІ Р·Р°РґРµСЂР¶РµРє)
 bool NSuppressionUnit::SetSourceFreq(const double &value)
 {
  if(value < 0)
@@ -224,7 +224,7 @@ bool NSuppressionUnit::SetSourceFreq(const double &value)
  return true;
 }
 
-/// Установка задержки источника подавляемого сигнала
+/// РЈСЃС‚Р°РЅРѕРІРєР° Р·Р°РґРµСЂР¶РєРё РёСЃС‚РѕС‡РЅРёРєР° РїРѕРґР°РІР»СЏРµРјРѕРіРѕ СЃРёРіРЅР°Р»Р°
 bool NSuppressionUnit::SetSourceDelay(const double &value)
 {
  if(value < 0)
@@ -236,7 +236,7 @@ bool NSuppressionUnit::SetSourceDelay(const double &value)
  return true;
 }
 
-/// Установка значения флага транзита сигнала внешнего источника
+/// РЈСЃС‚Р°РЅРѕРІРєР° Р·РЅР°С‡РµРЅРёСЏ С„Р»Р°РіР° С‚СЂР°РЅР·РёС‚Р° СЃРёРіРЅР°Р»Р° РІРЅРµС€РЅРµРіРѕ РёСЃС‚РѕС‡РЅРёРєР°
 bool NSuppressionUnit::SetTransitInput(const bool &value)
 {
  if (!SourceGenerator)
@@ -244,8 +244,8 @@ bool NSuppressionUnit::SetTransitInput(const bool &value)
 
  SourceGenerator->UseTransitSignal = value;
 
- // Если используется источник сигнала внутри компонента, то
- // применяем к нему пользовательнские настройки
+ // Р•СЃР»Рё РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РёСЃС‚РѕС‡РЅРёРє СЃРёРіРЅР°Р»Р° РІРЅСѓС‚СЂРё РєРѕРјРїРѕРЅРµРЅС‚Р°, С‚Рѕ
+ // РїСЂРёРјРµРЅСЏРµРј Рє РЅРµРјСѓ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊРЅСЃРєРёРµ РЅР°СЃС‚СЂРѕР№РєРё
  if (!value)
  {
   SourceGenerator->Frequency = SourceFreq;
@@ -255,7 +255,7 @@ bool NSuppressionUnit::SetTransitInput(const bool &value)
  return true;
 }
 
-/// Установка значения флага использования только подавляющего сигнала
+/// РЈСЃС‚Р°РЅРѕРІРєР° Р·РЅР°С‡РµРЅРёСЏ С„Р»Р°РіР° РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ С‚РѕР»СЊРєРѕ РїРѕРґР°РІР»СЏСЋС‰РµРіРѕ СЃРёРіРЅР°Р»Р°
 bool NSuppressionUnit::SetOnlyInhibition(const bool &value)
 {
  SourceGenerator->SetActivity(!value);
@@ -263,7 +263,7 @@ bool NSuppressionUnit::SetOnlyInhibition(const bool &value)
  return true;
 }
 
-/// Установка значения флага единоразового подавления сигнала
+/// РЈСЃС‚Р°РЅРѕРІРєР° Р·РЅР°С‡РµРЅРёСЏ С„Р»Р°РіР° РµРґРёРЅРѕСЂР°Р·РѕРІРѕРіРѕ РїРѕРґР°РІР»РµРЅРёСЏ СЃРёРіРЅР°Р»Р°
 bool NSuppressionUnit::SetSingleUse(const bool &value)
 {
  for (int i = 0; i < 2; i++)
@@ -281,7 +281,7 @@ bool NSuppressionUnit::SetSingleUse(const bool &value)
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NSuppressionUnit::ADefault(void)
 {
  PulseGeneratorClassName = "NPulseGeneratorTransit";
@@ -308,22 +308,22 @@ bool NSuppressionUnit::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NSuppressionUnit::ABuild(void)
 {
  bool res = true;
 
- // Инициализируем генератор входных импульсов
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РіРµРЅРµСЂР°С‚РѕСЂ РІС…РѕРґРЅС‹С… РёРјРїСѓР»СЊСЃРѕРІ
  SourceGenerator = AddMissingComponent<NPulseGeneratorTransit>(std::string("Source"), PulseGeneratorClassName);
  SourceGenerator->SetCoord(MVector<double,3>(4.6, 3, 0));
  if (TransitInput)
-  SourceGenerator->UseTransitSignal = true;  // Включаем режим транзита сигнала от внешнего источника
+  SourceGenerator->UseTransitSignal = true;  // Р’РєР»СЋС‡Р°РµРј СЂРµР¶РёРј С‚СЂР°РЅР·РёС‚Р° СЃРёРіРЅР°Р»Р° РѕС‚ РІРЅРµС€РЅРµРіРѕ РёСЃС‚РѕС‡РЅРёРєР°
  SourceGenerator->DisconnectAll("Output");
 
- // Инициализируем генераторы управляющих импульсов
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РіРµРЅРµСЂР°С‚РѕСЂС‹ СѓРїСЂР°РІР»СЏСЋС‰РёС… РёРјРїСѓР»СЊСЃРѕРІ
  DelayGenerators.resize(2);
  for(int i = 0; i < 2; i++)
  {
@@ -332,7 +332,7 @@ bool NSuppressionUnit::ABuild(void)
   DelayGenerators[i]->DisconnectAll("Output");
  }
 
- // Инициализируем нейрон ИЛИ
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РЅРµР№СЂРѕРЅ РР›Р
  ORNeuron = AddMissingComponent<NPulseNeuron>(std::string("ORNeuron"), NeuronClassName);
  ORNeuron->SetCoord(MVector<double,3>(11.33, 7, 0));
  ORNeuron->DisconnectAll("Output");
@@ -343,13 +343,13 @@ bool NSuppressionUnit::ABuild(void)
   or_soma->Build();
  }
 
- // Инициализируем подавляющий генератор
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РїРѕРґР°РІР»СЏСЋС‰РёР№ РіРµРЅРµСЂР°С‚РѕСЂ
  ControlledGenerator = AddMissingComponent<NPulseGeneratorTransit>(std::string("ControlledGenerator"), PulseGeneratorClassName);
  ControlledGenerator->SetCoord(MVector<double,3>(18, 7, 0));
- ControlledGenerator->UsePatternOutput = true;  // Включаем режим генерации импульсов с повышенной частотой
+ ControlledGenerator->UsePatternOutput = true;  // Р’РєР»СЋС‡Р°РµРј СЂРµР¶РёРј РіРµРЅРµСЂР°С†РёРё РёРјРїСѓР»СЊСЃРѕРІ СЃ РїРѕРІС‹С€РµРЅРЅРѕР№ С‡Р°СЃС‚РѕС‚РѕР№
  ControlledGenerator->DisconnectAll("Output");
 
- // Инициализируем нейрон
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РЅРµР№СЂРѕРЅ
  Neuron = AddMissingComponent<NPulseNeuron>(std::string("Neuron"), NeuronClassName);
  Neuron->SetCoord(MVector<double,3>(18, 3, 0));
 
@@ -359,14 +359,14 @@ bool NSuppressionUnit::ABuild(void)
  ltzone->Threshold = LTZThreshold;
 
 
- // Создаём связи между элементами
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·Рё РјРµР¶РґСѓ СЌР»РµРјРµРЅС‚Р°РјРё
 
- // Создаём связь между ORNeuron и ControlledGenerator
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·СЊ РјРµР¶РґСѓ ORNeuron Рё ControlledGenerator
  if (!CheckLink("ORNeuron", "Output", "ControlledGenerator", "Input"))
   res &= CreateLink("ORNeuron", "Output", "ControlledGenerator", "Input");
 
 
- // Находим нужные элементы в Neuron
+ // РќР°С…РѕРґРёРј РЅСѓР¶РЅС‹Рµ СЌР»РµРјРµРЅС‚С‹ РІ Neuron
  UEPtr<NPulseMembrane> soma = Neuron->GetComponentL<NPulseMembrane>("Soma1", true);
  if(!soma)
  {
@@ -381,23 +381,23 @@ bool NSuppressionUnit::ABuild(void)
   return true;
  }
 
- // Создаём связь между ControlledGenerator и тормозным синапсом сомы Neuron
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·СЊ РјРµР¶РґСѓ ControlledGenerator Рё С‚РѕСЂРјРѕР·РЅС‹Рј СЃРёРЅР°РїСЃРѕРј СЃРѕРјС‹ Neuron
  if (!CheckLink("ControlledGenerator", "Output", inhsynapse->GetLongName(this), "Input"))
   res &= CreateLink("ControlledGenerator", "Output", inhsynapse->GetLongName(this), "Input");
 
- // Создаём связь между источником входного сигнала Source и синапсом сомы Neuron
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·СЊ РјРµР¶РґСѓ РёСЃС‚РѕС‡РЅРёРєРѕРј РІС…РѕРґРЅРѕРіРѕ СЃРёРіРЅР°Р»Р° Source Рё СЃРёРЅР°РїСЃРѕРј СЃРѕРјС‹ Neuron
  if (!CheckLink("Source", "Output", excsynapse->GetLongName(this), "Input"))
   res &= CreateLink("Source", "Output", excsynapse->GetLongName(this), "Input");
 
 
- // Находим составляющие компоненты ORNeuron
+ // РќР°С…РѕРґРёРј СЃРѕСЃС‚Р°РІР»СЏСЋС‰РёРµ РєРѕРјРїРѕРЅРµРЅС‚С‹ ORNeuron
  if(!or_soma)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because ORNeuron->Soma1 isn't exists: "));
   return true;
  }
 
- // Создаём связи между Delay1, Delay2 и синапсами нейрона ORNeuron
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·Рё РјРµР¶РґСѓ Delay1, Delay2 Рё СЃРёРЅР°РїСЃР°РјРё РЅРµР№СЂРѕРЅР° ORNeuron
  for (int i = 0; i < 2; i++)
  {
   NPulseSynapseCommon *or_excsynapse = or_soma->GetExcitatorySynapses(i);
@@ -407,7 +407,7 @@ bool NSuppressionUnit::ABuild(void)
    return true;
   }
 
-  // Создаём связь
+  // РЎРѕР·РґР°С‘Рј СЃРІСЏР·СЊ
   if (!CheckLink(DelayGenerators[i]->GetLongName(this), "Output", or_excsynapse->GetLongName(this), "Input"))
    res &= CreateLink(DelayGenerators[i]->GetLongName(this), "Output", or_excsynapse->GetLongName(this), "Input");
  }
@@ -451,12 +451,12 @@ bool NSuppressionUnit::AReset(void)
 // Execute math. computations of current object on current step
 bool NSuppressionUnit::ACalculate(void)
 {
- // Передаём входную информацию со входа компонента на внутренний источник,
- // если поднят соответствующий флаг
+ // РџРµСЂРµРґР°С‘Рј РІС…РѕРґРЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ СЃРѕ РІС…РѕРґР° РєРѕРјРїРѕРЅРµРЅС‚Р° РЅР° РІРЅСѓС‚СЂРµРЅРЅРёР№ РёСЃС‚РѕС‡РЅРёРє,
+ // РµСЃР»Рё РїРѕРґРЅСЏС‚ СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёР№ С„Р»Р°Рі
  if (TransitInput)
   *SourceGenerator->Input = *Input;
 
- // Передаём выходную информацию
+ // РџРµСЂРµРґР°С‘Рј РІС‹С…РѕРґРЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ
  if (OnlyInhibition)
   Output = ControlledGenerator->Output;
  else if(Neuron)
@@ -464,10 +464,10 @@ bool NSuppressionUnit::ACalculate(void)
 
  if (SingleUse)
  {
-  // Первый генератор уже сработал - выключаем
+  // РџРµСЂРІС‹Р№ РіРµРЅРµСЂР°С‚РѕСЂ СѓР¶Рµ СЃСЂР°Р±РѕС‚Р°Р» - РІС‹РєР»СЋС‡Р°РµРј
   if (DelayGenerators[0]->Frequency != 0 && ControlledGenerator->IsInPatternMode)
    DelayGenerators[0]->Frequency = 0;
-  // Второй также уже сработал - можем выключить
+  // Р’С‚РѕСЂРѕР№ С‚Р°РєР¶Рµ СѓР¶Рµ СЃСЂР°Р±РѕС‚Р°Р» - РјРѕР¶РµРј РІС‹РєР»СЋС‡РёС‚СЊ
   if (DelayGenerators[1]->Frequency != 0 && !ControlledGenerator->IsInPatternMode && DelayGenerators[0]->Frequency == 0)
    DelayGenerators[1]->Frequency = 0;
  }

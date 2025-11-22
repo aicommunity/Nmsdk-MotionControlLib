@@ -23,84 +23,84 @@ using namespace RDK;
 /* *************************************************************************** */
 class RDK_LIB_TYPE NPendulumAndCart: public UNet
 {
-public: // Общедоступные свойства
-/// Масса тележки
-ULProperty<double, NPendulumAndCart> CartMass;
+public: //  
+///  
+UProperty<double,NPendulumAndCart, ptPubParameter> CartMass;
 
-/// Масса стержня
-ULProperty<double, NPendulumAndCart> RodMass;
+///  
+UProperty<double,NPendulumAndCart, ptPubParameter> RodMass;
 
-/// Длина стержня
-ULProperty<double, NPendulumAndCart> RodLength;
+///  
+UProperty<double,NPendulumAndCart, ptPubParameter> RodLength;
 
-/// Перемещение по X
-ULProperty<double, NPendulumAndCart> OutXMovement;
+///   X
+UProperty<double,NPendulumAndCart, ptPubParameter> OutXMovement;
 
-/// Режим работы
-/// 0 - Управление внешней СУ
-/// 1 - Управление встроенным PID
-ULProperty<double, NPendulumAndCart> Mode;
-
-/// Ki
-ULProperty<double, NPendulumAndCart> Ki;
-
-/// Kd
-ULProperty<double, NPendulumAndCart> Kd;
-
-/// Kp
-ULProperty<double, NPendulumAndCart> Kp;
+///  
+/// 0 -   
+/// 1 -   PID
+UProperty<double,NPendulumAndCart, ptPubParameter> Mode;
 
 /// Ki
-ULProperty<double, NPendulumAndCart> MovementKi;
+UProperty<double,NPendulumAndCart, ptPubParameter> Ki;
 
 /// Kd
-ULProperty<double, NPendulumAndCart> MovementKd;
+UProperty<double,NPendulumAndCart, ptPubParameter> Kd;
 
 /// Kp
-ULProperty<double, NPendulumAndCart> MovementKp;
+UProperty<double,NPendulumAndCart, ptPubParameter> Kp;
 
-/// Вес управления по углу
-ULProperty<double, NPendulumAndCart> AngleWeight;
+/// Ki
+UProperty<double,NPendulumAndCart, ptPubParameter> MovementKi;
 
-/// Вес управления по перемещению
-ULProperty<double, NPendulumAndCart> MovementWeight;
+/// Kd
+UProperty<double,NPendulumAndCart, ptPubParameter> MovementKd;
 
-public: // Состояния
+/// Kp
+UProperty<double,NPendulumAndCart, ptPubParameter> MovementKp;
 
-/// Внешний момент
-ULProperty<double, NPendulumAndCart, ptPubState> ExtrenalMoment;
+///    
+UProperty<double,NPendulumAndCart, ptPubParameter> AngleWeight;
 
-public: // Входы и выходы
-UPropertyInputData<MDMatrix<double>, NPendulumAndCart, ptInput | ptPubState> Input1;
+///    
+UProperty<double,NPendulumAndCart, ptPubParameter> MovementWeight;
 
-UPropertyInputData<MDMatrix<double>, NPendulumAndCart, ptInput | ptPubState> Input2;
+public: // 
 
-/// Выходное ускорение тележки
-UPropertyOutputData<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> Acceleration;
+///  
+UProperty<double, NPendulumAndCart, ptPubState> ExtrenalMoment;
 
-/// Угол поворота стержня
-UPropertyOutputData<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> Angle;
+public: //   
+UProperty<MDMatrix<double>, NPendulumAndCart, ptInput | ptPubState> Input1;
 
-/// Выходная скорость тележки
-UPropertyOutputData<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> Speed;
+UProperty<MDMatrix<double>, NPendulumAndCart, ptInput | ptPubState> Input2;
 
-/// Перемещение тележки
-UPropertyOutputData<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> Movement;
+///   
+UProperty<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> Acceleration;
 
-/// Перемещение тележки
-UPropertyOutputData<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> MovementSpeed;
+///   
+UProperty<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> Angle;
 
-protected: // Данные
+///   
+UProperty<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> Speed;
+
+///  
+UProperty<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> Movement;
+
+///  
+UProperty<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> MovementSpeed;
+
+protected: // 
 double theta0;
 double x0;
 double y,x,movement;
 double y0;
 
-protected: // Временные переменные
+protected: //  
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NPendulumAndCart(void);
 //NPendulumAndCart(const string &name);
@@ -108,28 +108,28 @@ virtual ~NPendulumAndCart(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NPendulumAndCart* New(void);
 // --------------------------
 
 protected:
 // --------------------------
-// Методы управления общедоступными свойствами
+//    
 // --------------------------
 // --------------------------
 
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
 // Reset computation

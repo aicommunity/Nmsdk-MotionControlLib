@@ -5,9 +5,9 @@
 
 namespace NMSDK {
 
-// Методы
+// РњРµС‚РѕРґС‹
 // --------------------------
-// Конструкторы и деструкторы
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
 // --------------------------
 NEyeRetina::NEyeRetina(void)
 : CaptureImage("CaptureImage",this),
@@ -24,8 +24,8 @@ NEyeRetina::NEyeRetina(void)
   RightGanglionicOut("RightGanglionicOut",this),
   TopGanglionicOut("TopGanglionicOut",this),
   BottomGanglionicOut("BottomGanglionicOut",this),
-  // ДЛЯ ОТЛАДКИ
-  // АКТИВНОСТЬ ВХОДОВ ДЛЯ 4-ч ГЛАЗНЫХ МЫШЦ
+  // Р”Р›РЇ РћРўР›РђР”РљР
+  // РђРљРўРР’РќРћРЎРўР¬ Р’РҐРћР”РћР’ Р”Р›РЇ 4-С‡ Р“Р›РђР—РќР«РҐ РњР«РЁР¦
   LeftMuscle("LeftMuscle",this),
   RightMuscle("RightMuscle",this),
   TopMuscle("TopMuscle",this),
@@ -41,19 +41,19 @@ NEyeRetina::~NEyeRetina(void)
 
 
 // ---------------------
-// Методы управления параметрами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°РјРё
 // ---------------------
 // ---------------------
 
 // ---------------------
-// Методы управления переменными состояния
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїРµСЂРµРјРµРЅРЅС‹РјРё СЃРѕСЃС‚РѕСЏРЅРёСЏ
 // ---------------------
 // ---------------------
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NEyeRetina* NEyeRetina::New(void)
 {
  return new NEyeRetina;
@@ -62,7 +62,7 @@ NEyeRetina* NEyeRetina::New(void)
 
 
 // --------------------------
-// Скрытые методы управления счетом 
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ СЃС‡РµС‚РѕРј 
 // --------------------------
 void NEyeRetina::UpdateImages(void)
 {
@@ -84,8 +84,8 @@ if(EyeRetina.GetBiMax()==0) bmax=1;
    (*BipolarOuts)[i]=abs(EyeRetina.GetBipolarOut()[i]);
   } */
 
- // ДОБАВЛЯЮ ЦВЕТНОЕ ЗРЕНИЕ -
- // Заккоменчен старый код ------->
+ // Р”РћР‘РђР’Р›РЇР® Р¦Р’Р•РўРќРћР• Р—Р Р•РќРР• -
+ // Р—Р°РєРєРѕРјРµРЅС‡РµРЅ СЃС‚Р°СЂС‹Р№ РєРѕРґ ------->
  /*
  max=0; min=0;
  GanglionicOuts->SetRes(EyeRetina.GetGangWidth(),EyeRetina.GetGangHeight(),ubmY8);
@@ -130,7 +130,7 @@ if(EyeRetina.GetBiMax()==0) bmax=1;
 	negmax=EyeRetina.GetARetinaOut()[i];
 
  } */
- // ДОБАВЛЯЮ ЦВЕТНОЕ ЗРЕНИЕ
+ // Р”РћР‘РђР’Р›РЇР® Р¦Р’Р•РўРќРћР• Р—Р Р•РќРР•
  // -------------->
   GanglionicOuts->SetRes(EyeRetina.GetGangWidth(),EyeRetina.GetGangHeight(),ubmRGB24);
   RConeGanglionicOuts->SetRes(EyeRetina.GetGangWidth(),EyeRetina.GetGangHeight(),ubmRGB24);
@@ -140,7 +140,7 @@ if(EyeRetina.GetBiMax()==0) bmax=1;
   OnGanglionicOuts->SetRes(EyeRetina.GetGangWidth(),EyeRetina.GetGangHeight(),ubmRGB24);
   OffGanglionicOuts->SetRes(EyeRetina.GetGangWidth(),EyeRetina.GetGangHeight(),ubmRGB24);
 
- // Выводим совместно он- и офф- каналы. Выбираем цвет с максимальным откликом
+ // Р’С‹РІРѕРґРёРј СЃРѕРІРјРµСЃС‚РЅРѕ РѕРЅ- Рё РѕС„С„- РєР°РЅР°Р»С‹. Р’С‹Р±РёСЂР°РµРј С†РІРµС‚ СЃ РјР°РєСЃРёРјР°Р»СЊРЅС‹Рј РѕС‚РєР»РёРєРѕРј
  for(i=0;i<EyeRetina.GetGangWidth()*EyeRetina.GetGangHeight();i++)
   {
    if(abs(EyeRetina.GetARetinaOut()[i]) > abs(EyeRetinaRCone.GetARetinaOut()[i]) &&
@@ -170,10 +170,10 @@ if(EyeRetina.GetBiMax()==0) bmax=1;
 	   }
   }
 
- // Выводим отдельно он- и офф- каналы. Для каждого выбираем цвет с максимальным откликом
+ // Р’С‹РІРѕРґРёРј РѕС‚РґРµР»СЊРЅРѕ РѕРЅ- Рё РѕС„С„- РєР°РЅР°Р»С‹. Р”Р»СЏ РєР°Р¶РґРѕРіРѕ РІС‹Р±РёСЂР°РµРј С†РІРµС‚ СЃ РјР°РєСЃРёРјР°Р»СЊРЅС‹Рј РѕС‚РєР»РёРєРѕРј
  for(i=0;i<EyeRetina.GetGangWidth()*EyeRetina.GetGangHeight();i++)
   {
-   // Он- канал
+   // РћРЅ- РєР°РЅР°Р»
    if(EyeRetina.GetARetinaOut()[i] >= EyeRetinaRCone.GetARetinaOut()[i] &&
 	  EyeRetina.GetARetinaOut()[i] >= EyeRetinaGCone.GetARetinaOut()[i] &&
 	  EyeRetina.GetARetinaOut()[i] >= EyeRetinaBCone.GetARetinaOut()[i] &&
@@ -208,7 +208,7 @@ if(EyeRetina.GetBiMax()==0) bmax=1;
 		 (*OnGanglionicOuts)(i).rgb.g=0;
 		 (*OnGanglionicOuts)(i).rgb.b=0;
 	   }
-   // Офф- канал
+   // РћС„С„- РєР°РЅР°Р»
    if(EyeRetina.GetARetinaOut()[i] < EyeRetinaRCone.GetARetinaOut()[i] &&
 	  EyeRetina.GetARetinaOut()[i] < EyeRetinaGCone.GetARetinaOut()[i] &&
 	  EyeRetina.GetARetinaOut()[i] < EyeRetinaBCone.GetARetinaOut()[i] &&
@@ -245,7 +245,7 @@ if(EyeRetina.GetBiMax()==0) bmax=1;
 	   }
   }
 
-  // Выводим отдельно цветные каналы он- и офф-
+  // Р’С‹РІРѕРґРёРј РѕС‚РґРµР»СЊРЅРѕ С†РІРµС‚РЅС‹Рµ РєР°РЅР°Р»С‹ РѕРЅ- Рё РѕС„С„-
   for(i=0;i<EyeRetina.GetGangWidth()*EyeRetina.GetGangHeight();i++)
   {
    (*RConeGanglionicOuts)(i).rgb.r=0;
@@ -258,41 +258,41 @@ if(EyeRetina.GetBiMax()==0) bmax=1;
    (*BConeGanglionicOuts)(i).rgb.g=0;
    (*BConeGanglionicOuts)(i).rgb.b=0;
    //(*RodGanglionicOuts)[i]=abs(EyeRetina.GetARetinaOut()[i]);
-   // Инвертнём
+   // РРЅРІРµСЂС‚РЅС‘Рј
    (*RodGanglionicOuts)[i]=255-abs(EyeRetina.GetARetinaOut()[i]);
 //   if(EyeRetina.GetARetinaOut()[i] < 0)
 //    int a = 0;
   }
   // <--------------
 
-  // Выходы для мотонейронов
-  // Активность выходов с групп ганглиозных клеток, отвечающих за рефлекторные
-  // движения четырёх глазных мышц
+  // Р’С‹С…РѕРґС‹ РґР»СЏ РјРѕС‚РѕРЅРµР№СЂРѕРЅРѕРІ
+  // РђРєС‚РёРІРЅРѕСЃС‚СЊ РІС‹С…РѕРґРѕРІ СЃ РіСЂСѓРїРї РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє, РѕС‚РІРµС‡Р°СЋС‰РёС… Р·Р° СЂРµС„Р»РµРєС‚РѕСЂРЅС‹Рµ
+  // РґРІРёР¶РµРЅРёСЏ С‡РµС‚С‹СЂС‘С… РіР»Р°Р·РЅС‹С… РјС‹С€С†
   LeftGanglionicOut(0,0) = (EyeRetina.LeftOnActivity * EyeRetina.GetRodReduceCoef() + EyeRetinaGCone.LeftOnActivity + EyeRetinaRCone.LeftOnActivity + EyeRetinaBCone.LeftOnActivity)/4;
   RightGanglionicOut(0,0) = (EyeRetina.RightOnActivity * EyeRetina.GetRodReduceCoef() + EyeRetinaGCone.RightOnActivity + EyeRetinaRCone.RightOnActivity + EyeRetinaBCone.RightOnActivity)/4;
   TopGanglionicOut(0,0) = (EyeRetina.TopOnActivity * EyeRetina.GetRodReduceCoef() + EyeRetinaGCone.TopOnActivity + EyeRetinaRCone.TopOnActivity + EyeRetinaBCone.TopOnActivity)/4;
   BottomGanglionicOut(0,0) = (EyeRetina.BottomOnActivity * EyeRetina.GetRodReduceCoef() + EyeRetinaGCone.BottomOnActivity + EyeRetinaRCone.BottomOnActivity + EyeRetinaBCone.BottomOnActivity)/4;
 
-  // ДЛЯ ОТЛАДКИ
-  // АКТИВНОСТЬ ВХОДОВ ДЛЯ 4-ч ГЛАЗНЫХ МЫШЦ
+  // Р”Р›РЇ РћРўР›РђР”РљР
+  // РђРљРўРР’РќРћРЎРўР¬ Р’РҐРћР”РћР’ Р”Р›РЇ 4-С‡ Р“Р›РђР—РќР«РҐ РњР«РЁР¦
   LeftMuscle->SetRes(EyeRetina.GetGangWidth(),EyeRetina.GetGangHeight(),ubmRGB24);
   RightMuscle->SetRes(EyeRetina.GetGangWidth(),EyeRetina.GetGangHeight(),ubmRGB24);
   TopMuscle->SetRes(EyeRetina.GetGangWidth(),EyeRetina.GetGangHeight(),ubmRGB24);
   BottomMuscle->SetRes(EyeRetina.GetGangWidth(),EyeRetina.GetGangHeight(),ubmRGB24);
-  // Заполняем белым
+  // Р—Р°РїРѕР»РЅСЏРµРј Р±РµР»С‹Рј
   LeftMuscle->Fill(0x00FFFFFF);
   RightMuscle->Fill(0x00FFFFFF);
   TopMuscle->Fill(0x00FFFFFF);
   BottomMuscle->Fill(0x00FFFFFF);
-  // Рисуем ось
+  // Р РёСЃСѓРµРј РѕСЃСЊ
   const UBRect rect(0,EyeRetina.GetGangHeight()/2,EyeRetina.GetGangWidth(),1);
   LeftMuscle->Fill(0x00000000,rect);
   RightMuscle->Fill(0x00000000,rect);
   TopMuscle->Fill(0x00000000,rect);
   BottomMuscle->Fill(0x00000000,rect);
-  // Активность мышц
+  // РђРєС‚РёРІРЅРѕСЃС‚СЊ РјС‹С€С†
   int activity = 0;
-  // Левая
+  // Р›РµРІР°СЏ
   activity = int(double(LeftGanglionicOut(0,0)*((EyeRetinaGCone.GetGangHeight()/2)-1)) / 255.0);
   if(activity > (EyeRetinaGCone.GetGangHeight()/2)-1) activity = (EyeRetinaGCone.GetGangHeight()/2)-1;
   const UBRect rect_on_left(0,(EyeRetinaGCone.GetGangHeight()/2)-activity,EyeRetinaGCone.GetGangWidth(),activity);
@@ -301,7 +301,7 @@ if(EyeRetina.GetBiMax()==0) bmax=1;
   if(activity > (EyeRetinaGCone.GetGangHeight()/2)-1) activity = (EyeRetinaGCone.GetGangHeight()/2)-1;
   const UBRect rect_off_left(0,(EyeRetinaGCone.GetGangHeight()/2)+1,EyeRetinaGCone.GetGangWidth(),activity);
   LeftMuscle->Fill(0x000000FF,rect_off_left);
-  // Правая
+  // РџСЂР°РІР°СЏ
   activity = int(double(RightGanglionicOut(0,0)*((EyeRetinaGCone.GetGangHeight()/2)-1)) / 255.0);
   if(activity > (EyeRetinaGCone.GetGangHeight()/2)-1) activity = (EyeRetinaGCone.GetGangHeight()/2)-1;
   const UBRect rect_on_right(0,(EyeRetinaGCone.GetGangHeight()/2)-activity,EyeRetinaGCone.GetGangWidth(),activity);
@@ -310,7 +310,7 @@ if(EyeRetina.GetBiMax()==0) bmax=1;
   if(activity > (EyeRetinaGCone.GetGangHeight()/2)-1) activity = (EyeRetinaGCone.GetGangHeight()/2)-1;
   const UBRect rect_off_right(0,(EyeRetinaGCone.GetGangHeight()/2)+1,EyeRetinaGCone.GetGangWidth(),activity);
   RightMuscle->Fill(0x000000FF,rect_off_right);
-  // Верхняя
+  // Р’РµСЂС…РЅСЏСЏ
   activity = int(double(TopGanglionicOut(0,0)*((EyeRetinaGCone.GetGangHeight()/2)-1)) / 255.0);
   if(activity > (EyeRetinaGCone.GetGangHeight()/2)-1) activity = (EyeRetinaGCone.GetGangHeight()/2)-1;
   const UBRect rect_on_top(0,(EyeRetinaGCone.GetGangHeight()/2)-activity,EyeRetinaGCone.GetGangWidth(),activity);
@@ -319,7 +319,7 @@ if(EyeRetina.GetBiMax()==0) bmax=1;
   if(activity > (EyeRetinaGCone.GetGangHeight()/2)-1) activity = (EyeRetinaGCone.GetGangHeight()/2)-1;
   const UBRect rect_off_top(0,(EyeRetinaGCone.GetGangHeight()/2)+1,EyeRetinaGCone.GetGangWidth(),activity);
   TopMuscle->Fill(0x000000FF,rect_off_top);
-  // Нижняя
+  // РќРёР¶РЅСЏСЏ
   activity = int(double(BottomGanglionicOut(0,0)*((EyeRetinaGCone.GetGangHeight()/2)-1)) / 255.0);
   if(activity > (EyeRetinaGCone.GetGangHeight()/2)-1) activity = (EyeRetinaGCone.GetGangHeight()/2)-1;
   const UBRect rect_on_bottom(0,(EyeRetinaGCone.GetGangHeight()/2)-activity,EyeRetinaGCone.GetGangWidth(),activity);
@@ -330,17 +330,17 @@ if(EyeRetina.GetBiMax()==0) bmax=1;
   BottomMuscle->Fill(0x000000FF,rect_off_bottom);
 }
 
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NEyeRetina::ADefault(void)
 {
  EyeRetina.ResetDefaults();
- // Колбочки
+ // РљРѕР»Р±РѕС‡РєРё
  EyeRetinaRCone.ResetDefaults();
  EyeRetinaGCone.ResetDefaults();
  EyeRetinaBCone.ResetDefaults();
- // Выходы для мотонейронов
- // Активность выходов с групп ганглиозных клеток, отвечающих за рефлекторные
- // движения четырёх глазных мышц
+ // Р’С‹С…РѕРґС‹ РґР»СЏ РјРѕС‚РѕРЅРµР№СЂРѕРЅРѕРІ
+ // РђРєС‚РёРІРЅРѕСЃС‚СЊ РІС‹С…РѕРґРѕРІ СЃ РіСЂСѓРїРї РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє, РѕС‚РІРµС‡Р°СЋС‰РёС… Р·Р° СЂРµС„Р»РµРєС‚РѕСЂРЅС‹Рµ
+ // РґРІРёР¶РµРЅРёСЏ С‡РµС‚С‹СЂС‘С… РіР»Р°Р·РЅС‹С… РјС‹С€С†
  LeftGanglionicOut.Assign(1,1,0.0);
  RightGanglionicOut.Assign(1,1,0.0);
  TopGanglionicOut.Assign(1,1,0.0);
@@ -348,16 +348,16 @@ bool NEyeRetina::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NEyeRetina::ABuild(void)
 {
  return true;
 }
 
-// Сброс процесса счета без потери настроек
+// РЎР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р° Р±РµР· РїРѕС‚РµСЂРё РЅР°СЃС‚СЂРѕРµРє
 bool NEyeRetina::AReset(void)
 {
  EyeWidth=320; EyeHeight=240;
@@ -369,7 +369,7 @@ bool NEyeRetina::AReset(void)
 						 EyeHeight,1);
   EyeRetina.SetGangCalcEnabled(true);
 
- // Колбочки
+ // РљРѕР»Р±РѕС‡РєРё
  EyeRetinaRCone.SetRetinaRes(EyeWidth,
 						 EyeHeight,1);
  EyeRetinaRCone.SetGangCalcEnabled(true);
@@ -385,7 +385,7 @@ bool NEyeRetina::AReset(void)
  return true;
 }
 
-// Выполняет расчет этого объекта
+// Р’С‹РїРѕР»РЅСЏРµС‚ СЂР°СЃС‡РµС‚ СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
 bool NEyeRetina::ACalculate(void)
 {
  pair<int,int> coord;
@@ -414,19 +414,19 @@ bool NEyeRetina::ACalculate(void)
 
  EyeRetina.SetRetinaRes(EyeWidth,
 						 EyeHeight,1);
- // Колбочки
+ // РљРѕР»Р±РѕС‡РєРё
  EyeRetinaRCone.SetRetinaRes(EyeWidth,
 						 EyeHeight,1);
  EyeRetinaGCone.SetRetinaRes(EyeWidth,
 						 EyeHeight,1);
  EyeRetinaBCone.SetRetinaRes(EyeWidth,
 						 EyeHeight,1);
- //UBResizeEdges(CaptureImage,InputImage);            // TODO: Включить
+ //UBResizeEdges(CaptureImage,InputImage);            // TODO: Р’РєР»СЋС‡РёС‚СЊ
  CaptureImage->ConvertTo(*InputImage);
 // *InputImage=*CaptureImage;
 // InputImage->SetColorModel(ubmRGB32);
 
- // Выводим траекторию
+ // Р’С‹РІРѕРґРёРј С‚СЂР°РµРєС‚РѕСЂРёСЋ
 /* CaptureForm->Image1->Canvas->Pen->Color=clRed;
  for(int i=0;i<int(EyeTraectory.size());i++)
  {
@@ -435,14 +435,14 @@ bool NEyeRetina::ACalculate(void)
    CaptureForm->Image1->Canvas->LineTo(EyeTraectory[i+1].first,EyeTraectory[i+1].second);
  }                */
 
-   // ЕСЛИ СЕТЧАТКА ОБРАБАТЫВАЕТ ТОЛЬКО Ч/Б УСТАНОВИТЬ:
+   // Р•РЎР›Р РЎР•РўР§РђРўРљРђ РћР‘Р РђР‘РђРўР«Р’РђР•Рў РўРћР›Р¬РљРћ Р§/Р‘ РЈРЎРўРђРќРћР’РРўР¬:
    //EyeRetina.SetRodReduceCoef(1.0);
-   // В ПРОТИВНОМ СЛУЧАЕ ЗАКОММЕНТИТЬ
+   // Р’ РџР РћРўРР’РќРћРњ РЎР›РЈР§РђР• Р—РђРљРћРњРњР•РќРўРРўР¬
 
    EyeRetina.SetInputImage((UColorT*)InputImage->GetData());
    EyeRetina.Calculate();
 
-   // Колбочки
+   // РљРѕР»Р±РѕС‡РєРё
    EyeRetinaRCone.SetInputImage((UColorT*)InputImage->GetData(),RCone);
    EyeRetinaRCone.Calculate();
    EyeRetinaGCone.SetInputImage((UColorT*)InputImage->GetData(),GCone);

@@ -26,107 +26,107 @@ using namespace RDK;
 /* *************************************************************************** */
 class RDK_LIB_TYPE NDCEngine: public UNet
 {
-public: // Общедоступные свойства
-/// Электромагнитный коэффициент
-ULProperty<double, NDCEngine, ptPubParameter> EMFactor;
+public: //  
+///  
+UProperty<double, NDCEngine, ptPubParameter> EMFactor;
 
-/// Индуктивность
-ULProperty<double, NDCEngine, ptPubParameter> Inductance;
+/// 
+UProperty<double, NDCEngine, ptPubParameter> Inductance;
 
-/// Сопротивление
-ULProperty<double, NDCEngine, ptPubParameter> Resistance;
+/// 
+UProperty<double, NDCEngine, ptPubParameter> Resistance;
 
-/// Электромеханическая постоянная времени
-ULProperty<double, NDCEngine, ptPubParameter> Tm;
+///   
+UProperty<double, NDCEngine, ptPubParameter> Tm;
 
-/// Передаточное число
-ULProperty<double, NDCEngine, ptPubParameter> ReductionRate;
+///  
+UProperty<double, NDCEngine, ptPubParameter> ReductionRate;
 
-/// Внешний момент
-ULProperty<double, NDCEngine, ptPubParameter> OutMoment;
+///  
+UProperty<double, NDCEngine, ptPubParameter> OutMoment;
 
-public: // Входы и выходы
-/// Входное напряжение
-UPropertyInputData<MDMatrix<double>, NDCEngine, ptInput | ptPubState> InputVoltage;
+public: //   
+///  
+UProperty<MDMatrix<double>, NDCEngine, ptInput | ptPubState> InputVoltage;
 
-/// Внешний момент на валу
-UPropertyInputData<MDMatrix<double>, NDCEngine, ptInput | ptPubState> InputMomentum;
+///    
+UProperty<MDMatrix<double>, NDCEngine, ptInput | ptPubState> InputMomentum;
 
-/// Выходной момент
-UPropertyOutputData<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputMomentum;
+///  
+UProperty<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputMomentum;
 
-/// Выходной угол поворота вала
-UPropertyOutputData<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputAngle;
+///    
+UProperty<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputAngle;
 
-/// Выходная угловая скорость вращения
-UPropertyOutputData<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputAngleSpeed;
+///    
+UProperty<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputAngleSpeed;
 
-protected: // Данные
-// Угол поворота
+protected: // 
+//  
 UProperty<double,NDCEngine, ptPubParameter> Angle;
 
-// Ток якоря
+//  
 double Current;
 
-// ЭДС якоря
+//  
 double EMF;
 
-// Момент развиваемый двигателем
+//   
 double Moment;
 
-// Угловая скорость
+//  
 double AngleSpeed;
 
-// Производная момента
+//  
 double DiffMoment;
 
-protected: // Временные переменные
+protected: //  
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NDCEngine(void);
 virtual ~NDCEngine(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NDCEngine* New(void);
 // --------------------------
 
 protected:
 // --------------------------
-// Методы управления общедоступными свойствами
+//    
 // --------------------------
-// Электромагнитный коэффициент
+//  
 bool SetEMFactor(const double &value);
 
-// Индуктивность
+// 
 bool SetInductance(const double &value);
 
-// Сопротивление
+// 
 bool SetResistance(const double &value);
 
-// Электромеханическая постоянная времени
+//   
 bool SetTm(const double &value);
 
-// Передаточное число
+//  
 bool SetReductionRate(const double &value);
 // --------------------------
 
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
 // Reset computation

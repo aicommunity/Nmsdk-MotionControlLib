@@ -45,9 +45,9 @@ NObjInArea::~NObjInArea(void)
 
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NObjInArea* NObjInArea::New(void)
 {
  return new NObjInArea;
@@ -56,20 +56,20 @@ NObjInArea* NObjInArea::New(void)
 
 
 // --------------------------
-// Скрытые методы управления компонентами
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РєРѕРјРїРѕРЅРµРЅС‚Р°РјРё
 // --------------------------
 
-/// Выполняет завершающие пользовательские действия
-/// при добавлении дочернего компонента в этот объект
-// Метод будет вызван только если comp был успешно добавлен в список компонент
+/// Р’С‹РїРѕР»РЅСЏРµС‚ Р·Р°РІРµСЂС€Р°СЋС‰РёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґРµР№СЃС‚РІРёСЏ
+/// РїСЂРё РґРѕР±Р°РІР»РµРЅРёРё РґРѕС‡РµСЂРЅРµРіРѕ РєРѕРјРїРѕРЅРµРЅС‚Р° РІ СЌС‚РѕС‚ РѕР±СЉРµРєС‚
+// РњРµС‚РѕРґ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ С‚РѕР»СЊРєРѕ РµСЃР»Рё comp Р±С‹Р» СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅ РІ СЃРїРёСЃРѕРє РєРѕРјРїРѕРЅРµРЅС‚
 bool NObjInArea::AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer)
 {
  return true;
 }
 
-/// Выполняет предварительные пользовательские действия
-/// при удалении дочернего компонента из этого объекта
-// Метод будет вызван только если comp существует в списке компонент
+/// Р’С‹РїРѕР»РЅСЏРµС‚ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґРµР№СЃС‚РІРёСЏ
+/// РїСЂРё СѓРґР°Р»РµРЅРёРё РґРѕС‡РµСЂРЅРµРіРѕ РєРѕРјРїРѕРЅРµРЅС‚Р° РёР· СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
+// РњРµС‚РѕРґ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ С‚РѕР»СЊРєРѕ РµСЃР»Рё comp СЃСѓС‰РµСЃС‚РІСѓРµС‚ РІ СЃРїРёСЃРєРµ РєРѕРјРїРѕРЅРµРЅС‚
 bool NObjInArea::ADelComponent(UEPtr<UContainer> comp)
 {
  return true;
@@ -79,30 +79,30 @@ bool NObjInArea::ADelComponent(UEPtr<UContainer> comp)
 
 
 // --------------------------
-// Методы управления общедоступными свойствами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±С‰РµРґРѕСЃС‚СѓРїРЅС‹РјРё СЃРІРѕР№СЃС‚РІР°РјРё
 // --------------------------
 
-/// Установка имени класса нейрона
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёРјРµРЅРё РєР»Р°СЃСЃР° РЅРµР№СЂРѕРЅР°
 bool NObjInArea::SetNeuronClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка имени класса генератора последовательности импульсов
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёРјРµРЅРё РєР»Р°СЃСЃР° РіРµРЅРµСЂР°С‚РѕСЂР° РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё РёРјРїСѓР»СЊСЃРѕРІ
 bool NObjInArea::SetMultiGeneratorClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка длительности импульсов
+/// РЈСЃС‚Р°РЅРѕРІРєР° РґР»РёС‚РµР»СЊРЅРѕСЃС‚Рё РёРјРїСѓР»СЊСЃРѕРІ
 bool NObjInArea::SetPulseLength(const double &value)
 {
  if(value <= 0)
   return false;
 
- // Настраиваем генераторы образов
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РіРµРЅРµСЂР°С‚РѕСЂС‹ РѕР±СЂР°Р·РѕРІ
  for (size_t i = 0; i < ClsSpikeFr.size(); i++)
  {
   if (!ClsSpikeFr[i])
@@ -111,7 +111,7 @@ bool NObjInArea::SetPulseLength(const double &value)
  }
 
 
- // Настраиваем блоки подавления
+ // РќР°СЃС‚СЂР°РёРІР°РµРј Р±Р»РѕРєРё РїРѕРґР°РІР»РµРЅРёСЏ
  if (!SuppressUnit1 || !SuppressUnit2)
   return true;
  SuppressUnit1->PulseLength = value;
@@ -119,7 +119,7 @@ bool NObjInArea::SetPulseLength(const double &value)
  SuppressUnit2->PulseLength = value;
  SuppressUnit2->Reset();
 
- // Настраиваем возбуждающий генератор
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РІРѕР·Р±СѓР¶РґР°СЋС‰РёР№ РіРµРЅРµСЂР°С‚РѕСЂ
  if (!ExcitatoryGen)
   return true;
  ExcitatoryGen->PulseLength = value;
@@ -127,13 +127,13 @@ bool NObjInArea::SetPulseLength(const double &value)
  return true;
 }
 
-/// Установка амплитуды импульсов
+/// РЈСЃС‚Р°РЅРѕРІРєР° Р°РјРїР»РёС‚СѓРґС‹ РёРјРїСѓР»СЊСЃРѕРІ
 bool NObjInArea::SetAmplitude(const double &value)
 {
  if(value <= 0)
   return false;
 
- // Настраиваем генераторы образов
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РіРµРЅРµСЂР°С‚РѕСЂС‹ РѕР±СЂР°Р·РѕРІ
  for (int i = 0; i < ClsSpikeFr.size(); i++)
  {
   if (!ClsSpikeFr[i])
@@ -142,7 +142,7 @@ bool NObjInArea::SetAmplitude(const double &value)
  }
 
 
- // Настраиваем блоки подавления
+ // РќР°СЃС‚СЂР°РёРІР°РµРј Р±Р»РѕРєРё РїРѕРґР°РІР»РµРЅРёСЏ
  if (!SuppressUnit1 || !SuppressUnit2)
   return true;
  SuppressUnit1->Amplitude = value;
@@ -150,7 +150,7 @@ bool NObjInArea::SetAmplitude(const double &value)
  SuppressUnit2->Amplitude = value;
  SuppressUnit2->Reset();
 
- // Настраиваем возбуждающий генератор
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РІРѕР·Р±СѓР¶РґР°СЋС‰РёР№ РіРµРЅРµСЂР°С‚РѕСЂ
  if (!ExcitatoryGen)
   return true;
  ExcitatoryGen->Amplitude = value;
@@ -158,13 +158,13 @@ bool NObjInArea::SetAmplitude(const double &value)
  return true;
 }
 
-/// Установка частоты генерации (Гц) всех компонентов
+/// РЈСЃС‚Р°РЅРѕРІРєР° С‡Р°СЃС‚РѕС‚С‹ РіРµРЅРµСЂР°С†РёРё (Р“С†) РІСЃРµС… РєРѕРјРїРѕРЅРµРЅС‚РѕРІ
 bool NObjInArea::SetFrequency(const double &value)
 {
  if(value < 0)
   return false;
 
- // Настраиваем генераторы образов
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РіРµРЅРµСЂР°С‚РѕСЂС‹ РѕР±СЂР°Р·РѕРІ
  for (int i = 0; i < ClsSpikeFr.size(); i++)
  {
   if (!ClsSpikeFr[i])
@@ -173,7 +173,7 @@ bool NObjInArea::SetFrequency(const double &value)
  }
 
 
- // Настраиваем блоки подавления
+ // РќР°СЃС‚СЂР°РёРІР°РµРј Р±Р»РѕРєРё РїРѕРґР°РІР»РµРЅРёСЏ
  if (!SuppressUnit1 || !SuppressUnit2)
   return true;
  SuppressUnit1->SourceFreq = value;
@@ -181,7 +181,7 @@ bool NObjInArea::SetFrequency(const double &value)
  SuppressUnit1->Reset();
  SuppressUnit2->Reset();
 
- // Настраиваем возбуждающий генератор
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РІРѕР·Р±СѓР¶РґР°СЋС‰РёР№ РіРµРЅРµСЂР°С‚РѕСЂ
  if (!ExcitatoryGen)
   return true;
  ExcitatoryGen->Frequency = value;
@@ -189,13 +189,13 @@ bool NObjInArea::SetFrequency(const double &value)
  return true;
 }
 
-/// Установка частоты импульсов подавляющих и возбуждающего генераторов
+/// РЈСЃС‚Р°РЅРѕРІРєР° С‡Р°СЃС‚РѕС‚С‹ РёРјРїСѓР»СЊСЃРѕРІ РїРѕРґР°РІР»СЏСЋС‰РёС… Рё РІРѕР·Р±СѓР¶РґР°СЋС‰РµРіРѕ РіРµРЅРµСЂР°С‚РѕСЂРѕРІ
 bool NObjInArea::SetHighFreq(const double &value)
 {
  if(value < 0)
   return false;
 
-  // Настраиваем блоки подавления
+  // РќР°СЃС‚СЂР°РёРІР°РµРј Р±Р»РѕРєРё РїРѕРґР°РІР»РµРЅРёСЏ
  if (!SuppressUnit1 || !SuppressUnit2 || !ExcitatoryGen)
   return true;
 
@@ -208,7 +208,7 @@ bool NObjInArea::SetHighFreq(const double &value)
  return true;
 }
 
-/// Установка момента времени t=t0, с которого начинается подавление области кадра с левой стороны
+/// РЈСЃС‚Р°РЅРѕРІРєР° РјРѕРјРµРЅС‚Р° РІСЂРµРјРµРЅРё t=t0, СЃ РєРѕС‚РѕСЂРѕРіРѕ РЅР°С‡РёРЅР°РµС‚СЃСЏ РїРѕРґР°РІР»РµРЅРёРµ РѕР±Р»Р°СЃС‚Рё РєР°РґСЂР° СЃ Р»РµРІРѕР№ СЃС‚РѕСЂРѕРЅС‹
 bool NObjInArea::SetDelay11(const double &value)
 {
  if(value < 0)
@@ -223,7 +223,7 @@ bool NObjInArea::SetDelay11(const double &value)
  return true;
 }
 
-/// Установка момента времени t=t1, до которого происходит подавление области кадра с левой стороны
+/// РЈСЃС‚Р°РЅРѕРІРєР° РјРѕРјРµРЅС‚Р° РІСЂРµРјРµРЅРё t=t1, РґРѕ РєРѕС‚РѕСЂРѕРіРѕ РїСЂРѕРёСЃС…РѕРґРёС‚ РїРѕРґР°РІР»РµРЅРёРµ РѕР±Р»Р°СЃС‚Рё РєР°РґСЂР° СЃ Р»РµРІРѕР№ СЃС‚РѕСЂРѕРЅС‹
 bool NObjInArea::SetDelay12(const double &value)
 {
  if(value < 0)
@@ -238,7 +238,7 @@ bool NObjInArea::SetDelay12(const double &value)
  return true;
 }
 
-/// Установка момента времени t=t2, с которого начинается подавление области кадра с правой стороны
+/// РЈСЃС‚Р°РЅРѕРІРєР° РјРѕРјРµРЅС‚Р° РІСЂРµРјРµРЅРё t=t2, СЃ РєРѕС‚РѕСЂРѕРіРѕ РЅР°С‡РёРЅР°РµС‚СЃСЏ РїРѕРґР°РІР»РµРЅРёРµ РѕР±Р»Р°СЃС‚Рё РєР°РґСЂР° СЃ РїСЂР°РІРѕР№ СЃС‚РѕСЂРѕРЅС‹
 bool NObjInArea::SetDelay21(const double &value)
 {
  if(value < 0)
@@ -253,7 +253,7 @@ bool NObjInArea::SetDelay21(const double &value)
  return true;
 }
 
-/// Установка момента времени t=T, до которого происходит подавление области кадра с правой стороны
+/// РЈСЃС‚Р°РЅРѕРІРєР° РјРѕРјРµРЅС‚Р° РІСЂРµРјРµРЅРё t=T, РґРѕ РєРѕС‚РѕСЂРѕРіРѕ РїСЂРѕРёСЃС…РѕРґРёС‚ РїРѕРґР°РІР»РµРЅРёРµ РѕР±Р»Р°СЃС‚Рё РєР°РґСЂР° СЃ РїСЂР°РІРѕР№ СЃС‚РѕСЂРѕРЅС‹
 bool NObjInArea::SetDelay22(const double &value)
 {
  if(value < 0)
@@ -268,7 +268,7 @@ bool NObjInArea::SetDelay22(const double &value)
  return true;
 }
 
-/// Установка размерности спайковых образов
+/// РЈСЃС‚Р°РЅРѕРІРєР° СЂР°Р·РјРµСЂРЅРѕСЃС‚Рё СЃРїР°Р№РєРѕРІС‹С… РѕР±СЂР°Р·РѕРІ
 bool NObjInArea::SetPulseCount(const int &value)
 {
  if(value < 1)
@@ -287,7 +287,7 @@ bool NObjInArea::SetPulseCount(const int &value)
  return true;
 }
 
-/// Установка количества объектов для распознавания
+/// РЈСЃС‚Р°РЅРѕРІРєР° РєРѕР»РёС‡РµСЃС‚РІР° РѕР±СЉРµРєС‚РѕРІ РґР»СЏ СЂР°СЃРїРѕР·РЅР°РІР°РЅРёСЏ
 bool NObjInArea::SetNumObj(const int &value)
 {
  if(value < 1)
@@ -299,7 +299,7 @@ bool NObjInArea::SetNumObj(const int &value)
  return true;
 }
 
-/// Установка задержек, задающих спайковые образы классов
+/// РЈСЃС‚Р°РЅРѕРІРєР° Р·Р°РґРµСЂР¶РµРє, Р·Р°РґР°СЋС‰РёС… СЃРїР°Р№РєРѕРІС‹Рµ РѕР±СЂР°Р·С‹ РєР»Р°СЃСЃРѕРІ
 bool NObjInArea::SetDelaysClsSpikeFr(const MDMatrix<double> &value)
 {
  bool res = true;
@@ -321,7 +321,7 @@ bool NObjInArea::SetDelaysClsSpikeFr(const MDMatrix<double> &value)
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NObjInArea::ADefault(void)
 {
  NeuronClassName = "NSPNeuronGen";
@@ -346,21 +346,21 @@ bool NObjInArea::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NObjInArea::ABuild(void)
 {
  bool res = true;
 
  DelaysClsSpikeFr.Resize(NumObj, PulseCount, 0.0);
 
- // Удаляем лишние генераторы спайковых образов классов
+ // РЈРґР°Р»СЏРµРј Р»РёС€РЅРёРµ РіРµРЅРµСЂР°С‚РѕСЂС‹ СЃРїР°Р№РєРѕРІС‹С… РѕР±СЂР°Р·РѕРІ РєР»Р°СЃСЃРѕРІ
  for(int i = NumObj; i < OldNumObj; i++)
   DelComponent(std::string("Cls")+sntoa(i+1)+std::string("SpikeFr"));
 
- // Инициализируем генераторы спайковых образов классов
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РіРµРЅРµСЂР°С‚РѕСЂС‹ СЃРїР°Р№РєРѕРІС‹С… РѕР±СЂР°Р·РѕРІ РєР»Р°СЃСЃРѕРІ
  ClsSpikeFr.resize(NumObj);
  for (int i = 0; i < NumObj; i++)
  {
@@ -370,7 +370,7 @@ bool NObjInArea::ABuild(void)
  }
 
 
- // Инициализируем подавляющие блоки
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РїРѕРґР°РІР»СЏСЋС‰РёРµ Р±Р»РѕРєРё
  SuppressUnit1 = AddMissingComponent<NSuppressionUnit>(std::string("SuppressUnit1"), "NSuppressionUnit");
  SuppressUnit1->SetCoord(MVector<double,3>(4, 5.33 + 2.33 * (NumObj - 1), 0));
  SuppressUnit1->DisconnectAll("Output");
@@ -380,7 +380,7 @@ bool NObjInArea::ABuild(void)
  SuppressUnit2->DisconnectAll("Output");
 
 
- // Инициализируем нейрон ИЛИ
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РЅРµР№СЂРѕРЅ РР›Р
  ORNeuron = AddMissingComponent<NPulseNeuron>(std::string("ORNeuron"), NeuronClassName);
  ORNeuron->SetCoord(MVector<double,3>(10.33, 2 + 2.33 * (NumObj - 1) / 2, 0));
  ORNeuron->DisconnectAll("Output");
@@ -391,7 +391,7 @@ bool NObjInArea::ABuild(void)
   or_soma->Build();
  }
 
- // Инициализируем решающий нейрон
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј СЂРµС€Р°СЋС‰РёР№ РЅРµР№СЂРѕРЅ
  DecidingNeuron = AddMissingComponent<NPulseNeuron>(std::string("DecidingNeuron"), NeuronClassName);
  DecidingNeuron->SetCoord(MVector<double,3>(16.67, 4.83 + 2.33 * (NumObj - 1) / 2, 0));
  DecidingNeuron->DisconnectAll("Output");
@@ -413,12 +413,12 @@ bool NObjInArea::ABuild(void)
   deciding_soma->Build();
  }
 
- // Инициализируем возбуждающий генератор
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РІРѕР·Р±СѓР¶РґР°СЋС‰РёР№ РіРµРЅРµСЂР°С‚РѕСЂ
  ExcitatoryGen = AddMissingComponent<NPulseGeneratorTransit>(std::string("ExcitatoryGen"), "NPulseGeneratorTransit");
  ExcitatoryGen->SetCoord(MVector<double,3>(23, 4.83 + 2.33 * (NumObj - 1) / 2, 0));
  ExcitatoryGen->DisconnectAll("Output");
 
- // Инициализируем нейрон И
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РЅРµР№СЂРѕРЅ Р
  ANDNeuron = AddMissingComponent<NPulseNeuron>(std::string("ANDNeuron"), NeuronClassName);
  ANDNeuron->SetCoord(MVector<double,3>(29.33, 4.83 + 2.33 * (NumObj - 1) / 2, 0));
  ANDNeuron->DisconnectAll("Output");
@@ -426,15 +426,15 @@ bool NObjInArea::ABuild(void)
  ANDNeuron->Build();
 
 
- // Строим связи между компонентами
- // Находим составляющие компоненты ORNeuron
+ // РЎС‚СЂРѕРёРј СЃРІСЏР·Рё РјРµР¶РґСѓ РєРѕРјРїРѕРЅРµРЅС‚Р°РјРё
+ // РќР°С…РѕРґРёРј СЃРѕСЃС‚Р°РІР»СЏСЋС‰РёРµ РєРѕРјРїРѕРЅРµРЅС‚С‹ ORNeuron
  if(!or_soma)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because ORNeuron->Soma1 isn't exists: "));
   return true;
  }
 
- // Создаём связи между ClsSpikeFr и синапсами нейрона ИЛИ
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·Рё РјРµР¶РґСѓ ClsSpikeFr Рё СЃРёРЅР°РїСЃР°РјРё РЅРµР№СЂРѕРЅР° РР›Р
  for (int i = 0; i < NumObj; i++)
  {
   NPulseSynapseCommon *or_excsynapse = or_soma->GetExcitatorySynapses(i);
@@ -444,13 +444,13 @@ bool NObjInArea::ABuild(void)
    return true;
   }
 
-  // Создаём связь
+  // РЎРѕР·РґР°С‘Рј СЃРІСЏР·СЊ
   if (!CheckLink(ClsSpikeFr[i]->GetLongName(this), "Output", or_excsynapse->GetLongName(this), "Input"))
    res &= CreateLink(ClsSpikeFr[i]->GetLongName(this), "Output", or_excsynapse->GetLongName(this), "Input");
  }
 
 
-  // Находим составляющие компоненты DecidingNeuron
+  // РќР°С…РѕРґРёРј СЃРѕСЃС‚Р°РІР»СЏСЋС‰РёРµ РєРѕРјРїРѕРЅРµРЅС‚С‹ DecidingNeuron
  if(!deciding_soma)
  {
   LogMessageEx(RDK_EX_DEBUG, __FUNCTION__, std::string("Can't create link because DecidingNeuron->Soma1 isn't exists: "));
@@ -465,25 +465,25 @@ bool NObjInArea::ABuild(void)
   return true;
  }
 
- // Создаём связь между ORNeuron и возбуждающим синапсом дендрита DecidingNeuron
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·СЊ РјРµР¶РґСѓ ORNeuron Рё РІРѕР·Р±СѓР¶РґР°СЋС‰РёРј СЃРёРЅР°РїСЃРѕРј РґРµРЅРґСЂРёС‚Р° DecidingNeuron
  if (!CheckLink("ORNeuron", "Output", deciding_excsynapse1->GetLongName(this), "Input"))
   res &= CreateLink("ORNeuron", "Output", deciding_excsynapse1->GetLongName(this), "Input");
 
- // Создаём связь между SuppressUnit1 и тормозным синапсом сомы DecidingNeuron
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·СЊ РјРµР¶РґСѓ SuppressUnit1 Рё С‚РѕСЂРјРѕР·РЅС‹Рј СЃРёРЅР°РїСЃРѕРј СЃРѕРјС‹ DecidingNeuron
  if (!CheckLink("SuppressUnit1", "Output", deciding_inhsynapse1->GetLongName(this), "Input"))
   res &= CreateLink("SuppressUnit1", "Output", deciding_inhsynapse1->GetLongName(this), "Input");
 
- // Создаём связь между SuppressUnit2 и тормозным синапсом сомы DecidingNeuron
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·СЊ РјРµР¶РґСѓ SuppressUnit2 Рё С‚РѕСЂРјРѕР·РЅС‹Рј СЃРёРЅР°РїСЃРѕРј СЃРѕРјС‹ DecidingNeuron
  if (!CheckLink("SuppressUnit2", "Output", deciding_inhsynapse2->GetLongName(this), "Input"))
   res &= CreateLink("SuppressUnit2", "Output", deciding_inhsynapse2->GetLongName(this), "Input");
 
 
- // Создаём связь между DecidingNeuron и ExcitatoryGen
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·СЊ РјРµР¶РґСѓ DecidingNeuron Рё ExcitatoryGen
  if (!CheckLink("DecidingNeuron", "Output", "ExcitatoryGen", "Input"))
   res &= CreateLink("DecidingNeuron", "Output", "ExcitatoryGen", "Input");
 
 
- // Находим составляющие компоненты ANDNeuron
+ // РќР°С…РѕРґРёРј СЃРѕСЃС‚Р°РІР»СЏСЋС‰РёРµ РєРѕРјРїРѕРЅРµРЅС‚С‹ ANDNeuron
  UEPtr<NPulseMembrane> and_soma1 = ANDNeuron->GetComponentL<NPulseMembrane>("Soma1", true);
  UEPtr<NPulseMembrane> and_soma2 = ANDNeuron->GetComponentL<NPulseMembrane>("Soma2", true);
  if(!and_soma1 || !and_soma2)
@@ -499,11 +499,11 @@ bool NObjInArea::ABuild(void)
   return true;
  }
 
- // Создаём связь между ExcitatoryGen и возбуждающим синапсом ANDNeuron->Soma1
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·СЊ РјРµР¶РґСѓ ExcitatoryGen Рё РІРѕР·Р±СѓР¶РґР°СЋС‰РёРј СЃРёРЅР°РїСЃРѕРј ANDNeuron->Soma1
  if (!CheckLink("ExcitatoryGen", "Output", and_excsynapse11->GetLongName(this), "Input"))
   res &= CreateLink("ExcitatoryGen", "Output", and_excsynapse11->GetLongName(this), "Input");
 
- // Находим источник импульса в момент t=T
+ // РќР°С…РѕРґРёРј РёСЃС‚РѕС‡РЅРёРє РёРјРїСѓР»СЊСЃР° РІ РјРѕРјРµРЅС‚ t=T
  UEPtr<NPulseGeneratorTransit> delay_T = SuppressUnit2->GetComponentL<NPulseGeneratorTransit>("Delay2", true);
  if(!delay_T)
  {
@@ -511,16 +511,16 @@ bool NObjInArea::ABuild(void)
   return true;
  }
 
- // Разрываем связь с SuppressUnit2->Delay2, если она была
+ // Р Р°Р·СЂС‹РІР°РµРј СЃРІСЏР·СЊ СЃ SuppressUnit2->Delay2, РµСЃР»Рё РѕРЅР° Р±С‹Р»Р°
  if(delay_T && CheckLink(delay_T->GetLongName(this), "Output", "ExcitatoryGen", "Input"))
   res &= BreakLink(delay_T->GetLongName(this), "Output", "ExcitatoryGen", "Input");
 
- // Создаём связь между источником импульса в момент t=T и возбуждающим синапсом ANDNeuron->Soma2
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·СЊ РјРµР¶РґСѓ РёСЃС‚РѕС‡РЅРёРєРѕРј РёРјРїСѓР»СЊСЃР° РІ РјРѕРјРµРЅС‚ t=T Рё РІРѕР·Р±СѓР¶РґР°СЋС‰РёРј СЃРёРЅР°РїСЃРѕРј ANDNeuron->Soma2
  if (!CheckLink(delay_T->GetLongName(this), "Output", and_excsynapse12->GetLongName(this), "Input"))
   res &= CreateLink(delay_T->GetLongName(this), "Output", and_excsynapse12->GetLongName(this), "Input");
 
- /* Нельзя сделать две связи на один вход
- // Создаём связь между источником импульса в момент t=T и ExcitatoryGen
+ /* РќРµР»СЊР·СЏ СЃРґРµР»Р°С‚СЊ РґРІРµ СЃРІСЏР·Рё РЅР° РѕРґРёРЅ РІС…РѕРґ
+ // РЎРѕР·РґР°С‘Рј СЃРІСЏР·СЊ РјРµР¶РґСѓ РёСЃС‚РѕС‡РЅРёРєРѕРј РёРјРїСѓР»СЊСЃР° РІ РјРѕРјРµРЅС‚ t=T Рё ExcitatoryGen
  if (!CheckLink(delay_T->GetLongName(this), "Output", "ExcitatoryGen", "Input"))
   res &= CreateLink(delay_T->GetLongName(this), "Output", "ExcitatoryGen", "Input");
 */
@@ -537,7 +537,7 @@ bool NObjInArea::AReset(void)
  Output.ToZero();
 
  /*
- // Строим связь ExcitatoryGen только с DecidingNeuron
+ // РЎС‚СЂРѕРёРј СЃРІСЏР·СЊ ExcitatoryGen С‚РѕР»СЊРєРѕ СЃ DecidingNeuron
  UEPtr<NPulseGeneratorTransit> delayT = SuppressUnit2->GetComponentL<NPulseGeneratorTransit>("Delay2", true);
  if(delayT && CheckLink(delayT->GetLongName(this), "Output", "ExcitatoryGen", "Input"))
   res &= BreakLink(delayT->GetLongName(this), "Output", "ExcitatoryGen", "Input");
@@ -550,7 +550,7 @@ bool NObjInArea::AReset(void)
   this->ABuild();
  }
 
- // Настраиваем генераторы образов
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РіРµРЅРµСЂР°С‚РѕСЂС‹ РѕР±СЂР°Р·РѕРІ
  for (size_t i = 0; i < ClsSpikeFr.size(); i++)
  {
   ClsSpikeFr[i]->Amplitude = Amplitude;
@@ -559,7 +559,7 @@ bool NObjInArea::AReset(void)
   ClsSpikeFr[i]->PulseCount = PulseCount;
  }
 
- // Настраиваем подавляющие блоки
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РїРѕРґР°РІР»СЏСЋС‰РёРµ Р±Р»РѕРєРё
  SuppressUnit1->OnlyInhibition = true;
  SuppressUnit1->SuppressionFreq = HighFreq;
  SuppressUnit1->Delay1 = Delay11;
@@ -569,11 +569,11 @@ bool NObjInArea::AReset(void)
  SuppressUnit2->Delay1 = Delay21;
  SuppressUnit2->Delay2 = Delay22;
 
- // Настраиваем возбуждающий генератор
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РІРѕР·Р±СѓР¶РґР°СЋС‰РёР№ РіРµРЅРµСЂР°С‚РѕСЂ
  ExcitatoryGen->UsePatternOutput = true;
  ExcitatoryGen->PatternFrequency = HighFreq;
 
- // Настраиваем порог генераторной зоны нейрона И
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РїРѕСЂРѕРі РіРµРЅРµСЂР°С‚РѕСЂРЅРѕР№ Р·РѕРЅС‹ РЅРµР№СЂРѕРЅР° Р
  UEPtr<NLTZone> ltzone = ANDNeuron->GetComponentL<NLTZone>("LTZone", true);
  ltzone->Threshold = 0.048;
 
@@ -587,9 +587,9 @@ bool NObjInArea::ACalculate(void)
 
  Output = ANDNeuron->Output;
 
- // ExcitatoryGen получил входной сигнал с DecidingNeuron и перешел с режим генерации с повышенной частотой
- // разрываем связь с DecidingNeuron, тк вход только один, и подключаемся к SuppressUnit2->Delay2,
- // чтобы дождаться от него выключающего сигнала
+ // ExcitatoryGen РїРѕР»СѓС‡РёР» РІС…РѕРґРЅРѕР№ СЃРёРіРЅР°Р» СЃ DecidingNeuron Рё РїРµСЂРµС€РµР» СЃ СЂРµР¶РёРј РіРµРЅРµСЂР°С†РёРё СЃ РїРѕРІС‹С€РµРЅРЅРѕР№ С‡Р°СЃС‚РѕС‚РѕР№
+ // СЂР°Р·СЂС‹РІР°РµРј СЃРІСЏР·СЊ СЃ DecidingNeuron, С‚Рє РІС…РѕРґ С‚РѕР»СЊРєРѕ РѕРґРёРЅ, Рё РїРѕРґРєР»СЋС‡Р°РµРјСЃСЏ Рє SuppressUnit2->Delay2,
+ // С‡С‚РѕР±С‹ РґРѕР¶РґР°С‚СЊСЃСЏ РѕС‚ РЅРµРіРѕ РІС‹РєР»СЋС‡Р°СЋС‰РµРіРѕ СЃРёРіРЅР°Р»Р°
  if (ExcitatoryGen->IsInPatternMode && !Relinked)
  {
   if(CheckLink("DecidingNeuron", "Output", "ExcitatoryGen", "Input"))
@@ -601,8 +601,8 @@ bool NObjInArea::ACalculate(void)
   Relinked = true;
  }
 
- // ExcitatoryGen получил выключающий входной сигнал с SuppressUnit2->Delay2 и выключился,
- // поэтому разрываем связь с SuppressUnit2->Delay2 и подключаемся к DecidingNeuron перед следующей итерацией
+ // ExcitatoryGen РїРѕР»СѓС‡РёР» РІС‹РєР»СЋС‡Р°СЋС‰РёР№ РІС…РѕРґРЅРѕР№ СЃРёРіРЅР°Р» СЃ SuppressUnit2->Delay2 Рё РІС‹РєР»СЋС‡РёР»СЃСЏ,
+ // РїРѕСЌС‚РѕРјСѓ СЂР°Р·СЂС‹РІР°РµРј СЃРІСЏР·СЊ СЃ SuppressUnit2->Delay2 Рё РїРѕРґРєР»СЋС‡Р°РµРјСЃСЏ Рє DecidingNeuron РїРµСЂРµРґ СЃР»РµРґСѓСЋС‰РµР№ РёС‚РµСЂР°С†РёРµР№
  if (!ExcitatoryGen->IsInPatternMode && Relinked)
  {
   UEPtr<NPulseGeneratorTransit> delay_T = SuppressUnit2->GetComponentL<NPulseGeneratorTransit>("Delay2", true);

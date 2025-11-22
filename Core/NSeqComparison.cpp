@@ -1,8 +1,8 @@
 /// @author Barymova Elizaveta (elizaveta.barymova@gmail.com)
 /// @date   November, 2023
 /// @brief  The component for sequences comparison
-/// Изменила предлагаемую в диссертации схему для правильной работы нейрона:
-/// оба сигнала замыкаются синапсы сомы (а не один на дендрит, другой на сому)
+/// РР·РјРµРЅРёР»Р° РїСЂРµРґР»Р°РіР°РµРјСѓСЋ РІ РґРёСЃСЃРµСЂС‚Р°С†РёРё СЃС…РµРјСѓ РґР»СЏ РїСЂР°РІРёР»СЊРЅРѕР№ СЂР°Р±РѕС‚С‹ РЅРµР№СЂРѕРЅР°:
+/// РѕР±Р° СЃРёРіРЅР°Р»Р° Р·Р°РјС‹РєР°СЋС‚СЃСЏ СЃРёРЅР°РїСЃС‹ СЃРѕРјС‹ (Р° РЅРµ РѕРґРёРЅ РЅР° РґРµРЅРґСЂРёС‚, РґСЂСѓРіРѕР№ РЅР° СЃРѕРјСѓ)
 
 #include "NSeqComparison.h"
 
@@ -37,9 +37,9 @@ NSeqComparison::~NSeqComparison(void) {}
 
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NSeqComparison* NSeqComparison::New(void)
 {
  return new NSeqComparison;
@@ -48,20 +48,20 @@ NSeqComparison* NSeqComparison::New(void)
 
 
 // --------------------------
-// Скрытые методы управления компонентами
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РєРѕРјРїРѕРЅРµРЅС‚Р°РјРё
 // --------------------------
 
-/// Выполняет завершающие пользовательские действия
-/// при добавлении дочернего компонента в этот объект
-// Метод будет вызван только если comp был успешно добавлен в список компонент
+/// Р’С‹РїРѕР»РЅСЏРµС‚ Р·Р°РІРµСЂС€Р°СЋС‰РёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґРµР№СЃС‚РІРёСЏ
+/// РїСЂРё РґРѕР±Р°РІР»РµРЅРёРё РґРѕС‡РµСЂРЅРµРіРѕ РєРѕРјРїРѕРЅРµРЅС‚Р° РІ СЌС‚РѕС‚ РѕР±СЉРµРєС‚
+// РњРµС‚РѕРґ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ С‚РѕР»СЊРєРѕ РµСЃР»Рё comp Р±С‹Р» СѓСЃРїРµС€РЅРѕ РґРѕР±Р°РІР»РµРЅ РІ СЃРїРёСЃРѕРє РєРѕРјРїРѕРЅРµРЅС‚
 bool NSeqComparison::AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer)
 {
  return true;
 }
 
-/// Выполняет предварительные пользовательские действия
-/// при удалении дочернего компонента из этого объекта
-// Метод будет вызван только если comp существует в списке компонент
+/// Р’С‹РїРѕР»РЅСЏРµС‚ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ РґРµР№СЃС‚РІРёСЏ
+/// РїСЂРё СѓРґР°Р»РµРЅРёРё РґРѕС‡РµСЂРЅРµРіРѕ РєРѕРјРїРѕРЅРµРЅС‚Р° РёР· СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
+// РњРµС‚РѕРґ Р±СѓРґРµС‚ РІС‹Р·РІР°РЅ С‚РѕР»СЊРєРѕ РµСЃР»Рё comp СЃСѓС‰РµСЃС‚РІСѓРµС‚ РІ СЃРїРёСЃРєРµ РєРѕРјРїРѕРЅРµРЅС‚
 bool NSeqComparison::ADelComponent(UEPtr<UContainer> comp)
 {
  return true;
@@ -71,24 +71,24 @@ bool NSeqComparison::ADelComponent(UEPtr<UContainer> comp)
 
 
 // --------------------------
-// Методы управления общедоступными свойствами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±С‰РµРґРѕСЃС‚СѓРїРЅС‹РјРё СЃРІРѕР№СЃС‚РІР°РјРё
 // --------------------------
 
-/// Установка имени класса нейрона
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёРјРµРЅРё РєР»Р°СЃСЃР° РЅРµР№СЂРѕРЅР°
 bool NSeqComparison::SetNeuronClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка имени класса генератора последовательности импульсов
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёРјРµРЅРё РєР»Р°СЃСЃР° РіРµРЅРµСЂР°С‚РѕСЂР° РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚Рё РёРјРїСѓР»СЊСЃРѕРІ
 bool NSeqComparison::SetMultiGeneratorClassName(const std::string &value)
 {
  Ready = false;
  return true;
 }
 
-/// Установка длительности импульсов
+/// РЈСЃС‚Р°РЅРѕРІРєР° РґР»РёС‚РµР»СЊРЅРѕСЃС‚Рё РёРјРїСѓР»СЊСЃРѕРІ
 bool NSeqComparison::SetPulseLength(const double &value)
 {
  if(value <= 0)
@@ -96,7 +96,7 @@ bool NSeqComparison::SetPulseLength(const double &value)
 
  size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
- // Настраиваем генераторы образов
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РіРµРЅРµСЂР°С‚РѕСЂС‹ РѕР±СЂР°Р·РѕРІ
  for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->PulseLength = value;
@@ -106,7 +106,7 @@ bool NSeqComparison::SetPulseLength(const double &value)
  return true;
 }
 
-/// Установка амплитуды импульсов
+/// РЈСЃС‚Р°РЅРѕРІРєР° Р°РјРїР»РёС‚СѓРґС‹ РёРјРїСѓР»СЊСЃРѕРІ
 bool NSeqComparison::SetAmplitude(const double &value)
 {
  if(value <= 0)
@@ -114,7 +114,7 @@ bool NSeqComparison::SetAmplitude(const double &value)
 
  size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
- // Настраиваем генераторы образов
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РіРµРЅРµСЂР°С‚РѕСЂС‹ РѕР±СЂР°Р·РѕРІ
  for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->Amplitude = value;
@@ -124,7 +124,7 @@ bool NSeqComparison::SetAmplitude(const double &value)
  return true;
 }
 
-/// Установка частоты генерации (Гц) всех компонентов
+/// РЈСЃС‚Р°РЅРѕРІРєР° С‡Р°СЃС‚РѕС‚С‹ РіРµРЅРµСЂР°С†РёРё (Р“С†) РІСЃРµС… РєРѕРјРїРѕРЅРµРЅС‚РѕРІ
 bool NSeqComparison::SetFrequency(const double &value)
 {
  if(value < 0)
@@ -132,7 +132,7 @@ bool NSeqComparison::SetFrequency(const double &value)
 
  size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
- // Настраиваем генераторы образов
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РіРµРЅРµСЂР°С‚РѕСЂС‹ РѕР±СЂР°Р·РѕРІ
  for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->Frequency = value;
@@ -142,7 +142,7 @@ bool NSeqComparison::SetFrequency(const double &value)
  return true;
 }
 
-/// Установка используемого порога низкопороговой зоны нейрона
+/// РЈСЃС‚Р°РЅРѕРІРєР° РёСЃРїРѕР»СЊР·СѓРµРјРѕРіРѕ РїРѕСЂРѕРіР° РЅРёР·РєРѕРїРѕСЂРѕРіРѕРІРѕР№ Р·РѕРЅС‹ РЅРµР№СЂРѕРЅР°
 bool NSeqComparison::SetLTZThreshold(const double &value)
 {
  if(value <= 0)
@@ -160,7 +160,7 @@ bool NSeqComparison::SetLTZThreshold(const double &value)
  return true;
 }
 
-/// Установка размерности спайковых образов
+/// РЈСЃС‚Р°РЅРѕРІРєР° СЂР°Р·РјРµСЂРЅРѕСЃС‚Рё СЃРїР°Р№РєРѕРІС‹С… РѕР±СЂР°Р·РѕРІ
 bool NSeqComparison::SetPulseCount(const int &value)
 {
  if(value < 1)
@@ -182,7 +182,7 @@ bool NSeqComparison::SetPulseCount(const int &value)
  return true;
 }
 
-/// Установка количества объектов для сравнения
+/// РЈСЃС‚Р°РЅРѕРІРєР° РєРѕР»РёС‡РµСЃС‚РІР° РѕР±СЉРµРєС‚РѕРІ РґР»СЏ СЃСЂР°РІРЅРµРЅРёСЏ
 bool NSeqComparison::SetNumClasses(const int &value)
 {
  if(value < 1)
@@ -194,7 +194,7 @@ bool NSeqComparison::SetNumClasses(const int &value)
  return true;
 }
 
-/// Установка задержек, задающих проверенные спайковые образы классов
+/// РЈСЃС‚Р°РЅРѕРІРєР° Р·Р°РґРµСЂР¶РµРє, Р·Р°РґР°СЋС‰РёС… РїСЂРѕРІРµСЂРµРЅРЅС‹Рµ СЃРїР°Р№РєРѕРІС‹Рµ РѕР±СЂР°Р·С‹ РєР»Р°СЃСЃРѕРІ
 bool NSeqComparison::SetDelaysKFCls(const MDMatrix<double> &value)
 {
  bool res = true;
@@ -213,7 +213,7 @@ bool NSeqComparison::SetDelaysKFCls(const MDMatrix<double> &value)
  return res;
 }
 
-/// Установка задержек, задающих тестовые спайковые образы классов
+/// РЈСЃС‚Р°РЅРѕРІРєР° Р·Р°РґРµСЂР¶РµРє, Р·Р°РґР°СЋС‰РёС… С‚РµСЃС‚РѕРІС‹Рµ СЃРїР°Р№РєРѕРІС‹Рµ РѕР±СЂР°Р·С‹ РєР»Р°СЃСЃРѕРІ
 bool NSeqComparison::SetDelaysFrCls(const MDMatrix<double> &value)
 {
  bool res = true;
@@ -237,7 +237,7 @@ bool NSeqComparison::SetDelaysFrCls(const MDMatrix<double> &value)
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NSeqComparison::ADefault(void)
 {
  NeuronClassName = "NSPNeuronGen";
@@ -258,10 +258,10 @@ bool NSeqComparison::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NSeqComparison::ABuild(void)
 {
  bool res = true;
@@ -269,14 +269,14 @@ bool NSeqComparison::ABuild(void)
  DelaysKFCls.Resize(NumClasses, PulseCount, 0.0);
  DelaysFrCls.Resize(NumClasses, PulseCount, 0.0);
 
- // Удаляем лишние генераторы спайковых образов классов
+ // РЈРґР°Р»СЏРµРј Р»РёС€РЅРёРµ РіРµРЅРµСЂР°С‚РѕСЂС‹ СЃРїР°Р№РєРѕРІС‹С… РѕР±СЂР°Р·РѕРІ РєР»Р°СЃСЃРѕРІ
  for(int i = NumClasses; i < OldNumClasses; i++)
  {
   DelComponent(std::string("KF_Cls")+sntoa(i+1)+std::string("_Spikes"));
   DelComponent(std::string("Fr_Cls")+sntoa(i+1)+std::string("_Spikes"));
  }
 
- // Инициализируем генераторы спайковых образов классов
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РіРµРЅРµСЂР°С‚РѕСЂС‹ СЃРїР°Р№РєРѕРІС‹С… РѕР±СЂР°Р·РѕРІ РєР»Р°СЃСЃРѕРІ
  KFClsSpikes.resize(NumClasses);
  FrClsSpikes.resize(NumClasses);
  for (int i = 0; i < NumClasses; i++)
@@ -290,14 +290,14 @@ bool NSeqComparison::ABuild(void)
  }
 
 
- // Инициализируем нейрон ИЛИ
+ // РРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РЅРµР№СЂРѕРЅ РР›Р
  CompNeuron = AddMissingComponent<NPulseNeuron>(std::string("CompNeuron"), NeuronClassName);
  CompNeuron->SetCoord(MVector<double,3>(11, 3.17 + 2.67 * (NumClasses - 1), 0));
  CompNeuron->DisconnectAll("Output");
  CompNeuron->NumSomaMembraneParts = NumClasses;
 
- /* Вариант с замыканием проверенных последовательностей на дендриты
- // Удаляем лишние сегменты дендритов в нейроне ИЛИ
+ /* Р’Р°СЂРёР°РЅС‚ СЃ Р·Р°РјС‹РєР°РЅРёРµРј РїСЂРѕРІРµСЂРµРЅРЅС‹С… РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚РµР№ РЅР° РґРµРЅРґСЂРёС‚С‹
+ // РЈРґР°Р»СЏРµРј Р»РёС€РЅРёРµ СЃРµРіРјРµРЅС‚С‹ РґРµРЅРґСЂРёС‚РѕРІ РІ РЅРµР№СЂРѕРЅРµ РР›Р
  for(int i = NumClasses; i < OldNumClasses; i++)
  {
   UEPtr<NPulseMembrane> dendrite = CompNeuron->GetComponentL<NPulseMembrane>("Dendrite" + sntoa(i+1) + "_1", true);
@@ -317,12 +317,12 @@ bool NSeqComparison::ABuild(void)
  CompNeuron->Reset();
 
 
- // Строим связи между генераторами и синапсами нейрона
+ // РЎС‚СЂРѕРёРј СЃРІСЏР·Рё РјРµР¶РґСѓ РіРµРЅРµСЂР°С‚РѕСЂР°РјРё Рё СЃРёРЅР°РїСЃР°РјРё РЅРµР№СЂРѕРЅР°
  for (int i = 0; i < NumClasses; i++)
  {
   UEPtr<NPulseMembrane> dendrite = CompNeuron->GetComponentL<NPulseMembrane>("Dendrite" + sntoa(i+1) + "_1", true);
   UEPtr<NPulseMembrane> soma = CompNeuron->GetComponentL<NPulseMembrane>("Soma" + sntoa(i+1), true);
-  // Заменить excsynapse, если нужно сделать связь на дендрит
+  // Р—Р°РјРµРЅРёС‚СЊ excsynapse, РµСЃР»Рё РЅСѓР¶РЅРѕ СЃРґРµР»Р°С‚СЊ СЃРІСЏР·СЊ РЅР° РґРµРЅРґСЂРёС‚
 //  NPulseSynapseCommon *excsynapse = dendrite->GetExcitatorySynapses(0);
   NPulseSynapseCommon *excsynapse = soma->GetExcitatorySynapses(0);
   NPulseSynapseCommon *inhsynapse = soma->GetInhibitorySynapses(0);
@@ -353,7 +353,7 @@ bool NSeqComparison::AReset(void)
 
  size_t temp_size = min(KFClsSpikes.size(), FrClsSpikes.size());
 
- // Настраиваем генераторы образов
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РіРµРЅРµСЂР°С‚РѕСЂС‹ РѕР±СЂР°Р·РѕРІ
  for (size_t i = 0; i < temp_size; i++)
  {
   KFClsSpikes[i]->Amplitude = Amplitude;
@@ -369,7 +369,7 @@ bool NSeqComparison::AReset(void)
   FrClsSpikes[i]->Reset();
  }
 
- // Настраиваем порог генераторной зоны нейрона И
+ // РќР°СЃС‚СЂР°РёРІР°РµРј РїРѕСЂРѕРі РіРµРЅРµСЂР°С‚РѕСЂРЅРѕР№ Р·РѕРЅС‹ РЅРµР№СЂРѕРЅР° Р
  UEPtr<NLTZone> ltzone = CompNeuron->GetComponentL<NLTZone>("LTZone", true);
  ltzone->Threshold = LTZThreshold;
  CompNeuron->UseAverageLTZonePotential = false;

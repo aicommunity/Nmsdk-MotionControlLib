@@ -17,162 +17,162 @@ using namespace RDK;
 /* *************************************************************************** */
 class RDK_LIB_TYPE NObjInArea: public UNet
 {
-public: // Общедоступные свойства
+public: //  
 
- /// Имя класса нейрона
- ULProperty<std::string, NObjInArea, ptPubParameter> NeuronClassName;
+ ///   
+ UProperty<std::string, NObjInArea, ptPubParameter> NeuronClassName;
 
- /// Имя класса генератора последовательности импульсов
- ULProperty<std::string, NObjInArea, ptPubParameter> MultiGeneratorClassName;
+ ///     
+ UProperty<std::string, NObjInArea, ptPubParameter> MultiGeneratorClassName;
 
- /// Длительность импульсов (с)
- ULProperty<double, NObjInArea, ptPubParameter> PulseLength;
+ ///   ()
+ UProperty<double, NObjInArea, ptPubParameter> PulseLength;
 
- /// Амплитуда импульсов
- ULProperty<double, NObjInArea, ptPubParameter> Amplitude;
+ ///  
+ UProperty<double, NObjInArea, ptPubParameter> Amplitude;
 
- /// Частота генерации (Гц) всех компонентов
- ULProperty<double, NObjInArea, ptPubParameter> Frequency;
+ ///   ()  
+ UProperty<double, NObjInArea, ptPubParameter> Frequency;
 
- /// Частота генерации (Гц) блоков подавления сигнала и возбуждающего генератора
- ULProperty<double, NObjInArea, ptPubParameter> HighFreq;
-
-
- /// Момент времени t=t0, с которого начинается подавление области кадра с левой стороны
- ULProperty<double, NObjInArea, ptPubParameter> Delay11;
-
- /// Момент времени t=t1, до которого происходит подавление области кадра с левой стороны
- ULProperty<double, NObjInArea, ptPubParameter> Delay12;
-
- /// Момент времени t=t2, с которого начинается подавление области кадра с правой стороны
- ULProperty<double, NObjInArea, ptPubParameter> Delay21;
-
- /// Момент времени t=T, до которого происходит подавление области кадра с правой стороны
- ULProperty<double, NObjInArea, ptPubParameter> Delay22;
+ ///   ()      
+ UProperty<double, NObjInArea, ptPubParameter> HighFreq;
 
 
- /// Размерность спайковых образов в одномерном случае
- ULProperty<int, NObjInArea, ptPubParameter> PulseCount;
+ ///   t=t0,         
+ UProperty<double, NObjInArea, ptPubParameter> Delay11;
 
- /// Количество объектов для распознавания
- ULProperty<int, NObjInArea, ptPubParameter> NumObj;
+ ///   t=t1,         
+ UProperty<double, NObjInArea, ptPubParameter> Delay12;
 
- /// Задержки, задающие спайковые образы классов
- ULProperty<MDMatrix<double>, NObjInArea, ptPubParameter> DelaysClsSpikeFr;
+ ///   t=t2,         
+ UProperty<double, NObjInArea, ptPubParameter> Delay21;
 
-
-public: // Входы и выходы
-
-/// Выход модели
-UPropertyOutputData<MDMatrix<double>, NObjInArea, ptOutput | ptPubState> Output;
+ ///   t=T,         
+ UProperty<double, NObjInArea, ptPubParameter> Delay22;
 
 
-protected: // Данные
- /// Генераторы спайковых образов классов
+ ///      
+ UProperty<int, NObjInArea, ptPubParameter> PulseCount;
+
+ ///    
+ UProperty<int, NObjInArea, ptPubParameter> NumObj;
+
+ /// ,    
+ UProperty<MDMatrix<double>, NObjInArea, ptPubParameter> DelaysClsSpikeFr;
+
+
+public: //   
+
+///  
+UProperty<MDMatrix<double>, NObjInArea, ptOutput | ptPubState> Output;
+
+
+protected: // 
+ ///    
  std::vector<UEPtr <NPulseGeneratorMulti>> ClsSpikeFr;
 
- /// Старое значение количества классов объектов, необходимое для перестраивания компонента
+ ///     ,    
  int OldNumObj;
 
- /// Блок подавления 1
+ ///   1
  UEPtr <NSuppressionUnit> SuppressUnit1;
 
- /// Блок подавления 2
+ ///   2
  UEPtr <NSuppressionUnit> SuppressUnit2;
 
- /// Нейрон ИЛИ
+ ///  
  UEPtr <NPulseNeuron> ORNeuron;
 
- /// Нейрон И
+ ///  
  UEPtr <NPulseNeuron> ANDNeuron;
 
- /// Решающий нейрон
+ ///  
  UEPtr <NPulseNeuron> DecidingNeuron;
 
- /// Возбуждающий генератор
+ ///  
  UEPtr <NPulseGeneratorTransit> ExcitatoryGen;
 
- // Флаг для изменения входных связей ExcitatoryGen
+ //      ExcitatoryGen
  bool Relinked;
 
 
-protected: // Временные переменные
+protected: //  
 
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NObjInArea(void);
 virtual ~NObjInArea(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NObjInArea* New(void);
 // --------------------------
 
 protected:
  // --------------------------
- // Скрытые методы управления компонентами
+ //    
  // --------------------------
 
- /// Выполняет завершающие пользовательские действия
- /// при добавлении дочернего компонента в этот объект
- // Метод будет вызван только если comp был успешно добавлен в список компонент
+ ///    
+ ///       
+ //      comp      
  virtual bool AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer = 0);
 
- /// Выполняет предварительные пользовательские действия
- /// при удалении дочернего компонента из этого объекта
- // Метод будет вызван только если comp существует в списке компонент
+ ///    
+ ///       
+ //      comp    
  virtual bool ADelComponent(UEPtr<UContainer> comp);
 
  // --------------------------
 
 protected:
 // --------------------------
-// Методы управления общедоступными свойствами
+//    
 // --------------------------
 
-/// Установка имени класса нейрона
+///    
 bool SetNeuronClassName(const std::string &value);
 
-/// Установка имени класса генератора последовательности импульсов
+///      
 bool SetMultiGeneratorClassName(const std::string &value);
 
-/// Установка длительности импульсов
+///   
 bool SetPulseLength(const double &value);
 
-/// Установка амплитуды импульсов
+///   
 bool SetAmplitude(const double &value);
 
-/// Установка частоты генерации (Гц) всех компонентов
+///    ()  
 bool SetFrequency(const double &value);
 
-/// Установка частоты импульсов подавляющих и возбуждающего генераторов
+///       
 bool SetHighFreq(const double &value);
 
-/// Установка момента времени t=t0, с которого начинается подавление области кадра с левой стороны
+///    t=t0,         
 bool SetDelay11(const double &value);
 
-/// Установка момента времени t=t1, до которого происходит подавление области кадра с левой стороны
+///    t=t1,         
 bool SetDelay12(const double &value);
 
-/// Установка момента времени t=t2, с которого начинается подавление области кадра с правой стороны
+///    t=t2,         
 bool SetDelay21(const double &value);
 
-/// Установка момента времени t=T, до которого происходит подавление области кадра с правой стороны
+///    t=T,         
 bool SetDelay22(const double &value);
 
-/// Установка размерности спайковых образов
+///    
 bool SetPulseCount(const int &value);
 
-/// Установка количества объектов для распознавания
+///     
 bool SetNumObj(const int &value);
 
-/// Установка задержек, задающих спайковые образы классов
+///  ,    
 bool SetDelaysClsSpikeFr(const MDMatrix<double> &value);
 
 // --------------------------
@@ -180,13 +180,13 @@ bool SetDelaysClsSpikeFr(const MDMatrix<double> &value);
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
 // Reset computation
