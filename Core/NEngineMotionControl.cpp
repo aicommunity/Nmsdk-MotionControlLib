@@ -1887,8 +1887,8 @@ int NEngineMotionControl::GetNumControlLoops(void)
 
 bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &value)
 {
-  int NumControlLoops = GetNumControlLoops();
-  if((index >=NumControlLoops)||(index <0))
+  int num_control_loops = GetNumControlLoops();
+  if((index >=num_control_loops)||(index <0))
    return false;
 
   for(int i=0;i<NumMotionElements;i++)
