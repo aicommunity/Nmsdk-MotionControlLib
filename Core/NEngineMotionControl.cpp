@@ -1148,7 +1148,7 @@ int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, 
 	else
 	 pos_ranges[i].first=pos_ranges[i-1].second;
 
-	pos_ranges[i].second=a_max/powl(2.0,num_motions-i-1);
+	pos_ranges[i].second=static_cast<double>(a_max)/static_cast<double>(powl(2.0,num_motions-i-1));
 	++rr_index;
    }
 
@@ -1160,7 +1160,7 @@ int NEngineMotionControl::CalcAfferentRange(int num_motions, bool cross_ranges, 
 	else
 	 neg_ranges[i].second=neg_ranges[i-1].first;
 
-	neg_ranges[i].first=a_min/powl(2.0,num_motions-i-1);
+	neg_ranges[i].first=static_cast<double>(a_min)/static_cast<double>(powl(2.0,num_motions-i-1));
 	++rr_index;
    }
   }
@@ -1257,15 +1257,17 @@ void NEngineMotionControl::SetupPacRange(void)
  {
    for(int i=0;i<num_motions;i++)
    {
-	values[i+values.size()/2].assign(1,a_max/powl(2.0,num_motions-i-1));
-	++rr_index;
+    double denom = static_cast<double>(powl(2.0, num_motions - i - 1));
+    values[i+values.size()/2].assign(1, static_cast<double>(a_max) / denom);
+    ++rr_index;
    }
 
    rr_index=0;
    for(int i=0;i<num_motions;i++)
    {
-	values[i].assign(1,a_min/powl(2.0,num_motions-i-1));
-	++rr_index;
+    double denom = static_cast<double>(powl(2.0, num_motions - i - 1));
+    values[i].assign(1, static_cast<double>(a_min) / denom);
+    ++rr_index;
    }
  }
  else
@@ -1887,8 +1889,8 @@ int NEngineMotionControl::GetNumControlLoops(void)
 
 bool NEngineMotionControl::SetIsAfferentLinked(const int &index, const bool &value)
 {
-  int NumControlLoops = GetNumControlLoops();
-  if((index >=NumControlLoops)||(index <0))
+  int num_control_loops = GetNumControlLoops();
+  if((index >=num_control_loops)||(index <0))
    return false;
 
   for(int i=0;i<NumMotionElements;i++)

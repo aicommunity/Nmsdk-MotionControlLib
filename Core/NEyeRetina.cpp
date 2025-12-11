@@ -2,6 +2,10 @@
 #define NMSDK_NEyeRetina_CPP
 
 #include "NEyeRetina.h"
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4244)
+#endif
 
 namespace NMSDK {
 
@@ -466,6 +470,9 @@ bool NEyeRetina::ACalculate(void)
 // --------------------------
 
 }
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 #endif
 
 

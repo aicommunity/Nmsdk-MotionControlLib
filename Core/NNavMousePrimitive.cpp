@@ -14,6 +14,10 @@ See file license.txt for more information
 *********************************************************** */
 
 #include "NNavMousePrimitive.h"
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4458 4456)
+#endif
 
 //---------------------------------------------------------------------------
 namespace NMSDK{
@@ -478,5 +482,8 @@ bool NNavMousePrimitive::ACalculate(void)
 /* *************************************************************************** */
 
 }
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 //---------------------------------------------------------------------------
 

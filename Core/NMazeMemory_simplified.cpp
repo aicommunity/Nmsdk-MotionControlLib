@@ -17,6 +17,14 @@ See file license.txt for more information
 #define NMAZEMEMORY_SIMPLIFIED_CPP
 
 #include "NMazeMemory_simplified.h"
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4456 4458)
+#endif
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4456 4458)
+#endif
 #include <QString>
 
 namespace NMSDK {
@@ -37,6 +45,14 @@ NMazeMemory_simplified::NMazeMemory_simplified(void)
 {
 
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 NMazeMemory_simplified::~NMazeMemory_simplified(void)
 {
@@ -636,22 +652,22 @@ bool NMazeMemory_simplified::MergingTEs(int active_num)
       for (size_t i = 0; i<back_max; i++)
       {
         //на N1_D1_2
-        UEPtr<NPulseNeuron> fin_neuron = BaseTE->Backwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
-        UEPtr<NPulseMembrane> fin_dend = fin_neuron->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
-        int dend_syns = fin_dend->NumExcitatorySynapses;
-        for (int n = 1; n<=dend_syns; n++)
+        UEPtr<NPulseNeuron> fin_neuron_local = BaseTE->Backwards[i]->GetComponentL<NPulseNeuron>("Neuron1", true);
+        UEPtr<NPulseMembrane> fin_dend_local = fin_neuron_local->GetComponentL<NPulseMembrane>("Dendrite1_2", true);
+        int dend_syns_local = fin_dend_local->NumExcitatorySynapses;
+        for (int n = 1; n<=dend_syns_local; n++)
         {
-          UEPtr<NPulseSynapse> syn = fin_dend->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
+          UEPtr<NPulseSynapse> syn = fin_dend_local->GetComponentL<NPulseSynapse>("ExcSynapse"+sntoa(n),true);
           if(!syn)
             return true;
 
           if (syn->Input.IsConnected())
           {
-           if(n==dend_syns)
+           if(n==dend_syns_local)
            {
-            fin_dend->NumExcitatorySynapses++;
-            fin_dend->Reset();
-            dend_syns = fin_dend->NumExcitatorySynapses;
+            fin_dend_local->NumExcitatorySynapses++;
+            fin_dend_local->Reset();
+            dend_syns_local = fin_dend_local->NumExcitatorySynapses;
            }
             continue; //перейти к следующему синапсу
           }
