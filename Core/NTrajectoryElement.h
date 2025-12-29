@@ -20,110 +20,135 @@ namespace NMSDK {
 
 class RDK_LIB_TYPE NTrajectoryElement: public UNet
 {
-public: // 
-///   
-UProperty<std::string, NTrajectoryElement, ptPubParameter> NeuronClassName;
+public: // Параметры
+/// Имя класса нейрона
+ULProperty<std::string, NTrajectoryElement, ptPubParameter> NeuronClassName;
 
-///      
-UProperty<MDMatrix<double>, NTrajectoryElement, ptOutput | ptPubState> Output;
+/// Выходной сигнал на следующий элемент траектории
+UPropertyOutputData<MDMatrix<double>, NTrajectoryElement, ptOutput | ptPubState> Output;
 
-/// ,     
-/// (   MazeMemory,   = 0)
-UProperty<int, NTrajectoryElement, ptPubParameter> Layer;
+///Номер слоя, к которому принадлежит элемент траетории
+/// (для использования в MazeMemory, по умолчанию = 0)
+ULProperty<int, NTrajectoryElement, ptPubParameter> Layer;
 
-//Input_u_top, Input_u_tcn  Input_y_pcn2 -          ( ),
-//     NTrajectoryElement   .
-// , ..      Input   Input .
-//  ,     -        
-//Input_u_top, Input_u_tcn  Input_y_pcn2   
+//Input_u_top, Input_u_tcn и Input_y_pcn2 - перемычки от входа блока к синапсам соответсвующих сегментов дендритов (согласно схеме),
+//заданы для упрощения покдлючения блока NTrajectoryElement к внешним источникам.
+//Сейчас неактивны, т.к. нет возможности в коде подключить Input блока к Input синапса.
+//Могут быть полезны, если такая возможность появится - тогда в код необходимо добавить построение связей между
+//Input_u_top, Input_u_tcn и Input_y_pcn2 и соответствующими синапсами
 
-///       (
-//UProperty<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_top;
+/// Входной сигнал с высшего уровня управления
+//UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_top;
 
-///   c   
-//UProperty<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_tcn;
+/// Входной сигнал c предыдущего элемента траектории
+//UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_u_tcn;
 
-///        - PCN2 ( NMultiPositionControl),
-///      
-//UProperty<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_y_pcn2;
+/// Входной сигнал с предыдущего уровня системы управления - PCN2 (блоки NMultiPositionControl),
+/// сигнализирует о выполнении текущего элемента траектории
+//UPropertyInputData<MDMatrix<double>,NTrajectoryElement, ptInput | ptPubState> Input_y_pcn2;
 
-///      
-/// (    )
-///      MazeMemory
+/// Имена дочерних TE (содержимое вектора Forwards)
+ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> ForwardsNames;
+
+/// Имена родительских TE (содержимое вектора Backwards)
+ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> BackwardsNames;
+
+/// Имена синапсов, на которые заведены связи на дочерние TE (содержимое вектора ForwardSyns)
+ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> ForwardSynsNames;
+
+/// Имена синапсов, на которые заведены обратные связи на родительские TE (содержимое вектора BackwardSyns)
+ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> BackwardSynsNames;
+
+///Имена всех узлов (СИНАПСЫ), в которые можно попасть из данного (содержимое вектора Paths)
+ULProperty<std::vector<string>, NTrajectoryElement, ptPubParameter> PathsNames;
+
+// Параметры для MazeMemory
+
+/// Возможные направления движения из данного элемента траектории
+/// (возможные действия в данной ситуации)
+/// параметр необходим для использования в MazeMemory
 std::vector<UEPtr<NTrajectoryElement>> Forwards;
 
-///   
-/// ( )
-///     MazeMemory
-//int CurrentForward;
+///Последнее выбранное направление движения
+/// (возможное действие)
+///параметр необходим для использования в MazeMemory
+ULProperty<int, NTrajectoryElement, ptPubParameter> LastUsedForward;
 
-///    
-///     MazeMemory
+///Обратные связи из данной точки
+///параметр необходим для использования в MazeMemory
 std::vector<UEPtr<NTrajectoryElement>> Backwards;
 
-///   
-///     MazeMemory
-//int CurrentBackward;
+///Последняя выбранная обратная связь
+///параметр необходим для использования в MazeMemory
+ULProperty<int, NTrajectoryElement, ptPubParameter> LastUsedBackward;
 
-///    
-///     MazeMemory
+///Все связи из данной точки
+///параметр необходим для использования в MazeMemory
 std::vector<UEPtr<NPulseSynapse>> Paths;
 
-///   (  )
-///     MazeMemory
+///Вектор синапсов на N1_D1_5 дочерних TE
+///параметр необходим для использования в MazeMemory
+std::vector<UEPtr<NPulseSynapse>> ForwardSyns;
+
+///Вектор синапсов на N1_S1 и N1_D1_5 родительских TE
+///(обратные связи)
+///параметр необходим для использования в MazeMemory
+std::vector<UEPtr<NPulseSynapse>> BackwardSyns;
+
+///Последняя выбранная связь (прямая или обратная)
+///параметр необходим для использования в MazeMemory
 int LastUsedPath;
 
-///,      TE  
-///     MazeMemory
+///Связь, по которой попали из предыдущего TE в текущий
+///параметр необходим для использования в MazeMemory
 //int UsedPath;
 
 
-
-
 protected:
-///   
+///Внутренние нейроны элемента траектории
 std::vector<UEPtr<NPulseNeuron>> Neurons;
 
-///   1  2
+///Размер сомы нейронов 1 и 2
 int SomaSize;
 
-///   1
+///Размер дендритов нейрона 1
 std::vector<int> DendSizes1;
 
-///   2
+///Размер дендритов нейрона 2
 std::vector<int> DendSizes2;
 
 
 
 
 
-public: // 
+
+public: // Методы
 // --------------------------
-//   
+// Конструкторы и деструкторы
 // --------------------------
 NTrajectoryElement(void);
 virtual ~NTrajectoryElement(void);
 // --------------------------
 
 // --------------------------
-//   
+// Методы управления параметрами
 // --------------------------
-///  ,  
+/// Имя класса, создающего нейрон
 bool SetNeuronClassName(const std::string &value);
 
-/// ,     
-/// (   MazeMemory,   = 0)
+///Номер слоя, к которому принадлежит элемент траетории
+/// (для использования в MazeMemory, по умолчанию = 0)
 bool SetLayer(const int &value);
 
 
 // --------------------------
 
 // --------------------------
-//    
+// Системные методы управления объектом
 
 // --------------------------
 public:
-//         
+// Выделяет память для новой чистой копии объекта этого класса
 virtual NTrajectoryElement* New(void);
 // --------------------------
 
@@ -131,13 +156,13 @@ virtual NTrajectoryElement* New(void);
 // Proctected computation methods
 // --------------------------
 protected:
-//        
+// Восстановление настроек по умолчанию и сброс процесса счета
 virtual bool ADefault(void);
 
-//     
-//   
-//    Reset()   Ready  true
-//    
+// Обеспечивает сборку внутренней структуры объекта
+// после настройки параметров
+// Автоматически вызывает метод Reset() и выставляет Ready в true
+// в случае успешной сборки
 virtual bool ABuild(void);
 
 // Reset computation

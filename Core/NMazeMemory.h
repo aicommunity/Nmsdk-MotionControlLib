@@ -35,26 +35,29 @@ class RDK_LIB_TYPE NMazeMemory: public UNet
 {
 public: // 
 ///      (, )
-UProperty<bool, NMazeMemory, ptPubParameter> Situation;
+ULProperty<bool, NMazeMemory, ptPubParameter> Situation;
 
 ///       ( )
 /// -  = -  ,
 ///   :
 /// 1 -     , 0 -  
 /// [0] -  , [1] -  , [2] -  , [3] - 
-UProperty<std::vector<int>,NMazeMemory, ptPubParameter> InputActions;
+ULProperty<std::vector<int>,NMazeMemory, ptPubParameter> InputActions;
 
 ///  
-RDK::UProperty<string, NMazeMemory, ptPubParameter> ActionNeuronsType;
+RDK::ULProperty<string, NMazeMemory, ptPubParameter> ActionNeuronsType;
 
 ///  ,   
-UProperty<int, NMazeMemory, ptPubParameter> FeaturesNum;
+ULProperty<int, NMazeMemory, ptPubParameter> FeaturesNum;
 
 ///    (   )
-UProperty<bool, NMazeMemory, ptPubParameter> IsDone;
+ULProperty<bool, NMazeMemory, ptPubParameter> IsDone;
 
 ///   ( = {x,y,alpha},  alpha -  
-UProperty<MDMatrix<double>, NMazeMemory, ptPubParameter> SituationCoords;
+ULProperty<MDMatrix<double>, NMazeMemory, ptPubParameter> SituationCoords;
+
+///     PassedTEs
+ULProperty<std::vector<string>, NMazeMemory, ptPubParameter> PassedTEsNames;
 
 protected:
 /// 
@@ -117,7 +120,8 @@ int WaitForSpike;
 ///     PostInputNeuron
 int WaitForSpikePI;
 
-
+///     
+///  PreControl 
 bool IsWaitingForAnswer;
 
 ///-,
@@ -125,10 +129,21 @@ bool IsWaitingForAnswer;
 ///  PreControl 
 int WaitForAnswerCnt;
 
+///  ,     
+///     
+bool CheckFinish;
+
 
 //,    
 UEPtr<NTrajectoryElement> TEToDelete;
 UEPtr<NMultiPositionControl> MPCToDelete;
+
+/// ,     
+///     
+std::vector<UEPtr<NPulseSynapse>> SynsToChngWeights;
+
+///
+string CheckBaseTE;
 
 
 public: // 
@@ -255,8 +270,25 @@ bool ProcessOptions();
 // 
 bool DeadlockProcessing();
 
+//  TE   
+// (     w = 0,     LastUsedForward (  LastUsedBackward)  1,
+//     w = 1)
+bool SwitchToNextLink(UEPtr<NTrajectoryElement> t_element);
+
+//     
+//   D1_5  finish_te,
+//     start_te
+UEPtr<NPulseSynapse> GetForwardSyn(UEPtr<NTrajectoryElement> start_te, UEPtr<NTrajectoryElement> finish_te);
+
+//     BackwardNames, ForwardNames, PathsNames   TE   MazeMemory
+bool UpdateNames();
+
+//     
+bool CheckIfFinished();
+
 // --------------------------
 };
 
 }
+
 #endif
