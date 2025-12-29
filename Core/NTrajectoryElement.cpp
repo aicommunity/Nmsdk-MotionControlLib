@@ -19,7 +19,7 @@ See file license.txt for more information
 namespace NMSDK {
 
 // --------------------------
-// Конструкторы и деструкторы
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
 // --------------------------
 NTrajectoryElement::NTrajectoryElement(void)
 : NeuronClassName("NeuronClassName",this, &NTrajectoryElement::SetNeuronClassName),
@@ -45,7 +45,7 @@ NTrajectoryElement::~NTrajectoryElement(void)
 // --------------------------
 
 // --------------------------
-// Методы управления параметрами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°РјРё
 // --------------------------
 bool NTrajectoryElement::SetNeuronClassName(const std::string &value)
 {
@@ -65,9 +65,9 @@ bool NTrajectoryElement::SetLayer(const int &value)
 
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NTrajectoryElement* NTrajectoryElement::New(void)
 {
  return new NTrajectoryElement;
@@ -77,7 +77,7 @@ NTrajectoryElement* NTrajectoryElement::New(void)
 // --------------------------
 // Proctected computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NTrajectoryElement::ADefault(void)
 {
  NeuronClassName = "NSPNeuronGen"; //NNewSPNeuron
@@ -98,17 +98,17 @@ bool NTrajectoryElement::ADefault(void)
 }
 
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NTrajectoryElement::ABuild(void)
 {
- //Координаты для размещения нейронов
+ //РљРѕРѕСЂРґРёРЅР°С‚С‹ РґР»СЏ СЂР°Р·РјРµС‰РµРЅРёСЏ РЅРµР№СЂРѕРЅРѕРІ
  int y_base = 2;
  int y_shift = 2;
 
- //Создаем нейроны
+ //РЎРѕР·РґР°РµРј РЅРµР№СЂРѕРЅС‹
  Neurons.resize(2);
  for (int i = 0; i<2; i++)
  {
@@ -126,11 +126,11 @@ bool NTrajectoryElement::ABuild(void)
    Neurons[1]->Reset();
 
 
- //Строим связи
+ //РЎС‚СЂРѕРёРј СЃРІСЏР·Рё
  bool res(true);
 
- //НОВАЯ КОНФИГУРАЦИЯ (подобрана для обновленной NNewSPNeuron)
- //От N1 к N2
+ //РќРћР’РђРЇ РљРћРќР¤РР“РЈР РђР¦РРЇ (РїРѕРґРѕР±СЂР°РЅР° РґР»СЏ РѕР±РЅРѕРІР»РµРЅРЅРѕР№ NNewSPNeuron)
+ //РћС‚ N1 Рє N2
  UEPtr<NPulseLTZoneCommon> ltzone1 = Neurons[0]->GetComponentL<NPulseLTZoneCommon>("LTZone", true);
  if(!ltzone1)
      return true;
@@ -145,7 +145,7 @@ bool NTrajectoryElement::ABuild(void)
  if(!res)
   return true;
 
- //От N2 к N1
+ //РћС‚ N2 Рє N1
  UEPtr<NLTZone> ltzone2 = Neurons[1]->GetComponentL<NLTZone>("LTZone", true);
  if(!ltzone2)
      return true;
@@ -174,7 +174,7 @@ bool NTrajectoryElement::AReset(void)
 // Execute math. computations of current object on current step
 bool NTrajectoryElement::ACalculate(void)
 {
- //Передача сигнала к выходу блока
+ //РџРµСЂРµРґР°С‡Р° СЃРёРіРЅР°Р»Р° Рє РІС‹С…РѕРґСѓ Р±Р»РѕРєР°
   Output = Neurons[0]->Output;
 
  return true;

@@ -28,267 +28,269 @@ See file license.txt for more information
 
 namespace NMSDK {
 
-//using namespace RDK;
+using namespace RDK;
 
-// ,       
+// Класс, создающий группу нейронов для моделирования условного рефлекса
 class RDK_LIB_TYPE NMazeMemory: public UNet
 {
-public: // 
-///      (, )
-ULProperty<bool, NMazeMemory, ptPubParameter> Situation;
+public: // Параметры
+/// Флаг ситуации с множественным выбором (перекресток, развилка)
+UProperty<bool, NMazeMemory, ptPubParameter> Situation;
 
-///       ( )
-/// -  = -  ,
-///   :
-/// 1 -     , 0 -  
-/// [0] -  , [1] -  , [2] -  , [3] - 
-ULProperty<std::vector<int>,NMazeMemory, ptPubParameter> InputActions;
+/// Вектор возможных вариантов действий в ситуации (направлений движения)
+/// Кол-во элементов = кол-ву возможных вариантов,
+/// значения элеменов вектора:
+/// 1 - есть возможность совершить это действие, 0 - нет возможности
+/// [0] - поворот направо, [1] - поворот налево, [2] - ехать прямо, [3] - стоп
+UProperty<std::vector<int>,NMazeMemory, ptPubParameter> InputActions;
 
-///  
-RDK::ULProperty<string, NMazeMemory, ptPubParameter> ActionNeuronsType;
+///Тип нейронов действия
+RDK::UProperty<string, NMazeMemory, ptPubParameter> ActionNeuronsType;
 
-///  ,   
-ULProperty<int, NMazeMemory, ptPubParameter> FeaturesNum;
+/// Количество признаков, описывающих запоминаемую ситуацию
+UProperty<int, NMazeMemory, ptPubParameter> FeaturesNum;
 
-///    (   )
-ULProperty<bool, NMazeMemory, ptPubParameter> IsDone;
+/// Флаг завершения работы (все возможные варианты исследованы)
+UProperty<bool, NMazeMemory, ptPubParameter> IsDone;
 
-///   ( = {x,y,alpha},  alpha -  
-ULProperty<MDMatrix<double>, NMazeMemory, ptPubParameter> SituationCoords;
+///Вектор параметров ситуации (сейчас = {x,y,alpha}, где alpha - ориентация робота)
+UProperty<MDMatrix<double>, NMazeMemory, ptPubParameter> SituationCoords;
 
-///     PassedTEs
-ULProperty<std::vector<string>, NMazeMemory, ptPubParameter> PassedTEsNames;
+///Содержимое вектора PassedTEs
+UProperty<std::vector<string>, NMazeMemory, ptPubParameter> PassedTEsNames;
 
 protected:
-/// 
+///Нейроны действий
 std::vector<UEPtr<NPulseNeuron>> ActionNeurons;
 
-///    
+///Все элементы траектории на схеме
 std::vector<UEPtr<NTrajectoryElement>> TrajectoryElements;
 
-///  PostInput   
+/// Активные PostInput нейроны в схеме
 std::vector<UEPtr<NTrajectoryElement>> ActivePIs;
 
-///  MultiPC
+/// Блоки MultiPC
 std::vector<UEPtr<NMultiPositionControl>> MultiPCs;
 
-///  NeuronTrainer (   )
+/// Блоки NeuronTrainer (осуществляют запоминание признаков ситуации)
 std::vector<UEPtr<NNeuronTrainer>> NTrainers;
 
-///     
+///Индекс текущего элемента траектории в массиве
 int CurrentTE;
 
-///   NeuronTrainer  
+///Указатель на текущий NeuronTrainer в массиве
 UEPtr<NNeuronTrainer> CurrentNT;
 
-///   
+/// Номер текущего слоя
 int CurrentLayer;
 
-///       X (   )
+///Расстояние по умолчанию между слоями по оси X (нужно для растановки блоков)
 double LayerShift;
 
-///       Y (   )
+///Расстояние по умолчанию между блоками по оси Y (нужно для растановки блоков)
 double yShift;
 
-///     (   )
+///Вес по умолчанию дополнительных связей (на направления помимо основного)
 double SideWeight;
 
-///  
+///Пройденные элементы траектории
 std::vector<UEPtr<NTrajectoryElement>> PassedTEs;
 
-///  
+///Текущий элемент траектории
 UEPtr<NTrajectoryElement> BaseTE;
 
-///MultiPC,    
+///MultiPC, соответствующий текущему элементу траектории
 UEPtr<NMultiPositionControl> BaseMPC;
 
-///  
+///Предыдущий элемент траектории
 UEPtr<NTrajectoryElement> PrevTE;
 
-///    NeuronTrainer
-///(,   NT,    )
+///Флаг ожидания завершения обучения NeuronTrainer
+///(ждем, пока обучится NT, чтобы завершить обработку ситуации)
 bool IsNotFinished;
 
-///-,
-///     NeuronTrainer,
-///      TE
+///Счетчик-заглушка,
+///обеспечивает паузу после окончания обучения NeuronTrainer,
+///чтобы сигнал успел дойти до дочерних TE
 int WaitForSpike;
 
 
-///-,
-///     TE,
-///     PostInputNeuron
+///Счетчик-заглушка,
+///обеспечивает паузу после переключения между TE,
+///чтобы сигнал успел дойти до PostInputNeuron
 int WaitForSpikePI;
 
-///     
-///  PreControl 
+/// Флаг паузы после подачи активности
+/// на PreControl нейроны
 bool IsWaitingForAnswer;
 
-///-,
-///    
-///  PreControl 
+///Счетчик-заглушка,
+///обеспечивает паузу после подачи активности
+/// на PreControl нейроны
 int WaitForAnswerCnt;
 
-///  ,     
-///     
+/// Флаг, обозначающий необходимость вызова функции
+/// для проверки выполнения условия завершения алгоритма
 bool CheckFinish;
 
 
-//,    
+///Компоненты, которые нужно будет удалить
 UEPtr<NTrajectoryElement> TEToDelete;
 UEPtr<NMultiPositionControl> MPCToDelete;
 
-/// ,     
-///     
-std::vector<UEPtr<NPulseSynapse>> SynsToChngWeights;
+/// Синапсы, веса которых нужно вернуть к значению 0.2
+/// после передачи активности при слиянии узлов
+vector<UEPtr<NPulseSynapse>> SynsToChngWeights;
 
-///
+///Для отладки
 string CheckBaseTE;
 
 
-public: // 
+public: // Методы
 // --------------------------
-//   
+// Конструкторы и деструкторы
 // --------------------------
 NMazeMemory(void);
 virtual ~NMazeMemory(void);
 // --------------------------
 
 // --------------------------
-//   
+// Методы упраления параметрами
 // --------------------------
-///      (, )
+/// Флаг ситуации с множественным выбором (перекресток, развилка)
 bool SetSituation(const bool &value);
 
-///       ( )
-/// -  = -  ,
-///   :
-/// 1 -     , 0 -  
-/// [0] -  , [1] -  , [2] -  , [3] - 
+/// Вектор возможных вариантов действий в ситуации (направлений движения)
+/// Кол-во элементов = кол-ву возможных вариантов,
+/// значения элеменов вектора:
+/// 1 - есть возможность совершить это действие, 0 - нет возможности
+/// [0] - поворот направо, [1] - поворот налево, [2] - ехать прямо, [3] - стоп
 bool SetInputActions(const std::vector<int> &value);
 
-///  
+///Тип нейронов действия
 bool SetActionNeuronsType(const string &value);
 
-///  ,   
+/// Количество признаков, описывающих запоминаемую ситуацию
 bool SetFeaturesNum(const int &value);
 
-///    (   )
+/// Флаг завершения работы (все возможные варианты исследованы)
 bool SetIsDone(const bool &value);
 
-///   ( = {x,y,alpha},  alpha -  
+///Вектор параметров ситуации (сейчас = {x,y,alpha}, где alpha - ориентация робота
 bool SetSituationCoords(const MDMatrix<double> &value);
 
 // --------------------------
 
 // --------------------------
-//     
+// Методы доступа к временным переменным
 // --------------------------
 
 // --------------------------
 
 // --------------------------
-//    
+// Системные методы управления объектом
 // --------------------------
-//         
+// Выделяет память для новой чистой копии объекта этого класса
 virtual NMazeMemory* New(void);
 static UComponent* NewStatic(void);
 // --------------------------
 
 // --------------------------
-//    
+// Скрытые методы управления компонентами
 // --------------------------
 protected:
-//    
-//       
-//      comp 
-//     
+// Выполняет завершающие пользовательские действия
+// при добавлении дочернего компонента в этот объект
+// Метод будет вызван только если comp был
+// успешно добавлен в список компонент
 virtual bool AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer=0);
 
-//    
-//       
-//      comp
-//    
+// Выполняет предварительные пользовательские действия
+// при удалении дочернего компонента из этого объекта
+// Метод будет вызван только если comp
+// существует в списке компонент
 virtual bool ADelComponent(UEPtr<UContainer> comp);
 // --------------------------
 
 
 // --------------------------
-//    
+// Скрытые методы управления счетом
 // --------------------------
 protected:
 
-//        
+// Восстановление настроек по умолчанию и сброс процесса счета
 virtual bool ADefault(void);
 
-//     
-//   
-//    Reset()   Ready  true
-//    
+// Обеспечивает сборку внутренней структуры объекта
+// после настройки параметров
+// Автоматически вызывает метод Reset() и выставляет Ready в true
+// в случае успешной сборки
 virtual bool ABuild(void);
 
-//   .
+// Сброс процесса счета.
 virtual bool AReset(void);
 
-//    
+// Выполняет расчет этого объекта
 virtual bool ACalculate(void);
 
-//    ( ), ..
-//  TrajectoryElement+MultiPC
+//Создание новой точки маршрута (варианта действия), т.е.
+//построение связки TrajectoryElement+MultiPC
 UEPtr<NTrajectoryElement> CreatePoint(MVector<double,3> coords);
 
-//      ( )
-//    
+//Построение связей между новой точкой маршрута (вариантом действия)
+// и остальными блокмаи сети
 bool LinkPoint(UEPtr<NTrajectoryElement> traj_el,  MVector<double,3> base_coords, int option_num);
 
-//   
-//        TrajectoryElements,
-//   PostInput 
-//..  TE,     
-bool MergingTEs(int active_num);
-
-//     TE   
-bool UpdateCurrentTE();
-
-//,    PostInput   
-int CheckActivePIs();
-
-//,         
+//Проверяет, есть ли активные элементы траектории среди возможных вариантов действий
 bool CheckActiveForwards(UEPtr<NTrajectoryElement> t_element);
 
-//     
-//(   PreControl   ,
-//       )
-bool CallForResponse();
+//Проверяет, есть ли активные PostInput нейроны в сети
+int CheckActivePIs();
 
-// ,      , w = 0,2
-bool LastUsedLink();
-
-//   ()
-bool ProcessOptions();
-
-// 
-bool DeadlockProcessing();
-
-//  TE   
-// (     w = 0,     LastUsedForward (  LastUsedBackward)  1,
-//     w = 1)
+// Переключает связь TE на следующую
+// (устанавливает для текущей связи w = 0, увеличивает LastUsedForward (или LastUsedBackward) на 1,
+// для следующей связи устанавливает w = 1)
 bool SwitchToNextLink(UEPtr<NTrajectoryElement> t_element);
 
-//     
-//   D1_5  finish_te,
-//     start_te
+//Слияние совпадающих элементов траектории
+//Принимает на вход порядковый номер ТЕ в векторе TrajectoryElements,
+//которому соответствует активный PostInput нейрон
+//т.е. номер TE, с которым совпадает текущая ситуация
+bool MergingTEs(int active_num);
+
+// Возвращает указатель на синапс D1_5 элемента finish_te,
+// на который заведена связь от элемента start_te
 UEPtr<NPulseSynapse> GetForwardSyn(UEPtr<NTrajectoryElement> start_te, UEPtr<NTrajectoryElement> finish_te);
 
-//     BackwardNames, ForwardNames, PathsNames   TE   MazeMemory
+//Обновляет значение указателя на текущий TE в конце итерации
+bool UpdateCurrentTE();
+
+//Обновляет значения BackwardNames, ForwardNames, PathsNames всех TE внутри MazeMemory
 bool UpdateNames();
 
-//     
+// Завершение алгоритма
 bool CheckIfFinished();
+
+//Проверяет, есть ли активные NeuronTrainer в сети
+//int CheckActiveNTs();
+
+// Возвращает вектор ссылок на первый свободный синапс следующих сегментов заданного TE:
+// N1_D1_5(Exc) + N1_S1(Inh) + N2_S1(Inh)
+//vector<UEPtr<NPulseSynapse>> GetAllForwardSyns(UEPtr<NTrajectoryElement> t_element);
+
+// Возвращает вектор ссылок на первый свободный синапс следующих сегментов заданного TE:
+// N1_D1_2(Exc) + N1_S1(Exc)
+// автоматически задает вес этих синапсов равным 0.2!
+//vector<UEPtr<NPulseSynapse>> GetAllBackwardSyns(UEPtr<NTrajectoryElement> t_element);
+
+// Возвращает номер
+//bool UpdateLastUsed(UEPtr<NTrajectoryElement> prev_te, UEPtr<NTrajectoryElement> base_te);
+
+//Обработка тупика
+//bool DeadlockProcessing();
 
 // --------------------------
 };
 
 }
-
 #endif
