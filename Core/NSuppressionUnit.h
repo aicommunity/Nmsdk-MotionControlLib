@@ -15,159 +15,159 @@ using namespace RDK;
 /* *************************************************************************** */
 class RDK_LIB_TYPE NSuppressionUnit: public UNet
 {
-public: // Общедоступные свойства
+public: //  
 
- /// Имя класса генератора импульсов
- ULProperty<std::string, NSuppressionUnit, ptPubParameter> PulseGeneratorClassName;
+ ///    
+ UProperty<std::string, NSuppressionUnit, ptPubParameter> PulseGeneratorClassName;
 
- /// Имя класса нейрона
- ULProperty<std::string, NSuppressionUnit, ptPubParameter> NeuronClassName;
+ ///   
+ UProperty<std::string, NSuppressionUnit, ptPubParameter> NeuronClassName;
 
- /// Имя класса синапсов
- ULProperty<std::string, NSuppressionUnit, ptPubParameter> SynapseClassName;
-
-
- /// Длительность импульсов (с)
- ULProperty<double, NSuppressionUnit, ptPubParameter> PulseLength;
-
- /// Амплитуда импульсов
- ULProperty<double, NSuppressionUnit, ptPubParameter> Amplitude;
-
- /// Частота генерации (Гц) блока подавления сигнала
- ULProperty<double, NSuppressionUnit, ptPubParameter> SuppressionFreq;
-
- /// Используемый порог низкопороговой зоны нейрона
- ULProperty<double, NSuppressionUnit, ptPubParameter> LTZThreshold;
+ ///   
+ UProperty<std::string, NSuppressionUnit, ptPubParameter> SynapseClassName;
 
 
- /// Момент времени Т1, с которого начинается подавление сигнала
- ULProperty<double, NSuppressionUnit, ptPubParameter> Delay1;
+ ///   ()
+ UProperty<double, NSuppressionUnit, ptPubParameter> PulseLength;
 
- /// Момент времени Т2, до которого происходит подавление сигнала
- ULProperty<double, NSuppressionUnit, ptPubParameter> Delay2;
+ ///  
+ UProperty<double, NSuppressionUnit, ptPubParameter> Amplitude;
 
+ ///   ()   
+ UProperty<double, NSuppressionUnit, ptPubParameter> SuppressionFreq;
 
- /// Частота генерации (Гц) источника подавляемого сигнала
- ULProperty<double, NSuppressionUnit, ptPubParameter> SourceFreq;
-
- /// Задержка источника подавляемого сигнала
- ULProperty<double, NSuppressionUnit, ptPubParameter> SourceDelay;
-
- /// При поднятом флаге используется входной сигнал на компонент,
- /// иначе внутренний источник компонента генерирует сигнал в соответствии с настройками
- ULProperty<bool, NSuppressionUnit, ptPubParameter> TransitInput;
-
- /// При поднятом флаге компонент не использует источник сигнала и нейрон
- /// Результатом работы компонента является только подавляющий сигнал
- ULProperty<bool, NSuppressionUnit, ptPubParameter> OnlyInhibition;
-
- /// При поднятом флаге подвление сигнала происходит только на одной итерации
- ULProperty<bool, NSuppressionUnit, ptPubParameter> SingleUse;
-
-public: // Входы и выходы
-/// Входной сигнал на компонент
-UPropertyInputData<MDMatrix<double>, NSuppressionUnit, ptInput | ptPubState> Input;
-
-/// Выход модели
-UPropertyOutputData<MDMatrix<double>, NSuppressionUnit, ptOutput | ptPubState> Output;
+ ///     
+ UProperty<double, NSuppressionUnit, ptPubParameter> LTZThreshold;
 
 
-protected: // Данные
- /// Генераторы входных импульсов
+ ///   1,     
+ UProperty<double, NSuppressionUnit, ptPubParameter> Delay1;
+
+ ///   2,     
+ UProperty<double, NSuppressionUnit, ptPubParameter> Delay2;
+
+
+ ///   ()   
+ UProperty<double, NSuppressionUnit, ptPubParameter> SourceFreq;
+
+ ///    
+ UProperty<double, NSuppressionUnit, ptPubParameter> SourceDelay;
+
+ ///        ,
+ ///          
+ UProperty<bool, NSuppressionUnit, ptPubParameter> TransitInput;
+
+ ///          
+ ///       
+ UProperty<bool, NSuppressionUnit, ptPubParameter> OnlyInhibition;
+
+ ///          
+ UProperty<bool, NSuppressionUnit, ptPubParameter> SingleUse;
+
+public: //   
+///    
+UProperty<MDMatrix<double>, NSuppressionUnit, ptInput | ptPubState> Input;
+
+///  
+UProperty<MDMatrix<double>, NSuppressionUnit, ptOutput | ptPubState> Output;
+
+
+protected: // 
+ ///   
  UEPtr <NPulseGeneratorTransit> SourceGenerator;
 
- /// Генераторы задержек
+ ///  
  std::vector<UEPtr<NPulseGeneratorTransit>> DelayGenerators;
 
- /// Нейрон ИЛИ
+ ///  
  UEPtr <NPulseNeuron> ORNeuron;
 
- /// Генератор подавляющих импульсов
+ ///   
  UEPtr <NPulseGeneratorTransit> ControlledGenerator;
 
- /// Нейрон
+ /// 
  UEPtr <NPulseNeuron> Neuron;
 
-protected: // Временные переменные
+protected: //  
 
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NSuppressionUnit(void);
 virtual ~NSuppressionUnit(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NSuppressionUnit* New(void);
 // --------------------------
 
 protected:
  // --------------------------
- // Скрытые методы управления компонентами
+ //    
  // --------------------------
 
- /// Выполняет завершающие пользовательские действия
- /// при добавлении дочернего компонента в этот объект
- // Метод будет вызван только если comp был успешно добавлен в список компонент
+ ///    
+ ///       
+ //      comp      
  virtual bool AAddComponent(UEPtr<UContainer> comp, UEPtr<UIPointer> pointer = 0);
 
- /// Выполняет предварительные пользовательские действия
- /// при удалении дочернего компонента из этого объекта
- // Метод будет вызван только если comp существует в списке компонент
+ ///    
+ ///       
+ //      comp    
  virtual bool ADelComponent(UEPtr<UContainer> comp);
 
  // --------------------------
 
 protected:
 // --------------------------
-// Методы управления общедоступными свойствами
+//    
 // --------------------------
 
-/// Установка имени класса генераторов импульсов
+///     
 bool SetPulseGeneratorClassName(const std::string &value);
 
-/// Установка имени класса нейрона
+///    
 bool SetNeuronClassName(const std::string &value);
 
-/// Установка имени класса синапсов
+///    
 bool SetSynapseClassName(const std::string &value);
 
-/// Установка частоты импульсов подавляющего генератора
+///     
 bool SetSuppressionFreq(const double &value);
 
-/// Установка длительности импульсов
+///   
 bool SetPulseLength(const double &value);
 
-/// Установка амплитуды импульсов
+///   
 bool SetAmplitude(const double &value);
 
-/// Установка используемого порога низкопороговой зоны нейрона
+///      
 bool SetLTZThreshold(const double &value);
 
-/// Установка момента времени Т1, с которого начинается подавление сигнала
+///    1,     
 bool SetDelay1(const double &value);
 
-/// Установка момента времени Т2, до которого происходит подавление сигнала
+///    2,     
 bool SetDelay2(const double &value);
 
-/// Установка частоты источника подавляемого сигнала (и генераторов задержек)
+///      (  )
 bool SetSourceFreq(const double &value);
 
-/// Установка задержки источника подавляемого сигнала
+///     
 bool SetSourceDelay(const double &value);
 
-/// Установка значения флага транзита сигнала внешнего источника
+///       
 bool SetTransitInput(const bool &value);
 
-/// Установка значения флага использования только подавляющего сигнала
+///       
 bool SetOnlyInhibition(const bool &value);
 
-/// Установка значения флага единоразового подавления сигнала
+///      
 bool SetSingleUse(const bool &value);
 
 // --------------------------
@@ -175,13 +175,13 @@ bool SetSingleUse(const bool &value);
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
 // Reset computation

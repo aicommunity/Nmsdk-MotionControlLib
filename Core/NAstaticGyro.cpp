@@ -8,9 +8,9 @@ See file license.txt for more information
 #include "NAstaticGyro.h"
 
 namespace NMSDK {
-// Методы
+// РњРµС‚РѕРґС‹
 // --------------------------
-// Конструкторы и деструкторы
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
 // --------------------------
 NAstaticGyro::NAstaticGyro(void)
  : natural_freq("NaturalFrequency",this),
@@ -46,9 +46,9 @@ NAstaticGyro::~NAstaticGyro(void)
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NAstaticGyro* NAstaticGyro::New(void)
 {
  return new NAstaticGyro;
@@ -56,9 +56,9 @@ NAstaticGyro* NAstaticGyro::New(void)
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ СЃС‡РµС‚РѕРј
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NAstaticGyro::ADefault(void)
 {
  natural_freq = 190.0;
@@ -74,15 +74,15 @@ bool NAstaticGyro::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NAstaticGyro::ABuild(void)
 {
  return true;
 }
-// Сброс процесса счета без потери настроек
+// РЎР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р° Р±РµР· РїРѕС‚РµСЂРё РЅР°СЃС‚СЂРѕРµРє
 bool NAstaticGyro::AReset(void)
 {
  alpha=0;
@@ -106,7 +106,7 @@ bool NAstaticGyro::AReset(void)
 
  return true;
 }
-// Выполняет расчет этого объекта
+// Р’С‹РїРѕР»РЅСЏРµС‚ СЂР°СЃС‡РµС‚ СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
 bool NAstaticGyro::ACalculate(void)
 {
  vector<double> input;
@@ -125,17 +125,17 @@ bool NAstaticGyro::ACalculate(void)
  input[1]=(*Input2)(0,0);
  input[2]=(*Input3)(0,0);
 
-// Нахождение угла alpha
+// РќР°С…РѕР¶РґРµРЅРёРµ СѓРіР»Р° alpha
 double x11=x11_prev+(x12_prev)/TimeStep;
 double x12=x12_prev+(natural_freq*natural_freq*(input[0]-x11_prev)-2*z_g*natural_freq*x12_prev)/TimeStep;
 double x21=x21_prev+(x22_prev)/TimeStep;
 double x22=x22_prev+(x11_prev)/TimeStep;
-// Нахождение угла betta
+// РќР°С…РѕР¶РґРµРЅРёРµ СѓРіР»Р° betta
 double y11=y11_prev+(y12_prev)/TimeStep;
 double y12=y12_prev+(natural_freq*natural_freq*(input[1]-y11_prev)-2*z_g*natural_freq*y12_prev)/TimeStep;
 double y21=y21_prev+(y22_prev)/TimeStep;
 double y22=y22_prev+(y11_prev)/TimeStep;
-// Нахождение угла gamma
+// РќР°С…РѕР¶РґРµРЅРёРµ СѓРіР»Р° gamma
 double z11=z11_prev+(z12_prev)/TimeStep;
 double z12=z12_prev+(natural_freq*natural_freq*(input[2]-z11_prev)-2*z_g*natural_freq*z12_prev)/TimeStep;
 double z21=z21_prev+(z22_prev)/TimeStep;
@@ -160,9 +160,9 @@ double z22=z22_prev+(z11_prev)/TimeStep;
  betta=y21;
  gamma=z21;
 
- Output1(0,0)=alpha;  //угол alpha
- Output2(0,0)=betta;  //угол betta
- Output3(0,0)=gamma;  //угол gamma
+ Output1(0,0)=alpha;  //СѓРіРѕР» alpha
+ Output2(0,0)=betta;  //СѓРіРѕР» betta
+ Output3(0,0)=gamma;  //СѓРіРѕР» gamma
 
  return true;
 }

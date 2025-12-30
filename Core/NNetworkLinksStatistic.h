@@ -21,47 +21,47 @@ using namespace RDK;
 
 class RDK_LIB_TYPE NNetworkLinksStatistic: public UNet
 {
-public: // Параметры
-// Интервал времени через который обновляется статистика
-ULProperty<double, NNetworkLinksStatistic, ptPubParameter> StatsInterval;
+public: // 
+//      
+UProperty<double, NNetworkLinksStatistic, ptPubParameter> StatsInterval;
 
-// Режим формирования статистики
-ULProperty<int, NNetworkLinksStatistic, ptPubParameter>  Mode;
+//   
+UProperty<int, NNetworkLinksStatistic, ptPubParameter>  Mode;
 
-public: // Входы и выходы
+public: //   
 UPropertyInputC<UNet, NNetworkLinksStatistic, ptPubInput> Inputs;
 
-protected: // Данные
-// Номер статистики
+protected: // 
+//  
 int StatsNumber;
 
-protected: // Временные переменные
-// Файлы данных
+protected: //  
+//  
 RDK::UIniFile<char> StatsFile;
 
-// Момент начала очередного интервала накопления статистики
+//      
 RDK::ULongTime StatsStartTime;
 
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NNetworkLinksStatistic(void);
 virtual ~NNetworkLinksStatistic(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NNetworkLinksStatistic* New(void);
 // --------------------------
 
 // --------------------------
 // Computation methods
 // --------------------------
-// Открывает новый файл, сохраняя предыдущий
+//   ,  
 bool ReCreateFile(void);
 // --------------------------
 
@@ -69,13 +69,13 @@ bool ReCreateFile(void);
 // Proctected computation methods
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
 // Reset computation
@@ -86,13 +86,13 @@ virtual bool ACalculate(void);
 // --------------------------
 
 // --------------------------
-// Вспомогательные методы счета статистики
+//    
 // --------------------------
 protected:
-// Сбрасывает текущую статистику
+//   
 void ClearStats(void);
 
-// Задает размеры векторов данных текущей статистики
+//      
 void ResizeStats(void);
 // --------------------------
 

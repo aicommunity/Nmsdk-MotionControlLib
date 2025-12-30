@@ -45,9 +45,9 @@ NDCEngine::~NDCEngine(void)
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NDCEngine* NDCEngine::New(void)
 {
  return new NDCEngine;
@@ -55,7 +55,7 @@ NDCEngine* NDCEngine::New(void)
 // --------------------------
 
 // --------------------------
-// Методы управления общедоступными свойствами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±С‰РµРґРѕСЃС‚СѓРїРЅС‹РјРё СЃРІРѕР№СЃС‚РІР°РјРё
 // --------------------------
 bool NDCEngine::SetEMFactor(const double &value)
 {
@@ -81,7 +81,7 @@ bool NDCEngine::SetResistance(const double &value)
  return true;
 }
 
-// Электромеханическая постоянная времени
+// Р­Р»РµРєС‚СЂРѕРјРµС…Р°РЅРёС‡РµСЃРєР°СЏ РїРѕСЃС‚РѕСЏРЅРЅР°СЏ РІСЂРµРјРµРЅРё
 bool NDCEngine::SetTm(const double &value)
 {
  if(value<=0)
@@ -90,7 +90,7 @@ bool NDCEngine::SetTm(const double &value)
  return true;
 }
 
-// Передаточное число
+// РџРµСЂРµРґР°С‚РѕС‡РЅРѕРµ С‡РёСЃР»Рѕ
 bool NDCEngine::SetReductionRate(const double &value)
 {
  if(value<=0)
@@ -103,7 +103,7 @@ bool NDCEngine::SetReductionRate(const double &value)
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NDCEngine::ADefault(void)
 {
  EMFactor=2;
@@ -123,10 +123,10 @@ bool NDCEngine::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NDCEngine::ABuild(void)
 {
 
@@ -171,7 +171,7 @@ bool NDCEngine::ACalculate(void)
 
  Moment=Current*EMFactor/Resistance;//EMF;
 
- OutputAngleSpeed(0,0)=EMF/EMFactor; // Угловая скорость //AngleSpeed;
+ OutputAngleSpeed(0,0)=EMF/EMFactor; // РЈРіР»РѕРІР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ //AngleSpeed;
  Angle.v+=OutputAngleSpeed(0,0)/(ReductionRate*TimeStep);
  OutputAngle(0,0)=Angle;
  OutputMomentum(0,0)=Moment;

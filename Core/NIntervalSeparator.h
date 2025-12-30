@@ -24,40 +24,40 @@ using namespace RDK;
 
 class RDK_LIB_TYPE NIntervalSeparator: public UNet
 {
-public: // Общедоступные свойства
-/// Нижняя граница выделяемого интервала
+public: //  
+///    
 UProperty<vector<double> ,NIntervalSeparator, ptPubParameter> MinRange;
 
-/// Верхняя граница выделяемого интервала
+///    
 UProperty<vector<double> ,NIntervalSeparator, ptPubParameter> MaxRange;
 
-/// Режим разделения.
-/// 0 - если значение попадает в заданный интервал, то оно и возврашается, иначе 0
-/// 1 - если значение попадает в заданный интервал, то возврашается значение минус
-/// нижняя граница интервала, иначе 0
-/// 2 - если значение превышает нижнюю границу, то оно и возвращается, иначе 0
-/// 3 - если значение ниже верхней границы, то оно и возвращается, иначе 0
-/// 4 - если значение превышает нижнюю границу, то возврашается значение минус
-/// 5 - если значение превышает нижнюю границу, то возврашается значение минус
-/// нижняя граница интервала;если значение превышает верхнюю границу, то возвращается
-/// верхняя граница минус нижняя граница (при переходе за границы возвращается значение границы)
-/// 6 -  если значение превышает нижнюю границу, то возврашается значение минус
-/// нижняя граница интервала;если значение превышает верхнюю границу, то возвращается
-/// верхняя граница минус нижняя граница
+///  .
+/// 0 -      ,    ,  0
+/// 1 -      ,    
+///   ,  0
+/// 2 -     ,    ,  0
+/// 3 -     ,    ,  0
+/// 4 -     ,    
+/// 5 -     ,    
+///   ;    ,  
+///      (      )
+/// 6 -      ,    
+///   ;    ,  
+///     
 UProperty<vector<int>,NIntervalSeparator, ptPubParameter> Mode;
 
-/// Множитель выходного значения
+///   
 UProperty<vector<double> ,NIntervalSeparator, ptPubParameter> Gain;
 
-/// Входные данные
-UPropertyInputData<MDMatrix<double>,NIntervalSeparator, ptInput | ptPubState> Input;
+///  
+UProperty<MDMatrix<double>,NIntervalSeparator, ptInput | ptPubState> Input;
 
-/// Разделенные данные
-UPropertyOutputData<MDMatrix<double>,NIntervalSeparator, ptOutput | ptPubState> Output;
+///  
+UProperty<MDMatrix<double>,NIntervalSeparator, ptOutput | ptPubState> Output;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NIntervalSeparator(void);
 virtual ~NIntervalSeparator(void);
@@ -65,46 +65,46 @@ virtual ~NIntervalSeparator(void);
 
 protected:
 // --------------------------
-// Методы управления общедоступными свойствами
+//    
 // --------------------------
-/// Нижняя граница выделяемого интервала
+///    
 bool SetMinRange(const double &value);
 
-/// Верхняя граница выделяемого интервала
+///    
 bool SetMaxRange(const double &value);
 
-/// Режим разделения
+///  
 bool SetMode(const int &value);
 
-/// Множитель выходного значения
+///   
 bool SetGain(const double &value);
 // --------------------------
 
 public:
 // --------------------------
-// Системные методы управления объектом
+//    
 // --------------------------
-/// Выделяет память для новой чистой копии объекта этого класса
+///         
 virtual NIntervalSeparator* New(void);
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом
+//    
 // --------------------------
 protected:
-/// Восстановление настроек по умолчанию и сброс процесса счета
+///        
 virtual bool ADefault(void);
 
-/// Обеспечивает сборку внутренней структуры объекта
-/// после настройки параметров
-/// Автоматически вызывает метод Reset() и выставляет Ready в true
-/// в случае успешной сборки
+///     
+///   
+///    Reset()   Ready  true
+///    
 virtual bool ABuild(void);
 
-/// Сброс процесса счета.
+///   .
 virtual bool AReset(void);
 
-/// Выполняет расчет этого объекта
+///    
 virtual bool ACalculate(void);
 // --------------------------
 };

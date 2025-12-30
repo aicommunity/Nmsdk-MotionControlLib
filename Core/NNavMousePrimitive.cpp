@@ -14,6 +14,10 @@ See file license.txt for more information
 *********************************************************** */
 
 #include "NNavMousePrimitive.h"
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4458 4456)
+#endif
 
 //---------------------------------------------------------------------------
 namespace NMSDK{
@@ -56,9 +60,9 @@ NNavMousePrimitive::~NNavMousePrimitive(void)
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NNavMousePrimitive* NNavMousePrimitive::New(void)
 {
  return new NNavMousePrimitive;
@@ -66,13 +70,13 @@ NNavMousePrimitive* NNavMousePrimitive::New(void)
 // --------------------------
 
 // --------------------------
-// Методы управления общедоступными свойствами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±С‰РµРґРѕСЃС‚СѓРїРЅС‹РјРё СЃРІРѕР№СЃС‚РІР°РјРё
 // --------------------------
 bool NNavMousePrimitive::SetPoleSize(const double &value)
 {
  if(value<=0)
   return false;
- //TODO: Обновление положения и выходов, но пока лучше размер во время работы не менять, и скидывать в ресет
+ //TODO: РћР±РЅРѕРІР»РµРЅРёРµ РїРѕР»РѕР¶РµРЅРёСЏ Рё РІС‹С…РѕРґРѕРІ, РЅРѕ РїРѕРєР° Р»СѓС‡С€Рµ СЂР°Р·РјРµСЂ РІРѕ РІСЂРµРјСЏ СЂР°Р±РѕС‚С‹ РЅРµ РјРµРЅСЏС‚СЊ, Рё СЃРєРёРґС‹РІР°С‚СЊ РІ СЂРµСЃРµС‚
  return true;
 }
 
@@ -80,7 +84,7 @@ bool NNavMousePrimitive::SetVibrissSize(const double &value)
 {
  if(value<=0)
   return false;
- //TODO: Обновление положения и выходов, но пока лучше размер во время работы не менять, и скидывать в ресет
+ //TODO: РћР±РЅРѕРІР»РµРЅРёРµ РїРѕР»РѕР¶РµРЅРёСЏ Рё РІС‹С…РѕРґРѕРІ, РЅРѕ РїРѕРєР° Р»СѓС‡С€Рµ СЂР°Р·РјРµСЂ РІРѕ РІСЂРµРјСЏ СЂР°Р±РѕС‚С‹ РЅРµ РјРµРЅСЏС‚СЊ, Рё СЃРєРёРґС‹РІР°С‚СЊ РІ СЂРµСЃРµС‚
  return true;
 }
 
@@ -88,7 +92,7 @@ bool NNavMousePrimitive::SetMouseSize(const double &value)
 {
  if(value<=0)
   return false;
- //TODO: Обновление положения и выходов, но пока лучше размер во время работы не менять, и скидывать в ресет
+ //TODO: РћР±РЅРѕРІР»РµРЅРёРµ РїРѕР»РѕР¶РµРЅРёСЏ Рё РІС‹С…РѕРґРѕРІ, РЅРѕ РїРѕРєР° Р»СѓС‡С€Рµ СЂР°Р·РјРµСЂ РІРѕ РІСЂРµРјСЏ СЂР°Р±РѕС‚С‹ РЅРµ РјРµРЅСЏС‚СЊ, Рё СЃРєРёРґС‹РІР°С‚СЊ РІ СЂРµСЃРµС‚
  return true;
 }
 
@@ -97,7 +101,7 @@ bool NNavMousePrimitive::SetVelocity(const double &value)
 {
  if(value<=0)
   return false;
- //TODO: Обновление положения и выходов, но пока лучше размер во время работы не менять, и скидывать в ресет
+ //TODO: РћР±РЅРѕРІР»РµРЅРёРµ РїРѕР»РѕР¶РµРЅРёСЏ Рё РІС‹С…РѕРґРѕРІ, РЅРѕ РїРѕРєР° Р»СѓС‡С€Рµ СЂР°Р·РјРµСЂ РІРѕ РІСЂРµРјСЏ СЂР°Р±РѕС‚С‹ РЅРµ РјРµРЅСЏС‚СЊ, Рё СЃРєРёРґС‹РІР°С‚СЊ РІ СЂРµСЃРµС‚
  return true;
 }
 
@@ -106,18 +110,18 @@ bool NNavMousePrimitive::SetVelocity(const double &value)
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NNavMousePrimitive::ADefault(void)
 {
- //все в см
+ //РІСЃРµ РІ СЃРј
  PoleSize=100;
  MouseSize=20;
  VibrissSize=10;
  Velocity=2;
 
- //все как везде
+ //РІСЃРµ РєР°Рє РІРµР·РґРµ
  Frequency=1.5;
- Delay=0.1;//Я отнюдь не уверен, что именно тут задержка уместна в принципе...
+ Delay=0.1;//РЇ РѕС‚РЅСЋРґСЊ РЅРµ СѓРІРµСЂРµРЅ, С‡С‚Рѕ РёРјРµРЅРЅРѕ С‚СѓС‚ Р·Р°РґРµСЂР¶РєР° СѓРјРµСЃС‚РЅР° РІ РїСЂРёРЅС†РёРїРµ...
  VibrissOutput.Resize(1,2);
  VibrissOutput.Assign(1,1,0.0);
  VibrissOutput.Assign(1,2,0.0);
@@ -126,13 +130,13 @@ bool NNavMousePrimitive::ADefault(void)
 
  MotionControlState=0;
 
- //Стоим в нуле, отодвинувшись на целый радиус и еще на 1/10 радиуса, чтобы не пищать даже случайно
+ //РЎС‚РѕРёРј РІ РЅСѓР»Рµ, РѕС‚РѕРґРІРёРЅСѓРІС€РёСЃСЊ РЅР° С†РµР»С‹Р№ СЂР°РґРёСѓСЃ Рё РµС‰Рµ РЅР° 1/10 СЂР°РґРёСѓСЃР°, С‡С‚РѕР±С‹ РЅРµ РїРёС‰Р°С‚СЊ РґР°Р¶Рµ СЃР»СѓС‡Р°Р№РЅРѕ
  MousePosition=0.0+MouseSize+MouseSize/10;
 
- //По дефолту принимаем вход со спайков
+ //РџРѕ РґРµС„РѕР»С‚Сѓ РїСЂРёРЅРёРјР°РµРј РІС…РѕРґ СЃРѕ СЃРїР°Р№РєРѕРІ
  UseExternalInput=true;
 
- //Это блин еще зачем ?!
+ //Р­С‚Рѕ Р±Р»РёРЅ РµС‰Рµ Р·Р°С‡РµРј ?!
  Input->Assign(1,1,0.0);
  Output.Assign(1,1,0.0);
 
@@ -155,10 +159,10 @@ bool NNavMousePrimitive::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NNavMousePrimitive::ABuild(void)
 {
 
@@ -178,7 +182,7 @@ bool NNavMousePrimitive::AReset(void)
 
  PainState=0;
  start_iter_time=0.0;
- //Это спорно, но логика подсказывает, что именно так и надо
+ //Р­С‚Рѕ СЃРїРѕСЂРЅРѕ, РЅРѕ Р»РѕРіРёРєР° РїРѕРґСЃРєР°Р·С‹РІР°РµС‚, С‡С‚Рѕ РёРјРµРЅРЅРѕ С‚Р°Рє Рё РЅР°РґРѕ
  MousePosition=0.0+MouseSize+MouseSize/10;
 
  vibriss_counters.resize(2, 0);
@@ -196,7 +200,7 @@ bool NNavMousePrimitive::AReset(void)
 
 bool NNavMousePrimitive::UpdateState(void)
 {
-    //Определить свое состояние
+    //РћРїСЂРµРґРµР»РёС‚СЊ СЃРІРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
     int state=100;
     bool updated=false;
     if(UseExternalInput)
@@ -237,7 +241,7 @@ bool NNavMousePrimitive::UpdateState(void)
     if(!updated)
         state = MotionControlState;
 
-    //По умолчанию не болит, если вылезем за границы - заболит
+    //РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РЅРµ Р±РѕР»РёС‚, РµСЃР»Рё РІС‹Р»РµР·РµРј Р·Р° РіСЂР°РЅРёС†С‹ - Р·Р°Р±РѕР»РёС‚
     PainState=0;
 
     if(state==1)
@@ -260,7 +264,7 @@ bool NNavMousePrimitive::UpdateState(void)
         }
     }
 
-    //Рассчитать реакции вибрисс на итерации
+    //Р Р°СЃСЃС‡РёС‚Р°С‚СЊ СЂРµР°РєС†РёРё РІРёР±СЂРёСЃСЃ РЅР° РёС‚РµСЂР°С†РёРё
     if((MousePosition+MouseSize+VibrissSize)>PoleSize)
     {
         double d = PoleSize-(MousePosition+MouseSize);// (MousePosition+MouseSize+VibrissSize)-PoleSize;
@@ -273,7 +277,7 @@ bool NNavMousePrimitive::UpdateState(void)
     }
     if((MousePosition-MouseSize-VibrissSize)<0)
     {
-        double d = fabs(MousePosition-MouseSize); //проверить!
+        double d = fabs(MousePosition-MouseSize); //РїСЂРѕРІРµСЂРёС‚СЊ!
         double dd = ((VibrissSize-d)/VibrissSize)*0.2;
         VibrDelays[1] = Delay+dd;
     }
@@ -282,7 +286,7 @@ bool NNavMousePrimitive::UpdateState(void)
         VibrDelays[1] = Delay;
     }
 
-    //Не забываем сохранить состояние на тот случай, если на будущем шаге команды не придут
+    //РќРµ Р·Р°Р±С‹РІР°РµРј СЃРѕС…СЂР°РЅРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ РЅР° С‚РѕС‚ СЃР»СѓС‡Р°Р№, РµСЃР»Рё РЅР° Р±СѓРґСѓС‰РµРј С€Р°РіРµ РєРѕРјР°РЅРґС‹ РЅРµ РїСЂРёРґСѓС‚
     MotionControlState = state;
 
  return true;
@@ -332,20 +336,20 @@ bool NNavMousePrimitive::ACalculate(void)
 
 
 
- double iter_time = Environment->GetTime().GetDoubleTime() - start_iter_time; // Текущее время итерации
- double iter_length = (1.0 / Frequency) - (1.0 / double(TimeStep)); // Длина одной итерации
+ double iter_time = Environment->GetTime().GetDoubleTime() - start_iter_time; // РўРµРєСѓС‰РµРµ РІСЂРµРјСЏ РёС‚РµСЂР°С†РёРё
+ double iter_length = (1.0 / Frequency) - (1.0 / double(TimeStep)); // Р”Р»РёРЅР° РѕРґРЅРѕР№ РёС‚РµСЂР°С†РёРё
 
- //Оцениваем входы
+ //РћС†РµРЅРёРІР°РµРј РІС…РѕРґС‹
  if(UseExternalInput)
  {
      if(MotionControlSpikeForward.IsConnected())
      {
          if(fabs((*MotionControlSpikeForward)(0,0))>0.001)
          {
-             //Только первое ненулевое значение входа (=передний фронт 1-го спайка) имеет значение
+             //РўРѕР»СЊРєРѕ РїРµСЂРІРѕРµ РЅРµРЅСѓР»РµРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РІС…РѕРґР° (=РїРµСЂРµРґРЅРёР№ С„СЂРѕРЅС‚ 1-РіРѕ СЃРїР°Р№РєР°) РёРјРµРµС‚ Р·РЅР°С‡РµРЅРёРµ
              if(fabs(ForwardSpikeTime)<0.001)
              {
-                 ForwardSpikeTime = iter_time; //Так же правильно - сколько времени прошло ?!
+                 ForwardSpikeTime = iter_time; //РўР°Рє Р¶Рµ РїСЂР°РІРёР»СЊРЅРѕ - СЃРєРѕР»СЊРєРѕ РІСЂРµРјРµРЅРё РїСЂРѕС€Р»Рѕ ?!
              }
          }
      }
@@ -354,10 +358,10 @@ bool NNavMousePrimitive::ACalculate(void)
      {
          if(fabs((*MotionControlSpikeBackward)(0,0))>0.001)
          {
-             //Только первое ненулевое значение входа (=передний фронт 1-го спайка) имеет значение
+             //РўРѕР»СЊРєРѕ РїРµСЂРІРѕРµ РЅРµРЅСѓР»РµРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РІС…РѕРґР° (=РїРµСЂРµРґРЅРёР№ С„СЂРѕРЅС‚ 1-РіРѕ СЃРїР°Р№РєР°) РёРјРµРµС‚ Р·РЅР°С‡РµРЅРёРµ
              if(fabs(BackwardSpikeTime)<0.001)
              {
-                 BackwardSpikeTime = iter_time; //Так же правильно - сколько времени прошло ?!
+                 BackwardSpikeTime = iter_time; //РўР°Рє Р¶Рµ РїСЂР°РІРёР»СЊРЅРѕ - СЃРєРѕР»СЊРєРѕ РІСЂРµРјРµРЅРё РїСЂРѕС€Р»Рѕ ?!
              }
          }
      }
@@ -366,19 +370,19 @@ bool NNavMousePrimitive::ACalculate(void)
      {
          if(fabs((*MotionControlSpikeStop)(0,0))>0.001)
          {
-             //Только первое ненулевое значение входа (=передний фронт 1-го спайка) имеет значение
+             //РўРѕР»СЊРєРѕ РїРµСЂРІРѕРµ РЅРµРЅСѓР»РµРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РІС…РѕРґР° (=РїРµСЂРµРґРЅРёР№ С„СЂРѕРЅС‚ 1-РіРѕ СЃРїР°Р№РєР°) РёРјРµРµС‚ Р·РЅР°С‡РµРЅРёРµ
              if(fabs(StopSpikeTime)<0.001)
              {
-                 StopSpikeTime = iter_time; //Так же правильно - сколько времени прошло ?!
+                 StopSpikeTime = iter_time; //РўР°Рє Р¶Рµ РїСЂР°РІРёР»СЊРЅРѕ - СЃРєРѕР»СЊРєРѕ РІСЂРµРјРµРЅРё РїСЂРѕС€Р»Рѕ ?!
              }
          }
      }
 
  }
 
- //Формируем выходы
+ //Р¤РѕСЂРјРёСЂСѓРµРј РІС‹С…РѕРґС‹
 
- //Обработать счетчики вибрисс
+ //РћР±СЂР°Р±РѕС‚Р°С‚СЊ СЃС‡РµС‚С‡РёРєРё РІРёР±СЂРёСЃСЃ
  for(int i=0; i<vibriss_counters.size();i++)
  {
   double Delay = VibrDelays[i];
@@ -386,10 +390,10 @@ bool NNavMousePrimitive::ACalculate(void)
    continue;
 
   int &PulseCounter = vibriss_counters[i];
-  if(PulseCounter>0) // Если импульс идет
+  if(PulseCounter>0) // Р•СЃР»Рё РёРјРїСѓР»СЊСЃ РёРґРµС‚
   {
    --PulseCounter;
-   if(PulseCounter <= 0) // Выключаем импульс и включаем ожидание
+   if(PulseCounter <= 0) // Р’С‹РєР»СЋС‡Р°РµРј РёРјРїСѓР»СЊСЃ Рё РІРєР»СЋС‡Р°РµРј РѕР¶РёРґР°РЅРёРµ
    {
     PulseCounter=static_cast<int>(-int(TimeStep/Frequency)+PulseLength*TimeStep);
     VibrissOutput(0, i) = 0.0;
@@ -398,7 +402,7 @@ bool NNavMousePrimitive::ACalculate(void)
   else
   {
    ++PulseCounter;
-   if(PulseCounter >= 0) // Включаем импульс
+   if(PulseCounter >= 0) // Р’РєР»СЋС‡Р°РµРј РёРјРїСѓР»СЊСЃ
    {
     PulseCounter=static_cast<RDK::UTime>(PulseLength*TimeStep);
     VibrissOutput(0, i) = Amplitude;
@@ -406,17 +410,17 @@ bool NNavMousePrimitive::ACalculate(void)
   }
  }
 
- //Обработать счетчик "боли"
+ //РћР±СЂР°Р±РѕС‚Р°С‚СЊ СЃС‡РµС‚С‡РёРє "Р±РѕР»Рё"
  double Delay = PainDelay;
  if((Environment->GetTime().GetDoubleTime() - ResetTime) > Delay)
  {
      int &PulseCounter = pain_counter;
-     if(PulseCounter>0) // Если импульс идет
+     if(PulseCounter>0) // Р•СЃР»Рё РёРјРїСѓР»СЊСЃ РёРґРµС‚
      {
       --PulseCounter;
-      if(PulseCounter <= 0) // Выключаем импульс и включаем ожидание
+      if(PulseCounter <= 0) // Р’С‹РєР»СЋС‡Р°РµРј РёРјРїСѓР»СЊСЃ Рё РІРєР»СЋС‡Р°РµРј РѕР¶РёРґР°РЅРёРµ
       {
-       //Включить ожидание на период, НО он никогда не дожидается, будет обновлено раньше в if(iter_time >= iter_length){...}
+       //Р’РєР»СЋС‡РёС‚СЊ РѕР¶РёРґР°РЅРёРµ РЅР° РїРµСЂРёРѕРґ, РќРћ РѕРЅ РЅРёРєРѕРіРґР° РЅРµ РґРѕР¶РёРґР°РµС‚СЃСЏ, Р±СѓРґРµС‚ РѕР±РЅРѕРІР»РµРЅРѕ СЂР°РЅСЊС€Рµ РІ if(iter_time >= iter_length){...}
        PulseCounter=static_cast<int>(-int(TimeStep/Frequency)+PulseLength*TimeStep);
        //PainOutput(1,1)=0;
        PainOutput.Assign(1,1,0.0);
@@ -425,7 +429,7 @@ bool NNavMousePrimitive::ACalculate(void)
      else
      {
       ++PulseCounter;
-      if(PulseCounter >= 0) // Включаем импульс
+      if(PulseCounter >= 0) // Р’РєР»СЋС‡Р°РµРј РёРјРїСѓР»СЊСЃ
       {
        PulseCounter=static_cast<RDK::UTime>(PulseLength*TimeStep);
        PainOutput.Assign(1,1,Amplitude);
@@ -437,8 +441,8 @@ bool NNavMousePrimitive::ACalculate(void)
  {
      UpdateState();
 
-     //Специфика такова, что задержки по факту меняются после каждой итерации и потому
-     //после определения задержек надо что-то типа ресета, это и есть тут.
+     //РЎРїРµС†РёС„РёРєР° С‚Р°РєРѕРІР°, С‡С‚Рѕ Р·Р°РґРµСЂР¶РєРё РїРѕ С„Р°РєС‚Сѓ РјРµРЅСЏСЋС‚СЃСЏ РїРѕСЃР»Рµ РєР°Р¶РґРѕР№ РёС‚РµСЂР°С†РёРё Рё РїРѕС‚РѕРјСѓ
+     //РїРѕСЃР»Рµ РѕРїСЂРµРґРµР»РµРЅРёСЏ Р·Р°РґРµСЂР¶РµРє РЅР°РґРѕ С‡С‚Рѕ-С‚Рѕ С‚РёРїР° СЂРµСЃРµС‚Р°, СЌС‚Рѕ Рё РµСЃС‚СЊ С‚СѓС‚.
      for(int i=0; i<vibriss_counters.size();i++)
      {
          double Delay = VibrDelays[i];
@@ -465,11 +469,11 @@ bool NNavMousePrimitive::ACalculate(void)
       }
      }
 
-     //Сбросить маркеры спайков на входе после конца итерации
+     //РЎР±СЂРѕСЃРёС‚СЊ РјР°СЂРєРµСЂС‹ СЃРїР°Р№РєРѕРІ РЅР° РІС…РѕРґРµ РїРѕСЃР»Рµ РєРѕРЅС†Р° РёС‚РµСЂР°С†РёРё
      ForwardSpikeTime=0.0;
      BackwardSpikeTime=0.0;
      StopSpikeTime=0.0;
-     //Это пока того, на уровне идеи, в обучении все почему-то сложнее
+     //Р­С‚Рѕ РїРѕРєР° С‚РѕРіРѕ, РЅР° СѓСЂРѕРІРЅРµ РёРґРµРё, РІ РѕР±СѓС‡РµРЅРёРё РІСЃРµ РїРѕС‡РµРјСѓ-С‚Рѕ СЃР»РѕР¶РЅРµРµ
      start_iter_time = Environment->GetTime().GetDoubleTime();
  }
  return true;
@@ -478,5 +482,8 @@ bool NNavMousePrimitive::ACalculate(void)
 /* *************************************************************************** */
 
 }
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 //---------------------------------------------------------------------------
 

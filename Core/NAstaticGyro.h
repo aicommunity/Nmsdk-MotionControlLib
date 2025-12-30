@@ -14,28 +14,28 @@ using namespace RDK;
 
 class RDK_LIB_TYPE NAstaticGyro: public UNet
 {
-public: // Общедоступные свойства
+public: //  
 
-// Собственная частота вращения гироскопа
-RDK::ULProperty<double, NAstaticGyro, ptPubParameter> natural_freq;
-// Коэф. демпфирования
-RDK::ULProperty<double, NAstaticGyro, ptPubParameter> z_g;
+//    
+RDK::UProperty<double, NAstaticGyro, ptPubParameter> natural_freq;
+// . 
+RDK::UProperty<double, NAstaticGyro, ptPubParameter> z_g;
 
-RDK::ULProperty<double, NAstaticGyro,ptPubState> alpha;
-RDK::ULProperty<double, NAstaticGyro,ptPubState> betta;
-RDK::ULProperty<double, NAstaticGyro,ptPubState> gamma;
+RDK::UProperty<double, NAstaticGyro,ptPubState> alpha;
+RDK::UProperty<double, NAstaticGyro,ptPubState> betta;
+RDK::UProperty<double, NAstaticGyro,ptPubState> gamma;
 
-public: // Входы и выходы
-UPropertyInputData<MDMatrix<double>, NAstaticGyro, ptInput | ptPubState> Input1;
-UPropertyInputData<MDMatrix<double>, NAstaticGyro, ptInput | ptPubState> Input2;
-UPropertyInputData<MDMatrix<double>, NAstaticGyro, ptInput | ptPubState> Input3;
+public: //   
+UProperty<MDMatrix<double>, NAstaticGyro, ptInput | ptPubState> Input1;
+UProperty<MDMatrix<double>, NAstaticGyro, ptInput | ptPubState> Input2;
+UProperty<MDMatrix<double>, NAstaticGyro, ptInput | ptPubState> Input3;
 
-UPropertyOutputData<MDMatrix<double>, NAstaticGyro, ptOutput | ptPubState> Output1;
-UPropertyOutputData<MDMatrix<double>, NAstaticGyro, ptOutput | ptPubState> Output2;
-UPropertyOutputData<MDMatrix<double>, NAstaticGyro, ptOutput | ptPubState> Output3;
+UProperty<MDMatrix<double>, NAstaticGyro, ptOutput | ptPubState> Output1;
+UProperty<MDMatrix<double>, NAstaticGyro, ptOutput | ptPubState> Output2;
+UProperty<MDMatrix<double>, NAstaticGyro, ptOutput | ptPubState> Output3;
 
 //
-protected: // Данные
+protected: // 
 
 double x11_prev;
 double x12_prev;
@@ -52,38 +52,38 @@ double z12_prev;
 double z21_prev;
 double z22_prev;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+//   
 // --------------------------
 NAstaticGyro(void);
 virtual ~NAstaticGyro(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+//    
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+//         
 virtual NAstaticGyro* New(void);
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом 
+//     
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+//        
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+//     
+//   
+//    Reset()   Ready  true
+//    
 virtual bool ABuild(void);
 
-// Сброс процесса счета без потери настроек
+//      
 virtual bool AReset(void);
 
-// Выполняет расчет этого объекта
+//    
 virtual bool ACalculate(void);
 // --------------------------
 };
