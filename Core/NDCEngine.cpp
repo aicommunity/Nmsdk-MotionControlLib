@@ -172,7 +172,7 @@ bool NDCEngine::ACalculate(void)
  Moment=Current*EMFactor/Resistance;//EMF;
 
  OutputAngleSpeed(0,0)=EMF/EMFactor; // Угловая скорость //AngleSpeed;
- Angle.v+=OutputAngleSpeed(0,0)/(ReductionRate*TimeStep);
+ Angle = Angle.GetData() + OutputAngleSpeed(0,0)/(ReductionRate*TimeStep);
  OutputAngle(0,0)=Angle;
  OutputMomentum(0,0)=Moment;
 
