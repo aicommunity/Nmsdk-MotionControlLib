@@ -316,7 +316,7 @@ bool NNavMousePrimitive::ACalculate(void)
      return true;
     }
 
-    if(OldFrequency != Frequency.v)
+    if(OldFrequency != Frequency.GetData())
     {
         for(int i=0; i<vibriss_counters.size();i++)
         {

@@ -129,7 +129,7 @@ bool NEngineMotionControl::SetNumMotionElements(const int &value)
 // Create();
  if(Ready && AdaptiveStructureMode >0)
  {
-  NumMotionElements.v=value;
+  NumMotionElements.SetDataDirect(value);
   Create(false);
  }
  else
@@ -196,7 +196,7 @@ bool NEngineMotionControl::SetPacRangeMode(const int &value)
  if(value < 0 || value > 3)
   return false;
 
- PacRangeMode.v=value;
+ PacRangeMode.SetDataDirect(value);
  if(Ready)
   SetupPacRange();
 
@@ -251,7 +251,7 @@ bool NEngineMotionControl::SetPacGain(const double &value)
  if(value <0)
   return false;
 
- PacGain.v=value;
+ PacGain.SetDataDirect(value);
  if(Ready)
   SetupPacRange();
 
@@ -263,7 +263,7 @@ bool NEngineMotionControl::SetPacSecretionTC(const double &value)
  if(value <0)
   return false;
 
- PacSecretionTC.v=value;
+ PacSecretionTC.SetDataDirect(value);
  UpdatePacTCParameters();
 	  /*
  if(Ready)
@@ -290,7 +290,7 @@ bool NEngineMotionControl::SetPacDissociationTC(const double &value)
  if(value <0)
   return false;
 
- PacDissociationTC.v=value;
+ PacDissociationTC.SetDataDirect(value);
  UpdatePacTCParameters();
 			 /*
  if(Ready)
@@ -377,7 +377,7 @@ bool NEngineMotionControl::SetAfferentMin(const std::vector<double> &value)
 
  if(Ready)
  {
-  SetAfferentRangeMode(AfferentRangeMode.v);
+  SetAfferentRangeMode(AfferentRangeMode.GetData());
 /*  if(ControlMode == 0)
   {
 
@@ -415,7 +415,7 @@ bool NEngineMotionControl::SetAfferentMax(const std::vector<double> &value)
 
  if(Ready)
  {
-  SetAfferentRangeMode(AfferentRangeMode.v);
+  SetAfferentRangeMode(AfferentRangeMode.GetData());
 /*
   bool crossranges=false;
   AfferentRangesPos.resize(NumControlLoops);
@@ -444,7 +444,7 @@ bool NEngineMotionControl::SetMotoneuronBranchMode(const int &value)
  {
   if(Ready && AdaptiveStructureMode >0)
   {
-   MotoneuronBranchMode.v=value;
+   MotoneuronBranchMode = value;
    Create(false);
   }
   else
@@ -459,7 +459,7 @@ bool NEngineMotionControl::SetRenshowMode(const int &value)
  {
   if(Ready && AdaptiveStructureMode >0)
   {
-   RenshowMode.v=value;
+   RenshowMode = value;
    Create(false);
   }
   else
@@ -983,8 +983,8 @@ void NEngineMotionControl::AdaptiveTuning(void)
 		dest_contour_min_amplitude, dest_transient_time, num_motion_elements, control_grain);
 
  // Применяем настройки регулятора
- NumMotionElements=num_motion_elements;
- PacGain=control_grain;
+ NumMotionElements.SetDataDirect(num_motion_elements);
+ PacGain.SetDataDirect(control_grain);
 }
 
 /// Реализация алгоритмов адаптивной настройки

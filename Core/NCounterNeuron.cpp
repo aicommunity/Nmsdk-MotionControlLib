@@ -106,7 +106,7 @@ bool NCounterNeuron::SetMaxCount(const int &value)
  if (value < CurCount)
  {
   SetCurCount(value);
-  CurCount = value;
+  CurCount.SetDataDirect(value);
  }
 
  OldNumSoma = MaxCount;
