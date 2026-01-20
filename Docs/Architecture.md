@@ -11,22 +11,22 @@ Nmsdk-MotionControlLib интегрирует различные подсист�
 ```mermaid
 flowchart TB
     subgraph "Двигатели"
-        NDCEngine[NDCEngine<br/>DC-двигатель]
-        NEngineMotion[NEngineMotionControl<br/>Движок управления]
+        NDCEngine["NDCEngine (DC-двигатель)"]
+        NEngineMotion["NEngineMotionControl (Движок_управления)"]
     end
     
     subgraph "Манипуляторы"
-        NManipulator[NManipulator<br/>Манипулятор]
-        NManipulatorGyro[NManipulatorAndGyro<br/>С гироскопом]
+        NManipulator["NManipulator (Манипулятор)"]
+        NManipulatorGyro["NManipulatorAndGyro (С_гироскопом)"]
     end
     
     subgraph "Контроль позиции"
-        NPositionControl[NPositionControlElement<br/>Контроль позиции]
-        NMultiPosition[NMultiPositionControl<br/>Множественный контроль]
+        NPositionControl["NPositionControlElement (Контроль_позиции)"]
+        NMultiPosition["NMultiPositionControl (Множественный_контроль)"]
     end
     
     subgraph "Визуальная система"
-        NEyeRetina[NEyeRetina<br/>Ретина глаза]
+        NEyeRetina["NEyeRetina (Ретина_глаза)"]
     end
     
     NDCEngine --> NManipulator
@@ -85,6 +85,34 @@ flowchart TB
 Nmsdk-MotionControlLib integrates various subsystems to create motion control systems.
 
 ### Library Structure
+
+```mermaid
+flowchart TB
+    subgraph Engines
+        NDCEngine_EN["NDCEngine (DC_motor)"]
+        NEngineMotion_EN["NEngineMotionControl (Motion_engine)"]
+    end
+    
+    subgraph Manipulators
+        NManipulator_EN["NManipulator (Manipulator)"]
+        NManipulatorGyro_EN["NManipulatorAndGyro (With_gyro)"]
+    end
+    
+    subgraph PositionControl
+        NPositionControl_EN["NPositionControlElement (Position_control)"]
+        NMultiPosition_EN["NMultiPositionControl (Multi_position)"]
+    end
+    
+    subgraph Vision
+        NEyeRetina_EN["NEyeRetina (Eye_retina)"]
+    end
+    
+    NDCEngine_EN --> NManipulator_EN
+    NManipulator_EN --> NPositionControl_EN
+    NEyeRetina_EN --> NEngineMotion_EN
+```
+
+The diagram shows how motion control is composed from multiple subsystems: actuators and manipulators feed position control elements; optional vision and sensor feedback are integrated into the motion control engine.
 
 ### Main Modules
 
