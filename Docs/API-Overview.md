@@ -47,7 +47,6 @@ DC-двигатель.
 
 ### См. также
 
-- [Reports/07-Nmsdk-MotionControlLib.md](../../../Reports/07-Nmsdk-MotionControlLib.md) - детальное описание
 - Исходный код: `Libraries/Nmsdk-MotionControlLib/Core/`
 
 ---
@@ -99,5 +98,4 @@ Eye retina.
 
 ### See Also
 
-- [Reports/07-Nmsdk-MotionControlLib.md](../../../Reports/07-Nmsdk-MotionControlLib.md) - detailed description
 - Source code: `Libraries/Nmsdk-MotionControlLib/Core/`
