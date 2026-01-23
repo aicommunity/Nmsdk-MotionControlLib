@@ -1,88 +1,312 @@
-## NIntervalSeparator — разделитель по интервалам (Nmsdk-MotionControlLib)
+# NIntervalSeparator — разделитель по интервалам
 
-**Класс**: `NIntervalSeparator` — классифицирует/разделяет входной сигнал по диапазонам (интервалам).  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NIntervalSeparator", ...)`.
+**Класс**: `NIntervalSeparator` — компонент для разделения входного сигнала по заданным интервалам значений с различными режимами обработки.  
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NIntervalSeparator", ...)`.  
+**Базовый класс**: `UNet` (из Rdk Framework).
 
-### Регистрация в UStorage
-- `ClassName = "NIntervalSeparator"` в `Bin/ClDesc` / `Bin/Configs`.
+NIntervalSeparator разделяет входной сигнал на части в зависимости от принадлежности значения заданным интервалам [MinRange, MaxRange]. Компонент поддерживает различные режимы обработки (Mode) для разных типов разделения.
 
-### Lifecycle
-- **ADefault**: установка границ интервалов и режима.
-- **ABuild**: подготовка выходных каналов.
-- **AReset**: очистка статистики (если ведётся).
-- **ACalculate**: вычисление принадлежности интервалу и выдача на соответствующий выход.
-
-### I/O
-- **Вход**: скаляр/вектор.
-- **Выход**: индекс интервала/маска/сигнал на выбранном выходе.
-
-### classDiagram
+## UML-диаграмма классов
 
 ```mermaid
 classDiagram
-    UComponent <|-- NIntervalSeparator
+    UNet <|-- NIntervalSeparator
+    class NIntervalSeparator {
+        +MinRange : vector~double~
+        +MaxRange : vector~double~
+        +Mode : vector~int~
+        +Gain : vector~double~
+        +Input : MDMatrix~double~
+        +Output : MDMatrix~double~
+        +SetMinRange(value) bool
+        +SetMaxRange(value) bool
+        +SetMode(value) bool
+        +SetGain(value) bool
+        +New() NIntervalSeparator*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
 ```
 
-Диаграмма показывает `NIntervalSeparator` как компонент-раскладчик входа на интервалы.
+**Иерархия наследования:**
+- `UNet` (Rdk Framework) — базовый класс для сетей компонентов
+- `NIntervalSeparator` — разделитель по интервалам
 
-### sequenceDiagram
+## UML-диаграмма последовательности
 
 ```mermaid
 sequenceDiagram
-    participant Src as Source
-    participant Sep as NIntervalSeparator
-    Src-->>Sep: value
-    Sep->>Sep: ACalculate()
-    Sep-->>Src: interval idx/output
+    participant Storage as UStorage
+    participant Separator as NIntervalSeparator
+    participant Source as SignalSource
+    
+    Storage->>Separator: new NIntervalSeparator()
+    Storage->>Separator: Default()
+    Separator->>Separator: ADefault()
+    
+    Storage->>Separator: Build()
+    Separator->>Separator: ABuild()
+    
+    loop Каждый шаг вычислений
+        Source->>Separator: Input = signal
+        Storage->>Separator: Calculate()
+        Separator->>Separator: ACalculate()
+        Note over Separator: Разделение по интервалам<br/>в зависимости от Mode
+        Separator->>Source: Output = separated_signal
+    end
 ```
 
-Пояснение: диаграмма последовательности показывает типовой сценарий взаимодействия и порядок вызовов.
-
-### flowchart
+## UML-диаграмма состояний
 
 ```mermaid
-flowchart LR
-    v[Value] --> sep[NIntervalSeparator]
-    sep --> out[Interval output]
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> CheckingInterval: Проверка интервала
+    CheckingInterval --> ProcessingMode: Обработка по Mode
+    ProcessingMode --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
 ```
 
-Пояснение: блок-схема показывает поток данных/сигналов (входы → компонент → выходы).
+## UML-диаграмма активности
 
-### Config snippet
-
-```ini
-[Component]
-ClassName = NIntervalSeparator
-Name = IntervalSep1
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала]
+    ReadInput --> ResizeOutput[Изменение размера Output]
+    ResizeOutput --> LoopInputs[Цикл по элементам входа]
+    LoopInputs --> CheckMode{Mode[j]?}
+    CheckMode -->|0| Mode0{input в<br/>[MinRange, MaxRange]?}
+    CheckMode -->|1| Mode1{input в<br/>[MinRange, MaxRange]?}
+    CheckMode -->|2| Mode2{input ><br/>MinRange?}
+    CheckMode -->|3| Mode3{input <<br/>MaxRange?}
+    CheckMode -->|4| Mode4{input ><br/>MinRange?}
+    CheckMode -->|5| Mode5[Режим 5:<br/>Сложная логика]
+    CheckMode -->|6| Mode6[Режим 6:<br/>Сложная логика]
+    Mode0 -->|Да| OutputInput[Output = input]
+    Mode0 -->|Нет| OutputZero[Output = 0]
+    Mode1 -->|Да| OutputShift[Output = input - MinRange]
+    Mode1 -->|Нет| OutputZero
+    Mode2 -->|Да| OutputInput
+    Mode2 -->|Нет| OutputZero
+    Mode3 -->|Да| OutputInput
+    Mode3 -->|Нет| OutputZero
+    Mode4 -->|Да| OutputShift
+    Mode4 -->|Нет| OutputZero
+    Mode5 --> ApplyGain
+    Mode6 --> ApplyGain
+    OutputInput --> ApplyGain[Применение Gain]
+    OutputShift --> ApplyGain
+    OutputZero --> ApplyGain
+    ApplyGain --> NextInput{Еще элементы?}
+    NextInput -->|Да| LoopInputs
+    NextInput -->|Нет| End([Конец])
 ```
+
+## UML-диаграмма компонентов
+
+```mermaid
+graph TB
+    Separator[[NIntervalSeparator]]
+    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    
+    Separator -->|использует| BasicLib
+    
+    Input[Input<br/>Входной сигнал]
+    Output[Output<br/>Разделенный сигнал]
+    
+    Separator --> Input
+    Separator --> Output
+```
+
+## Свойства
+
+### Параметры
+
+| Свойство | Тип | Флаги | Описание | Значение по умолчанию |
+|----------|-----|-------|----------|----------------------|
+| `MinRange` | `std::vector<double>` | `ptPubParameter` | Нижние границы интервалов | `[0.0]` |
+| `MaxRange` | `std::vector<double>` | `ptPubParameter` | Верхние границы интервалов | `[1.0]` |
+| `Mode` | `std::vector<int>` | `ptPubParameter` | Режимы разделения: 0=пропуск вне интервала, 1=смещение, 2=больше MinRange, 3=меньше MaxRange, 4=смещение если больше MinRange, 5=сложная логика, 6=сложная логика | `[2]` |
+| `Gain` | `std::vector<double>` | `ptPubParameter` | Коэффициенты усиления | `[1.0]` |
+
+### Входы
+
+| Свойство | Тип | Флаги | Описание | Источник данных |
+|----------|-----|-------|----------|-----------------|
+| `Input` | `MDMatrix<double>` | `ptInput \| ptPubState` | Входной сигнал для разделения | Другие компоненты системы |
+
+### Выходы
+
+| Свойство | Тип | Флаги | Описание | Назначение |
+|----------|-----|-------|----------|------------|
+| `Output` | `MDMatrix<double>` | `ptOutput \| ptPubState` | Разделенный сигнал | Передача другим компонентам |
+
+## Методы
+
+### Конструкторы и деструкторы
+
+#### `NIntervalSeparator(void)`
+**Назначение:** Конструктор компонента  
+**Параметры:** Нет  
+**Возвращаемое значение:** Нет
+
+#### `virtual ~NIntervalSeparator(void)`
+**Назначение:** Деструктор компонента  
+**Параметры:** Нет  
+**Возвращаемое значение:** Нет
+
+### Методы жизненного цикла
+
+#### `virtual bool ADefault(void)`
+**Назначение:** Инициализация значений по умолчанию  
+**Параметры:** Нет  
+**Возвращаемое значение:** `true` при успехе  
+**Описание:** Устанавливает MinRange=[0.0], MaxRange=[1.0], Mode=[2], Gain=[1.0]
+
+#### `virtual bool ABuild(void)`
+**Назначение:** Построение внутренней структуры компонента  
+**Параметры:** Нет  
+**Возвращаемое значение:** `true` при успехе
+
+#### `virtual bool AReset(void)`
+**Назначение:** Сброс состояния компонента  
+**Параметры:** Нет  
+**Возвращаемое значение:** `true` при успехе  
+**Описание:** Обнуляет Output
+
+#### `virtual bool ACalculate(void)`
+**Назначение:** Выполнение вычислений на текущем шаге  
+**Параметры:** Нет  
+**Возвращаемое значение:** `true` при успехе  
+**Описание:** Разделяет входной сигнал по интервалам в зависимости от Mode:
+- Mode=0: если input в [MinRange, MaxRange], то Output=input, иначе 0
+- Mode=1: если input в [MinRange, MaxRange], то Output=input-MinRange, иначе 0
+- Mode=2: если input > MinRange, то Output=input, иначе 0
+- Mode=3: если input < MaxRange, то Output=input, иначе 0
+- Mode=4: если input > MinRange, то Output=input-MinRange, иначе 0
+- Mode=5,6: сложная логика с учетом знака и границ
+
+### Сеттеры свойств
+
+#### `bool SetMinRange(const double &value)`
+**Назначение:** Установка нижней границы интервала  
+**Параметры:**
+- `value` - нижняя граница
+**Возвращаемое значение:** `true` при успехе
+
+#### `bool SetMaxRange(const double &value)`
+**Назначение:** Установка верхней границы интервала  
+**Параметры:**
+- `value` - верхняя граница
+**Возвращаемое значение:** `true` при успехе
+
+#### `bool SetMode(const int &value)`
+**Назначение:** Установка режима разделения  
+**Параметры:**
+- `value` - режим (0-6)
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
+
+#### `bool SetGain(const double &value)`
+**Назначение:** Установка коэффициента усиления  
+**Параметры:**
+- `value` - значение усиления
+**Возвращаемое значение:** `true` при успехе
+
+### Публичные методы
+
+#### `virtual NIntervalSeparator* New(void)`
+**Назначение:** Создание нового экземпляра компонента  
+**Параметры:** Нет  
+**Возвращаемое значение:** Указатель на новый экземпляр
+
+## Примеры использования
+
+### C++ код
+
+```cpp
+#include "NIntervalSeparator.h"
+
+UEPtr<NIntervalSeparator> separator = new NIntervalSeparator;
+separator->Default();
+std::vector<double> minRange(1, 0.0);
+std::vector<double> maxRange(1, 10.0);
+separator->MinRange = minRange;
+separator->MaxRange = maxRange;
+std::vector<int> mode(1, 1);  // Режим смещения
+separator->Mode = mode;
+separator->Build();
+```
+
+### XML конфигурация
+
+```xml
+<Object Name="IntervalSeparator" ClassName="NIntervalSeparator">
+    <Property Name="MinRange" Value="0.0" />
+    <Property Name="MaxRange" Value="10.0" />
+    <Property Name="Mode" Value="1" />
+    <Property Name="Gain" Value="1.0" />
+    <Property Name="Input" Connect="Source.Output" />
+</Object>
+```
+
+### Использование в конфигурациях
+
+Компонент `NIntervalSeparator` используется для разделения сигналов по интервалам значений в системах управления движением.
+
+**Типичные сценарии использования:**
+1. **Разделение сигналов** - выделение сигналов в заданных диапазонах
+2. **Обработка афферентных сигналов** - разделение афферентных сигналов по интервалам
+
+**Типичные комбинации:**
+- `NIntervalSeparator` + `NEngineMotionControl` - разделение афферентных сигналов
+- `NIntervalSeparator` + датчики - обработка сигналов датчиков
 
 ---
 
-## NIntervalSeparator — interval separator (EN)
+# NIntervalSeparator — interval separator
 
-Splits/classifies input signal into configured intervals and produces interval output.
+**Class**: `NIntervalSeparator` — component for separating input signal by specified value intervals with different processing modes.  
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NIntervalSeparator", ...)`.  
+**Base class**: `UNet` (from Rdk Framework).
 
-```mermaid
-classDiagram
-    UComponent <|-- NIntervalSeparator
-```
+NIntervalSeparator separates input signal into parts depending on value membership in specified intervals [MinRange, MaxRange]. The component supports various processing modes (Mode) for different types of separation.
 
-Description: this class diagram shows the component position in the type hierarchy and key relations.
+## Class Diagram
 
-```mermaid
-sequenceDiagram
-    participant Src as Source
-    participant Sep as NIntervalSeparator
-    Src-->>Sep: value
-    Sep-->>Src: interval output
-```
+[Same as RU section]
 
-Description: this sequence diagram shows a typical runtime interaction and call order.
+## Sequence Diagram
 
-```mermaid
-flowchart LR
-    v[Value] --> sep[NIntervalSeparator]
-    sep --> out[Interval output]
-```
+[Same as RU section]
 
-Description: this flowchart shows the data/signal flow (inputs → component → outputs).
+## State Diagram
+
+[Same as RU section]
+
+## Activity Diagram
+
+[Same as RU section]
+
+## Component Diagram
+
+[Same as RU section]
+
+## Properties
+
+[Same structure as RU section, translated to English]
+
+## Methods
+
+[Same structure as RU section, translated to English]
+
+## Usage Examples
+
+[Same as RU section, with English comments]

@@ -1,80 +1,267 @@
-## NManipulatorAndGyro — манипулятор с гироскопом
+# NManipulatorAndGyro — манипулятор с гироскопом
 
-**Класс**: `NManipulatorAndGyro` — вариант управления манипулятором с учётом данных гироскопа.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorAndGyro", ...)`.
+**Класс**: `NManipulatorAndGyro` — компонент для моделирования манипулятора с гироскопом, вычисляющий результирующий момент с учетом внешнего момента, момента двигателя и гравитации.  
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorAndGyro", ...)`.  
+**Базовый класс**: `UNet` (из Rdk Framework).
 
-### Lifecycle
-- **ADefault**: параметры фильтрации/слияния данных.
-- **ABuild**: подключение `NManipulator` и `NAstaticGyro`.
-- **AReset**: сброс фильтров.
-- **ACalculate**: вычисление команд манипулятора с учётом ориентации.
+NManipulatorAndGyro реализует модель манипулятора с учетом гравитации и гироскопических эффектов. Компонент вычисляет результирующий момент на основе внешнего момента, момента двигателя и гравитационного момента.
 
-### I/O
-- Вход: целевые команды + данные гироскопа.
-- Выход: команды на суставы.
+## UML-диаграмма классов
 
 ```mermaid
 classDiagram
-    NManipulator <|-- NManipulatorAndGyro
+    UNet <|-- NManipulatorAndGyro
+    class NManipulatorAndGyro {
+        +Mass : double
+        +Length : double
+        +InputMomentumExt : MDMatrix~double~
+        +InputMomentum : MDMatrix~double~
+        +InputAngle : MDMatrix~double~
+        +Output : MDMatrix~double~
+        #gravity_constant : double
+        +New() NManipulatorAndGyro*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
 ```
 
-Пояснение: диаграмма классов показывает место компонента в иерархии и ключевые связи.
+**Иерархия наследования:**
+- `UNet` (Rdk Framework) — базовый класс для сетей компонентов
+- `NManipulatorAndGyro` — манипулятор с гироскопом
+
+## UML-диаграмма последовательности
 
 ```mermaid
 sequenceDiagram
-    participant Gy as NAstaticGyro
-    participant Man as NManipulatorAndGyro
-    Gy-->>Man: orientation
-    Man-->>Gy: optional feedback
+    participant Storage as UStorage
+    participant Manipulator as NManipulatorAndGyro
+    participant Engine as Engine
+    participant External as ExternalSource
+    
+    Storage->>Manipulator: new NManipulatorAndGyro()
+    Storage->>Manipulator: Default()
+    Manipulator->>Manipulator: ADefault()
+    
+    Storage->>Manipulator: Build()
+    Manipulator->>Manipulator: ABuild()
+    
+    Storage->>Manipulator: Reset()
+    Manipulator->>Manipulator: AReset()
+    Note over Manipulator: gravity_constant = 9.8
+    
+    loop Каждый шаг вычислений
+        Engine->>Manipulator: InputMomentum = engine_moment
+        External->>Manipulator: InputMomentumExt = external_moment
+        External->>Manipulator: InputAngle = angle
+        Storage->>Manipulator: Calculate()
+        Manipulator->>Manipulator: ACalculate()
+        Note over Manipulator: Output = -external_moment + engine_moment - Mass*g*Length*sin(angle)
+        Manipulator->>Engine: Output = resulting_moment
+    end
 ```
 
-Пояснение: диаграмма последовательности показывает типовой сценарий взаимодействия и порядок вызовов.
+## UML-диаграмма состояний
 
 ```mermaid
-flowchart LR
-    cmd[Target] --> man[NManipulatorAndGyro]
-    gyro[Gyro] --> man
-    man --> out[Joint commands]
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> ReadingInputs: Чтение входов
+    ReadingInputs --> ComputingMoment: Вычисление момента
+    ComputingMoment --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
 ```
 
-Пояснение: блок-схема показывает поток данных/сигналов (входы → компонент → выходы).
+## UML-диаграмма активности
 
-### Config snippet
-
-```ini
-[Component]
-ClassName = NManipulatorAndGyro
-Name = ManGyro1
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> ReadInputs[Чтение входов:<br/>external_moment, engine_moment, angle]
+    ReadInputs --> CalcGravity[Вычисление гравитационного момента:<br/>Mass * gravity_constant * Length * sin(angle)]
+    CalcGravity --> CalcOutput[Вычисление результирующего момента:<br/>Output = -external_moment + engine_moment - gravity_moment]
+    CalcOutput --> End([Конец])
 ```
+
+## UML-диаграмма компонентов
+
+```mermaid
+graph TB
+    Manipulator[[NManipulatorAndGyro]]
+    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    
+    Manipulator -->|использует| BasicLib
+    
+    InputMomentumExt[InputMomentumExt<br/>Внешний момент]
+    InputMomentum[InputMomentum<br/>Момент двигателя]
+    InputAngle[InputAngle<br/>Угол манипулятора]
+    Output[Output<br/>Результирующий момент]
+    
+    Manipulator --> InputMomentumExt
+    Manipulator --> InputMomentum
+    Manipulator --> InputAngle
+    Manipulator --> Output
+```
+
+## Свойства
+
+### Параметры модели
+
+| Свойство | Тип | Флаги | Описание | Значение по умолчанию |
+|----------|-----|-------|----------|----------------------|
+| `Mass` | `double` | `ptPubParameter` | Масса манипулятора (кг) | `1.0` |
+| `Length` | `double` | `ptPubParameter` | Длина манипулятора (м) | `1.0` |
+
+### Входы
+
+| Свойство | Тип | Флаги | Описание | Источник данных |
+|----------|-----|-------|----------|-----------------|
+| `InputMomentumExt` | `MDMatrix<double>` | `ptInput \| ptPubState` | Внешний момент (Н·м) | Внешние источники |
+| `InputMomentum` | `MDMatrix<double>` | `ptInput \| ptPubState` | Момент двигателя (Н·м) | Двигатель или привод |
+| `InputAngle` | `MDMatrix<double>` | `ptInput \| ptPubState` | Угол манипулятора (рад) | Датчик угла или модель |
+
+### Выходы
+
+| Свойство | Тип | Флаги | Описание | Назначение |
+|----------|-----|-------|----------|------------|
+| `Output` | `MDMatrix<double>` | `ptOutput \| ptPubState` | Результирующий момент (Н·м) | Передача системам управления |
+
+### Защищенные переменные
+
+| Свойство | Тип | Описание |
+|----------|-----|----------|
+| `gravity_constant` | `double` | Константа гравитации (9.8 м/с²) |
+
+## Методы
+
+### Конструкторы и деструкторы
+
+#### `NManipulatorAndGyro(void)`
+**Назначение:** Конструктор компонента  
+**Параметры:** Нет  
+**Возвращаемое значение:** Нет  
+**Описание:** Инициализирует gravity_constant=0
+
+#### `virtual ~NManipulatorAndGyro(void)`
+**Назначение:** Деструктор компонента  
+**Параметры:** Нет  
+**Возвращаемое значение:** Нет
+
+### Методы жизненного цикла
+
+#### `virtual bool ADefault(void)`
+**Назначение:** Инициализация значений по умолчанию  
+**Параметры:** Нет  
+**Возвращаемое значение:** `true` при успехе  
+**Описание:** Устанавливает Mass=1, Length=1, инициализирует входные и выходные матрицы нулями
+
+#### `virtual bool ABuild(void)`
+**Назначение:** Построение внутренней структуры компонента  
+**Параметры:** Нет  
+**Возвращаемое значение:** `true` при успехе
+
+#### `virtual bool AReset(void)`
+**Назначение:** Сброс состояния компонента  
+**Параметры:** Нет  
+**Возвращаемое значение:** `true` при успехе  
+**Описание:** Устанавливает gravity_constant=9.8
+
+#### `virtual bool ACalculate(void)`
+**Назначение:** Выполнение вычислений на текущем шаге  
+**Параметры:** Нет  
+**Возвращаемое значение:** `true` при успехе  
+**Описание:** Вычисляет результирующий момент:
+- `Output = -InputMomentumExt + InputMomentum - Mass * gravity_constant * Length * sin(InputAngle)`
+
+### Публичные методы
+
+#### `virtual NManipulatorAndGyro* New(void)`
+**Назначение:** Создание нового экземпляра компонента  
+**Параметры:** Нет  
+**Возвращаемое значение:** Указатель на новый экземпляр
+
+## Примеры использования
+
+### C++ код
+
+```cpp
+#include "NManipulatorAndGyro.h"
+
+UEPtr<NManipulatorAndGyro> manipulator = new NManipulatorAndGyro;
+manipulator->Default();
+manipulator->Mass = 2.0;  // Масса 2 кг
+manipulator->Length = 0.5;  // Длина 0.5 м
+manipulator->Build();
+manipulator->Reset();
+```
+
+### XML конфигурация
+
+```xml
+<Object Name="ManipulatorAndGyro" ClassName="NManipulatorAndGyro">
+    <Property Name="Mass" Value="2.0" />
+    <Property Name="Length" Value="0.5" />
+    <Property Name="InputMomentum" Connect="Engine.OutputMoment" />
+    <Property Name="InputAngle" Connect="AngleSensor.Output" />
+</Object>
+```
+
+### Использование в конфигурациях
+
+Компонент `NManipulatorAndGyro` используется для моделирования манипулятора с учетом гравитации и гироскопических эффектов.
+
+**Типичные сценарии использования:**
+1. **Моделирование манипулятора** - симуляция динамики манипулятора с гравитацией
+2. **Интеграция с гироскопом** - использование данных гироскопа для управления
+
+**Типичные комбинации:**
+- `NManipulatorAndGyro` + `NAstaticGyro` - манипулятор с гироскопом
+- `NManipulatorAndGyro` + двигатели - управление манипулятором
 
 ---
 
-## NManipulatorAndGyro — manipulator with gyro (EN)
+# NManipulatorAndGyro — manipulator with gyroscope
 
-Manipulator control with gyro feedback fusion.
+**Class**: `NManipulatorAndGyro` — component for modeling a manipulator with a gyroscope, calculating resulting moment accounting for external moment, engine moment, and gravity.  
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorAndGyro", ...)`.  
+**Base class**: `UNet` (from Rdk Framework).
 
-```mermaid
-classDiagram
-    NManipulator <|-- NManipulatorAndGyro
-```
+NManipulatorAndGyro implements a manipulator model accounting for gravity and gyroscopic effects. The component calculates resulting moment based on external moment, engine moment, and gravitational moment.
 
-Description: this class diagram shows the component position in the type hierarchy and key relations.
+## Class Diagram
 
-```mermaid
-sequenceDiagram
-    participant Gy as NAstaticGyro
-    participant Man as NManipulatorAndGyro
-    Gy-->>Man: orientation
-    Man-->>Gy: outputs
-```
+[Same as RU section]
 
-Description: this sequence diagram shows a typical runtime interaction and call order.
+## Sequence Diagram
 
-```mermaid
-flowchart LR
-    cmd[Target] --> man[NManipulatorAndGyro]
-    gyro[Gyro] --> man
-    man --> out[Joint commands]
-```
+[Same as RU section]
 
-Description: this flowchart shows the data/signal flow (inputs → component → outputs).
+## State Diagram
+
+[Same as RU section]
+
+## Activity Diagram
+
+[Same as RU section]
+
+## Component Diagram
+
+[Same as RU section]
+
+## Properties
+
+[Same structure as RU section, translated to English]
+
+## Methods
+
+[Same structure as RU section, translated to English]
+
+## Usage Examples
+
+[Same as RU section, with English comments]
