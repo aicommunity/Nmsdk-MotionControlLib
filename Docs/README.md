@@ -15,6 +15,31 @@
 - Работы с ретиной глаза
 - Интеграции с гироскопами
 
+### Быстрый старт
+
+#### Управление манипулятором
+
+```cpp
+// Создание компонента манипулятора
+auto manipulator = storage->CreateComponent<NManipulator>("Manipulator");
+manipulator->Default();
+manipulator->Build();
+
+// Управление позицией
+manipulator->SetPosition(x, y, z);
+manipulator->Calculate();
+```
+
+#### Работа с ретиной глаза
+
+```cpp
+// Создание компонента ретины
+auto retina = storage->CreateComponent<NEyeRetina>("Retina");
+retina->InputImage.AttachTo(&camera->OutputImage);
+retina->Build();
+retina->Calculate();
+```
+
 ### Связь с корневой документацией
 
 Для обзорной информации см. корневую документацию проекта:
@@ -25,6 +50,7 @@
 - [Architecture.md](Architecture.md) - архитектура библиотеки
 - [Usage-Examples.md](Usage-Examples.md) - примеры использования
 - [API-Overview.md](API-Overview.md) - обзор API
+- [Component-Catalog.md](Component-Catalog.md) - каталог компонентов
 
 ---
 
@@ -53,3 +79,4 @@ For overview information see root project documentation:
 - [Architecture.md](Architecture.md) - library architecture
 - [Usage-Examples.md](Usage-Examples.md) - usage examples
 - [API-Overview.md](API-Overview.md) - API overview
+- [Component-Catalog.md](Component-Catalog.md) - component catalog
