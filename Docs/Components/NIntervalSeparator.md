@@ -1,7 +1,7 @@
 # NIntervalSeparator — разделитель по интервалам
 
-**Класс**: `NIntervalSeparator` — компонент для разделения входного сигнала по заданным интервалам значений с различными режимами обработки.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NIntervalSeparator", ...)`.  
+**Класс**: `NIntervalSeparator` — компонент для разделения входного сигнала по заданным интервалам значений с различными режимами обработки.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NIntervalSeparator", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NIntervalSeparator разделяет входной сигнал на части в зависимости от принадлежности значения заданным интервалам [MinRange, MaxRange]. Компонент поддерживает различные режимы обработки (Mode) для разных типов разделения.
@@ -41,14 +41,14 @@ sequenceDiagram
     participant Storage as UStorage
     participant Separator as NIntervalSeparator
     participant Source as SignalSource
-    
+
     Storage->>Separator: new NIntervalSeparator()
     Storage->>Separator: Default()
     Separator->>Separator: ADefault()
-    
+
     Storage->>Separator: Build()
     Separator->>Separator: ABuild()
-    
+
     loop Каждый шаг вычислений
         Source->>Separator: Input = signal
         Storage->>Separator: Calculate()
@@ -116,12 +116,12 @@ flowchart TD
 graph TB
     Separator[[NIntervalSeparator]]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Separator -->|использует| BasicLib
-    
+
     Input[Input<br/>Входной сигнал]
     Output[Output<br/>Разделенный сигнал]
-    
+
     Separator --> Input
     Separator --> Output
 ```
@@ -154,38 +154,38 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NIntervalSeparator(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 #### `virtual ~NIntervalSeparator(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает MinRange=[0.0], MaxRange=[1.0], Mode=[2], Gain=[1.0]
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Обнуляет Output
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Разделяет входной сигнал по интервалам в зависимости от Mode:
 - Mode=0: если input в [MinRange, MaxRange], то Output=input, иначе 0
 - Mode=1: если input в [MinRange, MaxRange], то Output=input-MinRange, иначе 0
@@ -197,25 +197,25 @@ graph TB
 ### Сеттеры свойств
 
 #### `bool SetMinRange(const double &value)`
-**Назначение:** Установка нижней границы интервала  
+**Назначение:** Установка нижней границы интервала
 **Параметры:**
 - `value` - нижняя граница
 **Возвращаемое значение:** `true` при успехе
 
 #### `bool SetMaxRange(const double &value)`
-**Назначение:** Установка верхней границы интервала  
+**Назначение:** Установка верхней границы интервала
 **Параметры:**
 - `value` - верхняя граница
 **Возвращаемое значение:** `true` при успехе
 
 #### `bool SetMode(const int &value)`
-**Назначение:** Установка режима разделения  
+**Назначение:** Установка режима разделения
 **Параметры:**
 - `value` - режим (0-6)
 **Возвращаемое значение:** `true` при успехе, `false` при ошибке
 
 #### `bool SetGain(const double &value)`
-**Назначение:** Установка коэффициента усиления  
+**Назначение:** Установка коэффициента усиления
 **Параметры:**
 - `value` - значение усиления
 **Возвращаемое значение:** `true` при успехе
@@ -223,8 +223,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NIntervalSeparator* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -273,8 +273,8 @@ separator->Build();
 
 # NIntervalSeparator — interval separator
 
-**Class**: `NIntervalSeparator` — component for separating input signal by specified value intervals with different processing modes.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NIntervalSeparator", ...)`.  
+**Class**: `NIntervalSeparator` — component for separating input signal by specified value intervals with different processing modes.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NIntervalSeparator", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NIntervalSeparator separates input signal into parts depending on value membership in specified intervals [MinRange, MaxRange]. The component supports various processing modes (Mode) for different types of separation.
@@ -306,6 +306,10 @@ NIntervalSeparator separates input signal into parts depending on value membersh
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 22 — разделение интервалов в контурах управления движением.
 
 ## Usage Examples
 

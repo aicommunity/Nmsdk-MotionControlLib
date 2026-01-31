@@ -1,7 +1,7 @@
 # NWPhysicalManipulator — WinAPI физический манипулятор
 
-**Класс**: `NWPhysicalManipulator` — компонент для управления физическим манипулятором через WinAPI и внешнюю DLL (RoboLib.dll).  
-**Регистрация**: `Libraries/Nmsdk-MotionControlLib/Core/WinAPI/NWinAPIActLibrary.cpp` → `UploadClass("NWPhysicalManipulator", ...)`.  
+**Класс**: `NWPhysicalManipulator` — компонент для управления физическим манипулятором через WinAPI и внешнюю DLL (RoboLib.dll).
+**Регистрация**: `Libraries/Nmsdk-MotionControlLib/Core/WinAPI/NWinAPIActLibrary.cpp` → `UploadClass("NWPhysicalManipulator", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NWPhysicalManipulator обеспечивает интерфейс для управления физическим манипулятором через WinAPI. Компонент загружает внешнюю DLL (RoboLib.dll), инициализирует COM-порт для связи с устройством, и использует многопоточность (boost::thread) для асинхронной отправки команд и чтения данных. Компонент поддерживает несколько режимов работы (командный режим, нейроуправление, эмулятор) и автоматически масштабирует данные между внутренним представлением и физическими единицами устройства.
@@ -88,15 +88,15 @@ sequenceDiagram
     participant Device as Physical Device
     participant SendThread as SendThread
     participant ReadThread as ReadThread
-    
+
     Storage->>Manipulator: new NWPhysicalManipulator()
     Storage->>Manipulator: Default()
     Manipulator->>Manipulator: ADefault()
     Note over Manipulator: Инициализация параметров<br/>EmulatorMode, ComPort, ServoNumber
-    
+
     Storage->>Manipulator: Build()
     Manipulator->>Manipulator: ABuild()
-    
+
     Storage->>Manipulator: Init()
     Manipulator->>Manipulator: AInit()
     Manipulator->>Manipulator: LoadManipulatorDll()
@@ -108,16 +108,16 @@ sequenceDiagram
     Manipulator->>DLL: SetWorkMode(DllManipulatorMode)
     Manipulator->>SendThread: Start thread
     Manipulator->>ReadThread: Start thread
-    
+
     Storage->>Manipulator: Reset()
     Manipulator->>Manipulator: AReset()
-    
+
     loop Каждый шаг вычислений
         Storage->>Manipulator: Input = command_voltage
         Storage->>Manipulator: Calculate()
         Manipulator->>Manipulator: ACalculate()
         Note over Manipulator: Обновление SafeInput/SafeOutput
-        
+
         par Асинхронная отправка команд
             SendThread->>Manipulator: SendCommand()
             Manipulator->>Manipulator: MoveServoByCommand()
@@ -133,12 +133,12 @@ sequenceDiagram
             Manipulator->>Manipulator: Process and scale data
             Manipulator->>Manipulator: Update SafeOutput[0/1/2]
         end
-        
+
         Manipulator->>Storage: Output1 = moment
         Manipulator->>Storage: Output2 = angle
         Manipulator->>Storage: Output3 = angular_speed
     end
-    
+
     Storage->>Manipulator: UnInit()
     Manipulator->>Manipulator: AUnInit()
     Manipulator->>SendThread: Terminate thread
@@ -199,7 +199,7 @@ flowchart TD
     LockRead --> UpdateOutputs[Обновление Output1/2/3 из SafeOutput]
     UpdateOutputs --> UnlockRead[Разблокировка ReadMutex]
     UnlockRead --> End([Конец])
-    
+
     subgraph SendThread["Поток отправки (SendCommand)"]
         STStart([Начало потока]) --> STCheck{ManipulatorDLL<br/>загружена?}
         STCheck -->|Нет| STSleep[Ожидание 10 мс]
@@ -217,7 +217,7 @@ flowchart TD
         STWait --> STCheckTerm
         STSleep --> STCheckTerm
     end
-    
+
     subgraph ReadThread["Поток чтения (ReadData)"]
         RTStart([Начало потока]) --> RTCheck{ManipulatorDLL<br/>загружена?}
         RTCheck -->|Нет| RTSleep[Ожидание 10 мс]
@@ -252,26 +252,26 @@ graph TB
     subgraph "Nmsdk-MotionControlLib"
         NWPhysical[NWPhysicalManipulator]
     end
-    
+
     subgraph "Rdk-BasicLib"
         UNet[UNet]
     end
-    
+
     subgraph "Windows API"
         WinAPI[WinAPI Functions]
         DLL[RoboLib.dll]
     end
-    
+
     subgraph "Hardware"
         Device[Physical Manipulator]
         COMPort[COM Port]
     end
-    
+
     subgraph "Boost"
         BoostThread[boost::thread]
         BoostMutex[boost::mutex]
     end
-    
+
     UNet --> NWPhysical
     NWPhysical --> WinAPI
     NWPhysical --> DLL
@@ -485,9 +485,9 @@ manipulator->Reset();
 while (simulation_running) {
     // Установка команды управления (напряжение от -100 до 100)
     manipulator->Input(0, 0) = command_voltage;
-    
+
     manipulator->Calculate();
-    
+
     // Получение данных о состоянии
     double moment = manipulator->Output1(0, 0);
     double angle = manipulator->Output2(0, 0);
@@ -549,8 +549,8 @@ manipulator->UnInit(); // Останавливает потоки, закрыв�
 
 ## NWPhysicalManipulator — WinAPI physical manipulator (EN)
 
-**Class**: `NWPhysicalManipulator` — component for controlling a physical manipulator via WinAPI and external DLL (RoboLib.dll).  
-**Registration**: `Libraries/Nmsdk-MotionControlLib/Core/WinAPI/NWinAPIActLibrary.cpp` → `UploadClass("NWPhysicalManipulator", ...)`.  
+**Class**: `NWPhysicalManipulator` — component for controlling a physical manipulator via WinAPI and external DLL (RoboLib.dll).
+**Registration**: `Libraries/Nmsdk-MotionControlLib/Core/WinAPI/NWinAPIActLibrary.cpp` → `UploadClass("NWPhysicalManipulator", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NWPhysicalManipulator provides an interface for controlling a physical manipulator via WinAPI. The component loads an external DLL (RoboLib.dll), initializes a COM port for device communication, and uses multithreading (boost::thread) for asynchronous command sending and data reading. The component supports multiple operation modes (command mode, neurocontrol, emulator) and automatically scales data between internal representation and physical device units.
@@ -588,7 +588,7 @@ sequenceDiagram
     participant DLL as RoboLib.dll
     participant SendThread as SendThread
     participant ReadThread as ReadThread
-    
+
     Storage->>Manipulator: new NWPhysicalManipulator()
     Storage->>Manipulator: Default()
     Storage->>Manipulator: Build()
@@ -598,7 +598,7 @@ sequenceDiagram
     Manipulator->>DLL: ComOpen(ComPort)
     Manipulator->>SendThread: Start thread
     Manipulator->>ReadThread: Start thread
-    
+
     loop Each calculation step
         Storage->>Manipulator: Input = command_voltage
         Storage->>Manipulator: Calculate()
@@ -635,12 +635,12 @@ flowchart TD
     LockCommand --> ReadInput[Read Input to SafeInput]
     ReadInput --> UpdateOutputs[Update Output1/2/3 from SafeOutput]
     UpdateOutputs --> End([End])
-    
+
     subgraph SendThread["Send Thread"]
         STCheck{Time elapsed?} --> STMove[MoveServoByCommand]
         STMove --> STSend[Send command via DLL]
     end
-    
+
     subgraph ReadThread["Read Thread"]
         RTCheck{Time elapsed?} --> RTRead[ReadManipulatorData]
         RTRead --> RTProcess[Process and scale data]
@@ -655,15 +655,15 @@ graph TB
     subgraph "Nmsdk-MotionControlLib"
         NWPhysical[NWPhysicalManipulator]
     end
-    
+
     subgraph "Windows API"
         DLL[RoboLib.dll]
     end
-    
+
     subgraph "Hardware"
         Device[Physical Manipulator]
     end
-    
+
     NWPhysical --> DLL
     DLL --> Device
 ```
@@ -754,3 +754,7 @@ manipulator->UnInit();
     </Properties>
 </Component>
 ```
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21 — физический манипулятор в иерархии управления поведением робота.

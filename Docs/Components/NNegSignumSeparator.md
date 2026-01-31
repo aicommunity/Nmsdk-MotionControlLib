@@ -1,7 +1,7 @@
 # NNegSignumSeparator — разделитель отрицательной части сигнала
 
-**Класс**: `NNegSignumSeparator` — вариант конфигурации `NSignumSeparator` для выделения отрицательной составляющей сигнала.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNegSignumSeparator", ...)`.  
+**Класс**: `NNegSignumSeparator` — вариант конфигурации `NSignumSeparator` для выделения отрицательной составляющей сигнала.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNegSignumSeparator", ...)`.
 **Базовый класс**: `NSignumSeparator` (вариант конфигурации с `Sign=-1.0`).
 
 NNegSignumSeparator является предварительно настроенным вариантом `NSignumSeparator` с параметром `Sign=-1.0`, что позволяет выделять только отрицательную часть входного сигнала. Компонент умножает входной сигнал на коэффициент знака и применяет усиление для формирования выходного сигнала. Положительные значения входного сигнала обнуляются.
@@ -41,15 +41,15 @@ sequenceDiagram
     participant Storage as UStorage
     participant Separator as NNegSignumSeparator
     participant Source as SignalSource
-    
+
     Storage->>Separator: new NSignumSeparator()<br/>Sign=-1.0
     Storage->>Separator: Default()
     Separator->>Separator: ADefault()
     Note over Separator: Sign = [-1.0]<br/>Gain = [1.0]
-    
+
     Storage->>Separator: Build()
     Separator->>Separator: ABuild()
-    
+
     loop Каждый шаг вычислений
         Source->>Separator: Input = signal
         Storage->>Separator: Calculate()
@@ -131,16 +131,16 @@ graph TB
     subgraph "Nmsdk-MotionControlLib"
         NNegSep[NNegSignumSeparator]
     end
-    
+
     subgraph "Rdk-BasicLib"
         UNet[UNet]
     end
-    
+
     NNegSep -->|наследуется от| UNet
-    
+
     Input[Input<br/>Входной сигнал]
     Output[Output<br/>Отрицательная часть]
-    
+
     NNegSep --> Input
     NNegSep --> Output
 ```
@@ -209,7 +209,7 @@ separator->Reset();
 while (simulation_running) {
     separator->Input(0, 0) = input_signal; // Может быть положительным или отрицательным
     separator->Calculate();
-    
+
     double negative_part = separator->Output(0, 0); // Только отрицательная часть
 }
 ```
@@ -248,8 +248,8 @@ while (simulation_running) {
 
 ## NNegSignumSeparator — negative channel extractor (EN)
 
-**Class**: `NNegSignumSeparator` — configuration variant of `NSignumSeparator` for extracting negative signal component.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNegSignumSeparator", ...)`.  
+**Class**: `NNegSignumSeparator` — configuration variant of `NSignumSeparator` for extracting negative signal component.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNegSignumSeparator", ...)`.
 **Base class**: `NSignumSeparator` (configuration variant with `Sign=-1.0`).
 
 NNegSignumSeparator is a pre-configured variant of `NSignumSeparator` with parameter `Sign=-1.0`, allowing extraction of only the negative part of the input signal. The component multiplies the input signal by the sign coefficient and applies gain to form the output signal. Positive input values are zeroed.
@@ -275,7 +275,7 @@ sequenceDiagram
     participant Storage as UStorage
     participant Separator as NNegSignumSeparator
     participant Source as SignalSource
-    
+
     Storage->>Separator: new NSignumSeparator()<br/>Sign=-1.0
     Storage->>Separator: Default()
     loop Each calculation step
@@ -350,3 +350,7 @@ while (simulation_running) {
     </Properties>
 </Component>
 ```
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28 — разделитель сигнум-сигналов в контурах управления.

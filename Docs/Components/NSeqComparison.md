@@ -1,7 +1,7 @@
 # NSeqComparison — сравнение последовательностей
 
-**Класс**: `NSeqComparison` — компонент для сравнения последовательностей импульсных сигналов с использованием нейросетевых структур.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NSeqComparison", ...)`.  
+**Класс**: `NSeqComparison` — компонент для сравнения последовательностей импульсных сигналов с использованием нейросетевых структур.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NSeqComparison", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NSeqComparison реализует сравнение последовательностей импульсных сигналов через нейросетевую структуру. Компонент создаёт генераторы многоимпульсных последовательностей (NPulseGeneratorMulti) для эталонных (KF) и тестовых (Fr) классов, и использует нейрон сравнения (NPulseNeuron) для определения совпадения последовательностей. Компонент используется для распознавания и сравнения паттернов импульсных сигналов.
@@ -14,7 +14,7 @@ classDiagram
     NSeqComparison *-- NPulseGeneratorMulti : KFClsSpikes
     NSeqComparison *-- NPulseGeneratorMulti : FrClsSpikes
     NSeqComparison *-- NPulseNeuron : CompNeuron
-    
+
     class NSeqComparison {
         +NeuronClassName : string
         +MultiGeneratorClassName : string
@@ -68,12 +68,12 @@ sequenceDiagram
     participant KFGen as KFClsSpikes Generators
     participant FrGen as FrClsSpikes Generators
     participant Neuron as CompNeuron
-    
+
     Storage->>Comparison: new NSeqComparison()
     Storage->>Comparison: Default()
     Comparison->>Comparison: ADefault()
     Note over Comparison: NeuronClassName = "NSPNeuronGen"<br/>MultiGeneratorClassName = "NPulseGeneratorMulti"<br/>PulseLength = 0.001<br/>Amplitude = 1.0
-    
+
     Storage->>Comparison: Build()
     Comparison->>Comparison: ABuild()
     Comparison->>KFGen: Create NumClasses generators
@@ -81,13 +81,13 @@ sequenceDiagram
     Comparison->>Neuron: Create CompNeuron
     Comparison->>Comparison: Link generators to neuron
     Note over Comparison: KF generators → excitatory synapses<br/>Fr generators → inhibitory synapses
-    
+
     Storage->>Comparison: Reset()
     Comparison->>Comparison: AReset()
     Comparison->>KFGen: Reset with delays from DelaysKFCls
     Comparison->>FrGen: Reset with delays from DelaysFrCls
     Comparison->>Neuron: Reset with LTZThreshold
-    
+
     loop Каждый шаг вычислений
         Storage->>Comparison: Calculate()
         Comparison->>Comparison: ACalculate()
@@ -148,7 +148,7 @@ stateDiagram-v2
 flowchart TD
     Start([Начало ACalculate]) --> GetNeuronOutput[Получение выхода нейрона:<br/>Output = CompNeuron->Output]
     GetNeuronOutput --> End([Конец])
-    
+
     subgraph NeuronProcess["Процесс в CompNeuron"]
         KFGen[KFClsSpikes генераторы<br/>генерируют эталонные<br/>последовательности]
         FrGen[FrClsSpikes генераторы<br/>генерируют тестовые<br/>последовательности]
@@ -156,7 +156,7 @@ flowchart TD
         InhSyn[Тормозные синапсы<br/>сомы получают Fr сигналы]
         LTZone[LTZone сравнивает<br/>потенциалы]
         NeuronOutput[Выход нейрона:<br/>результат сравнения]
-        
+
         KFGen --> ExcSyn
         FrGen --> InhSyn
         ExcSyn --> LTZone
@@ -180,26 +180,26 @@ graph TB
     subgraph "Nmsdk-MotionControlLib"
         NSeqComp[NSeqComparison]
     end
-    
+
     subgraph "Nmsdk-PulseLib"
         NPulseGenMulti[NPulseGeneratorMulti]
         NPulseNeuron[NPulseNeuron]
         NLTZone[NLTZone]
     end
-    
+
     subgraph "Rdk-BasicLib"
         UNet[UNet]
     end
-    
+
     NSeqComp -->|наследуется от| UNet
     NSeqComp -->|создаёт| NPulseGenMulti
     NSeqComp -->|создаёт| NPulseNeuron
     NPulseNeuron -->|использует| NLTZone
-    
+
     KFGen[KFClsSpikes<br/>Эталонные генераторы]
     FrGen[FrClsSpikes<br/>Тестовые генераторы]
     CompNeuron[CompNeuron<br/>Нейрон сравнения]
-    
+
     NSeqComp --> KFGen
     NSeqComp --> FrGen
     NSeqComp --> CompNeuron
@@ -360,7 +360,7 @@ comparison->Reset();
 // В цикле вычислений
 while (simulation_running) {
     comparison->Calculate();
-    
+
     // Получение результата сравнения
     double result = comparison->Output(0, 0);
     // result > 0 означает совпадение последовательностей
@@ -416,8 +416,8 @@ while (simulation_running) {
 
 ## NSeqComparison — sequence comparison (EN)
 
-**Class**: `NSeqComparison` — component for comparing pulse signal sequences using neural network structures.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NSeqComparison", ...)`.  
+**Class**: `NSeqComparison` — component for comparing pulse signal sequences using neural network structures.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NSeqComparison", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NSeqComparison implements comparison of pulse signal sequences through a neural network structure. The component creates multi-pulse sequence generators (NPulseGeneratorMulti) for reference (KF) and test (Fr) classes, and uses a comparison neuron (NPulseNeuron) to determine sequence matches. Used for recognition and comparison of pulse signal patterns.
@@ -441,7 +441,7 @@ sequenceDiagram
     participant KFGen as KFClsSpikes
     participant FrGen as FrClsSpikes
     participant Neuron as CompNeuron
-    
+
     Storage->>Comparison: new NSeqComparison()
     Storage->>Comparison: Default()
     Storage->>Comparison: Build()
@@ -542,3 +542,7 @@ while (simulation_running) {
     </Properties>
 </Component>
 ```
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — сравнение последовательностей импульсов в нейронных структурах управления.

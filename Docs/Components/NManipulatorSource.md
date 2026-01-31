@@ -1,7 +1,7 @@
 # NManipulatorSource — источник манипулятора
 
-**Класс**: `NManipulatorSource` — источник данных о состоянии манипулятора (угол, скорость, сила, перемещение).  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorSource", ...)`.  
+**Класс**: `NManipulatorSource` — источник данных о состоянии манипулятора (угол, скорость, сила, перемещение).
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorSource", ...)`.
 **Базовый класс**: `NSource` (из Nmsdk-PulseLib).
 
 NManipulatorSource предоставляет данные о состоянии манипулятора: угол, скорость, силу и перемещение. Компонент может получать данные через входные свойства или использовать внутренние параметры, и выдает их на выходы для использования другими компонентами системы.
@@ -47,17 +47,17 @@ sequenceDiagram
     participant Source as NManipulatorSource
     participant Manipulator as ManipulatorModel
     participant Controller as Controller
-    
+
     Storage->>Source: new NManipulatorSource()
     Storage->>Source: Default()
     Source->>Source: ADefault()
-    
+
     Storage->>Source: Build()
     Source->>Source: ABuild()
-    
+
     Storage->>Source: Reset()
     Source->>Source: AReset()
-    
+
     loop Каждый шаг вычислений
         Manipulator->>Source: InputAngle, InputSpeed, InputForce, InputMovement
         Storage->>Source: Calculate()
@@ -114,10 +114,10 @@ graph TB
     Source[[NManipulatorSource]]
     PulseLib[Nmsdk-PulseLib<br/>NSource]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Source -->|наследуется от| PulseLib
     Source -->|использует| BasicLib
-    
+
     InputAngle[InputAngle<br/>Входной угол]
     InputSpeed[InputSpeed<br/>Входная скорость]
     InputForce[InputForce<br/>Входная сила]
@@ -126,7 +126,7 @@ graph TB
     OutputSpeed[OutputSpeed<br/>Выходная скорость]
     OutputForce[OutputForce<br/>Выходная сила]
     OutputMovement[OutputMovement<br/>Выходное перемещение]
-    
+
     Source --> InputAngle
     Source --> InputSpeed
     Source --> InputForce
@@ -177,34 +177,34 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NManipulatorSource(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует UpdateOutputFlag=0
 
 #### `virtual ~NManipulatorSource(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает Angle=0, Speed=0, Force=0, Movement=0, вызывает ADefault() базового класса
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает UpdateOutputFlag=true, обнуляет выходные матрицы, вызывает AReset() базового класса
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Обновляет выходы:
 - Если InputAngle подключен: OutputAngle = InputAngle, иначе OutputAngle = Angle
 - Если InputSpeed подключен: OutputSpeed = InputSpeed, иначе OutputSpeed = Speed
@@ -214,19 +214,19 @@ graph TB
 ### Сеттеры свойств
 
 #### `bool SetAngle(const double &value)`
-**Назначение:** Установка угла  
+**Назначение:** Установка угла
 **Параметры:**
 - `value` - значение угла
 **Возвращаемое значение:** `true` при успехе
 
 #### `bool SetSpeed(const double &value)`
-**Назначение:** Установка скорости  
+**Назначение:** Установка скорости
 **Параметры:**
 - `value` - значение скорости
 **Возвращаемое значение:** `true` при успехе
 
 #### `bool SetForce(const double &value)`
-**Назначение:** Установка силы  
+**Назначение:** Установка силы
 **Параметры:**
 - `value` - значение силы
 **Возвращаемое значение:** `true` при успехе
@@ -234,8 +234,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NManipulatorSource* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -261,7 +261,7 @@ model->OutputMovement.Connect(source->InputMovement);
 for (int step = 0; step < numSteps; step++) {
     model->Calculate();
     source->Calculate();
-    
+
     // Получение данных о состоянии
     double angle = source->OutputAngle(0, 0);
     double speed = source->OutputSpeed(0, 0);
@@ -299,8 +299,8 @@ for (int step = 0; step < numSteps; step++) {
 
 # NManipulatorSource — manipulator source
 
-**Class**: `NManipulatorSource` — source of manipulator state data (angle, speed, force, movement).  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorSource", ...)`.  
+**Class**: `NManipulatorSource` — source of manipulator state data (angle, speed, force, movement).
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorSource", ...)`.
 **Base class**: `NSource` (from Nmsdk-PulseLib).
 
 NManipulatorSource provides manipulator state data: angle, speed, force, and movement. The component can receive data through input properties or use internal parameters, and outputs them for use by other system components.
@@ -332,6 +332,10 @@ NManipulatorSource provides manipulator state data: angle, speed, force, and mov
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21 — источник данных манипулятора в иерархии управления.
 
 ## Usage Examples
 

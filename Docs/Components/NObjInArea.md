@@ -1,7 +1,7 @@
 # NObjInArea — объект в области
 
-**Класс**: `NObjInArea` — компонент для обнаружения объектов в ограниченной области изображения с использованием нейросетевой структуры и блоков подавления.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NObjInArea", ...)`.  
+**Класс**: `NObjInArea` — компонент для обнаружения объектов в ограниченной области изображения с использованием нейросетевой структуры и блоков подавления.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NObjInArea", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NObjInArea обнаруживает объекты в ограниченной области изображения, используя генераторы последовательностей импульсов, блоки подавления (NSuppressionUnit) и нейроны для принятия решений. Компонент создает сложную структуру для обработки визуальной информации.
@@ -18,7 +18,7 @@ classDiagram
     NObjInArea *-- NPulseNeuron : ANDNeuron
     NObjInArea *-- NPulseNeuron : DecidingNeuron
     NObjInArea *-- NPulseGeneratorTransit : ExcitatoryGen
-    
+
     class NObjInArea {
         +NeuronClassName : string
         +MultiGeneratorClassName : string
@@ -67,11 +67,11 @@ sequenceDiagram
     participant ORNeuron as ORNeuron
     participant ANDNeuron as ANDNeuron
     participant Deciding as DecidingNeuron
-    
+
     Storage->>Detector: new NObjInArea()
     Storage->>Detector: Default()
     Detector->>Detector: ADefault()
-    
+
     Storage->>Detector: Build()
     Detector->>Detector: ABuild()
     Detector->>ClsGen: Создание NumObj генераторов ClsSpikeFr
@@ -81,7 +81,7 @@ sequenceDiagram
     Detector->>ANDNeuron: new NPulseNeuron("ANDNeuron")
     Detector->>Deciding: new NPulseNeuron("DecidingNeuron")
     Detector->>Detector: Создание связей между компонентами
-    
+
     loop Каждый шаг вычислений
         Storage->>Detector: Calculate()
         Detector->>Detector: ACalculate()
@@ -136,18 +136,18 @@ graph TB
     PulseLib[Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron]
     MotionLib[Nmsdk-MotionControlLib<br/>NSuppressionUnit]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Detector -->|использует| PulseLib
     Detector -->|использует| MotionLib
     Detector -->|использует| BasicLib
-    
+
     ClsGenerators[ClsSpikeFr<br/>Генераторы последовательностей]
     Suppress1[SuppressUnit1<br/>Блок подавления 1]
     Suppress2[SuppressUnit2<br/>Блок подавления 2]
     ORNeuron[ORNeuron<br/>Нейрон ИЛИ]
     ANDNeuron[ANDNeuron<br/>Нейрон И]
     DecidingNeuron[DecidingNeuron<br/>Нейрон принятия решения]
-    
+
     Detector --> ClsGenerators
     Detector --> Suppress1
     Detector --> Suppress2
@@ -216,28 +216,28 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NObjInArea(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует OldNumObj=0, очищает ClsSpikeFr, устанавливает все указатели в NULL, Relinked=false
 
 #### `virtual ~NObjInArea(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает значения по умолчанию для всех параметров
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает структуру:
 1. Удаляет старые генераторы, если NumObj изменилось
 2. Создает NumObj генераторов ClsSpikeFr с задержками из DelaysClsSpikeFr
@@ -247,14 +247,14 @@ graph TB
 6. Создает связи между компонентами
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Вычисления выполняются нейронами внутри структуры автоматически
 
 ### Сеттеры свойств
@@ -264,8 +264,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NObjInArea* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -316,8 +316,8 @@ detector->Build();
 
 # NObjInArea — object in area
 
-**Class**: `NObjInArea` — component for detecting objects in a restricted image area using a neural network structure and suppression units.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NObjInArea", ...)`.  
+**Class**: `NObjInArea` — component for detecting objects in a restricted image area using a neural network structure and suppression units.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NObjInArea", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NObjInArea detects objects in a restricted image area using pulse sequence generators, suppression units (NSuppressionUnit), and decision neurons. The component creates a complex structure for processing visual information.
@@ -349,6 +349,10 @@ NObjInArea detects objects in a restricted image area using pulse sequence gener
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 13, 19 — обнаружение объектов, восприятие и управление.
 
 ## Usage Examples
 

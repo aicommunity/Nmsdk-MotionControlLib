@@ -1,7 +1,7 @@
 # NSignumSeparator — разделитель по знаку
 
-**Класс**: `NSignumSeparator` — компонент для разделения входного сигнала по знаку с применением усиления.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NSignumSeparator", ...)`.  
+**Класс**: `NSignumSeparator` — компонент для разделения входного сигнала по знаку с применением усиления.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NSignumSeparator", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NSignumSeparator разделяет входной сигнал на части в зависимости от знака. Компонент умножает входной сигнал на коэффициент знака (Sign) и применяет усиление (Gain) для формирования выходного сигнала.
@@ -37,14 +37,14 @@ sequenceDiagram
     participant Storage as UStorage
     participant Separator as NSignumSeparator
     participant Source as SignalSource
-    
+
     Storage->>Separator: new NSignumSeparator()
     Storage->>Separator: Default()
     Separator->>Separator: ADefault()
-    
+
     Storage->>Separator: Build()
     Separator->>Separator: ABuild()
-    
+
     loop Каждый шаг вычислений
         Source->>Separator: Input = signal
         Storage->>Separator: Calculate()
@@ -86,12 +86,12 @@ flowchart TD
 graph TB
     Separator[[NSignumSeparator]]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Separator -->|использует| BasicLib
-    
+
     Input[Input<br/>Входной сигнал]
     Output[Output<br/>Разделенный сигнал]
-    
+
     Separator --> Input
     Separator --> Output
 ```
@@ -122,49 +122,49 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NSignumSeparator(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 #### `virtual ~NSignumSeparator(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает Sign=[1.0], Gain=[1.0]
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Вычисляет `Output = Input * Sign * Gain`
 
 ### Сеттеры свойств
 
 #### `bool SetSign(const double &value)`
-**Назначение:** Установка коэффициента знака  
+**Назначение:** Установка коэффициента знака
 **Параметры:**
 - `value` - значение знака
 **Возвращаемое значение:** `true` при успехе
 
 #### `bool SetGain(const double &value)`
-**Назначение:** Установка коэффициента усиления  
+**Назначение:** Установка коэффициента усиления
 **Параметры:**
 - `value` - значение усиления
 **Возвращаемое значение:** `true` при успехе
@@ -172,8 +172,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NSignumSeparator* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -218,8 +218,8 @@ separator->Build();
 
 # NSignumSeparator — signum separator
 
-**Class**: `NSignumSeparator` — component for separating input signal by sign with gain application.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NSignumSeparator", ...)`.  
+**Class**: `NSignumSeparator` — component for separating input signal by sign with gain application.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NSignumSeparator", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NSignumSeparator separates input signal into parts depending on sign. The component multiplies input signal by sign coefficient (Sign) and applies gain (Gain) to form output signal.
@@ -251,6 +251,10 @@ NSignumSeparator separates input signal into parts depending on sign. The compon
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28 — разделение сигнум-сигналов в контурах управления.
 
 ## Usage Examples
 

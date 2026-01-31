@@ -1,7 +1,7 @@
 # NManipulatorSourceEmulator — эмулятор источника манипулятора
 
-**Класс**: `NManipulatorSourceEmulator` — эмулятор источника данных о состоянии манипулятора, упрощённая версия `NManipulatorSource` для тестирования и отладки.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorSourceEmulator", ...)`.  
+**Класс**: `NManipulatorSourceEmulator` — эмулятор источника данных о состоянии манипулятора, упрощённая версия `NManipulatorSource` для тестирования и отладки.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorSourceEmulator", ...)`.
 **Базовый класс**: `NManipulatorSource` (из Nmsdk-MotionControlLib).
 
 NManipulatorSourceEmulator является упрощённой версией `NManipulatorSource`, предназначенной для эмуляции состояния манипулятора. Компонент наследует все свойства базового класса и устанавливает значения по умолчанию (Angle=2, Speed=0, Force=5). Если входные свойства подключены, компонент передаёт их значения на выходы, иначе использует внутренние параметры. Используется для тестирования систем управления манипулятором без реального физического устройства.
@@ -46,19 +46,19 @@ sequenceDiagram
     participant Emulator as NManipulatorSourceEmulator
     participant Source as DataSource
     participant Controller as Controller
-    
+
     Storage->>Emulator: new NManipulatorSourceEmulator()
     Storage->>Emulator: Default()
     Emulator->>Emulator: ADefault()
     Note over Emulator: Angle = 2<br/>Speed = 0<br/>Force = 5
-    
+
     Storage->>Emulator: Build()
     Emulator->>Emulator: ABuild()
-    
+
     Storage->>Emulator: Reset()
     Emulator->>Emulator: AReset()
     Note over Emulator: UpdateOutputFlag = true
-    
+
     loop Каждый шаг вычислений
         alt Входные свойства подключены
             Source->>Emulator: InputAngle, InputSpeed, InputForce, InputMovement
@@ -151,29 +151,29 @@ graph TB
         Emulator[NManipulatorSourceEmulator]
         BaseSource[NManipulatorSource]
     end
-    
+
     subgraph "Nmsdk-PulseLib"
         NSource[NSource]
     end
-    
+
     subgraph "Rdk-BasicLib"
         UNet[UNet]
     end
-    
+
     Emulator -->|наследуется от| BaseSource
     BaseSource -->|наследуется от| NSource
     NSource -->|наследуется от| UNet
-    
+
     InputAngle[InputAngle<br/>Входной угол]
     InputSpeed[InputSpeed<br/>Входная скорость]
     InputForce[InputForce<br/>Входная сила]
     InputMovement[InputMovement<br/>Входное перемещение]
-    
+
     OutputAngle[OutputAngle<br/>Выходной угол]
     OutputSpeed[OutputSpeed<br/>Выходная скорость]
     OutputForce[OutputForce<br/>Выходная сила]
     OutputMovement[OutputMovement<br/>Выходное перемещение]
-    
+
     Emulator --> InputAngle
     Emulator --> InputSpeed
     Emulator --> InputForce
@@ -270,14 +270,14 @@ while (simulation_running) {
     emulator->InputAngle(0, 0) = simulated_angle;
     emulator->InputSpeed(0, 0) = simulated_speed;
     emulator->InputForce(0, 0) = simulated_force;
-    
+
     emulator->Calculate();
-    
+
     // Получение выходных данных
     double angle = emulator->OutputAngle(0, 0);
     double speed = emulator->OutputSpeed(0, 0);
     double force = emulator->OutputForce(0, 0);
-    
+
     // Вариант 2: Использование внутренних параметров (если входы не подключены)
     // emulator->Angle = 2.5;
     // emulator->Speed = 1.0;
@@ -326,8 +326,8 @@ while (simulation_running) {
 
 ## NManipulatorSourceEmulator — manipulator source emulator (EN)
 
-**Class**: `NManipulatorSourceEmulator` — emulator for manipulator state data source, simplified version of `NManipulatorSource` for testing and debugging.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorSourceEmulator", ...)`.  
+**Class**: `NManipulatorSourceEmulator` — emulator for manipulator state data source, simplified version of `NManipulatorSource` for testing and debugging.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorSourceEmulator", ...)`.
 **Base class**: `NManipulatorSource` (from Nmsdk-MotionControlLib).
 
 NManipulatorSourceEmulator is a simplified version of `NManipulatorSource` designed for emulating manipulator state. The component inherits all properties from the base class and sets default values (Angle=2, Speed=0, Force=5). If input properties are connected, the component passes their values to outputs, otherwise uses internal parameters. Used for testing manipulator control systems without a real physical device.
@@ -360,7 +360,7 @@ sequenceDiagram
     participant Storage as UStorage
     participant Emulator as NManipulatorSourceEmulator
     participant Source as DataSource
-    
+
     Storage->>Emulator: new NManipulatorSourceEmulator()
     Storage->>Emulator: Default()
     Emulator->>Emulator: ADefault()
@@ -453,3 +453,7 @@ while (simulation_running) {
     </Properties>
 </Component>
 ```
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 21 — эмулятор источника манипулятора в иерархии управления.

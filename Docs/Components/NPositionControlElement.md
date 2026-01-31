@@ -1,7 +1,9 @@
 # NPositionControlElement — элемент контроля позиции
 
-**Класс**: `NPositionControlElement` — базовый элемент для контроля позиции с использованием нейросетевых компонентов.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NPositionControlElement", ...)`.  
+**Каталог компонентов:** [Component-Catalog.md](../Component-Catalog.md).
+
+**Класс**: `NPositionControlElement` — базовый элемент для контроля позиции с использованием нейросетевых компонентов.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NPositionControlElement", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NPositionControlElement является базовым классом для элементов управления позицией. Он создает нейросетевую структуру с входными и управляющими нейронами для вычисления управляющих сигналов на основе текущей и целевой позиций.
@@ -17,7 +19,7 @@ classDiagram
     NPositionControlElement *-- NNet : InputNeurons
     NPositionControlElement *-- NNet : ControlNeurons
     NPositionControlElement *-- UNet : Generators
-    
+
     class NPositionControlElement {
         +CurrentPosition : MDMatrix~double~
         +TargetPosition : MDMatrix~double~
@@ -50,9 +52,9 @@ classDiagram
 **Иерархия наследования:**
 - `UNet` (Rdk Framework) — базовый класс для сетей компонентов
 - `NPositionControlElement` — базовый элемент контроля позиции
-- `NNewPositionControlElement` — новый элемент контроля позиции
-- `NMultiPositionControl` — множественный контроль позиции
-- `NPCNElement` — PCN элемент (Position Control Network)
+- [NNewPositionControlElement](NNewPositionControlElement.md) — новый элемент контроля позиции
+- [NMultiPositionControl](NMultiPositionControl.md) — множественный контроль позиции
+- [NPCN](NPCN.md) (NPCNElement) — PCN элемент (Position Control Network)
 
 ## UML-диаграмма последовательности
 
@@ -62,22 +64,22 @@ sequenceDiagram
     participant Element as NPositionControlElement
     participant InputNeuron as InputNeuron
     participant ControlNeuron as ControlNeuron
-    
+
     Storage->>Element: new NPositionControlElement()
     Storage->>Element: Default()
     Element->>Element: ADefault()
     Note over Element: Инициализация параметров
-    
+
     Storage->>Element: Build()
     Element->>Element: ABuild()
     Element->>Element: CreateNeurons()
     Element->>InputNeuron: new InputNeuron()
     Element->>ControlNeuron: new ControlNeuron()
     Element->>Element: LinkNeurons()
-    
+
     Storage->>Element: Reset()
     Element->>Element: AReset()
-    
+
     loop Каждый шаг вычислений
         Storage->>Element: Calculate()
         Element->>Element: ACalculate()
@@ -120,14 +122,14 @@ graph TB
     Element[[NPositionControlElement]]
     PulseLib[Nmsdk-PulseLib<br/>NNet, нейроны]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Element -->|использует| PulseLib
     Element -->|использует| BasicLib
-    
+
     InputNeurons[InputNeurons<br/>Входные нейроны]
     ControlNeurons[ControlNeurons<br/>Управляющие нейроны]
     Generators[Generators<br/>Генераторы]
-    
+
     Element --> InputNeurons
     Element --> ControlNeurons
     Element --> Generators
@@ -171,113 +173,113 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NPositionControlElement(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 #### `virtual ~NPositionControlElement(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает InputNeuronType="NNewSPNeuron", ControlNeuronType="NNewSPNeuron", ExternalControl=false
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Инициализирует матрицы позиций (2x1), очищает векторы нейронов
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает RememberState=false
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Для базового класса не выполняет вычислений (переопределяется в наследниках)
 
 ### Методы создания структуры
 
 #### `virtual bool CreateNeurons(void)`
-**Назначение:** Создание нейронов  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Создание нейронов
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает входные и управляющие нейроны (базовая реализация возвращает true, переопределяется в наследниках)
 
 #### `virtual bool CreateExternalControlElements(void)`
-**Назначение:** Создание элементов внешнего управления  
-**Параметры:** Нет  
+**Назначение:** Создание элементов внешнего управления
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool LinkNeurons(vector<NNet*> start, vector<NNet*> finish)`
-**Назначение:** Связывание нейронов  
+**Назначение:** Связывание нейронов
 **Параметры:**
 - `start` - вектор нейронов-источников
 - `finish` - вектор нейронов-приемников
-**Возвращаемое значение:** `true` при успехе  
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает связи между нейронами через мембраны
 
 #### `virtual bool UnlinkNeurons(vector<NNet*> start, vector<NNet*> finish)`
-**Назначение:** Разрывание связей между нейронами  
+**Назначение:** Разрывание связей между нейронами
 **Параметры:**
 - `start` - вектор нейронов-источников
 - `finish` - вектор нейронов-приемников
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool LinkGenerators(const bool &value)`
-**Назначение:** Связывание/разрывание генераторов  
+**Назначение:** Связывание/разрывание генераторов
 **Параметры:**
 - `value` - связывать (true) или разрывать (false)
 **Возвращаемое значение:** `true` при успехе
 
 #### `vector<NNet*> GetInputNeurons(void)`
-**Назначение:** Получение входных нейронов  
-**Параметры:** Нет  
+**Назначение:** Получение входных нейронов
+**Параметры:** Нет
 **Возвращаемое значение:** Вектор входных нейронов
 
 #### `vector<NNet*> GetControlNeurons(void)`
-**Назначение:** Получение управляющих нейронов  
-**Параметры:** Нет  
+**Назначение:** Получение управляющих нейронов
+**Параметры:** Нет
 **Возвращаемое значение:** Вектор управляющих нейронов
 
 ### Сеттеры свойств
 
 #### `bool SetInputNeuronType(const string &value)`
-**Назначение:** Установка типа входного нейрона  
+**Назначение:** Установка типа входного нейрона
 **Параметры:**
 - `value` - имя класса нейрона
-**Возвращаемое значение:** `true` при успехе  
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает Ready=false для перестроения
 
 #### `bool SetControlNeuronType(const string &value)`
-**Назначение:** Установка типа управляющего нейрона  
+**Назначение:** Установка типа управляющего нейрона
 **Параметры:**
 - `value` - имя класса нейрона
-**Возвращаемое значение:** `true` при успехе  
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает Ready=false для перестроения
 
 #### `bool SetExternalControl(const bool &value)`
-**Назначение:** Установка режима внешнего управления  
+**Назначение:** Установка режима внешнего управления
 **Параметры:**
 - `value` - использовать внешнее управление
-**Возвращаемое значение:** `true` при успехе  
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Вызывает LinkGenerators(value), устанавливает Ready=false
 
 ### Публичные методы
 
 #### `virtual NPositionControlElement* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -308,12 +310,14 @@ element->Build();
 
 Компонент `NPositionControlElement` используется как базовый класс для элементов управления позицией. Обычно используются его наследники: `NNewPositionControlElement`, `NMultiPositionControl`, `NPCNElement`.
 
+**Примеры конфигураций:** `Bin/Configs/SpikeSamples/MC1-PCN/` (MotionControl_Test, MultiPositionControl_*, NewPositionControl_Test).
+
 ---
 
 # NPositionControlElement — position control element
 
-**Class**: `NPositionControlElement` — base element for position control using neural network components.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPositionControlElement", ...)`.  
+**Class**: `NPositionControlElement` — base element for position control using neural network components.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPositionControlElement", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NPositionControlElement is a base class for position control elements. It creates a neural network structure with input and control neurons for computing control signals based on current and target positions.
@@ -340,12 +344,59 @@ NPositionControlElement is a base class for position control elements. It create
 
 ## Properties
 
-[Same structure as RU section, translated to English]
+### Parameters and state
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `CurrentPosition` | `MDMatrix<double>` | Current position (ptPubState) |
+| `TargetPosition` | `MDMatrix<double>` | Target position (ptPubParameter) |
+| `InputNeuronType` | `string` | Input neuron class name |
+| `ControlNeuronType` | `string` | Control neuron class name |
+| `ExternalControl` | `bool` | Use external control |
+| `RememberState` | `bool` | Remember state |
+| `Delta` | `MDMatrix<double>` | Position error (ptPubState) |
+
+### Internal structures
+
+- **InputNeurons**, **ControlNeurons**, **PreControlNeurons**, **PostInputNeurons** — neural network elements
+- **Generators** — pulse generators
 
 ## Methods
 
-[Same structure as RU section, translated to English]
+### Lifecycle
+
+- **`ADefault()`** — set default parameters
+- **`ABuild()`** — create neural structure (input/control neurons, generators)
+- **`AReset()`** — reset state
+- **`ACalculate()`** — compute control from current and target positions; update Delta
+
+### Setters
+
+- **`SetInputNeuronType(value)`**, **`SetControlNeuronType(value)`**, **`SetExternalControl(value)`**
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24, 25 — контроль позиции, запоминание конфигураций, преобразование импульсов.
 
 ## Usage Examples
 
-[Same as RU section, with English comments]
+### C++ Code
+
+```cpp
+#include "NPositionControlElement.h"
+
+UEPtr<NPositionControlElement> positionControl = storage->CreateComponent<NPositionControlElement>("PosCtrl1");
+positionControl->TargetPosition(0, 0) = target_pos;
+positionControl->CurrentPosition(0, 0) = current_pos;
+positionControl->ExternalControl = false;
+positionControl->Default();
+positionControl->Build();
+positionControl->Reset();
+
+positionControl->Calculate();
+double delta = positionControl->Delta(0, 0);
+```
+
+### Usage in Configurations
+
+Base class for position control elements; used via [NNewPositionControlElement](NNewPositionControlElement.md), [NMultiPositionControl](NMultiPositionControl.md), [NPCN](NPCN.md). Example configs: `Bin/Configs/SpikeSamples/MC1-PCN/`.

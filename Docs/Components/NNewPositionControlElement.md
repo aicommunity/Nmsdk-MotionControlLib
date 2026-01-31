@@ -1,7 +1,7 @@
 # NNewPositionControlElement — новый элемент контроля позиции
 
-**Класс**: `NNewPositionControlElement` — расширенный элемент контроля позиции с поддержкой множественных контуров управления и элементов движения.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNewPositionControlElement", ...)`.  
+**Класс**: `NNewPositionControlElement` — расширенный элемент контроля позиции с поддержкой множественных контуров управления и элементов движения.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNewPositionControlElement", ...)`.
 **Базовый класс**: `NPositionControlElement` (из Nmsdk-MotionControlLib).
 
 NNewPositionControlElement расширяет функциональность NPositionControlElement для работы с NEngineMotionControl. Компонент вычисляет текущую позицию на основе данных от элементов движения, вычисляет разность между целевой и текущей позицией, и создает нейросетевую структуру для управления.
@@ -16,7 +16,7 @@ classDiagram
     NNewPositionControlElement *-- NNet : RightInputNeurons
     NNewPositionControlElement *-- NNet : LeftControlNeurons
     NNewPositionControlElement *-- NNet : RightControlNeurons
-    
+
     class NNewPositionControlElement {
         +MotionControl : MDMatrix~double~
         +SimControl : bool
@@ -54,16 +54,16 @@ sequenceDiagram
     participant Element as NNewPositionControlElement
     participant Engine as NEngineMotionControl
     participant MotionElem as NMotionElement
-    
+
     Storage->>Element: new NNewPositionControlElement()
     Storage->>Element: Default()
     Element->>Element: ADefault()
-    
+
     Storage->>Element: Build()
     Element->>Element: ABuild()
     Element->>Engine: Получение MotionControlElement
     Element->>Element: Инициализация массивов позиций
-    
+
     loop Каждый шаг вычислений
         Storage->>Element: Calculate()
         Element->>Element: ACalculate()
@@ -125,15 +125,15 @@ graph TB
     Element[[NNewPositionControlElement]]
     PulseLib[Nmsdk-PulseLib<br/>NNet, нейроны]
     MotionLib[Nmsdk-MotionControlLib<br/>NEngineMotionControl, NMotionElement]
-    
+
     Element -->|использует| PulseLib
     Element -->|связан с| MotionLib
-    
+
     Engine[NEngineMotionControl<br/>Движок управления]
     MotionElem[NMotionElement<br/>Элементы движения]
     InputNeurons[InputNeurons<br/>Входные нейроны]
     ControlNeurons[ControlNeurons<br/>Управляющие нейроны]
-    
+
     Element --> Engine
     Element --> MotionElem
     Element --> InputNeurons
@@ -176,40 +176,40 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NNewPositionControlElement(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 #### `virtual ~NNewPositionControlElement(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Вызывает ADefault() базового класса
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Получает MotionControlElement из MotionControl, инициализирует размеры массивов позиций на основе параметров движка, очищает векторы нейронов
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает RememberState=false
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
-**Описание:** 
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
+**Описание:**
 1. Проверяет наличие MotionControlElement
 2. Проверяет соответствие размеров массивов
 3. Создает нейроны, если они не созданы
@@ -220,14 +220,14 @@ graph TB
 ### Публичные методы
 
 #### `virtual bool CreateNeurons(void)`
-**Назначение:** Создание нейронов для всех контуров и элементов движения  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Создание нейронов для всех контуров и элементов движения
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает входные и управляющие нейроны для левых и правых афферентов каждого контура каждого элемента движения
 
 #### `virtual NNewPositionControlElement* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -260,7 +260,7 @@ element->Reset();
 for (int step = 0; step < numSteps; step++) {
     engine->Calculate();
     element->Calculate();
-    
+
     // Получение текущей позиции и разности
     MDMatrix<double> current = element->CurrentPosition;
     MDMatrix<double> delta = element->Delta;
@@ -282,6 +282,8 @@ for (int step = 0; step < numSteps; step++) {
 
 Компонент `NNewPositionControlElement` используется для контроля позиции в системах управления движением с множественными контурами управления и элементами движения.
 
+**Примеры конфигураций:** `Bin/Configs/SpikeSamples/MC1-PCN/` (NewPositionControl_Test, MotionControl_Test, MultiPositionControl_*).
+
 **Типичные сценарии использования:**
 1. **Контроль позиции манипулятора** - управление позицией с обратной связью от элементов движения
 2. **Множественные контуры** - контроль нескольких независимых контуров управления
@@ -295,8 +297,8 @@ for (int step = 0; step < numSteps; step++) {
 
 # NNewPositionControlElement — new position control element
 
-**Class**: `NNewPositionControlElement` — extended position control element with support for multiple control loops and motion elements.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNewPositionControlElement", ...)`.  
+**Class**: `NNewPositionControlElement` — extended position control element with support for multiple control loops and motion elements.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNewPositionControlElement", ...)`.
 **Base class**: `NPositionControlElement` (from Nmsdk-MotionControlLib).
 
 NNewPositionControlElement extends NPositionControlElement functionality for working with NEngineMotionControl. The component calculates current position based on data from motion elements, computes the difference between target and current positions, and creates a neural network structure for control.
@@ -328,6 +330,10 @@ NNewPositionControlElement extends NPositionControlElement functionality for wor
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24 — элемент контроля позиции, пространственные конфигурации.
 
 ## Usage Examples
 

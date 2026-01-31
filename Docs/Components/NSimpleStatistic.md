@@ -333,6 +333,10 @@ NSimpleStatistic collects statistics (minimum, maximum, average, range) on input
 
 [Same structure as RU section, translated to English]
 
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 22 — статистика в контурах управления движением.
+
 ## Usage Examples
 
 [Same as RU section, with English comments]

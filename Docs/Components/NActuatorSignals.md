@@ -1,7 +1,7 @@
 # NActuatorSignals — сигналы актуаторов
 
-**Класс**: `NActuatorSignals` — компонент для определения направления движения объекта управления с использованием нейросетевой структуры из генераторов импульсов, задержек и нейронов.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NActuatorSignals", ...)`.  
+**Класс**: `NActuatorSignals` — компонент для определения направления движения объекта управления с использованием нейросетевой структуры из генераторов импульсов, задержек и нейронов.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NActuatorSignals", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NActuatorSignals определяет направление движения объекта управления (Stay, Forward, Back, Left, Right) на основе сигналов от левого и правого двигателей и синхронизирующих сигналов. Компонент создает сложную нейросетевую структуру для обработки сигналов и принятия решений о направлении движения.
@@ -28,7 +28,7 @@ classDiagram
     NActuatorSignals *-- NPulseNeuron : LeftNeuron
     NActuatorSignals *-- NPulseNeuron : RightNeuron
     NActuatorSignals *-- NPulseNeuron : BackNeuron
-    
+
     class NActuatorSignals {
         +NeuronClassName : string
         +GeneratorClassName : string
@@ -70,11 +70,11 @@ sequenceDiagram
     participant Sinchro1 as Sinchro1
     participant Sinchro2 as Sinchro2
     participant Neurons as DecisionNeurons
-    
+
     Storage->>Signals: new NActuatorSignals()
     Storage->>Signals: Default()
     Signals->>Signals: ADefault()
-    
+
     Storage->>Signals: Build()
     Signals->>Signals: ABuild()
     Signals->>LeftEngine: new NPulseGeneratorTransit("LeftEngine")
@@ -83,7 +83,7 @@ sequenceDiagram
     Signals->>Sinchro2: new NPulseGeneratorTransit("Sinchro2")
     Signals->>Neurons: Создание нейронов принятия решений
     Signals->>Signals: Создание связей между компонентами
-    
+
     loop Каждый шаг вычислений
         Storage->>Signals: Calculate()
         Signals->>Signals: ACalculate()
@@ -138,16 +138,16 @@ graph TB
     Signals[[NActuatorSignals]]
     PulseLib[Nmsdk-PulseLib<br/>NPulseGenerator, NPulseDelay, NPulseNeuron]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Signals -->|использует| PulseLib
     Signals -->|использует| BasicLib
-    
+
     LeftEngine[LeftEngine<br/>Генератор левого двигателя]
     RightEngine[RightEngine<br/>Генератор правого двигателя]
     Sinchro1[Sinchro1<br/>Синхронизация 1]
     Sinchro2[Sinchro2<br/>Синхронизация 2]
     DecisionNeurons[DecisionNeurons<br/>Нейроны принятия решений]
-    
+
     Signals --> LeftEngine
     Signals --> RightEngine
     Signals --> Sinchro1
@@ -204,28 +204,28 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NActuatorSignals(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует все указатели на компоненты как NULL
 
 #### `virtual ~NActuatorSignals(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает значения по умолчанию для всех параметров
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает нейросетевую структуру:
 1. LeftEngine, RightEngine - генераторы для левого и правого двигателей
 2. Sinchro1, Sinchro2 - генераторы синхронизации
@@ -237,14 +237,14 @@ graph TB
 8. Создает связи между компонентами
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Вычисления выполняются нейронами внутри структуры автоматически
 
 ### Сеттеры свойств
@@ -254,8 +254,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NActuatorSignals* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -300,8 +300,8 @@ signals->Build();
 
 # NActuatorSignals — actuator signals
 
-**Class**: `NActuatorSignals` — component for determining control object movement direction using a neural network structure of pulse generators, delays, and neurons.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NActuatorSignals", ...)`.  
+**Class**: `NActuatorSignals` — component for determining control object movement direction using a neural network structure of pulse generators, delays, and neurons.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NActuatorSignals", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NActuatorSignals determines control object movement direction (Stay, Forward, Back, Left, Right) based on signals from left and right engines and synchronizing signals. The component creates a complex neural network structure for signal processing and movement direction decision making.
@@ -333,6 +333,10 @@ NActuatorSignals determines control object movement direction (Stay, Forward, Ba
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 28, 29, 31 — сигналы актуаторов и нейронные структуры управления.
 
 ## Usage Examples
 

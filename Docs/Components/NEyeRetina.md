@@ -1,7 +1,9 @@
 # NEyeRetina — ретина глаза
 
-**Класс**: `NEyeRetina` — компонент моделирования биологической ретины глаза для обработки визуальной информации.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NEyeRetina", ...)`.  
+**Каталог компонентов:** [Component-Catalog.md](../Component-Catalog.md).
+
+**Класс**: `NEyeRetina` — компонент моделирования биологической ретины глаза для обработки визуальной информации.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NEyeRetina", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NEyeRetina реализует модель биологической ретины, обрабатывающую входные изображения через слои фоторецепторов (палочки и колбочки R, G, B), биполярных клеток и ганглиозных клеток. Компонент выдает выходные сигналы для управления движениями глаз и предоставляет обработанные изображения для дальнейшей обработки.
@@ -17,7 +19,7 @@ classDiagram
     NEyeRetina *-- NEyeRetinaBWCore : EyeRetinaBCone
     NEyeRetina *-- NEyeRetinaMuscleCore : MuscleCore
     NEyeRetina *-- MovingSegmentSelector : MovingObjects
-    
+
     class NEyeRetina {
         +CaptureImage : UBitmap
         +InputImage : UBitmap
@@ -71,19 +73,19 @@ sequenceDiagram
     participant Retina as NEyeRetina
     participant Camera as CameraSource
     participant Controller as EyeController
-    
+
     Storage->>Retina: new NEyeRetina()
     Storage->>Retina: Default()
     Retina->>Retina: ADefault()
     Note over Retina: Инициализация ядер ретины
-    
+
     Storage->>Retina: Build()
     Retina->>Retina: ABuild()
-    
+
     Storage->>Retina: Reset()
     Retina->>Retina: AReset()
     Note over Retina: Установка разрешения, сброс траектории
-    
+
     loop Каждый шаг вычислений
         Camera->>Retina: CaptureImage = frame
         Storage->>Retina: Calculate()
@@ -148,17 +150,17 @@ graph TB
     Retina[[NEyeRetina]]
     CvLib[Rdk-CvBasicLib<br/>Обработка изображений]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Retina -->|использует| CvLib
     Retina -->|использует| BasicLib
-    
+
     CaptureImage[CaptureImage<br/>Входное изображение]
     GanglionicOuts[GanglionicOuts<br/>Выход ганглиозных клеток]
     LeftGanglionicOut[LeftGanglionicOut<br/>Сигнал для левой мышцы]
     RightGanglionicOut[RightGanglionicOut<br/>Сигнал для правой мышцы]
     TopGanglionicOut[TopGanglionicOut<br/>Сигнал для верхней мышцы]
     BottomGanglionicOut[BottomGanglionicOut<br/>Сигнал для нижней мышцы]
-    
+
     Retina --> CaptureImage
     Retina --> GanglionicOuts
     Retina --> LeftGanglionicOut
@@ -232,41 +234,41 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NEyeRetina(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует все свойства компонента
 
 #### `virtual ~NEyeRetina(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Освобождает ресурсы компонента
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Сбрасывает параметры всех ядер ретины по умолчанию, инициализирует выходные сигналы нулями
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Для NEyeRetina не требуется дополнительных действий при построении
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента к начальному  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента к начальному
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает разрешение изображения (320x240 по умолчанию), инициализирует все ядра ретины с правильным разрешением, очищает траекторию движения глаза
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Основной метод обработки изображения:
 1. Добавление текущих координат в траекторию
 2. Проверка валидности входного изображения
@@ -278,17 +280,17 @@ graph TB
 ### Защищенные методы
 
 #### `void UpdateImages(void)`
-**Назначение:** Обновление выходных изображений на основе результатов обработки  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Обновление выходных изображений на основе результатов обработки
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Обновляет все выходные изображения (GanglionicOuts, RConeGanglionicOuts, GConeGanglionicOuts, BConeGanglionicOuts, RodGanglionicOuts, OnGanglionicOuts, OffGanglionicOuts) на основе результатов обработки ядрами ретины
 
 ### Публичные методы
 
 #### `virtual NEyeRetina* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Указатель на новый экземпляр NEyeRetina  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Указатель на новый экземпляр NEyeRetina
 **Описание:** Выделяет память и создает новый экземпляр компонента
 
 ## Примеры использования
@@ -319,16 +321,16 @@ retina->Reset();
 for (int step = 0; step < numSteps; step++) {
     camera->Calculate();
     retina->Calculate();
-    
+
     // Получение выходных сигналов для управления мышцами
     double leftSignal = retina->LeftGanglionicOut(0, 0);
     double rightSignal = retina->RightGanglionicOut(0, 0);
     double topSignal = retina->TopGanglionicOut(0, 0);
     double bottomSignal = retina->BottomGanglionicOut(0, 0);
-    
+
     // Использование сигналов для управления движениями глаз
     // ...
-    
+
     // Получение обработанных изображений
     UBitmap* ganglionicImage = retina->GanglionicOuts.GetItem();
     // Использование для дальнейшей обработки
@@ -345,7 +347,7 @@ for (int step = 0; step < numSteps; step++) {
     <Object Name="Camera" ClassName="CameraSource">
         <Property Name="OutputImage" Connect="EyeRetina.CaptureImage" />
     </Object>
-    
+
     <!-- Использование выходных сигналов -->
     <Object Name="EyeController" ClassName="EyeMuscleController">
         <Property Name="LeftInput" Connect="EyeRetina.LeftGanglionicOut" />
@@ -365,22 +367,24 @@ for (int step = 0; step < numSteps; step++) {
 - Обработки визуальной информации для робототехнических систем
 - Интеграции с системами управления движением
 
+**Примеры конфигураций:** `Bin/Configs/SpikeSamples/EyeRetina/` (EyeRetina, EyeRetinaMuscle), `Bin/Configs/SpikeSamples/MC-Muscles/` (управление мышцей глаза).
+
 **Типичные сценарии использования:**
 1. **Управление движениями глаз** - использование выходных сигналов для управления глазными мышцами
 2. **Обработка визуальной информации** - использование обработанных изображений для дальнейшего анализа
 3. **Интеграция с системами управления** - подключение к NEngineMotionControl для управления на основе визуальной информации
 
 **Типичные комбинации с другими компонентами:**
-- `NEyeRetina` + `NEngineMotionControl` - управление движением на основе визуальной информации
-- `NEyeRetina` + системы управления мышцами - управление движениями глаз
-- `NEyeRetina` + компоненты обработки изображений - дальнейшая обработка визуальной информации
+- `NEyeRetina` + [NEngineMotionControl](NEngineMotionControl.md) — управление движением на основе визуальной информации
+- `NEyeRetina` + системы управления мышцами — управление движениями глаз
+- `NEyeRetina` + компоненты обработки изображений — дальнейшая обработка визуальной информации
 
 ---
 
 # NEyeRetina — eye retina
 
-**Class**: `NEyeRetina` — biological eye retina modeling component for visual information processing.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NEyeRetina", ...)`.  
+**Class**: `NEyeRetina` — biological eye retina modeling component for visual information processing.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NEyeRetina", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NEyeRetina implements a biological retina model that processes input images through layers of photoreceptors (rods and R, G, B cones), bipolar cells, and ganglion cells. The component outputs signals for eye movement control and provides processed images for further processing.
@@ -407,22 +411,64 @@ NEyeRetina implements a biological retina model that processes input images thro
 
 ## Properties
 
-[Same structure as RU section, translated to English]
+### Inputs / parameters
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `CaptureImage` | `UBitmap` | Captured image |
+| `InputImage` | `UBitmap` | Input image |
+
+### Outputs (images)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `GanglionicOuts` | `UBitmap` | Ganglion cell outputs |
+| `RConeGanglionicOuts`, `GConeGanglionicOuts`, `BConeGanglionicOuts` | `UBitmap` | Cone outputs |
+| `RodGanglionicOuts`, `OnGanglionicOuts`, `OffGanglionicOuts` | `UBitmap` | Rod / on/off outputs |
+
+### Outputs (control signals)
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `LeftGanglionicOut`, `RightGanglionicOut` | `MDMatrix<double>` | Left/right eye control |
+| `TopGanglionicOut`, `BottomGanglionicOut` | `MDMatrix<double>` | Top/bottom eye control |
+
+### Muscle parameters
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `LeftMuscle`, `RightMuscle`, `TopMuscle`, `BottomMuscle` | `UBitmap` | Muscle images |
 
 ## Methods
 
-[Same structure as RU section, translated to English]
+### Lifecycle
+
+- **`ADefault()`** — set default parameters
+- **`ABuild()`** — build retina cores (photoreceptors, bipolar, ganglion)
+- **`AReset()`** — reset state
+- **`ACalculate()`** — process input image; update ganglion outputs and control signals
 
 ## Usage Examples
 
 ### C++ Code
 
-[Same examples as RU section, with English comments]
+```cpp
+#include "NEyeRetina.h"
 
-### XML Configuration
+UEPtr<NEyeRetina> retina = storage->CreateComponent<NEyeRetina>("Retina1");
+retina->Default();
+retina->Build();
+retina->Reset();
 
-[Same XML examples as RU section, with English comments]
+retina->Calculate();
+double left_out = retina->LeftGanglionicOut(0, 0);
+double right_out = retina->RightGanglionicOut(0, 0);
+```
 
 ### Usage in Configurations
 
-[Same as RU section, translated to English]
+Used in vision and eye-movement control; example configs: `Bin/Configs/SpikeSamples/EyeRetina/` (EyeRetina, EyeRetinaMuscle), `Bin/Configs/SpikeSamples/MC-Muscles/`. Typical combination: with [NEngineMotionControl](NEngineMotionControl.md).
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): 13, [A] — нейроморфная модель зрительной системы.

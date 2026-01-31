@@ -1,7 +1,7 @@
 # NSuppressionUnit — блок подавления
 
-**Класс**: `NSuppressionUnit` — компонент для подавления входных импульсов в заданном временном интервале [Delay1, Delay2].  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NSuppressionUnit", ...)`.  
+**Класс**: `NSuppressionUnit` — компонент для подавления входных импульсов в заданном временном интервале [Delay1, Delay2].
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NSuppressionUnit", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NSuppressionUnit подавляет входные импульсы в заданном временном интервале с использованием нейросетевой структуры из генераторов импульсов и нейронов. Компонент создает структуру для управления подавлением сигналов.
@@ -16,7 +16,7 @@ classDiagram
     NSuppressionUnit *-- NPulseGeneratorTransit : ControlledGenerator
     NSuppressionUnit *-- NPulseNeuron : ORNeuron
     NSuppressionUnit *-- NPulseNeuron : Neuron
-    
+
     class NSuppressionUnit {
         +PulseGeneratorClassName : string
         +NeuronClassName : string
@@ -61,11 +61,11 @@ sequenceDiagram
     participant DelayGen as DelayGenerators
     participant ORNeuron as ORNeuron
     participant Neuron as Neuron
-    
+
     Storage->>Unit: new NSuppressionUnit()
     Storage->>Unit: Default()
     Unit->>Unit: ADefault()
-    
+
     Storage->>Unit: Build()
     Unit->>Unit: ABuild()
     Unit->>SourceGen: new NPulseGeneratorTransit("Source")
@@ -74,7 +74,7 @@ sequenceDiagram
     Unit->>Unit: new NPulseGeneratorTransit("ControlledGenerator")
     Unit->>Neuron: new NPulseNeuron("Neuron")
     Unit->>Unit: Создание связей между компонентами
-    
+
     loop Каждый шаг вычислений
         Storage->>Unit: Calculate()
         Unit->>Unit: ACalculate()
@@ -125,16 +125,16 @@ graph TB
     Unit[[NSuppressionUnit]]
     PulseLib[Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Unit -->|использует| PulseLib
     Unit -->|использует| BasicLib
-    
+
     SourceGen[SourceGenerator<br/>Генератор входных импульсов]
     DelayGens[DelayGenerators<br/>Генераторы задержек]
     ORNeuron[ORNeuron<br/>Нейрон ИЛИ]
     ControlledGen[ControlledGenerator<br/>Управляемый генератор]
     Neuron[Neuron<br/>Выходной нейрон]
-    
+
     Unit --> SourceGen
     Unit --> DelayGens
     Unit --> ORNeuron
@@ -195,28 +195,28 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NSuppressionUnit(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует указатели на компоненты как NULL
 
 #### `virtual ~NSuppressionUnit(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает значения по умолчанию для всех параметров
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает нейросетевую структуру:
 1. SourceGenerator - генератор входных импульсов
 2. DelayGenerators[0,1] - генераторы задержек для Delay1 и Delay2
@@ -226,14 +226,14 @@ graph TB
 6. Создает связи между компонентами
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Вычисления выполняются нейронами внутри структуры автоматически
 
 ### Сеттеры свойств
@@ -243,8 +243,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NSuppressionUnit* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -289,8 +289,8 @@ unit->Build();
 
 # NSuppressionUnit — suppression unit
 
-**Class**: `NSuppressionUnit` — component for suppressing input pulses in a specified time interval [Delay1, Delay2].  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NSuppressionUnit", ...)`.  
+**Class**: `NSuppressionUnit` — component for suppressing input pulses in a specified time interval [Delay1, Delay2].
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NSuppressionUnit", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NSuppressionUnit suppresses input pulses in a specified time interval using a neural network structure of pulse generators and neurons. The component creates a structure for managing signal suppression.
@@ -322,6 +322,10 @@ NSuppressionUnit suppresses input pulses in a specified time interval using a ne
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 28, 29 — подавление сигналов в нейронных структурах.
 
 ## Usage Examples
 

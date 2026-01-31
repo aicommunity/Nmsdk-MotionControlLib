@@ -77,12 +77,16 @@
 ## Прогресс: 40/40 (100%) ✅
 
 ### Последние обновления
+- ✅ **Literature-References.md** — создан локальный справочник источников ([A], 13, 19–25, 27–29, 31); во всех компонентах добавлен раздел «Источники» со ссылкой на него
+- ✅ **API-Overview.md и Usage-Examples.md** — приведены в соответствие с реальным API (NDCEngine, NManipulator, NPositionControlElement, NEyeRetina): свойства и примеры кода синхронизированы с `Core/*.h`
+- ✅ **Component-Documentation-Template.md** — в шаблон добавлены секции «Источники» / «References» в конце RU- и EN-блоков
+- ✅ **Ссылки на конфигурации** — в ключевых компонентах (NDCEngine, NEngineMotionControl, NEyeRetina, NManipulator, NPositionControlElement, NMultiPositionControl, NNewPositionControlElement) добавлены пути к примерам в `Bin/Configs/SpikeSamples/` (MC-Muscles, MC1-PCN, EyeRetina)
 - ✅ **План выполнен полностью!** Все 40 компонентов библиотеки Nmsdk-MotionControlLib полностью задокументированы
 - ✅ **NSeqComparison** - дополнена полная документация (была только базовая версия)
 - ✅ Создана полная UML-документация для всех компонентов (все 5 типов диаграмм: Class, Sequence, State, Activity, Component)
 - ✅ Детальное описание всех свойств и методов для каждого компонента
 - ✅ Примеры использования в C++ и XML-конфигурации для всех компонентов
-- ✅ Полная документация на русском и английском языках
+- ⚠ **Английские секции** — в большинстве компонентов EN-блоки содержат заглушки «[Same as RU section, translated to English]»; рекомендуется поэтапно заполнять EN для приоритетных компонентов (NEngineMotionControl, NDCEngine, NManipulator, NEyeRetina, NPositionControlElement и др.)
 - ✅ Создан шаблон документации для всех компонентов
 - ✅ Проведена полная инвентаризация всех компонентов библиотеки
 
@@ -114,3 +118,11 @@
 - Остальные компоненты могут иметь упрощенные версии некоторых диаграмм (например, State Diagram для компонентов без явных состояний)
 - Варианты конфигурации (NPosSignumSeparator, NNegSignumSeparator, NEngineControlSignumAfferent и др.) должны быть описаны в документации базового класса
 - Компоненты с наследованием внутри библиотеки должны иметь ссылки на базовые классы
+
+## Сверка с кодом (при добавлении/изменении класса в Core/)
+
+При изменении заголовков в `Core/` рекомендуется обновить:
+1. **Component-Inventory.md** — при добавлении/удалении компонента или смене базового класса
+2. **Docs/Components/[ComponentName].md** — таблицы свойств и методов, примеры кода
+3. **API-Overview.md** и **Usage-Examples.md** — при изменении публичного API ключевых классов (NDCEngine, NManipulator, NPositionControlElement, NEyeRetina и др.)
+4. **Component-Catalog.md** — при добавлении нового компонента в библиотеку

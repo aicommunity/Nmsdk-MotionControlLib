@@ -1,7 +1,7 @@
 # NNavMousePrimitive — примитив навигации мыши
 
-**Класс**: `NNavMousePrimitive` — компонент для моделирования навигации мыши в лабиринте с вибриссами (усами) для обнаружения препятствий.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNavMousePrimitive", ...)`.  
+**Класс**: `NNavMousePrimitive` — компонент для моделирования навигации мыши в лабиринте с вибриссами (усами) для обнаружения препятствий.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNavMousePrimitive", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NNavMousePrimitive моделирует движение мыши в одномерном лабиринте (полюсе) с использованием вибрисс для обнаружения препятствий. Компонент вычисляет позицию мыши, генерирует сигналы вибрисс и обрабатывает болевые сигналы при столкновении.
@@ -66,18 +66,18 @@ sequenceDiagram
     participant Storage as UStorage
     participant Mouse as NNavMousePrimitive
     participant Controller as MotionController
-    
+
     Storage->>Mouse: new NNavMousePrimitive()
     Storage->>Mouse: Default()
     Mouse->>Mouse: ADefault()
-    
+
     Storage->>Mouse: Build()
     Mouse->>Mouse: ABuild()
-    
+
     Storage->>Mouse: Reset()
     Mouse->>Mouse: AReset()
     Note over Mouse: Инициализация позиции мыши
-    
+
     loop Каждый шаг вычислений
         Controller->>Mouse: MotionControlSpikeForward/Backward/Stop
         Storage->>Mouse: Calculate()
@@ -136,15 +136,15 @@ flowchart TD
 graph TB
     Mouse[[NNavMousePrimitive]]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Mouse -->|использует| BasicLib
-    
+
     Input[Input<br/>Входной сигнал]
     MotionControl[MotionControlSpikes<br/>Сигналы управления движением]
     VibrissOutput[VibrissOutput<br/>Выход вибрисс]
     PainOutput[PainOutput<br/>Выход болевого сигнала]
     Output[Output<br/>Выходной сигнал]
-    
+
     Mouse --> Input
     Mouse --> MotionControl
     Mouse --> VibrissOutput
@@ -217,22 +217,22 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NNavMousePrimitive(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует OldFrequency=0.0
 
 #### `virtual ~NNavMousePrimitive(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает значения по умолчанию:
 - PoleSize=100, MouseSize=20, VibrissSize=10, Velocity=2
 - Frequency=1.5, Delay=0.1, PainDelay=0.1
@@ -241,27 +241,27 @@ graph TB
 - UseExternalInput=true
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Сбрасывает позицию мыши, счетчики, времена импульсов
 
 #### `virtual bool UpdateState(void)`
-**Назначение:** Обновление состояния движения  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Обновление состояния движения
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Обновляет MotionControlState на основе входных импульсов управления движением
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
-**Описание:** 
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
+**Описание:**
 1. Вызывает UpdateState() для обновления состояния движения
 2. Обновляет MousePosition на основе Velocity и MotionControlState
 3. Проверяет столкновения с препятствиями
@@ -272,25 +272,25 @@ graph TB
 ### Сеттеры свойств
 
 #### `bool SetPoleSize(const double &value)`
-**Назначение:** Установка размера полюса  
+**Назначение:** Установка размера полюса
 **Параметры:**
 - `value` - размер (должен быть > 0)
 **Возвращаемое значение:** `true` при успехе, `false` при ошибке
 
 #### `bool SetVibrissSize(const double &value)`
-**Назначение:** Установка размера вибрисс  
+**Назначение:** Установка размера вибрисс
 **Параметры:**
 - `value` - размер (должен быть > 0)
 **Возвращаемое значение:** `true` при успехе, `false` при ошибке
 
 #### `bool SetMouseSize(const double &value)`
-**Назначение:** Установка размера мыши  
+**Назначение:** Установка размера мыши
 **Параметры:**
 - `value` - размер (должен быть > 0)
 **Возвращаемое значение:** `true` при успехе, `false` при ошибке
 
 #### `bool SetVelocity(const double &value)`
-**Назначение:** Установка скорости движения  
+**Назначение:** Установка скорости движения
 **Параметры:**
 - `value` - скорость (должна быть > 0)
 **Возвращаемое значение:** `true` при успехе, `false` при ошибке
@@ -298,8 +298,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NNavMousePrimitive* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -349,8 +349,8 @@ mouse->Reset();
 
 # NNavMousePrimitive — navigation mouse primitive
 
-**Class**: `NNavMousePrimitive` — component for modeling mouse navigation in a maze with vibrissae (whiskers) for obstacle detection.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNavMousePrimitive", ...)`.  
+**Class**: `NNavMousePrimitive` — component for modeling mouse navigation in a maze with vibrissae (whiskers) for obstacle detection.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNavMousePrimitive", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NNavMousePrimitive models mouse movement in a one-dimensional maze (pole) using vibrissae for obstacle detection. The component calculates mouse position, generates vibrissae signals, and processes pain signals upon collision.
@@ -386,3 +386,7 @@ NNavMousePrimitive models mouse movement in a one-dimensional maze (pole) using 
 ## Usage Examples
 
 [Same as RU section, with English comments]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24 — навигация, память пространственных конфигураций.

@@ -1,7 +1,7 @@
 # NFrequencyReceiver — приемник частот
 
-**Класс**: `NFrequencyReceiver` — приемник для измерения частоты импульсных сигналов в заданном диапазоне.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NFrequencyReceiver", ...)`.  
+**Класс**: `NFrequencyReceiver` — приемник для измерения частоты импульсных сигналов в заданном диапазоне.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NFrequencyReceiver", ...)`.
 **Базовый класс**: `NReceiver` (из Nmsdk-PulseLib).
 
 NFrequencyReceiver измеряет частоту входных импульсных сигналов, подсчитывая количество импульсов в заданном диапазоне частот и предоставляя гистограмму распределения частот.
@@ -44,18 +44,18 @@ sequenceDiagram
     participant Storage as UStorage
     participant Receiver as NFrequencyReceiver
     participant Source as PulseSource
-    
+
     Storage->>Receiver: new NFrequencyReceiver()
     Storage->>Receiver: Default()
     Receiver->>Receiver: ADefault()
-    
+
     Storage->>Receiver: Build()
     Receiver->>Receiver: ABuild()
-    
+
     Storage->>Receiver: Reset()
     Receiver->>Receiver: AReset()
     Note over Receiver: Инициализация Results массива
-    
+
     loop Каждый шаг вычислений
         Source->>Receiver: Input = pulse_signal
         Storage->>Receiver: Calculate()
@@ -112,14 +112,14 @@ graph TB
     Receiver[[NFrequencyReceiver]]
     PulseLib[Nmsdk-PulseLib<br/>NReceiver]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Receiver -->|наследуется от| PulseLib
     Receiver -->|использует| BasicLib
-    
+
     Input[Input<br/>Импульсный сигнал]
     OutputFreq[OutputFreq<br/>Гистограмма частот]
     Results[Results<br/>Результаты измерений]
-    
+
     Receiver --> Input
     Receiver --> OutputFreq
     Receiver --> Results
@@ -161,39 +161,39 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NFrequencyReceiver(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует PrevPulseStartTime=0, PrevPulseStopTime=0
 
 #### `virtual ~NFrequencyReceiver(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает LeftRange=0, RightRange=500, FrequencyStep=1, инициализирует матрицы
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Инициализирует Results массив с частотами от LeftRange до RightRange с шагом FrequencyStep, сбрасывает счетчики
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Измеряет частоту импульсов:
 1. Читает входной сигнал
 2. Обнаруживает начало и конец импульсов
@@ -204,36 +204,36 @@ graph TB
 ### Сеттеры свойств
 
 #### `bool SetLeftRange(const double &range)`
-**Назначение:** Установка левой границы диапазона  
+**Назначение:** Установка левой границы диапазона
 **Параметры:**
 - `range` - левая граница (должна быть >= 0)
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** Устанавливает Ready=false для перестроения
 
 #### `bool SetRightRange(const double &range)`
-**Назначение:** Установка правой границы диапазона  
+**Назначение:** Установка правой границы диапазона
 **Параметры:**
 - `range` - правая граница (должна быть >= 0)
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** Устанавливает Ready=false для перестроения
 
 #### `bool SetFrequencyStep(const double &step)`
-**Назначение:** Установка шага по частоте  
+**Назначение:** Установка шага по частоте
 **Параметры:**
 - `step` - шаг (должен быть >= 0)
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** Устанавливает Ready=false для перестроения
 
 ### Публичные методы
 
 #### `size_t GetResultsSize(void) const`
-**Назначение:** Получение размера результатов  
-**Параметры:** Нет  
+**Назначение:** Получение размера результатов
+**Параметры:** Нет
 **Возвращаемое значение:** Количество точек в Results
 
 #### `virtual NFrequencyReceiver* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -259,7 +259,7 @@ source->Output.Connect(receiver->Input);
 for (int step = 0; step < numSteps; step++) {
     source->Calculate();
     receiver->Calculate();
-    
+
     // Получение гистограммы частот
     MDMatrix<double> histogram = receiver->OutputFreq;
     size_t numPoints = receiver->GetResultsSize();
@@ -294,8 +294,8 @@ for (int step = 0; step < numSteps; step++) {
 
 # NFrequencyReceiver — frequency receiver
 
-**Class**: `NFrequencyReceiver` — receiver for measuring frequency of pulse signals in a specified range.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NFrequencyReceiver", ...)`.  
+**Class**: `NFrequencyReceiver` — receiver for measuring frequency of pulse signals in a specified range.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NFrequencyReceiver", ...)`.
 **Base class**: `NReceiver` (from Nmsdk-PulseLib).
 
 NFrequencyReceiver measures the frequency of input pulse signals by counting pulses in a specified frequency range and providing a frequency distribution histogram.
@@ -327,6 +327,10 @@ NFrequencyReceiver measures the frequency of input pulse signals by counting pul
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28 — приём частотных сигналов в контурах управления.
 
 ## Usage Examples
 

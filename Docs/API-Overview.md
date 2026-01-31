@@ -10,44 +10,55 @@
 
 #### NDCEngine
 
-DC-двигатель.
+DC-двигатель. Модель с электромеханическими параметрами.
 
-**Основные свойства:**
-- `MaxSpeed` - максимальная скорость
-- `TargetSpeed` - целевая скорость
-- `CurrentSpeed` - текущая скорость
-- `Position` - текущая позиция
+**Параметры (ptPubParameter):**
+- `EMFactor` — коэффициент ЭДС
+- `Inductance` — индуктивность
+- `Resistance` — сопротивление
+- `Tm` — постоянная времени
+- `ReductionRate` — передаточное отношение
+- `OutMoment` — выходной момент
+
+**Входы:** `InputVoltage`, `InputMomentum` (напряжение и момент нагрузки).
+
+**Выходы:** `OutputMomentum`, `OutputAngle`, `OutputAngleSpeed` (момент, угол, угловая скорость).
 
 #### NManipulator
 
-Роботизированный манипулятор.
+Роботизированный манипулятор (упрощённая электрическая модель).
 
-**Основные свойства:**
-- `NumJoints` - количество суставов
-- `TargetPosition` - целевая позиция
-- `CurrentPosition` - текущая позиция
-- `JointAngles` - углы суставов
+**Параметры:** `EMFactor`, `Inductance`, `Resistance`.
+
+**Входы:** `Input` (управляющий сигнал).
+
+**Выходы:** `Output` (ток/сигнал для приводов).
 
 #### NPositionControlElement
 
-Элемент контроля позиции.
+Элемент контроля позиции. Базовый класс для нейросетевого контроля позиции.
 
-**Основные свойства:**
-- `TargetPosition` - целевая позиция
-- `CurrentPosition` - текущая позиция
-- `ControlOutput` - выходной сигнал управления
+**Параметры и состояние:** `TargetPosition`, `CurrentPosition`, `InputNeuronType`, `ControlNeuronType`, `ExternalControl`, `RememberState`, `Delta`.
+
+**Внутренние структуры:** `InputNeurons`, `ControlNeurons`, `Generators`.
 
 #### NEyeRetina
 
-Ретина глаза.
+Ретина глаза. Обработка визуальной информации.
 
-**Основные свойства:**
-- `InputImage` - входное изображение
-- `RetinaOutput` - выход ретины
+**Входы/параметры:** `CaptureImage`, `InputImage`.
+
+**Выходы (изображения):** `GanglionicOuts`, `RConeGanglionicOuts`, `GConeGanglionicOuts`, `BConeGanglionicOuts`, `RodGanglionicOuts`, `OnGanglionicOuts`, `OffGanglionicOuts`.
+
+**Выходы (сигналы управления):** `LeftGanglionicOut`, `RightGanglionicOut`, `TopGanglionicOut`, `BottomGanglionicOut`.
+
+**Параметры мышц:** `LeftMuscle`, `RightMuscle`, `TopMuscle`, `BottomMuscle`.
 
 ### См. также
 
 - Исходный код: `Libraries/Nmsdk-MotionControlLib/Core/`
+- Каталог компонентов: [Component-Catalog.md](Component-Catalog.md)
+- Детальная документация по классам: [Components/](Components/)
 
 ---
 
@@ -61,41 +72,46 @@ Main library class, inherits from `ULibrary`.
 
 #### NDCEngine
 
-DC motor.
+DC motor. Model with electromechanical parameters.
 
-**Main Properties:**
-- `MaxSpeed` - maximum speed
-- `TargetSpeed` - target speed
-- `CurrentSpeed` - current speed
-- `Position` - current position
+**Parameters (ptPubParameter):** `EMFactor`, `Inductance`, `Resistance`, `Tm`, `ReductionRate`, `OutMoment`.
+
+**Inputs:** `InputVoltage`, `InputMomentum` (voltage and load torque).
+
+**Outputs:** `OutputMomentum`, `OutputAngle`, `OutputAngleSpeed` (torque, angle, angular speed).
 
 #### NManipulator
 
-Robotic manipulator.
+Robotic manipulator (simplified electrical model).
 
-**Main Properties:**
-- `NumJoints` - number of joints
-- `TargetPosition` - target position
-- `CurrentPosition` - current position
-- `JointAngles` - joint angles
+**Parameters:** `EMFactor`, `Inductance`, `Resistance`.
+
+**Inputs:** `Input` (control signal).
+
+**Outputs:** `Output` (current/signal for actuators).
 
 #### NPositionControlElement
 
-Position control element.
+Position control element. Base class for neural position control.
 
-**Main Properties:**
-- `TargetPosition` - target position
-- `CurrentPosition` - current position
-- `ControlOutput` - control output signal
+**Parameters and state:** `TargetPosition`, `CurrentPosition`, `InputNeuronType`, `ControlNeuronType`, `ExternalControl`, `RememberState`, `Delta`.
+
+**Internal structures:** `InputNeurons`, `ControlNeurons`, `Generators`.
 
 #### NEyeRetina
 
-Eye retina.
+Eye retina. Visual information processing.
 
-**Main Properties:**
-- `InputImage` - input image
-- `RetinaOutput` - retina output
+**Inputs/parameters:** `CaptureImage`, `InputImage`.
+
+**Outputs (images):** `GanglionicOuts`, `RConeGanglionicOuts`, `GConeGanglionicOuts`, `BConeGanglionicOuts`, `RodGanglionicOuts`, `OnGanglionicOuts`, `OffGanglionicOuts`.
+
+**Outputs (control signals):** `LeftGanglionicOut`, `RightGanglionicOut`, `TopGanglionicOut`, `BottomGanglionicOut`.
+
+**Muscle parameters:** `LeftMuscle`, `RightMuscle`, `TopMuscle`, `BottomMuscle`.
 
 ### See Also
 
 - Source code: `Libraries/Nmsdk-MotionControlLib/Core/`
+- Component catalog: [Component-Catalog.md](Component-Catalog.md)
+- Per-class documentation: [Components/](Components/)

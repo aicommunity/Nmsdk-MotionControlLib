@@ -1,7 +1,9 @@
 # NManipulator — манипулятор
 
-**Класс**: `NManipulator` — компонент моделирования манипулятора с электрическими характеристиками.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulator", ...)`.  
+**Каталог компонентов:** [Component-Catalog.md](../Component-Catalog.md).
+
+**Класс**: `NManipulator` — компонент моделирования манипулятора с электрическими характеристиками.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulator", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NManipulator реализует упрощенную модель манипулятора, учитывающую электрические параметры (индуктивность, сопротивление, коэффициент ЭДС). Компонент вычисляет ток на основе входного управляющего сигнала и выдает его как выходной сигнал для управления приводами.
@@ -35,8 +37,8 @@ classDiagram
 - `NManipulator` — модель манипулятора
 
 **Связи с другими компонентами:**
-- **Входы**: получает управляющий сигнал от контроллеров
-- **Выходы**: предоставляет ток/сигнал управления для подключения к приводам
+- **Входы**: получает управляющий сигнал от [NEngineMotionControl](NEngineMotionControl.md) или контроллеров
+- **Выходы**: предоставляет ток/сигнал управления для подключения к приводам и [NDCEngine](NDCEngine.md)
 
 ## UML-диаграмма последовательности
 
@@ -46,19 +48,19 @@ sequenceDiagram
     participant Manipulator as NManipulator
     participant Controller as Controller
     participant Actuator as Actuator
-    
+
     Storage->>Manipulator: new NManipulator()
     Storage->>Manipulator: Default()
     Manipulator->>Manipulator: ADefault()
     Note over Manipulator: Инициализация параметров
-    
+
     Storage->>Manipulator: Build()
     Manipulator->>Manipulator: ABuild()
-    
+
     Storage->>Manipulator: Reset()
     Manipulator->>Manipulator: AReset()
     Note over Manipulator: Сброс тока (Current=0)
-    
+
     loop Каждый шаг вычислений
         Controller->>Manipulator: Input = control_signal
         Storage->>Manipulator: Calculate()
@@ -119,12 +121,12 @@ flowchart TD
 graph TB
     Manipulator[[NManipulator]]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Manipulator -->|использует| BasicLib
-    
+
     Input[Input<br/>Входной управляющий сигнал]
     Output[Output<br/>Выходной ток/сигнал]
-    
+
     Manipulator --> Input
     Manipulator --> Output
 ```
@@ -170,23 +172,23 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NManipulator(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует все свойства компонента, устанавливает Current=0
 
 #### `virtual ~NManipulator(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Освобождает ресурсы компонента
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает значения по умолчанию:
 - EMFactor = 1.0
 - Inductance = 1.0
@@ -194,22 +196,22 @@ graph TB
 - Инициализирует входную и выходную матрицы нулями
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Для NManipulator не требуется дополнительных действий при построении
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента к начальному  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента к начальному
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Сбрасывает внутренние переменные:
 - Current = 0
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Основной метод вычислений:
 1. Чтение входного управляющего сигнала: `cs = Input(0,0)`
 2. Вычисление тока: `Current = (cs/TimeStep - 0*EMFactor)/Inductance + (1.0 - Resistance/(TimeStep*Inductance))*Current`
@@ -218,32 +220,32 @@ graph TB
 ### Сеттеры свойств
 
 #### `bool SetEMFactor(const double &value)`
-**Назначение:** Установка коэффициента ЭДС  
+**Назначение:** Установка коэффициента ЭДС
 **Параметры:**
 - `value` - коэффициент ЭДС (должен быть > 0)
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** Валидирует значение (должно быть положительным)
 
 #### `bool SetInductance(const double &value)`
-**Назначение:** Установка индуктивности  
+**Назначение:** Установка индуктивности
 **Параметры:**
 - `value` - индуктивность в Гн (должна быть > 0)
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** Валидирует значение (должно быть положительным)
 
 #### `bool SetResistance(const double &value)`
-**Назначение:** Установка сопротивления  
+**Назначение:** Установка сопротивления
 **Параметры:**
 - `value` - сопротивление в Ом (должно быть > 0)
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** Валидирует значение (должно быть положительным)
 
 ### Публичные методы
 
 #### `virtual NManipulator* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Указатель на новый экземпляр NManipulator  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Указатель на новый экземпляр NManipulator
 **Описание:** Выделяет память и создает новый экземпляр компонента
 
 ## Примеры использования
@@ -279,10 +281,10 @@ manipulator->Reset();
 for (int step = 0; step < numSteps; step++) {
     controller->Calculate();
     manipulator->Calculate();
-    
+
     // Получение выходного сигнала
     double output = manipulator->Output(0, 0);
-    
+
     // Использование для управления приводами
     std::cout << "Control signal: " << output << std::endl;
 }
@@ -298,7 +300,7 @@ for (int step = 0; step < numSteps; step++) {
     <Property Name="EMFactor" Value="1.5" />
     <Property Name="Inductance" Value="0.5" />
     <Property Name="Resistance" Value="2.0" />
-    
+
     <!-- Подключение входов -->
     <Property Name="Input" Connect="Controller.OutputSignal" />
 </Object>
@@ -311,6 +313,8 @@ for (int step = 0; step < numSteps; step++) {
 - Моделирования манипуляторов в робототехнических системах
 - Систем управления суставами роботов
 - Преобразования управляющих сигналов в токи управления
+
+**Примеры конфигураций:** `Bin/Configs/SpikeSamples/MC-Muscles/`, `Bin/Configs/SpikeSamples/MC0-RCN/`, `Bin/Configs/SpikeSamples/MC1-PCN/`.
 
 **Типичные сценарии использования:**
 1. **Управление суставом** - преобразование управляющего сигнала в ток для привода сустава
@@ -326,8 +330,8 @@ for (int step = 0; step < numSteps; step++) {
 
 # NManipulator — manipulator
 
-**Class**: `NManipulator` — manipulator modeling component with electrical characteristics.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulator", ...)`.  
+**Class**: `NManipulator` — manipulator modeling component with electrical characteristics.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulator", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NManipulator implements a simplified manipulator model, accounting for electrical parameters (inductance, resistance, EMF factor). The component calculates current based on input control signal and outputs it as a control signal for actuator drives.
@@ -354,22 +358,62 @@ NManipulator implements a simplified manipulator model, accounting for electrica
 
 ## Properties
 
-[Same structure as RU section, translated to English]
+### Parameters
+
+| Property | Type | Description | Default |
+|----------|------|-------------|---------|
+| `EMFactor` | `double` | EMF coefficient | `1.0` |
+| `Inductance` | `double` | Inductance (H) | `1.0` |
+| `Resistance` | `double` | Resistance (Ω) | `1.0` |
+
+### Inputs / Outputs
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `Input` | `MDMatrix<double>` | Control signal input |
+| `Output` | `MDMatrix<double>` | Current / control signal output |
 
 ## Methods
 
-[Same structure as RU section, translated to English]
+### Lifecycle
+
+- **`ADefault()`** — set default parameters (EMFactor, Inductance, Resistance).
+- **`ABuild()`** — no extra setup for NManipulator.
+- **`AReset()`** — reset Current to zero.
+- **`ACalculate()`** — read Input, compute current, update Output.
+
+### Setters
+
+- **`SetEMFactor(value)`**, **`SetInductance(value)`**, **`SetResistance(value)`** — set parameters; return `true` on success.
 
 ## Usage Examples
 
 ### C++ Code
 
-[Same examples as RU section, with English comments]
+```cpp
+#include "NManipulator.h"
+
+UEPtr<NManipulator> manipulator = storage->CreateComponent<NManipulator>("Manip1");
+manipulator->EMFactor = 1.0;
+manipulator->Inductance = 0.01;
+manipulator->Resistance = 1.0;
+manipulator->Default();
+manipulator->Build();
+manipulator->Reset();
+
+manipulator->Input(0, 0) = control_signal;
+manipulator->Calculate();
+double output_current = manipulator->Output(0, 0);
+```
 
 ### XML Configuration
 
-[Same XML examples as RU section, with English comments]
+See RU section for full XML; typical properties: `EMFactor`, `Inductance`, `Resistance`.
 
 ### Usage in Configurations
 
-[Same as RU section, translated to English]
+Used in robotic manipulator and motion control systems; example configs: `Bin/Configs/SpikeSamples/MC-Muscles/`, `Bin/Configs/SpikeSamples/MC0-RCN/`, `Bin/Configs/SpikeSamples/MC1-PCN/`. Typical combinations: with [NDCEngine](NDCEngine.md), [NEngineMotionControl](NEngineMotionControl.md).
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 23 — иерархия управления поведением робота, согласованное управление исполнительной системой, бионические модели управления движением.

@@ -1,7 +1,7 @@
 # NNewMotionElement (NMotionElement) — элемент движения
 
-**Класс**: `NMotionElement` (регистрируется как `NNewMotionElement`) — элемент движения, создающий нейросетевую структуру для управления движением с моторными нейронами, афферентными нейронами и интернейронами.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNewMotionElement", ...)`.  
+**Класс**: `NMotionElement` (регистрируется как `NNewMotionElement`) — элемент движения, создающий нейросетевую структуру для управления движением с моторными нейронами, афферентными нейронами и интернейронами.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNewMotionElement", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NMotionElement является базовым элементом для систем управления движением. Он создает нейросетевую структуру, состоящую из пары моторных нейронов (MotoneuronL, MotoneuronR), афферентных нейронов для каждого контура управления, интернейронов (опционально), клеток Реншоу (опционально) и пейсмейкеров (опционально). Компонент используется внутри NEngineMotionControl для создания элементов движения.
@@ -14,7 +14,7 @@ classDiagram
     NMotionElement *-- NAfferentNeuron : Afferents
     NMotionElement *-- NPulseGenerator : ExternalControlGenerators
     NMotionElement *-- NPulseNeuron : Motoneurons
-    
+
     class NMotionElement {
         +NumControlLoops : int
         +EnableControlLoopFlags : vector~int~
@@ -70,7 +70,7 @@ sequenceDiagram
     participant Element as NMotionElement
     participant Motoneuron as NPulseNeuron
     participant Afferent as NAfferentNeuron
-    
+
     Storage->>Engine: Create()
     Engine->>Element: new NMotionElement()
     Engine->>Element: SetNumControlLoops()
@@ -92,7 +92,7 @@ sequenceDiagram
     Element->>Element: LinkRenshow() (если включен)
     Element->>Element: LinkPM() (если включен)
     Element->>Element: RestoreExternalLinks()
-    
+
     loop Каждый шаг вычислений
         Storage->>Element: Calculate()
         Element->>Element: ACalculate()
@@ -163,17 +163,17 @@ graph TB
     Element[[NMotionElement]]
     PulseLib[Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron, NPulseGenerator]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Element -->|использует| PulseLib
     Element -->|использует| BasicLib
-    
+
     MotoneuronL[MotoneuronL<br/>Левый моторный нейрон]
     MotoneuronR[MotoneuronR<br/>Правый моторный нейрон]
     Afferents[Afferents<br/>Афферентные нейроны]
     Interneurons[Interneurons<br/>Интернейроны]
     Renshow[Renshow Cells<br/>Клетки Реншоу]
     Pacemaker[Pacemaker<br/>Пейсмейкеры]
-    
+
     Element --> MotoneuronL
     Element --> MotoneuronR
     Element --> Afferents
@@ -228,23 +228,23 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NMotionElement(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует все свойства, устанавливает isNumControlLoopsInitialized=false
 
 #### `virtual ~NMotionElement(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Освобождает ресурсы компонента
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает значения по умолчанию:
 - NumControlLoops = 1 (если не инициализирован)
 - InterneuronPresentMode = 1
@@ -254,9 +254,9 @@ graph TB
 - AfferentObjectName = "NSimpleAfferentNeuron"
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Выполняет:
 1. BackupExternalLinks() - сохранение внешних связей
 2. CreateStructure() - создание структуры нейросети
@@ -264,41 +264,41 @@ graph TB
 4. RestoreExternalLinks() - восстановление внешних связей
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента к начальному  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента к начальному
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Для NMotionElement не требуется дополнительных действий при сбросе
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Для NMotionElement вычисления выполняются нейронами внутри структуры автоматически
 
 ### Методы создания структуры
 
 #### `void CreateStructure(void)`
-**Назначение:** Создание структуры нейросети  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Создание структуры нейросети
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Удаляет все существующие компоненты, проверяет наличие Storage и имен классов, затем создает:
 - Моторные нейроны (CreateMotoneurons)
 - Афферентные нейроны (CreateAfferents)
 - Интернейроны (CreateInterneurons)
 
 #### `void CreateInternalLinks(void)`
-**Назначение:** Создание внутренних связей между нейронами  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Создание внутренних связей между нейронами
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Создает связи:
 - LinkMotoneurons() - связывание моторных нейронов
 - LinkRenshow() - связывание клеток Реншоу (если включен RenshowMode)
 - LinkPM() - связывание пейсмейкеров (если включен PacemakerMode)
 
 #### `bool CreateMotoneurons()`
-**Назначение:** Создание пары моторных нейронов  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Создание пары моторных нейронов
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает:
 - MotoneuronL - левый моторный нейрон с NumSomaMembraneParts = NumControlLoops
 - MotoneuronR - правый моторный нейрон с NumSomaMembraneParts = NumControlLoops
@@ -306,45 +306,45 @@ graph TB
 - PmL, PmR - пейсмейкеры (если PacemakerMode включен)
 
 #### `bool CreateAfferents()`
-**Назначение:** Создание афферентных нейронов для каждого контура управления  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Создание афферентных нейронов для каждого контура управления
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает пары афферентных нейронов (AfferentL и AfferentR) для каждого контура управления
 
 #### `bool CreateInterneurons()`
-**Назначение:** Создание интернейронов (если включены)  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Создание интернейронов (если включены)
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает интернейроны для каждого контура управления, если InterneuronPresentMode = 1
 
 #### `bool LinkMotoneurons()`
-**Назначение:** Связывание моторных нейронов в соответствии с LinkModes  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Связывание моторных нейронов в соответствии с LinkModes
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает связи между моторными нейронами и афферентными нейронами в зависимости от режима связи (0-4)
 
 #### `bool LinkRenshow()`
-**Назначение:** Связывание клеток Реншоу с моторными нейронами  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Связывание клеток Реншоу с моторными нейронами
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает связи между клетками Реншоу и моторными нейронами для рекуррентного торможения
 
 #### `bool LinkPM()`
-**Назначение:** Связывание пейсмейкеров с моторными нейронами  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Связывание пейсмейкеров с моторными нейронами
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает связи между пейсмейкерами и моторными нейронами для генерации ритмической активности
 
 #### `void BackupExternalLinks(void)`
-**Назначение:** Сохранение внешних связей перед перестроением  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Сохранение внешних связей перед перестроением
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Сохраняет информацию о внешних связях для последующего восстановления
 
 #### `void RestoreExternalLinks(void)`
-**Назначение:** Восстановление внешних связей после перестроения  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Восстановление внешних связей после перестроения
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Восстанавливает внешние связи после перестроения структуры
 
 ### Сеттеры свойств
@@ -409,8 +409,8 @@ for (size_t i = 0; i < motions.size(); i++) {
 
 # NNewMotionElement (NMotionElement) — motion element
 
-**Class**: `NMotionElement` (registered as `NNewMotionElement`) — motion element that creates a neural network structure for motion control with motoneurons, afferent neurons, and interneurons.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNewMotionElement", ...)`.  
+**Class**: `NMotionElement` (registered as `NNewMotionElement`) — motion element that creates a neural network structure for motion control with motoneurons, afferent neurons, and interneurons.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNewMotionElement", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NMotionElement is a basic element for motion control systems. It creates a neural network structure consisting of a pair of motoneurons (MotoneuronL, MotoneuronR), afferent neurons for each control loop, interneurons (optional), Renshaw cells (optional), and pacemakers (optional). The component is used inside NEngineMotionControl to create motion elements.
@@ -456,3 +456,7 @@ NMotionElement is a basic element for motion control systems. It creates a neura
 ### Usage in Configurations
 
 [Same as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 21, 22, 23 — элементы движения, моторная память, согласованное управление.

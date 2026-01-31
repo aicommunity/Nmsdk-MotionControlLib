@@ -1,7 +1,7 @@
 # NManipulatorInput — вход манипулятора
 
-**Класс**: `NManipulatorInput` — источник входных данных для манипулятора, преобразующий входной сигнал в напряжение.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorInput", ...)`.  
+**Класс**: `NManipulatorInput` — источник входных данных для манипулятора, преобразующий входной сигнал в напряжение.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorInput", ...)`.
 **Базовый класс**: `NSource` (из Nmsdk-PulseLib).
 
 NManipulatorInput является источником данных для манипулятора. Компонент получает входной сигнал и преобразует его в напряжение, которое передается на выход для управления манипулятором.
@@ -36,17 +36,17 @@ sequenceDiagram
     participant Input as NManipulatorInput
     participant Controller as Controller
     participant Manipulator as NManipulator
-    
+
     Storage->>Input: new NManipulatorInput()
     Storage->>Input: Default()
     Input->>Input: ADefault()
-    
+
     Storage->>Input: Build()
     Input->>Input: ABuild()
-    
+
     Storage->>Input: Reset()
     Input->>Input: AReset()
-    
+
     loop Каждый шаг вычислений
         Controller->>Input: Input = control_signal
         Storage->>Input: Calculate()
@@ -90,13 +90,13 @@ graph TB
     Input[[NManipulatorInput]]
     PulseLib[Nmsdk-PulseLib<br/>NSource]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Input -->|наследуется от| PulseLib
     Input -->|использует| BasicLib
-    
+
     InputSignal[Input<br/>Входной сигнал управления]
     Output[Output<br/>Выходное напряжение]
-    
+
     Input --> InputSignal
     Input --> Output
 ```
@@ -132,40 +132,40 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NManipulatorInput(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует UpdateOutputFlag=false
 
 #### `virtual ~NManipulatorInput(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает Voltage=0, инициализирует Input и Output нулями, вызывает ADefault() базового класса
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает UpdateOutputFlag=true, вызывает AReset() базового класса
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Читает входной сигнал: `Voltage = Input(0,0)`, обновляет выход: `Output(0,0) = Voltage`
 
 ### Сеттеры свойств
 
 #### `bool SetVoltage(const double &value)`
-**Назначение:** Установка напряжения  
+**Назначение:** Установка напряжения
 **Параметры:**
 - `value` - значение напряжения
 **Возвращаемое значение:** `true` при успехе
@@ -173,8 +173,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NManipulatorInput* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -230,8 +230,8 @@ for (int step = 0; step < numSteps; step++) {
 
 # NManipulatorInput — manipulator input
 
-**Class**: `NManipulatorInput` — source of input data for manipulator, converting input signal to voltage.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorInput", ...)`.  
+**Class**: `NManipulatorInput` — source of input data for manipulator, converting input signal to voltage.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorInput", ...)`.
 **Base class**: `NSource` (from Nmsdk-PulseLib).
 
 NManipulatorInput is a data source for manipulators. The component receives an input signal and converts it to voltage, which is output for manipulator control.
@@ -263,6 +263,10 @@ NManipulatorInput is a data source for manipulators. The component receives an i
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 21 — вход манипулятора в иерархии управления.
 
 ## Usage Examples
 

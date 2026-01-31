@@ -1,7 +1,7 @@
 # NSignalEstimation — оценка сигнала
 
-**Класс**: `NSignalEstimation` — компонент для зонирования сигнала, разделяющий входной сигнал на зоны по верхним пределам.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NSignalEstimation", ...)`.  
+**Класс**: `NSignalEstimation` — компонент для зонирования сигнала, разделяющий входной сигнал на зоны по верхним пределам.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NSignalEstimation", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NSignalEstimation разделяет входной сигнал на зоны на основе верхних пределов зон. Компонент использует генераторы импульсов и нейроны для каждой зоны, создавая структуру для определения принадлежности сигнала к определенной зоне.
@@ -14,7 +14,7 @@ classDiagram
     NSignalEstimation *-- NPulseGeneratorTransit : SignalGen
     NSignalEstimation *-- NPulseGeneratorTransit : SinchroGen
     NSignalEstimation *-- NPulseNeuron : ZoneNeurons
-    
+
     class NSignalEstimation {
         +NeuronClassName : string
         +GeneratorClassName : string
@@ -55,18 +55,18 @@ sequenceDiagram
     participant SignalGen as SignalGen
     participant SinchroGen as SinchroGen
     participant ZoneNeurons as ZoneNeurons
-    
+
     Storage->>Estimator: new NSignalEstimation()
     Storage->>Estimator: Default()
     Estimator->>Estimator: ADefault()
-    
+
     Storage->>Estimator: Build()
     Estimator->>Estimator: ABuild()
     Estimator->>SignalGen: new NPulseGeneratorTransit("SignalGen")
     Estimator->>SinchroGen: new NPulseGeneratorTransit("SinchroGen")
     Estimator->>ZoneNeurons: Создание NumZones нейронов
     Estimator->>Estimator: Создание связей между компонентами
-    
+
     loop Каждый шаг вычислений
         Storage->>Estimator: Calculate()
         Estimator->>Estimator: ACalculate()
@@ -115,14 +115,14 @@ graph TB
     Estimator[[NSignalEstimation]]
     PulseLib[Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Estimator -->|использует| PulseLib
     Estimator -->|использует| BasicLib
-    
+
     SignalGen[SignalGen<br/>Генератор сигнала]
     SinchroGen[SinchroGen<br/>Генератор синхронизации]
     ZoneNeurons[ZoneNeurons<br/>Нейроны для каждой зоны]
-    
+
     Estimator --> SignalGen
     Estimator --> SinchroGen
     Estimator --> ZoneNeurons
@@ -178,28 +178,28 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NSignalEstimation(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует OldNumZones=0, очищает ZoneNeurons, устанавливает генераторы в NULL
 
 #### `virtual ~NSignalEstimation(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает значения по умолчанию для всех параметров
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает структуру:
 1. Удаляет старые нейроны, если NumZones изменилось
 2. Создает SignalGen с UseTransitSignal
@@ -208,14 +208,14 @@ graph TB
 5. Создает связи между генераторами и нейронами зон
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Вычисления выполняются нейронами внутри структуры автоматически
 
 ### Сеттеры свойств
@@ -225,8 +225,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NSignalEstimation* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -275,8 +275,8 @@ estimator->Build();
 
 # NSignalEstimation — signal estimation
 
-**Class**: `NSignalEstimation` — component for signal zoning that divides input signal into zones based on upper zone limits.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NSignalEstimation", ...)`.  
+**Class**: `NSignalEstimation` — component for signal zoning that divides input signal into zones based on upper zone limits.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NSignalEstimation", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NSignalEstimation divides input signal into zones based on upper zone limits. The component uses pulse generators and neurons for each zone, creating a structure for determining signal membership in a specific zone.
@@ -308,6 +308,10 @@ NSignalEstimation divides input signal into zones based on upper zone limits. Th
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — оценка сигналов, преобразование импульсных потоков.
 
 ## Usage Examples
 

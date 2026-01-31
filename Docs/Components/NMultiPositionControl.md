@@ -1,7 +1,7 @@
 # NMultiPositionControl — множественный контроль позиции
 
-**Класс**: `NMultiPositionControl` — элемент контроля позиции для управления несколькими позициями одновременно с поддержкой запоминания состояний.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NMultiPositionControl", ...)`.  
+**Класс**: `NMultiPositionControl` — элемент контроля позиции для управления несколькими позициями одновременно с поддержкой запоминания состояний.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NMultiPositionControl", ...)`.
 **Базовый класс**: `NPositionControlElement` (из Nmsdk-MotionControlLib).
 
 NMultiPositionControl расширяет NPositionControlElement для управления множественными позициями. Компонент может работать в двух режимах: BuildSolo=true (создает собственную структуру) или BuildSolo=false (использует существующие NNewPositionControl элементы). Поддерживает запоминание состояний и динамическое создание нейронов.
@@ -14,7 +14,7 @@ classDiagram
     NMultiPositionControl *-- NPositionControlElement : PositionControlElement
     NMultiPositionControl *-- NNet : InputNeuronsByContours
     NMultiPositionControl *-- NNet : ControlNeuronsByContours
-    
+
     class NMultiPositionControl {
         +PositionControl : vector~MDMatrix~double~~
         +NumOfPositions : int
@@ -51,11 +51,11 @@ sequenceDiagram
     participant MultiPC as NMultiPositionControl
     participant PC as NPositionControlElement
     participant Neurons as Neurons
-    
+
     Storage->>MultiPC: new NMultiPositionControl()
     Storage->>MultiPC: Default()
     MultiPC->>MultiPC: ADefault()
-    
+
     Storage->>MultiPC: Build()
     MultiPC->>MultiPC: ABuild()
     alt BuildSolo == true
@@ -64,7 +64,7 @@ sequenceDiagram
     else BuildSolo == false
         MultiPC->>PC: Использование существующих элементов
     end
-    
+
     loop Каждый шаг вычислений
         Storage->>MultiPC: Calculate()
         MultiPC->>MultiPC: ACalculate()
@@ -120,14 +120,14 @@ graph TB
     MultiPC[[NMultiPositionControl]]
     PulseLib[Nmsdk-PulseLib<br/>NNet, нейроны]
     MotionLib[Nmsdk-MotionControlLib<br/>NPositionControlElement]
-    
+
     MultiPC -->|использует| PulseLib
     MultiPC -->|содержит| MotionLib
-    
+
     PositionControls[PositionControlElement<br/>Вектор элементов контроля]
     InputNeurons[InputNeuronsByContours<br/>Входные нейроны по контурам]
     ControlNeurons[ControlNeuronsByContours<br/>Управляющие нейроны по контурам]
-    
+
     MultiPC --> PositionControls
     MultiPC --> InputNeurons
     MultiPC --> ControlNeurons
@@ -161,88 +161,88 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NMultiPositionControl(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 #### `virtual ~NMultiPositionControl(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает NumOfPositions=0, BuildSolo=true, PCsNum=1, InputsNum=0, ExternalControl=true, IsNeedToRebuild=false, PostInputThreshold=0.024, PrebuildStructure=false
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Инициализирует PositionControlElement из PositionControl, создает нейроны в зависимости от режима BuildSolo
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Вызывает AReset() базового класса
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Обрабатывает запоминание состояний, создает новые нейроны при необходимости, выполняет вычисления
 
 ### Сеттеры свойств
 
 #### `bool SetBuildSolo(const bool &value)`
-**Назначение:** Установка режима построения  
+**Назначение:** Установка режима построения
 **Параметры:**
 - `value` - режим построения
 **Возвращаемое значение:** `true` при успехе
 
 #### `bool SetInputsNum(const int &value)`
-**Назначение:** Установка количества входных нейронов  
+**Назначение:** Установка количества входных нейронов
 **Параметры:**
 - `value` - количество входных нейронов
-**Возвращаемое значение:** `true` при успехе  
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает Ready=false для перестроения
 
 #### `bool SetPCsNum(const int &value)`
-**Назначение:** Установка количества элементов контроля позиции  
+**Назначение:** Установка количества элементов контроля позиции
 **Параметры:**
 - `value` - количество элементов
-**Возвращаемое значение:** `true` при успехе  
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает Ready=false для перестроения
 
 #### `bool SetIsNeedToRebuild(const bool &value)`
-**Назначение:** Установка флага необходимости перестроения  
+**Назначение:** Установка флага необходимости перестроения
 **Параметры:**
 - `value` - необходимость перестроения
-**Возвращаемое значение:** `true` при успехе  
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает Ready=false для перестроения
 
 #### `bool SetPostInputTreshold(const double &value)`
-**Назначение:** Установка порога для PostInput нейронов  
+**Назначение:** Установка порога для PostInput нейронов
 **Параметры:**
 - `value` - значение порога
 **Возвращаемое значение:** `true` при успехе
 
 #### `bool SetPrebuildStructure(const bool &value)`
-**Назначение:** Установка флага предварительного построения структуры  
+**Назначение:** Установка флага предварительного построения структуры
 **Параметры:**
 - `value` - предварительное построение
-**Возвращаемое значение:** `true` при успехе  
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает Ready=false для перестроения
 
 ### Публичные методы
 
 #### `virtual NMultiPositionControl* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -277,6 +277,8 @@ multiPC->Build();
 
 Компонент `NMultiPositionControl` используется для управления множественными позициями одновременно, особенно в системах с запоминанием состояний и динамическим созданием нейронов.
 
+**Примеры конфигураций:** `Bin/Configs/SpikeSamples/MC1-PCN/` (MultiPositionControl_Test, MultiPositionControl_*Task, MultiPositionControl_*Test).
+
 **Типичные сценарии использования:**
 1. **Множественные позиции** - управление несколькими независимыми позициями
 2. **Запоминание состояний** - динамическое создание нейронов при запоминании новых состояний
@@ -290,8 +292,8 @@ multiPC->Build();
 
 # NMultiPositionControl — multi position control
 
-**Class**: `NMultiPositionControl` — position control element for managing multiple positions simultaneously with state memory support.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NMultiPositionControl", ...)`.  
+**Class**: `NMultiPositionControl` — position control element for managing multiple positions simultaneously with state memory support.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NMultiPositionControl", ...)`.
 **Base class**: `NPositionControlElement` (from Nmsdk-MotionControlLib).
 
 NMultiPositionControl extends NPositionControlElement for managing multiple positions. The component can work in two modes: BuildSolo=true (creates its own structure) or BuildSolo=false (uses existing NNewPositionControl elements). Supports state memory and dynamic neuron creation.
@@ -323,6 +325,10 @@ NMultiPositionControl extends NPositionControlElement for managing multiple posi
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24 — множественный контроль позиции.
 
 ## Usage Examples
 

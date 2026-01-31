@@ -1,7 +1,7 @@
 # NMazeMemory — память лабиринта
 
-**Класс**: `NMazeMemory` — компонент для создания и управления памятью лабиринта с использованием элементов траектории (NTrajectoryElement), блоков множественного контроля позиции (NMultiPositionControl) и нейронных тренеров (NNeuronTrainer).  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NMazeMemory", ...)`.  
+**Класс**: `NMazeMemory` — компонент для создания и управления памятью лабиринта с использованием элементов траектории (NTrajectoryElement), блоков множественного контроля позиции (NMultiPositionControl) и нейронных тренеров (NNeuronTrainer).
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NMazeMemory", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NMazeMemory реализует систему памяти лабиринта, которая запоминает пройденные пути, создает новые элементы траектории при обнаружении новых ситуаций, и использует нейронные тренеры для запоминания признаков ситуаций. Компонент создает сложную динамическую структуру для навигации в лабиринте.
@@ -15,7 +15,7 @@ classDiagram
     NMazeMemory *-- NMultiPositionControl : MultiPCs
     NMazeMemory *-- NNeuronTrainer : NTrainers
     NMazeMemory *-- NPulseNeuron : ActionNeurons
-    
+
     class NMazeMemory {
         +Situation : bool
         +InputActions : vector~int~
@@ -61,17 +61,17 @@ sequenceDiagram
     participant TE as NTrajectoryElement
     participant MPC as NMultiPositionControl
     participant NT as NNeuronTrainer
-    
+
     Storage->>Memory: new NMazeMemory()
     Storage->>Memory: Default()
     Memory->>Memory: ADefault()
-    
+
     Storage->>Memory: Build()
     Memory->>Memory: ABuild()
     Memory->>TE: Создание начальных элементов траектории
     Memory->>MPC: Создание блоков MultiPC
     Memory->>NT: Создание нейронных тренеров
-    
+
     loop Каждый шаг вычислений
         Storage->>Memory: Calculate()
         Memory->>Memory: ACalculate()
@@ -136,16 +136,16 @@ graph TB
     MotionLib[Nmsdk-MotionControlLib<br/>NTrajectoryElement, NMultiPositionControl]
     PulseLib[Nmsdk-PulseLib<br/>NNeuronTrainer, NPulseNeuron]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Memory -->|использует| MotionLib
     Memory -->|использует| PulseLib
     Memory -->|использует| BasicLib
-    
+
     TrajectoryElements[TrajectoryElements<br/>Элементы траектории]
     MultiPCs[MultiPCs<br/>Блоки множественного контроля]
     NTrainers[NTrainers<br/>Нейронные тренеры]
     ActionNeurons[ActionNeurons<br/>Нейроны действий]
-    
+
     Memory --> TrajectoryElements
     Memory --> MultiPCs
     Memory --> NTrainers
@@ -188,27 +188,27 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NMazeMemory(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 #### `virtual ~NMazeMemory(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает Situation=false, InputActions=[0,0,0], ActionNeuronsType="NSPNeuronGen", FeaturesNum=4, IsDone=false, инициализирует внутренние переменные
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает начальную структуру:
 1. Создает начальные элементы траектории, если их нет
 2. Создает нейроны действий
@@ -216,15 +216,15 @@ graph TB
 4. Создает связи между компонентами
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
-**Описание:** 
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
+**Описание:**
 1. Проверяет наличие ситуации (Situation)
 2. Если новая ситуация, обучает NeuronTrainer на SituationCoords
 3. Создает новые элементы траектории и блоки MultiPC при необходимости
@@ -238,8 +238,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NMazeMemory* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -283,8 +283,8 @@ memory->Build();
 
 # NMazeMemory — maze memory
 
-**Class**: `NMazeMemory` — component for creating and managing maze memory using trajectory elements (NTrajectoryElement), multi-position control blocks (NMultiPositionControl), and neural trainers (NNeuronTrainer).  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NMazeMemory", ...)`.  
+**Class**: `NMazeMemory` — component for creating and managing maze memory using trajectory elements (NTrajectoryElement), multi-position control blocks (NMultiPositionControl), and neural trainers (NNeuronTrainer).
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NMazeMemory", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NMazeMemory implements a maze memory system that remembers traversed paths, creates new trajectory elements upon discovering new situations, and uses neural trainers to remember situation features. The component creates a complex dynamic structure for maze navigation.
@@ -320,3 +320,7 @@ NMazeMemory implements a maze memory system that remembers traversed paths, crea
 ## Usage Examples
 
 [Same as RU section, with English comments]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24 — моторная память, запоминание пространственных конфигураций.

@@ -1,7 +1,7 @@
 # NEngineControlRangeAfferent — афферентный контроллер (range)
 
-**Класс**: `NEngineControlRangeAfferent` — вариант контроллера движения на базе диапазонных (range) афферентов.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineControlRangeAfferent", ...)`.  
+**Класс**: `NEngineControlRangeAfferent` — вариант контроллера движения на базе диапазонных (range) афферентов.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineControlRangeAfferent", ...)`.
 **Базовый класс**: `NEngineMotionControl` (из Nmsdk-MotionControlLib).
 
 NEngineControlRangeAfferent является специализированной версией NEngineMotionControl, настроенной для работы с range-афферентами (разделение сигналов по диапазонам значений). Компонент использует NIntervalSeparator для обработки афферентных сигналов.
@@ -13,7 +13,7 @@ classDiagram
     UNet <|-- NEngineMotionControl
     NEngineMotionControl <|-- NEngineControlRangeAfferent
     NEngineControlRangeAfferent *-- NIntervalSeparator : IntervalSeparators
-    
+
     class NEngineControlRangeAfferent {
         +CreationMode : int
         +NumControlLoops : int
@@ -42,17 +42,17 @@ sequenceDiagram
     participant Controller as NEngineControlRangeAfferent
     participant IntervalSep as NIntervalSeparator
     participant MotionElem as NMotionElement
-    
+
     Storage->>Controller: new NEngineControlRangeAfferent()
     Storage->>Controller: Default()
     Controller->>Controller: ADefault()
     Note over Controller: CreationMode = 1 (Range)
-    
+
     Storage->>Controller: Build()
     Controller->>Controller: ABuild()
     Controller->>IntervalSep: Создание NIntervalSeparator для афферентов
     Controller->>MotionElem: Создание элементов движения
-    
+
     loop Каждый шаг вычислений
         Storage->>Controller: Calculate()
         Controller->>Controller: ACalculate()
@@ -98,13 +98,13 @@ graph TB
     Controller[[NEngineControlRangeAfferent]]
     MotionLib[Nmsdk-MotionControlLib<br/>NIntervalSeparator, NMotionElement]
     PulseLib[Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron]
-    
+
     Controller -->|использует| MotionLib
     Controller -->|использует| PulseLib
-    
+
     IntervalSeparators[IntervalSeparators<br/>Разделители по диапазонам]
     MotionElements[MotionElements<br/>Элементы движения]
-    
+
     Controller --> IntervalSeparators
     Controller --> MotionElements
 ```
@@ -177,8 +177,8 @@ controller->Build();
 
 # NEngineControlRangeAfferent — afferent range controller
 
-**Class**: `NEngineControlRangeAfferent` — motion controller variant based on range afferents.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineControlRangeAfferent", ...)`.  
+**Class**: `NEngineControlRangeAfferent` — motion controller variant based on range afferents.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineControlRangeAfferent", ...)`.
 **Base class**: `NEngineMotionControl` (from Nmsdk-MotionControlLib).
 
 NEngineControlRangeAfferent is a specialized version of NEngineMotionControl configured for working with range afferents (signal separation by value ranges). The component uses NIntervalSeparator for processing afferent signals.
@@ -210,6 +210,10 @@ NEngineControlRangeAfferent is a specialized version of NEngineMotionControl con
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22, 27 — движок управления с диапазонными афферентами.
 
 ## Usage Examples
 

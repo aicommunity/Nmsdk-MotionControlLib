@@ -1,7 +1,7 @@
 # NControlObjectSource — источник объекта управления
 
-**Класс**: `NControlObjectSource` — источник данных о состоянии объекта управления для систем управления движением.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NControlObjectSource", ...)`.  
+**Класс**: `NControlObjectSource` — источник данных о состоянии объекта управления для систем управления движением.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NControlObjectSource", ...)`.
 **Базовый класс**: `NSource` (из Nmsdk-PulseLib).
 
 NControlObjectSource преобразует входные данные об объекте управления (координаты, углы, скорости и т.д.) в выходные сигналы с возможностью масштабирования, сдвига и выбора индексов данных. Компонент используется в NEngineMotionControl для получения данных об объекте управления.
@@ -38,18 +38,18 @@ sequenceDiagram
     participant Source as NControlObjectSource
     participant Object as ControlObject
     participant Engine as NEngineMotionControl
-    
+
     Storage->>Source: new NControlObjectSource()
     Storage->>Source: Default()
     Source->>Source: ADefault()
-    
+
     Storage->>Source: Build()
     Source->>Source: ABuild()
-    
+
     Storage->>Source: Reset()
     Source->>Source: AReset()
     Note over Source: Инициализация размеров массивов
-    
+
     loop Каждый шаг вычислений
         Object->>Source: Input = object_data
         Storage->>Source: Calculate()
@@ -97,13 +97,13 @@ graph TB
     Source[[NControlObjectSource]]
     PulseLib[Nmsdk-PulseLib<br/>NSource]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Source -->|наследуется от| PulseLib
     Source -->|использует| BasicLib
-    
+
     Input[Input<br/>Входные данные объекта]
     Output[Output<br/>Преобразованные данные]
-    
+
     Source --> Input
     Source --> Output
 ```
@@ -145,34 +145,34 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NControlObjectSource(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует свойства, устанавливает UpdateOutputFlag=false
 
 #### `virtual ~NControlObjectSource(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Вызывает ADefault() базового класса NSource
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает UpdateOutputFlag=true, инициализирует размеры массивов DataShift, DataIndexes, DataMul на основе размера Input (если подключен)
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Преобразует входные данные:
 1. Проверяет подключение Input
 2. Изменяет размеры массивов DataShift, DataIndexes, DataMul при необходимости
@@ -182,7 +182,7 @@ graph TB
 ### Сеттеры свойств
 
 #### `bool SetDataShift(const MDVector<double> &value)`
-**Назначение:** Установка сдвигов данных  
+**Назначение:** Установка сдвигов данных
 **Параметры:**
 - `value` - вектор сдвигов
 **Возвращаемое значение:** `true` при успехе
@@ -190,8 +190,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NControlObjectSource* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -229,7 +229,7 @@ source->Reset();
 for (int step = 0; step < numSteps; step++) {
     object->Calculate();
     source->Calculate();
-    
+
     // Получение преобразованных данных
     MDMatrix<double> output = source->Output;
     // Использование данных
@@ -242,7 +242,7 @@ for (int step = 0; step < numSteps; step++) {
 <Object Name="NManipulatorSource1" ClassName="NControlObjectSource">
     <!-- Подключение входных данных -->
     <Property Name="Input" Connect="ObjectModel.OutputData" />
-    
+
     <!-- Настройка преобразования -->
     <Property Name="DataShift" Value="0.0,0.0,0.0" />
     <Property Name="DataMul" Value="1.0,1.0,1.0" />
@@ -267,8 +267,8 @@ for (int step = 0; step < numSteps; step++) {
 
 # NControlObjectSource — control object source
 
-**Class**: `NControlObjectSource` — source of control object state data for motion control systems.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NControlObjectSource", ...)`.  
+**Class**: `NControlObjectSource` — source of control object state data for motion control systems.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NControlObjectSource", ...)`.
 **Base class**: `NSource` (from Nmsdk-PulseLib).
 
 NControlObjectSource transforms input data about the control object (coordinates, angles, velocities, etc.) into output signals with scaling, shifting, and data index selection capabilities. The component is used in NEngineMotionControl to obtain data about the control object.
@@ -295,12 +295,47 @@ NControlObjectSource transforms input data about the control object (coordinates
 
 ## Properties
 
-[Same structure as RU section, translated to English]
+### Parameters
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `Coord` | `MDMatrix<double>` | Control object coordinates (e.g. position, angles) |
+| `Scale`, `Shift` | scaling/shift for output |
+| `DataIndex` | index selection for output |
+
+### Outputs
+
+Output signals derived from Coord (scaled, shifted, indexed) for use by [NEngineMotionControl](NEngineMotionControl.md).
 
 ## Methods
 
-[Same structure as RU section, translated to English]
+### Lifecycle
+
+- **`ADefault()`** — set default parameters
+- **`ABuild()`** — prepare output matrices
+- **`AReset()`** — reset state
+- **`ACalculate()`** — copy/transform Coord to output
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 21 — источник объекта управления в иерархии.
 
 ## Usage Examples
 
-[Same as RU section, with English comments]
+### C++ Code
+
+```cpp
+#include "NControlObjectSource.h"
+
+UEPtr<NControlObjectSource> source = storage->CreateComponent<NControlObjectSource>("ControlObj1");
+source->Coord(0, 0) = x; source->Coord(0, 1) = y; source->Coord(0, 2) = z;
+source->Default();
+source->Build();
+source->Reset();
+source->Calculate();
+// Output is consumed by NEngineMotionControl (ObjectControlInterface)
+```
+
+### Usage in Configurations
+
+Used as the control object data source in [NEngineMotionControl](NEngineMotionControl.md); example configs: `Bin/Configs/SpikeSamples/MC1-PCN/`, `Bin/Configs/SpikeSamples/MC-Muscles/`.

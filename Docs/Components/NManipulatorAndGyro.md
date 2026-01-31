@@ -1,7 +1,7 @@
 # NManipulatorAndGyro — манипулятор с гироскопом
 
-**Класс**: `NManipulatorAndGyro` — компонент для моделирования манипулятора с гироскопом, вычисляющий результирующий момент с учетом внешнего момента, момента двигателя и гравитации.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorAndGyro", ...)`.  
+**Класс**: `NManipulatorAndGyro` — компонент для моделирования манипулятора с гироскопом, вычисляющий результирующий момент с учетом внешнего момента, момента двигателя и гравитации.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorAndGyro", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NManipulatorAndGyro реализует модель манипулятора с учетом гравитации и гироскопических эффектов. Компонент вычисляет результирующий момент на основе внешнего момента, момента двигателя и гравитационного момента.
@@ -39,18 +39,18 @@ sequenceDiagram
     participant Manipulator as NManipulatorAndGyro
     participant Engine as Engine
     participant External as ExternalSource
-    
+
     Storage->>Manipulator: new NManipulatorAndGyro()
     Storage->>Manipulator: Default()
     Manipulator->>Manipulator: ADefault()
-    
+
     Storage->>Manipulator: Build()
     Manipulator->>Manipulator: ABuild()
-    
+
     Storage->>Manipulator: Reset()
     Manipulator->>Manipulator: AReset()
     Note over Manipulator: gravity_constant = 9.8
-    
+
     loop Каждый шаг вычислений
         Engine->>Manipulator: InputMomentum = engine_moment
         External->>Manipulator: InputMomentumExt = external_moment
@@ -95,14 +95,14 @@ flowchart TD
 graph TB
     Manipulator[[NManipulatorAndGyro]]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Manipulator -->|использует| BasicLib
-    
+
     InputMomentumExt[InputMomentumExt<br/>Внешний момент]
     InputMomentum[InputMomentum<br/>Момент двигателя]
     InputAngle[InputAngle<br/>Угол манипулятора]
     Output[Output<br/>Результирующий момент]
-    
+
     Manipulator --> InputMomentumExt
     Manipulator --> InputMomentum
     Manipulator --> InputAngle
@@ -143,47 +143,47 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NManipulatorAndGyro(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует gravity_constant=0
 
 #### `virtual ~NManipulatorAndGyro(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает Mass=1, Length=1, инициализирует входные и выходные матрицы нулями
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает gravity_constant=9.8
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Вычисляет результирующий момент:
 - `Output = -InputMomentumExt + InputMomentum - Mass * gravity_constant * Length * sin(InputAngle)`
 
 ### Публичные методы
 
 #### `virtual NManipulatorAndGyro* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -228,8 +228,8 @@ manipulator->Reset();
 
 # NManipulatorAndGyro — manipulator with gyroscope
 
-**Class**: `NManipulatorAndGyro` — component for modeling a manipulator with a gyroscope, calculating resulting moment accounting for external moment, engine moment, and gravity.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorAndGyro", ...)`.  
+**Class**: `NManipulatorAndGyro` — component for modeling a manipulator with a gyroscope, calculating resulting moment accounting for external moment, engine moment, and gravity.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorAndGyro", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NManipulatorAndGyro implements a manipulator model accounting for gravity and gyroscopic effects. The component calculates resulting moment based on external moment, engine moment, and gravitational moment.
@@ -261,6 +261,10 @@ NManipulatorAndGyro implements a manipulator model accounting for gravity and gy
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 21 — манипулятор и гироскоп в иерархии управления.
 
 ## Usage Examples
 

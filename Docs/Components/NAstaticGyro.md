@@ -1,7 +1,7 @@
 # NAstaticGyro — астатический гироскоп
 
-**Класс**: `NAstaticGyro` — компонент моделирования астатического гироскопа для измерения углов ориентации (alpha, betta, gamma) на основе входных сигналов угловой скорости.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NAstaticGyro", ...)`.  
+**Класс**: `NAstaticGyro` — компонент моделирования астатического гироскопа для измерения углов ориентации (alpha, betta, gamma) на основе входных сигналов угловой скорости.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NAstaticGyro", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NAstaticGyro реализует модель астатического гироскопа, который вычисляет углы ориентации (alpha, betta, gamma) на основе входных сигналов угловой скорости по трем осям. Компонент использует фильтр второго порядка для обработки входных сигналов.
@@ -54,18 +54,18 @@ sequenceDiagram
     participant Storage as UStorage
     participant Gyro as NAstaticGyro
     participant Sensor as AngularVelocitySensor
-    
+
     Storage->>Gyro: new NAstaticGyro()
     Storage->>Gyro: Default()
     Gyro->>Gyro: ADefault()
-    
+
     Storage->>Gyro: Build()
     Gyro->>Gyro: ABuild()
-    
+
     Storage->>Gyro: Reset()
     Gyro->>Gyro: AReset()
     Note over Gyro: Сброс углов и внутренних переменных
-    
+
     loop Каждый шаг вычислений
         Sensor->>Gyro: Input1, Input2, Input3 = angular_velocities
         Storage->>Gyro: Calculate()
@@ -113,16 +113,16 @@ flowchart TD
 graph TB
     Gyro[[NAstaticGyro]]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Gyro -->|использует| BasicLib
-    
+
     Input1[Input1<br/>Угловая скорость по оси X]
     Input2[Input2<br/>Угловая скорость по оси Y]
     Input3[Input3<br/>Угловая скорость по оси Z]
     Output1[Output1<br/>Угол alpha]
     Output2[Output2<br/>Угол betta]
     Output3[Output3<br/>Угол gamma]
-    
+
     Gyro --> Input1
     Gyro --> Input2
     Gyro --> Input3
@@ -177,39 +177,39 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NAstaticGyro(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует все предыдущие значения нулями
 
 #### `virtual ~NAstaticGyro(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает natural_freq=190.0, z_g=0.707, инициализирует входные и выходные матрицы нулями
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Сбрасывает углы (alpha=0, betta=0, gamma=0) и все предыдущие значения фильтров
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Вычисляет углы ориентации через фильтр второго порядка:
 - Для каждой оси (X, Y, Z) вычисляются промежуточные переменные x11, x12, x21, x22 (и аналогично для Y и Z)
 - Формулы фильтра: `x12 = x12_prev + (natural_freq²*(input - x11_prev) - 2*z_g*natural_freq*x12_prev)/TimeStep`
@@ -218,8 +218,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NAstaticGyro* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -246,11 +246,11 @@ sensor->OutputZ.Connect(gyro->Input3);
 for (int step = 0; step < numSteps; step++) {
     sensor->Calculate();
     gyro->Calculate();
-    
+
     double alpha = gyro->Output1(0, 0);
     double betta = gyro->Output2(0, 0);
     double gamma = gyro->Output3(0, 0);
-    
+
     // Использование углов для управления
 }
 ```
@@ -284,8 +284,8 @@ for (int step = 0; step < numSteps; step++) {
 
 # NAstaticGyro — astatic gyroscope
 
-**Class**: `NAstaticGyro` — astatic gyroscope modeling component for measuring orientation angles (alpha, betta, gamma) based on angular velocity input signals.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NAstaticGyro", ...)`.  
+**Class**: `NAstaticGyro` — astatic gyroscope modeling component for measuring orientation angles (alpha, betta, gamma) based on angular velocity input signals.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NAstaticGyro", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NAstaticGyro implements an astatic gyroscope model that calculates orientation angles (alpha, betta, gamma) based on angular velocity input signals along three axes. The component uses a second-order filter for processing input signals.
@@ -317,6 +317,10 @@ NAstaticGyro implements an astatic gyroscope model that calculates orientation a
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 21 — гироскоп в иерархии управления и согласованном управлении.
 
 ## Usage Examples
 

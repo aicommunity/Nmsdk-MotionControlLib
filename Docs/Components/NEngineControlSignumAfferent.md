@@ -1,7 +1,7 @@
 # NEngineControlSignumAfferent — афферентный контроллер (signum)
 
-**Класс**: `NEngineControlSignumAfferent` — вариант контроллера движения на базе signum-признаков (афферентные сигналы).  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineControlSignumAfferent", ...)`.  
+**Класс**: `NEngineControlSignumAfferent` — вариант контроллера движения на базе signum-признаков (афферентные сигналы).
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineControlSignumAfferent", ...)`.
 **Базовый класс**: `NEngineMotionControl` (из Nmsdk-MotionControlLib).
 
 NEngineControlSignumAfferent является специализированной версией NEngineMotionControl, настроенной для работы с signum-афферентами (разделение сигналов по знаку). Компонент использует NSignumSeparator для обработки афферентных сигналов.
@@ -13,7 +13,7 @@ classDiagram
     UNet <|-- NEngineMotionControl
     NEngineMotionControl <|-- NEngineControlSignumAfferent
     NEngineControlSignumAfferent *-- NSignumSeparator : SignumSeparators
-    
+
     class NEngineControlSignumAfferent {
         +CreationMode : int
         +NumControlLoops : int
@@ -41,17 +41,17 @@ sequenceDiagram
     participant Controller as NEngineControlSignumAfferent
     participant SignumSep as NSignumSeparator
     participant MotionElem as NMotionElement
-    
+
     Storage->>Controller: new NEngineControlSignumAfferent()
     Storage->>Controller: Default()
     Controller->>Controller: ADefault()
     Note over Controller: CreationMode = 0 (Signum)
-    
+
     Storage->>Controller: Build()
     Controller->Controller: ABuild()
     Controller->>SignumSep: Создание NSignumSeparator для афферентов
     Controller->>MotionElem: Создание элементов движения
-    
+
     loop Каждый шаг вычислений
         Storage->>Controller: Calculate()
         Controller->>Controller: ACalculate()
@@ -96,13 +96,13 @@ graph TB
     Controller[[NEngineControlSignumAfferent]]
     MotionLib[Nmsdk-MotionControlLib<br/>NSignumSeparator, NMotionElement]
     PulseLib[Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron]
-    
+
     Controller -->|использует| MotionLib
     Controller -->|использует| PulseLib
-    
+
     SignumSeparators[SignumSeparators<br/>Разделители по знаку]
     MotionElements[MotionElements<br/>Элементы движения]
-    
+
     Controller --> SignumSeparators
     Controller --> MotionElements
 ```
@@ -161,8 +161,8 @@ controller->Build();
 
 # NEngineControlSignumAfferent — afferent controller (signum)
 
-**Class**: `NEngineControlSignumAfferent` — motion controller variant based on signum features (afferent signals).  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineControlSignumAfferent", ...)`.  
+**Class**: `NEngineControlSignumAfferent` — motion controller variant based on signum features (afferent signals).
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineControlSignumAfferent", ...)`.
 **Base class**: `NEngineMotionControl` (from Nmsdk-MotionControlLib).
 
 NEngineControlSignumAfferent is a specialized version of NEngineMotionControl configured for working with signum afferents (signal separation by sign). The component uses NSignumSeparator for processing afferent signals.
@@ -194,6 +194,10 @@ NEngineControlSignumAfferent is a specialized version of NEngineMotionControl co
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22, 27 — движок управления с афферентами, иерархия и моторная память.
 
 ## Usage Examples
 

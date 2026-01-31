@@ -1,7 +1,7 @@
 # NCounterNeuron — счетчик нейрон
 
-**Класс**: `NCounterNeuron` — нейрон-счетчик, генерирующий выходной импульс только после получения MaxCount входных импульсов.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NCounterNeuron", ...)`.  
+**Класс**: `NCounterNeuron` — нейрон-счетчик, генерирующий выходной импульс только после получения MaxCount входных импульсов.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NCounterNeuron", ...)`.
 **Базовый класс**: `NPulseNeuronCommon` (из Nmsdk-PulseLib).
 
 NCounterNeuron реализует счетчик импульсов, который динамически увеличивает количество активных сом при получении импульсов и генерирует выходной импульс только после достижения MaxCount импульсов.
@@ -13,7 +13,7 @@ classDiagram
     NPulseNeuronCommon <|-- NCounterNeuron
     NCounterNeuron *-- NPulseMembrane : Soma
     NCounterNeuron *-- NLTZone : LTZone
-    
+
     class NCounterNeuron {
         +MembraneClassName : string
         +LTZoneClassName : string
@@ -48,17 +48,17 @@ sequenceDiagram
     participant Counter as NCounterNeuron
     participant Source as PulseSource
     participant Soma as Soma
-    
+
     Storage->>Counter: new NCounterNeuron()
     Storage->>Counter: Default()
     Counter->>Counter: ADefault()
-    
+
     Storage->>Counter: Build()
     Counter->>Counter: ABuild()
     Counter->>Counter: Создание MaxCount сом
     Counter->>Soma: new NPulseMembrane() для каждой сомы
     Counter->>Counter: CreateSomaLinks() для первых CurCount сом
-    
+
     loop Каждый шаг вычислений
         Source->>Counter: Input = pulse
         Storage->>Counter: Calculate()
@@ -124,15 +124,15 @@ graph TB
     Counter[[NCounterNeuron]]
     PulseLib[Nmsdk-PulseLib<br/>NPulseNeuronCommon, NPulseMembrane, NLTZone]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Counter -->|наследуется от| PulseLib
     Counter -->|использует| BasicLib
-    
+
     LTZone[LTZone<br/>Низкопороговая зона]
     Somas[Somas<br/>Участки мембраны]
     PosGenerator[PosGenerator<br/>Возбуждающий генератор]
     NegGenerator[NegGenerator<br/>Тормозной генератор]
-    
+
     Counter --> LTZone
     Counter --> Somas
     Counter --> PosGenerator
@@ -176,28 +176,28 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NCounterNeuron(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует OldNumSoma=0, очищает Soma
 
 #### `virtual ~NCounterNeuron(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает значения по умолчанию для всех параметров, вызывает ADefault() базового класса
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает структуру:
 1. LTZone - низкопороговая зона
 2. PosGenerator, NegGenerator - генераторы для ионных механизмов
@@ -205,16 +205,16 @@ graph TB
 4. Связывает первые CurCount сом через CreateSomaLinks()
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает TheSamePulse=false, вызывает AReset() базового класса
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
-**Описание:** 
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
+**Описание:**
 1. Передает Input на синапсы первых CurCount сом
 2. Отслеживает начало и окончание импульсов
 3. При окончании импульса увеличивает CurCount (если < MaxCount) и связывает новую сому
@@ -223,17 +223,17 @@ graph TB
 ### Защищенные методы
 
 #### `bool CreateSomaLinks(UEPtr<NPulseMembrane> soma)`
-**Назначение:** Создание связей для сомы  
+**Назначение:** Создание связей для сомы
 **Параметры:**
 - `soma` - указатель на сому
-**Возвращаемое значение:** `true` при успехе  
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает связи между каналами сомы, LTZone, генераторами и обратной связью
 
 ### Публичные методы
 
 #### `virtual NCounterNeuron* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -275,8 +275,8 @@ counter->Build();
 
 # NCounterNeuron — counter neuron
 
-**Class**: `NCounterNeuron` — counter neuron that generates output pulse only after receiving MaxCount input pulses.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NCounterNeuron", ...)`.  
+**Class**: `NCounterNeuron` — counter neuron that generates output pulse only after receiving MaxCount input pulses.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NCounterNeuron", ...)`.
 **Base class**: `NPulseNeuronCommon` (from Nmsdk-PulseLib).
 
 NCounterNeuron implements a pulse counter that dynamically increases the number of active somas upon receiving pulses and generates an output pulse only after reaching MaxCount pulses.
@@ -308,6 +308,10 @@ NCounterNeuron implements a pulse counter that dynamically increases the number 
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — импульсные нейроны в контурах управления.
 
 ## Usage Examples
 

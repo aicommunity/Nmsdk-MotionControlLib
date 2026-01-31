@@ -1,7 +1,7 @@
 # NManipulatorInputEmulator — эмулятор ввода манипулятора
 
-**Класс**: `NManipulatorInputEmulator` — эмулятор входных данных для манипулятора, упрощённая версия `NManipulatorInput` для тестирования и отладки.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorInputEmulator", ...)`.  
+**Класс**: `NManipulatorInputEmulator` — эмулятор входных данных для манипулятора, упрощённая версия `NManipulatorInput` для тестирования и отладки.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorInputEmulator", ...)`.
 **Базовый класс**: `NManipulatorInput` (из Nmsdk-MotionControlLib).
 
 NManipulatorInputEmulator является упрощённой версией `NManipulatorInput`, предназначенной для эмуляции входных команд манипулятора. Компонент наследует все свойства базового класса и просто передаёт входной сигнал на выход через напряжение. Используется для тестирования систем управления манипулятором без реального физического устройства.
@@ -37,19 +37,19 @@ sequenceDiagram
     participant Emulator as NManipulatorInputEmulator
     participant Source as SignalSource
     participant Manipulator as NManipulator
-    
+
     Storage->>Emulator: new NManipulatorInputEmulator()
     Storage->>Emulator: Default()
     Emulator->>Emulator: ADefault()
     Note over Emulator: Voltage = 0
-    
+
     Storage->>Emulator: Build()
     Emulator->>Emulator: ABuild()
-    
+
     Storage->>Emulator: Reset()
     Emulator->>Emulator: AReset()
     Note over Emulator: UpdateOutputFlag = true
-    
+
     loop Каждый шаг вычислений
         Source->>Emulator: Input = control_signal
         Storage->>Emulator: Calculate()
@@ -119,22 +119,22 @@ graph TB
         Emulator[NManipulatorInputEmulator]
         BaseInput[NManipulatorInput]
     end
-    
+
     subgraph "Nmsdk-PulseLib"
         NSource[NSource]
     end
-    
+
     subgraph "Rdk-BasicLib"
         UNet[UNet]
     end
-    
+
     Emulator -->|наследуется от| BaseInput
     BaseInput -->|наследуется от| NSource
     NSource -->|наследуется от| UNet
-    
+
     Input[Input<br/>Входной сигнал управления]
     Output[Output<br/>Выходное напряжение]
-    
+
     Emulator --> Input
     Emulator --> Output
 ```
@@ -207,9 +207,9 @@ emulator->Reset();
 while (simulation_running) {
     // Установка входного сигнала (например, от контроллера)
     emulator->Input(0, 0) = control_signal;
-    
+
     emulator->Calculate();
-    
+
     // Получение выходного напряжения
     double voltage = emulator->Output(0, 0);
     // или
@@ -256,8 +256,8 @@ while (simulation_running) {
 
 ## NManipulatorInputEmulator — manipulator input emulator (EN)
 
-**Class**: `NManipulatorInputEmulator` — emulator for manipulator input data, simplified version of `NManipulatorInput` for testing and debugging.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorInputEmulator", ...)`.  
+**Class**: `NManipulatorInputEmulator` — emulator for manipulator input data, simplified version of `NManipulatorInput` for testing and debugging.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorInputEmulator", ...)`.
 **Base class**: `NManipulatorInput` (from Nmsdk-MotionControlLib).
 
 NManipulatorInputEmulator is a simplified version of `NManipulatorInput` designed for emulating manipulator input commands. The component inherits all properties from the base class and simply passes the input signal to the output through voltage. Used for testing manipulator control systems without a real physical device.
@@ -286,7 +286,7 @@ sequenceDiagram
     participant Storage as UStorage
     participant Emulator as NManipulatorInputEmulator
     participant Source as SignalSource
-    
+
     Storage->>Emulator: new NManipulatorInputEmulator()
     Storage->>Emulator: Default()
     Emulator->>Emulator: ADefault()
@@ -368,3 +368,7 @@ while (simulation_running) {
     </Properties>
 </Component>
 ```
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 21 — эмулятор входа манипулятора в иерархии управления.

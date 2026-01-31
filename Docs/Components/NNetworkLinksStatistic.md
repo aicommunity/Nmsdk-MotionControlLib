@@ -1,7 +1,7 @@
 # NNetworkLinksStatistic — статистика связей сети
 
-**Класс**: `NNetworkLinksStatistic` — компонент для сбора и сохранения статистики по связям в нейронных сетях.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNetworkLinksStatistic", ...)` (в настоящее время закомментирован).  
+**Класс**: `NNetworkLinksStatistic` — компонент для сбора и сохранения статистики по связям в нейронных сетях.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNetworkLinksStatistic", ...)` (в настоящее время закомментирован).
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NNetworkLinksStatistic собирает статистику по связям между компонентами в нейронных сетях. Компонент анализирует структуру связей в подключённых сетях, извлекает информацию о весах связей и сохраняет её в файлы с заданным интервалом. Используется для анализа и отладки структуры нейронных сетей, изучения динамики изменения весов связей.
@@ -43,19 +43,19 @@ sequenceDiagram
     participant Statistic as NNetworkLinksStatistic
     participant Network1 as UNet (Network 1)
     participant Network2 as UNet (Network 2)
-    
+
     Storage->>Statistic: new NNetworkLinksStatistic()
     Storage->>Statistic: Default()
     Statistic->>Statistic: ADefault()
     Note over Statistic: StatsInterval = 0.1<br/>Mode = 0
-    
+
     Storage->>Statistic: Build()
     Statistic->>Statistic: ABuild()
-    
+
     Storage->>Statistic: Reset()
     Statistic->>Statistic: AReset()
     Note over Statistic: ClearStats()<br/>StatsStartTime = current_time
-    
+
     loop Каждый шаг вычислений
         Storage->>Statistic: Calculate()
         Statistic->>Statistic: ACalculate()
@@ -154,20 +154,20 @@ graph TB
     subgraph "Nmsdk-MotionControlLib"
         Statistic[NNetworkLinksStatistic]
     end
-    
+
     subgraph "Rdk-BasicLib"
         UNet[UNet]
         UIniFile[UIniFile]
         ULongTime[ULongTime]
     end
-    
+
     Statistic -->|наследуется от| UNet
     Statistic -->|использует| UIniFile
     Statistic -->|использует| ULongTime
-    
+
     Networks[Inputs: UNet networks<br/>для анализа]
     File[StatsFile<br/>Файл статистики]
-    
+
     Statistic --> Networks
     Statistic --> File
 ```
@@ -328,8 +328,8 @@ while (simulation_running) {
 
 ## NNetworkLinksStatistic — network links statistics (EN)
 
-**Class**: `NNetworkLinksStatistic` — component for collecting and saving statistics on connections in neural networks.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNetworkLinksStatistic", ...)` (currently commented out).  
+**Class**: `NNetworkLinksStatistic` — component for collecting and saving statistics on connections in neural networks.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNetworkLinksStatistic", ...)` (currently commented out).
 **Base class**: `UNet` (from Rdk Framework).
 
 NNetworkLinksStatistic collects statistics on connections between components in neural networks. The component analyzes the connection structure in connected networks, extracts information about connection weights, and saves it to files at specified intervals. Used for analyzing and debugging neural network structure, studying the dynamics of connection weight changes.
@@ -359,7 +359,7 @@ sequenceDiagram
     participant Storage as UStorage
     participant Statistic as NNetworkLinksStatistic
     participant Network as UNet
-    
+
     Storage->>Statistic: new NNetworkLinksStatistic()
     Storage->>Statistic: Default()
     loop Each calculation step
@@ -456,3 +456,7 @@ while (simulation_running) {
     </Properties>
 </Component>
 ```
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 22 — статистика связей в нейросетевых контурах управления движением.

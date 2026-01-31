@@ -303,6 +303,10 @@ NPulseReceiver accumulates pulse signals from multiple inputs, tracks pulse star
 
 [Same structure as RU section, translated to English]
 
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — приём импульсных сигналов в нейронных структурах.
+
 ## Usage Examples
 
 [Same as RU section, with English comments]

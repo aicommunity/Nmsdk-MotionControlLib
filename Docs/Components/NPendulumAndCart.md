@@ -1,7 +1,7 @@
 # NPendulumAndCart — маятник и тележка
 
-**Класс**: `NPendulumAndCart` — компонент для моделирования системы маятника на тележке (inverted pendulum on a cart) с возможностью управления через PID-регулятор.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NPendulumAndCart", ...)`.  
+**Класс**: `NPendulumAndCart` — компонент для моделирования системы маятника на тележке (inverted pendulum on a cart) с возможностью управления через PID-регулятор.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NPendulumAndCart", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NPendulumAndCart реализует математическую модель маятника на тележке, вычисляющую динамику системы на основе физических параметров (массы тележки, массы стержня, длины стержня) и входных управляющих сигналов. Компонент поддерживает режим управления через PID-регулятор.
@@ -58,18 +58,18 @@ sequenceDiagram
     participant Storage as UStorage
     participant Pendulum as NPendulumAndCart
     participant Controller as PIDController
-    
+
     Storage->>Pendulum: new NPendulumAndCart()
     Storage->>Pendulum: Default()
     Pendulum->>Pendulum: ADefault()
-    
+
     Storage->>Pendulum: Build()
     Pendulum->>Pendulum: ABuild()
-    
+
     Storage->>Pendulum: Reset()
     Pendulum->>Pendulum: AReset()
     Note over Pendulum: Сброс угла, скорости, ускорения
-    
+
     loop Каждый шаг вычислений
         Controller->>Pendulum: Input1, Input2 = control_signals
         Storage->>Pendulum: Calculate()
@@ -124,9 +124,9 @@ flowchart TD
 graph TB
     Pendulum[[NPendulumAndCart]]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Pendulum -->|использует| BasicLib
-    
+
     Input1[Input1<br/>Входной сигнал 1]
     Input2[Input2<br/>Входной сигнал 2]
     Acceleration[Acceleration<br/>Ускорение маятника]
@@ -134,7 +134,7 @@ graph TB
     Speed[Speed<br/>Угловая скорость]
     Movement[Movement<br/>Перемещение тележки]
     MovementSpeed[MovementSpeed<br/>Скорость тележки]
-    
+
     Pendulum --> Input1
     Pendulum --> Input2
     Pendulum --> Acceleration
@@ -203,40 +203,40 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NPendulumAndCart(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует theta0=0, x0=0, y=0, x=0, movement=0, y0=0
 
 #### `virtual ~NPendulumAndCart(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает CartMass=1, RodMass=0.1, RodLength=1, все PID коэффициенты=0, AngleWeight=1, MovementWeight=1, инициализирует матрицы нулями
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Сбрасывает theta0=0, y=0, x=0, movement=0, обнуляет выходные матрицы
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
-**Описание:** 
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
+**Описание:**
 1. Читает Input1 и Input2
 2. Если Mode=1, вычисляет PID-управление: `input[0] = (theta0*Kp + y*Kd + Ki*theta0/TimeStep)*AngleWeight + (movement*MovementKp + x*MovementKd + MovementKi*movement/TimeStep)*MovementWeight`
 3. Добавляет ExtrenalMoment
@@ -247,8 +247,8 @@ graph TB
 ### Публичные методы
 
 #### `virtual NPendulumAndCart* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -301,8 +301,8 @@ pendulum->Reset();
 
 # NPendulumAndCart — pendulum and cart
 
-**Class**: `NPendulumAndCart` — component for modeling an inverted pendulum on a cart system with PID controller support.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPendulumAndCart", ...)`.  
+**Class**: `NPendulumAndCart` — component for modeling an inverted pendulum on a cart system with PID controller support.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPendulumAndCart", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NPendulumAndCart implements a mathematical model of a pendulum on a cart, calculating system dynamics based on physical parameters (cart mass, rod mass, rod length) and input control signals. The component supports PID controller mode.
@@ -338,3 +338,7 @@ NPendulumAndCart implements a mathematical model of a pendulum on a cart, calcul
 ## Usage Examples
 
 [Same as RU section, with English comments]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 23, 27 — бионические модели управления движением.

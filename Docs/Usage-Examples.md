@@ -5,41 +5,84 @@
 ### Пример 1: Управление DC-двигателем
 
 ```cpp
-// Создание компонента DC-двигателя
-auto engine = storage->CreateComponent<NDCEngine>();
-engine->MaxSpeed = 100.0;
-engine->Build();
+#include "NDCEngine.h"
 
-// Установка скорости
-engine->TargetSpeed = 50.0;
+// Создание компонента DC-двигателя
+UEPtr<NDCEngine> engine = storage->CreateComponent<NDCEngine>("Engine1");
+engine->EMFactor = 1.0;
+engine->Inductance = 0.01;
+engine->Resistance = 1.0;
+engine->Tm = 0.1;
+engine->ReductionRate = 10.0;
+engine->Default();
+engine->Build();
+engine->Reset();
+
+// В цикле: подача напряжения и момента нагрузки, получение выхода
+engine->InputVoltage(0, 0) = voltage;
+engine->InputMomentum(0, 0) = load_moment;
 engine->Calculate();
+double moment = engine->OutputMomentum(0, 0);
+double angle = engine->OutputAngle(0, 0);
+double angle_speed = engine->OutputAngleSpeed(0, 0);
 ```
 
 ### Пример 2: Управление манипулятором
 
 ```cpp
-// Создание манипулятора
-auto manipulator = storage->CreateComponent<NManipulator>();
-manipulator->NumJoints = 6;
-manipulator->Build();
+#include "NManipulator.h"
 
-// Установка целевой позиции
-manipulator->TargetPosition = targetPos;
+// Создание манипулятора
+UEPtr<NManipulator> manipulator = storage->CreateComponent<NManipulator>("Manip1");
+manipulator->EMFactor = 1.0;
+manipulator->Inductance = 0.01;
+manipulator->Resistance = 1.0;
+manipulator->Default();
+manipulator->Build();
+manipulator->Reset();
+
+// Установка управляющего сигнала и получение выхода (ток)
+manipulator->Input(0, 0) = control_signal;
 manipulator->Calculate();
+double output_current = manipulator->Output(0, 0);
 ```
 
 ### Пример 3: Контроль позиции
 
 ```cpp
-// Создание элемента контроля позиции
-auto positionControl = storage->CreateComponent<NPositionControlElement>();
-positionControl->TargetPosition = targetPos;
-positionControl->CurrentPosition = currentPos;
-positionControl->Build();
+#include "NPositionControlElement.h"
 
-// Вычисление управления
+// Создание элемента контроля позиции
+UEPtr<NPositionControlElement> positionControl = storage->CreateComponent<NPositionControlElement>("PosCtrl1");
+positionControl->TargetPosition(0, 0) = target_pos;
+positionControl->CurrentPosition(0, 0) = current_pos;
+positionControl->ExternalControl = false;
+positionControl->Default();
+positionControl->Build();
+positionControl->Reset();
+
+// Вычисление управления (Delta и выходы нейросети обновляются внутри)
 positionControl->Calculate();
-auto controlSignal = positionControl->ControlOutput;
+double delta = positionControl->Delta(0, 0);
+```
+
+### Пример 4: Ретина глаза
+
+```cpp
+#include "NEyeRetina.h"
+
+// Создание ретины
+UEPtr<NEyeRetina> retina = storage->CreateComponent<NEyeRetina>("Retina1");
+retina->Default();
+retina->Build();
+retina->Reset();
+
+// Установка входного изображения (через InputImage или CaptureImage)
+// retina->InputImage = ...;
+retina->Calculate();
+// Выходы: LeftGanglionicOut, RightGanglionicOut, TopGanglionicOut, BottomGanglionicOut
+double left_out = retina->LeftGanglionicOut(0, 0);
+double right_out = retina->RightGanglionicOut(0, 0);
 ```
 
 ---
@@ -49,39 +92,72 @@ auto controlSignal = positionControl->ControlOutput;
 ### Example 1: DC Motor Control
 
 ```cpp
-// Creating DC motor component
-auto engine = storage->CreateComponent<NDCEngine>();
-engine->MaxSpeed = 100.0;
-engine->Build();
+#include "NDCEngine.h"
 
-// Setting speed
-engine->TargetSpeed = 50.0;
+UEPtr<NDCEngine> engine = storage->CreateComponent<NDCEngine>("Engine1");
+engine->EMFactor = 1.0;
+engine->Inductance = 0.01;
+engine->Resistance = 1.0;
+engine->Tm = 0.1;
+engine->ReductionRate = 10.0;
+engine->Default();
+engine->Build();
+engine->Reset();
+
+engine->InputVoltage(0, 0) = voltage;
+engine->InputMomentum(0, 0) = load_moment;
 engine->Calculate();
+double moment = engine->OutputMomentum(0, 0);
+double angle = engine->OutputAngle(0, 0);
+double angle_speed = engine->OutputAngleSpeed(0, 0);
 ```
 
 ### Example 2: Manipulator Control
 
 ```cpp
-// Creating manipulator
-auto manipulator = storage->CreateComponent<NManipulator>();
-manipulator->NumJoints = 6;
-manipulator->Build();
+#include "NManipulator.h"
 
-// Setting target position
-manipulator->TargetPosition = targetPos;
+UEPtr<NManipulator> manipulator = storage->CreateComponent<NManipulator>("Manip1");
+manipulator->EMFactor = 1.0;
+manipulator->Inductance = 0.01;
+manipulator->Resistance = 1.0;
+manipulator->Default();
+manipulator->Build();
+manipulator->Reset();
+
+manipulator->Input(0, 0) = control_signal;
 manipulator->Calculate();
+double output_current = manipulator->Output(0, 0);
 ```
 
 ### Example 3: Position Control
 
 ```cpp
-// Creating position control element
-auto positionControl = storage->CreateComponent<NPositionControlElement>();
-positionControl->TargetPosition = targetPos;
-positionControl->CurrentPosition = currentPos;
-positionControl->Build();
+#include "NPositionControlElement.h"
 
-// Computing control
+UEPtr<NPositionControlElement> positionControl = storage->CreateComponent<NPositionControlElement>("PosCtrl1");
+positionControl->TargetPosition(0, 0) = target_pos;
+positionControl->CurrentPosition(0, 0) = current_pos;
+positionControl->ExternalControl = false;
+positionControl->Default();
+positionControl->Build();
+positionControl->Reset();
+
 positionControl->Calculate();
-auto controlSignal = positionControl->ControlOutput;
+double delta = positionControl->Delta(0, 0);
+```
+
+### Example 4: Eye Retina
+
+```cpp
+#include "NEyeRetina.h"
+
+UEPtr<NEyeRetina> retina = storage->CreateComponent<NEyeRetina>("Retina1");
+retina->Default();
+retina->Build();
+retina->Reset();
+
+retina->Calculate();
+double left_out = retina->LeftGanglionicOut(0, 0);
+double right_out = retina->RightGanglionicOut(0, 0);
 ```

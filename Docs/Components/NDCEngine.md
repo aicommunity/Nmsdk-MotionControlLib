@@ -1,7 +1,9 @@
 # NDCEngine — DC-двигатель
 
-**Класс**: `NDCEngine` — компонент моделирования DC-двигателя с электромеханическими характеристиками.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NDCEngine", ...)`.  
+**Каталог компонентов:** [Component-Catalog.md](../Component-Catalog.md).
+
+**Класс**: `NDCEngine` — компонент моделирования DC-двигателя с электромеханическими характеристиками.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NDCEngine", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NDCEngine реализует математическую модель DC-двигателя, учитывающую электрические параметры (индуктивность, сопротивление, ЭДС) и механические характеристики (момент, угловая скорость, угол поворота). Компонент вычисляет динамику двигателя на каждом шаге симуляции на основе входного напряжения и момента нагрузки.
@@ -47,8 +49,8 @@ classDiagram
 - `NDCEngine` — модель DC-двигателя
 
 **Связи с другими компонентами:**
-- **Входы**: получает напряжение и момент нагрузки от других компонентов
-- **Выходы**: предоставляет момент, угол и угловую скорость для подключения к другим компонентам
+- **Входы**: получает напряжение и момент нагрузки от других компонентов (например, от [NEngineMotionControl](NEngineMotionControl.md) или контроллеров)
+- **Выходы**: предоставляет момент, угол и угловую скорость для подключения к [NManipulator](NManipulator.md), [NPositionControlElement](NPositionControlElement.md) и другим компонентам
 
 ## UML-диаграмма последовательности
 
@@ -58,19 +60,19 @@ sequenceDiagram
     participant Engine as NDCEngine
     participant Controller as Controller
     participant Load as Load
-    
+
     Storage->>Engine: new NDCEngine()
     Storage->>Engine: Default()
     Engine->>Engine: ADefault()
     Note over Engine: Инициализация параметров двигателя
-    
+
     Storage->>Engine: Build()
     Engine->>Engine: ABuild()
-    
+
     Storage->>Engine: Reset()
     Engine->>Engine: AReset()
     Note over Engine: Сброс состояния (Current=0, EMF=0, Angle=0)
-    
+
     loop Каждый шаг вычислений
         Controller->>Engine: InputVoltage = voltage
         Load->>Engine: InputMomentum = load_moment
@@ -150,15 +152,15 @@ flowchart TD
 graph TB
     Engine[[NDCEngine]]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Engine -->|использует| BasicLib
-    
+
     InputVoltage[InputVoltage<br/>Входное напряжение]
     InputMomentum[InputMomentum<br/>Входной момент нагрузки]
     OutputMomentum[OutputMomentum<br/>Выходной момент]
     OutputAngle[OutputAngle<br/>Выходной угол]
     OutputAngleSpeed[OutputAngleSpeed<br/>Выходная угловая скорость]
-    
+
     Engine --> InputVoltage
     Engine --> InputMomentum
     Engine --> OutputMomentum
@@ -217,23 +219,23 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NDCEngine(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует все свойства компонента
 
 #### `virtual ~NDCEngine(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Освобождает ресурсы компонента
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает значения по умолчанию:
 - EMFactor = 2.0
 - Inductance = 0.1
@@ -244,15 +246,15 @@ graph TB
 - Инициализирует входные и выходные матрицы нулями
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Для NDCEngine не требуется дополнительных действий при построении
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента к начальному  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента к начальному
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Сбрасывает внутренние переменные:
 - Current = 0
 - EMF = 0
@@ -261,9 +263,9 @@ graph TB
 - DiffMoment = 0
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Основной метод вычислений динамики двигателя:
 1. Чтение входного напряжения (если подключено)
 2. Чтение входного момента нагрузки (если подключено)
@@ -277,46 +279,46 @@ graph TB
 ### Сеттеры свойств
 
 #### `bool SetEMFactor(const double &value)`
-**Назначение:** Установка коэффициента ЭДС  
+**Назначение:** Установка коэффициента ЭДС
 **Параметры:**
 - `value` - коэффициент ЭДС (должен быть > 0)
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** Валидирует значение (должно быть положительным)
 
 #### `bool SetInductance(const double &value)`
-**Назначение:** Установка индуктивности  
+**Назначение:** Установка индуктивности
 **Параметры:**
 - `value` - индуктивность в Гн (должна быть > 0)
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** Валидирует значение (должно быть положительным)
 
 #### `bool SetResistance(const double &value)`
-**Назначение:** Установка сопротивления  
+**Назначение:** Установка сопротивления
 **Параметры:**
 - `value` - сопротивление в Ом (должно быть > 0)
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** Валидирует значение (должно быть положительным)
 
 #### `bool SetTm(const double &value)`
-**Назначение:** Установка электромеханической постоянной времени  
+**Назначение:** Установка электромеханической постоянной времени
 **Параметры:**
 - `value` - постоянная времени в секундах (должна быть > 0)
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** Валидирует значение (должно быть положительным)
 
 #### `bool SetReductionRate(const double &value)`
-**Назначение:** Установка передаточного числа редуктора  
+**Назначение:** Установка передаточного числа редуктора
 **Параметры:**
 - `value` - передаточное число (должно быть > 0)
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** Валидирует значение (должно быть положительным)
 
 ### Публичные методы
 
 #### `virtual NDCEngine* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Указатель на новый экземпляр NDCEngine  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Указатель на новый экземпляр NDCEngine
 **Описание:** Выделяет память и создает новый экземпляр компонента
 
 ## Примеры использования
@@ -359,12 +361,12 @@ for (int step = 0; step < numSteps; step++) {
     controller->Calculate();
     load->Calculate();
     engine->Calculate();
-    
+
     // Получение выходных данных
     double angle = engine->OutputAngle(0, 0);
     double speed = engine->OutputAngleSpeed(0, 0);
     double moment = engine->OutputMomentum(0, 0);
-    
+
     // Использование данных для управления или визуализации
     std::cout << "Angle: " << angle << ", Speed: " << speed << ", Moment: " << moment << std::endl;
 }
@@ -403,7 +405,7 @@ controller->Reset();
 for (int step = 0; step < 1000; step++) {
     controller->Calculate();
     motor->Calculate();
-    
+
     // Проверка достижения целевого угла
     double currentAngle = motor->OutputAngle(0, 0);
     if (fabs(currentAngle - controller->TargetAngle) < 0.01) {
@@ -426,7 +428,7 @@ for (int step = 0; step < 1000; step++) {
     <Property Name="Tm" Value="0.1" />
     <Property Name="ReductionRate" Value="1.0" />
     <Property Name="OutMoment" Value="0.0" />
-    
+
     <!-- Подключение входов -->
     <Property Name="InputVoltage" Connect="Controller.OutputVoltage" />
     <Property Name="InputMomentum" Connect="Load.OutputMoment" />
@@ -444,17 +446,17 @@ for (int step = 0; step < 1000; step++) {
     <Property Name="Tm" Value="0.12" />
     <Property Name="ReductionRate" Value="10.0" />
     <Property Name="OutMoment" Value="0.5" />
-    
+
     <!-- Подключение к контроллеру -->
     <Object Name="MotorController" ClassName="SomeController">
         <Property Name="OutputVoltage" Connect="DCMotorWithGear.InputVoltage" />
     </Object>
-    
+
     <!-- Подключение к нагрузке -->
     <Object Name="Load" ClassName="SomeLoad">
         <Property Name="OutputMoment" Connect="DCMotorWithGear.InputMomentum" />
     </Object>
-    
+
     <!-- Использование выходов -->
     <Object Name="PositionMonitor" ClassName="SomeMonitor">
         <Property Name="InputAngle" Connect="DCMotorWithGear.OutputAngle" />
@@ -473,6 +475,8 @@ for (int step = 0; step < 1000; step++) {
 - Систем управления движением с обратной связью
 - Симуляции электромеханических систем
 
+**Примеры конфигураций:** `Bin/Configs/SpikeSamples/MC-Muscles/` (MC-M-00-EyeMuscle, MC-M-01-EyeMuscle — модели управления мышцей глаза с нейронными командами).
+
 **Типичные сценарии использования:**
 1. **Управление манипулятором** - двигатель для привода сустава манипулятора
 2. **Система позиционирования** - двигатель с обратной связью по углу и скорости
@@ -480,17 +484,17 @@ for (int step = 0; step < 1000; step++) {
 4. **Цепочка двигателей** - несколько двигателей, соединенных последовательно
 
 **Типичные комбинации с другими компонентами:**
-- `NDCEngine` + `NPositionControlElement` - управление позицией с обратной связью
-- `NDCEngine` + `NManipulator` - привод сустава манипулятора
-- `NDCEngine` + `NEngineMotionControl` - интеграция в систему управления движением
-- `NDCEngine` + контроллеры напряжения - различные стратегии управления
+- `NDCEngine` + [NPositionControlElement](NPositionControlElement.md) — управление позицией с обратной связью
+- `NDCEngine` + [NManipulator](NManipulator.md) — привод сустава манипулятора
+- `NDCEngine` + [NEngineMotionControl](NEngineMotionControl.md) — интеграция в систему управления движением
+- `NDCEngine` + контроллеры напряжения — различные стратегии управления
 
 ---
 
 # NDCEngine — DC motor
 
-**Class**: `NDCEngine` — DC motor modeling component with electromechanical characteristics.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NDCEngine", ...)`.  
+**Class**: `NDCEngine` — DC motor modeling component with electromechanical characteristics.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NDCEngine", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NDCEngine implements a mathematical model of a DC motor, accounting for electrical parameters (inductance, resistance, EMF) and mechanical characteristics (torque, angular velocity, rotation angle). The component calculates motor dynamics at each simulation step based on input voltage and load torque.
@@ -517,22 +521,79 @@ NDCEngine implements a mathematical model of a DC motor, accounting for electric
 
 ## Properties
 
-[Same structure as RU section, translated to English]
+### Parameters
+
+| Property | Type | Description | Default |
+|----------|------|-------------|---------|
+| `EMFactor` | `double` | EMF coefficient (link between EMF and angular speed) | `2.0` |
+| `Inductance` | `double` | Motor winding inductance (H) | `0.1` |
+| `Resistance` | `double` | Motor winding resistance (Ω) | `1.0` |
+| `Tm` | `double` | Electromechanical time constant (s) | `0.1` |
+| `ReductionRate` | `double` | Gear ratio | `1.0` |
+| `OutMoment` | `double` | Default load torque (N·m) | `0.0` |
+
+### Inputs
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `InputVoltage` | `MDMatrix<double>` | Control voltage (V) |
+| `InputMomentum` | `MDMatrix<double>` | Load torque (N·m) |
+
+### Outputs
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `OutputMomentum` | `MDMatrix<double>` | Shaft torque (N·m) |
+| `OutputAngle` | `MDMatrix<double>` | Shaft angle (rad) |
+| `OutputAngleSpeed` | `MDMatrix<double>` | Angular speed (rad/s) |
 
 ## Methods
 
-[Same structure as RU section, translated to English]
+### Lifecycle
+
+- **`ADefault()`** — set default parameters (EMFactor, Inductance, Resistance, Tm, ReductionRate, OutMoment).
+- **`ABuild()`** — no extra setup for NDCEngine.
+- **`AReset()`** — reset internal state (Current, EMF, Angle, AngleSpeed to zero).
+- **`ACalculate()`** — compute motor dynamics: current, EMF, torque, angular speed, angle; update outputs.
+
+### Setters
+
+- **`SetEMFactor(value)`**, **`SetInductance(value)`**, **`SetResistance(value)`**, **`SetTm(value)`**, **`SetReductionRate(value)`** — set parameters; return `true` on success.
 
 ## Usage Examples
 
 ### C++ Code
 
-[Same examples as RU section, with English comments]
+```cpp
+#include "NDCEngine.h"
+
+UEPtr<NDCEngine> engine = storage->CreateComponent<NDCEngine>("Engine1");
+engine->EMFactor = 1.0;
+engine->Inductance = 0.01;
+engine->Resistance = 1.0;
+engine->Tm = 0.1;
+engine->ReductionRate = 10.0;
+engine->Default();
+engine->Build();
+engine->Reset();
+
+// Each step: set voltage and load torque, then calculate
+engine->InputVoltage(0, 0) = voltage;
+engine->InputMomentum(0, 0) = load_moment;
+engine->Calculate();
+double moment = engine->OutputMomentum(0, 0);
+double angle = engine->OutputAngle(0, 0);
+double angle_speed = engine->OutputAngleSpeed(0, 0);
+```
 
 ### XML Configuration
 
-[Same XML examples as RU section, with English comments]
+See RU section for full XML; typical properties: `EMFactor`, `Inductance`, `Resistance`, `Tm`, `ReductionRate`, `OutMoment`.
 
 ### Usage in Configurations
 
-[Same as RU section, translated to English]
+Used in motion control and manipulator systems; example configs: `Bin/Configs/SpikeSamples/MC-Muscles/` (MC-M-00-EyeMuscle, MC-M-01-EyeMuscle). Typical combinations: with [NPositionControlElement](NPositionControlElement.md), [NManipulator](NManipulator.md), [NEngineMotionControl](NEngineMotionControl.md).
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 28, 29, 31 — нейронные структуры управления мышечным сокращением и преобразование импульсных потоков в исполнительных системах.

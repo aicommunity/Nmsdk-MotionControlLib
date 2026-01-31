@@ -1,7 +1,9 @@
 # NEngineMotionControl — движок управления движением
 
-**Класс**: `NEngineMotionControl` — центральный компонент управления движением, объединяющий сенсоры, контроллеры и актуаторы для реализации сложных систем управления движением.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineMotionControl", ...)`.  
+**Каталог компонентов:** [Component-Catalog.md](../Component-Catalog.md).
+
+**Класс**: `NEngineMotionControl` — центральный компонент управления движением, объединяющий сенсоры, контроллеры и актуаторы для реализации сложных систем управления движением.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineMotionControl", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NEngineMotionControl является высокоуровневым компонентом, который создает и управляет сетью элементов движения (NMotionElement), интегрируя импульсные нейросети из Nmsdk-PulseLib с компонентами управления позицией и источниками данных. Компонент поддерживает различные режимы создания сети (CreationMode), адаптивную настройку структуры и управление множественными контурами управления.
@@ -16,7 +18,7 @@ classDiagram
     NEngineMotionControl *-- NPulseGenerator : InternalGenerator
     NEngineMotionControl --> NControlObjectSource : uses
     NEngineMotionControl --> NIntervalSeparator : uses
-    
+
     class NEngineMotionControl {
         +NumControlLoops : int
         +NumMotionElements : int
@@ -124,12 +126,12 @@ sequenceDiagram
     participant Receptor as NReceptor
     participant Source as NControlObjectSource
     participant PAC as NPac
-    
+
     Storage->>Engine: new NEngineMotionControl()
     Storage->>Engine: Default()
     Engine->>Engine: ADefault()
     Note over Engine: Инициализация параметров по умолчанию
-    
+
     Storage->>Engine: Build()
     Engine->>Engine: ABuild()
     Engine->>Engine: Create(full_recreate=true)
@@ -143,11 +145,11 @@ sequenceDiagram
     Engine->>Engine: SetupPacRange()
     Engine->>Engine: NewIntervalSeparatorsSetup()
     Engine->>Engine: NewStandardLinksSetup()
-    
+
     Storage->>Engine: Reset()
     Engine->>Engine: AReset()
     Note over Engine: Сброс статистики и истории
-    
+
     loop Каждый шаг вычислений
         Source->>Engine: Данные от источника управления
         Storage->>Engine: Calculate()
@@ -256,26 +258,26 @@ graph TB
     PulseLib[Nmsdk-PulseLib<br/>NNet, NReceptor, NPulseGenerator, NPac]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
     MotionLib[Nmsdk-MotionControlLib<br/>NMotionElement, NControlObjectSource]
-    
+
     Engine -->|использует| PulseLib
     Engine -->|использует| BasicLib
     Engine -->|создает| MotionLib
-    
+
     MotionElem[NMotionElement<br/>Элементы движения]
     Receptor[NReceptor<br/>Рецепторы]
     Source[NControlObjectSource<br/>Источник управления]
     PAC[NPac<br/>Проприоцептивная обратная связь]
     Separator[NIntervalSeparator<br/>Разделитель интервалов]
-    
+
     Engine --> MotionElem
     Engine --> Receptor
     Engine --> Source
     Engine --> PAC
     Engine --> Separator
-    
+
     InputInterface[Входные интерфейсы<br/>Данные от источников управления]
     OutputInterface[Выходные интерфейсы<br/>Статистика и состояние]
-    
+
     Source --> InputInterface
     Engine --> OutputInterface
 ```
@@ -391,41 +393,41 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NEngineMotionControl(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Инициализирует все свойства, устанавливает начальные значения внутренних переменных (ControlMode=0, HistorySize=0, TransientHistorySize=0, InternalGeneratorDirection=-1)
 
 #### `virtual ~NEngineMotionControl(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Освобождает ресурсы компонента
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает значения по умолчанию для всех параметров: NumMotionElements=1, NumControlLoops=1, CreationMode=14, диапазоны афферентов, параметры PAC и др.
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** Проверяет наличие Storage, вызывает `Create()` если AdaptiveStructureMode включен, инициализирует массивы для статистики контуров
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента к начальному  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента к начальному
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Сбрасывает статистику контуров, время переходного процесса, состояния, инициализирует векторы рецепторов для каждого элемента движения
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Основной метод вычислений:
 - Получает данные от источников управления
 - Обновляет историю измерений
@@ -437,27 +439,27 @@ graph TB
 ### Публичные методы управления
 
 #### `virtual bool Create(bool full_recreate=true)`
-**Назначение:** Создание структуры сети в соответствии с CreationMode  
+**Назначение:** Создание структуры сети в соответствии с CreationMode
 **Параметры:**
 - `full_recreate` - если `true`, удаляет все существующие элементы движения, иначе сохраняет их
-**Возвращаемое значение:** `true` при успехе  
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Удаляет существующую структуру (если нужно), создает новую структуру сети в зависимости от CreationMode, настраивает PAC, разделители интервалов, создает компонент статистики
 
 #### `virtual bool ClearStructure(int expected_num_motion_elements)`
-**Назначение:** Удаление существующей структуры, сохранение указанного количества элементов движения  
+**Назначение:** Удаление существующей структуры, сохранение указанного количества элементов движения
 **Параметры:**
 - `expected_num_motion_elements` - количество элементов движения для сохранения
-**Возвращаемое значение:** `true` при успехе  
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Удаляет компоненты структуры, сохраняя интерфейсные компоненты и указанное количество элементов движения
 
 #### `virtual void AdaptiveTuning(void)`
-**Назначение:** Адаптивная настройка структуры на основе текущих и целевых параметров  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Адаптивная настройка структуры на основе текущих и целевых параметров
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Вызывает `AdaptiveTuningSimple()` с текущими параметрами контуров и целевыми значениями для автоматической настройки количества элементов движения и усиления управления
 
 #### `virtual void AdaptiveTuningSimple(...)`
-**Назначение:** Упрощенная адаптивная настройка с явными параметрами  
+**Назначение:** Упрощенная адаптивная настройка с явными параметрами
 **Параметры:**
 - `current_contour_amplitude` - текущие амплитуды контуров
 - `use_contour_data` - флаги использования данных контуров
@@ -467,139 +469,139 @@ graph TB
 - `dest_transient_time` - целевое время переходного процесса
 - `num_motion_elements` - выходной параметр: количество элементов движения
 - `control_gain` - выходной параметр: усиление управления
-**Возвращаемое значение:** Нет  
+**Возвращаемое значение:** Нет
 **Описание:** Вычисляет оптимальные параметры структуры на основе сравнения текущих и целевых характеристик
 
 #### `int GetNumControlLoops(void)`
-**Назначение:** Получение количества контуров управления  
-**Параметры:** Нет  
-**Возвращаемое значение:** Количество контуров управления  
+**Назначение:** Получение количества контуров управления
+**Параметры:** Нет
+**Возвращаемое значение:** Количество контуров управления
 **Описание:** Возвращает значение свойства NumControlLoops
 
 #### `vector<NMotionElement *> GetMotion(void)`
-**Назначение:** Получение вектора элементов движения  
-**Параметры:** Нет  
-**Возвращаемое значение:** Вектор указателей на элементы движения  
+**Назначение:** Получение вектора элементов движения
+**Параметры:** Нет
+**Возвращаемое значение:** Вектор указателей на элементы движения
 **Описание:** Возвращает внутренний вектор Motions, содержащий все созданные элементы движения
 
 ### Методы настройки разделителей интервалов
 
 #### `void NewIntervalSeparatorsSetup(int mode_value, int last_mode_value, double pos_gain_value, double neg_gain_value)`
-**Назначение:** Настройка разделителей интервалов  
+**Назначение:** Настройка разделителей интервалов
 **Параметры:**
 - `mode_value` - новый режим разделителей
 - `last_mode_value` - предыдущий режим
 - `pos_gain_value` - усиление для положительных интервалов
 - `neg_gain_value` - усиление для отрицательных интервалов
-**Возвращаемое значение:** Нет  
+**Возвращаемое значение:** Нет
 **Описание:** Создает или обновляет разделители интервалов в соответствии с режимом
 
 #### `void NewIntervalSeparatorsUpdate(int mode_value, int last_mode_value)`
-**Назначение:** Обновление разделителей интервалов  
+**Назначение:** Обновление разделителей интервалов
 **Параметры:**
 - `mode_value` - новый режим
 - `last_mode_value` - предыдущий режим
-**Возвращаемое значение:** Нет  
+**Возвращаемое значение:** Нет
 **Описание:** Обновляет существующие разделители интервалов без пересоздания
 
 #### `void NewIntervalSeparatorLinksSetup(void)`
-**Назначение:** Настройка связей разделителей интервалов  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Настройка связей разделителей интервалов
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Создает связи между разделителями интервалов и другими компонентами сети
 
 ### Методы управления генераторами
 
 #### `void ConnectInternalGenerators(int direction, int num_motion_elements, int control_loop_index)`
-**Назначение:** Подключение внутренних генераторов  
+**Назначение:** Подключение внутренних генераторов
 **Параметры:**
 - `direction` - направление (0=прямое, 1=обратное)
 - `num_motion_elements` - количество элементов движения
 - `control_loop_index` - индекс контура управления
-**Возвращаемое значение:** Нет  
+**Возвращаемое значение:** Нет
 **Описание:** Подключает внутренние генераторы импульсов к элементам движения
 
 #### `void SetInternalGeneratorFrequency(int direction, int num_motion_elements, int control_loop_index, double value)`
-**Назначение:** Установка частоты внутреннего генератора  
+**Назначение:** Установка частоты внутреннего генератора
 **Параметры:**
 - `direction` - направление генератора
 - `num_motion_elements` - количество элементов движения
 - `control_loop_index` - индекс контура управления
 - `value` - частота генератора
-**Возвращаемое значение:** Нет  
+**Возвращаемое значение:** Нет
 **Описание:** Устанавливает частоту внутреннего генератора для указанного направления и контура
 
 ### Защищенные методы
 
 #### `#int CalcAfferentRange(int num_motions, bool cross_ranges, double a_min, double a_max, vector<pair<double,double> > &pos_ranges, vector<pair<double,double> > &neg_ranges, int range_mode)`
-**Назначение:** Вычисление диапазонов афферентных нейронов  
+**Назначение:** Вычисление диапазонов афферентных нейронов
 **Параметры:**
 - `num_motions` - количество элементов движения
 - `cross_ranges` - использовать ли пересекающиеся диапазоны
 - `a_min`, `a_max` - минимальное и максимальное значения
 - `pos_ranges`, `neg_ranges` - выходные векторы диапазонов для положительных и отрицательных значений
 - `range_mode` - режим расчета диапазонов
-**Возвращаемое значение:** Количество созданных диапазонов  
+**Возвращаемое значение:** Количество созданных диапазонов
 **Описание:** Вычисляет диапазоны для афферентных нейронов в зависимости от режима
 
 #### `#void SetupPacRange(void)`
-**Назначение:** Настройка диапазонов PAC  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Настройка диапазонов PAC
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Настраивает диапазоны для компонентов PAC на основе текущих параметров
 
 #### `#void AACSetup(UEPtr<UNet> net, double gain_value)`
-**Назначение:** Настройка AAC (Adaptive Afferent Control)  
+**Назначение:** Настройка AAC (Adaptive Afferent Control)
 **Параметры:**
 - `net` - сеть для настройки
 - `gain_value` - значение усиления
-**Возвращаемое значение:** Нет  
+**Возвращаемое значение:** Нет
 **Описание:** Настраивает адаптивное афферентное управление в сети
 
 #### `#void AdditionalComponentsSetup(UEPtr<UNet> net)`
-**Назначение:** Настройка дополнительных компонентов  
+**Назначение:** Настройка дополнительных компонентов
 **Параметры:**
 - `net` - сеть для настройки
-**Возвращаемое значение:** Нет  
+**Возвращаемое значение:** Нет
 **Описание:** Настраивает дополнительные компоненты сети (источники, разделители и т.д.)
 
 #### `#UNet* CreateNewEngineControl2NeuronsSimplest(bool crosslinks = false, bool crossranges=false)`
-**Назначение:** Создание упрощенной структуры управления с 2 нейронами  
+**Назначение:** Создание упрощенной структуры управления с 2 нейронами
 **Параметры:**
 - `crosslinks` - создавать ли перекрестные связи
 - `crossranges` - использовать ли пересекающиеся диапазоны
-**Возвращаемое значение:** Указатель на созданную сеть  
+**Возвращаемое значение:** Указатель на созданную сеть
 **Описание:** Создает упрощенную структуру управления движением с двумя нейронами на каждый элемент движения
 
 #### `#void NewMotionElementsSetup(UEPtr<UNet> net)`
-**Назначение:** Настройка элементов движения  
+**Назначение:** Настройка элементов движения
 **Параметры:**
 - `net` - сеть для настройки
-**Возвращаемое значение:** Нет  
+**Возвращаемое значение:** Нет
 **Описание:** Создает и настраивает элементы движения в сети
 
 #### `#void NewPACSetup(double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode)`
-**Назначение:** Настройка PAC компонентов  
+**Назначение:** Настройка PAC компонентов
 **Параметры:**
 - `pulse_amplitude` - амплитуда импульсов
 - `secretion_tc` - постоянная времени секреции
 - `dissociaton_tc` - постоянная времени диссоциации
 - `gain_value` - значение усиления
 - `gain_div_mode` - режим деления усиления
-**Возвращаемое значение:** Нет  
+**Возвращаемое значение:** Нет
 **Описание:** Создает и настраивает компоненты PAC в сети
 
 #### `#void UpdatePacTCParameters(void)`
-**Назначение:** Обновление параметров постоянных времени PAC  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Обновление параметров постоянных времени PAC
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** Обновляет постоянные времени секреции и диссоциации для всех PAC компонентов
 
 #### `#void NewStandardLinksSetup(const string &engine_integrator_name)`
-**Назначение:** Настройка стандартных связей  
+**Назначение:** Настройка стандартных связей
 **Параметры:**
 - `engine_integrator_name` - имя интегратора двигателя
-**Возвращаемое значение:** Нет  
+**Возвращаемое значение:** Нет
 **Описание:** Создает стандартные связи между компонентами сети
 
 ### Сеттеры свойств
@@ -660,12 +662,12 @@ for (size_t i = 0; i < motions.size(); i++) {
 engine->Reset();
 for (int step = 0; step < numSteps; step++) {
     engine->Calculate();
-    
+
     // Получение статистики
     MDMatrix<double> stats = engine->Statistic;
     std::vector<double> amplitudes = engine->CurrentContourAmplitude;
     std::vector<double> averages = engine->CurrentContourAverage;
-    
+
     // Проверка состояния переходного процесса
     if (engine->CurrentTransientState) {
         double transientTime = engine->CurrentTransientTime;
@@ -740,18 +742,18 @@ engine->Create(false);  // Перестроение с сохранением с
     <Property Name="NumControlLoops" Value="3" />
     <Property Name="CreationMode" Value="14" />
     <Property Name="AdaptiveStructureMode" Value="1" />
-    
+
     <!-- Диапазоны афферентов -->
     <Property Name="IaMin" Value="-3.14159" />
     <Property Name="IaMax" Value="3.14159" />
     <Property Name="IIMin" Value="-1.5708" />
     <Property Name="IIMax" Value="1.5708" />
-    
+
     <!-- Параметры PAC -->
     <Property Name="PacGain" Value="120.0" />
     <Property Name="PacSecretionTC" Value="0.001" />
     <Property Name="PacDissociationTC" Value="0.001" />
-    
+
     <!-- Имена классов -->
     <Property Name="MotionElementClassName" Value="NNewMotionElement" />
     <Property Name="MCNeuroObjectName" Value="NNewSPNeuron" />
@@ -769,19 +771,19 @@ engine->Create(false);  // Перестроение с сохранением с
     <Property Name="CreationMode" Value="14" />
     <Property Name="AdaptiveStructureMode" Value="2" />
     <Property Name="InterneuronPresentMode" Value="1" />
-    
+
     <!-- Диапазоны афферентов -->
     <Property Name="AfferentMin" Value="-1.5708,-3.14159" />
     <Property Name="AfferentMax" Value="1.5708,3.14159" />
     <Property Name="AfferentRangeMode" Value="2" />
     <Property Name="MinAfferentRange" Value="0.1" />
-    
+
     <!-- PAC параметры -->
     <Property Name="PacGain" Value="150.0" />
     <Property Name="PacSecretionTC" Value="0.001" />
     <Property Name="PacDissociationTC" Value="0.001" />
     <Property Name="PacRangeMode" Value="0" />
-    
+
     <!-- Параметры переходного процесса -->
     <Property Name="DestTransientTime" Value="0.15" />
     <Property Name="TransientHistoryTime" Value="1.0" />
@@ -790,17 +792,17 @@ engine->Create(false);  // Перестроение с сохранением с
     <Property Name="DestContourMaxAmplitude" Value="1.8,1.5" />
     <Property Name="DestContourMinAmplitude" Value="0.8,0.6" />
     <Property Name="UseContourData" Value="true,true" />
-    
+
     <!-- Активные контуры -->
     <Property Name="ActiveContours" Value="true,true" />
-    
+
     <!-- Разделители интервалов -->
     <Property Name="IntervalSeparatorMode" Value="6" />
-    
+
     <!-- Моторные нейроны -->
     <Property Name="MotoneuronBranchMode" Value="1" />
     <Property Name="RenshowMode" Value="1" />
-    
+
     <!-- Источник управления -->
     <Object Name="NManipulatorSource1" ClassName="NControlObjectSource">
         <Property Name="Coord" Value="10.0,8.0,6.0" />
@@ -817,6 +819,8 @@ engine->Create(false);  // Перестроение с сохранением с
 - Системами управления движением с обратной связью
 - Адаптивными системами управления
 
+**Примеры конфигураций:** `Bin/Configs/SpikeSamples/MC-Muscles/`, `Bin/Configs/SpikeSamples/MC1-PCN/` (MotionControl_Test, MultiPositionControl_*), `Bin/Configs/SpikeSamples/MC0-RCN/`, `Bin/Configs/SpikeSamples/EyeRetina/`.
+
 **Типичные сценарии использования:**
 1. **Управление манипулятором** - создание системы управления с несколькими степенями свободы
 2. **Адаптивное управление** - автоматическая настройка параметров на основе характеристик переходных процессов
@@ -824,18 +828,18 @@ engine->Create(false);  // Перестроение с сохранением с
 4. **Интеграция с сенсорами** - подключение ретины, гироскопов, приемников сигналов
 
 **Типичные комбинации с другими компонентами:**
-- `NEngineMotionControl` + `NControlObjectSource` - источник данных об объекте управления
-- `NEngineMotionControl` + `NMotionElement` - элементы движения (создаются автоматически)
-- `NEngineMotionControl` + `NEyeRetina` - визуальное восприятие для управления
-- `NEngineMotionControl` + `NAstaticGyro` - ориентация в пространстве
-- `NEngineMotionControl` + `NPositionControlElement` - контроль позиции
+- `NEngineMotionControl` + [NControlObjectSource](NControlObjectSource.md) — источник данных об объекте управления
+- `NEngineMotionControl` + `NMotionElement` — элементы движения (создаются автоматически)
+- `NEngineMotionControl` + [NEyeRetina](NEyeRetina.md) — визуальное восприятие для управления
+- `NEngineMotionControl` + [NAstaticGyro](NAstaticGyro.md) — ориентация в пространстве
+- `NEngineMotionControl` + [NPositionControlElement](NPositionControlElement.md) — контроль позиции
 
 ---
 
 # NEngineMotionControl — motion control engine
 
-**Class**: `NEngineMotionControl` — central motion control component that integrates sensors, controllers, and actuators for complex motion control systems.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineMotionControl", ...)`.  
+**Class**: `NEngineMotionControl` — central motion control component that integrates sensors, controllers, and actuators for complex motion control systems.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineMotionControl", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NEngineMotionControl is a high-level component that creates and manages a network of motion elements (NMotionElement), integrating spiking neural networks from Nmsdk-PulseLib with position control components and data sources. The component supports various network creation modes (CreationMode), adaptive structure tuning, and management of multiple control loops.
@@ -862,22 +866,53 @@ NEngineMotionControl is a high-level component that creates and manages a networ
 
 ## Properties
 
-[Same structure as RU section, translated to English]
+### Main parameters
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `CreationMode` | `int` | Network creation mode (0=Signum, 14=Branched, etc.) |
+| `NumControlLoops` | `int` | Number of control loops |
+| `NumMotionElements` | `int` | Number of motion elements |
+| `MotionElementClassName` | `NameT` | Class name for motion elements (e.g. NNewMotionElement) |
+| `ObjectControlInterfaceClassName` | `NameT` | Class name for control object source (e.g. NControlObjectSource) |
+| `AdaptiveStructureMode` | `int` | Adaptive structure tuning |
+| `InterneuronPresentMode` | `int` | Interneuron presence |
+| `IntervalSeparatorMode` | `int` | Interval separator mode |
+| `AfferentMin`, `AfferentMax` | `vector<double>` | Afferent ranges (Ia, Ib, II, Ic) |
+
+### State
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `CurrentContourAmplitude`, `CurrentContourAverage` | `vector<double>` | Current contour state |
+| `ActiveContours`, `UseContourData` | `vector<bool>` | Active/used contours |
+| `Statistic` | `MDMatrix<double>` | Statistics matrix |
 
 ## Methods
 
-[Same structure as RU section, translated to English]
+### Lifecycle
+
+- **`ADefault()`** — set default parameters for chosen CreationMode
+- **`ABuild()`** — create neural network (receptors, motion elements, interval separators)
+- **`AReset()`** — reset all internal components
+- **`ACalculate()`** — process afferent signals; update motion elements; generate control commands
+
+### Structure
+
+- **`Create(full_recreate)`** — (re)build network structure
+- **`ClearStructure(expected_num_motion_elements)`** — clear motion elements
+- **`AdaptiveTuning()`** — tune structure adaptively
 
 ## Usage Examples
 
 ### C++ Code
 
-[Same examples as RU section, with English comments]
-
-### XML Configuration
-
-[Same XML examples as RU section, with English comments]
+See RU section for full examples. Typical usage: create NEngineMotionControl, set CreationMode and NumMotionElements, connect [NControlObjectSource](NControlObjectSource.md) as ObjectControlInterface, Default/Build/Reset, then Calculate() in loop. Afferent signals are fed via receptors; motion elements output control commands.
 
 ### Usage in Configurations
 
-[Same as RU section, translated to English]
+Central component for motion control; example configs: `Bin/Configs/SpikeSamples/MC-Muscles/`, `Bin/Configs/SpikeSamples/MC1-PCN/`, `Bin/Configs/SpikeSamples/MC0-RCN/`, `Bin/Configs/SpikeSamples/EyeRetina/`. Typical combinations: with [NControlObjectSource](NControlObjectSource.md), [NPositionControlElement](NPositionControlElement.md), [NEyeRetina](NEyeRetina.md), [NAstaticGyro](NAstaticGyro.md).
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22, 27 — иерархия управления поведением робота, моторная память, согласованное управление исполнительной системой.

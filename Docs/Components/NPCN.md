@@ -1,7 +1,7 @@
 # NPCN (NPCNElement) — PCN элемент
 
-**Класс**: `NPCNElement` (регистрируется как `NPCN`) — элемент сети контроля позиции (Position Control Network) для управления движением на основе нейросетевых вычислений.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NPCN", ...)`.  
+**Класс**: `NPCNElement` (регистрируется как `NPCN`) — элемент сети контроля позиции (Position Control Network) для управления движением на основе нейросетевых вычислений.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NPCN", ...)`.
 **Базовый класс**: `NPositionControlElement` (из Nmsdk-MotionControlLib).
 
 NPCNElement реализует элемент сети контроля позиции, который вычисляет текущую позицию на основе данных от элементов движения через NEngineMotionControl и создает нейросетевую структуру для управления позицией с использованием афферентных нейронов.
@@ -18,7 +18,7 @@ classDiagram
     NPCNElement *-- NNet : RightControlNeurons
     NPCNElement *-- NNet : LeftAfferentNeurons
     NPCNElement *-- NNet : RightAfferentNeurons
-    
+
     class NPCNElement {
         +MotionControl : MDMatrix~double~
         +SimControl : bool
@@ -55,16 +55,16 @@ sequenceDiagram
     participant PCN as NPCNElement
     participant Engine as NEngineMotionControl
     participant MotionElem as NMotionElement
-    
+
     Storage->>PCN: new NPCNElement()
     Storage->>PCN: Default()
     PCN->>PCN: ADefault()
-    
+
     Storage->>PCN: Build()
     PCN->>PCN: ABuild()
     PCN->>Engine: Получение MotionControlElement
     PCN->>PCN: Инициализация массивов
-    
+
     loop Каждый шаг вычислений
         Storage->>PCN: Calculate()
         PCN->>PCN: ACalculate()
@@ -127,15 +127,15 @@ graph TB
     PCN[[NPCNElement]]
     PulseLib[Nmsdk-PulseLib<br/>NNet, нейроны]
     MotionLib[Nmsdk-MotionControlLib<br/>NEngineMotionControl, NMotionElement]
-    
+
     PCN -->|использует| PulseLib
     PCN -->|связан с| MotionLib
-    
+
     Engine[NEngineMotionControl<br/>Движок управления]
     MotionElem[NMotionElement<br/>Элементы движения]
     AfferentNeurons[AfferentNeurons<br/>Афферентные нейроны]
     ControlNeurons[ControlNeurons<br/>Управляющие нейроны]
-    
+
     PCN --> Engine
     PCN --> MotionElem
     PCN --> AfferentNeurons
@@ -172,40 +172,40 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NPCNElement(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 #### `virtual ~NPCNElement(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Вызывает ADefault() базового класса
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Получает MotionControlElement из MotionControl, инициализирует размеры массивов позиций
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Устанавливает RememberState=false
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
-**Описание:** 
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
+**Описание:**
 1. Проверяет наличие MotionControlElement
 2. Вычисляет CurrentPosition на основе данных от элементов движения
 3. Управляет генераторами в зависимости от ExternalControl
@@ -213,14 +213,14 @@ graph TB
 ### Публичные методы
 
 #### `virtual bool CreateNeurons(void)`
-**Назначение:** Создание нейронов для всех контуров и элементов движения  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Создание нейронов для всех контуров и элементов движения
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает входные, управляющие и афферентные нейроны для левых и правых афферентов
 
 #### `virtual NPCNElement* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -262,8 +262,8 @@ pcn->Build();
 
 # NPCN (NPCNElement) — PCN element
 
-**Class**: `NPCNElement` (registered as `NPCN`) — Position Control Network element for motion control based on neural network computations.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPCN", ...)`.  
+**Class**: `NPCNElement` (registered as `NPCN`) — Position Control Network element for motion control based on neural network computations.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPCN", ...)`.
 **Base class**: `NPositionControlElement` (from Nmsdk-MotionControlLib).
 
 NPCNElement implements a Position Control Network element that calculates current position based on data from motion elements through NEngineMotionControl and creates a neural network structure for position control using afferent neurons.
@@ -295,6 +295,10 @@ NPCNElement implements a Position Control Network element that calculates curren
 ## Methods
 
 [Same structure as RU section, translated to English]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24 — сеть контроля позиции (PCN).
 
 ## Usage Examples
 

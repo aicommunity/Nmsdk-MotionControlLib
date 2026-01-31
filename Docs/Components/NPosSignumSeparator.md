@@ -1,7 +1,7 @@
 # NPosSignumSeparator — разделитель положительной части сигнала
 
-**Класс**: `NPosSignumSeparator` — вариант конфигурации `NSignumSeparator` для выделения положительной составляющей сигнала.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NPosSignumSeparator", ...)`.  
+**Класс**: `NPosSignumSeparator` — вариант конфигурации `NSignumSeparator` для выделения положительной составляющей сигнала.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NPosSignumSeparator", ...)`.
 **Базовый класс**: `NSignumSeparator` (вариант конфигурации с `Sign=1.0`).
 
 NPosSignumSeparator является предварительно настроенным вариантом `NSignumSeparator` с параметром `Sign=1.0`, что позволяет выделять только положительную часть входного сигнала. Компонент умножает входной сигнал на коэффициент знака и применяет усиление для формирования выходного сигнала. Отрицательные значения входного сигнала обнуляются.
@@ -41,15 +41,15 @@ sequenceDiagram
     participant Storage as UStorage
     participant Separator as NPosSignumSeparator
     participant Source as SignalSource
-    
+
     Storage->>Separator: new NSignumSeparator()<br/>Sign=1.0
     Storage->>Separator: Default()
     Separator->>Separator: ADefault()
     Note over Separator: Sign = [1.0]<br/>Gain = [1.0]
-    
+
     Storage->>Separator: Build()
     Separator->>Separator: ABuild()
-    
+
     loop Каждый шаг вычислений
         Source->>Separator: Input = signal
         Storage->>Separator: Calculate()
@@ -131,16 +131,16 @@ graph TB
     subgraph "Nmsdk-MotionControlLib"
         NPosSep[NPosSignumSeparator]
     end
-    
+
     subgraph "Rdk-BasicLib"
         UNet[UNet]
     end
-    
+
     NPosSep -->|наследуется от| UNet
-    
+
     Input[Input<br/>Входной сигнал]
     Output[Output<br/>Положительная часть]
-    
+
     NPosSep --> Input
     NPosSep --> Output
 ```
@@ -209,7 +209,7 @@ separator->Reset();
 while (simulation_running) {
     separator->Input(0, 0) = input_signal; // Может быть положительным или отрицательным
     separator->Calculate();
-    
+
     double positive_part = separator->Output(0, 0); // Только положительная часть
 }
 ```
@@ -248,8 +248,8 @@ while (simulation_running) {
 
 ## NPosSignumSeparator — positive channel extractor (EN)
 
-**Class**: `NPosSignumSeparator` — configuration variant of `NSignumSeparator` for extracting positive signal component.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPosSignumSeparator", ...)`.  
+**Class**: `NPosSignumSeparator` — configuration variant of `NSignumSeparator` for extracting positive signal component.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPosSignumSeparator", ...)`.
 **Base class**: `NSignumSeparator` (configuration variant with `Sign=1.0`).
 
 NPosSignumSeparator is a pre-configured variant of `NSignumSeparator` with parameter `Sign=1.0`, allowing extraction of only the positive part of the input signal. The component multiplies the input signal by the sign coefficient and applies gain to form the output signal. Negative input values are zeroed.
@@ -275,7 +275,7 @@ sequenceDiagram
     participant Storage as UStorage
     participant Separator as NPosSignumSeparator
     participant Source as SignalSource
-    
+
     Storage->>Separator: new NSignumSeparator()<br/>Sign=1.0
     Storage->>Separator: Default()
     loop Each calculation step
@@ -350,3 +350,7 @@ while (simulation_running) {
     </Properties>
 </Component>
 ```
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28 — разделитель сигнум-сигналов в контурах управления.

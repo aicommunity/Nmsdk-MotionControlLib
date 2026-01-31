@@ -1,7 +1,7 @@
 # [ComponentName] — [RU название]
 
-**Класс**: `[ComponentName]` — [краткое описание назначения компонента].  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("[ComponentName]", ...)`.  
+**Класс**: `[ComponentName]` — [краткое описание назначения компонента].
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("[ComponentName]", ...)`.
 **Базовый класс**: `[BaseClass]` (из [библиотека]).
 
 [Подробное описание компонента, его назначения и области применения]
@@ -38,7 +38,7 @@ sequenceDiagram
     participant Component as [ComponentName]
     participant Input as InputComponent
     participant Output as OutputComponent
-    
+
     Storage->>Component: new [ComponentName]()
     Storage->>Component: Default()
     Component->>Component: ADefault()
@@ -114,15 +114,15 @@ graph TB
     BasicLib[Rdk-BasicLib]
     CvLib[Rdk-CvBasicLib]
     HardwareLib[Rdk-HardwareLib]
-    
+
     Component -->|использует| PulseLib
     Component -->|использует| BasicLib
     Component -->|использует| CvLib
     Component -->|использует| HardwareLib
-    
+
     InputInterface[Input Properties<br/>ptInput]
     OutputInterface[Output Properties<br/>ptOutput]
-    
+
     Component --> InputInterface
     Component --> OutputInterface
 ```
@@ -168,68 +168,68 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `[ComponentName](void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** [Описание инициализации при создании]
 
 #### `~[ComponentName](void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
+**Возвращаемое значение:** Нет
 **Описание:** [Описание очистки ресурсов]
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** [Описание инициализации]
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** [Описание построения структуры]
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента к начальному  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Назначение:** Сброс состояния компонента к начальному
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** [Описание сброса состояния]
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** [Описание алгоритма вычислений]
 
 ### Сеттеры свойств
 
 #### `bool SetPropertyName(const Type &value)`
-**Назначение:** Установка значения свойства  
+**Назначение:** Установка значения свойства
 **Параметры:**
 - `value` - новое значение свойства
-**Возвращаемое значение:** `true` при успехе, `false` при ошибке  
+**Возвращаемое значение:** `true` при успехе, `false` при ошибке
 **Описание:** [Описание валидации и установки значения]
 
 ### Публичные методы
 
 #### `ReturnType MethodName(Parameters)`
-**Назначение:** [Описание назначения метода]  
+**Назначение:** [Описание назначения метода]
 **Параметры:**
 - `param1` - [описание параметра]
 - `param2` - [описание параметра]
-**Возвращаемое значение:** [Описание возвращаемого значения]  
+**Возвращаемое значение:** [Описание возвращаемого значения]
 **Описание:** [Подробное описание работы метода]
 
 ### Защищенные методы
 
 #### `#ProtectedMethod(Parameters)`
-**Назначение:** [Описание назначения]  
-**Параметры:** [Описание параметров]  
-**Возвращаемое значение:** [Описание возвращаемого значения]  
+**Назначение:** [Описание назначения]
+**Параметры:** [Описание параметров]
+**Возвращаемое значение:** [Описание возвращаемого значения]
 **Описание:** [Описание работы метода]
 
 ## Примеры использования
@@ -318,10 +318,10 @@ for (int step = 0; step < numSteps; step++) {
     <!-- Параметры -->
     <Property Name="PropertyName" Value="1.0" />
     <Property Name="AnotherProperty" Value="2.5" />
-    
+
     <!-- Входы -->
     <Property Name="InputProperty" Connect="SourceComponent.OutputProperty" />
-    
+
     <!-- Выходы (подключение к другим компонентам) -->
     <Object Name="TargetComponent" ClassName="TargetClass">
         <Property Name="InputProperty" Connect="MyComponent.OutputProperty" />
@@ -345,12 +345,16 @@ for (int step = 0; step < numSteps; step++) {
 - `[ComponentName]` + `[RelatedComponent1]` - [описание комбинации]
 - `[ComponentName]` + `[RelatedComponent2]` - [описание комбинации]
 
+## Источники
+
+- [Literature-References.md](Literature-References.md): [A], [номера публикаций по тематике компонента] — [краткое пояснение, напр. иерархия управления, моторная память, контроль позиции].
+
 ---
 
 # [ComponentName] — [EN название]
 
-**Class**: `[ComponentName]` — [brief description in English].  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("[ComponentName]", ...)`.  
+**Class**: `[ComponentName]` — [brief description in English].
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("[ComponentName]", ...)`.
 **Base class**: `[BaseClass]` (from [library]).
 
 [Detailed description of the component, its purpose and application area]
@@ -396,3 +400,7 @@ for (int step = 0; step < numSteps; step++) {
 ### Usage in Configurations
 
 [Same as RU section, translated to English]
+
+## References
+
+- [Literature-References.md](Literature-References.md): [A], [publication numbers for this component] — [brief note, e.g. hierarchical control, motor memory, position control].

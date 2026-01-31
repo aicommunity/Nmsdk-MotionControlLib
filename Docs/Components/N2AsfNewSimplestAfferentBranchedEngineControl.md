@@ -1,7 +1,7 @@
 # N2AsfNewSimplestAfferentBranchedEngineControl — разветвлённый афферентный контроллер движения
 
-**Класс**: `N2AsfNewSimplestAfferentBranchedEngineControl` — специализированная конфигурация `NEngineMotionControl` с разветвлённой афферентной обработкой и параметрическим управлением структурой нейросети.  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl", ...)`.  
+**Класс**: `N2AsfNewSimplestAfferentBranchedEngineControl` — специализированная конфигурация `NEngineMotionControl` с разветвлённой афферентной обработкой и параметрическим управлением структурой нейросети.
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl", ...)`.
 **Базовый класс**: `NEngineMotionControl` (через регистрацию с `CreationMode=14`).
 
 N2AsfNewSimplestAfferentBranchedEngineControl представляет собой предварительно настроенный вариант `NEngineMotionControl` с `CreationMode=14` ("New net with parametric structure control"). Этот режим создаёт новую нейросеть с параметрическим управлением структурой, использующую разветвлённую обработку афферентных сигналов для управления движением. Компонент автоматически настраивает параметры для работы с упрощённой двухнейронной моделью с дополнительными контурами управления скоростью и силой.
@@ -16,7 +16,7 @@ classDiagram
     NEngineMotionControl *-- NReceptor : receptors
     NEngineMotionControl *-- NIntervalSeparator : uses
     NEngineMotionControl --> NControlObjectSource : uses
-    
+
     class N2AsfNewSimplestAfferentBranchedEngineControl {
         +CreationMode : int = 14
         +NumControlLoops : int
@@ -68,23 +68,23 @@ sequenceDiagram
     participant Receptors as NReceptor
     participant Separator as NIntervalSeparator
     participant Actuator as Actuator
-    
+
     Storage->>Controller: new N2AsfNewSimplestAfferentBranchedEngineControl()
     Storage->>Controller: Default()
     Controller->>Controller: ADefault()
     Note over Controller: CreationMode=14, AdaptiveStructureMode=1<br/>InterneuronPresentMode=1, IntervalSeparatorMode=6
-    
+
     Storage->>Controller: Build()
     Controller->>Controller: ABuild()
     Controller->>MotionElement: CreateStructure()
     Controller->>Receptors: Create receptors for afferents
     Controller->>Separator: Setup interval separators
     Note over Controller: Создание нейросети с параметрической структурой
-    
+
     Storage->>Controller: Reset()
     Controller->>Controller: AReset()
     Controller->>MotionElement: Reset()
-    
+
     loop Каждый шаг вычислений
         Actuator->>Controller: Afferent signals
         Storage->>Controller: Calculate()
@@ -170,23 +170,23 @@ graph TB
     subgraph "Nmsdk-MotionControlLib"
         N2Asf[N2AsfNewSimplestAfferentBranchedEngineControl]
     end
-    
+
     subgraph "Nmsdk-PulseLib"
         NMotion[NMotionElement]
         NReceptor[NReceptor]
         NPulseGen[NPulseGenerator]
         NPulseNeuron[NPulseNeuron]
     end
-    
+
     subgraph "Nmsdk-MotionControlLib"
         NSeparator[NIntervalSeparator]
         NControlSource[NControlObjectSource]
     end
-    
+
     subgraph "Rdk-BasicLib"
         UNet[UNet]
     end
-    
+
     UNet --> N2Asf
     N2Asf --> NMotion
     N2Asf --> NReceptor
@@ -309,9 +309,9 @@ controller->Reset();
 while (simulation_running) {
     // Установка афферентных сигналов через рецепторы
     // (обрабатываются автоматически внутри компонента)
-    
+
     controller->Calculate();
-    
+
     // Получение команд управления
     // (доступны через внутренние NMotionElement)
 }
@@ -362,8 +362,8 @@ while (simulation_running) {
 
 ## N2AsfNewSimplestAfferentBranchedEngineControl — branched afferent motion controller (EN)
 
-**Class**: `N2AsfNewSimplestAfferentBranchedEngineControl` — specialized configuration of `NEngineMotionControl` with branched afferent processing and parametric structure control.  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl", ...)`.  
+**Class**: `N2AsfNewSimplestAfferentBranchedEngineControl` — specialized configuration of `NEngineMotionControl` with branched afferent processing and parametric structure control.
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl", ...)`.
 **Base class**: `NEngineMotionControl` (via registration with `CreationMode=14`).
 
 N2AsfNewSimplestAfferentBranchedEngineControl is a pre-configured variant of `NEngineMotionControl` with `CreationMode=14` ("New net with parametric structure control"). This mode creates a new neural network with parametric structure control, using branched afferent signal processing for motion control. The component automatically configures parameters for working with a simplified two-neuron model with additional speed and force control loops.
@@ -389,7 +389,7 @@ sequenceDiagram
     participant MotionElement as NMotionElement
     participant Receptors as NReceptor
     participant Actuator as Actuator
-    
+
     Storage->>Controller: new N2AsfNewSimplestAfferentBranchedEngineControl()
     Storage->>Controller: Default()
     Controller->>Controller: ADefault()
@@ -446,16 +446,16 @@ graph TB
     subgraph "Nmsdk-MotionControlLib"
         N2Asf[N2AsfNewSimplestAfferentBranchedEngineControl]
     end
-    
+
     subgraph "Nmsdk-PulseLib"
         NMotion[NMotionElement]
         NReceptor[NReceptor]
     end
-    
+
     subgraph "Nmsdk-MotionControlLib"
         NSeparator[NIntervalSeparator]
     end
-    
+
     N2Asf --> NMotion
     N2Asf --> NReceptor
     N2Asf --> NSeparator
@@ -524,3 +524,7 @@ while (simulation_running) {
     </Properties>
 </Component>
 ```
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22 — упрощённая ветвящаяся система управления движением.

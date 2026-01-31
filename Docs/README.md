@@ -51,6 +51,7 @@ retina->Calculate();
 - [Usage-Examples.md](Usage-Examples.md) - примеры использования
 - [API-Overview.md](API-Overview.md) - обзор API
 - [Component-Catalog.md](Component-Catalog.md) - каталог компонентов
+- [Documentation-Status.md](Documentation-Status.md) - статус документации и **чеклист сверки с кодом** при изменении классов в `Core/`
 
 ---
 
@@ -80,3 +81,4 @@ For overview information see root project documentation:
 - [Usage-Examples.md](Usage-Examples.md) - usage examples
 - [API-Overview.md](API-Overview.md) - API overview
 - [Component-Catalog.md](Component-Catalog.md) - component catalog
+- [Documentation-Status.md](Documentation-Status.md) - documentation status and **code sync checklist** when changing classes in `Core/`

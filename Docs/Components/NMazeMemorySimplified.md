@@ -1,7 +1,7 @@
 # NMazeMemorySimplified — упрощенная память лабиринта
 
-**Класс**: `NMazeMemorySimplified` — упрощенная версия компонента памяти лабиринта с использованием элементов траектории (NTrajectoryElement), блоков множественного контроля позиции (NMultiPositionControl) и нейронных тренеров (NNeuronTrainer).  
-**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NMazeMemorySimplified", ...)`.  
+**Класс**: `NMazeMemorySimplified` — упрощенная версия компонента памяти лабиринта с использованием элементов траектории (NTrajectoryElement), блоков множественного контроля позиции (NMultiPositionControl) и нейронных тренеров (NNeuronTrainer).
+**Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NMazeMemorySimplified", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
 
 NMazeMemorySimplified является упрощенной версией NMazeMemory, реализующей систему памяти лабиринта с упрощенной логикой создания и управления элементами траектории.
@@ -15,7 +15,7 @@ classDiagram
     NMazeMemorySimplified *-- NMultiPositionControl : MultiPCs
     NMazeMemorySimplified *-- NNeuronTrainer : NTrainers
     NMazeMemorySimplified *-- NPulseNeuron : ActionNeurons
-    
+
     class NMazeMemorySimplified {
         +Situation : bool
         +InputActions : vector~int~
@@ -58,17 +58,17 @@ sequenceDiagram
     participant TE as NTrajectoryElement
     participant MPC as NMultiPositionControl
     participant NT as NNeuronTrainer
-    
+
     Storage->>Memory: new NMazeMemorySimplified()
     Storage->>Memory: Default()
     Memory->>Memory: ADefault()
-    
+
     Storage->>Memory: Build()
     Memory->>Memory: ABuild()
     Memory->>TE: Создание начальных элементов траектории
     Memory->>MPC: Создание блоков MultiPC
     Memory->>NT: Создание нейронных тренеров
-    
+
     loop Каждый шаг вычислений
         Storage->>Memory: Calculate()
         Memory->>Memory: ACalculate()
@@ -128,15 +128,15 @@ graph TB
     MotionLib[Nmsdk-MotionControlLib<br/>NTrajectoryElement, NMultiPositionControl]
     PulseLib[Nmsdk-PulseLib<br/>NNeuronTrainer, NPulseNeuron]
     BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    
+
     Memory -->|использует| MotionLib
     Memory -->|использует| PulseLib
     Memory -->|использует| BasicLib
-    
+
     TrajectoryElements[TrajectoryElements<br/>Элементы траектории]
     MultiPCs[MultiPCs<br/>Блоки множественного контроля]
     NTrainers[NTrainers<br/>Нейронные тренеры]
-    
+
     Memory --> TrajectoryElements
     Memory --> MultiPCs
     Memory --> NTrainers
@@ -164,45 +164,45 @@ graph TB
 ### Конструкторы и деструкторы
 
 #### `NMazeMemorySimplified(void)`
-**Назначение:** Конструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Конструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 #### `virtual ~NMazeMemorySimplified(void)`
-**Назначение:** Деструктор компонента  
-**Параметры:** Нет  
+**Назначение:** Деструктор компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Нет
 
 ### Методы жизненного цикла
 
 #### `virtual bool ADefault(void)`
-**Назначение:** Инициализация значений по умолчанию  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Инициализация значений по умолчанию
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Аналогично NMazeMemory, но без некоторых сложных механизмов
 
 #### `virtual bool ABuild(void)`
-**Назначение:** Построение внутренней структуры компонента  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Построение внутренней структуры компонента
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Создает упрощенную структуру аналогично NMazeMemory
 
 #### `virtual bool AReset(void)`
-**Назначение:** Сброс состояния компонента  
-**Параметры:** Нет  
+**Назначение:** Сброс состояния компонента
+**Параметры:** Нет
 **Возвращаемое значение:** `true` при успехе
 
 #### `virtual bool ACalculate(void)`
-**Назначение:** Выполнение вычислений на текущем шаге  
-**Параметры:** Нет  
-**Возвращаемое значение:** `true` при успехе  
+**Назначение:** Выполнение вычислений на текущем шаге
+**Параметры:** Нет
+**Возвращаемое значение:** `true` при успехе
 **Описание:** Упрощенная логика по сравнению с NMazeMemory
 
 ### Публичные методы
 
 #### `virtual NMazeMemorySimplified* New(void)`
-**Назначение:** Создание нового экземпляра компонента  
-**Параметры:** Нет  
+**Назначение:** Создание нового экземпляра компонента
+**Параметры:** Нет
 **Возвращаемое значение:** Указатель на новый экземпляр
 
 ## Примеры использования
@@ -242,8 +242,8 @@ memory->Build();
 
 # NMazeMemorySimplified — simplified maze memory
 
-**Class**: `NMazeMemorySimplified` — simplified version of maze memory component using trajectory elements (NTrajectoryElement), multi-position control blocks (NMultiPositionControl), and neural trainers (NNeuronTrainer).  
-**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NMazeMemorySimplified", ...)`.  
+**Class**: `NMazeMemorySimplified` — simplified version of maze memory component using trajectory elements (NTrajectoryElement), multi-position control blocks (NMultiPositionControl), and neural trainers (NNeuronTrainer).
+**Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NMazeMemorySimplified", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
 NMazeMemorySimplified is a simplified version of NMazeMemory, implementing a maze memory system with simplified logic for creating and managing trajectory elements.
@@ -279,3 +279,7 @@ NMazeMemorySimplified is a simplified version of NMazeMemory, implementing a maz
 ## Usage Examples
 
 [Same as RU section, with English comments]
+
+## Источники
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24 — память лабиринта, пространственные конфигурации.
