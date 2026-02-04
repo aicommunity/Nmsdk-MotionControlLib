@@ -27,7 +27,14 @@ target_sources(${TARGET_NAME} PRIVATE ${MOTION_SOURCES})
 
 target_compile_definitions(${TARGET_NAME} PUBLIC RDK_QT RDK_LIB_CVS_REVISION=0)
 
-find_package(Qt5 REQUIRED COMPONENTS Core)
-target_link_libraries(${TARGET_NAME} PUBLIC Qt5::Core Threads::Threads rdk.static.qt Rdk-BasicLib.qt Rdk-CvBasicLib.qt Rdk-HardwareLib.qt)
+include(${CMAKE_SOURCE_DIR}/cmake/SelectQt.cmake)
+target_link_libraries(${TARGET_NAME} PUBLIC
+  Nmsdk::Qt::Core
+  Threads::Threads
+  rdk.static.qt
+  Rdk-BasicLib.qt
+  Rdk-CvBasicLib.qt
+  Rdk-HardwareLib.qt
+)
 
 
