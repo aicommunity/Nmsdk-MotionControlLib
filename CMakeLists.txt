@@ -15,10 +15,10 @@ file(GLOB MOTION_SOURCES
   ${CMAKE_SOURCE_DIR}/Libraries/Nmsdk-MotionControlLib/Core/*.cpp
 )
 
-# Исключаем файлы с ошибками компиляции
+# Exclude files with known compilation errors
 list(FILTER MOTION_SOURCES EXCLUDE REGEX "/Libraries/Nmsdk-MotionControlLib/Core/NNetworkLinksStatistic\\.cpp$")
 
-# Добавляем ядро Retina
+# Add Retina core
 list(APPEND MOTION_SOURCES
   ${CMAKE_SOURCE_DIR}/Libraries/Nmsdk-MotionControlLib/Core/NEyeRetinaCore/NEyeRetinaBWCore.cpp
 )
