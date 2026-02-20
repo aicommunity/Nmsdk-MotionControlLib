@@ -68,19 +68,19 @@ RDK::UProperty<int, NEngineMotionControl, ptPubParameter> InterneuronPresentMode
 // Link modes (vector)
 RDK::UProperty<std::vector<int>, NEngineMotionControl, ptPubParameter> LinkModes;
 
-//      Ia
+// Диапазон афферентных нейронов по каналу Ia
 RDK::UProperty<double, NEngineMotionControl,ptParameter> IaMin;
 RDK::UProperty<double, NEngineMotionControl,ptParameter> IaMax;
 
-//      Ib
+// Диапазон афферентных нейронов по каналу Ib
 RDK::UProperty<double, NEngineMotionControl,ptParameter> IbMin;
 RDK::UProperty<double, NEngineMotionControl,ptParameter> IbMax;
 
-//      II
+// Диапазон афферентных нейронов по каналу II
 RDK::UProperty<double, NEngineMotionControl,ptParameter> IIMin;
 RDK::UProperty<double, NEngineMotionControl,ptParameter> IIMax;
 
-//      Ic
+// Диапазон афферентных нейронов по каналу Ic
 RDK::UProperty<double, NEngineMotionControl,ptParameter> IcMin;
 RDK::UProperty<double, NEngineMotionControl,ptParameter> IcMax;
 
@@ -112,24 +112,25 @@ RDK::UProperty<int, NEngineMotionControl, ptPubParameter> AfferentRangeMode;
 //    pac
 RDK::UProperty<int, NEngineMotionControl, ptPubParameter> PacRangeMode;
 
-//      *Max-*Min
-//      
+// Процентная величина от соответствующей разницы *Max-*Min
+// определяющая минимальную ширину диапазона афферетных нейронов
+// изменяяется в интервале [0;1]
 //    [0;1]
 RDK::UProperty<double, NEngineMotionControl,ptPubState> MinAfferentRange;
 
-///   
+/// Текущая амплитуда колебаний
 RDK::UProperty<std::vector<double>, NEngineMotionControl,ptPubState> CurrentContourAmplitude;
 
-///   
+/// Текущее среднее колебаний
 RDK::UProperty<std::vector<double>, NEngineMotionControl,ptPubState> CurrentContourAverage;
 
-///    
+/// Текущее время переходного процесса
 RDK::UProperty<double, NEngineMotionControl,ptPubState> CurrentTransientTime;
 
-///        
+/// Мгновенная скорость вычисленная по среднему положению выбранного контура
 RDK::UProperty<double, NEngineMotionControl,ptPubState> InstantAvgSpeed;
 
-///    
+/// Текущее состояние переходного процесса
 RDK::UProperty<bool, NEngineMotionControl,ptPubState> CurrentTransientState;
 
 /// Destination contour maximum amplitude
@@ -171,7 +172,7 @@ RDK::UProperty<string, NEngineMotionControl, ptPubParameter> MCAfferentObjectNam
 //    PAC
 RDK::UProperty<string, NEngineMotionControl, ptPubParameter> PacObjectName;
 
-//    
+// Максимальная зафиксированная амплитуда колебаний
 RDK::UProperty<std::vector<double>, NEngineMotionControl,ptPubState> MaxContourAmplitude;
 
 //       
@@ -201,7 +202,7 @@ vector<vector<pair<double,double> > > AfferentRangesPos, AfferentRangesNeg;
 
 vector<NMotionElement *> Motions;
 
-///    
+/// Генераторы принудительной коррекции регулятора
 UEPtr<NPulseGenerator> InternalGenerator;
 
 vector<vector<double> > History;
@@ -218,13 +219,13 @@ double OldTransientAverage;
 
 double TempTransientState;
 
-/// , ,      
-/// 0 -  ,       
-/// 1 -  ,       
+/// Признак, индицирующий, какой режим системы управления сейчас ипользуется
+/// 0 - старый режим, в котором число контуров фиксировано при создании
+/// 1 - новый режим, в котором число контуров может динамически изменяться
 int ControlMode;
 
-///  ,     
-/// -1 -  
+/// Временная переменная, отражающая текущий режим внутреннего генератора
+/// -1 - не опредлено
 /// 0 -
 /// 1 -
 int InternalGeneratorDirection;
@@ -233,42 +234,46 @@ int InternalGeneratorDirection;
 
 public: // 
 // --------------------------
-//   
+// --------------------------
+// Конструкторы и деструкторы
+// --------------------------
 // --------------------------
 NEngineMotionControl(void);
 virtual ~NEngineMotionControl(void);
 
 // --------------------------
 // --------------------------
-//   
+// --------------------------
+// Вспомогательные методы
+// --------------------------
 // --------------------------
 protected:
 //UEPtr<NManipulatorSource> ManipulatorSource1;
 //UEPtr<NIntervalSeparator> PosIntervalSeparator;
 
-//   
+// Число контуров управления
 bool SetNumControlLoops(const int &value);
 
 bool SetIsAfferentLinked(const int &index, const bool &value);
 
 bool GetIsAfferentLinked(const int &index);
 
-//   
+// Число управляющих элементов
 bool SetNumMotionElements(const int &value);
 
-//   
+// Режим формирования сети
 bool SetCreationMode(const int &value);
 
-//     
+// Режим настройки диапазонов афферентных нейронов
 bool SetAfferentRangeMode(const int &value);
 
-//    pac
+// Режим настрйоки диапазонов pac
 bool SetPacRangeMode(const int &value);
 
-//      *Max-*Min
+// Процентная величина от соответствующей разницы *Max-*Min
 bool SetMinAfferentRange(const double &value);
 
-//    
+// Максимальное усиление управляющего воздействия
 bool SetPacGain(const double &value);
 bool SetPacSecretionTC(const double &value);
 bool SetPacDissociationTC(const double &value);
@@ -279,7 +284,7 @@ bool SetPacObjectName(const string &value);
 bool SetObjectControlInterfaceClassName(const string &value);
 
 
-///     
+/// Диапазон афферентных нейронов по каналам
 bool SetAfferentMin(const std::vector<double> &value);
 bool SetAfferentMax(const std::vector<double> &value);
 
@@ -288,34 +293,39 @@ bool SetIntervalSeparatorMode(const int &value);
 bool SetMotoneuronBranchMode(const int &value);
 bool SetRenshowMode(const int &value);
 
-///    
+/// Управление списком активных контуров
 bool SetActiveContours(const std::vector<bool> &value);
 
-///   
+/// Режим наличия интернейронов
 bool SetInterneuronPresentMode(const int &value);
 
 bool SetLinkModes(const std::vector<int> &value);
 // --------------------------
 
 // --------------------------
-//    
+// --------------------------
+// Методы управления счетом
+// --------------------------
 // --------------------------
 public:
-//         
+// Выделяет память для новой чистой копии объекта этого класса
 virtual NEngineMotionControl* New(void);
 // --------------------------
 
 // --------------------------
-// Proctected computation methods
+// --------------------------
+// Вспомогательные методы
+// --------------------------
 // --------------------------
 protected:
-//        
+// Восстановление настроек по умолчанию и сброс процесса счета
 virtual bool ADefault(void);
 
-//     
-//   
+// Обеспечивает сборку внутренней структуры объекта
+// после настройки параметров
+// Автоматически вызывает метод Reset() и выставляет Ready в true
+// в случае успешной сборки
 //    Reset()   Ready  true
-//    
 virtual bool ABuild(void);
 
 // Reset computation
@@ -326,29 +336,31 @@ virtual bool ACalculate(void);
 // --------------------------
 
 // --------------------------
-//   
+// --------------------------
+// Методы управления счетом
+// --------------------------
 // --------------------------
 public:
-//         CreationMode
-//  full_recreate == true     
-//    
+// Создает объект с желаемой структурой в соответствии с CreationMode
+// Если full_recreate == true удаляет все существующие управляющие элементы
+// Иначе стремится их сохранить
 virtual bool Create(bool full_recreate=true);
 
-///   ,    
-///  expected_num_motion_elements   
+/// Удаляет существующую структуру, не трогая вспомогательные компоненты
+/// Сохраняет expected_num_motion_elements число управляющих элементов
 virtual bool ClearStructure(int expected_num_motion_elements);
 
-///   
+/// Алгоритм адаптивной настройки
 virtual void AdaptiveTuning(void);
 
-///    
-/// current_contour_amplitude -     
-/// use_contour_data - ,      
-/// current_transient_time -    
-/// dest_contour_amplitude -     
-/// dest_transient_time -    
-/// num_motion_elements -    
-/// control_gain -    
+/// Реализация алгоритмов адаптивной настройки
+/// current_contour_amplitude - текущая амплитуда по контурам управления
+/// use_contour_data - флаги, определающие данные каких контуров можно использовать
+/// current_transient_time - текущее время переходного процесса
+/// dest_contour_amplitude - желаемая амплитуда по контурам управления
+/// dest_transient_time - желаемое время переходного процесса
+/// num_motion_elements - расчетное число управляющих элементов
+/// control_gain - расчетное усиление сигнала управления
 ///
 virtual void AdaptiveTuningSimple(const std::vector<double> &current_contour_amplitude,
 								  const std::vector<bool> &use_contour_data,
@@ -361,11 +373,13 @@ virtual void AdaptiveTuningSimple(const std::vector<double> &current_contour_amp
 // --------------------------
 int GetNumControlLoops(void);
 // --------------------------
-//  
+// --------------------------
+// Вспомогательные методы
+// --------------------------
 // --------------------------
 protected:
-//    
-//    
+// Вычисляет диапазоны действия афферентнов
+// Возвращает число получившихся диапазонов
 int CalcAfferentRange(int num_motions, bool cross_ranges, double a_min, double a_max,
 			vector<pair<double,double> > &pos_ranges, vector<pair<double,double> > &neg_ranges, int range_mode);
 
@@ -378,9 +392,8 @@ void AACSetup(UEPtr<UNet> net, double gain_value);
 void AdditionalComponentsSetup(UEPtr<UNet> net);
 
 //------------------------------
-//   
+// Формируем сеть управления новым способом на 2 импульсных нейронах
 
-//       2  
 UNet* CreateNewEngineControl2NeuronsSimplest(bool crosslinks = false, bool crossranges=false);
 
 //  
@@ -389,27 +402,27 @@ void NewMotionElementsSetup(UEPtr<UNet> net);
 //   -
 void NewPACSetup(double pulse_amplitude, double secretion_tc, double dissociaton_tc, double gain_value, bool gain_div_mode);
 
-///     Pac
+/// Обновляет параметры постоянных времени Pac
 void UpdatePacTCParameters(void);
 
-//   
+// Установка стандартных связей
 void NewStandardLinksSetup(const string &engine_integrator_name);
 
 public:
-//   
+// Настройка разделителей интервалов
 void NewIntervalSeparatorsSetup(int mode_value, int last_mode_value, double pos_gain_value, double neg_gain_value);
 
-//   
+// Настройка разделителей интервалов
 void NewIntervalSeparatorsUpdate(int mode_value, int last_mode_value);
 
-//    
+// Установка связей разделителей интервалов
 void NewIntervalSeparatorLinksSetup(void);
 
-///          
-/// direction 0 - , direction 1 - 
+/// Подключает внутренние генераторы к вставочным нейронам нужного числа управляющих элементов
+/// direction 0 - налево, direction 1 - направо
 void ConnectInternalGenerators(int direction, int num_motion_elements, int control_loop_index);
 
-///     
+/// Задает частоту работы внутреннего генератора
 void SetInternalGeneratorFrequency(int direction, int num_motion_elements, int control_loop_index, double value);
 // --------------------------
 

@@ -82,17 +82,17 @@ RDK::UProperty<string, NMotionElement, ptPubParameter> AfferentObjectName;
 
 public: //  
 
-//      
+// Флаг первоначальной инициализации количества контуров управления
 bool  isNumControlLoopsInitialized;
 
 public: //  
-//    
+// Указатели на афферентные нейроны
 UCPointer<NAfferentNeuron, NMotionElement> Afferents;
 
-//     
+// Указатели на генераторы внешнего управления
 UCPointer<NPulseGenerator, NMotionElement> ExternalControlGenerators;
 
-//     ()
+// Указатели на результирующие нейроны (мотонейроны)
 UCPointer<NPulseNeuron, NMotionElement> Motoneurons;
 
 string netclassname;
@@ -100,14 +100,18 @@ string neuron_class_name;
 
 public: // 
 // --------------------------
-//   
+// --------------------------
+// Конструкторы и деструкторы
+// --------------------------
 // --------------------------
 NMotionElement(void);
 virtual ~NMotionElement(void);
 // --------------------------
 
 // --------------------------
-//   
+// --------------------------
+// Методы управления параметрами
+// --------------------------
 // --------------------------
 bool SetNumControlLoops(const int &value);
 bool SetEnableControlLoopFlags(const std::vector<int> &value);
@@ -124,25 +128,28 @@ bool SetAfferentObjectName(const string &value);
 // --------------------------
 
 // --------------------------
-//    
+// --------------------------
 
 // --------------------------
 public:
-//         
+// Выделяет память для новой чистой копии объекта этого класса
 virtual NMotionElement* New(void);
 // --------------------------
 
 // --------------------------
+// --------------------------
 // Proctected computation methods
 // --------------------------
+// --------------------------
 protected:
-//        
+// Восстановление настроек по умолчанию и сброс процесса счета
 virtual bool ADefault(void);
 
-//     
-//   
+// Обеспечивает сборку внутренней структуры объекта
+// после настройки параметров
+// Автоматически вызывает метод Reset() и выставляет Ready в true
+// в случае успешной сборки
 //    Reset()   Ready  true
-//    
 virtual bool ABuild(void);
 
 // Reset computation
@@ -151,44 +158,46 @@ virtual bool AReset(void);
 // Execute math. computations of current object on current step
 virtual bool ACalculate(void);
 
-//        
-//   ,       
+// Создает структуру в соответствии с текущими значениями параметров
+// Если структура существует, то пытается модифицировать ее с минимальными изменениями
 void CreateStructure(void);
 
-//         
+// Создает внутренние связи в соответствии с текущими значениями параметров
 void CreateInternalLinks(void);
 
-//     
+// Сохраняет и восстанавливает внешние связи
 void BackupExternalLinks(void);
 void RestoreExternalLinks(void);
 // --------------------------
-//    
 // --------------------------
-//   
+// Методы создания элементов СУ
+// --------------------------
+// Создание пары мотонейронов
+// --------------------------
 bool CreateMotoneurons();
 
-//    
+// Создание связки афферентных нейронов
 bool CreateAfferents();
 
-//  
+// Создание интернейронов
 bool CreateInterneurons();
 
-//       
-// 0 -   ( )
-// 1 -   
-// 2 -   (L-R) +  (L-L)
-// 3 -   (L-L) +  (L-R)
+// Создание связей между афферентными нейронами и мотонейронами
+// 0 - прямая связь (без интернейронов)
+// 1 - связь через интернейроны
+// 2 - связь через интернейроны(L-R) + прямая связь(L-L)
+// 3 - связь через интернейроны(L-L) + прямая связь(L-R)
 bool LinkMotoneurons();
 
-//     
+// Создание связей с клетками Реншоу
 bool LinkRenshow();
 
-//     
+// Создание связей с пейсмейкерными нейронами
 bool LinkPM();
 
-//     
-// 0 -  
-// 1 -  
+// Создание связи между двумя нейронами
+// 0 - возбуждающая связь
+// 1 - тормозная связь
 bool LinkNeuron(const string &source, const string &sink, int mode, const string &branch = "Soma1");
 };
 

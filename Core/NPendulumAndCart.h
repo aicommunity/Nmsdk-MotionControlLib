@@ -67,7 +67,7 @@ UProperty<double,NPendulumAndCart, ptPubParameter> MovementWeight;
 
 public: // 
 
-///  
+/// Внешний момент
 UProperty<double, NPendulumAndCart, ptPubState> ExtrenalMoment;
 
 public: //   
@@ -75,19 +75,19 @@ UProperty<MDMatrix<double>, NPendulumAndCart, ptInput | ptPubState> Input1;
 
 UProperty<MDMatrix<double>, NPendulumAndCart, ptInput | ptPubState> Input2;
 
-///   
+/// Выходное ускорение тележки
 UProperty<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> Acceleration;
 
-///   
+/// Угол поворота стержня
 UProperty<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> Angle;
 
-///   
+/// Выходная скорость тележки
 UProperty<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> Speed;
 
-///  
+/// Перемещение тележки
 UProperty<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> Movement;
 
-///  
+/// Перемещение тележки
 UProperty<MDMatrix<double>, NPendulumAndCart, ptOutput | ptPubState> MovementSpeed;
 
 protected: // 
@@ -100,7 +100,9 @@ protected: //
 
 public: // 
 // --------------------------
-//   
+// --------------------------
+// Конструкторы и деструкторы
+// --------------------------
 // --------------------------
 NPendulumAndCart(void);
 //NPendulumAndCart(const string &name);
@@ -108,28 +110,32 @@ virtual ~NPendulumAndCart(void);
 // --------------------------
 
 // --------------------------
-//    
 // --------------------------
-//         
+// Системные методы управления объектом
+// --------------------------
+// Выделяет память для новой чистой копии объекта этого класса
+// --------------------------
 virtual NPendulumAndCart* New(void);
 // --------------------------
 
 protected:
 // --------------------------
-//    
-// --------------------------
-// --------------------------
-
 // --------------------------
 // Computation methods
 // --------------------------
-//        
+// Восстановление настроек по умолчанию и сброс процесса счета
+// --------------------------
+// --------------------------
+
+// --------------------------
+// --------------------------
 virtual bool ADefault(void);
 
-//     
-//   
+// Обеспечивает сборку внутренней структуры объекта
+// после настройки параметров
+// Автоматически вызывает метод Reset() и выставляет Ready в true
+// в случае успешной сборки
 //    Reset()   Ready  true
-//    
 virtual bool ABuild(void);
 
 // Reset computation

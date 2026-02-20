@@ -24,7 +24,7 @@ namespace NMSDK {
 NMotionControlLibrary MotionControlLibrary;
 
 // --------------------------
-// Конструкторы и деструкторы
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
 // --------------------------
 NMotionControlLibrary::NMotionControlLibrary(void)
  : ULibrary("MotionControlLibrary","1.0", GetGlobalVersion())
@@ -33,15 +33,15 @@ NMotionControlLibrary::NMotionControlLibrary(void)
 // --------------------------
 
 // --------------------------
-// Методы создания составных моделей
+// РњРµС‚РѕРґС‹ СЃРѕР·РґР°РЅРёСЏ СЃРѕСЃС‚Р°РІРЅС‹С… РјРѕРґРµР»РµР№
 // --------------------------
 // --------------------------
 
 // --------------------------
-// Методы заполенения бибилиотеки
+// РњРµС‚РѕРґС‹ Р·Р°РїРѕР»РµРЅРµРЅРёСЏ Р±РёР±РёР»РёРѕС‚РµРєРё
 // --------------------------
-// Заполняет массив ClassSamples готовыми экземплярами образцов и их именами.
-// Не требуется предварительная очистка массива и уборка памяти.
+// Р—Р°РїРѕР»РЅСЏРµС‚ РјР°СЃСЃРёРІ ClassSamples РіРѕС‚РѕРІС‹РјРё СЌРєР·РµРјРїР»СЏСЂР°РјРё РѕР±СЂР°Р·С†РѕРІ Рё РёС… РёРјРµРЅР°РјРё.
+// РќРµ С‚СЂРµР±СѓРµС‚СЃСЏ РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅР°СЏ РѕС‡РёСЃС‚РєР° РјР°СЃСЃРёРІР° Рё СѓР±РѕСЂРєР° РїР°РјСЏС‚Рё.
 void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
 {
  UEPtr<RDK::UContainer> cont;
@@ -127,7 +127,7 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  UploadClass("NIntervalSeparator",cont);
 
 
- // Разделители аналогового сигнала на положительную и отрицательную части
+ // Р Р°Р·РґРµР»РёС‚РµР»Рё Р°РЅР°Р»РѕРіРѕРІРѕРіРѕ СЃРёРіРЅР°Р»Р° РЅР° РїРѕР»РѕР¶РёС‚РµР»СЊРЅСѓСЋ Рё РѕС‚СЂРёС†Р°С‚РµР»СЊРЅСѓСЋ С‡Р°СЃС‚Рё
  cont=dynamic_pointer_cast<UContainer>(dynamic_cast<UStorage*>(storage)->TakeObject("NSignumSeparator"));
  cont->SetName("PosSignumSeparator");
  vector<double> signum;
@@ -198,32 +198,23 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  UploadClass("NSignalEstimation", cont);
 
 
- // Создаем СУ двигательной единицей
+ // РЎРѕР·РґР°РµРј РЎРЈ РґРІРёРіР°С‚РµР»СЊРЅРѕР№ РµРґРёРЅРёС†РµР№
  UEPtr<UNet> net=new NMotionElement;
  net->SetName("MotionElement");
  net->Default();
  UploadClass("NNewMotionElement",net);
 
- // Создаем прототип систем управления
+ // РЎРѕР·РґР°РµРј РїСЂРѕС‚РѕС‚РёРї СЃРёСЃС‚РµРј СѓРїСЂР°РІР»РµРЅРёСЏ
  UEPtr<NEngineMotionControl> cs=0;
  cs=new NEngineMotionControl;
  cs->Default();
  cs->SetName("EngineMotionControl");
  UploadClass("NEngineMotionControl",cs);
 
- // Режим формирования сети
+ // Р РµР¶РёРј С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ СЃРµС‚Рё
 
- // 1 - Range
- // 2 - Branched Range
- // 3 - Branched Range Crosslinks
- // 4 - Branched Ind. Range
- // 5 - Branched Ind. Range Crosslinks
- // 10 - Branched Ind. Range Continues LTZone neurons
- // 11 - Simplest 2 neuron model
- // 12 - As 11 but speed and force control added
- // 13 - As 12 but additional control contour added
+ // 14 - New net with parametric structure control
 
- // 0 - Signum
  cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
  cs->NumMotionElements=1;
  cs->CreationMode=0;
@@ -235,7 +226,6 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  net->SetName("EngineControlSignumAfferent");
  UploadClass("NEngineControlSignumAfferent",net);
 
- // 1 - Range
  cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
  cs->NumMotionElements=1;
  cs->CreationMode=0;
@@ -247,7 +237,6 @@ void NMotionControlLibrary::CreateClassSamples(UStorage *storage)
  net->SetName("EngineControlRangeAfferent");
  UploadClass("NEngineControlRangeAfferent",net);
 
- // 14 - New net with parametric structure control
  cs=dynamic_pointer_cast<NEngineMotionControl>(dynamic_cast<UStorage*>(storage)->TakeObject("NEngineMotionControl"));
  cs->NumMotionElements=1;
  cs->CreationMode=14;
