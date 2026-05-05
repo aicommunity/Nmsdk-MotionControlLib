@@ -1,5 +1,5 @@
 #include "../../../../Rdk/GUI/Qt/UComponentFormRegistry.h"
-#include "../../../../Rdk/GUI/Qt/UGenericComponentControllerWidget.h"
+#include "MotionControlComponentControllerWidget.h"
 
 namespace
 {
@@ -11,7 +11,9 @@ UComponentFormDescriptor MakeMotionDescriptor(const QString& id, const QString& 
     descriptor.singleInstance = true;
     descriptor.factory = [id, title](RDK::UApplication* app) -> UVisualControllerWidget*
     {
-        return new UGenericComponentControllerWidget(id, title, nullptr, app);
+        Q_UNUSED(id);
+        Q_UNUSED(title);
+        return new MotionControlComponentControllerWidget(nullptr, app);
     };
     return descriptor;
 }
