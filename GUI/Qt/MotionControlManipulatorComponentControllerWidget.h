@@ -43,6 +43,9 @@ private slots:
     void onPacDissociationChanged(int value);
     void onSensorDivisionChanged(int index);
     void onContourCheckboxToggled();
+    void onBranchModeToggled(bool checked);
+    void onRenshowModeToggled(bool checked);
+    void onStructuralAdaptationToggled(bool checked);
     void onMomentChanged(int value);
     void onMovementChanged(int value);
     void onSaveStatsClicked();
@@ -94,6 +97,11 @@ private:
     QLabel* m_pacDissociationValue = nullptr;
 
     QComboBox* m_sensorDivisionCombo = nullptr;
+    QCheckBox* m_branchModeCheck = nullptr;
+    QCheckBox* m_renshowModeCheck = nullptr;
+    QCheckBox* m_structuralAdaptationCheck = nullptr;
+    QCheckBox* m_useSimpleAfferentsCheck = nullptr;
+    QCheckBox* m_useNewNeuronsCheck = nullptr;
 
     QSlider* m_momentSlider = nullptr;
     QLabel* m_momentValue = nullptr;

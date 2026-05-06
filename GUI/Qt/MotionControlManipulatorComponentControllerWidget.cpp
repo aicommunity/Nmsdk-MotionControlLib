@@ -89,6 +89,20 @@ MotionControlManipulatorComponentControllerWidget::MotionControlManipulatorCompo
     m_sensorDivisionCombo->addItem("Signum", 0);
     m_sensorDivisionCombo->addItem("Range", 1);
     settingsForm->addRow("Afferent range mode", m_sensorDivisionCombo);
+    m_branchModeCheck = new QCheckBox("Enable motoneuron branching", this);
+    settingsForm->addRow("Motoneuron branch mode", m_branchModeCheck);
+    m_renshowModeCheck = new QCheckBox("Enable Renshow cells", this);
+    settingsForm->addRow("Renshow mode", m_renshowModeCheck);
+    m_structuralAdaptationCheck = new QCheckBox("Enable structural adaptation", this);
+    settingsForm->addRow("Structural adaptation", m_structuralAdaptationCheck);
+    m_useSimpleAfferentsCheck = new QCheckBox("Use simple afferents (legacy advanced)", this);
+    m_useSimpleAfferentsCheck->setEnabled(false);
+    m_useSimpleAfferentsCheck->setToolTip("Not supported in Qt parity yet.");
+    settingsForm->addRow("Use simple afferents", m_useSimpleAfferentsCheck);
+    m_useNewNeuronsCheck = new QCheckBox("Use new neurons (legacy advanced)", this);
+    m_useNewNeuronsCheck->setEnabled(false);
+    m_useNewNeuronsCheck->setToolTip("Not supported in Qt parity yet.");
+    settingsForm->addRow("Use new neurons", m_useNewNeuronsCheck);
 
     settingsForm->addRow("Moment",
                          createSliderRow(-kSliderScale, kSliderScale, 1, m_momentSlider, m_momentValue));
@@ -135,6 +149,9 @@ MotionControlManipulatorComponentControllerWidget::MotionControlManipulatorCompo
     connect(m_pacDissociationSlider, &QSlider::valueChanged, this, &MotionControlManipulatorComponentControllerWidget::onPacDissociationChanged);
     connect(m_sensorDivisionCombo, qOverload<int>(&QComboBox::currentIndexChanged),
             this, &MotionControlManipulatorComponentControllerWidget::onSensorDivisionChanged);
+    connect(m_branchModeCheck, &QCheckBox::toggled, this, &MotionControlManipulatorComponentControllerWidget::onBranchModeToggled);
+    connect(m_renshowModeCheck, &QCheckBox::toggled, this, &MotionControlManipulatorComponentControllerWidget::onRenshowModeToggled);
+    connect(m_structuralAdaptationCheck, &QCheckBox::toggled, this, &MotionControlManipulatorComponentControllerWidget::onStructuralAdaptationToggled);
     connect(m_momentSlider, &QSlider::valueChanged, this, &MotionControlManipulatorComponentControllerWidget::onMomentChanged);
     connect(m_movementSlider, &QSlider::valueChanged, this, &MotionControlManipulatorComponentControllerWidget::onMovementChanged);
     connect(m_saveStatsButton, &QPushButton::clicked, this, &MotionControlManipulatorComponentControllerWidget::onSaveStatsClicked);
@@ -265,6 +282,9 @@ void MotionControlManipulatorComponentControllerWidget::setUiFromControlSystem()
         int mode = cs->AfferentRangeMode.GetData();
         int modeIndex = m_sensorDivisionCombo->findData(mode);
         m_sensorDivisionCombo->setCurrentIndex(modeIndex >= 0 ? modeIndex : 0);
+        m_branchModeCheck->setChecked(cs->MotoneuronBranchMode.GetData() != 0);
+        m_renshowModeCheck->setChecked(cs->RenshowMode.GetData() != 0);
+        m_structuralAdaptationCheck->setChecked(cs->AdaptiveStructureMode.GetData() != 0);
 
         rebuildContoursUi(cs->NumControlLoops.GetData());
         const std::vector<bool>& contours = cs->ActiveContours.GetData();
@@ -460,6 +480,36 @@ void MotionControlManipulatorComponentControllerWidget::onContourCheckboxToggled
         for(int i = 0; i < m_contourChecks.size(); ++i)
             contours[static_cast<size_t>(i)] = m_contourChecks[i]->isChecked();
         cs->ActiveContours = contours;
+    });
+}
+
+void MotionControlManipulatorComponentControllerWidget::onBranchModeToggled(bool checked)
+{
+    if(m_updatingUi)
+        return;
+    withControlSystem([checked](const RDK::UELockPtr<NMSDK::NModel>&, NMSDK::NEngineMotionControl* cs)
+    {
+        cs->MotoneuronBranchMode = checked ? 1 : 0;
+    });
+}
+
+void MotionControlManipulatorComponentControllerWidget::onRenshowModeToggled(bool checked)
+{
+    if(m_updatingUi)
+        return;
+    withControlSystem([checked](const RDK::UELockPtr<NMSDK::NModel>&, NMSDK::NEngineMotionControl* cs)
+    {
+        cs->RenshowMode = checked ? 1 : 0;
+    });
+}
+
+void MotionControlManipulatorComponentControllerWidget::onStructuralAdaptationToggled(bool checked)
+{
+    if(m_updatingUi)
+        return;
+    withControlSystem([checked](const RDK::UELockPtr<NMSDK::NModel>&, NMSDK::NEngineMotionControl* cs)
+    {
+        cs->AdaptiveStructureMode = checked ? 1 : 0;
     });
 }
 
