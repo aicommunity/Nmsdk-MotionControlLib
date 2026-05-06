@@ -1,9 +1,11 @@
 #include "../../../../Rdk/GUI/Qt/UComponentFormRegistry.h"
 #include "MotionControlComponentControllerWidget.h"
+#include "MotionControlAstaticGyroComponentControllerWidget.h"
+#include "MotionControlNewPositionControlElementControllerWidget.h"
 
 namespace
 {
-UComponentFormDescriptor MakeMotionDescriptor(const QString& id, const QString& title)
+UComponentFormDescriptor MakeMotionManipulatorDescriptor(const QString& id, const QString& title)
 {
     UComponentFormDescriptor descriptor;
     descriptor.formId = id;
@@ -17,6 +19,32 @@ UComponentFormDescriptor MakeMotionDescriptor(const QString& id, const QString& 
     };
     return descriptor;
 }
+
+UComponentFormDescriptor MakeMotionAstaticGyroDescriptor(const QString& id, const QString& title)
+{
+    UComponentFormDescriptor descriptor;
+    descriptor.formId = id;
+    descriptor.title = title;
+    descriptor.singleInstance = true;
+    descriptor.factory = [](RDK::UApplication* app) -> UVisualControllerWidget*
+    {
+        return new MotionControlAstaticGyroComponentControllerWidget(nullptr, app);
+    };
+    return descriptor;
+}
+
+UComponentFormDescriptor MakeMotionNewPositionControlElementDescriptor(const QString& id, const QString& title)
+{
+    UComponentFormDescriptor descriptor;
+    descriptor.formId = id;
+    descriptor.title = title;
+    descriptor.singleInstance = true;
+    descriptor.factory = [](RDK::UApplication* app) -> UVisualControllerWidget*
+    {
+        return new MotionControlNewPositionControlElementControllerWidget(nullptr, app);
+    };
+    return descriptor;
+}
 }
 
 void RegisterMotionControlComponentGuiForms()
@@ -24,7 +52,7 @@ void RegisterMotionControlComponentGuiForms()
     UComponentFormRegistry& registry = UComponentFormRegistry::instance();
 
     const UComponentFormDescriptor manipDescriptor =
-        MakeMotionDescriptor("motion.manipulator.control", "Motion Control: Manipulator");
+        MakeMotionManipulatorDescriptor("motion.manipulator.control", "Motion Control: Manipulator");
     const char* manipClasses[] = {
         "NAslsNewSimplestAfferentBranchedEngineControlPM",
         "NAsfNewSimplestAfferentBranchedEngineControlPM",
@@ -50,11 +78,12 @@ void RegisterMotionControlComponentGuiForms()
         registry.registerFormFactory(QString::fromLatin1(cls), manipDescriptor);
 
     registry.registerFormFactory("N2AsfNewSimplestAfferentBranchedEngineControl",
-                                 MakeMotionDescriptor("motion.newmanipulator.control", "Motion Control: New Manipulator"));
+                                 MakeMotionManipulatorDescriptor("motion.newmanipulator.control", "Motion Control: New Manipulator"));
     registry.registerFormFactory("N2AsfSimplestAfferentBranchedEngineControl",
-                                 MakeMotionDescriptor("motion.newmanipulator.control", "Motion Control: New Manipulator"));
+                                 MakeMotionManipulatorDescriptor("motion.newmanipulator.control", "Motion Control: New Manipulator"));
     registry.registerFormFactory("NNewPositionControlElement",
-                                 MakeMotionDescriptor("motion.position.control", "Motion Control: Position Element"));
+                                 MakeMotionNewPositionControlElementDescriptor("motion.position.control",
+                                                                                   "Motion Control: Position Element"));
     registry.registerFormFactory("NAstaticGyro",
-                                 MakeMotionDescriptor("motion.gyro.control", "Motion Control: Astatic Gyro"));
+                                 MakeMotionAstaticGyroDescriptor("motion.gyro.control", "Motion Control: Astatic Gyro"));
 }
