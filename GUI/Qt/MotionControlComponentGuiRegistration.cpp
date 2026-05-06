@@ -1,6 +1,7 @@
 #include "../../../../Rdk/GUI/Qt/UComponentFormRegistry.h"
 #include "MotionControlComponentControllerWidget.h"
 #include "MotionControlAstaticGyroComponentControllerWidget.h"
+#include "MotionControlManipulatorComponentControllerWidget.h"
 #include "MotionControlNewPositionControlElementControllerWidget.h"
 
 namespace
@@ -15,7 +16,7 @@ UComponentFormDescriptor MakeMotionManipulatorDescriptor(const QString& id, cons
     {
         Q_UNUSED(id);
         Q_UNUSED(title);
-        return new MotionControlComponentControllerWidget(nullptr, app);
+        return new MotionControlManipulatorComponentControllerWidget(nullptr, app);
     };
     return descriptor;
 }
