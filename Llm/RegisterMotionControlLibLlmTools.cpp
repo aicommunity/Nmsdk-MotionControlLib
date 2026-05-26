@@ -1,12 +1,9 @@
 #include "RegisterMotionControlLibLlmTools.h"
 
 #include <filesystem>
-#include <unordered_set>
 
 #include "../../../Rdk/LLM/Core/Context/ILLMProjectContextProvider.h"
 #include "../../../Rdk/LLM/Core/Context/UDocSearchIndex.h"
-#include "../../../Rdk/LLM/Core/Domain/URdkDomainAccess.h"
-#include "../../../Rdk/LLM/Core/Tools/ULLMLibraryScopedWriteTools.h"
 #include "../../../Rdk/LLM/Core/Tools/ULLMToolRegistry.h"
 
 namespace fs = std::filesystem;
@@ -25,18 +22,6 @@ RDK::LLM::LLMToolDefinition makeReadDef(const std::string& name, const std::stri
     return d;
 }
 
-const std::unordered_set<std::string>& motionClassNames()
-{
-    static const std::unordered_set<std::string> k = {
-        "NManipulator",
-        "NEngineMotionControl",
-        "NNewMotionElement",
-        "NEyeRetina",
-        "NAstaticGyro",
-    };
-    return k;
-}
-
 fs::path motionDocsRoot(RDK::LLM::ILLMProjectContextProvider* ctx)
 {
     if(!ctx)
@@ -50,6 +35,7 @@ void RegisterMotionControlLibLlmTools(RDK::LLM::ULLMToolRegistry& registry,
                                     RDK::LLM::ILLMProjectContextProvider* project_context,
                                     RDK::LLM::URdkDomainAccess& domain)
 {
+    (void)domain;
     registry.registerTool(
         makeReadDef("search_motion_control_docs",
                     "Search Nmsdk-MotionControlLib documentation (manipulators, motion, retina)",
@@ -80,7 +66,7 @@ void RegisterMotionControlLibLlmTools(RDK::LLM::ULLMToolRegistry& registry,
 
     registry.registerTool(
         makeReadDef("list_motion_control_component_classes",
-                    "Lists motion control library component class names and short descriptions",
+                    "Lists motion control component classes (use add_component to create)",
                     {{"type", "object"}, {"additionalProperties", false}}),
         [](const nlohmann::json& args) -> RDK::LLM::ToolGatewayResult {
             (void)args;
@@ -93,44 +79,8 @@ void RegisterMotionControlLibLlmTools(RDK::LLM::ULLMToolRegistry& registry,
                 {{"class_name", "NAstaticGyro"}, {"summary", "Astatic gyroscope integration"}},
             });
             r.result["docs_hint"] = "Libraries/Nmsdk-MotionControlLib/Docs/README.md";
+            r.result["mutation_hint"] = "Use add_component with class_name from this list.";
             r.ok = true;
             return r;
-        });
-
-    RDK::LLM::URdkDomainAccess* domain_access = &domain;
-    registry.registerTool(
-        RDK::LLM::makeLibraryWriteDef(
-            "add_motion_component",
-            "Add a Nmsdk-MotionControlLib component (manipulator, motion hub, retina)",
-            {{"type", "object"},
-             {"required", {"class_name", "parent_long_name", "short_name"}},
-             {"properties",
-              {{"class_name", {{"type", "string"}}},
-               {"parent_long_name", {{"type", "string"}}},
-               {"short_name", {{"type", "string"}}},
-               {"channel_index", {{"type", "integer"}, {"minimum", 0}}}}},
-             {"additionalProperties", false}},
-            true),
-        [domain_access](const nlohmann::json& args) -> RDK::LLM::ToolGatewayResult {
-            return RDK::LLM::invokeLibraryAddComponent(*domain_access, args, motionClassNames(),
-                                                       "Nmsdk-MotionControlLib");
-        });
-
-    registry.registerTool(
-        RDK::LLM::makeLibraryWriteDef(
-            "set_motion_property",
-            "Set a property on a motion-control component (same safety rules as set_property)",
-            {{"type", "object"},
-             {"required", {"long_name", "property_name", "value"}},
-             {"properties",
-              {{"long_name", {{"type", "string"}}},
-               {"property_name", {{"type", "string"}}},
-               {"value", {{"type", "string"}}},
-               {"channel_index", {{"type", "integer"}, {"minimum", 0}, {"default", 0}}}}},
-             {"additionalProperties", false}},
-            true),
-        [domain_access](const nlohmann::json& args) -> RDK::LLM::ToolGatewayResult {
-            return RDK::LLM::invokeLibrarySetProperty(*domain_access, args, motionClassNames(),
-                                                      "Nmsdk-MotionControlLib");
         });
 }
