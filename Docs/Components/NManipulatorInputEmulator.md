@@ -1,5 +1,7 @@
 # NManipulatorInputEmulator — эмулятор ввода манипулятора
 
+## RU
+
 **Класс**: `NManipulatorInputEmulator` — эмулятор входных данных для манипулятора, упрощённая версия `NManipulatorInput` для тестирования и отладки.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorInputEmulator", ...)`.
 **Базовый класс**: `NManipulatorInput` (из Nmsdk-MotionControlLib).
@@ -253,6 +255,8 @@ while (simulation_running) {
 - Предназначен для тестирования и отладки, а не для работы с реальным устройством
 
 ---
+
+## EN
 
 ## NManipulatorInputEmulator — manipulator input emulator (EN)
 

@@ -1,5 +1,7 @@
 # NEyeRetina — ретина глаза
 
+## RU
+
 **Каталог компонентов:** [Component-Catalog.md](../Component-Catalog.md).
 
 **Класс**: `NEyeRetina` — компонент моделирования биологической ретины глаза для обработки визуальной информации.
@@ -381,7 +383,9 @@ for (int step = 0; step < numSteps; step++) {
 
 ---
 
-# NEyeRetina — eye retina
+## EN
+
+NEyeRetina — eye retina
 
 **Class**: `NEyeRetina` — biological eye retina modeling component for visual information processing.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NEyeRetina", ...)`.

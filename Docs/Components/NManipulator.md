@@ -1,5 +1,7 @@
 # NManipulator — манипулятор
 
+## RU
+
 **Каталог компонентов:** [Component-Catalog.md](../Component-Catalog.md).
 
 **Класс**: `NManipulator` — компонент моделирования манипулятора с электрическими характеристиками.
@@ -328,7 +330,9 @@ for (int step = 0; step < numSteps; step++) {
 
 ---
 
-# NManipulator — manipulator
+## EN
+
+NManipulator — manipulator
 
 **Class**: `NManipulator` — manipulator modeling component with electrical characteristics.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulator", ...)`.

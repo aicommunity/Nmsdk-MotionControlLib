@@ -1,5 +1,7 @@
 # NAstaticGyro — астатический гироскоп
 
+## RU
+
 **Класс**: `NAstaticGyro` — компонент моделирования астатического гироскопа для измерения углов ориентации (alpha, betta, gamma) на основе входных сигналов угловой скорости.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NAstaticGyro", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -282,7 +284,9 @@ for (int step = 0; step < numSteps; step++) {
 
 ---
 
-# NAstaticGyro — astatic gyroscope
+## EN
+
+NAstaticGyro — astatic gyroscope
 
 **Class**: `NAstaticGyro` — astatic gyroscope modeling component for measuring orientation angles (alpha, betta, gamma) based on angular velocity input signals.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NAstaticGyro", ...)`.

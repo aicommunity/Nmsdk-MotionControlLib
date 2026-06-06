@@ -1,5 +1,7 @@
 # NDCEngine — DC-двигатель
 
+## RU
+
 **Каталог компонентов:** [Component-Catalog.md](../Component-Catalog.md).
 
 **Класс**: `NDCEngine` — компонент моделирования DC-двигателя с электромеханическими характеристиками.
@@ -491,7 +493,9 @@ for (int step = 0; step < 1000; step++) {
 
 ---
 
-# NDCEngine — DC motor
+## EN
+
+NDCEngine — DC motor
 
 **Class**: `NDCEngine` — DC motor modeling component with electromechanical characteristics.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NDCEngine", ...)`.

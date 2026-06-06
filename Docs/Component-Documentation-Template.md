@@ -1,5 +1,7 @@
 # [ComponentName] — [RU название]
 
+## RU
+
 **Класс**: `[ComponentName]` — [краткое описание назначения компонента].
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("[ComponentName]", ...)`.
 **Базовый класс**: `[BaseClass]` (из [библиотека]).
@@ -351,7 +353,9 @@ for (int step = 0; step < numSteps; step++) {
 
 ---
 
-# [ComponentName] — [EN название]
+## EN
+
+[ComponentName] — [EN название]
 
 **Class**: `[ComponentName]` — [brief description in English].
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("[ComponentName]", ...)`.

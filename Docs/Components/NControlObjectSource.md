@@ -1,5 +1,7 @@
 # NControlObjectSource — источник объекта управления
 
+## RU
+
 **Класс**: `NControlObjectSource` — источник данных о состоянии объекта управления для систем управления движением.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NControlObjectSource", ...)`.
 **Базовый класс**: `NSource` (из Nmsdk-PulseLib).
@@ -265,7 +267,9 @@ for (int step = 0; step < numSteps; step++) {
 
 ---
 
-# NControlObjectSource — control object source
+## EN
+
+NControlObjectSource — control object source
 
 **Class**: `NControlObjectSource` — source of control object state data for motion control systems.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NControlObjectSource", ...)`.

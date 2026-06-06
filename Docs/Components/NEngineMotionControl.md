@@ -1,5 +1,7 @@
 # NEngineMotionControl — движок управления движением
 
+## RU
+
 **Каталог компонентов:** [Component-Catalog.md](../Component-Catalog.md).
 
 **Класс**: `NEngineMotionControl` — центральный компонент управления движением, объединяющий сенсоры, контроллеры и актуаторы для реализации сложных систем управления движением.
@@ -836,7 +838,9 @@ engine->Create(false);  // Перестроение с сохранением с
 
 ---
 
-# NEngineMotionControl — motion control engine
+## EN
+
+NEngineMotionControl — motion control engine
 
 **Class**: `NEngineMotionControl` — central motion control component that integrates sensors, controllers, and actuators for complex motion control systems.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineMotionControl", ...)`.

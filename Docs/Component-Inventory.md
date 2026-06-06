@@ -1,5 +1,7 @@
 # Инвентаризация компонентов Nmsdk-MotionControlLib
 
+## RU
+
 ## Общая информация
 
 **Дата создания:** 2025-01-27  
@@ -209,3 +211,217 @@ NEngineMotionControl
 3. Некоторые компоненты используют базовые классы из `Nmsdk-PulseLib`
 4. Варианты конфигурации не требуют отдельных файлов документации, но должны быть описаны в документации базового класса
 5. Компоненты с наследованием внутри библиотеки должны иметь ссылки на базовые классы в документации
+
+---
+
+## EN
+
+## General information
+
+**Created:** 2025-01-27  
+**Total components:** 40  
+**Registration source:** `Core/NMotionControlLibrary.cpp` and `Core/WinAPI/NWinAPIActLibrary.cpp`
+
+## Base classes
+
+### Inheritance hierarchy
+
+```
+ULibrary (Rdk)
+  ├── NMotionControlLibrary
+  └── NWinAPIActLibrary
+
+UNet (Rdk)
+  ├── [Most components]
+  └── [Specialized components]
+
+NSource (Nmsdk-PulseLib)
+  ├── NManipulatorInput
+  ├── NManipulatorInputEmulator
+  ├── NManipulatorSource
+  ├── NManipulatorSourceEmulator
+  └── NControlObjectSource
+
+NReceiver (Nmsdk-PulseLib)
+  ├── NFrequencyReceiver
+  └── NPulseReceiver
+
+NPositionControlElement (MotionControlLib)
+  ├── NPCNElement
+  ├── NNewPositionControlElement
+  └── NMultiPositionControl
+
+NPulseNeuronCommon (Nmsdk-PulseLib)
+  └── NCounterNeuron
+```
+
+## Full component list by category
+
+### 1. Engines / Actuators
+
+| Component | Base class | File | Description |
+|-----------|--------------|------|----------|
+| **NDCEngine** | `UNet` | `Core/NDCEngine.h` | DC motor, speed and direction control |
+| **NActuatorSignals** | `UNet` | `Core/NActuatorSignals.h` | Actuator signals, drive signal management |
+
+### 2. Manipulators
+
+| Component | Base class | File | Description |
+|-----------|--------------|------|----------|
+| **NManipulator** | `UNet` | `Core/NManipulator.h` | Robotic manipulator |
+| **NManipulatorAndGyro** | `UNet` | `Core/NManipulatorAndGyro.h` | Manipulator with gyroscope |
+| **NManipulatorInput** | `NSource` | `Core/NManipulatorInput.h` | Manipulator input data |
+| **NManipulatorInputEmulator** | `NManipulatorInput` | `Core/NManipulatorInputEmulator.h` | Manipulator input data emulator |
+| **NManipulatorSource** | `NSource` | `Core/NManipulatorSource.h` | Manipulator data source |
+| **NManipulatorSourceEmulator** | `NManipulatorSource` | `Core/NManipulatorSourceEmulator.h` | Manipulator data source emulator |
+| **NWPhysicalManipulator** | `UNet` | `Core/WinAPI/NWPhysicalManipulator.h` | Physical manipulator via WinAPI |
+
+### 3. Sensors / Perception
+
+| Component | Base class | File | Description |
+|-----------|--------------|------|----------|
+| **NEyeRetina** | `UNet` | `Core/NEyeRetina.h` | Eye retina, image processing |
+| **NAstaticGyro** | `UNet` | `Core/NAstaticGyro.h` | Astatic gyroscope |
+| **NFrequencyReceiver** | `NReceiver` | `Core/NFrequencyReceiver.h` | Frequency signal receiver |
+| **NPulseReceiver** | `NReceiver` | `Core/NPulseReceiver.h` | Pulse signal receiver |
+| **NSimpleStatistic** | `UNet` | `Core/NSimpleStatistic.h` | Simple statistics |
+| **NNetworkLinksStatistic** | `UNet` | `Core/NNetworkLinksStatistic.h` | Network link statistics (commented out) |
+
+### 4. Control / Logic
+
+| Component | Base class | File | Description |
+|-----------|--------------|------|----------|
+| **NEngineMotionControl** | `UNet` | `Core/NEngineMotionControl.h` | Central motion control engine |
+| **NEngineControlSignumAfferent** | `NEngineMotionControl` | (configuration variant) | Control engine with signum afferents |
+| **NEngineControlRangeAfferent** | `NEngineMotionControl` | (configuration variant) | Control engine with range afferents |
+| **N2AsfNewSimplestAfferentBranchedEngineControl** | `NEngineMotionControl` | (configuration variant) | Simplified branched control system |
+| **NSignumSeparator** | `UNet` | `Core/NSignumSeparator.h` | Signum signal separator |
+| **NPosSignumSeparator** | `NSignumSeparator` | (configuration variant) | Positive signum signal separator |
+| **NNegSignumSeparator** | `NSignumSeparator` | (configuration variant) | Negative signum signal separator |
+| **NIntervalSeparator** | `UNet` | `Core/NIntervalSeparator.h` | Interval separator |
+| **NSuppressionUnit** | `UNet` | `Core/NSuppressionUnit.h` | Signal suppression unit |
+| **NCounterNeuron** | `NPulseNeuronCommon` | `Core/NCounterNeuron.h` | Neuron counter |
+| **NSeqComparison** | `UNet` | `Core/NSeqComparison.h` | Sequence comparison |
+| **NSignalEstimation** | `UNet` | `Core/NSignalEstimation.h` | Signal estimation |
+| **NObjInArea** | `UNet` | `Core/NObjInArea.h` | Object detection in area |
+
+### 5. Navigation / Trajectories / Memory
+
+| Component | Base class | File | Description |
+|-----------|--------------|------|----------|
+| **NNavMousePrimitive** | `UNet` | `Core/NNavMousePrimitive.h` | Mouse navigation primitive |
+| **NPositionControlElement** | `UNet` | `Core/NPositionControlElement.h` | Position control element |
+| **NNewPositionControlElement** | `NPositionControlElement` | `Core/NNewPositionControlElement.h` | New position control element |
+| **NMultiPositionControl** | `NPositionControlElement` | `Core/NMultiPositionControl.h` | Multi-position control |
+| **NTrajectoryElement** | `UNet` | `Core/NTrajectoryElement.h` | Trajectory element |
+| **NMazeMemory** | `UNet` | `Core/NMazeMemory.h` | Maze memory |
+| **NMazeMemorySimplified** | `UNet` | `Core/NMazeMemorySimplified.h` | Simplified maze memory |
+
+### 6. Motion Elements
+
+| Component | Base class | File | Description |
+|-----------|--------------|------|----------|
+| **NNewMotionElement** | `NMotionElement` | `Core/NMotionElement.h` | Motion element (registered as NNewMotionElement) |
+| **NPCN** | `NPCNElement` | `Core/NPCNElement.h` | PCN element (Position Control Network) |
+| **NPendulumAndCart** | `UNet` | `Core/NPendulumAndCart.h` | Pendulum and cart |
+| **NControlObjectSource** | `NSource` | `Core/NControlObjectSource.h` | Control object source |
+
+## Dependencies between components
+
+### Inheritance hierarchy within the library
+
+```
+NPositionControlElement
+  ├── NPCNElement (registered as NPCN)
+  ├── NNewPositionControlElement
+  └── NMultiPositionControl
+
+NSignumSeparator
+  ├── NPosSignumSeparator (configuration variant)
+  └── NNegSignumSeparator (configuration variant)
+
+NManipulatorInput
+  └── NManipulatorInputEmulator
+
+NManipulatorSource
+  └── NManipulatorSourceEmulator
+
+NEngineMotionControl
+  ├── NEngineControlSignumAfferent (configuration variant)
+  ├── NEngineControlRangeAfferent (configuration variant)
+  └── N2AsfNewSimplestAfferentBranchedEngineControl (configuration variant)
+```
+
+### Dependencies on external libraries
+
+#### Nmsdk-PulseLib
+- `NSource` — base class for sources
+- `NReceiver` — base class for receivers
+- `NPulseNeuronCommon` — base class for pulse neurons
+- `NReceptor` — used in NEngineMotionControl
+- `NNet` — used in NEngineMotionControl
+- `NPulseGenerator` — used in NEngineMotionControl
+
+#### Rdk-BasicLib
+- Base components and utilities
+
+#### Rdk-CvBasicLib
+- Computer vision components (used in NEyeRetina)
+
+#### Rdk-HardwareLib
+- Hardware interface components
+
+## Statistics by base class
+
+| Base class | Component count | Components |
+|---------------|------------------------|------------|
+| `UNet` | 30 | Most components |
+| `NSource` | 5 | NManipulatorInput, NManipulatorInputEmulator, NManipulatorSource, NManipulatorSourceEmulator, NControlObjectSource |
+| `NReceiver` | 2 | NFrequencyReceiver, NPulseReceiver |
+| `NPositionControlElement` | 3 | NPCNElement, NNewPositionControlElement, NMultiPositionControl |
+| `NPulseNeuronCommon` | 1 | NCounterNeuron |
+| `ULibrary` | 2 | NMotionControlLibrary, NWinAPIActLibrary |
+
+## Special cases
+
+### Configuration variants (not separate classes)
+
+The following components are created as configuration variants of existing classes:
+
+1. **NPosSignumSeparator** — created from NSignumSeparator with `Sign = [1.0]`
+2. **NNegSignumSeparator** — created from NSignumSeparator with `Sign = [-1.0]`
+3. **NEngineControlSignumAfferent** — created from NEngineMotionControl with `CreationMode=0`
+4. **NEngineControlRangeAfferent** — created from NEngineMotionControl with `CreationMode=0`
+5. **N2AsfNewSimplestAfferentBranchedEngineControl** — created from NEngineMotionControl with `CreationMode=14`
+
+### Commented-out components
+
+- **NNetworkLinksStatistic** — commented out in `NMotionControlLibrary.cpp` (lines 106-111)
+
+## Documentation priorities
+
+### High priority
+1. NEngineMotionControl — central component
+2. NDCEngine — base motor
+3. NManipulator — manipulator
+4. NEyeRetina — eye retina
+5. NMotionElement (NNewMotionElement) — motion element
+
+### Medium priority
+- Position control components
+- Sensors and sources
+- Processors and separators
+- Navigation and memory
+
+### Low priority
+- Specialized components
+- Configuration variants
+- WinAPI components
+
+## Notes
+
+1. All components are registered via `UploadClass()` in the `CreateClassSamples()` method
+2. Most components inherit from `UNet` (Rdk Framework base class)
+3. Some components use base classes from `Nmsdk-PulseLib`
+4. Configuration variants do not require separate documentation files, but should be described in the base class documentation
+5. Components with inheritance within the library should have links to base classes in their documentation

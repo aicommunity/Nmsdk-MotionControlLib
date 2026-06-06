@@ -1,5 +1,7 @@
 # NMazeMemorySimplified — упрощенная память лабиринта
 
+## RU
+
 **Класс**: `NMazeMemorySimplified` — упрощенная версия компонента памяти лабиринта с использованием элементов траектории (NTrajectoryElement), блоков множественного контроля позиции (NMultiPositionControl) и нейронных тренеров (NNeuronTrainer).
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NMazeMemorySimplified", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -240,7 +242,9 @@ memory->Build();
 
 ---
 
-# NMazeMemorySimplified — simplified maze memory
+## EN
+
+NMazeMemorySimplified — simplified maze memory
 
 **Class**: `NMazeMemorySimplified` — simplified version of maze memory component using trajectory elements (NTrajectoryElement), multi-position control blocks (NMultiPositionControl), and neural trainers (NNeuronTrainer).
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NMazeMemorySimplified", ...)`.

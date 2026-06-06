@@ -1,5 +1,7 @@
 # NMazeMemory — память лабиринта
 
+## RU
+
 **Класс**: `NMazeMemory` — компонент для создания и управления памятью лабиринта с использованием элементов траектории (NTrajectoryElement), блоков множественного контроля позиции (NMultiPositionControl) и нейронных тренеров (NNeuronTrainer).
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NMazeMemory", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -281,7 +283,9 @@ memory->Build();
 
 ---
 
-# NMazeMemory — maze memory
+## EN
+
+NMazeMemory — maze memory
 
 **Class**: `NMazeMemory` — component for creating and managing maze memory using trajectory elements (NTrajectoryElement), multi-position control blocks (NMultiPositionControl), and neural trainers (NNeuronTrainer).
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NMazeMemory", ...)`.

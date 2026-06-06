@@ -1,5 +1,7 @@
 # NPositionControlElement — элемент контроля позиции
 
+## RU
+
 **Каталог компонентов:** [Component-Catalog.md](../Component-Catalog.md).
 
 **Класс**: `NPositionControlElement` — базовый элемент для контроля позиции с использованием нейросетевых компонентов.
@@ -314,7 +316,9 @@ element->Build();
 
 ---
 
-# NPositionControlElement — position control element
+## EN
+
+NPositionControlElement — position control element
 
 **Class**: `NPositionControlElement` — base element for position control using neural network components.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPositionControlElement", ...)`.

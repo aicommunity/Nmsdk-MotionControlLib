@@ -1,5 +1,7 @@
 # Источники литературы (Nmsdk-MotionControlLib)
 
+## RU
+
 Подмножество источников, релевантных для документации библиотеки управления движением. Полный список см. в [Bin/Docs/Literature-References.md](../../../Bin/Docs/Literature-References.md).
 
 ## Диссертации
@@ -60,5 +62,7 @@
     [DOI](https://link.springer.com/chapter/10.1007%2F978-3-030-60577-3_40)
 
 ---
+
+## EN
 
 Идентификаторы [A], 13, 19–25, 27–29, 31 соответствуют полному справочнику в `Bin/Docs/Literature-References.md`.

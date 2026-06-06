@@ -1,5 +1,7 @@
 # NPCN (NPCNElement) — PCN элемент
 
+## RU
+
 **Класс**: `NPCNElement` (регистрируется как `NPCN`) — элемент сети контроля позиции (Position Control Network) для управления движением на основе нейросетевых вычислений.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NPCN", ...)`.
 **Базовый класс**: `NPositionControlElement` (из Nmsdk-MotionControlLib).
@@ -260,7 +262,9 @@ pcn->Build();
 
 ---
 
-# NPCN (NPCNElement) — PCN element
+## EN
+
+NPCN (NPCNElement) — PCN element
 
 **Class**: `NPCNElement` (registered as `NPCN`) — Position Control Network element for motion control based on neural network computations.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPCN", ...)`.

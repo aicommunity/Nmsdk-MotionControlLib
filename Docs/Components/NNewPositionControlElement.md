@@ -1,5 +1,7 @@
 # NNewPositionControlElement — новый элемент контроля позиции
 
+## RU
+
 **Класс**: `NNewPositionControlElement` — расширенный элемент контроля позиции с поддержкой множественных контуров управления и элементов движения.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNewPositionControlElement", ...)`.
 **Базовый класс**: `NPositionControlElement` (из Nmsdk-MotionControlLib).
@@ -295,7 +297,9 @@ for (int step = 0; step < numSteps; step++) {
 
 ---
 
-# NNewPositionControlElement — new position control element
+## EN
+
+NNewPositionControlElement — new position control element
 
 **Class**: `NNewPositionControlElement` — extended position control element with support for multiple control loops and motion elements.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNewPositionControlElement", ...)`.

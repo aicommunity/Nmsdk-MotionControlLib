@@ -1,5 +1,7 @@
 # NTrajectoryElement — элемент траектории
 
+## RU
+
 **Класс**: `NTrajectoryElement` — элемент траектории для построения и следования по траекториям движения, используется в системах навигации и памяти лабиринта.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NTrajectoryElement", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -283,7 +285,9 @@ element->Build();
 
 ---
 
-# NTrajectoryElement — trajectory element
+## EN
+
+NTrajectoryElement — trajectory element
 
 **Class**: `NTrajectoryElement` — trajectory element for building and following motion trajectories, used in navigation systems and maze memory.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NTrajectoryElement", ...)`.

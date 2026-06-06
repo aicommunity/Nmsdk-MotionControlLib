@@ -1,5 +1,7 @@
 # N2AsfNewSimplestAfferentBranchedEngineControl — разветвлённый афферентный контроллер движения
 
+## RU
+
 **Класс**: `N2AsfNewSimplestAfferentBranchedEngineControl` — специализированная конфигурация `NEngineMotionControl` с разветвлённой афферентной обработкой и параметрическим управлением структурой нейросети.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("N2AsfNewSimplestAfferentBranchedEngineControl", ...)`.
 **Базовый класс**: `NEngineMotionControl` (через регистрацию с `CreationMode=14`).
@@ -359,6 +361,8 @@ while (simulation_running) {
 - Адаптивные системы управления движением с обучением
 
 ---
+
+## EN
 
 ## N2AsfNewSimplestAfferentBranchedEngineControl — branched afferent motion controller (EN)
 

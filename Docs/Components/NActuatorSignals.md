@@ -1,5 +1,7 @@
 # NActuatorSignals — сигналы актуаторов
 
+## RU
+
 **Класс**: `NActuatorSignals` — компонент для определения направления движения объекта управления с использованием нейросетевой структуры из генераторов импульсов, задержек и нейронов.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NActuatorSignals", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -298,7 +300,9 @@ signals->Build();
 
 ---
 
-# NActuatorSignals — actuator signals
+## EN
+
+NActuatorSignals — actuator signals
 
 **Class**: `NActuatorSignals` — component for determining control object movement direction using a neural network structure of pulse generators, delays, and neurons.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NActuatorSignals", ...)`.

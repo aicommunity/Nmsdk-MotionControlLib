@@ -1,5 +1,7 @@
 # NCounterNeuron — счетчик нейрон
 
+## RU
+
 **Класс**: `NCounterNeuron` — нейрон-счетчик, генерирующий выходной импульс только после получения MaxCount входных импульсов.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NCounterNeuron", ...)`.
 **Базовый класс**: `NPulseNeuronCommon` (из Nmsdk-PulseLib).
@@ -273,7 +275,9 @@ counter->Build();
 
 ---
 
-# NCounterNeuron — counter neuron
+## EN
+
+NCounterNeuron — counter neuron
 
 **Class**: `NCounterNeuron` — counter neuron that generates output pulse only after receiving MaxCount input pulses.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NCounterNeuron", ...)`.

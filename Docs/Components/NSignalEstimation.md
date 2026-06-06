@@ -1,5 +1,7 @@
 # NSignalEstimation — оценка сигнала
 
+## RU
+
 **Класс**: `NSignalEstimation` — компонент для зонирования сигнала, разделяющий входной сигнал на зоны по верхним пределам.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NSignalEstimation", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -273,7 +275,9 @@ estimator->Build();
 
 ---
 
-# NSignalEstimation — signal estimation
+## EN
+
+NSignalEstimation — signal estimation
 
 **Class**: `NSignalEstimation` — component for signal zoning that divides input signal into zones based on upper zone limits.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NSignalEstimation", ...)`.

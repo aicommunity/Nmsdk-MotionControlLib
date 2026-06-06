@@ -1,5 +1,7 @@
 # NFrequencyReceiver — приемник частот
 
+## RU
+
 **Класс**: `NFrequencyReceiver` — приемник для измерения частоты импульсных сигналов в заданном диапазоне.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NFrequencyReceiver", ...)`.
 **Базовый класс**: `NReceiver` (из Nmsdk-PulseLib).
@@ -292,7 +294,9 @@ for (int step = 0; step < numSteps; step++) {
 
 ---
 
-# NFrequencyReceiver — frequency receiver
+## EN
+
+NFrequencyReceiver — frequency receiver
 
 **Class**: `NFrequencyReceiver` — receiver for measuring frequency of pulse signals in a specified range.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NFrequencyReceiver", ...)`.

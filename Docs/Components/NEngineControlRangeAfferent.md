@@ -1,5 +1,7 @@
 # NEngineControlRangeAfferent — афферентный контроллер (range)
 
+## RU
+
 **Класс**: `NEngineControlRangeAfferent` — вариант контроллера движения на базе диапазонных (range) афферентов.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineControlRangeAfferent", ...)`.
 **Базовый класс**: `NEngineMotionControl` (из Nmsdk-MotionControlLib).
@@ -175,7 +177,9 @@ controller->Build();
 
 ---
 
-# NEngineControlRangeAfferent — afferent range controller
+## EN
+
+NEngineControlRangeAfferent — afferent range controller
 
 **Class**: `NEngineControlRangeAfferent` — motion controller variant based on range afferents.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineControlRangeAfferent", ...)`.

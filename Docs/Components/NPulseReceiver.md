@@ -1,5 +1,7 @@
 # NPulseReceiver — приемник импульсов
 
+## RU
+
 **Класс**: `NPulseReceiver` — приемник для накопления и обработки импульсных сигналов от нескольких источников.  
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NPulseReceiver", ...)`.  
 **Базовый класс**: `NReceiver` (из Nmsdk-PulseLib).
@@ -267,7 +269,9 @@ for (int step = 0; step < numSteps; step++) {
 
 ---
 
-# NPulseReceiver — pulse receiver
+## EN
+
+NPulseReceiver — pulse receiver
 
 **Class**: `NPulseReceiver` — receiver for accumulating and processing pulse signals from multiple sources.  
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPulseReceiver", ...)`.  

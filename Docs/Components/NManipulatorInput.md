@@ -1,5 +1,7 @@
 # NManipulatorInput — вход манипулятора
 
+## RU
+
 **Класс**: `NManipulatorInput` — источник входных данных для манипулятора, преобразующий входной сигнал в напряжение.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorInput", ...)`.
 **Базовый класс**: `NSource` (из Nmsdk-PulseLib).
@@ -228,7 +230,9 @@ for (int step = 0; step < numSteps; step++) {
 
 ---
 
-# NManipulatorInput — manipulator input
+## EN
+
+NManipulatorInput — manipulator input
 
 **Class**: `NManipulatorInput` — source of input data for manipulator, converting input signal to voltage.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorInput", ...)`.

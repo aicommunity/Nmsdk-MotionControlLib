@@ -1,5 +1,7 @@
 # NSignumSeparator — разделитель по знаку
 
+## RU
+
 **Класс**: `NSignumSeparator` — компонент для разделения входного сигнала по знаку с применением усиления.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NSignumSeparator", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -216,7 +218,9 @@ separator->Build();
 
 ---
 
-# NSignumSeparator — signum separator
+## EN
+
+NSignumSeparator — signum separator
 
 **Class**: `NSignumSeparator` — component for separating input signal by sign with gain application.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NSignumSeparator", ...)`.

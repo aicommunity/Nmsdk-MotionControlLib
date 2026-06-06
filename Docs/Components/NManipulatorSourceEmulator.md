@@ -1,5 +1,7 @@
 # NManipulatorSourceEmulator — эмулятор источника манипулятора
 
+## RU
+
 **Класс**: `NManipulatorSourceEmulator` — эмулятор источника данных о состоянии манипулятора, упрощённая версия `NManipulatorSource` для тестирования и отладки.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorSourceEmulator", ...)`.
 **Базовый класс**: `NManipulatorSource` (из Nmsdk-MotionControlLib).
@@ -323,6 +325,8 @@ while (simulation_running) {
 - Предназначен для тестирования и отладки, а не для работы с реальным устройством
 
 ---
+
+## EN
 
 ## NManipulatorSourceEmulator — manipulator source emulator (EN)
 

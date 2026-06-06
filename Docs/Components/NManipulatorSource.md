@@ -1,5 +1,7 @@
 # NManipulatorSource — источник манипулятора
 
+## RU
+
 **Класс**: `NManipulatorSource` — источник данных о состоянии манипулятора (угол, скорость, сила, перемещение).
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorSource", ...)`.
 **Базовый класс**: `NSource` (из Nmsdk-PulseLib).
@@ -297,7 +299,9 @@ for (int step = 0; step < numSteps; step++) {
 
 ---
 
-# NManipulatorSource — manipulator source
+## EN
+
+NManipulatorSource — manipulator source
 
 **Class**: `NManipulatorSource` — source of manipulator state data (angle, speed, force, movement).
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorSource", ...)`.

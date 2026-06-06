@@ -1,5 +1,7 @@
 # NObjInArea — объект в области
 
+## RU
+
 **Класс**: `NObjInArea` — компонент для обнаружения объектов в ограниченной области изображения с использованием нейросетевой структуры и блоков подавления.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NObjInArea", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -314,7 +316,9 @@ detector->Build();
 
 ---
 
-# NObjInArea — object in area
+## EN
+
+NObjInArea — object in area
 
 **Class**: `NObjInArea` — component for detecting objects in a restricted image area using a neural network structure and suppression units.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NObjInArea", ...)`.

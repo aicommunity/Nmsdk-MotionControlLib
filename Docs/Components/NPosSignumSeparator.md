@@ -1,5 +1,7 @@
 # NPosSignumSeparator — разделитель положительной части сигнала
 
+## RU
+
 **Класс**: `NPosSignumSeparator` — вариант конфигурации `NSignumSeparator` для выделения положительной составляющей сигнала.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NPosSignumSeparator", ...)`.
 **Базовый класс**: `NSignumSeparator` (вариант конфигурации с `Sign=1.0`).
@@ -245,6 +247,8 @@ while (simulation_running) {
 - Выходы могут подключаться к элементам управления движением
 
 ---
+
+## EN
 
 ## NPosSignumSeparator — positive channel extractor (EN)
 

@@ -1,5 +1,7 @@
 # NEngineControlSignumAfferent — афферентный контроллер (signum)
 
+## RU
+
 **Класс**: `NEngineControlSignumAfferent` — вариант контроллера движения на базе signum-признаков (афферентные сигналы).
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineControlSignumAfferent", ...)`.
 **Базовый класс**: `NEngineMotionControl` (из Nmsdk-MotionControlLib).
@@ -159,7 +161,9 @@ controller->Build();
 
 ---
 
-# NEngineControlSignumAfferent — afferent controller (signum)
+## EN
+
+NEngineControlSignumAfferent — afferent controller (signum)
 
 **Class**: `NEngineControlSignumAfferent` — motion controller variant based on signum features (afferent signals).
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NEngineControlSignumAfferent", ...)`.

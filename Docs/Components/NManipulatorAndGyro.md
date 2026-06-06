@@ -1,5 +1,7 @@
 # NManipulatorAndGyro — манипулятор с гироскопом
 
+## RU
+
 **Класс**: `NManipulatorAndGyro` — компонент для моделирования манипулятора с гироскопом, вычисляющий результирующий момент с учетом внешнего момента, момента двигателя и гравитации.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorAndGyro", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -226,7 +228,9 @@ manipulator->Reset();
 
 ---
 
-# NManipulatorAndGyro — manipulator with gyroscope
+## EN
+
+NManipulatorAndGyro — manipulator with gyroscope
 
 **Class**: `NManipulatorAndGyro` — component for modeling a manipulator with a gyroscope, calculating resulting moment accounting for external moment, engine moment, and gravity.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NManipulatorAndGyro", ...)`.

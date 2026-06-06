@@ -1,5 +1,7 @@
 # NPendulumAndCart — маятник и тележка
 
+## RU
+
 **Класс**: `NPendulumAndCart` — компонент для моделирования системы маятника на тележке (inverted pendulum on a cart) с возможностью управления через PID-регулятор.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NPendulumAndCart", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -299,7 +301,9 @@ pendulum->Reset();
 
 ---
 
-# NPendulumAndCart — pendulum and cart
+## EN
+
+NPendulumAndCart — pendulum and cart
 
 **Class**: `NPendulumAndCart` — component for modeling an inverted pendulum on a cart system with PID controller support.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPendulumAndCart", ...)`.

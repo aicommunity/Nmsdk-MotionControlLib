@@ -1,5 +1,7 @@
 # NNavMousePrimitive — примитив навигации мыши
 
+## RU
+
 **Класс**: `NNavMousePrimitive` — компонент для моделирования навигации мыши в лабиринте с вибриссами (усами) для обнаружения препятствий.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNavMousePrimitive", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -347,7 +349,9 @@ mouse->Reset();
 
 ---
 
-# NNavMousePrimitive — navigation mouse primitive
+## EN
+
+NNavMousePrimitive — navigation mouse primitive
 
 **Class**: `NNavMousePrimitive` — component for modeling mouse navigation in a maze with vibrissae (whiskers) for obstacle detection.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNavMousePrimitive", ...)`.

@@ -1,5 +1,7 @@
 # NIntervalSeparator — разделитель по интервалам
 
+## RU
+
 **Класс**: `NIntervalSeparator` — компонент для разделения входного сигнала по заданным интервалам значений с различными режимами обработки.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NIntervalSeparator", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -271,7 +273,9 @@ separator->Build();
 
 ---
 
-# NIntervalSeparator — interval separator
+## EN
+
+NIntervalSeparator — interval separator
 
 **Class**: `NIntervalSeparator` — component for separating input signal by specified value intervals with different processing modes.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NIntervalSeparator", ...)`.

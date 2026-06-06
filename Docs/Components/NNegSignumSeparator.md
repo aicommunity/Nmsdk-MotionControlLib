@@ -1,5 +1,7 @@
 # NNegSignumSeparator — разделитель отрицательной части сигнала
 
+## RU
+
 **Класс**: `NNegSignumSeparator` — вариант конфигурации `NSignumSeparator` для выделения отрицательной составляющей сигнала.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNegSignumSeparator", ...)`.
 **Базовый класс**: `NSignumSeparator` (вариант конфигурации с `Sign=-1.0`).
@@ -245,6 +247,8 @@ while (simulation_running) {
 - Выходы могут подключаться к элементам управления движением
 
 ---
+
+## EN
 
 ## NNegSignumSeparator — negative channel extractor (EN)
 

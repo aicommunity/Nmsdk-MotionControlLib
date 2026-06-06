@@ -1,5 +1,7 @@
 # NMultiPositionControl — множественный контроль позиции
 
+## RU
+
 **Класс**: `NMultiPositionControl` — элемент контроля позиции для управления несколькими позициями одновременно с поддержкой запоминания состояний.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NMultiPositionControl", ...)`.
 **Базовый класс**: `NPositionControlElement` (из Nmsdk-MotionControlLib).
@@ -290,7 +292,9 @@ multiPC->Build();
 
 ---
 
-# NMultiPositionControl — multi position control
+## EN
+
+NMultiPositionControl — multi position control
 
 **Class**: `NMultiPositionControl` — position control element for managing multiple positions simultaneously with state memory support.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NMultiPositionControl", ...)`.

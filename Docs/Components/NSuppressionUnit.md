@@ -1,5 +1,7 @@
 # NSuppressionUnit — блок подавления
 
+## RU
+
 **Класс**: `NSuppressionUnit` — компонент для подавления входных импульсов в заданном временном интервале [Delay1, Delay2].
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NSuppressionUnit", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -287,7 +289,9 @@ unit->Build();
 
 ---
 
-# NSuppressionUnit — suppression unit
+## EN
+
+NSuppressionUnit — suppression unit
 
 **Class**: `NSuppressionUnit` — component for suppressing input pulses in a specified time interval [Delay1, Delay2].
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NSuppressionUnit", ...)`.

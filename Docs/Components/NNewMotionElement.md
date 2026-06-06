@@ -1,5 +1,7 @@
 # NNewMotionElement (NMotionElement) — элемент движения
 
+## RU
+
 **Класс**: `NMotionElement` (регистрируется как `NNewMotionElement`) — элемент движения, создающий нейросетевую структуру для управления движением с моторными нейронами, афферентными нейронами и интернейронами.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNewMotionElement", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -407,7 +409,9 @@ for (size_t i = 0; i < motions.size(); i++) {
 
 ---
 
-# NNewMotionElement (NMotionElement) — motion element
+## EN
+
+NNewMotionElement (NMotionElement) — motion element
 
 **Class**: `NMotionElement` (registered as `NNewMotionElement`) — motion element that creates a neural network structure for motion control with motoneurons, afferent neurons, and interneurons.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NNewMotionElement", ...)`.

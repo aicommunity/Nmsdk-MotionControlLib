@@ -1,5 +1,7 @@
 # NWPhysicalManipulator — WinAPI физический манипулятор
 
+## RU
+
 **Класс**: `NWPhysicalManipulator` — компонент для управления физическим манипулятором через WinAPI и внешнюю DLL (RoboLib.dll).
 **Регистрация**: `Libraries/Nmsdk-MotionControlLib/Core/WinAPI/NWinAPIActLibrary.cpp` → `UploadClass("NWPhysicalManipulator", ...)`.
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -546,6 +548,8 @@ manipulator->UnInit(); // Останавливает потоки, закрыв�
 - В режиме эмулятора (`EmulatorMode=true`) физическое подключение не требуется
 
 ---
+
+## EN
 
 ## NWPhysicalManipulator — WinAPI physical manipulator (EN)
 

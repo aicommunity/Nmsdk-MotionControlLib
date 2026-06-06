@@ -1,5 +1,7 @@
 # Статус расширения документации компонентов Nmsdk-MotionControlLib
 
+## RU
+
 ## Выполнено
 
 ### Подготовка
@@ -126,3 +128,134 @@
 2. **Docs/Components/[ComponentName].md** — таблицы свойств и методов, примеры кода
 3. **API-Overview.md** и **Usage-Examples.md** — при изменении публичного API ключевых классов (NDCEngine, NManipulator, NPositionControlElement, NEyeRetina и др.)
 4. **Component-Catalog.md** — при добавлении нового компонента в библиотеку
+
+---
+
+## EN
+
+## Completed
+
+### Preparation
+- ✅ **Component inventory** — created document `Component-Inventory.md` with a full list of all 40 components, their base classes, and categories
+- ✅ **Documentation template** — created `Component-Documentation-Template.md` with a complete structure for all UML diagram types and sections
+
+### Priority components
+- ✅ **NEngineMotionControl** — fully documented:
+  - UML class diagram (Class Diagram)
+  - UML sequence diagram (Sequence Diagram)
+  - UML state diagram (State Diagram)
+  - UML activity diagram (Activity Diagram)
+  - UML component diagram (Component Diagram)
+  - Detailed description of all properties (40+ properties)
+  - Detailed description of all methods
+  - C++ usage examples
+  - XML configuration examples
+  - Description of usage in configurations
+  - Complete documentation in Russian and English
+
+## Fully completed
+
+### Control components
+- ✅ **NPositionControlElement** — fully documented
+- ✅ **NNewPositionControlElement** — fully documented
+- ✅ **NMultiPositionControl** — fully documented
+- ✅ **NTrajectoryElement** — fully documented
+- ✅ **NPCN (NPCNElement)** — fully documented
+- ✅ **NControlObjectSource** — fully documented
+
+### Sensors and sources
+- ✅ **NAstaticGyro** — fully documented
+- ✅ **NFrequencyReceiver** — fully documented
+- ✅ **NPulseReceiver** — fully documented
+- ✅ **NManipulatorInput** — fully documented
+- ✅ **NManipulatorInputEmulator** — fully documented
+- ✅ **NManipulatorSource** — fully documented
+- ✅ **NManipulatorSourceEmulator** — fully documented
+- ✅ **NSimpleStatistic** — fully documented
+- ✅ **NNetworkLinksStatistic** — fully documented
+
+### Processors and separators
+- ✅ **NSignumSeparator** — fully documented
+- ✅ **NPosSignumSeparator** — fully documented
+- ✅ **NNegSignumSeparator** — fully documented
+- ✅ **NIntervalSeparator** — fully documented
+- ✅ **NSuppressionUnit** — fully documented
+- ✅ **NCounterNeuron** — fully documented
+- ✅ **NSeqComparison** — fully documented
+- ✅ **NSignalEstimation** — fully documented
+- ✅ **NObjInArea** — fully documented
+
+### Navigation and memory
+- ✅ **NNavMousePrimitive** — fully documented
+- ✅ **NMazeMemory** — fully documented
+- ✅ **NMazeMemorySimplified** — fully documented
+
+### Specialized components
+- ✅ **NPendulumAndCart** — fully documented
+- ✅ **NManipulatorAndGyro** — fully documented
+- ✅ **NActuatorSignals** — fully documented
+- ✅ **NEngineControlSignumAfferent** — fully documented
+- ✅ **NEngineControlRangeAfferent** — fully documented
+- ✅ **N2AsfNewSimplestAfferentBranchedEngineControl** — fully documented
+- ✅ **NWPhysicalManipulator** — fully documented
+
+### Additional priority components
+- ✅ **NDCEngine** — fully documented
+- ✅ **NManipulator** — fully documented
+- ✅ **NEyeRetina** — fully documented
+- ✅ **NMotionElement (NNewMotionElement)** — fully documented
+
+## Total components: 40
+
+## Progress: 40/40 (100%) ✅
+
+### Recent updates
+- ✅ **Literature-References.md** — created local reference guide ([A], 13, 19–25, 27–29, 31); added "References" section in all components linking to it
+- ✅ **API-Overview.md and Usage-Examples.md** — aligned with actual API (NDCEngine, NManipulator, NPositionControlElement, NEyeRetina): properties and code examples synchronized with `Core/*.h`
+- ✅ **Component-Documentation-Template.md** — added "References" / "References" sections at the end of RU and EN blocks in the template
+- ✅ **Configuration links** — added paths to examples in `Bin/Configs/SpikeSamples/` (MC-Muscles, MC1-PCN, EyeRetina) in key components (NDCEngine, NEngineMotionControl, NEyeRetina, NManipulator, NPositionControlElement, NMultiPositionControl, NNewPositionControlElement)
+- ✅ **Plan fully completed!** All 40 components of the Nmsdk-MotionControlLib library are fully documented
+- ✅ **NSeqComparison** — completed full documentation (previously had only a basic version)
+- ✅ Created complete UML documentation for all components (all 5 diagram types: Class, Sequence, State, Activity, Component)
+- ✅ Detailed description of all properties and methods for each component
+- ✅ C++ usage examples and XML configurations for all components
+- ⚠ **English sections** — in most components EN blocks contain placeholders "[Same as RU section, translated to English]"; it is recommended to fill EN incrementally for priority components (NEngineMotionControl, NDCEngine, NManipulator, NEyeRetina, NPositionControlElement, etc.)
+- ✅ Created documentation template for all components
+- ✅ Completed full inventory of all library components
+
+### Documentation statistics
+- **Total components**: 40
+- **Fully documented**: 40 (100%)
+- **Documentation files**: 40
+- **UML diagrams created**: ~200 (5 diagrams × 40 components)
+- **Code examples**: 80+ (C++ and XML for each component)
+
+## Documentation structure
+
+Each component should have:
+1. ✅ UML class diagram (Class Diagram)
+2. ✅ UML sequence diagram (Sequence Diagram)
+3. ✅ UML state diagram (State Diagram)
+4. ✅ UML activity diagram (Activity Diagram)
+5. ✅ UML component diagram (Component Diagram)
+6. ✅ Detailed description of all properties
+7. ✅ Detailed description of all methods
+8. ✅ C++ usage examples
+9. ✅ XML configuration examples
+10. ✅ Description of usage in configurations
+11. ✅ Documentation in Russian and English
+
+## Notes
+
+- NEngineMotionControl is the central component and has the most complex structure
+- Other components may have simplified versions of some diagrams (for example, State Diagram for components without explicit states)
+- Configuration variants (NPosSignumSeparator, NNegSignumSeparator, NEngineControlSignumAfferent, etc.) should be described in the base class documentation
+- Components with inheritance within the library should have links to base classes
+
+## Code reconciliation (when adding/changing a class in Core/)
+
+When headers in `Core/` change, it is recommended to update:
+1. **Component-Inventory.md** — when adding/removing a component or changing the base class
+2. **Docs/Components/[ComponentName].md** — property and method tables, code examples
+3. **API-Overview.md** and **Usage-Examples.md** — when the public API of key classes changes (NDCEngine, NManipulator, NPositionControlElement, NEyeRetina, etc.)
+4. **Component-Catalog.md** — when adding a new component to the library

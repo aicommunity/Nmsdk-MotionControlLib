@@ -1,5 +1,7 @@
 # NNetworkLinksStatistic — статистика связей сети
 
+## RU
+
 **Класс**: `NNetworkLinksStatistic` — компонент для сбора и сохранения статистики по связям в нейронных сетях.
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NNetworkLinksStatistic", ...)` (в настоящее время закомментирован).
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -325,6 +327,8 @@ while (simulation_running) {
 - Файлы статистики сохраняются в формате INI с именами вида `ComponentName_XXXXX.ini`
 
 ---
+
+## EN
 
 ## NNetworkLinksStatistic — network links statistics (EN)
 

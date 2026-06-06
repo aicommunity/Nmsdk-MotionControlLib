@@ -1,5 +1,7 @@
 # NSimpleStatistic — простая статистика
 
+## RU
+
 **Класс**: `NSimpleStatistic` — компонент для сбора и записи статистики по входным данным в файл.  
 **Регистрация**: `NMotionControlLibrary.cpp` → `UploadClass("NSimpleStatistic", ...)`.  
 **Базовый класс**: `UNet` (из Rdk Framework).
@@ -297,7 +299,9 @@ for (int step = 0; step < numSteps; step++) {
 
 ---
 
-# NSimpleStatistic — simple statistics
+## EN
+
+NSimpleStatistic — simple statistics
 
 **Class**: `NSimpleStatistic` — component for collecting and writing statistics on input data to a file.  
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NSimpleStatistic", ...)`.  
