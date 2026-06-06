@@ -759,6 +759,5 @@ manipulator->UnInit();
 </Component>
 ```
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 20, 21 — физический манипулятор в иерархии управления поведением робота.

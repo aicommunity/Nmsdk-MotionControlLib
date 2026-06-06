@@ -189,23 +189,101 @@ NEngineControlRangeAfferent is a specialized version of NEngineMotionControl con
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NEngineMotionControl
+    NEngineMotionControl <|-- NEngineControlRangeAfferent
+    NEngineControlRangeAfferent *-- NIntervalSeparator : IntervalSeparators
+
+    class NEngineControlRangeAfferent {
+        +CreationMode : int
+        +NumControlLoops : int
+        +NumMotionElements : int
+        +AfferentMin : vector~double~
+        +AfferentMax : vector~double~
+        +AfferentRangeMode : int
+        +New() NEngineControlRangeAfferent*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Controller as NEngineControlRangeAfferent
+    participant IntervalSep as NIntervalSeparator
+    participant MotionElem as NMotionElement
+
+    Storage->>Controller: new NEngineControlRangeAfferent()
+    Storage->>Controller: Default()
+    Controller->>Controller: ADefault()
+    Note over Controller: CreationMode = 1 (Range)
+
+    Storage->>Controller: Build()
+    Controller->>Controller: ABuild()
+    Controller->>IntervalSep: Создание NIntervalSeparator для афферентов
+    Controller->>MotionElem: Создание элементов движения
+
+    loop Каждый шаг вычислений
+        Storage->>Controller: Calculate()
+        Controller->>Controller: ACalculate()
+        Controller->>IntervalSep: Обработка афферентных сигналов по диапазонам
+        Controller->>MotionElem: Управление элементами движения
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> CreatingInterval: Создание IntervalSeparators
+    CreatingInterval --> CreatingMotions: Создание элементов движения
+    CreatingMotions --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> ProcessingAfferents: Обработка range-афферентов
+    ProcessingAfferents --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ABuild]) --> SetMode["Установка CreationMode = 1<br/>Range режим"]
+    SetMode --> CalcRanges["Вычисление диапазонов афферентов<br/>на основе AfferentMin, AfferentMax"]
+    CalcRanges --> CreateIntervalSep["Создание NIntervalSeparator<br/>для каждого диапазона"]
+    CreateIntervalSep --> CreateMotions[Создание элементов движения]
+    CreateMotions --> LinkInterval["Связывание IntervalSeparator<br/>с афферентными нейронами"]
+    LinkInterval --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Controller[[NEngineControlRangeAfferent]]
+    MotionLib["Nmsdk-MotionControlLib<br/>NIntervalSeparator, NMotionElement"]
+    PulseLib["Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron"]
+
+    Controller -->|использует| MotionLib
+    Controller -->|использует| PulseLib
+
+    IntervalSeparators["IntervalSeparators<br/>Разделители по диапазонам"]
+    MotionElements["MotionElements<br/>Элементы движения"]
+
+    Controller --> IntervalSeparators
+    Controller --> MotionElements
+```
 
 ## Properties
 
@@ -215,8 +293,7 @@ NEngineControlRangeAfferent is a specialized version of NEngineMotionControl con
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22, 27 — движок управления с диапазонными афферентами.
 
 ## Usage Examples

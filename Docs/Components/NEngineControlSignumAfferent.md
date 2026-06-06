@@ -173,23 +173,99 @@ NEngineControlSignumAfferent is a specialized version of NEngineMotionControl co
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NEngineMotionControl
+    NEngineMotionControl <|-- NEngineControlSignumAfferent
+    NEngineControlSignumAfferent *-- NSignumSeparator : SignumSeparators
+
+    class NEngineControlSignumAfferent {
+        +CreationMode : int
+        +NumControlLoops : int
+        +NumMotionElements : int
+        +AfferentMin : vector~double~
+        +AfferentMax : vector~double~
+        +New() NEngineControlSignumAfferent*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Controller as NEngineControlSignumAfferent
+    participant SignumSep as NSignumSeparator
+    participant MotionElem as NMotionElement
+
+    Storage->>Controller: new NEngineControlSignumAfferent()
+    Storage->>Controller: Default()
+    Controller->>Controller: ADefault()
+    Note over Controller: CreationMode = 0 (Signum)
+
+    Storage->>Controller: Build()
+    Controller->Controller: ABuild()
+    Controller->>SignumSep: Создание NSignumSeparator для афферентов
+    Controller->>MotionElem: Создание элементов движения
+
+    loop Каждый шаг вычислений
+        Storage->>Controller: Calculate()
+        Controller->>Controller: ACalculate()
+        Controller->>SignumSep: Обработка афферентных сигналов
+        Controller->>MotionElem: Управление элементами движения
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> CreatingSignum: Создание SignumSeparators
+    CreatingSignum --> CreatingMotions: Создание элементов движения
+    CreatingMotions --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> ProcessingAfferents: Обработка signum-афферентов
+    ProcessingAfferents --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ABuild]) --> SetMode["Установка CreationMode = 0<br/>Signum режим"]
+    SetMode --> CreateSignumSep["Создание NSignumSeparator<br/>для обработки афферентов"]
+    CreateSignumSep --> CreateMotions[Создание элементов движения]
+    CreateMotions --> LinkSignum["Связывание SignumSeparator<br/>с афферентными нейронами"]
+    LinkSignum --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Controller[[NEngineControlSignumAfferent]]
+    MotionLib["Nmsdk-MotionControlLib<br/>NSignumSeparator, NMotionElement"]
+    PulseLib["Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron"]
+
+    Controller -->|использует| MotionLib
+    Controller -->|использует| PulseLib
+
+    SignumSeparators["SignumSeparators<br/>Разделители по знаку"]
+    MotionElements["MotionElements<br/>Элементы движения"]
+
+    Controller --> SignumSeparators
+    Controller --> MotionElements
+```
 
 ## Properties
 
@@ -199,8 +275,7 @@ NEngineControlSignumAfferent is a specialized version of NEngineMotionControl co
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22, 27 — движок управления с афферентами, иерархия и моторная память.
 
 ## Usage Examples

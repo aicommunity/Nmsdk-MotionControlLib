@@ -312,23 +312,148 @@ NActuatorSignals determines control object movement direction (Stay, Forward, Ba
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NActuatorSignals
+    NActuatorSignals *-- NPulseGeneratorTransit : LeftEngine
+    NActuatorSignals *-- NPulseGeneratorTransit : RightEngine
+    NActuatorSignals *-- NPulseGeneratorTransit : Sinchro1
+    NActuatorSignals *-- NPulseGeneratorTransit : Sinchro2
+    NActuatorSignals *-- NPulseGeneratorTransit : NOTGenerator
+    NActuatorSignals *-- NPulseDelay : Delay1To2
+    NActuatorSignals *-- NPulseNeuron : ORNeuron
+    NActuatorSignals *-- NPulseNeuron : NOTNeuron
+    NActuatorSignals *-- NPulseNeuron : IsForwardNeuron
+    NActuatorSignals *-- NPulseNeuron : IsLeftNeuron
+    NActuatorSignals *-- NPulseNeuron : IsRightNeuron
+    NActuatorSignals *-- NPulseNeuron : IsBackNeuron
+    NActuatorSignals *-- NPulseNeuron : StayNeuron
+    NActuatorSignals *-- NPulseNeuron : ForwardNeuron
+    NActuatorSignals *-- NPulseNeuron : LeftNeuron
+    NActuatorSignals *-- NPulseNeuron : RightNeuron
+    NActuatorSignals *-- NPulseNeuron : BackNeuron
+
+    class NActuatorSignals {
+        +NeuronClassName : string
+        +GeneratorClassName : string
+        +DelayClassName : string
+        +PulseLength : double
+        +Amplitude : double
+        +Frequency : double
+        +LeftDelay : double
+        +RightDelay : double
+        +Sinchro1Delay : double
+        +Sinchro2Delay : double
+        +UseTransitEngineSignal : bool
+        +UseTransitSinchroSignal : bool
+        +Stay : MDMatrix~double~
+        +Forward : MDMatrix~double~
+        +Back : MDMatrix~double~
+        +Left : MDMatrix~double~
+        +Right : MDMatrix~double~
+        +New() NActuatorSignals*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Signals as NActuatorSignals
+    participant LeftEngine as LeftEngine
+    participant RightEngine as RightEngine
+    participant Sinchro1 as Sinchro1
+    participant Sinchro2 as Sinchro2
+    participant Neurons as DecisionNeurons
+
+    Storage->>Signals: new NActuatorSignals()
+    Storage->>Signals: Default()
+    Signals->>Signals: ADefault()
+
+    Storage->>Signals: Build()
+    Signals->>Signals: ABuild()
+    Signals->>LeftEngine: new NPulseGeneratorTransit("LeftEngine")
+    Signals->>RightEngine: new NPulseGeneratorTransit("RightEngine")
+    Signals->>Sinchro1: new NPulseGeneratorTransit("Sinchro1")
+    Signals->>Sinchro2: new NPulseGeneratorTransit("Sinchro2")
+    Signals->>Neurons: Создание нейронов принятия решений
+    Signals->>Signals: Создание связей между компонентами
+
+    loop Каждый шаг вычислений
+        Storage->>Signals: Calculate()
+        Signals->>Signals: ACalculate()
+        Note over Signals: Определение направления движения
+        Signals->>Neurons: Stay, Forward, Back, Left, Right
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> CreatingGenerators: Создание генераторов
+    CreatingGenerators --> CreatingDelay: Создание задержки
+    CreatingDelay --> CreatingNeurons: Создание нейронов
+    CreatingNeurons --> CreatingLinks: Создание связей
+    CreatingLinks --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> ProcessingSignals: Обработка сигналов
+    ProcessingSignals --> DeterminingDirection: Определение направления
+    DeterminingDirection --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ABuild]) --> CreateLeftEngine[Создание LeftEngine]
+    CreateLeftEngine --> CreateRightEngine[Создание RightEngine]
+    CreateRightEngine --> CreateSinchro1[Создание Sinchro1]
+    CreateSinchro1 --> CreateSinchro2[Создание Sinchro2]
+    CreateSinchro2 --> CreateNOTGen[Создание NOTGenerator]
+    CreateNOTGen --> CreateDelay[Создание Delay1To2]
+    CreateDelay --> CreateOR[Создание ORNeuron]
+    CreateOR --> CreateNOT[Создание NOTNeuron]
+    CreateNOT --> CreateIsNeurons[Создание IsForwardNeuron, IsLeftNeuron, IsRightNeuron, IsBackNeuron]
+    CreateIsNeurons --> CreateDirectionNeurons[Создание StayNeuron, ForwardNeuron, LeftNeuron, RightNeuron, BackNeuron]
+    CreateDirectionNeurons --> LinkComponents[Создание связей между компонентами]
+    LinkComponents --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Signals[[NActuatorSignals]]
+    PulseLib["Nmsdk-PulseLib<br/>NPulseGenerator, NPulseDelay, NPulseNeuron"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Signals -->|использует| PulseLib
+    Signals -->|использует| BasicLib
+
+    LeftEngine["LeftEngine<br/>Генератор левого двигателя"]
+    RightEngine["RightEngine<br/>Генератор правого двигателя"]
+    Sinchro1["Sinchro1<br/>Синхронизация 1"]
+    Sinchro2["Sinchro2<br/>Синхронизация 2"]
+    DecisionNeurons["DecisionNeurons<br/>Нейроны принятия решений"]
+
+    Signals --> LeftEngine
+    Signals --> RightEngine
+    Signals --> Sinchro1
+    Signals --> Sinchro2
+    Signals --> DecisionNeurons
+```
 
 ## Properties
 
@@ -338,8 +463,7 @@ NActuatorSignals determines control object movement direction (Stay, Forward, Ba
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 28, 29, 31 — сигналы актуаторов и нейронные структуры управления.
 
 ## Usage Examples

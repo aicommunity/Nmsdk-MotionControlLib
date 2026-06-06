@@ -287,23 +287,121 @@ NSignalEstimation divides input signal into zones based on upper zone limits. Th
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NSignalEstimation
+    NSignalEstimation *-- NPulseGeneratorTransit : SignalGen
+    NSignalEstimation *-- NPulseGeneratorTransit : SinchroGen
+    NSignalEstimation *-- NPulseNeuron : ZoneNeurons
+
+    class NSignalEstimation {
+        +NeuronClassName : string
+        +GeneratorClassName : string
+        +PulseLength : double
+        +Amplitude : double
+        +Frequency : double
+        +LTZThreshold : double
+        +DelaySignal : double
+        +DelaySinchro : double
+        +NumZones : int
+        +UpperLimitsOfZones : MDMatrix~double~
+        +UseTransitSignal : bool
+        +UseTransitSinchro : bool
+        +Sinchro : MDMatrix~double~
+        +Input : MDMatrix~double~
+        #SignalGen : UEPtr~NPulseGeneratorTransit~
+        #SinchroGen : UEPtr~NPulseGeneratorTransit~
+        #ZoneNeurons : vector~UEPtr~NPulseNeuron~~
+        #OldNumZones : int
+        +New() NSignalEstimation*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Estimator as NSignalEstimation
+    participant SignalGen as SignalGen
+    participant SinchroGen as SinchroGen
+    participant ZoneNeurons as ZoneNeurons
+
+    Storage->>Estimator: new NSignalEstimation()
+    Storage->>Estimator: Default()
+    Estimator->>Estimator: ADefault()
+
+    Storage->>Estimator: Build()
+    Estimator->>Estimator: ABuild()
+    Estimator->>SignalGen: new NPulseGeneratorTransit("SignalGen")
+    Estimator->>SinchroGen: new NPulseGeneratorTransit("SinchroGen")
+    Estimator->>ZoneNeurons: Создание NumZones нейронов
+    Estimator->>Estimator: Создание связей между компонентами
+
+    loop Каждый шаг вычислений
+        Storage->>Estimator: Calculate()
+        Estimator->>Estimator: ACalculate()
+        Note over Estimator: Определение зоны сигнала
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> CreatingGenerators: Создание генераторов
+    CreatingGenerators --> CreatingNeurons: Создание нейронов зон
+    CreatingNeurons --> CreatingLinks: Создание связей
+    CreatingLinks --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Estimating: Оценка сигнала
+    Estimating --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ABuild]) --> CheckZones["NumZones<br/>изменилось?"]
+    CheckZones -->|Да| DeleteOld[Удаление старых нейронов]
+    CheckZones -->|Нет| CreateSignalGen
+    DeleteOld --> CreateSignalGen["Создание SignalGen<br/>с UseTransitSignal"]
+    CreateSignalGen --> CreateSinchroGen["Создание SinchroGen<br/>с UseTransitSinchro"]
+    CreateSinchroGen --> CreateZoneNeurons["Создание NumZones нейронов<br/>для каждой зоны"]
+    CreateZoneNeurons --> LinkSignal[Связь SignalGen -> ZoneNeurons]
+    LinkSignal --> LinkSinchro[Связь SinchroGen -> ZoneNeurons]
+    LinkSinchro --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Estimator[[NSignalEstimation]]
+    PulseLib["Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Estimator -->|использует| PulseLib
+    Estimator -->|использует| BasicLib
+
+    SignalGen["SignalGen<br/>Генератор сигнала"]
+    SinchroGen["SinchroGen<br/>Генератор синхронизации"]
+    ZoneNeurons["ZoneNeurons<br/>Нейроны для каждой зоны"]
+
+    Estimator --> SignalGen
+    Estimator --> SinchroGen
+    Estimator --> ZoneNeurons
+```
 
 ## Properties
 
@@ -313,8 +411,7 @@ NSignalEstimation divides input signal into zones based on upper zone limits. Th
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — оценка сигналов, преобразование импульсных потоков.
 
 ## Usage Examples

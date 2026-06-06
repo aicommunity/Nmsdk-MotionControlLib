@@ -529,6 +529,5 @@ while (simulation_running) {
 </Component>
 ```
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22 — упрощённая ветвящаяся система управления движением.

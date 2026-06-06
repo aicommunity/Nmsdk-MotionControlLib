@@ -547,6 +547,5 @@ while (simulation_running) {
 </Component>
 ```
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — сравнение последовательностей импульсов в нейронных структурах управления.

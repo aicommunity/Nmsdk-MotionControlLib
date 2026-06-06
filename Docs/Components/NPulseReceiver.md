@@ -281,23 +281,117 @@ NPulseReceiver accumulates pulse signals from multiple inputs, tracks pulse star
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    NReceiver <|-- NPulseReceiver
+    class NPulseReceiver {
+        +MaxAccumulationRange : double
+        +Inputs : vector~MDMatrix~double~~
+        +Output : MDMatrix~double~
+        #Data : vector~list~double~~
+        #MatrixData : vector~list~double~~
+        #PulseFlag : vector~bool~
+        +SetMaxAccumulationRange(value) bool
+        +New() NPulseReceiver*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Receiver as NPulseReceiver
+    participant Source1 as PulseSource1
+    participant Source2 as PulseSource2
+    
+    Storage->>Receiver: new NPulseReceiver()
+    Storage->>Receiver: Default()
+    Receiver->>Receiver: ADefault()
+    
+    Storage->>Receiver: Build()
+    Receiver->>Receiver: ABuild()
+    
+    Storage->>Receiver: Reset()
+    Receiver->>Receiver: AReset()
+    Note over Receiver: Инициализация Output и Data
+    
+    loop Каждый шаг вычислений
+        Source1->>Receiver: Inputs[0] = pulse1
+        Source2->>Receiver: Inputs[1] = pulse2
+        Storage->>Receiver: Calculate()
+        Receiver->>Receiver: ACalculate()
+        Note over Receiver: Обработка импульсов, накопление данных
+        Receiver->>Receiver: Обновление Output с историей
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> ProcessingInputs: Обработка входов
+    ProcessingInputs --> DetectingPulses: Обнаружение импульсов
+    DetectingPulses --> Accumulating: Накопление данных
+    Accumulating --> Filtering: Фильтрация по диапазону
+    Filtering --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> ResizeData[Изменение размеров Data и MatrixData]
+    ResizeData --> ResizePulseFlag[Изменение размера PulseFlag]
+    ResizePulseFlag --> LoopInputs[Цикл по всем входам]
+    LoopInputs --> CheckPulse{Inputs[i] > 0?}
+    CheckPulse -->|Да| CheckFlag{PulseFlag[i]?}
+    CheckPulse -->|Нет| CheckFlag2{PulseFlag[i]?}
+    CheckFlag -->|Нет| AddStart[Добавление времени начала импульса]
+    CheckFlag -->|Да| NextInput
+    CheckFlag2 -->|Да| AddStop[Добавление времени окончания импульса]
+    CheckFlag2 -->|Нет| NextInput
+    AddStart --> SetFlag[Установка PulseFlag[i]=true]
+    AddStop --> ClearFlag[Сброс PulseFlag[i]=false]
+    SetFlag --> CheckRange{MaxAccumulationRange > 0?}
+    ClearFlag --> CheckRange
+    CheckRange -->|Да| FilterData[Фильтрация данных по диапазону]
+    CheckRange -->|Нет| UpdateOutput
+    FilterData --> UpdateOutput[Обновление Output матрицы]
+    UpdateOutput --> NextInput{Еще входы?}
+    NextInput -->|Да| LoopInputs
+    NextInput -->|Нет| End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Receiver[[NPulseReceiver]]
+    PulseLib["Nmsdk-PulseLib<br/>NReceiver"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    
+    Receiver -->|наследуется от| PulseLib
+    Receiver -->|использует| BasicLib
+    
+    Inputs["Inputs<br/>Вектор входных сигналов"]
+    Output["Output<br/>История импульсов"]
+    
+    Receiver --> Inputs
+    Receiver --> Output
+```
 
 ## Properties
 
@@ -307,8 +401,7 @@ NPulseReceiver accumulates pulse signals from multiple inputs, tracks pulse star
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — приём импульсных сигналов в нейронных структурах.
 
 ## Usage Examples

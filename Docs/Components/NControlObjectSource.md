@@ -279,23 +279,101 @@ NControlObjectSource transforms input data about the control object (coordinates
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    NSource <|-- NControlObjectSource
+    class NControlObjectSource {
+        +DataIndexes : MDVector~int~
+        +DataShift : MDVector~double~
+        +DataMul : MDVector~double~
+        +Input : MDMatrix~double~
+        +Output : MDMatrix~double~
+        +UpdateOutputFlag : bool
+        +SetDataShift(value) bool
+        +New() NControlObjectSource*
+        #ADefault() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Source as NControlObjectSource
+    participant Object as ControlObject
+    participant Engine as NEngineMotionControl
+
+    Storage->>Source: new NControlObjectSource()
+    Storage->>Source: Default()
+    Source->>Source: ADefault()
+
+    Storage->>Source: Build()
+    Source->>Source: ABuild()
+
+    Storage->>Source: Reset()
+    Source->>Source: AReset()
+    Note over Source: Инициализация размеров массивов
+
+    loop Каждый шаг вычислений
+        Object->>Source: Input = object_data
+        Storage->>Source: Calculate()
+        Source->>Source: ACalculate()
+        Note over Source: Преобразование данных:<br/>Output = DataMul * (Input[DataIndexes] - DataShift)
+        Source->>Engine: Output = transformed_data
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> CheckInput["Input<br/>подключен?"]
+    CheckInput -->|Да| ResizeArrays["Изменение размеров массивов:<br/>DataShift, DataIndexes, DataMul"]
+    CheckInput -->|Нет| ResizeOutputZero[Output.Resize(0,0)]
+    ResizeArrays --> ResizeOutput[Output.Resize(1, Input->GetSize())]
+    ResizeOutput --> LoopStart[Цикл по элементам Input]
+    LoopStart --> Transform[Преобразование:<br/>Output[i] = DataMul[i] * (Input[DataIndexes[i]] - DataShift[i])]
+    Transform --> LoopEnd{Еще элементы?}
+    LoopEnd -->|Да| LoopStart
+    LoopEnd -->|Нет| End([Конец])
+    ResizeOutputZero --> End
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Source[[NControlObjectSource]]
+    PulseLib["Nmsdk-PulseLib<br/>NSource"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Source -->|наследуется от| PulseLib
+    Source -->|использует| BasicLib
+
+    Input["Input<br/>Входные данные объекта"]
+    Output["Output<br/>Преобразованные данные"]
+
+    Source --> Input
+    Source --> Output
+```
 
 ## Properties
 
@@ -320,8 +398,7 @@ Output signals derived from Coord (scaled, shifted, indexed) for use by [NEngine
 - **`AReset()`** — reset state
 - **`ACalculate()`** — copy/transform Coord to output
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 21 — источник объекта управления в иерархии.
 
 ## Usage Examples

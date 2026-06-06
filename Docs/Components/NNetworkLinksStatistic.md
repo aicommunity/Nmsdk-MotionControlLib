@@ -461,6 +461,5 @@ while (simulation_running) {
 </Component>
 ```
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 22 — статистика связей в нейросетевых контурах управления движением.

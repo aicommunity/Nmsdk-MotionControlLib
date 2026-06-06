@@ -274,23 +274,134 @@ NPCNElement implements a Position Control Network element that calculates curren
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    NPositionControlElement <|-- NPCNElement
+    NPCNElement *-- NEngineMotionControl : MotionControlElement
+    NPCNElement *-- NNet : LeftInputNeurons
+    NPCNElement *-- NNet : RightInputNeurons
+    NPCNElement *-- NNet : LeftControlNeurons
+    NPCNElement *-- NNet : RightControlNeurons
+    NPCNElement *-- NNet : LeftAfferentNeurons
+    NPCNElement *-- NNet : RightAfferentNeurons
+
+    class NPCNElement {
+        +MotionControl : MDMatrix~double~
+        +SimControl : bool
+        +LeftInputNeurons : vector~vector~NNet*~~
+        +RightInputNeurons : vector~vector~NNet*~~
+        +LeftControlNeurons : vector~vector~NNet*~~
+        +RightControlNeurons : vector~vector~NNet*~~
+        +LeftAfferentNeurons : vector~vector~NNet*~~
+        +RightAfferentNeurons : vector~vector~NNet*~~
+        +LeftPostAfferentNeurons : vector~vector~NNet*~~
+        +RightPostAfferentNeurons : vector~vector~NNet*~~
+        +LeftGenerators : vector~vector~UNet*~~
+        +RightGenerators : vector~vector~UNet*~~
+        +MotionControlElement : UEPtr~NEngineMotionControl~
+        +New() NPCNElement*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+        +CreateNeurons() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant PCN as NPCNElement
+    participant Engine as NEngineMotionControl
+    participant MotionElem as NMotionElement
+
+    Storage->>PCN: new NPCNElement()
+    Storage->>PCN: Default()
+    PCN->>PCN: ADefault()
+
+    Storage->>PCN: Build()
+    PCN->>PCN: ABuild()
+    PCN->>Engine: Получение MotionControlElement
+    PCN->>PCN: Инициализация массивов
+
+    loop Каждый шаг вычислений
+        Storage->>PCN: Calculate()
+        PCN->>PCN: ACalculate()
+        PCN->>MotionElem: Получение данных от элементов движения
+        PCN->>PCN: Вычисление CurrentPosition из LTZone
+        PCN->>PCN: Управление генераторами в зависимости от ExternalControl
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> GettingEngine: Получение MotionControlElement
+    GettingEngine --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> GettingPosition: Получение позиции
+    GettingPosition --> ManagingGenerators: Управление генераторами
+    ManagingGenerators --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> CheckEngine["MotionControlElement<br/>существует?"]
+    CheckEngine -->|Нет| End([Конец])
+    CheckEngine -->|Да| CheckSize["Размеры<br/>совпадают?"]
+    CheckSize -->|Нет| Reset[Reset и выход]
+    CheckSize -->|Да| CheckNeurons["Нейроны<br/>созданы?"]
+    CheckNeurons -->|Нет| CreateNeurons[CreateNeurons]
+    CreateNeurons --> InitArrays[Инициализация массивов]
+    CheckNeurons -->|Да| InitArrays
+    InitArrays --> LoopMotions[Цикл по элементам движения]
+    LoopMotions --> LoopLoops[Цикл по контурам]
+    LoopLoops --> GetLTZone[Получение LTZone от афферентов]
+    GetLTZone --> CalcPosition[Вычисление CurrentPosition]
+    CalcPosition --> NextLoop{Еще контуры?}
+    NextLoop -->|Да| LoopLoops
+    NextLoop -->|Нет| NextMotion{Еще элементы?}
+    NextMotion -->|Да| LoopMotions
+    NextMotion -->|Нет| CheckExternal{ExternalControl?}
+    CheckExternal -->|Да| LinkGenerators[Связывание генераторов]
+    CheckExternal -->|Нет| UnlinkGenerators[Разрывание связей генераторов]
+    LinkGenerators --> End
+    UnlinkGenerators --> End
+    Reset --> End
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    PCN[[NPCNElement]]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, нейроны"]
+    MotionLib["Nmsdk-MotionControlLib<br/>NEngineMotionControl, NMotionElement"]
+
+    PCN -->|использует| PulseLib
+    PCN -->|связан с| MotionLib
+
+    Engine["NEngineMotionControl<br/>Движок управления"]
+    MotionElem["NMotionElement<br/>Элементы движения"]
+    AfferentNeurons["AfferentNeurons<br/>Афферентные нейроны"]
+    ControlNeurons["ControlNeurons<br/>Управляющие нейроны"]
+
+    PCN --> Engine
+    PCN --> MotionElem
+    PCN --> AfferentNeurons
+    PCN --> ControlNeurons
+```
 
 ## Properties
 
@@ -300,8 +411,7 @@ NPCNElement implements a Position Control Network element that calculates curren
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 22, 24 — сеть контроля позиции (PCN).
 
 ## Usage Examples

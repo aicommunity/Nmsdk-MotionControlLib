@@ -421,23 +421,163 @@ NMotionElement is a basic element for motion control systems. It creates a neura
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NMotionElement
+    NMotionElement *-- NAfferentNeuron : Afferents
+    NMotionElement *-- NPulseGenerator : ExternalControlGenerators
+    NMotionElement *-- NPulseNeuron : Motoneurons
+
+    class NMotionElement {
+        +NumControlLoops : int
+        +EnableControlLoopFlags : vector~int~
+        +LinkModes : vector~int~
+        +InterneuronPresentMode : int
+        +RenshowMode : int
+        +PacemakerMode : int
+        +RecurrentInhibitionMode : int
+        +RecurrentInhibitionBranchMode : int
+        +MotoneuronBranchMode : int
+        +ExternalControlMode : int
+        +NeuroObjectName : string
+        +AfferentObjectName : string
+        +isNumControlLoopsInitialized : bool
+        +Afferents : UCPointer~NAfferentNeuron~
+        +ExternalControlGenerators : UCPointer~NPulseGenerator~
+        +Motoneurons : UCPointer~NPulseNeuron~
+        +SetNumControlLoops(value) bool
+        +SetLinkModes(value) bool
+        +SetInterneuronPresentMode(value) bool
+        +SetRenshowMode(value) bool
+        +SetPacemakerMode(value) bool
+        +New() NMotionElement*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+        #CreateStructure() void
+        #CreateInternalLinks() void
+        #CreateMotoneurons() bool
+        #CreateAfferents() bool
+        #CreateInterneurons() bool
+        #LinkMotoneurons() bool
+        #LinkRenshow() bool
+        #LinkPM() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Engine as NEngineMotionControl
+    participant Element as NMotionElement
+    participant Motoneuron as NPulseNeuron
+    participant Afferent as NAfferentNeuron
+
+    Storage->>Engine: Create()
+    Engine->>Element: new NMotionElement()
+    Engine->>Element: SetNumControlLoops()
+    Engine->>Element: SetInterneuronPresentMode()
+    Engine->>Element: SetRenshowMode()
+    Engine->>Element: SetMotoneuronBranchMode()
+    Engine->>Element: Build()
+    Element->>Element: ABuild()
+    Element->>Element: BackupExternalLinks()
+    Element->>Element: CreateStructure()
+    Element->>Element: CreateMotoneurons()
+    Element->>Motoneuron: new NPulseNeuron("MotoneuronL")
+    Element->>Motoneuron: new NPulseNeuron("MotoneuronR")
+    Element->>Element: CreateAfferents()
+    Element->>Afferent: new NAfferentNeuron() для каждого контура
+    Element->>Element: CreateInterneurons()
+    Element->>Element: CreateInternalLinks()
+    Element->>Element: LinkMotoneurons()
+    Element->>Element: LinkRenshow() (если включен)
+    Element->>Element: LinkPM() (если включен)
+    Element->>Element: RestoreExternalLinks()
+
+    loop Каждый шаг вычислений
+        Storage->>Element: Calculate()
+        Element->>Element: ACalculate()
+        Note over Element: Вычисления выполняются нейронами внутри
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> BackingUp: BackupExternalLinks()
+    BackingUp --> Creating: CreateStructure()
+    Creating --> CreatingMotoneurons: CreateMotoneurons()
+    CreatingMotoneurons --> CreatingAfferents: CreateAfferents()
+    CreatingAfferents --> CreatingInterneurons: CreateInterneurons()
+    CreatingInterneurons --> Linking: CreateInternalLinks()
+    Linking --> Restoring: RestoreExternalLinks()
+    Restoring --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ABuild]) --> Backup[BackupExternalLinks]
+    Backup --> CreateStruct[CreateStructure]
+    CreateStruct --> DelAll[DelAllComponents]
+    DelAll --> CheckStorage["Storage<br/>существует?"]
+    CheckStorage -->|Нет| End([Конец])
+    CheckStorage -->|Да| CheckNames["Имена классов<br/>заданы?"]
+    CheckNames -->|Нет| End
+    CheckNames -->|Да| CreateMN["CreateMotoneurons:<br/>Создание MotoneuronL и MotoneuronR"]
+    CreateMN --> CreateAff["CreateAfferents:<br/>Создание афферентов для каждого контура"]
+    CreateAff --> CreateIN["CreateInterneurons:<br/>Создание интернейронов если включены"]
+    CreateIN --> CreateLinks[CreateInternalLinks]
+    CreateLinks --> LinkMN["LinkMotoneurons:<br/>Связывание моторных нейронов"]
+    LinkMN --> CheckRenshow{RenshowMode?}
+    CheckRenshow -->|Да| LinkRenshow[LinkRenshow]
+    CheckRenshow -->|Нет| CheckPM
+    LinkRenshow --> CheckPM{PacemakerMode?}
+    CheckPM -->|Да| LinkPM[LinkPM]
+    CheckPM -->|Нет| Restore
+    LinkPM --> Restore[RestoreExternalLinks]
+    Restore --> End
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Element[[NMotionElement]]
+    PulseLib["Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron, NPulseGenerator"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Element -->|использует| PulseLib
+    Element -->|использует| BasicLib
+
+    MotoneuronL["MotoneuronL<br/>Левый моторный нейрон"]
+    MotoneuronR["MotoneuronR<br/>Правый моторный нейрон"]
+    Afferents["Afferents<br/>Афферентные нейроны"]
+    Interneurons["Interneurons<br/>Интернейроны"]
+    Renshow["Renshow Cells<br/>Клетки Реншоу"]
+    Pacemaker["Pacemaker<br/>Пейсмейкеры"]
+
+    Element --> MotoneuronL
+    Element --> MotoneuronR
+    Element --> Afferents
+    Element --> Interneurons
+    Element --> Renshow
+    Element --> Pacemaker
+```
 
 ## Properties
 
@@ -461,6 +601,5 @@ NMotionElement is a basic element for motion control systems. It creates a neura
 
 [Same as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 21, 22, 23 — элементы движения, моторная память, согласованное управление.

@@ -240,23 +240,102 @@ NManipulatorAndGyro implements a manipulator model accounting for gravity and gy
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NManipulatorAndGyro
+    class NManipulatorAndGyro {
+        +Mass : double
+        +Length : double
+        +InputMomentumExt : MDMatrix~double~
+        +InputMomentum : MDMatrix~double~
+        +InputAngle : MDMatrix~double~
+        +Output : MDMatrix~double~
+        #gravity_constant : double
+        +New() NManipulatorAndGyro*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Manipulator as NManipulatorAndGyro
+    participant Engine as Engine
+    participant External as ExternalSource
+
+    Storage->>Manipulator: new NManipulatorAndGyro()
+    Storage->>Manipulator: Default()
+    Manipulator->>Manipulator: ADefault()
+
+    Storage->>Manipulator: Build()
+    Manipulator->>Manipulator: ABuild()
+
+    Storage->>Manipulator: Reset()
+    Manipulator->>Manipulator: AReset()
+    Note over Manipulator: gravity_constant = 9.8
+
+    loop Каждый шаг вычислений
+        Engine->>Manipulator: InputMomentum = engine_moment
+        External->>Manipulator: InputMomentumExt = external_moment
+        External->>Manipulator: InputAngle = angle
+        Storage->>Manipulator: Calculate()
+        Manipulator->>Manipulator: ACalculate()
+        Note over Manipulator: Output = -external_moment + engine_moment - Mass*g*Length*sin(angle)
+        Manipulator->>Engine: Output = resulting_moment
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> ReadingInputs: Чтение входов
+    ReadingInputs --> ComputingMoment: Вычисление момента
+    ComputingMoment --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> ReadInputs["Чтение входов:<br/>external_moment, engine_moment, angle"]
+    ReadInputs --> CalcGravity["Вычисление гравитационного момента:<br/>Mass * gravity_constant * Length * sin(angle)"]
+    CalcGravity --> CalcOutput["Вычисление результирующего момента:<br/>Output = -external_moment + engine_moment - gravity_moment"]
+    CalcOutput --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Manipulator[[NManipulatorAndGyro]]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Manipulator -->|использует| BasicLib
+
+    InputMomentumExt["InputMomentumExt<br/>Внешний момент"]
+    InputMomentum["InputMomentum<br/>Момент двигателя"]
+    InputAngle["InputAngle<br/>Угол манипулятора"]
+    Output["Output<br/>Результирующий момент"]
+
+    Manipulator --> InputMomentumExt
+    Manipulator --> InputMomentum
+    Manipulator --> InputAngle
+    Manipulator --> Output
+```
 
 ## Properties
 
@@ -266,8 +345,7 @@ NManipulatorAndGyro implements a manipulator model accounting for gravity and gy
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 21 — манипулятор и гироскоп в иерархии управления.
 
 ## Usage Examples

@@ -309,23 +309,132 @@ NNewPositionControlElement extends NPositionControlElement functionality for wor
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    NPositionControlElement <|-- NNewPositionControlElement
+    NNewPositionControlElement *-- NEngineMotionControl : MotionControlElement
+    NNewPositionControlElement *-- NNet : LeftInputNeurons
+    NNewPositionControlElement *-- NNet : RightInputNeurons
+    NNewPositionControlElement *-- NNet : LeftControlNeurons
+    NNewPositionControlElement *-- NNet : RightControlNeurons
+
+    class NNewPositionControlElement {
+        +MotionControl : MDMatrix~double~
+        +SimControl : bool
+        +Output : MDMatrix~double~
+        +LeftInputNeurons : vector~vector~NNet*~~
+        +RightInputNeurons : vector~vector~NNet*~~
+        +LeftControlNeurons : vector~vector~NNet*~~
+        +RightControlNeurons : vector~vector~NNet*~~
+        +LeftPostInputNeurons : vector~vector~NNet*~~
+        +RightPostInputNeurons : vector~vector~NNet*~~
+        +LeftPreControlNeurons : vector~vector~NNet*~~
+        +RightPreControlNeurons : vector~vector~NNet*~~
+        +LeftGenerators : vector~vector~UNet*~~
+        +RightGenerators : vector~vector~UNet*~~
+        +MotionControlElement : UEPtr~NEngineMotionControl~
+        +New() NNewPositionControlElement*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+        +CreateNeurons() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Element as NNewPositionControlElement
+    participant Engine as NEngineMotionControl
+    participant MotionElem as NMotionElement
+
+    Storage->>Element: new NNewPositionControlElement()
+    Storage->>Element: Default()
+    Element->>Element: ADefault()
+
+    Storage->>Element: Build()
+    Element->>Element: ABuild()
+    Element->>Engine: Получение MotionControlElement
+    Element->>Element: Инициализация массивов позиций
+
+    loop Каждый шаг вычислений
+        Storage->>Element: Calculate()
+        Element->>Element: ACalculate()
+        Element->>MotionElem: Получение данных от элементов движения
+        Element->>Element: Вычисление CurrentPosition из LTZone
+        Element->>Element: Вычисление Delta = TargetPosition - CurrentPosition
+        Element->>Element: Обновление Output
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> GettingEngine: Получение MotionControlElement
+    GettingEngine --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> GettingPosition: Получение позиции от элементов движения
+    GettingPosition --> ComputingDelta: Вычисление Delta
+    ComputingDelta --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> CheckEngine["MotionControlElement<br/>существует?"]
+    CheckEngine -->|Нет| End([Конец])
+    CheckEngine -->|Да| CheckSize["Размеры<br/>совпадают?"]
+    CheckSize -->|Нет| Reset[Reset и выход]
+    CheckSize -->|Да| CheckNeurons["Нейроны<br/>созданы?"]
+    CheckNeurons -->|Нет| CreateNeurons[CreateNeurons]
+    CreateNeurons --> InitArrays[Инициализация массивов позиций]
+    CheckNeurons -->|Да| InitArrays
+    InitArrays --> LoopMotions[Цикл по элементам движения]
+    LoopMotions --> LoopLoops[Цикл по контурам управления]
+    LoopLoops --> GetLTZone[Получение LTZone от афферентов]
+    GetLTZone --> CalcPosition[Вычисление CurrentPosition из OutputFrequency]
+    CalcPosition --> NextLoop{Еще контуры?}
+    NextLoop -->|Да| LoopLoops
+    NextLoop -->|Нет| NextMotion{Еще элементы?}
+    NextMotion -->|Да| LoopMotions
+    NextMotion -->|Нет| CalcDelta[Вычисление Delta = TargetPosition - CurrentPosition]
+    CalcDelta --> UpdateOutput[Обновление Output]
+    UpdateOutput --> End
+    Reset --> End
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Element[[NNewPositionControlElement]]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, нейроны"]
+    MotionLib["Nmsdk-MotionControlLib<br/>NEngineMotionControl, NMotionElement"]
+
+    Element -->|использует| PulseLib
+    Element -->|связан с| MotionLib
+
+    Engine["NEngineMotionControl<br/>Движок управления"]
+    MotionElem["NMotionElement<br/>Элементы движения"]
+    InputNeurons["InputNeurons<br/>Входные нейроны"]
+    ControlNeurons["ControlNeurons<br/>Управляющие нейроны"]
+
+    Element --> Engine
+    Element --> MotionElem
+    Element --> InputNeurons
+    Element --> ControlNeurons
+```
 
 ## Properties
 
@@ -335,8 +444,7 @@ NNewPositionControlElement extends NPositionControlElement functionality for wor
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 22, 24 — элемент контроля позиции, пространственные конфигурации.
 
 ## Usage Examples

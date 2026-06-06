@@ -304,23 +304,125 @@ NMultiPositionControl extends NPositionControlElement for managing multiple posi
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    NPositionControlElement <|-- NMultiPositionControl
+    NMultiPositionControl *-- NPositionControlElement : PositionControlElement
+    NMultiPositionControl *-- NNet : InputNeuronsByContours
+    NMultiPositionControl *-- NNet : ControlNeuronsByContours
+
+    class NMultiPositionControl {
+        +PositionControl : vector~MDMatrix~double~~
+        +NumOfPositions : int
+        +BuildSolo : bool
+        +PCsNum : int
+        +InputsNum : int
+        +IsNeedToRebuild : bool
+        +PostInputThreshold : double
+        +PrebuildStructure : bool
+        +InputNeuronsByContours : vector~vector~NNet*~~
+        +ControlNeuronsByContours : vector~vector~NNet*~~
+        +PositionControlElement : vector~UEPtr~NPositionControlElement~~
+        +SetBuildSolo(value) bool
+        +SetInputsNum(value) bool
+        +SetPCsNum(value) bool
+        +New() NMultiPositionControl*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant MultiPC as NMultiPositionControl
+    participant PC as NPositionControlElement
+    participant Neurons as Neurons
+
+    Storage->>MultiPC: new NMultiPositionControl()
+    Storage->>MultiPC: Default()
+    MultiPC->>MultiPC: ADefault()
+
+    Storage->>MultiPC: Build()
+    MultiPC->>MultiPC: ABuild()
+    alt BuildSolo == true
+        MultiPC->>MultiPC: CreateNeuronsSolo()
+        MultiPC->>Neurons: Создание нейронов
+    else BuildSolo == false
+        MultiPC->>PC: Использование существующих элементов
+    end
+
+    loop Каждый шаг вычислений
+        Storage->>MultiPC: Calculate()
+        MultiPC->>MultiPC: ACalculate()
+        alt RememberState == true
+            MultiPC->>MultiPC: Запоминание состояния
+            MultiPC->>MultiPC: Создание новых нейронов
+        end
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> CheckingMode{BuildSolo?}
+    CheckingMode -->|Да| CreatingSolo: CreateNeuronsSolo()
+    CheckingMode -->|Нет| UsingExisting: Использование существующих
+    CreatingSolo --> Ready: Готов к работе
+    UsingExisting --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Remembering{RememberState?}
+    Remembering -->|Да| CreatingNew: Создание новых нейронов
+    Remembering -->|Нет| Ready: Завершение шага
+    CreatingNew --> Ready: После создания
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> CheckBuildSolo{BuildSolo?}
+    CheckBuildSolo -->|true| CheckRemember{RememberState?}
+    CheckBuildSolo -->|false| ProcessExisting[Обработка существующих элементов]
+    CheckRemember -->|true| RememberState[Запоминание состояния]
+    RememberState --> CreatePreControl[Создание PreControlNeuron]
+    CreatePreControl --> CreatePostInput[Создание PostInputNeuron]
+    CreatePostInput --> LinkNeurons[Связывание нейронов]
+    LinkNeurons --> ProcessExisting
+    CheckRemember -->|false| ProcessExisting
+    ProcessExisting --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    MultiPC[[NMultiPositionControl]]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, нейроны"]
+    MotionLib["Nmsdk-MotionControlLib<br/>NPositionControlElement"]
+
+    MultiPC -->|использует| PulseLib
+    MultiPC -->|содержит| MotionLib
+
+    PositionControls["PositionControlElement<br/>Вектор элементов контроля"]
+    InputNeurons["InputNeuronsByContours<br/>Входные нейроны по контурам"]
+    ControlNeurons["ControlNeuronsByContours<br/>Управляющие нейроны по контурам"]
+
+    MultiPC --> PositionControls
+    MultiPC --> InputNeurons
+    MultiPC --> ControlNeurons
+```
 
 ## Properties
 
@@ -330,8 +432,7 @@ NMultiPositionControl extends NPositionControlElement for managing multiple posi
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 22, 24 — множественный контроль позиции.
 
 ## Usage Examples

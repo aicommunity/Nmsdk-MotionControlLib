@@ -313,23 +313,137 @@ NPendulumAndCart implements a mathematical model of a pendulum on a cart, calcul
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NPendulumAndCart
+    class NPendulumAndCart {
+        +CartMass : double
+        +RodMass : double
+        +RodLength : double
+        +OutXMovement : double
+        +Mode : double
+        +Ki : double
+        +Kd : double
+        +Kp : double
+        +MovementKi : double
+        +MovementKd : double
+        +MovementKp : double
+        +AngleWeight : double
+        +MovementWeight : double
+        +ExtrenalMoment : double
+        +Input1 : MDMatrix~double~
+        +Input2 : MDMatrix~double~
+        +Acceleration : MDMatrix~double~
+        +Angle : MDMatrix~double~
+        +Speed : MDMatrix~double~
+        +Movement : MDMatrix~double~
+        +MovementSpeed : MDMatrix~double~
+        #theta0 : double
+        #x0 : double
+        #y : double
+        #x : double
+        #movement : double
+        #y0 : double
+        +New() NPendulumAndCart*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Pendulum as NPendulumAndCart
+    participant Controller as PIDController
+
+    Storage->>Pendulum: new NPendulumAndCart()
+    Storage->>Pendulum: Default()
+    Pendulum->>Pendulum: ADefault()
+
+    Storage->>Pendulum: Build()
+    Pendulum->>Pendulum: ABuild()
+
+    Storage->>Pendulum: Reset()
+    Pendulum->>Pendulum: AReset()
+    Note over Pendulum: Сброс угла, скорости, ускорения
+
+    loop Каждый шаг вычислений
+        Controller->>Pendulum: Input1, Input2 = control_signals
+        Storage->>Pendulum: Calculate()
+        Pendulum->>Pendulum: ACalculate()
+        alt Mode == 1 (PID)
+            Pendulum->>Pendulum: Вычисление PID-управления
+        end
+        Pendulum->>Pendulum: Вычисление динамики маятника
+        Pendulum->>Controller: Angle, Speed, Acceleration, Movement, MovementSpeed
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> CheckMode{Mode == 1?}
+    CheckMode -->|Да| PIDControl: Вычисление PID
+    CheckMode -->|Нет| DirectInput: Использование прямого входа
+    PIDControl --> Dynamics: Вычисление динамики
+    DirectInput --> Dynamics: Вычисление динамики
+    Dynamics --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> ReadInputs[Чтение Input1 и Input2]
+    ReadInputs --> CheckMode["Mode == 1<br/>PID?"]
+    CheckMode -->|Да| CalcPID[Вычисление PID:<br/>input[0] = (theta0*Kp + y*Kd + Ki*theta0/TimeStep)*AngleWeight +<br/>(movement*MovementKp + x*MovementKd + MovementKi*movement/TimeStep)*MovementWeight]
+    CheckMode -->|Нет| AddExternal[Добавление ExtrenalMoment]
+    CalcPID --> AddExternal
+    AddExternal --> CalcCoeffs["Вычисление коэффициентов:<br/>k1 = 3*g*(CartMass+RodMass)/((4*CartMass+RodMass)*RodLength)<br/>k2 = 3/(4*CartMass+RodMass)/RodLength"]
+    CalcCoeffs --> CalcDynamics["Вычисление динамики:<br/>y = y + (a*theta0 + b)/TimeStep<br/>Angle = theta0 + (y-OutXMovement)/TimeStep<br/>Speed = y<br/>Acceleration = (a*theta0 + b)"]
+    CalcDynamics --> CalcMovement["Вычисление движения тележки:<br/>x = x + ...<br/>Movement = x<br/>MovementSpeed = ..."]
+    CalcMovement --> UpdateOutputs[Обновление выходов]
+    UpdateOutputs --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Pendulum[[NPendulumAndCart]]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Pendulum -->|использует| BasicLib
+
+    Input1["Input1<br/>Входной сигнал 1"]
+    Input2["Input2<br/>Входной сигнал 2"]
+    Acceleration["Acceleration<br/>Ускорение маятника"]
+    Angle["Angle<br/>Угол маятника"]
+    Speed["Speed<br/>Угловая скорость"]
+    Movement["Movement<br/>Перемещение тележки"]
+    MovementSpeed["MovementSpeed<br/>Скорость тележки"]
+
+    Pendulum --> Input1
+    Pendulum --> Input2
+    Pendulum --> Acceleration
+    Pendulum --> Angle
+    Pendulum --> Speed
+    Pendulum --> Movement
+    Pendulum --> MovementSpeed
+```
 
 ## Properties
 
@@ -343,6 +457,5 @@ NPendulumAndCart implements a mathematical model of a pendulum on a cart, calcul
 
 [Same as RU section, with English comments]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 23, 27 — бионические модели управления движением.

@@ -311,23 +311,130 @@ NManipulatorSource provides manipulator state data: angle, speed, force, and mov
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    NSource <|-- NManipulatorSource
+    class NManipulatorSource {
+        +Angle : double
+        +Speed : double
+        +Force : double
+        +Movement : double
+        +InputAngle : MDMatrix~double~
+        +InputSpeed : MDMatrix~double~
+        +InputForce : MDMatrix~double~
+        +InputMovement : MDMatrix~double~
+        +OutputAngle : MDMatrix~double~
+        +OutputSpeed : MDMatrix~double~
+        +OutputForce : MDMatrix~double~
+        +OutputMovement : MDMatrix~double~
+        +UpdateOutputFlag : bool
+        +SetAngle(value) bool
+        +SetSpeed(value) bool
+        +SetForce(value) bool
+        +New() NManipulatorSource*
+        #ADefault() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Source as NManipulatorSource
+    participant Manipulator as ManipulatorModel
+    participant Controller as Controller
+
+    Storage->>Source: new NManipulatorSource()
+    Storage->>Source: Default()
+    Source->>Source: ADefault()
+
+    Storage->>Source: Build()
+    Source->>Source: ABuild()
+
+    Storage->>Source: Reset()
+    Source->>Source: AReset()
+
+    loop Каждый шаг вычислений
+        Manipulator->>Source: InputAngle, InputSpeed, InputForce, InputMovement
+        Storage->>Source: Calculate()
+        Source->>Source: ACalculate()
+        Note over Source: Обновление выходов из входов или параметров
+        Source->>Controller: OutputAngle, OutputSpeed, OutputForce, OutputMovement
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> ReadingInputs: Чтение входных данных
+    ReadingInputs --> UpdatingOutputs: Обновление выходов
+    UpdatingOutputs --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> CheckInputAngle["InputAngle<br/>подключен?"]
+    CheckInputAngle -->|Да| ReadInputAngle[OutputAngle = InputAngle]
+    CheckInputAngle -->|Нет| UseParamAngle[OutputAngle = Angle]
+    ReadInputAngle --> CheckInputSpeed
+    UseParamAngle --> CheckInputSpeed["InputSpeed<br/>подключен?"]
+    CheckInputSpeed -->|Да| ReadInputSpeed[OutputSpeed = InputSpeed]
+    CheckInputSpeed -->|Нет| UseParamSpeed[OutputSpeed = Speed]
+    ReadInputSpeed --> CheckInputForce
+    UseParamSpeed --> CheckInputForce["InputForce<br/>подключен?"]
+    CheckInputForce -->|Да| ReadInputForce[OutputForce = InputForce]
+    CheckInputForce -->|Нет| UseParamForce[OutputForce = Force]
+    ReadInputForce --> CheckInputMovement
+    UseParamForce --> CheckInputMovement["InputMovement<br/>подключен?"]
+    CheckInputMovement -->|Да| ReadInputMovement[OutputMovement = InputMovement]
+    CheckInputMovement -->|Нет| UseParamMovement[OutputMovement = Movement]
+    ReadInputMovement --> End([Конец])
+    UseParamMovement --> End
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Source[[NManipulatorSource]]
+    PulseLib["Nmsdk-PulseLib<br/>NSource"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Source -->|наследуется от| PulseLib
+    Source -->|использует| BasicLib
+
+    InputAngle["InputAngle<br/>Входной угол"]
+    InputSpeed["InputSpeed<br/>Входная скорость"]
+    InputForce["InputForce<br/>Входная сила"]
+    InputMovement["InputMovement<br/>Входное перемещение"]
+    OutputAngle["OutputAngle<br/>Выходной угол"]
+    OutputSpeed["OutputSpeed<br/>Выходная скорость"]
+    OutputForce["OutputForce<br/>Выходная сила"]
+    OutputMovement["OutputMovement<br/>Выходное перемещение"]
+
+    Source --> InputAngle
+    Source --> InputSpeed
+    Source --> InputForce
+    Source --> InputMovement
+    Source --> OutputAngle
+    Source --> OutputSpeed
+    Source --> OutputForce
+    Source --> OutputMovement
+```
 
 ## Properties
 
@@ -337,8 +444,7 @@ NManipulatorSource provides manipulator state data: angle, speed, force, and mov
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 20, 21 — источник данных манипулятора в иерархии управления.
 
 ## Usage Examples

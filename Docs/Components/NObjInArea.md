@@ -328,23 +328,149 @@ NObjInArea detects objects in a restricted image area using pulse sequence gener
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NObjInArea
+    NObjInArea *-- NPulseGeneratorMulti : ClsSpikeFr
+    NObjInArea *-- NSuppressionUnit : SuppressUnit1
+    NObjInArea *-- NSuppressionUnit : SuppressUnit2
+    NObjInArea *-- NPulseNeuron : ORNeuron
+    NObjInArea *-- NPulseNeuron : ANDNeuron
+    NObjInArea *-- NPulseNeuron : DecidingNeuron
+    NObjInArea *-- NPulseGeneratorTransit : ExcitatoryGen
+
+    class NObjInArea {
+        +NeuronClassName : string
+        +MultiGeneratorClassName : string
+        +PulseLength : double
+        +Amplitude : double
+        +Frequency : double
+        +HighFreq : double
+        +Delay11 : double
+        +Delay12 : double
+        +Delay21 : double
+        +Delay22 : double
+        +PulseCount : int
+        +NumObj : int
+        +DelaysClsSpikeFr : MDMatrix~double~
+        +Output : MDMatrix~double~
+        #ClsSpikeFr : vector~UEPtr~NPulseGeneratorMulti~~
+        #OldNumObj : int
+        #SuppressUnit1 : UEPtr~NSuppressionUnit~
+        #SuppressUnit2 : UEPtr~NSuppressionUnit~
+        #ORNeuron : UEPtr~NPulseNeuron~
+        #ANDNeuron : UEPtr~NPulseNeuron~
+        #DecidingNeuron : UEPtr~NPulseNeuron~
+        #ExcitatoryGen : UEPtr~NPulseGeneratorTransit~
+        #Relinked : bool
+        +New() NObjInArea*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Detector as NObjInArea
+    participant ClsGen as ClsSpikeFr
+    participant Suppress1 as SuppressUnit1
+    participant Suppress2 as SuppressUnit2
+    participant ORNeuron as ORNeuron
+    participant ANDNeuron as ANDNeuron
+    participant Deciding as DecidingNeuron
+
+    Storage->>Detector: new NObjInArea()
+    Storage->>Detector: Default()
+    Detector->>Detector: ADefault()
+
+    Storage->>Detector: Build()
+    Detector->>Detector: ABuild()
+    Detector->>ClsGen: Создание NumObj генераторов ClsSpikeFr
+    Detector->>Suppress1: new NSuppressionUnit("SuppressUnit1")
+    Detector->>Suppress2: new NSuppressionUnit("SuppressUnit2")
+    Detector->>ORNeuron: new NPulseNeuron("ORNeuron")
+    Detector->>ANDNeuron: new NPulseNeuron("ANDNeuron")
+    Detector->>Deciding: new NPulseNeuron("DecidingNeuron")
+    Detector->>Detector: Создание связей между компонентами
+
+    loop Каждый шаг вычислений
+        Storage->>Detector: Calculate()
+        Detector->>Detector: ACalculate()
+        Note over Detector: Обнаружение объектов в области
+        Detector->>Deciding: Output = результат обнаружения
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> CreatingGenerators: Создание генераторов
+    CreatingGenerators --> CreatingSuppress: Создание блоков подавления
+    CreatingSuppress --> CreatingNeurons: Создание нейронов
+    CreatingNeurons --> CreatingLinks: Создание связей
+    CreatingLinks --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Detecting: Обнаружение объектов
+    Detecting --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ABuild]) --> CheckObj["NumObj<br/>изменилось?"]
+    CheckObj -->|Да| DeleteOld[Удаление старых генераторов]
+    CheckObj -->|Нет| CreateGenerators
+    DeleteOld --> CreateGenerators["Создание NumObj генераторов ClsSpikeFr<br/>с задержками из DelaysClsSpikeFr"]
+    CreateGenerators --> CreateSuppress1["Создание SuppressUnit1<br/>с Delay1=Delay11, Delay2=Delay12"]
+    CreateSuppress1 --> CreateSuppress2["Создание SuppressUnit2<br/>с Delay1=Delay21, Delay2=Delay22"]
+    CreateSuppress2 --> CreateOR[Создание ORNeuron]
+    CreateOR --> CreateAND[Создание ANDNeuron]
+    CreateAND --> CreateDeciding[Создание DecidingNeuron]
+    CreateDeciding --> CreateExcitatory[Создание ExcitatoryGen]
+    CreateExcitatory --> LinkComponents[Создание связей между компонентами]
+    LinkComponents --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Detector[[NObjInArea]]
+    PulseLib["Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron"]
+    MotionLib["Nmsdk-MotionControlLib<br/>NSuppressionUnit"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Detector -->|использует| PulseLib
+    Detector -->|использует| MotionLib
+    Detector -->|использует| BasicLib
+
+    ClsGenerators["ClsSpikeFr<br/>Генераторы последовательностей"]
+    Suppress1["SuppressUnit1<br/>Блок подавления 1"]
+    Suppress2["SuppressUnit2<br/>Блок подавления 2"]
+    ORNeuron["ORNeuron<br/>Нейрон ИЛИ"]
+    ANDNeuron["ANDNeuron<br/>Нейрон И"]
+    DecidingNeuron["DecidingNeuron<br/>Нейрон принятия решения"]
+
+    Detector --> ClsGenerators
+    Detector --> Suppress1
+    Detector --> Suppress2
+    Detector --> ORNeuron
+    Detector --> ANDNeuron
+    Detector --> DecidingNeuron
+```
 
 ## Properties
 
@@ -354,8 +480,7 @@ NObjInArea detects objects in a restricted image area using pulse sequence gener
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 13, 19 — обнаружение объектов, восприятие и управление.
 
 ## Usage Examples

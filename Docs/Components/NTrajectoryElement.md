@@ -297,23 +297,121 @@ NTrajectoryElement represents a point in trajectory space with the ability to tr
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NTrajectoryElement
+    NTrajectoryElement *-- NPulseNeuron : Neurons
+    NTrajectoryElement *-- NPulseSynapse : Paths
+    NTrajectoryElement *-- NTrajectoryElement : Forwards
+    NTrajectoryElement *-- NTrajectoryElement : Backwards
+
+    class NTrajectoryElement {
+        +NeuronClassName : string
+        +Output : MDMatrix~double~
+        +Layer : int
+        +ForwardsNames : vector~string~
+        +BackwardsNames : vector~string~
+        +ForwardSynsNames : vector~string~
+        +BackwardSynsNames : vector~string~
+        +PathsNames : vector~string~
+        +LastUsedForward : int
+        +LastUsedBackward : int
+        +Forwards : vector~UEPtr~NTrajectoryElement~~
+        +Backwards : vector~UEPtr~NTrajectoryElement~~
+        +Paths : vector~UEPtr~NPulseSynapse~~
+        +ForwardSyns : vector~UEPtr~NPulseSynapse~~
+        +BackwardSyns : vector~UEPtr~NPulseSynapse~~
+        +SetNeuronClassName(value) bool
+        +SetLayer(value) bool
+        +New() NTrajectoryElement*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Element as NTrajectoryElement
+    participant Neuron1 as Neuron1
+    participant Neuron2 as Neuron2
+    participant NextElement as NextTrajectoryElement
+
+    Storage->>Element: new NTrajectoryElement()
+    Storage->>Element: Default()
+    Element->>Element: ADefault()
+
+    Storage->>Element: Build()
+    Element->>Element: ABuild()
+    Element->>Neuron1: new NPulseNeuron("Neuron1")
+    Element->>Neuron2: new NPulseNeuron("Neuron2")
+    Element->>Element: Создание связей между нейронами
+    Element->>Element: Создание связей с другими элементами
+
+    loop Каждый шаг вычислений
+        Storage->>Element: Calculate()
+        Element->>Element: ACalculate()
+        Element->>Neuron1: Вычисления
+        Element->>Neuron2: Вычисления
+        Element->>NextElement: Output сигнал
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> CreatingNeurons: Создание нейронов
+    CreatingNeurons --> CreatingLinks: Создание связей
+    CreatingLinks --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ABuild]) --> CreateNeuron1[Создание Neuron1<br/>SomaSize=1, DendSizes1=[5]]
+    CreateNeuron1 --> CreateNeuron2[Создание Neuron2<br/>SomaSize=1, DendSizes2=[3]]
+    CreateNeuron2 --> LinkN1toN2["Связь от N1 к N2:<br/>LTZone -> Dendrite1_1, Dendrite1_3"]
+    LinkN1toN2 --> LinkN2toN1["Связь от N2 к N1:<br/>LTZone -> Dendrite1_2, Dendrite1_5"]
+    LinkN2toN1 --> LinkForwards["Связи с дочерними элементами<br/>через ForwardSyns"]
+    LinkForwards --> LinkBackwards["Связи с родительскими элементами<br/>через BackwardSyns"]
+    LinkBackwards --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Element[[NTrajectoryElement]]
+    PulseLib["Nmsdk-PulseLib<br/>NPulseNeuron, NPulseSynapse"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Element -->|использует| PulseLib
+    Element -->|использует| BasicLib
+
+    Neuron1["Neuron1<br/>Внутренний нейрон 1"]
+    Neuron2["Neuron2<br/>Внутренний нейрон 2"]
+    Forwards["Forwards<br/>Дочерние элементы"]
+    Backwards["Backwards<br/>Родительские элементы"]
+
+    Element --> Neuron1
+    Element --> Neuron2
+    Element --> Forwards
+    Element --> Backwards
+```
 
 ## Properties
 
@@ -339,8 +437,7 @@ Output reflects current trajectory node activity (from neural structure).
 - **`AReset()`** — reset state
 - **`ACalculate()`** — update neuron outputs (trajectory transitions)
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 22, 24 — элемент траектории, память и навигация.
 
 ## Usage Examples

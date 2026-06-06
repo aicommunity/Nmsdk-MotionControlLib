@@ -458,6 +458,5 @@ while (simulation_running) {
 </Component>
 ```
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 21 — эмулятор источника манипулятора в иерархии управления.

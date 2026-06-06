@@ -361,23 +361,145 @@ NNavMousePrimitive models mouse movement in a one-dimensional maze (pole) using 
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NNavMousePrimitive
+    class NNavMousePrimitive {
+        +PoleSize : double
+        +MouseSize : double
+        +VibrissSize : double
+        +Velocity : double
+        +Frequency : double
+        +Delay : double
+        +PainDelay : double
+        +PulseLength : double
+        +UseExternalInput : bool
+        +Amplitude : double
+        +MotionControlSimple : int
+        +Input : MDMatrix~double~
+        +MotionControlSpikeForward : MDMatrix~double~
+        +MotionControlSpikeBackward : MDMatrix~double~
+        +MotionControlSpikeStop : MDMatrix~double~
+        +MotionControlState : int
+        +PainState : int
+        +MousePosition : double
+        +Output : MDMatrix~double~
+        +VibrissOutput : MDMatrix~double~
+        +PainOutput : MDMatrix~double~
+        #VibrDelays : vector~double~
+        #ForwardSpikeTime : double
+        #BackwardSpikeTime : double
+        #StopSpikeTime : double
+        #start_iter_time : double
+        #OldFrequency : double
+        #ResetTime : double
+        #vibriss_counters : vector~int~
+        #pain_counter : int
+        +SetPoleSize(value) bool
+        +SetVibrissSize(value) bool
+        +SetMouseSize(value) bool
+        +SetVelocity(value) bool
+        +New() NNavMousePrimitive*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #UpdateState() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Mouse as NNavMousePrimitive
+    participant Controller as MotionController
+
+    Storage->>Mouse: new NNavMousePrimitive()
+    Storage->>Mouse: Default()
+    Mouse->>Mouse: ADefault()
+
+    Storage->>Mouse: Build()
+    Mouse->>Mouse: ABuild()
+
+    Storage->>Mouse: Reset()
+    Mouse->>Mouse: AReset()
+    Note over Mouse: Инициализация позиции мыши
+
+    loop Каждый шаг вычислений
+        Controller->>Mouse: MotionControlSpikeForward/Backward/Stop
+        Storage->>Mouse: Calculate()
+        Mouse->>Mouse: ACalculate()
+        Mouse->>Mouse: UpdateState()
+        Note over Mouse: Обновление позиции, генерация вибрисс, обработка столкновений
+        Mouse->>Controller: VibrissOutput, PainOutput, Output
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> UpdatingState: UpdateState()
+    UpdatingState --> Moving: Движение
+    Moving --> CheckingCollision: Проверка столкновения
+    CheckingCollision --> GeneratingVibriss: Генерация вибрисс
+    GeneratingVibriss --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> UpdateState["UpdateState:<br/>Обновление состояния движения"]
+    UpdateState --> CheckForward{MotionControlSpikeForward?}
+    CheckForward -->|Да| SetForward["MotionControlState = 1<br/>ForwardSpikeTime = текущее время"]
+    CheckForward -->|Нет| CheckBackward
+    SetForward --> CheckBackward{MotionControlSpikeBackward?}
+    CheckBackward -->|Да| SetBackward["MotionControlState = -1<br/>BackwardSpikeTime = текущее время"]
+    CheckBackward -->|Нет| CheckStop
+    SetBackward --> CheckStop{MotionControlSpikeStop?}
+    CheckStop -->|Да| SetStop["MotionControlState = 0<br/>StopSpikeTime = текущее время"]
+    CheckStop -->|Нет| UpdatePosition
+    SetStop --> UpdatePosition["Обновление MousePosition<br/>на основе Velocity и MotionControlState"]
+    UpdatePosition --> CheckCollision["Столкновение<br/>с препятствием?"]
+    CheckCollision -->|Да| GeneratePain["Генерация PainOutput<br/>PainState = 1"]
+    CheckCollision -->|Нет| GenerateVibriss["Генерация VibrissOutput<br/>на основе позиции и VibrissSize"]
+    GeneratePain --> GenerateVibriss
+    GenerateVibriss --> UpdateOutput[Обновление Output]
+    UpdateOutput --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Mouse[[NNavMousePrimitive]]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Mouse -->|использует| BasicLib
+
+    Input["Input<br/>Входной сигнал"]
+    MotionControl["MotionControlSpikes<br/>Сигналы управления движением"]
+    VibrissOutput["VibrissOutput<br/>Выход вибрисс"]
+    PainOutput["PainOutput<br/>Выход болевого сигнала"]
+    Output["Output<br/>Выходной сигнал"]
+
+    Mouse --> Input
+    Mouse --> MotionControl
+    Mouse --> VibrissOutput
+    Mouse --> PainOutput
+    Mouse --> Output
+```
 
 ## Properties
 
@@ -391,6 +513,5 @@ NNavMousePrimitive models mouse movement in a one-dimensional maze (pole) using 
 
 [Same as RU section, with English comments]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 22, 24 — навигация, память пространственных конфигураций.

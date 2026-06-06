@@ -296,23 +296,124 @@ NAstaticGyro implements an astatic gyroscope model that calculates orientation a
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NAstaticGyro
+    class NAstaticGyro {
+        +natural_freq : double
+        +z_g : double
+        +alpha : double
+        +betta : double
+        +gamma : double
+        +Input1 : MDMatrix~double~
+        +Input2 : MDMatrix~double~
+        +Input3 : MDMatrix~double~
+        +Output1 : MDMatrix~double~
+        +Output2 : MDMatrix~double~
+        +Output3 : MDMatrix~double~
+        #x11_prev : double
+        #x12_prev : double
+        #x21_prev : double
+        #x22_prev : double
+        #y11_prev : double
+        #y12_prev : double
+        #y21_prev : double
+        #y22_prev : double
+        #z11_prev : double
+        #z12_prev : double
+        #z21_prev : double
+        #z22_prev : double
+        +New() NAstaticGyro*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Gyro as NAstaticGyro
+    participant Sensor as AngularVelocitySensor
+
+    Storage->>Gyro: new NAstaticGyro()
+    Storage->>Gyro: Default()
+    Gyro->>Gyro: ADefault()
+
+    Storage->>Gyro: Build()
+    Gyro->>Gyro: ABuild()
+
+    Storage->>Gyro: Reset()
+    Gyro->>Gyro: AReset()
+    Note over Gyro: Сброс углов и внутренних переменных
+
+    loop Каждый шаг вычислений
+        Sensor->>Gyro: Input1, Input2, Input3 = angular_velocities
+        Storage->>Gyro: Calculate()
+        Gyro->>Gyro: ACalculate()
+        Note over Gyro: Вычисление углов через фильтр 2-го порядка
+        Gyro->>Sensor: Output1=alpha, Output2=betta, Output3=gamma
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Filtering: Фильтрация сигналов
+    Filtering --> ComputingAngles: Вычисление углов
+    ComputingAngles --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> CheckInputs["Все входы<br/>подключены?"]
+    CheckInputs -->|Нет| End([Конец])
+    CheckInputs -->|Да| ReadInputs[Чтение входных сигналов:<br/>input[0]=Input1, input[1]=Input2, input[2]=Input3]
+    ReadInputs --> CalcAlpha["Вычисление alpha:<br/>Фильтр 2-го порядка для оси X"]
+    CalcAlpha --> CalcBetta["Вычисление betta:<br/>Фильтр 2-го порядка для оси Y"]
+    CalcBetta --> CalcGamma["Вычисление gamma:<br/>Фильтр 2-го порядка для оси Z"]
+    CalcGamma --> UpdatePrev[Обновление предыдущих значений]
+    UpdatePrev --> UpdateOutputs["Обновление выходов:<br/>Output1=alpha, Output2=betta, Output3=gamma"]
+    UpdateOutputs --> End
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Gyro[[NAstaticGyro]]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Gyro -->|использует| BasicLib
+
+    Input1["Input1<br/>Угловая скорость по оси X"]
+    Input2["Input2<br/>Угловая скорость по оси Y"]
+    Input3["Input3<br/>Угловая скорость по оси Z"]
+    Output1["Output1<br/>Угол alpha"]
+    Output2["Output2<br/>Угол betta"]
+    Output3["Output3<br/>Угол gamma"]
+
+    Gyro --> Input1
+    Gyro --> Input2
+    Gyro --> Input3
+    Gyro --> Output1
+    Gyro --> Output2
+    Gyro --> Output3
+```
 
 ## Properties
 
@@ -322,8 +423,7 @@ NAstaticGyro implements an astatic gyroscope model that calculates orientation a
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 21 — гироскоп в иерархии управления и согласованном управлении.
 
 ## Usage Examples

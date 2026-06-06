@@ -254,23 +254,135 @@ NMazeMemorySimplified is a simplified version of NMazeMemory, implementing a maz
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NMazeMemorySimplified
+    NMazeMemorySimplified *-- NTrajectoryElement : TrajectoryElements
+    NMazeMemorySimplified *-- NMultiPositionControl : MultiPCs
+    NMazeMemorySimplified *-- NNeuronTrainer : NTrainers
+    NMazeMemorySimplified *-- NPulseNeuron : ActionNeurons
+
+    class NMazeMemorySimplified {
+        +Situation : bool
+        +InputActions : vector~int~
+        +ActionNeuronsType : string
+        +FeaturesNum : int
+        +IsDone : bool
+        +SituationCoords : MDMatrix~double~
+        #ActionNeurons : vector~UEPtr~NPulseNeuron~~
+        #TrajectoryElements : vector~UEPtr~NTrajectoryElement~~
+        #ActivePIs : vector~UEPtr~NTrajectoryElement~~
+        #MultiPCs : vector~UEPtr~NMultiPositionControl~~
+        #NTrainers : vector~UEPtr~NNeuronTrainer~~
+        #CurrentTE : int
+        #CurrentNT : UEPtr~NNeuronTrainer~
+        #CurrentLayer : int
+        #BaseTE : UEPtr~NTrajectoryElement~
+        #BaseMPC : UEPtr~NMultiPositionControl~
+        #PrevTE : UEPtr~NTrajectoryElement~
+        #PassedTEs : vector~UEPtr~NTrajectoryElement~~
+        +SetSituation(value) bool
+        +SetInputActions(value) bool
+        +New() NMazeMemorySimplified*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Memory as NMazeMemorySimplified
+    participant TE as NTrajectoryElement
+    participant MPC as NMultiPositionControl
+    participant NT as NNeuronTrainer
+
+    Storage->>Memory: new NMazeMemorySimplified()
+    Storage->>Memory: Default()
+    Memory->>Memory: ADefault()
+
+    Storage->>Memory: Build()
+    Memory->>Memory: ABuild()
+    Memory->>TE: Создание начальных элементов траектории
+    Memory->>MPC: Создание блоков MultiPC
+    Memory->>NT: Создание нейронных тренеров
+
+    loop Каждый шаг вычислений
+        Storage->>Memory: Calculate()
+        Memory->>Memory: ACalculate()
+        alt Новая ситуация
+            Memory->>NT: Запоминание признаков ситуации
+            Memory->>TE: Создание нового элемента траектории
+            Memory->>MPC: Создание нового блока MultiPC
+        end
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> CreatingStructure: Создание начальной структуры
+    CreatingStructure --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> CheckingSituation: Проверка ситуации
+    CheckingSituation --> NewSituation: Новая ситуация?
+    NewSituation -->|Да| Training: Обучение NeuronTrainer
+    NewSituation -->|Нет| Updating: Обновление траектории
+    Training --> CreatingTE: Создание нового TE
+    CreatingTE --> CreatingMPC: Создание нового MPC
+    CreatingMPC --> Updating: Обновление траектории
+    Updating --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> CheckSituation{Situation?}
+    CheckSituation -->|Да| CheckActions["InputActions<br/>доступны?"]
+    CheckSituation -->|Нет| UpdateCurrent[Обновление текущего TE]
+    CheckActions -->|Да| CheckTraining["NeuronTrainer<br/>обучен?"]
+    CheckActions -->|Нет| UpdateCurrent
+    CheckTraining -->|Нет| TrainNT[Обучение NeuronTrainer]
+    CheckTraining -->|Да| CreateTE[Создание нового TE]
+    TrainNT --> CreateTE
+    CreateTE --> CreateMPC[Создание нового MPC]
+    CreateMPC --> UpdateCurrent
+    UpdateCurrent --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Memory[[NMazeMemorySimplified]]
+    MotionLib["Nmsdk-MotionControlLib<br/>NTrajectoryElement, NMultiPositionControl"]
+    PulseLib["Nmsdk-PulseLib<br/>NNeuronTrainer, NPulseNeuron"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Memory -->|использует| MotionLib
+    Memory -->|использует| PulseLib
+    Memory -->|использует| BasicLib
+
+    TrajectoryElements["TrajectoryElements<br/>Элементы траектории"]
+    MultiPCs["MultiPCs<br/>Блоки множественного контроля"]
+    NTrainers["NTrainers<br/>Нейронные тренеры"]
+
+    Memory --> TrajectoryElements
+    Memory --> MultiPCs
+    Memory --> NTrainers
+```
 
 ## Properties
 
@@ -284,6 +396,5 @@ NMazeMemorySimplified is a simplified version of NMazeMemory, implementing a maz
 
 [Same as RU section, with English comments]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 22, 24 — память лабиринта, пространственные конфигурации.

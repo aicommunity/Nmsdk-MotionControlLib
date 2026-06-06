@@ -505,23 +505,130 @@ NDCEngine implements a mathematical model of a DC motor, accounting for electric
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NDCEngine
+    class NDCEngine {
+        +EMFactor : double
+        +Inductance : double
+        +Resistance : double
+        +Tm : double
+        +ReductionRate : double
+        +OutMoment : double
+        +InputVoltage : MDMatrix~double~
+        +InputMomentum : MDMatrix~double~
+        +OutputMomentum : MDMatrix~double~
+        +OutputAngle : MDMatrix~double~
+        +OutputAngleSpeed : MDMatrix~double~
+        #Angle : double
+        #Current : double
+        #EMF : double
+        #Moment : double
+        #AngleSpeed : double
+        #DiffMoment : double
+        +SetEMFactor(value) bool
+        +SetInductance(value) bool
+        +SetResistance(value) bool
+        +SetTm(value) bool
+        +SetReductionRate(value) bool
+        +New() NDCEngine*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Engine as NDCEngine
+    participant Controller as Controller
+    participant Load as Load
+
+    Storage->>Engine: new NDCEngine()
+    Storage->>Engine: Default()
+    Engine->>Engine: ADefault()
+    Note over Engine: Инициализация параметров двигателя
+
+    Storage->>Engine: Build()
+    Engine->>Engine: ABuild()
+
+    Storage->>Engine: Reset()
+    Engine->>Engine: AReset()
+    Note over Engine: Сброс состояния (Current=0, EMF=0, Angle=0)
+
+    loop Каждый шаг вычислений
+        Controller->>Engine: InputVoltage = voltage
+        Load->>Engine: InputMomentum = load_moment
+        Storage->>Engine: Calculate()
+        Engine->>Engine: ACalculate()
+        Note over Engine: Вычисление тока, ЭДС, момента, скорости, угла
+        Engine->>Controller: OutputMomentum = moment
+        Engine->>Controller: OutputAngle = angle
+        Engine->>Controller: OutputAngleSpeed = angular_speed
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> ReadVoltage["InputVoltage<br/>подключен?"]
+    ReadVoltage -->|Да| GetVoltage[Получить InputVoltage]
+    ReadVoltage -->|Нет| SetVoltageZero[input[0] = 0]
+    GetVoltage --> ReadMomentum
+    SetVoltageZero --> ReadMomentum["InputMomentum<br/>подключен?"]
+    ReadMomentum -->|Да| GetMomentum[Получить InputMomentum + OutMoment]
+    ReadMomentum -->|Нет| SetMomentumOut[input[1] = OutMoment]
+    GetMomentum --> CalcCurrent["Вычисление тока:<br/>Current = f(Voltage, EMF, Resistance, Inductance)"]
+    SetMomentumOut --> CalcCurrent
+    CalcCurrent --> CalcEMF["Вычисление ЭДС:<br/>EMF = f(Current, Momentum, Tm)"]
+    CalcEMF --> CalcMoment["Вычисление момента:<br/>Moment = Current * EMFactor / Resistance"]
+    CalcMoment --> CalcSpeed["Вычисление угловой скорости:<br/>OutputAngleSpeed = EMF / EMFactor"]
+    CalcSpeed --> CalcAngle["Вычисление угла:<br/>Angle += OutputAngleSpeed / ReductionRate / TimeStep"]
+    CalcAngle --> UpdateOutputs["Обновление выходов:<br/>OutputMomentum, OutputAngle, OutputAngleSpeed"]
+    UpdateOutputs --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Engine[[NDCEngine]]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Engine -->|использует| BasicLib
+
+    InputVoltage["InputVoltage<br/>Входное напряжение"]
+    InputMomentum["InputMomentum<br/>Входной момент нагрузки"]
+    OutputMomentum["OutputMomentum<br/>Выходной момент"]
+    OutputAngle["OutputAngle<br/>Выходной угол"]
+    OutputAngleSpeed["OutputAngleSpeed<br/>Выходная угловая скорость"]
+
+    Engine --> InputVoltage
+    Engine --> InputMomentum
+    Engine --> OutputMomentum
+    Engine --> OutputAngle
+    Engine --> OutputAngleSpeed
+```
 
 ## Properties
 
@@ -598,6 +705,5 @@ See RU section for full XML; typical properties: `EMFactor`, `Inductance`, `Resi
 
 Used in motion control and manipulator systems; example configs: `Bin/Configs/SpikeSamples/MC-Muscles/` (MC-M-00-EyeMuscle, MC-M-01-EyeMuscle). Typical combinations: with [NPositionControlElement](NPositionControlElement.md), [NManipulator](NManipulator.md), [NEngineMotionControl](NEngineMotionControl.md).
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 28, 29, 31 — нейронные структуры управления мышечным сокращением и преобразование импульсных потоков в исполнительных системах.

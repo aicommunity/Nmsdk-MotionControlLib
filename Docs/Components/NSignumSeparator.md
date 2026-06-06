@@ -230,23 +230,89 @@ NSignumSeparator separates input signal into parts depending on sign. The compon
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NSignumSeparator
+    class NSignumSeparator {
+        +Sign : vector~double~
+        +Gain : vector~double~
+        +Input : MDMatrix~double~
+        +Output : MDMatrix~double~
+        +SetSign(value) bool
+        +SetGain(value) bool
+        +New() NSignumSeparator*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Separator as NSignumSeparator
+    participant Source as SignalSource
+
+    Storage->>Separator: new NSignumSeparator()
+    Storage->>Separator: Default()
+    Separator->>Separator: ADefault()
+
+    Storage->>Separator: Build()
+    Separator->>Separator: ABuild()
+
+    loop Каждый шаг вычислений
+        Source->>Separator: Input = signal
+        Storage->>Separator: Calculate()
+        Separator->>Separator: ACalculate()
+        Note over Separator: Output = Input * Sign * Gain
+        Separator->>Source: Output = separated_signal
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Separating: Разделение по знаку
+    Separating --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала]
+    ReadInput --> ApplySign["Применение знака:<br/>Output = Input * Sign"]
+    ApplySign --> ApplyGain["Применение усиления:<br/>Output = Output * Gain"]
+    ApplyGain --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Separator[[NSignumSeparator]]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Separator -->|использует| BasicLib
+
+    Input["Input<br/>Входной сигнал"]
+    Output["Output<br/>Разделенный сигнал"]
+
+    Separator --> Input
+    Separator --> Output
+```
 
 ## Properties
 
@@ -256,8 +322,7 @@ NSignumSeparator separates input signal into parts depending on sign. The compon
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 25, 28 — разделение сигнум-сигналов в контурах управления.
 
 ## Usage Examples

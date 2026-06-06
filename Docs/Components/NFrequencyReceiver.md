@@ -306,23 +306,118 @@ NFrequencyReceiver measures the frequency of input pulse signals by counting pul
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    NReceiver <|-- NFrequencyReceiver
+    class NFrequencyReceiver {
+        +LeftRange : double
+        +RightRange : double
+        +FrequencyStep : double
+        +Input : MDMatrix~double~
+        +OutputFreq : MDMatrix~double~
+        +PulseCounter : size_t
+        +Results : MDMatrix~double~
+        #PrevPulseStartTime : double
+        #PrevPulseStopTime : double
+        +SetLeftRange(value) bool
+        +SetRightRange(value) bool
+        +SetFrequencyStep(value) bool
+        +GetResultsSize() size_t
+        +New() NFrequencyReceiver*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Receiver as NFrequencyReceiver
+    participant Source as PulseSource
+
+    Storage->>Receiver: new NFrequencyReceiver()
+    Storage->>Receiver: Default()
+    Receiver->>Receiver: ADefault()
+
+    Storage->>Receiver: Build()
+    Receiver->>Receiver: ABuild()
+
+    Storage->>Receiver: Reset()
+    Receiver->>Receiver: AReset()
+    Note over Receiver: Инициализация Results массива
+
+    loop Каждый шаг вычислений
+        Source->>Receiver: Input = pulse_signal
+        Storage->>Receiver: Calculate()
+        Receiver->>Receiver: ACalculate()
+        Note over Receiver: Измерение частоты импульсов
+        Receiver->>Receiver: Обновление Results гистограммы
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> DetectingPulse: Обнаружение импульса
+    DetectingPulse --> MeasuringFrequency: Измерение частоты
+    MeasuringFrequency --> UpdatingHistogram: Обновление гистограммы
+    UpdatingHistogram --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала cs]
+    ReadInput --> CheckPulse{cs > 0?}
+    CheckPulse -->|Да| CheckStart["PrevPulseStartTime<br/>== -1?"]
+    CheckPulse -->|Нет| UpdateStop[Обновление PrevPulseStopTime]
+    CheckStart -->|Да| CheckStop["PrevPulseStopTime<br/>!= -1?"]
+    CheckStart -->|Нет| UpdateStart[Обновление PrevPulseStartTime]
+    CheckStop -->|Да| CalcFreq[Вычисление frequency = 1/PrevPulseStopTime]
+    CheckStop -->|Нет| UpdateStart
+    CalcFreq --> CheckRange["frequency в<br/>диапазоне?"]
+    CheckRange -->|Да| UpdateHistogram[Обновление Results гистограммы]
+    CheckRange -->|Нет| UpdateStart
+    UpdateHistogram --> IncrementCounter[Увеличение PulseCounter]
+    IncrementCounter --> UpdateStart
+    UpdateStart --> UpdateOutput[Обновление OutputFreq]
+    UpdateStop --> UpdateOutput
+    UpdateOutput --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Receiver[[NFrequencyReceiver]]
+    PulseLib["Nmsdk-PulseLib<br/>NReceiver"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Receiver -->|наследуется от| PulseLib
+    Receiver -->|использует| BasicLib
+
+    Input["Input<br/>Импульсный сигнал"]
+    OutputFreq["OutputFreq<br/>Гистограмма частот"]
+    Results["Results<br/>Результаты измерений"]
+
+    Receiver --> Input
+    Receiver --> OutputFreq
+    Receiver --> Results
+```
 
 ## Properties
 
@@ -332,8 +427,7 @@ NFrequencyReceiver measures the frequency of input pulse signals by counting pul
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 25, 28 — приём частотных сигналов в контурах управления.
 
 ## Usage Examples

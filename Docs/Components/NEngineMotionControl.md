@@ -850,23 +850,232 @@ NEngineMotionControl is a high-level component that creates and manages a networ
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NEngineMotionControl
+    NEngineMotionControl *-- NMotionElement : Motions
+    NEngineMotionControl *-- NReceptor : receptors
+    NEngineMotionControl *-- NPulseGenerator : InternalGenerator
+    NEngineMotionControl --> NControlObjectSource : uses
+    NEngineMotionControl --> NIntervalSeparator : uses
+
+    class NEngineMotionControl {
+        +NumControlLoops : int
+        +NumMotionElements : int
+        +CreationMode : int
+        +MotionElementClassName : NameT
+        +ObjectControlInterfaceClassName : NameT
+        +AdaptiveStructureMode : int
+        +InterneuronPresentMode : int
+        +LinkModes : vector~int~
+        +IaMin : double
+        +IaMax : double
+        +IbMin : double
+        +IbMax : double
+        +IIMin : double
+        +IIMax : double
+        +IcMin : double
+        +IcMax : double
+        +AfferentMin : vector~double~
+        +AfferentMax : vector~double~
+        +IntervalSeparatorMode : int
+        +PacGain : double
+        +PacSecretionTC : double
+        +PacDissociationTC : double
+        +AfferentRangeMode : int
+        +PacRangeMode : int
+        +MinAfferentRange : double
+        +CurrentContourAmplitude : vector~double~
+        +CurrentContourAverage : vector~double~
+        +CurrentTransientTime : double
+        +InstantAvgSpeed : double
+        +CurrentTransientState : bool
+        +DestContourMaxAmplitude : vector~double~
+        +DestContourMinAmplitude : vector~double~
+        +DestTransientTime : double
+        +ActiveContours : vector~bool~
+        +UseContourData : vector~bool~
+        +TransientHistoryTime : double
+        +TransientObjectIndex : int
+        +TransientAverageThreshold : double
+        +MCNeuroObjectName : string
+        +MCAfferentObjectName : string
+        +PacObjectName : string
+        +MaxContourAmplitude : vector~double~
+        +MotoneuronBranchMode : int
+        +RenshowMode : int
+        +Statistic : MDMatrix~double~
+        #receptors : vector~vector~UEPtr~NReceptor~~~
+        #Ia_ranges_pos : vector~pair~double,double~~~
+        #Ib_ranges_pos : vector~pair~double,double~~~
+        #II_ranges_pos : vector~pair~double,double~~~
+        #Ic_ranges_pos : vector~pair~double,double~~~
+        #AfferentRangesPos : vector~vector~pair~double,double~~~
+        #Motions : vector~NMotionElement*~
+        #InternalGenerator : UEPtr~NPulseGenerator~
+        #History : vector~vector~double~~
+        #TransientHistory : vector~double~
+        #ControlMode : int
+        #InternalGeneratorDirection : int
+        +Create(full_recreate) bool
+        +ClearStructure(expected_num_motion_elements) bool
+        +AdaptiveTuning() void
+        +AdaptiveTuningSimple(...) void
+        +GetNumControlLoops() int
+        +GetMotion() vector~NMotionElement*~
+        +NewIntervalSeparatorsSetup(...) void
+        +NewIntervalSeparatorsUpdate(...) void
+        +NewIntervalSeparatorLinksSetup() void
+        +ConnectInternalGenerators(...) void
+        +SetInternalGeneratorFrequency(...) void
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+        #SetNumControlLoops(value) bool
+        #SetNumMotionElements(value) bool
+        #SetCreationMode(value) bool
+        #CalcAfferentRange(...) int
+        #SetupPacRange() void
+        #AACSetup(...) void
+        #AdditionalComponentsSetup(...) void
+        #CreateNewEngineControl2NeuronsSimplest(...) UNet*
+        #NewMotionElementsSetup(...) void
+        #NewPACSetup(...) void
+        #UpdatePacTCParameters() void
+        #NewStandardLinksSetup(...) void
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Engine as NEngineMotionControl
+    participant MotionElem as NMotionElement
+    participant Receptor as NReceptor
+    participant Source as NControlObjectSource
+    participant PAC as NPac
+
+    Storage->>Engine: new NEngineMotionControl()
+    Storage->>Engine: Default()
+    Engine->>Engine: ADefault()
+    Note over Engine: Инициализация параметров по умолчанию
+
+    Storage->>Engine: Build()
+    Engine->>Engine: ABuild()
+    Engine->>Engine: Create(full_recreate=true)
+    Engine->>Engine: CreateNewEngineControl2NeuronsSimplest()
+    Engine->>MotionElem: new NMotionElement()
+    Engine->>MotionElem: Default()
+    Engine->>MotionElem: Build()
+    Engine->>Receptor: Создание рецепторов
+    Engine->>Source: Создание источников
+    Engine->>PAC: Настройка PAC
+    Engine->>Engine: SetupPacRange()
+    Engine->>Engine: NewIntervalSeparatorsSetup()
+    Engine->>Engine: NewStandardLinksSetup()
+
+    Storage->>Engine: Reset()
+    Engine->>Engine: AReset()
+    Note over Engine: Сброс статистики и истории
+
+    loop Каждый шаг вычислений
+        Source->>Engine: Данные от источника управления
+        Storage->>Engine: Calculate()
+        Engine->>Engine: ACalculate()
+        Engine->>Source: Получение данных координат
+        Engine->>Engine: Вычисление статистики контуров
+        Engine->>Engine: Обновление CurrentContourAmplitude
+        Engine->>Engine: Обновление CurrentContourAverage
+        Engine->>Engine: Определение переходного процесса
+        alt AdaptiveStructureMode == 2
+            Engine->>Engine: AdaptiveTuning()
+        end
+        Engine->>Engine: Обновление Statistic
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> Creating: Create()
+    Creating --> StructureCreated: Структура создана
+    StructureCreated --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> UpdatingStats: Обновление статистики
+    UpdatingStats --> AdaptiveTuning: AdaptiveStructureMode==2
+    AdaptiveTuning --> Ready: После настройки
+    UpdatingStats --> Ready: Обычный режим
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> Rebuilding: Изменение параметров
+    Rebuilding --> Building: ABuild()
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> CreateLink[Создание связи Statistic]
+    CreateLink --> InitArrays[Инициализация массивов статистики]
+    InitArrays --> CalcHistorySize[Вычисление размера истории]
+    CalcHistorySize --> GetSourceData[Получение данных от источников]
+    GetSourceData --> UpdateHistory[Обновление истории измерений]
+    UpdateHistory --> CalcStats["Вычисление статистики<br/>для каждого контура"]
+    CalcStats --> FindMinMax[Поиск min/max в истории]
+    FindMinMax --> CalcAmplitude[Вычисление амплитуды контура]
+    CalcAmplitude --> CalcAverage[Вычисление среднего значения]
+    CalcAverage --> UpdateMaxAmplitude[Обновление максимальной амплитуды]
+    UpdateMaxAmplitude --> CalcSpeed[Вычисление мгновенной скорости]
+    CalcSpeed --> CheckTransient["Проверка<br/>переходного процесса"]
+    CheckTransient -->|Скорость >= порог| SetTransientState[Установка состояния перехода]
+    CheckTransient -->|Скорость < порог| ClearTransientState[Сброс состояния перехода]
+    SetTransientState --> CheckAdaptive{AdaptiveStructureMode==2?}
+    ClearTransientState --> CheckAdaptive
+    CheckAdaptive -->|Да| CallAdaptiveTuning[Вызов AdaptiveTuning]
+    CheckAdaptive -->|Нет| UpdateStatistic
+    CallAdaptiveTuning --> UpdateStatistic[Обновление матрицы Statistic]
+    UpdateStatistic --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Engine[[NEngineMotionControl]]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, NReceptor, NPulseGenerator, NPac"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    MotionLib["Nmsdk-MotionControlLib<br/>NMotionElement, NControlObjectSource"]
+
+    Engine -->|использует| PulseLib
+    Engine -->|использует| BasicLib
+    Engine -->|создает| MotionLib
+
+    MotionElem["NMotionElement<br/>Элементы движения"]
+    Receptor["NReceptor<br/>Рецепторы"]
+    Source["NControlObjectSource<br/>Источник управления"]
+    PAC["NPac<br/>Проприоцептивная обратная связь"]
+    Separator["NIntervalSeparator<br/>Разделитель интервалов"]
+
+    Engine --> MotionElem
+    Engine --> Receptor
+    Engine --> Source
+    Engine --> PAC
+    Engine --> Separator
+
+    InputInterface["Входные интерфейсы<br/>Данные от источников управления"]
+    OutputInterface["Выходные интерфейсы<br/>Статистика и состояние"]
+
+    Source --> InputInterface
+    Engine --> OutputInterface
+```
 
 ## Properties
 
@@ -917,6 +1126,5 @@ See RU section for full examples. Typical usage: create NEngineMotionControl, se
 
 Central component for motion control; example configs: `Bin/Configs/SpikeSamples/MC-Muscles/`, `Bin/Configs/SpikeSamples/MC1-PCN/`, `Bin/Configs/SpikeSamples/MC0-RCN/`, `Bin/Configs/SpikeSamples/EyeRetina/`. Typical combinations: with [NControlObjectSource](NControlObjectSource.md), [NPositionControlElement](NPositionControlElement.md), [NEyeRetina](NEyeRetina.md), [NAstaticGyro](NAstaticGyro.md).
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22, 27 — иерархия управления поведением робота, моторная память, согласованное управление исполнительной системой.

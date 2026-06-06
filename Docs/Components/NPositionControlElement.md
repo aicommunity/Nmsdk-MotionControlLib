@@ -328,23 +328,123 @@ NPositionControlElement is a base class for position control elements. It create
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NPositionControlElement
+    NPositionControlElement <|-- NNewPositionControlElement
+    NPositionControlElement <|-- NMultiPositionControl
+    NPositionControlElement <|-- NPCNElement
+    NPositionControlElement *-- NNet : InputNeurons
+    NPositionControlElement *-- NNet : ControlNeurons
+    NPositionControlElement *-- UNet : Generators
+
+    class NPositionControlElement {
+        +CurrentPosition : MDMatrix~double~
+        +TargetPosition : MDMatrix~double~
+        +InputNeuronType : string
+        +ControlNeuronType : string
+        +ExternalControl : bool
+        +RememberState : bool
+        +Delta : MDMatrix~double~
+        +InputNeurons : vector~NNet*~
+        +ControlNeurons : vector~NNet*~
+        +PreControlNeurons : vector~NNet*~
+        +PostInputNeurons : vector~NNet*~
+        +Generators : vector~UNet*~
+        +SetInputNeuronType(value) bool
+        +SetControlNeuronType(value) bool
+        +SetExternalControl(value) bool
+        +CreateNeurons() bool
+        +CreateExternalControlElements() bool
+        +LinkNeurons(start, finish) bool
+        +UnlinkNeurons(start, finish) bool
+        +LinkGenerators(value) bool
+        +New() NPositionControlElement*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Element as NPositionControlElement
+    participant InputNeuron as InputNeuron
+    participant ControlNeuron as ControlNeuron
+
+    Storage->>Element: new NPositionControlElement()
+    Storage->>Element: Default()
+    Element->>Element: ADefault()
+    Note over Element: Инициализация параметров
+
+    Storage->>Element: Build()
+    Element->>Element: ABuild()
+    Element->>Element: CreateNeurons()
+    Element->>InputNeuron: new InputNeuron()
+    Element->>ControlNeuron: new ControlNeuron()
+    Element->>Element: LinkNeurons()
+
+    Storage->>Element: Reset()
+    Element->>Element: AReset()
+
+    loop Каждый шаг вычислений
+        Storage->>Element: Calculate()
+        Element->>Element: ACalculate()
+        Note over Element: Вычисления выполняются нейронами
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> Creating: CreateNeurons()
+    Creating --> Linking: LinkNeurons()
+    Linking --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ABuild]) --> InitArrays[Инициализация массивов позиций]
+    InitArrays --> ClearNeurons[Очистка векторов нейронов]
+    ClearNeurons --> CreateNeurons["CreateNeurons:<br/>Создание входных и управляющих нейронов"]
+    CreateNeurons --> LinkNeurons["LinkNeurons:<br/>Связывание нейронов"]
+    LinkNeurons --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Element[[NPositionControlElement]]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, нейроны"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Element -->|использует| PulseLib
+    Element -->|использует| BasicLib
+
+    InputNeurons["InputNeurons<br/>Входные нейроны"]
+    ControlNeurons["ControlNeurons<br/>Управляющие нейроны"]
+    Generators["Generators<br/>Генераторы"]
+
+    Element --> InputNeurons
+    Element --> ControlNeurons
+    Element --> Generators
+```
 
 ## Properties
 
@@ -378,8 +478,7 @@ NPositionControlElement is a base class for position control elements. It create
 
 - **`SetInputNeuronType(value)`**, **`SetControlNeuronType(value)`**, **`SetExternalControl(value)`**
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 22, 24, 25 — контроль позиции, запоминание конфигураций, преобразование импульсов.
 
 ## Usage Examples

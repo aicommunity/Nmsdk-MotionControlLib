@@ -285,23 +285,119 @@ NIntervalSeparator separates input signal into parts depending on value membersh
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NIntervalSeparator
+    class NIntervalSeparator {
+        +MinRange : vector~double~
+        +MaxRange : vector~double~
+        +Mode : vector~int~
+        +Gain : vector~double~
+        +Input : MDMatrix~double~
+        +Output : MDMatrix~double~
+        +SetMinRange(value) bool
+        +SetMaxRange(value) bool
+        +SetMode(value) bool
+        +SetGain(value) bool
+        +New() NIntervalSeparator*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Separator as NIntervalSeparator
+    participant Source as SignalSource
+
+    Storage->>Separator: new NIntervalSeparator()
+    Storage->>Separator: Default()
+    Separator->>Separator: ADefault()
+
+    Storage->>Separator: Build()
+    Separator->>Separator: ABuild()
+
+    loop Каждый шаг вычислений
+        Source->>Separator: Input = signal
+        Storage->>Separator: Calculate()
+        Separator->>Separator: ACalculate()
+        Note over Separator: Разделение по интервалам<br/>в зависимости от Mode
+        Separator->>Source: Output = separated_signal
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> CheckingInterval: Проверка интервала
+    CheckingInterval --> ProcessingMode: Обработка по Mode
+    ProcessingMode --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала]
+    ReadInput --> ResizeOutput[Изменение размера Output]
+    ResizeOutput --> LoopInputs[Цикл по элементам входа]
+    LoopInputs --> CheckMode{Mode[j]?}
+    CheckMode -->|0| Mode0["input в<br/>[MinRange, MaxRange]?"]
+    CheckMode -->|1| Mode1["input в<br/>[MinRange, MaxRange]?"]
+    CheckMode -->|2| Mode2["input ><br/>MinRange?"]
+    CheckMode -->|3| Mode3["input <<br/>MaxRange?"]
+    CheckMode -->|4| Mode4["input ><br/>MinRange?"]
+    CheckMode -->|5| Mode5["Режим 5:<br/>Сложная логика"]
+    CheckMode -->|6| Mode6["Режим 6:<br/>Сложная логика"]
+    Mode0 -->|Да| OutputInput[Output = input]
+    Mode0 -->|Нет| OutputZero[Output = 0]
+    Mode1 -->|Да| OutputShift[Output = input - MinRange]
+    Mode1 -->|Нет| OutputZero
+    Mode2 -->|Да| OutputInput
+    Mode2 -->|Нет| OutputZero
+    Mode3 -->|Да| OutputInput
+    Mode3 -->|Нет| OutputZero
+    Mode4 -->|Да| OutputShift
+    Mode4 -->|Нет| OutputZero
+    Mode5 --> ApplyGain
+    Mode6 --> ApplyGain
+    OutputInput --> ApplyGain[Применение Gain]
+    OutputShift --> ApplyGain
+    OutputZero --> ApplyGain
+    ApplyGain --> NextInput{Еще элементы?}
+    NextInput -->|Да| LoopInputs
+    NextInput -->|Нет| End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Separator[[NIntervalSeparator]]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Separator -->|использует| BasicLib
+
+    Input["Input<br/>Входной сигнал"]
+    Output["Output<br/>Разделенный сигнал"]
+
+    Separator --> Input
+    Separator --> Output
+```
 
 ## Properties
 
@@ -311,8 +407,7 @@ NIntervalSeparator separates input signal into parts depending on value membersh
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 22 — разделение интервалов в контурах управления движением.
 
 ## Usage Examples

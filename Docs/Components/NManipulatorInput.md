@@ -242,23 +242,94 @@ NManipulatorInput is a data source for manipulators. The component receives an i
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    NSource <|-- NManipulatorInput
+    class NManipulatorInput {
+        +Voltage : double
+        +Input : MDMatrix~double~
+        +Output : MDMatrix~double~
+        +UpdateOutputFlag : bool
+        +SetVoltage(value) bool
+        +New() NManipulatorInput*
+        #ADefault() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Input as NManipulatorInput
+    participant Controller as Controller
+    participant Manipulator as NManipulator
+
+    Storage->>Input: new NManipulatorInput()
+    Storage->>Input: Default()
+    Input->>Input: ADefault()
+
+    Storage->>Input: Build()
+    Input->>Input: ABuild()
+
+    Storage->>Input: Reset()
+    Input->>Input: AReset()
+
+    loop Каждый шаг вычислений
+        Controller->>Input: Input = control_signal
+        Storage->>Input: Calculate()
+        Input->>Input: ACalculate()
+        Note over Input: Voltage = Input, Output = Voltage
+        Input->>Manipulator: Output = voltage
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> ReadingInput: Чтение Input
+    ReadingInput --> SettingVoltage: Voltage = Input
+    SettingVoltage --> UpdatingOutput: Output = Voltage
+    UpdatingOutput --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> ReadInput["Чтение входного сигнала:<br/>Voltage = Input(0,0)"]
+    ReadInput --> UpdateOutput["Обновление выхода:<br/>Output(0,0) = Voltage"]
+    UpdateOutput --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Input[[NManipulatorInput]]
+    PulseLib["Nmsdk-PulseLib<br/>NSource"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Input -->|наследуется от| PulseLib
+    Input -->|использует| BasicLib
+
+    InputSignal["Input<br/>Входной сигнал управления"]
+    Output["Output<br/>Выходное напряжение"]
+
+    Input --> InputSignal
+    Input --> Output
+```
 
 ## Properties
 
@@ -268,8 +339,7 @@ NManipulatorInput is a data source for manipulators. The component receives an i
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 21 — вход манипулятора в иерархии управления.
 
 ## Usage Examples

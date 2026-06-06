@@ -301,23 +301,135 @@ NSuppressionUnit suppresses input pulses in a specified time interval using a ne
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NSuppressionUnit
+    NSuppressionUnit *-- NPulseGeneratorTransit : SourceGenerator
+    NSuppressionUnit *-- NPulseGeneratorTransit : DelayGenerators
+    NSuppressionUnit *-- NPulseGeneratorTransit : ControlledGenerator
+    NSuppressionUnit *-- NPulseNeuron : ORNeuron
+    NSuppressionUnit *-- NPulseNeuron : Neuron
+
+    class NSuppressionUnit {
+        +PulseGeneratorClassName : string
+        +NeuronClassName : string
+        +SynapseClassName : string
+        +PulseLength : double
+        +Amplitude : double
+        +SuppressionFreq : double
+        +LTZThreshold : double
+        +Delay1 : double
+        +Delay2 : double
+        +SourceFreq : double
+        +SourceDelay : double
+        +TransitInput : bool
+        +OnlyInhibition : bool
+        +SingleUse : bool
+        +Input : MDMatrix~double~
+        +Output : MDMatrix~double~
+        #SourceGenerator : UEPtr~NPulseGeneratorTransit~
+        #DelayGenerators : vector~UEPtr~NPulseGeneratorTransit~~
+        #ORNeuron : UEPtr~NPulseNeuron~
+        #ControlledGenerator : UEPtr~NPulseGeneratorTransit~
+        #Neuron : UEPtr~NPulseNeuron~
+        +New() NSuppressionUnit*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Unit as NSuppressionUnit
+    participant SourceGen as SourceGenerator
+    participant DelayGen as DelayGenerators
+    participant ORNeuron as ORNeuron
+    participant Neuron as Neuron
+
+    Storage->>Unit: new NSuppressionUnit()
+    Storage->>Unit: Default()
+    Unit->>Unit: ADefault()
+
+    Storage->>Unit: Build()
+    Unit->>Unit: ABuild()
+    Unit->>SourceGen: new NPulseGeneratorTransit("Source")
+    Unit->>DelayGen: new NPulseGeneratorTransit("Delay1", "Delay2")
+    Unit->>ORNeuron: new NPulseNeuron("ORNeuron")
+    Unit->>Unit: new NPulseGeneratorTransit("ControlledGenerator")
+    Unit->>Neuron: new NPulseNeuron("Neuron")
+    Unit->>Unit: Создание связей между компонентами
+
+    loop Каждый шаг вычислений
+        Storage->>Unit: Calculate()
+        Unit->>Unit: ACalculate()
+        Note over Unit: Подавление импульсов в интервале [Delay1, Delay2]
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> CreatingGenerators: Создание генераторов
+    CreatingGenerators --> CreatingNeurons: Создание нейронов
+    CreatingNeurons --> CreatingLinks: Создание связей
+    CreatingLinks --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Suppressing: Подавление импульсов
+    Suppressing --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ABuild]) --> CreateSourceGen[Создание SourceGenerator]
+    CreateSourceGen --> CreateDelayGens[Создание DelayGenerators[0,1]]
+    CreateDelayGens --> CreateORNeuron["Создание ORNeuron<br/>с 2 возбуждающими синапсами"]
+    CreateORNeuron --> CreateControlledGen["Создание ControlledGenerator<br/>с UsePatternOutput=true"]
+    CreateControlledGen --> CreateNeuron[Создание Neuron]
+    CreateNeuron --> LinkSourceToOR[Связь SourceGenerator -> ORNeuron]
+    LinkSourceToOR --> LinkDelaysToOR[Связь DelayGenerators -> ORNeuron]
+    LinkDelaysToOR --> LinkORToControlled[Связь ORNeuron -> ControlledGenerator]
+    LinkORToControlled --> LinkControlledToNeuron[Связь ControlledGenerator -> Neuron]
+    LinkControlledToNeuron --> LinkNeuronOutput[Связь Neuron -> Output]
+    LinkNeuronOutput --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Unit[[NSuppressionUnit]]
+    PulseLib["Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Unit -->|использует| PulseLib
+    Unit -->|использует| BasicLib
+
+    SourceGen["SourceGenerator<br/>Генератор входных импульсов"]
+    DelayGens["DelayGenerators<br/>Генераторы задержек"]
+    ORNeuron["ORNeuron<br/>Нейрон ИЛИ"]
+    ControlledGen["ControlledGenerator<br/>Управляемый генератор"]
+    Neuron["Neuron<br/>Выходной нейрон"]
+
+    Unit --> SourceGen
+    Unit --> DelayGens
+    Unit --> ORNeuron
+    Unit --> ControlledGen
+    Unit --> Neuron
+```
 
 ## Properties
 
@@ -327,8 +439,7 @@ NSuppressionUnit suppresses input pulses in a specified time interval using a ne
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 28, 29 — подавление сигналов в нейронных структурах.
 
 ## Usage Examples

@@ -311,23 +311,127 @@ NSimpleStatistic collects statistics (minimum, maximum, average, range) on input
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NSimpleStatistic
+    class NSimpleStatistic {
+        +StatsInterval : UTime
+        +Mode : int
+        +Headers : vector~string~
+        +Inputs : vector~MDMatrix~double~~
+        +Output : MDMatrix~double~
+        #StatsNumber : int
+        #StatsFile : fstream*
+        #StatsStartTime : double
+        #StatsMin : vector~vector~double~~
+        #StatsMax : vector~vector~double~~
+        #StatsAvg : vector~vector~double~~
+        #StatsDelta : vector~vector~double~~
+        +ReCreateFile() bool
+        +New() NSimpleStatistic*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+        #ClearStats() void
+        #ResizeStats() void
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Statistic as NSimpleStatistic
+    participant Source1 as DataSource1
+    participant Source2 as DataSource2
+    participant File as StatsFile
+    
+    Storage->>Statistic: new NSimpleStatistic()
+    Storage->>Statistic: Default()
+    Statistic->>Statistic: ADefault()
+    
+    Storage->>Statistic: Build()
+    Statistic->>Statistic: ABuild()
+    
+    Storage->>Statistic: Reset()
+    Statistic->>Statistic: AReset()
+    Statistic->>Statistic: ReCreateFile()
+    Statistic->>File: Создание файла статистики
+    
+    loop Каждый шаг вычислений
+        Source1->>Statistic: Inputs[0] = data1
+        Source2->>Statistic: Inputs[1] = data2
+        Storage->>Statistic: Calculate()
+        Statistic->>Statistic: ACalculate()
+        Statistic->>Statistic: Обновление StatsMin, StatsMax, StatsAvg, StatsDelta
+        alt StatsInterval достигнут
+            Statistic->>File: Запись статистики в файл
+            Statistic->>Statistic: ClearStats()
+        end
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Collecting: Сбор статистики
+    Collecting --> CheckingInterval["StatsInterval<br/>достигнут?"]
+    CheckingInterval -->|Да| WritingFile: Запись в файл
+    CheckingInterval -->|Нет| Ready: Завершение шага
+    WritingFile --> Clearing: ClearStats()
+    Clearing --> Ready: После очистки
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> CheckFile["StatsFile<br/>существует?"]
+    CheckFile -->|Нет| ReCreateFile["ReCreateFile:<br/>Создание файла"]
+    CheckFile -->|Да| CheckMode
+    ReCreateFile --> CheckMode{Mode?}
+    CheckMode -->|0| Mode0["Режим 0:<br/>Min, Max, Avg, Delta"]
+    CheckMode -->|1| Mode1["Режим 1:<br/>Построчная запись"]
+    CheckMode -->|2| Mode2["Режим 2:<br/>Построчная запись всех данных"]
+    Mode0 --> CheckInterval["StatsInterval<br/>достигнут?"]
+    Mode1 --> CheckInterval
+    Mode2 --> CheckInterval
+    CheckInterval -->|Да| WriteStats[Запись статистики в файл]
+    CheckInterval -->|Нет| ResizeStats["ResizeStats:<br/>Изменение размеров массивов"]
+    WriteStats --> ClearStats["ClearStats:<br/>Очистка статистики"]
+    ClearStats --> ResizeStats
+    ResizeStats --> UpdateStats[Обновление StatsMin, StatsMax, StatsAvg, StatsDelta]
+    UpdateStats --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Statistic[[NSimpleStatistic]]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    
+    Statistic -->|использует| BasicLib
+    
+    Inputs["Inputs<br/>Вектор входных данных"]
+    Output["Output<br/>Выходная статистика"]
+    StatsFile["StatsFile<br/>Файл статистики"]
+    
+    Statistic --> Inputs
+    Statistic --> Output
+    Statistic --> StatsFile
+```
 
 ## Properties
 
@@ -337,8 +441,7 @@ NSimpleStatistic collects statistics (minimum, maximum, average, range) on input
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 22 — статистика в контурах управления движением.
 
 ## Usage Examples

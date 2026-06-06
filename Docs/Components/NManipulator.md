@@ -342,23 +342,98 @@ NManipulator implements a simplified manipulator model, accounting for electrica
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    UNet <|-- NManipulator
+    class NManipulator {
+        +EMFactor : double
+        +Inductance : double
+        +Resistance : double
+        +Input : MDMatrix~double~
+        +Output : MDMatrix~double~
+        #Current : double
+        #Graphics : UGraphics
+        +SetEMFactor(value) bool
+        +SetInductance(value) bool
+        +SetResistance(value) bool
+        +New() NManipulator*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Manipulator as NManipulator
+    participant Controller as Controller
+    participant Actuator as Actuator
+
+    Storage->>Manipulator: new NManipulator()
+    Storage->>Manipulator: Default()
+    Manipulator->>Manipulator: ADefault()
+    Note over Manipulator: Инициализация параметров
+
+    Storage->>Manipulator: Build()
+    Manipulator->>Manipulator: ABuild()
+
+    Storage->>Manipulator: Reset()
+    Manipulator->>Manipulator: AReset()
+    Note over Manipulator: Сброс тока (Current=0)
+
+    loop Каждый шаг вычислений
+        Controller->>Manipulator: Input = control_signal
+        Storage->>Manipulator: Calculate()
+        Manipulator->>Manipulator: ACalculate()
+        Note over Manipulator: Вычисление тока на основе входного сигнала
+        Manipulator->>Actuator: Output = current
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> ReadInput["Чтение входного сигнала:<br/>cs = Input(0,0)"]
+    ReadInput --> CalcCurrent["Вычисление тока:<br/>Current = f(cs, EMFactor, Inductance, Resistance, TimeStep)"]
+    CalcCurrent --> UpdateOutput["Обновление выхода:<br/>Output(0,0) = Current"]
+    UpdateOutput --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Manipulator[[NManipulator]]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Manipulator -->|использует| BasicLib
+
+    Input["Input<br/>Входной управляющий сигнал"]
+    Output["Output<br/>Выходной ток/сигнал"]
+
+    Manipulator --> Input
+    Manipulator --> Output
+```
 
 ## Properties
 
@@ -418,6 +493,5 @@ See RU section for full XML; typical properties: `EMFactor`, `Inductance`, `Resi
 
 Used in robotic manipulator and motion control systems; example configs: `Bin/Configs/SpikeSamples/MC-Muscles/`, `Bin/Configs/SpikeSamples/MC0-RCN/`, `Bin/Configs/SpikeSamples/MC1-PCN/`. Typical combinations: with [NDCEngine](NDCEngine.md), [NEngineMotionControl](NEngineMotionControl.md).
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 23 — иерархия управления поведением робота, согласованное управление исполнительной системой, бионические модели управления движением.

@@ -287,23 +287,132 @@ NCounterNeuron implements a pulse counter that dynamically increases the number 
 
 ## Class Diagram
 
-[Same as RU section]
+```mermaid
+classDiagram
+    NPulseNeuronCommon <|-- NCounterNeuron
+    NCounterNeuron *-- NPulseMembrane : Soma
+    NCounterNeuron *-- NLTZone : LTZone
+
+    class NCounterNeuron {
+        +MembraneClassName : string
+        +LTZoneClassName : string
+        +ExcGeneratorClassName : string
+        +InhGeneratorClassName : string
+        +MaxCount : int
+        +CurCount : int
+        +Input : MDMatrix~double~
+        #Soma : vector~UEPtr~NPulseMembrane~~
+        #OldNumSoma : int
+        #TheSamePulse : bool
+        +SetMaxCount(value) bool
+        +SetCurCount(value) bool
+        +New() NCounterNeuron*
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+        #CreateSomaLinks(soma) bool
+    }
+```
 
 ## Sequence Diagram
 
-[Same as RU section]
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Counter as NCounterNeuron
+    participant Source as PulseSource
+    participant Soma as Soma
+
+    Storage->>Counter: new NCounterNeuron()
+    Storage->>Counter: Default()
+    Counter->>Counter: ADefault()
+
+    Storage->>Counter: Build()
+    Counter->>Counter: ABuild()
+    Counter->>Counter: Создание MaxCount сом
+    Counter->>Soma: new NPulseMembrane() для каждой сомы
+    Counter->>Counter: CreateSomaLinks() для первых CurCount сом
+
+    loop Каждый шаг вычислений
+        Source->>Counter: Input = pulse
+        Storage->>Counter: Calculate()
+        Counter->>Counter: ACalculate()
+        Counter->>Counter: Передача Input на синапсы
+        alt Импульс начался
+            Counter->>Counter: TheSamePulse = true
+        else Импульс закончился
+            Counter->>Counter: TheSamePulse = false
+            alt CurCount < MaxCount
+                Counter->>Counter: CurCount++
+                Counter->>Soma: CreateSomaLinks() для новой сомы
+            end
+        end
+    end
+```
 
 ## State Diagram
 
-[Same as RU section]
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Создание
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Building: ABuild()
+    Building --> CreatingLTZone: Создание LTZone
+    CreatingLTZone --> CreatingGenerators: Создание генераторов
+    CreatingGenerators --> CreatingSomas: Создание MaxCount сом
+    CreatingSomas --> LinkingSomas: Связывание первых CurCount сом
+    LinkingSomas --> Ready: Готов к работе
+    Ready --> Calculating: ACalculate()
+    Calculating --> ProcessingPulse: Обработка импульса
+    ProcessingPulse --> Incrementing: Увеличение CurCount
+    Incrementing --> LinkingNewSoma: Связывание новой сомы
+    LinkingNewSoma --> Ready: Завершение шага
+    Ready --> Reset: AReset()
+    Reset --> Ready: После сброса
+    Ready --> [*]: Уничтожение
+```
 
 ## Activity Diagram
 
-[Same as RU section]
+```mermaid
+flowchart TD
+    Start([Начало ACalculate]) --> TransferInput["Передача Input на синапсы<br/>первых CurCount сом"]
+    TransferInput --> CheckPulse["Input >= 0.01<br/>и TheSamePulse == false?"]
+    CheckPulse -->|Да| SetPulseStart[TheSamePulse = true]
+    CheckPulse -->|Нет| CheckPulseEnd
+    SetPulseStart --> CheckPulseEnd["Input <= 0.01<br/>и TheSamePulse == true?"]
+    CheckPulseEnd -->|Да| SetPulseEnd[TheSamePulse = false]
+    CheckPulseEnd -->|Нет| CallBase
+    SetPulseEnd --> CheckCount["CurCount <<br/>MaxCount?"]
+    CheckCount -->|Да| IncrementCount[CurCount++]
+    IncrementCount --> CreateLinks["CreateSomaLinks<br/>для новой сомы"]
+    CreateLinks --> CallBase[NPulseNeuronCommon::ACalculate]
+    CheckCount -->|Нет| CallBase
+    CallBase --> End([Конец])
+```
 
 ## Component Diagram
 
-[Same as RU section]
+```mermaid
+graph TB
+    Counter[[NCounterNeuron]]
+    PulseLib["Nmsdk-PulseLib<br/>NPulseNeuronCommon, NPulseMembrane, NLTZone"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+
+    Counter -->|наследуется от| PulseLib
+    Counter -->|использует| BasicLib
+
+    LTZone["LTZone<br/>Низкопороговая зона"]
+    Somas["Somas<br/>Участки мембраны"]
+    PosGenerator["PosGenerator<br/>Возбуждающий генератор"]
+    NegGenerator["NegGenerator<br/>Тормозной генератор"]
+
+    Counter --> LTZone
+    Counter --> Somas
+    Counter --> PosGenerator
+    Counter --> NegGenerator
+```
 
 ## Properties
 
@@ -313,8 +422,7 @@ NCounterNeuron implements a pulse counter that dynamically increases the number 
 
 [Same structure as RU section, translated to English]
 
-## Источники
-
+## References
 - [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — импульсные нейроны в контурах управления.
 
 ## Usage Examples
