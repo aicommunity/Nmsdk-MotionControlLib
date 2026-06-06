@@ -318,15 +318,15 @@ sequenceDiagram
     
     Storage->>Receiver: Reset()
     Receiver->>Receiver: AReset()
-    Note over Receiver: Инициализация Output и Data
+    Note over Receiver: initialization Output and Data
     
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Source1->>Receiver: Inputs[0] = pulse1
         Source2->>Receiver: Inputs[1] = pulse2
         Storage->>Receiver: Calculate()
         Receiver->>Receiver: ACalculate()
-        Note over Receiver: Обработка импульсов, накопление данных
-        Receiver->>Receiver: Обновление Output с историей
+        Note over Receiver: processing pulses, accumulating data
+        Receiver->>Receiver: update Output with history
     end
 ```
 
@@ -334,45 +334,45 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> ProcessingInputs: Обработка входов
-    ProcessingInputs --> DetectingPulses: Обнаружение импульсов
-    DetectingPulses --> Accumulating: Накопление данных
-    Accumulating --> Filtering: Фильтрация по диапазону
-    Filtering --> Ready: Завершение шага
+    Calculating --> ProcessingInputs: processing inputs
+    ProcessingInputs --> DetectingPulses: detection pulses
+    DetectingPulses --> Accumulating: Accumulating data
+    Accumulating --> Filtering: Filtering by range
+    Filtering --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ResizeData[Изменение размеров Data и MatrixData]
-    ResizeData --> ResizePulseFlag[Изменение размера PulseFlag]
-    ResizePulseFlag --> LoopInputs[Цикл по всем входам]
+    Start([Start ACalculate]) --> ResizeData[Resizing Data and MatrixData]
+    ResizeData --> ResizePulseFlag[Resizing PulseFlag]
+    ResizePulseFlag --> LoopInputs[loop over all inputs]
     LoopInputs --> CheckPulse{Inputs[i] > 0?}
-    CheckPulse -->|Да| CheckFlag{PulseFlag[i]?}
-    CheckPulse -->|Нет| CheckFlag2{PulseFlag[i]?}
-    CheckFlag -->|Нет| AddStart[Добавление времени начала импульса]
-    CheckFlag -->|Да| NextInput
-    CheckFlag2 -->|Да| AddStop[Добавление времени окончания импульса]
-    CheckFlag2 -->|Нет| NextInput
-    AddStart --> SetFlag[Установка PulseFlag[i]=true]
-    AddStop --> ClearFlag[Сброс PulseFlag[i]=false]
+    CheckPulse -->|Yes| CheckFlag{PulseFlag[i]?}
+    CheckPulse -->|No| CheckFlag2{PulseFlag[i]?}
+    CheckFlag -->|No| AddStart[Adding pulse start time]
+    CheckFlag -->|Yes| NextInput
+    CheckFlag2 -->|Yes| AddStop[Adding pulse end time]
+    CheckFlag2 -->|No| NextInput
+    AddStart --> SetFlag[setting PulseFlag[i]=true]
+    AddStop --> ClearFlag[reset PulseFlag[i]=false]
     SetFlag --> CheckRange{MaxAccumulationRange > 0?}
     ClearFlag --> CheckRange
-    CheckRange -->|Да| FilterData[Фильтрация данных по диапазону]
-    CheckRange -->|Нет| UpdateOutput
-    FilterData --> UpdateOutput[Обновление Output матрицы]
-    UpdateOutput --> NextInput{Еще входы?}
-    NextInput -->|Да| LoopInputs
-    NextInput -->|Нет| End([Конец])
+    CheckRange -->|Yes| FilterData[Filtering data by range]
+    CheckRange -->|No| UpdateOutput
+    FilterData --> UpdateOutput[update Output matrices]
+    UpdateOutput --> NextInput{More inputs?}
+    NextInput -->|Yes| LoopInputs
+    NextInput -->|No| End([End])
 ```
 
 ## Component Diagram
@@ -381,13 +381,13 @@ flowchart TD
 graph TB
     Receiver[[NPulseReceiver]]
     PulseLib["Nmsdk-PulseLib<br/>NReceiver"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
     
-    Receiver -->|наследуется от| PulseLib
-    Receiver -->|использует| BasicLib
+    Receiver -->|inherits from| PulseLib
+    Receiver -->|uses| BasicLib
     
-    Inputs["Inputs<br/>Вектор входных сигналов"]
-    Output["Output<br/>История импульсов"]
+    Inputs["Inputs<br/>vector input signals"]
+    Output["Output<br/>history pulses"]
     
     Receiver --> Inputs
     Receiver --> Output
@@ -402,7 +402,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — приём импульсных сигналов в нейронных структурах.
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — receiving pulse signals in neural structures.
 
 ## Usage Examples
 

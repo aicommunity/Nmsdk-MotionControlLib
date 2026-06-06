@@ -279,7 +279,7 @@ sequenceDiagram
     Manipulator->>Manipulator: AReset()
     Note over Manipulator: gravity_constant = 9.8
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Engine->>Manipulator: InputMomentum = engine_moment
         External->>Manipulator: InputMomentumExt = external_moment
         External->>Manipulator: InputAngle = angle
@@ -294,27 +294,27 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> ReadingInputs: Чтение входов
-    ReadingInputs --> ComputingMoment: Вычисление момента
-    ComputingMoment --> Ready: Завершение шага
+    Calculating --> ReadingInputs: Reading inputs
+    ReadingInputs --> ComputingMoment: Computing moment
+    ComputingMoment --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadInputs["Чтение входов:<br/>external_moment, engine_moment, angle"]
-    ReadInputs --> CalcGravity["Вычисление гравитационного момента:<br/>Mass * gravity_constant * Length * sin(angle)"]
-    CalcGravity --> CalcOutput["Вычисление результирующего момента:<br/>Output = -external_moment + engine_moment - gravity_moment"]
-    CalcOutput --> End([Конец])
+    Start([Start ACalculate]) --> ReadInputs["Reading inputs:<br/>external_moment, engine_moment, angle"]
+    ReadInputs --> CalcGravity["Computing gravitational moment:<br/>Mass * gravity_constant * Length * sin(angle)"]
+    CalcGravity --> CalcOutput["Computing resultant moment:<br/>Output = -external_moment + engine_moment - gravity_moment"]
+    CalcOutput --> End([End])
 ```
 
 ## Component Diagram
@@ -322,14 +322,14 @@ flowchart TD
 ```mermaid
 graph TB
     Manipulator[[NManipulatorAndGyro]]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Manipulator -->|использует| BasicLib
+    Manipulator -->|uses| BasicLib
 
-    InputMomentumExt["InputMomentumExt<br/>Внешний момент"]
-    InputMomentum["InputMomentum<br/>Момент двигателя"]
-    InputAngle["InputAngle<br/>Угол манипулятора"]
-    Output["Output<br/>Результирующий момент"]
+    InputMomentumExt["InputMomentumExt<br/>External moment"]
+    InputMomentum["InputMomentum<br/>Engine moment"]
+    InputAngle["InputAngle<br/>Manipulator angle"]
+    Output["Output<br/>Resultant moment"]
 
     Manipulator --> InputMomentumExt
     Manipulator --> InputMomentum
@@ -346,7 +346,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 21 — манипулятор и гироскоп в иерархии управления.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 21 — manipulator and gyroscope in the control hierarchy.
 
 ## Usage Examples
 

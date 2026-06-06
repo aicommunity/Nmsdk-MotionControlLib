@@ -530,4 +530,5 @@ while (simulation_running) {
 ```
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22 — упрощённая ветвящаяся система управления движением.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22 — simplified branched motion control system.

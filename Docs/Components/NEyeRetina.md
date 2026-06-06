@@ -453,24 +453,24 @@ sequenceDiagram
     Storage->>Retina: new NEyeRetina()
     Storage->>Retina: Default()
     Retina->>Retina: ADefault()
-    Note over Retina: Инициализация ядер ретины
+    Note over Retina: Initializing retina cores
 
     Storage->>Retina: Build()
     Retina->>Retina: ABuild()
 
     Storage->>Retina: Reset()
     Retina->>Retina: AReset()
-    Note over Retina: Установка разрешения, сброс траектории
+    Note over Retina: Setting resolution, resetting trajectory
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Camera->>Retina: CaptureImage = frame
         Storage->>Retina: Calculate()
         Retina->>Retina: ACalculate()
-        Retina->>Retina: Конвертация изображения
-        Retina->>Retina: EyeRetina.Calculate() (палочки)
-        Retina->>Retina: EyeRetinaRCone.Calculate() (R колбочки)
-        Retina->>Retina: EyeRetinaGCone.Calculate() (G колбочки)
-        Retina->>Retina: EyeRetinaBCone.Calculate() (B колбочки)
+        Retina->>Retina: Converting image
+        Retina->>Retina: EyeRetina.Calculate() (rods)
+        Retina->>Retina: EyeRetinaRCone.Calculate() (R cones)
+        Retina->>Retina: EyeRetinaGCone.Calculate() (G cones)
+        Retina->>Retina: EyeRetinaBCone.Calculate() (B cones)
         Retina->>Retina: UpdateImages()
         Retina->>Controller: LeftGanglionicOut, RightGanglionicOut, etc.
     end
@@ -480,35 +480,35 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> ProcessingImage: Обработка изображения
-    ProcessingImage --> ProcessingRods: Обработка палочек
-    ProcessingRods --> ProcessingCones: Обработка колбочек
-    ProcessingCones --> UpdatingOutputs: Обновление выходов
-    UpdatingOutputs --> Ready: Завершение шага
+    Calculating --> ProcessingImage: Processing image
+    ProcessingImage --> ProcessingRods: Processing rods
+    ProcessingRods --> ProcessingCones: Processing cones
+    ProcessingCones --> UpdatingOutputs: Updating outputs
+    UpdatingOutputs --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> AddTrajectory[Добавление координат в траекторию]
-    AddTrajectory --> CheckImage["Изображение<br/>валидно?"]
-    CheckImage -->|Нет| End([Конец])
-    CheckImage -->|Да| SetResolution[Установка разрешения изображения]
-    SetResolution --> ConvertImage[Конвертация CaptureImage в InputImage]
-    ConvertImage --> ProcessRods["Обработка палочек:<br/>EyeRetina.SetInputImage + Calculate"]
-    ProcessRods --> ProcessRCone["Обработка R колбочек:<br/>EyeRetinaRCone.Calculate"]
-    ProcessRCone --> ProcessGCone["Обработка G колбочек:<br/>EyeRetinaGCone.Calculate"]
-    ProcessGCone --> ProcessBCone["Обработка B колбочек:<br/>EyeRetinaBCone.Calculate"]
-    ProcessBCone --> UpdateImages["UpdateImages:<br/>Обновление выходных изображений"]
+    Start([Start ACalculate]) --> AddTrajectory[Adding coordinates to trajectory]
+    AddTrajectory --> CheckImage["Image<br/>valid?"]
+    CheckImage -->|No| End([End])
+    CheckImage -->|Yes| SetResolution[Setting image resolution]
+    SetResolution --> ConvertImage[Converting CaptureImage to InputImage]
+    ConvertImage --> ProcessRods["Processing rods:<br/>EyeRetina.SetInputImage + Calculate"]
+    ProcessRods --> ProcessRCone["Processing R cones:<br/>EyeRetinaRCone.Calculate"]
+    ProcessRCone --> ProcessGCone["Processing G cones:<br/>EyeRetinaGCone.Calculate"]
+    ProcessGCone --> ProcessBCone["Processing B cones:<br/>EyeRetinaBCone.Calculate"]
+    ProcessBCone --> UpdateImages["UpdateImages:<br/>Updating output images"]
     UpdateImages --> End
 ```
 
@@ -517,18 +517,18 @@ flowchart TD
 ```mermaid
 graph TB
     Retina[[NEyeRetina]]
-    CvLib["Rdk-CvBasicLib<br/>Обработка изображений"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    CvLib["Rdk-CvBasicLib<br/>Image processing"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Retina -->|использует| CvLib
-    Retina -->|использует| BasicLib
+    Retina -->|uses| CvLib
+    Retina -->|uses| BasicLib
 
-    CaptureImage["CaptureImage<br/>Входное изображение"]
-    GanglionicOuts["GanglionicOuts<br/>Выход ганглиозных клеток"]
-    LeftGanglionicOut["LeftGanglionicOut<br/>Сигнал для левой мышцы"]
-    RightGanglionicOut["RightGanglionicOut<br/>Сигнал для правой мышцы"]
-    TopGanglionicOut["TopGanglionicOut<br/>Сигнал для верхней мышцы"]
-    BottomGanglionicOut["BottomGanglionicOut<br/>Сигнал для нижней мышцы"]
+    CaptureImage["CaptureImage<br/>Input image"]
+    GanglionicOuts["GanglionicOuts<br/>Ganglion cell output"]
+    LeftGanglionicOut["LeftGanglionicOut<br/>Signal for left muscle"]
+    RightGanglionicOut["RightGanglionicOut<br/>Signal for right muscle"]
+    TopGanglionicOut["TopGanglionicOut<br/>Signal for upper muscle"]
+    BottomGanglionicOut["BottomGanglionicOut<br/>Signal for lower muscle"]
 
     Retina --> CaptureImage
     Retina --> GanglionicOuts
@@ -599,4 +599,5 @@ double right_out = retina->RightGanglionicOut(0, 0);
 Used in vision and eye-movement control; example configs: `Bin/Configs/SpikeSamples/EyeRetina/` (EyeRetina, EyeRetinaMuscle), `Bin/Configs/SpikeSamples/MC-Muscles/`. Typical combination: with [NEngineMotionControl](NEngineMotionControl.md).
 
 ## References
-- [Literature-References.md](../Literature-References.md): 13, [A] — нейроморфная модель зрительной системы.
+
+- [Literature-References.md](../Literature-References.md): 13, [A] — neuromorphic model of the visual system.

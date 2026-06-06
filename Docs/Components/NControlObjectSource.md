@@ -315,13 +315,13 @@ sequenceDiagram
 
     Storage->>Source: Reset()
     Source->>Source: AReset()
-    Note over Source: Инициализация размеров массивов
+Note over Source: Initialization размеров массивов
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Object->>Source: Input = object_data
         Storage->>Source: Calculate()
         Source->>Source: ACalculate()
-        Note over Source: Преобразование данных:<br/>Output = DataMul * (Input[DataIndexes] - DataShift)
+Note over Source: Преобразование данных:<br/>Output = DataMul * (Input[DataIndexes] - DataShift)
         Source->>Engine: Output = transformed_data
     end
 ```
@@ -330,30 +330,30 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> Ready: Завершение шага
+    Calculating --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckInput["Input<br/>подключен?"]
-    CheckInput -->|Да| ResizeArrays["Изменение размеров массивов:<br/>DataShift, DataIndexes, DataMul"]
-    CheckInput -->|Нет| ResizeOutputZero[Output.Resize(0,0)]
+Start([Start ACalculate]) --> CheckInput["Input<br/>подключен?"]
+CheckInput -->|Да| ResizeArrays["Изменение размеров массивов:<br/>DataShift, DataIndexes, DataMul"]
+CheckInput -->|Нет| ResizeOutputZero[Output.Resize(0,0)]
     ResizeArrays --> ResizeOutput[Output.Resize(1, Input->GetSize())]
-    ResizeOutput --> LoopStart[Цикл по элементам Input]
-    LoopStart --> Transform[Преобразование:<br/>Output[i] = DataMul[i] * (Input[DataIndexes[i]] - DataShift[i])]
-    Transform --> LoopEnd{Еще элементы?}
-    LoopEnd -->|Да| LoopStart
-    LoopEnd -->|Нет| End([Конец])
+ResizeOutput --> LoopStart[Цикл по элементам Input]
+LoopStart --> Transform[Преобразование:<br/>Output[i] = DataMul[i] * (Input[DataIndexes[i]] - DataShift[i])]
+Transform --> LoopEnd{Еще элементы?}
+LoopEnd -->|Да| LoopStart
+LoopEnd -->|Нет| End([End])
     ResizeOutputZero --> End
 ```
 
@@ -363,13 +363,13 @@ flowchart TD
 graph TB
     Source[[NControlObjectSource]]
     PulseLib["Nmsdk-PulseLib<br/>NSource"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Source -->|наследуется от| PulseLib
-    Source -->|использует| BasicLib
+Source -->|inherits от| PulseLib
+    Source -->|uses| BasicLib
 
-    Input["Input<br/>Входные данные объекта"]
-    Output["Output<br/>Преобразованные данные"]
+Input["Input<br/>Входные данные объекта"]
+Output["Output<br/>Преобразованные данные"]
 
     Source --> Input
     Source --> Output
@@ -399,24 +399,5 @@ Output signals derived from Coord (scaled, shifted, indexed) for use by [NEngine
 - **`ACalculate()`** — copy/transform Coord to output
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 21 — источник объекта управления в иерархии.
 
-## Usage Examples
-
-### C++ Code
-
-```cpp
-#include "NControlObjectSource.h"
-
-UEPtr<NControlObjectSource> source = storage->CreateComponent<NControlObjectSource>("ControlObj1");
-source->Coord(0, 0) = x; source->Coord(0, 1) = y; source->Coord(0, 2) = z;
-source->Default();
-source->Build();
-source->Reset();
-source->Calculate();
-// Output is consumed by NEngineMotionControl (ObjectControlInterface)
-```
-
-### Usage in Configurations
-
-Used as the control object data source in [NEngineMotionControl](NEngineMotionControl.md); example configs: `Bin/Configs/SpikeSamples/MC1-PCN/`, `Bin/Configs/SpikeSamples/MC-Muscles/`.
+- [Literature-References.md](../Literature-References.md): [A], 19, 21 — control object source в hierarchy.

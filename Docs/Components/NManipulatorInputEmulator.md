@@ -330,6 +330,32 @@ flowchart TD
 | `Input` | `MDMatrix<double>` | - | Input control signal |
 | `Output` | `MDMatrix<double>` | - | Output voltage |
 
+```mermaid
+graph TB
+    subgraph "Nmsdk-MotionControlLib"
+        Emulator[NManipulatorInputEmulator]
+        BaseInput[NManipulatorInput]
+    end
+
+    subgraph "Nmsdk-PulseLib"
+        NSource[NSource]
+    end
+
+    subgraph "Rdk-BasicLib"
+        UNet[UNet]
+    end
+
+    Emulator -->|inherits от| BaseInput
+    BaseInput -->|inherits от| NSource
+    NSource -->|inherits от| UNet
+
+    Input["Input<br/>Входной сигнал управления"]
+    Output["Output<br/>Выходное напряжение"]
+
+    Emulator --> Input
+    Emulator --> Output
+```
+
 ## Methods
 
 ### Lifecycle Methods
@@ -374,4 +400,5 @@ while (simulation_running) {
 ```
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 21 — эмулятор входа манипулятора в иерархии управления.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 21 — manipulator input emulator in the control hierarchy.

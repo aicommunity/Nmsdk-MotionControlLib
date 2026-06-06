@@ -323,6 +323,25 @@ flowchart TD
 | `Input` | `MDMatrix<double>` | - | Input signal (scalar or vector) |
 | `Output` | `MDMatrix<double>` | - | Output signal (positive part) |
 
+```mermaid
+graph TB
+    subgraph "Nmsdk-MotionControlLib"
+        NPosSep[NPosSignumSeparator]
+    end
+
+    subgraph "Rdk-BasicLib"
+        UNet[UNet]
+    end
+
+    NPosSep -->|inherits от| UNet
+
+    Input["Input<br/>Входной сигнал"]
+    Output["Output<br/>Положительная часть"]
+
+    NPosSep --> Input
+    NPosSep --> Output
+```
+
 ## Usage Examples
 
 ### C++ Code
@@ -356,4 +375,5 @@ while (simulation_running) {
 ```
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 25, 28 — разделитель сигнум-сигналов в контурах управления.
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28 — signum signal separator in control loops.

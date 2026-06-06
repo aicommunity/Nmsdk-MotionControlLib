@@ -209,14 +209,14 @@ sequenceDiagram
 
     Storage->>Controller: Build()
     Controller->Controller: ABuild()
-    Controller->>SignumSep: Создание NSignumSeparator для афферентов
-    Controller->>MotionElem: Создание элементов движения
+    Controller->>SignumSep: Creating NSignumSeparator for afferents
+    Controller->>MotionElem: Creating motion elements
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Storage->>Controller: Calculate()
         Controller->>Controller: ACalculate()
-        Controller->>SignumSep: Обработка афферентных сигналов
-        Controller->>MotionElem: Управление элементами движения
+        Controller->>SignumSep: Processing afferent signals
+        Controller->>MotionElem: Controlling motion elements
     end
 ```
 
@@ -224,29 +224,29 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
-    Building --> CreatingSignum: Создание SignumSeparators
-    CreatingSignum --> CreatingMotions: Создание элементов движения
-    CreatingMotions --> Ready: Готов к работе
+    Building --> CreatingSignum: Creation SignumSeparators
+    CreatingSignum --> CreatingMotions: Creating motion elements
+    CreatingMotions --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> ProcessingAfferents: Обработка signum-афферентов
-    ProcessingAfferents --> Ready: Завершение шага
+    Calculating --> ProcessingAfferents: Processing signum afferents
+    ProcessingAfferents --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> SetMode["Установка CreationMode = 0<br/>Signum режим"]
-    SetMode --> CreateSignumSep["Создание NSignumSeparator<br/>для обработки афферентов"]
-    CreateSignumSep --> CreateMotions[Создание элементов движения]
-    CreateMotions --> LinkSignum["Связывание SignumSeparator<br/>с афферентными нейронами"]
-    LinkSignum --> End([Конец])
+    Start([Start ABuild]) --> SetMode["Setting CreationMode = 0<br/>Signum mode"]
+    SetMode --> CreateSignumSep["Creating NSignumSeparator<br/>for afferent processing"]
+    CreateSignumSep --> CreateMotions[Creating motion elements]
+    CreateMotions --> LinkSignum["Linking SignumSeparator<br/>with afferent neurons"]
+    LinkSignum --> End([End])
 ```
 
 ## Component Diagram
@@ -257,11 +257,11 @@ graph TB
     MotionLib["Nmsdk-MotionControlLib<br/>NSignumSeparator, NMotionElement"]
     PulseLib["Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron"]
 
-    Controller -->|использует| MotionLib
-    Controller -->|использует| PulseLib
+    Controller -->|uses| MotionLib
+    Controller -->|uses| PulseLib
 
-    SignumSeparators["SignumSeparators<br/>Разделители по знаку"]
-    MotionElements["MotionElements<br/>Элементы движения"]
+    SignumSeparators["SignumSeparators<br/>Sign separators"]
+    MotionElements["MotionElements<br/>Motion elements"]
 
     Controller --> SignumSeparators
     Controller --> MotionElements
@@ -276,7 +276,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22, 27 — движок управления с афферентами, иерархия и моторная память.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22, 27 — motion control engine with afferents, hierarchy, and motor memory.
 
 ## Usage Examples
 

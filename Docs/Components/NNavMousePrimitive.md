@@ -425,14 +425,14 @@ sequenceDiagram
 
     Storage->>Mouse: Reset()
     Mouse->>Mouse: AReset()
-    Note over Mouse: Инициализация позиции мыши
+    Note over Mouse: Initializing mouse position
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Controller->>Mouse: MotionControlSpikeForward/Backward/Stop
         Storage->>Mouse: Calculate()
         Mouse->>Mouse: ACalculate()
         Mouse->>Mouse: UpdateState()
-        Note over Mouse: Обновление позиции, генерация вибрисс, обработка столкновений
+        Note over Mouse: Updating position, generating whiskers, processing collisions
         Mouse->>Controller: VibrissOutput, PainOutput, Output
     end
 ```
@@ -441,42 +441,42 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
     Calculating --> UpdatingState: UpdateState()
-    UpdatingState --> Moving: Движение
-    Moving --> CheckingCollision: Проверка столкновения
-    CheckingCollision --> GeneratingVibriss: Генерация вибрисс
-    GeneratingVibriss --> Ready: Завершение шага
+    UpdatingState --> Moving: Movement
+    Moving --> CheckingCollision: Checking collision
+    CheckingCollision --> GeneratingVibriss: Generating whiskers
+    GeneratingVibriss --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> UpdateState["UpdateState:<br/>Обновление состояния движения"]
+    Start([Start ACalculate]) --> UpdateState["UpdateState:<br/>Updating movement state"]
     UpdateState --> CheckForward{MotionControlSpikeForward?}
-    CheckForward -->|Да| SetForward["MotionControlState = 1<br/>ForwardSpikeTime = текущее время"]
-    CheckForward -->|Нет| CheckBackward
+    CheckForward -->|Yes| SetForward["MotionControlState = 1<br/>ForwardSpikeTime = current time"]
+    CheckForward -->|No| CheckBackward
     SetForward --> CheckBackward{MotionControlSpikeBackward?}
-    CheckBackward -->|Да| SetBackward["MotionControlState = -1<br/>BackwardSpikeTime = текущее время"]
-    CheckBackward -->|Нет| CheckStop
+    CheckBackward -->|Yes| SetBackward["MotionControlState = -1<br/>BackwardSpikeTime = current time"]
+    CheckBackward -->|No| CheckStop
     SetBackward --> CheckStop{MotionControlSpikeStop?}
-    CheckStop -->|Да| SetStop["MotionControlState = 0<br/>StopSpikeTime = текущее время"]
-    CheckStop -->|Нет| UpdatePosition
-    SetStop --> UpdatePosition["Обновление MousePosition<br/>на основе Velocity и MotionControlState"]
-    UpdatePosition --> CheckCollision["Столкновение<br/>с препятствием?"]
-    CheckCollision -->|Да| GeneratePain["Генерация PainOutput<br/>PainState = 1"]
-    CheckCollision -->|Нет| GenerateVibriss["Генерация VibrissOutput<br/>на основе позиции и VibrissSize"]
+    CheckStop -->|Yes| SetStop["MotionControlState = 0<br/>StopSpikeTime = current time"]
+    CheckStop -->|No| UpdatePosition
+    SetStop --> UpdatePosition["Updating MousePosition<br/>based on Velocity and MotionControlState"]
+    UpdatePosition --> CheckCollision["Collision<br/>with obstacle?"]
+    CheckCollision -->|Yes| GeneratePain["Generating PainOutput<br/>PainState = 1"]
+    CheckCollision -->|No| GenerateVibriss["Generating VibrissOutput<br/>based on position and VibrissSize"]
     GeneratePain --> GenerateVibriss
-    GenerateVibriss --> UpdateOutput[Обновление Output]
-    UpdateOutput --> End([Конец])
+    GenerateVibriss --> UpdateOutput[Updating Output]
+    UpdateOutput --> End([End])
 ```
 
 ## Component Diagram
@@ -484,15 +484,15 @@ flowchart TD
 ```mermaid
 graph TB
     Mouse[[NNavMousePrimitive]]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Mouse -->|использует| BasicLib
+    Mouse -->|uses| BasicLib
 
-    Input["Input<br/>Входной сигнал"]
-    MotionControl["MotionControlSpikes<br/>Сигналы управления движением"]
-    VibrissOutput["VibrissOutput<br/>Выход вибрисс"]
-    PainOutput["PainOutput<br/>Выход болевого сигнала"]
-    Output["Output<br/>Выходной сигнал"]
+    Input["Input<br/>Input signal"]
+    MotionControl["MotionControlSpikes<br/>Movement control signals"]
+    VibrissOutput["VibrissOutput<br/>Whisker output"]
+    PainOutput["PainOutput<br/>Pain signal output"]
+    Output["Output<br/>Output signal"]
 
     Mouse --> Input
     Mouse --> MotionControl
@@ -514,4 +514,5 @@ graph TB
 [Same as RU section, with English comments]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 22, 24 — навигация, память пространственных конфигураций.
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24 — navigation, spatial configuration memory.

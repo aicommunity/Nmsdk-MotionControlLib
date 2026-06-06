@@ -351,17 +351,17 @@ sequenceDiagram
     MultiPC->>MultiPC: ABuild()
     alt BuildSolo == true
         MultiPC->>MultiPC: CreateNeuronsSolo()
-        MultiPC->>Neurons: Создание нейронов
+        MultiPC->>Neurons: Creating neurons
     else BuildSolo == false
-        MultiPC->>PC: Использование существующих элементов
+        MultiPC->>PC: Using existing elements
     end
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Storage->>MultiPC: Calculate()
         MultiPC->>MultiPC: ACalculate()
         alt RememberState == true
-            MultiPC->>MultiPC: Запоминание состояния
-            MultiPC->>MultiPC: Создание новых нейронов
+            MultiPC->>MultiPC: Storing state
+            MultiPC->>MultiPC: Creating new neurons
         end
     end
 ```
@@ -370,38 +370,38 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
     Building --> CheckingMode{BuildSolo?}
-    CheckingMode -->|Да| CreatingSolo: CreateNeuronsSolo()
-    CheckingMode -->|Нет| UsingExisting: Использование существующих
-    CreatingSolo --> Ready: Готов к работе
-    UsingExisting --> Ready: Готов к работе
+    CheckingMode -->|Yes| CreatingSolo: CreateNeuronsSolo()
+    CheckingMode -->|No| UsingExisting: Using existing
+    CreatingSolo --> Ready: Ready
+    UsingExisting --> Ready: Ready
     Ready --> Calculating: ACalculate()
     Calculating --> Remembering{RememberState?}
-    Remembering -->|Да| CreatingNew: Создание новых нейронов
-    Remembering -->|Нет| Ready: Завершение шага
-    CreatingNew --> Ready: После создания
+    Remembering -->|Yes| CreatingNew: Creating new neurons
+    Remembering -->|No| Ready: Step complete
+    CreatingNew --> Ready: After creation
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckBuildSolo{BuildSolo?}
+    Start([Start ACalculate]) --> CheckBuildSolo{BuildSolo?}
     CheckBuildSolo -->|true| CheckRemember{RememberState?}
-    CheckBuildSolo -->|false| ProcessExisting[Обработка существующих элементов]
-    CheckRemember -->|true| RememberState[Запоминание состояния]
-    RememberState --> CreatePreControl[Создание PreControlNeuron]
-    CreatePreControl --> CreatePostInput[Создание PostInputNeuron]
-    CreatePostInput --> LinkNeurons[Связывание нейронов]
+    CheckBuildSolo -->|false| ProcessExisting[Processing existing elements]
+    CheckRemember -->|true| RememberState[Storing state]
+    RememberState --> CreatePreControl[Creation PreControlNeuron]
+    CreatePreControl --> CreatePostInput[Creation PostInputNeuron]
+    CreatePostInput --> LinkNeurons[Linking neurons]
     LinkNeurons --> ProcessExisting
     CheckRemember -->|false| ProcessExisting
-    ProcessExisting --> End([Конец])
+    ProcessExisting --> End([End])
 ```
 
 ## Component Diagram
@@ -409,15 +409,15 @@ flowchart TD
 ```mermaid
 graph TB
     MultiPC[[NMultiPositionControl]]
-    PulseLib["Nmsdk-PulseLib<br/>NNet, нейроны"]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, neurons"]
     MotionLib["Nmsdk-MotionControlLib<br/>NPositionControlElement"]
 
-    MultiPC -->|использует| PulseLib
-    MultiPC -->|содержит| MotionLib
+    MultiPC -->|uses| PulseLib
+    MultiPC -->|contains| MotionLib
 
-    PositionControls["PositionControlElement<br/>Вектор элементов контроля"]
-    InputNeurons["InputNeuronsByContours<br/>Входные нейроны по контурам"]
-    ControlNeurons["ControlNeuronsByContours<br/>Управляющие нейроны по контурам"]
+    PositionControls["PositionControlElement<br/>Vector of control elements"]
+    InputNeurons["InputNeuronsByContours<br/>Input neurons per loops"]
+    ControlNeurons["ControlNeuronsByContours<br/>Control neurons per loops"]
 
     MultiPC --> PositionControls
     MultiPC --> InputNeurons
@@ -433,7 +433,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 22, 24 — множественный контроль позиции.
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24 — multi-position control.
 
 ## Usage Examples
 

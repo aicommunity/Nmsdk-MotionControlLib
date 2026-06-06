@@ -330,22 +330,22 @@ sequenceDiagram
 
     Storage->>Counter: Build()
     Counter->>Counter: ABuild()
-    Counter->>Counter: Создание MaxCount сом
-    Counter->>Soma: new NPulseMembrane() для каждой сомы
-    Counter->>Counter: CreateSomaLinks() для первых CurCount сом
+    Counter->>Counter: Creating MaxCount somas
+    Counter->>Soma: new NPulseMembrane() for each soma
+    Counter->>Counter: CreateSomaLinks() for the first CurCount somas
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Source->>Counter: Input = pulse
         Storage->>Counter: Calculate()
         Counter->>Counter: ACalculate()
-        Counter->>Counter: Передача Input на синапсы
-        alt Импульс начался
+        Counter->>Counter: Transfer Input to synapses
+        alt Pulse started
             Counter->>Counter: TheSamePulse = true
-        else Импульс закончился
+        else Pulse ended
             Counter->>Counter: TheSamePulse = false
             alt CurCount < MaxCount
                 Counter->>Counter: CurCount++
-                Counter->>Soma: CreateSomaLinks() для новой сомы
+                Counter->>Soma: CreateSomaLinks() for a new soma
             end
         end
     end
@@ -355,41 +355,41 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
-    Building --> CreatingLTZone: Создание LTZone
-    CreatingLTZone --> CreatingGenerators: Создание генераторов
-    CreatingGenerators --> CreatingSomas: Создание MaxCount сом
-    CreatingSomas --> LinkingSomas: Связывание первых CurCount сом
-    LinkingSomas --> Ready: Готов к работе
+    Building --> CreatingLTZone: Creating LTZone
+    CreatingLTZone --> CreatingGenerators: Creating generators
+    CreatingGenerators --> CreatingSomas: Creating MaxCount somas
+    CreatingSomas --> LinkingSomas: Linking first CurCount somas
+    LinkingSomas --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> ProcessingPulse: Обработка импульса
-    ProcessingPulse --> Incrementing: Увеличение CurCount
-    Incrementing --> LinkingNewSoma: Связывание новой сомы
-    LinkingNewSoma --> Ready: Завершение шага
+    Calculating --> ProcessingPulse: Pulse processing
+    ProcessingPulse --> Incrementing: Increment CurCount
+    Incrementing --> LinkingNewSoma: Linking new soma
+    LinkingNewSoma --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> TransferInput["Передача Input на синапсы<br/>первых CurCount сом"]
-    TransferInput --> CheckPulse["Input >= 0.01<br/>и TheSamePulse == false?"]
-    CheckPulse -->|Да| SetPulseStart[TheSamePulse = true]
-    CheckPulse -->|Нет| CheckPulseEnd
-    SetPulseStart --> CheckPulseEnd["Input <= 0.01<br/>и TheSamePulse == true?"]
-    CheckPulseEnd -->|Да| SetPulseEnd[TheSamePulse = false]
-    CheckPulseEnd -->|Нет| CallBase
+    Start([Start ACalculate]) --> TransferInput["Transfer Input to synapses<br/>of first CurCount somas"]
+    TransferInput --> CheckPulse["Input >= 0.01<br/>and TheSamePulse == false?"]
+    CheckPulse -->|Yes| SetPulseStart[TheSamePulse = true]
+    CheckPulse -->|No| CheckPulseEnd
+    SetPulseStart --> CheckPulseEnd["Input <= 0.01<br/>and TheSamePulse == true?"]
+    CheckPulseEnd -->|Yes| SetPulseEnd[TheSamePulse = false]
+    CheckPulseEnd -->|No| CallBase
     SetPulseEnd --> CheckCount["CurCount <<br/>MaxCount?"]
-    CheckCount -->|Да| IncrementCount[CurCount++]
-    IncrementCount --> CreateLinks["CreateSomaLinks<br/>для новой сомы"]
+    CheckCount -->|Yes| IncrementCount[CurCount++]
+    IncrementCount --> CreateLinks["CreateSomaLinks<br/>for a new soma"]
     CreateLinks --> CallBase[NPulseNeuronCommon::ACalculate]
-    CheckCount -->|Нет| CallBase
-    CallBase --> End([Конец])
+    CheckCount -->|No| CallBase
+    CallBase --> End([End])
 ```
 
 ## Component Diagram
@@ -398,15 +398,15 @@ flowchart TD
 graph TB
     Counter[[NCounterNeuron]]
     PulseLib["Nmsdk-PulseLib<br/>NPulseNeuronCommon, NPulseMembrane, NLTZone"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Counter -->|наследуется от| PulseLib
-    Counter -->|использует| BasicLib
+    Counter -->|inherits from| PulseLib
+    Counter -->|uses| BasicLib
 
-    LTZone["LTZone<br/>Низкопороговая зона"]
-    Somas["Somas<br/>Участки мембраны"]
-    PosGenerator["PosGenerator<br/>Возбуждающий генератор"]
-    NegGenerator["NegGenerator<br/>Тормозной генератор"]
+    LTZone["LTZone<br/>Low-threshold zone"]
+    Somas["Somas<br/>Membrane sections"]
+    PosGenerator["PosGenerator<br/>Excitatory generator"]
+    NegGenerator["NegGenerator<br/>Inhibitory generator"]
 
     Counter --> LTZone
     Counter --> Somas
@@ -423,7 +423,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — импульсные нейроны в контурах управления.
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — pulse neurons in control loops.
 
 ## Usage Examples
 

@@ -323,15 +323,15 @@ sequenceDiagram
 
     Storage->>PCN: Build()
     PCN->>PCN: ABuild()
-    PCN->>Engine: Получение MotionControlElement
-    PCN->>PCN: Инициализация массивов
+    PCN->>Engine: Getting MotionControlElement
+    PCN->>PCN: Initializing arrays
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Storage->>PCN: Calculate()
         PCN->>PCN: ACalculate()
-        PCN->>MotionElem: Получение данных от элементов движения
-        PCN->>PCN: Вычисление CurrentPosition из LTZone
-        PCN->>PCN: Управление генераторами в зависимости от ExternalControl
+        PCN->>MotionElem: Getting data from motion elements
+        PCN->>PCN: Computing CurrentPosition from LTZone
+        PCN->>PCN: Controlling generators depending on ExternalControl
     end
 ```
 
@@ -339,43 +339,43 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
-    Building --> GettingEngine: Получение MotionControlElement
-    GettingEngine --> Ready: Готов к работе
+    Building --> GettingEngine: Getting MotionControlElement
+    GettingEngine --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> GettingPosition: Получение позиции
-    GettingPosition --> ManagingGenerators: Управление генераторами
-    ManagingGenerators --> Ready: Завершение шага
+    Calculating --> GettingPosition: Getting position
+    GettingPosition --> ManagingGenerators: Controlling generators
+    ManagingGenerators --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckEngine["MotionControlElement<br/>существует?"]
-    CheckEngine -->|Нет| End([Конец])
-    CheckEngine -->|Да| CheckSize["Размеры<br/>совпадают?"]
-    CheckSize -->|Нет| Reset[Reset и выход]
-    CheckSize -->|Да| CheckNeurons["Нейроны<br/>созданы?"]
-    CheckNeurons -->|Нет| CreateNeurons[CreateNeurons]
-    CreateNeurons --> InitArrays[Инициализация массивов]
-    CheckNeurons -->|Да| InitArrays
-    InitArrays --> LoopMotions[Цикл по элементам движения]
-    LoopMotions --> LoopLoops[Цикл по контурам]
-    LoopLoops --> GetLTZone[Получение LTZone от афферентов]
-    GetLTZone --> CalcPosition[Вычисление CurrentPosition]
-    CalcPosition --> NextLoop{Еще контуры?}
-    NextLoop -->|Да| LoopLoops
-    NextLoop -->|Нет| NextMotion{Еще элементы?}
-    NextMotion -->|Да| LoopMotions
-    NextMotion -->|Нет| CheckExternal{ExternalControl?}
-    CheckExternal -->|Да| LinkGenerators[Связывание генераторов]
-    CheckExternal -->|Нет| UnlinkGenerators[Разрывание связей генераторов]
+    Start([Start ACalculate]) --> CheckEngine["MotionControlElement<br/>exists?"]
+    CheckEngine -->|No| End([End])
+    CheckEngine -->|Yes| CheckSize["Sizes<br/>match?"]
+    CheckSize -->|No| Reset[Reset and exit]
+    CheckSize -->|Yes| CheckNeurons["Neurons<br/>created?"]
+    CheckNeurons -->|No| CreateNeurons[CreateNeurons]
+    CreateNeurons --> InitArrays[Initializing arrays]
+    CheckNeurons -->|Yes| InitArrays
+    InitArrays --> LoopMotions[Loop over motion elements]
+    LoopMotions --> LoopLoops[Loop over loops]
+    LoopLoops --> GetLTZone[Getting LTZone from afferents]
+    GetLTZone --> CalcPosition[Computing CurrentPosition]
+    CalcPosition --> NextLoop{More loops?}
+    NextLoop -->|Yes| LoopLoops
+    NextLoop -->|No| NextMotion{More elements?}
+    NextMotion -->|Yes| LoopMotions
+    NextMotion -->|No| CheckExternal{ExternalControl?}
+    CheckExternal -->|Yes| LinkGenerators[Linking generators]
+    CheckExternal -->|No| UnlinkGenerators[Breaking generator links]
     LinkGenerators --> End
     UnlinkGenerators --> End
     Reset --> End
@@ -386,16 +386,16 @@ flowchart TD
 ```mermaid
 graph TB
     PCN[[NPCNElement]]
-    PulseLib["Nmsdk-PulseLib<br/>NNet, нейроны"]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, neurons"]
     MotionLib["Nmsdk-MotionControlLib<br/>NEngineMotionControl, NMotionElement"]
 
-    PCN -->|использует| PulseLib
-    PCN -->|связан с| MotionLib
+    PCN -->|uses| PulseLib
+    PCN -->|linked to| MotionLib
 
-    Engine["NEngineMotionControl<br/>Движок управления"]
-    MotionElem["NMotionElement<br/>Элементы движения"]
-    AfferentNeurons["AfferentNeurons<br/>Афферентные нейроны"]
-    ControlNeurons["ControlNeurons<br/>Управляющие нейроны"]
+    Engine["NEngineMotionControl<br/>Control engine"]
+    MotionElem["NMotionElement<br/>Motion elements"]
+    AfferentNeurons["AfferentNeurons<br/>Afferent neurons"]
+    ControlNeurons["ControlNeurons<br/>Control neurons"]
 
     PCN --> Engine
     PCN --> MotionElem
@@ -412,7 +412,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 22, 24 — сеть контроля позиции (PCN).
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24 — position control network (PCN).
 
 ## Usage Examples
 

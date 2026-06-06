@@ -96,10 +96,12 @@
 Components from `Core/NMotionControlLibrary.cpp` and `Core/WinAPI/NWinAPIActLibrary.cpp`, grouped with a brief purpose. Below is the full list with links to per-component files in `Docs/Components/`.
 
 ## Engines / Actuators
+
 - **NDCEngine** — see [`NDCEngine`](Components/NDCEngine.md).
 - **NActuatorSignals** — see [`NActuatorSignals`](Components/NActuatorSignals.md).
 
 ## Manipulators
+
 - **NManipulator** — see [`NManipulator`](Components/NManipulator.md).
 - **NManipulatorAndGyro** — see [`NManipulatorAndGyro`](Components/NManipulatorAndGyro.md).
 - **NManipulatorInput** — see [`NManipulatorInput`](Components/NManipulatorInput.md).
@@ -109,6 +111,7 @@ Components from `Core/NMotionControlLibrary.cpp` and `Core/WinAPI/NWinAPIActLibr
 - **NWPhysicalManipulator** — see [`NWPhysicalManipulator`](Components/NWPhysicalManipulator.md).
 
 ## Sensors / Perception
+
 - **NEyeRetina** — see [`NEyeRetina`](Components/NEyeRetina.md).
 - **NAstaticGyro** — see [`NAstaticGyro`](Components/NAstaticGyro.md).
 - **NFrequencyReceiver** — see [`NFrequencyReceiver`](Components/NFrequencyReceiver.md).
@@ -117,6 +120,7 @@ Components from `Core/NMotionControlLibrary.cpp` and `Core/WinAPI/NWinAPIActLibr
 - **NNetworkLinksStatistic** — see [`NNetworkLinksStatistic`](Components/NNetworkLinksStatistic.md).
 
 ## Control / Logic
+
 - **NEngineMotionControl** — see [`NEngineMotionControl`](Components/NEngineMotionControl.md).
 - **NEngineControlSignumAfferent** — see [`NEngineControlSignumAfferent`](Components/NEngineControlSignumAfferent.md).
 - **NEngineControlRangeAfferent** — see [`NEngineControlRangeAfferent`](Components/NEngineControlRangeAfferent.md).
@@ -132,12 +136,14 @@ Components from `Core/NMotionControlLibrary.cpp` and `Core/WinAPI/NWinAPIActLibr
 - **NObjInArea** — see [`NObjInArea`](Components/NObjInArea.md).
 
 ## Navigation / Trajectories / Memory
+
 - **NNavMousePrimitive** — see [`NNavMousePrimitive`](Components/NNavMousePrimitive.md).
 - **NPositionControlElement**, **NNewPositionControlElement**, **NMultiPositionControl** — see [`NPositionControlElement`](Components/NPositionControlElement.md).
 - **NTrajectoryElement** — see [`NTrajectoryElement`](Components/NTrajectoryElement.md).
 - **NMazeMemory**, **NMazeMemorySimplified** — see [`NMazeMemory`](Components/NMazeMemory.md).
 
 ## Full component list (UploadClass)
+
 - **N2AsfNewSimplestAfferentBranchedEngineControl** — [`N2AsfNewSimplestAfferentBranchedEngineControl`](Components/N2AsfNewSimplestAfferentBranchedEngineControl.md)
 - **NActuatorSignals** — [`NActuatorSignals`](Components/NActuatorSignals.md)
 - **NAstaticGyro** — [`NAstaticGyro`](Components/NAstaticGyro.md)

@@ -348,14 +348,14 @@ sequenceDiagram
 
     Storage->>Receiver: Reset()
     Receiver->>Receiver: AReset()
-    Note over Receiver: Инициализация Results массива
+    Note over Receiver: Initializing Results array
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Source->>Receiver: Input = pulse_signal
         Storage->>Receiver: Calculate()
         Receiver->>Receiver: ACalculate()
-        Note over Receiver: Измерение частоты импульсов
-        Receiver->>Receiver: Обновление Results гистограммы
+        Note over Receiver: Measuring pulse frequency
+        Receiver->>Receiver: Updating histogram Results
     end
 ```
 
@@ -363,40 +363,40 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> DetectingPulse: Обнаружение импульса
-    DetectingPulse --> MeasuringFrequency: Измерение частоты
-    MeasuringFrequency --> UpdatingHistogram: Обновление гистограммы
-    UpdatingHistogram --> Ready: Завершение шага
+    Calculating --> DetectingPulse: Detecting pulse
+    DetectingPulse --> MeasuringFrequency: Measuring frequency
+    MeasuringFrequency --> UpdatingHistogram: Updating histogram
+    UpdatingHistogram --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала cs]
+    Start([Start ACalculate]) --> ReadInput[Reading input signal cs]
     ReadInput --> CheckPulse{cs > 0?}
-    CheckPulse -->|Да| CheckStart["PrevPulseStartTime<br/>== -1?"]
-    CheckPulse -->|Нет| UpdateStop[Обновление PrevPulseStopTime]
-    CheckStart -->|Да| CheckStop["PrevPulseStopTime<br/>!= -1?"]
-    CheckStart -->|Нет| UpdateStart[Обновление PrevPulseStartTime]
-    CheckStop -->|Да| CalcFreq[Вычисление frequency = 1/PrevPulseStopTime]
-    CheckStop -->|Нет| UpdateStart
-    CalcFreq --> CheckRange["frequency в<br/>диапазоне?"]
-    CheckRange -->|Да| UpdateHistogram[Обновление Results гистограммы]
-    CheckRange -->|Нет| UpdateStart
-    UpdateHistogram --> IncrementCounter[Увеличение PulseCounter]
+    CheckPulse -->|Yes| CheckStart["PrevPulseStartTime<br/>== -1?"]
+    CheckPulse -->|No| UpdateStop[Updating PrevPulseStopTime]
+    CheckStart -->|Yes| CheckStop["PrevPulseStopTime<br/>!= -1?"]
+    CheckStart -->|No| UpdateStart[Updating PrevPulseStartTime]
+    CheckStop -->|Yes| CalcFreq[Computing frequency = 1/PrevPulseStopTime]
+    CheckStop -->|No| UpdateStart
+    CalcFreq --> CheckRange["frequency in<br/>range?"]
+    CheckRange -->|Yes| UpdateHistogram[Updating histogram Results]
+    CheckRange -->|No| UpdateStart
+    UpdateHistogram --> IncrementCounter[Incrementing PulseCounter]
     IncrementCounter --> UpdateStart
-    UpdateStart --> UpdateOutput[Обновление OutputFreq]
+    UpdateStart --> UpdateOutput[Updating OutputFreq]
     UpdateStop --> UpdateOutput
-    UpdateOutput --> End([Конец])
+    UpdateOutput --> End([End])
 ```
 
 ## Component Diagram
@@ -405,14 +405,14 @@ flowchart TD
 graph TB
     Receiver[[NFrequencyReceiver]]
     PulseLib["Nmsdk-PulseLib<br/>NReceiver"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Receiver -->|наследуется от| PulseLib
-    Receiver -->|использует| BasicLib
+    Receiver -->|inherits from| PulseLib
+    Receiver -->|uses| BasicLib
 
-    Input["Input<br/>Импульсный сигнал"]
-    OutputFreq["OutputFreq<br/>Гистограмма частот"]
-    Results["Results<br/>Результаты измерений"]
+    Input["Input<br/>Pulse signal"]
+    OutputFreq["OutputFreq<br/>Frequency histogram"]
+    Results["Results<br/>Measurement results"]
 
     Receiver --> Input
     Receiver --> OutputFreq
@@ -428,7 +428,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 25, 28 — приём частотных сигналов в контурах управления.
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28 — receiving frequency signals in control loops.
 
 ## Usage Examples
 

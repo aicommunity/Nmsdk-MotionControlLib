@@ -415,6 +415,29 @@ flowchart TD
 | `Mode` | `int` | `0` | Operation mode (currently unused) |
 | `Inputs` | `UPropertyInputC<UNet>` | - | Collection of networks (UNet) for link analysis |
 
+```mermaid
+graph TB
+    subgraph "Nmsdk-MotionControlLib"
+        Statistic[NNetworkLinksStatistic]
+    end
+
+    subgraph "Rdk-BasicLib"
+        UNet[UNet]
+        UIniFile[UIniFile]
+        ULongTime[ULongTime]
+    end
+
+    Statistic -->|inherits от| UNet
+    Statistic -->|uses| UIniFile
+    Statistic -->|uses| ULongTime
+
+    Networks["Inputs: UNet networks<br/>для анализа"]
+    File["StatsFile<br/>Файл статистики"]
+
+    Statistic --> Networks
+    Statistic --> File
+```
+
 ## Methods
 
 ### Lifecycle Methods
@@ -462,4 +485,5 @@ while (simulation_running) {
 ```
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 22 — статистика связей в нейросетевых контурах управления движением.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 22 — link statistics in neural motion control loops.

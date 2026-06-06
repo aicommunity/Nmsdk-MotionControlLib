@@ -357,16 +357,16 @@ sequenceDiagram
 
     Storage->>Element: Build()
     Element->>Element: ABuild()
-    Element->>Engine: Получение MotionControlElement
-    Element->>Element: Инициализация массивов позиций
+    Element->>Engine: Getting MotionControlElement
+    Element->>Element: Initializing position arrays
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Storage->>Element: Calculate()
         Element->>Element: ACalculate()
-        Element->>MotionElem: Получение данных от элементов движения
-        Element->>Element: Вычисление CurrentPosition из LTZone
-        Element->>Element: Вычисление Delta = TargetPosition - CurrentPosition
-        Element->>Element: Обновление Output
+        Element->>MotionElem: Getting data from motion elements
+        Element->>Element: Computing CurrentPosition from LTZone
+        Element->>Element: Computing Delta = TargetPosition - CurrentPosition
+        Element->>Element: Updating Output
     end
 ```
 
@@ -374,42 +374,42 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
-    Building --> GettingEngine: Получение MotionControlElement
-    GettingEngine --> Ready: Готов к работе
+    Building --> GettingEngine: Getting MotionControlElement
+    GettingEngine --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> GettingPosition: Получение позиции от элементов движения
-    GettingPosition --> ComputingDelta: Вычисление Delta
-    ComputingDelta --> Ready: Завершение шага
+    Calculating --> GettingPosition: Getting position from motion elements
+    GettingPosition --> ComputingDelta: Computing Delta
+    ComputingDelta --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckEngine["MotionControlElement<br/>существует?"]
-    CheckEngine -->|Нет| End([Конец])
-    CheckEngine -->|Да| CheckSize["Размеры<br/>совпадают?"]
-    CheckSize -->|Нет| Reset[Reset и выход]
-    CheckSize -->|Да| CheckNeurons["Нейроны<br/>созданы?"]
-    CheckNeurons -->|Нет| CreateNeurons[CreateNeurons]
-    CreateNeurons --> InitArrays[Инициализация массивов позиций]
-    CheckNeurons -->|Да| InitArrays
-    InitArrays --> LoopMotions[Цикл по элементам движения]
-    LoopMotions --> LoopLoops[Цикл по контурам управления]
-    LoopLoops --> GetLTZone[Получение LTZone от афферентов]
-    GetLTZone --> CalcPosition[Вычисление CurrentPosition из OutputFrequency]
-    CalcPosition --> NextLoop{Еще контуры?}
-    NextLoop -->|Да| LoopLoops
-    NextLoop -->|Нет| NextMotion{Еще элементы?}
-    NextMotion -->|Да| LoopMotions
-    NextMotion -->|Нет| CalcDelta[Вычисление Delta = TargetPosition - CurrentPosition]
-    CalcDelta --> UpdateOutput[Обновление Output]
+    Start([Start ACalculate]) --> CheckEngine["MotionControlElement<br/>exists?"]
+    CheckEngine -->|No| End([End])
+    CheckEngine -->|Yes| CheckSize["Sizes<br/>match?"]
+    CheckSize -->|No| Reset[Reset and exit]
+    CheckSize -->|Yes| CheckNeurons["Neurons<br/>created?"]
+    CheckNeurons -->|No| CreateNeurons[CreateNeurons]
+    CreateNeurons --> InitArrays[Initializing position arrays]
+    CheckNeurons -->|Yes| InitArrays
+    InitArrays --> LoopMotions[Loop over motion elements]
+    LoopMotions --> LoopLoops[Loop over control loops]
+    LoopLoops --> GetLTZone[Getting LTZone from afferents]
+    GetLTZone --> CalcPosition[Computing CurrentPosition from OutputFrequency]
+    CalcPosition --> NextLoop{More loops?}
+    NextLoop -->|Yes| LoopLoops
+    NextLoop -->|No| NextMotion{More elements?}
+    NextMotion -->|Yes| LoopMotions
+    NextMotion -->|No| CalcDelta[Computing Delta = TargetPosition - CurrentPosition]
+    CalcDelta --> UpdateOutput[Updating Output]
     UpdateOutput --> End
     Reset --> End
 ```
@@ -419,16 +419,16 @@ flowchart TD
 ```mermaid
 graph TB
     Element[[NNewPositionControlElement]]
-    PulseLib["Nmsdk-PulseLib<br/>NNet, нейроны"]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, neurons"]
     MotionLib["Nmsdk-MotionControlLib<br/>NEngineMotionControl, NMotionElement"]
 
-    Element -->|использует| PulseLib
-    Element -->|связан с| MotionLib
+    Element -->|uses| PulseLib
+    Element -->|linked to| MotionLib
 
-    Engine["NEngineMotionControl<br/>Движок управления"]
-    MotionElem["NMotionElement<br/>Элементы движения"]
-    InputNeurons["InputNeurons<br/>Входные нейроны"]
-    ControlNeurons["ControlNeurons<br/>Управляющие нейроны"]
+    Engine["NEngineMotionControl<br/>Control engine"]
+    MotionElem["NMotionElement<br/>Motion elements"]
+    InputNeurons["InputNeurons<br/>Input neurons"]
+    ControlNeurons["ControlNeurons<br/>Control neurons"]
 
     Element --> Engine
     Element --> MotionElem
@@ -445,7 +445,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 22, 24 — элемент контроля позиции, пространственные конфигурации.
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24 — position control element, spatial configurations.
 
 ## Usage Examples
 

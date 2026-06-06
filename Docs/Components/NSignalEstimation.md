@@ -339,13 +339,13 @@ sequenceDiagram
     Estimator->>Estimator: ABuild()
     Estimator->>SignalGen: new NPulseGeneratorTransit("SignalGen")
     Estimator->>SinchroGen: new NPulseGeneratorTransit("SinchroGen")
-    Estimator->>ZoneNeurons: Создание NumZones нейронов
-    Estimator->>Estimator: Создание связей между компонентами
+    Estimator->>ZoneNeurons: Creation NumZones neurons
+    Estimator->>Estimator: Creating links between components
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Storage->>Estimator: Calculate()
         Estimator->>Estimator: ACalculate()
-        Note over Estimator: Определение зоны сигнала
+        Note over Estimator: Determining zone signal
     end
 ```
 
@@ -353,34 +353,34 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
-    Building --> CreatingGenerators: Создание генераторов
-    CreatingGenerators --> CreatingNeurons: Создание нейронов зон
-    CreatingNeurons --> CreatingLinks: Создание связей
-    CreatingLinks --> Ready: Готов к работе
+    Building --> CreatingGenerators: Creating generators
+    CreatingGenerators --> CreatingNeurons: Creating neurons zones
+    CreatingNeurons --> CreatingLinks: Creating links
+    CreatingLinks --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> Estimating: Оценка сигнала
-    Estimating --> Ready: Завершение шага
+    Calculating --> Estimating: Estimating signal
+    Estimating --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> CheckZones["NumZones<br/>изменилось?"]
-    CheckZones -->|Да| DeleteOld[Удаление старых нейронов]
-    CheckZones -->|Нет| CreateSignalGen
-    DeleteOld --> CreateSignalGen["Создание SignalGen<br/>с UseTransitSignal"]
-    CreateSignalGen --> CreateSinchroGen["Создание SinchroGen<br/>с UseTransitSinchro"]
-    CreateSinchroGen --> CreateZoneNeurons["Создание NumZones нейронов<br/>для каждой зоны"]
-    CreateZoneNeurons --> LinkSignal[Связь SignalGen -> ZoneNeurons]
-    LinkSignal --> LinkSinchro[Связь SinchroGen -> ZoneNeurons]
-    LinkSinchro --> End([Конец])
+    Start([Start ABuild]) --> CheckZones["NumZones<br/>changed?"]
+    CheckZones -->|Yes| DeleteOld[Deleting old neurons]
+    CheckZones -->|No| CreateSignalGen
+    DeleteOld --> CreateSignalGen["Creation SignalGen<br/>with UseTransitSignal"]
+    CreateSignalGen --> CreateSinchroGen["Creation SinchroGen<br/>with UseTransitSinchro"]
+    CreateSinchroGen --> CreateZoneNeurons["Creation NumZones neurons<br/>for each zone"]
+    CreateZoneNeurons --> LinkSignal[Link SignalGen -> ZoneNeurons]
+    LinkSignal --> LinkSinchro[Link SinchroGen -> ZoneNeurons]
+    LinkSinchro --> End([End])
 ```
 
 ## Component Diagram
@@ -389,14 +389,14 @@ flowchart TD
 graph TB
     Estimator[[NSignalEstimation]]
     PulseLib["Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Estimator -->|использует| PulseLib
-    Estimator -->|использует| BasicLib
+    Estimator -->|uses| PulseLib
+    Estimator -->|uses| BasicLib
 
-    SignalGen["SignalGen<br/>Генератор сигнала"]
-    SinchroGen["SinchroGen<br/>Генератор синхронизации"]
-    ZoneNeurons["ZoneNeurons<br/>Нейроны для каждой зоны"]
+    SignalGen["SignalGen<br/>Signal generator"]
+    SinchroGen["SinchroGen<br/>Synchronization generator"]
+    ZoneNeurons["ZoneNeurons<br/>neurons for each zone"]
 
     Estimator --> SignalGen
     Estimator --> SinchroGen
@@ -412,7 +412,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — оценка сигналов, преобразование импульсных потоков.
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — signal estimation, pulse stream conversion.
 
 ## Usage Examples
 

@@ -226,14 +226,14 @@ sequenceDiagram
 
     Storage->>Controller: Build()
     Controller->>Controller: ABuild()
-    Controller->>IntervalSep: Создание NIntervalSeparator для афферентов
-    Controller->>MotionElem: Создание элементов движения
+    Controller->>IntervalSep: Creating NIntervalSeparator for afferents
+    Controller->>MotionElem: Creating motion elements
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Storage->>Controller: Calculate()
         Controller->>Controller: ACalculate()
-        Controller->>IntervalSep: Обработка афферентных сигналов по диапазонам
-        Controller->>MotionElem: Управление элементами движения
+        Controller->>IntervalSep: Processing afferent signals by ranges
+        Controller->>MotionElem: Controlling motion elements
     end
 ```
 
@@ -241,30 +241,30 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
-    Building --> CreatingInterval: Создание IntervalSeparators
-    CreatingInterval --> CreatingMotions: Создание элементов движения
-    CreatingMotions --> Ready: Готов к работе
+    Building --> CreatingInterval: Creation IntervalSeparators
+    CreatingInterval --> CreatingMotions: Creating motion elements
+    CreatingMotions --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> ProcessingAfferents: Обработка range-афферентов
-    ProcessingAfferents --> Ready: Завершение шага
+    Calculating --> ProcessingAfferents: Processing range afferents
+    ProcessingAfferents --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> SetMode["Установка CreationMode = 1<br/>Range режим"]
-    SetMode --> CalcRanges["Вычисление диапазонов афферентов<br/>на основе AfferentMin, AfferentMax"]
-    CalcRanges --> CreateIntervalSep["Создание NIntervalSeparator<br/>для каждого диапазона"]
-    CreateIntervalSep --> CreateMotions[Создание элементов движения]
-    CreateMotions --> LinkInterval["Связывание IntervalSeparator<br/>с афферентными нейронами"]
-    LinkInterval --> End([Конец])
+    Start([Start ABuild]) --> SetMode["Setting CreationMode = 1<br/>Range mode"]
+    SetMode --> CalcRanges["Computing afferent ranges<br/>based on AfferentMin, AfferentMax"]
+    CalcRanges --> CreateIntervalSep["Creating NIntervalSeparator<br/>for each range"]
+    CreateIntervalSep --> CreateMotions[Creating motion elements]
+    CreateMotions --> LinkInterval["Linking IntervalSeparator<br/>with afferent neurons"]
+    LinkInterval --> End([End])
 ```
 
 ## Component Diagram
@@ -275,11 +275,11 @@ graph TB
     MotionLib["Nmsdk-MotionControlLib<br/>NIntervalSeparator, NMotionElement"]
     PulseLib["Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron"]
 
-    Controller -->|использует| MotionLib
-    Controller -->|использует| PulseLib
+    Controller -->|uses| MotionLib
+    Controller -->|uses| PulseLib
 
-    IntervalSeparators["IntervalSeparators<br/>Разделители по диапазонам"]
-    MotionElements["MotionElements<br/>Элементы движения"]
+    IntervalSeparators["IntervalSeparators<br/>Range separators"]
+    MotionElements["MotionElements<br/>Motion elements"]
 
     Controller --> IntervalSeparators
     Controller --> MotionElements
@@ -294,7 +294,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22, 27 — движок управления с диапазонными афферентами.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22, 27 — motion control engine with range afferents.
 
 ## Usage Examples
 

@@ -390,19 +390,19 @@ sequenceDiagram
 
     Storage->>Detector: Build()
     Detector->>Detector: ABuild()
-    Detector->>ClsGen: Создание NumObj генераторов ClsSpikeFr
+    Detector->>ClsGen: Creating NumObj ClsSpikeFr generators
     Detector->>Suppress1: new NSuppressionUnit("SuppressUnit1")
     Detector->>Suppress2: new NSuppressionUnit("SuppressUnit2")
     Detector->>ORNeuron: new NPulseNeuron("ORNeuron")
     Detector->>ANDNeuron: new NPulseNeuron("ANDNeuron")
     Detector->>Deciding: new NPulseNeuron("DecidingNeuron")
-    Detector->>Detector: Создание связей между компонентами
+    Detector->>Detector: Creating links between components
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Storage->>Detector: Calculate()
         Detector->>Detector: ACalculate()
-        Note over Detector: Обнаружение объектов в области
-        Detector->>Deciding: Output = результат обнаружения
+        Note over Detector: Detecting objects in area
+        Detector->>Deciding: Output = detection result
     end
 ```
 
@@ -410,38 +410,38 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
-    Building --> CreatingGenerators: Создание генераторов
-    CreatingGenerators --> CreatingSuppress: Создание блоков подавления
-    CreatingSuppress --> CreatingNeurons: Создание нейронов
-    CreatingNeurons --> CreatingLinks: Создание связей
-    CreatingLinks --> Ready: Готов к работе
+    Building --> CreatingGenerators: Creating generators
+    CreatingGenerators --> CreatingSuppress: Creating suppression blocks
+    CreatingSuppress --> CreatingNeurons: Creating neurons
+    CreatingNeurons --> CreatingLinks: Creating links
+    CreatingLinks --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> Detecting: Обнаружение объектов
-    Detecting --> Ready: Завершение шага
+    Calculating --> Detecting: Detecting objects
+    Detecting --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> CheckObj["NumObj<br/>изменилось?"]
-    CheckObj -->|Да| DeleteOld[Удаление старых генераторов]
-    CheckObj -->|Нет| CreateGenerators
-    DeleteOld --> CreateGenerators["Создание NumObj генераторов ClsSpikeFr<br/>с задержками из DelaysClsSpikeFr"]
-    CreateGenerators --> CreateSuppress1["Создание SuppressUnit1<br/>с Delay1=Delay11, Delay2=Delay12"]
-    CreateSuppress1 --> CreateSuppress2["Создание SuppressUnit2<br/>с Delay1=Delay21, Delay2=Delay22"]
-    CreateSuppress2 --> CreateOR[Создание ORNeuron]
-    CreateOR --> CreateAND[Создание ANDNeuron]
-    CreateAND --> CreateDeciding[Создание DecidingNeuron]
-    CreateDeciding --> CreateExcitatory[Создание ExcitatoryGen]
-    CreateExcitatory --> LinkComponents[Создание связей между компонентами]
-    LinkComponents --> End([Конец])
+    Start([Start ABuild]) --> CheckObj["NumObj<br/>changed?"]
+    CheckObj -->|Yes| DeleteOld[Deleting old generators]
+    CheckObj -->|No| CreateGenerators
+    DeleteOld --> CreateGenerators["Creating NumObj ClsSpikeFr generators<br/>with delays from DelaysClsSpikeFr"]
+    CreateGenerators --> CreateSuppress1["Creating SuppressUnit1<br/>with Delay1=Delay11, Delay2=Delay12"]
+    CreateSuppress1 --> CreateSuppress2["Creating SuppressUnit2<br/>with Delay1=Delay21, Delay2=Delay22"]
+    CreateSuppress2 --> CreateOR[Creating ORNeuron]
+    CreateOR --> CreateAND[Creation ANDNeuron]
+    CreateAND --> CreateDeciding[Creation DecidingNeuron]
+    CreateDeciding --> CreateExcitatory[Creation ExcitatoryGen]
+    CreateExcitatory --> LinkComponents[Creating links between components]
+    LinkComponents --> End([End])
 ```
 
 ## Component Diagram
@@ -451,18 +451,18 @@ graph TB
     Detector[[NObjInArea]]
     PulseLib["Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron"]
     MotionLib["Nmsdk-MotionControlLib<br/>NSuppressionUnit"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Detector -->|использует| PulseLib
-    Detector -->|использует| MotionLib
-    Detector -->|использует| BasicLib
+    Detector -->|uses| PulseLib
+    Detector -->|uses| MotionLib
+    Detector -->|uses| BasicLib
 
-    ClsGenerators["ClsSpikeFr<br/>Генераторы последовательностей"]
-    Suppress1["SuppressUnit1<br/>Блок подавления 1"]
-    Suppress2["SuppressUnit2<br/>Блок подавления 2"]
-    ORNeuron["ORNeuron<br/>Нейрон ИЛИ"]
-    ANDNeuron["ANDNeuron<br/>Нейрон И"]
-    DecidingNeuron["DecidingNeuron<br/>Нейрон принятия решения"]
+    ClsGenerators["ClsSpikeFr<br/>Sequence generators"]
+    Suppress1["SuppressUnit1<br/>Suppression block 1"]
+    Suppress2["SuppressUnit2<br/>Suppression block 2"]
+    ORNeuron["ORNeuron<br/>OR neuron"]
+    ANDNeuron["ANDNeuron<br/>AND neuron"]
+    DecidingNeuron["DecidingNeuron<br/>Decision neuron"]
 
     Detector --> ClsGenerators
     Detector --> Suppress1
@@ -481,7 +481,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 13, 19 — обнаружение объектов, восприятие и управление.
+
+- [Literature-References.md](../Literature-References.md): [A], 13, 19 — object detection, perception, and control.
 
 ## Usage Examples
 

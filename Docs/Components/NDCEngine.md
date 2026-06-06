@@ -551,21 +551,21 @@ sequenceDiagram
     Storage->>Engine: new NDCEngine()
     Storage->>Engine: Default()
     Engine->>Engine: ADefault()
-    Note over Engine: Инициализация параметров двигателя
+    Note over Engine: Engine parameter initialization
 
     Storage->>Engine: Build()
     Engine->>Engine: ABuild()
 
     Storage->>Engine: Reset()
     Engine->>Engine: AReset()
-    Note over Engine: Сброс состояния (Current=0, EMF=0, Angle=0)
+    Note over Engine: Reset state (Current=0, EMF=0, Angle=0)
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Controller->>Engine: InputVoltage = voltage
         Load->>Engine: InputMomentum = load_moment
         Storage->>Engine: Calculate()
         Engine->>Engine: ACalculate()
-        Note over Engine: Вычисление тока, ЭДС, момента, скорости, угла
+        Note over Engine: Computing current, EMF, moment, speed, angle
         Engine->>Controller: OutputMomentum = moment
         Engine->>Controller: OutputAngle = angle
         Engine->>Controller: OutputAngleSpeed = angular_speed
@@ -576,36 +576,36 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> Ready: Завершение шага
+    Calculating --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadVoltage["InputVoltage<br/>подключен?"]
-    ReadVoltage -->|Да| GetVoltage[Получить InputVoltage]
-    ReadVoltage -->|Нет| SetVoltageZero[input[0] = 0]
+    Start([Start ACalculate]) --> ReadVoltage["InputVoltage<br/>connected?"]
+    ReadVoltage -->|Yes| GetVoltage[Get InputVoltage]
+    ReadVoltage -->|No| SetVoltageZero[input[0] = 0]
     GetVoltage --> ReadMomentum
-    SetVoltageZero --> ReadMomentum["InputMomentum<br/>подключен?"]
-    ReadMomentum -->|Да| GetMomentum[Получить InputMomentum + OutMoment]
-    ReadMomentum -->|Нет| SetMomentumOut[input[1] = OutMoment]
-    GetMomentum --> CalcCurrent["Вычисление тока:<br/>Current = f(Voltage, EMF, Resistance, Inductance)"]
+    SetVoltageZero --> ReadMomentum["InputMomentum<br/>connected?"]
+    ReadMomentum -->|Yes| GetMomentum[Get InputMomentum + OutMoment]
+    ReadMomentum -->|No| SetMomentumOut[input[1] = OutMoment]
+    GetMomentum --> CalcCurrent["Computing current:<br/>Current = f(Voltage, EMF, Resistance, Inductance)"]
     SetMomentumOut --> CalcCurrent
-    CalcCurrent --> CalcEMF["Вычисление ЭДС:<br/>EMF = f(Current, Momentum, Tm)"]
-    CalcEMF --> CalcMoment["Вычисление момента:<br/>Moment = Current * EMFactor / Resistance"]
-    CalcMoment --> CalcSpeed["Вычисление угловой скорости:<br/>OutputAngleSpeed = EMF / EMFactor"]
-    CalcSpeed --> CalcAngle["Вычисление угла:<br/>Angle += OutputAngleSpeed / ReductionRate / TimeStep"]
-    CalcAngle --> UpdateOutputs["Обновление выходов:<br/>OutputMomentum, OutputAngle, OutputAngleSpeed"]
-    UpdateOutputs --> End([Конец])
+    CalcCurrent --> CalcEMF["Computing EMF:<br/>EMF = f(Current, Momentum, Tm)"]
+    CalcEMF --> CalcMoment["Computing moment:<br/>Moment = Current * EMFactor / Resistance"]
+    CalcMoment --> CalcSpeed["Computing angular speed:<br/>OutputAngleSpeed = EMF / EMFactor"]
+    CalcSpeed --> CalcAngle["Computing angle:<br/>Angle += OutputAngleSpeed / ReductionRate / TimeStep"]
+    CalcAngle --> UpdateOutputs["Updating outputs:<br/>OutputMomentum, OutputAngle, OutputAngleSpeed"]
+    UpdateOutputs --> End([End])
 ```
 
 ## Component Diagram
@@ -613,15 +613,15 @@ flowchart TD
 ```mermaid
 graph TB
     Engine[[NDCEngine]]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Engine -->|использует| BasicLib
+    Engine -->|uses| BasicLib
 
-    InputVoltage["InputVoltage<br/>Входное напряжение"]
-    InputMomentum["InputMomentum<br/>Входной момент нагрузки"]
-    OutputMomentum["OutputMomentum<br/>Выходной момент"]
-    OutputAngle["OutputAngle<br/>Выходной угол"]
-    OutputAngleSpeed["OutputAngleSpeed<br/>Выходная угловая скорость"]
+    InputVoltage["InputVoltage<br/>Input voltage"]
+    InputMomentum["InputMomentum<br/>Input load moment"]
+    OutputMomentum["OutputMomentum<br/>Output moment"]
+    OutputAngle["OutputAngle<br/>Output angle"]
+    OutputAngleSpeed["OutputAngleSpeed<br/>Output angular speed"]
 
     Engine --> InputVoltage
     Engine --> InputMomentum
@@ -706,4 +706,5 @@ See RU section for full XML; typical properties: `EMFactor`, `Inductance`, `Resi
 Used in motion control and manipulator systems; example configs: `Bin/Configs/SpikeSamples/MC-Muscles/` (MC-M-00-EyeMuscle, MC-M-01-EyeMuscle). Typical combinations: with [NPositionControlElement](NPositionControlElement.md), [NManipulator](NManipulator.md), [NEngineMotionControl](NEngineMotionControl.md).
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 28, 29, 31 — нейронные структуры управления мышечным сокращением и преобразование импульсных потоков в исполнительных системах.
+
+- [Literature-References.md](../Literature-References.md): [A], 28, 29, 31 — neural structures for muscle contraction control and conversion of pulse streams in actuator systems.

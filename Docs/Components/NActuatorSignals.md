@@ -381,13 +381,13 @@ sequenceDiagram
     Signals->>RightEngine: new NPulseGeneratorTransit("RightEngine")
     Signals->>Sinchro1: new NPulseGeneratorTransit("Sinchro1")
     Signals->>Sinchro2: new NPulseGeneratorTransit("Sinchro2")
-    Signals->>Neurons: Создание нейронов принятия решений
-    Signals->>Signals: Создание связей между компонентами
+    Signals->>Neurons: Creating decision neurons
+    Signals->>Signals: Creating links between components
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Storage->>Signals: Calculate()
         Signals->>Signals: ACalculate()
-        Note over Signals: Определение направления движения
+        Note over Signals: Movement direction detection
         Signals->>Neurons: Stay, Forward, Back, Left, Right
     end
 ```
@@ -396,39 +396,39 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
-    Building --> CreatingGenerators: Создание генераторов
-    CreatingGenerators --> CreatingDelay: Создание задержки
-    CreatingDelay --> CreatingNeurons: Создание нейронов
-    CreatingNeurons --> CreatingLinks: Создание связей
-    CreatingLinks --> Ready: Готов к работе
+    Building --> CreatingGenerators: Creating generators
+    CreatingGenerators --> CreatingDelay: Creating delay
+    CreatingDelay --> CreatingNeurons: Creating neurons
+    CreatingNeurons --> CreatingLinks: Creating links
+    CreatingLinks --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> ProcessingSignals: Обработка сигналов
-    ProcessingSignals --> DeterminingDirection: Определение направления
-    DeterminingDirection --> Ready: Завершение шага
+    Calculating --> ProcessingSignals: Processing signals
+    ProcessingSignals --> DeterminingDirection: Direction detection
+    DeterminingDirection --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> CreateLeftEngine[Создание LeftEngine]
-    CreateLeftEngine --> CreateRightEngine[Создание RightEngine]
-    CreateRightEngine --> CreateSinchro1[Создание Sinchro1]
-    CreateSinchro1 --> CreateSinchro2[Создание Sinchro2]
-    CreateSinchro2 --> CreateNOTGen[Создание NOTGenerator]
-    CreateNOTGen --> CreateDelay[Создание Delay1To2]
-    CreateDelay --> CreateOR[Создание ORNeuron]
-    CreateOR --> CreateNOT[Создание NOTNeuron]
-    CreateNOT --> CreateIsNeurons[Создание IsForwardNeuron, IsLeftNeuron, IsRightNeuron, IsBackNeuron]
-    CreateIsNeurons --> CreateDirectionNeurons[Создание StayNeuron, ForwardNeuron, LeftNeuron, RightNeuron, BackNeuron]
-    CreateDirectionNeurons --> LinkComponents[Создание связей между компонентами]
-    LinkComponents --> End([Конец])
+    Start([Start ABuild]) --> CreateLeftEngine[Creation LeftEngine]
+    CreateLeftEngine --> CreateRightEngine[Creation RightEngine]
+    CreateRightEngine --> CreateSinchro1[Creation Sinchro1]
+    CreateSinchro1 --> CreateSinchro2[Creation Sinchro2]
+    CreateSinchro2 --> CreateNOTGen[Creation NOTGenerator]
+    CreateNOTGen --> CreateDelay[Creation Delay1To2]
+    CreateDelay --> CreateOR[Creating ORNeuron]
+    CreateOR --> CreateNOT[Creation NOTNeuron]
+    CreateNOT --> CreateIsNeurons[Creation IsForwardNeuron, IsLeftNeuron, IsRightNeuron, IsBackNeuron]
+    CreateIsNeurons --> CreateDirectionNeurons[Creation StayNeuron, ForwardNeuron, LeftNeuron, RightNeuron, BackNeuron]
+    CreateDirectionNeurons --> LinkComponents[Creating links between components]
+    LinkComponents --> End([End])
 ```
 
 ## Component Diagram
@@ -437,16 +437,16 @@ flowchart TD
 graph TB
     Signals[[NActuatorSignals]]
     PulseLib["Nmsdk-PulseLib<br/>NPulseGenerator, NPulseDelay, NPulseNeuron"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Signals -->|использует| PulseLib
-    Signals -->|использует| BasicLib
+    Signals -->|uses| PulseLib
+    Signals -->|uses| BasicLib
 
-    LeftEngine["LeftEngine<br/>Генератор левого двигателя"]
-    RightEngine["RightEngine<br/>Генератор правого двигателя"]
-    Sinchro1["Sinchro1<br/>Синхронизация 1"]
-    Sinchro2["Sinchro2<br/>Синхронизация 2"]
-    DecisionNeurons["DecisionNeurons<br/>Нейроны принятия решений"]
+    LeftEngine["LeftEngine<br/>Left engine generator"]
+    RightEngine["RightEngine<br/>Right engine generator"]
+    Sinchro1["Sinchro1<br/>Synchronization 1"]
+    Sinchro2["Sinchro2<br/>Synchronization 2"]
+    DecisionNeurons["DecisionNeurons<br/>Decision neurons"]
 
     Signals --> LeftEngine
     Signals --> RightEngine
@@ -464,7 +464,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 28, 29, 31 — сигналы актуаторов и нейронные структуры управления.
+
+- [Literature-References.md](../Literature-References.md): [A], 28, 29, 31 — actuator signals and neural control structures.
 
 ## Usage Examples
 

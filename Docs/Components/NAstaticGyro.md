@@ -348,13 +348,13 @@ sequenceDiagram
 
     Storage->>Gyro: Reset()
     Gyro->>Gyro: AReset()
-    Note over Gyro: Сброс углов и внутренних переменных
+    Note over Gyro: Reset angles and internal variables
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Sensor->>Gyro: Input1, Input2, Input3 = angular_velocities
         Storage->>Gyro: Calculate()
         Gyro->>Gyro: ACalculate()
-        Note over Gyro: Вычисление углов через фильтр 2-го порядка
+        Note over Gyro: Computing angles via 2nd-order filter
         Gyro->>Sensor: Output1=alpha, Output2=betta, Output3=gamma
     end
 ```
@@ -363,31 +363,31 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> Filtering: Фильтрация сигналов
-    Filtering --> ComputingAngles: Вычисление углов
-    ComputingAngles --> Ready: Завершение шага
+    Calculating --> Filtering: Signal filtering
+    Filtering --> ComputingAngles: Computing angles
+    ComputingAngles --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckInputs["Все входы<br/>подключены?"]
-    CheckInputs -->|Нет| End([Конец])
-    CheckInputs -->|Да| ReadInputs[Чтение входных сигналов:<br/>input[0]=Input1, input[1]=Input2, input[2]=Input3]
-    ReadInputs --> CalcAlpha["Вычисление alpha:<br/>Фильтр 2-го порядка для оси X"]
-    CalcAlpha --> CalcBetta["Вычисление betta:<br/>Фильтр 2-го порядка для оси Y"]
-    CalcBetta --> CalcGamma["Вычисление gamma:<br/>Фильтр 2-го порядка для оси Z"]
-    CalcGamma --> UpdatePrev[Обновление предыдущих значений]
-    UpdatePrev --> UpdateOutputs["Обновление выходов:<br/>Output1=alpha, Output2=betta, Output3=gamma"]
+    Start([Start ACalculate]) --> CheckInputs["All inputs<br/>connected?"]
+    CheckInputs -->|No| End([End])
+    CheckInputs -->|Yes| ReadInputs[Reading input signals:<br/>input[0]=Input1, input[1]=Input2, input[2]=Input3]
+    ReadInputs --> CalcAlpha["Computing alpha:<br/>2nd-order filter for X axis"]
+    CalcAlpha --> CalcBetta["Computing betta:<br/>2nd-order filter for Y axis"]
+    CalcBetta --> CalcGamma["Computing gamma:<br/>2nd-order filter for Z axis"]
+    CalcGamma --> UpdatePrev[Updating previous values]
+    UpdatePrev --> UpdateOutputs["Updating outputs:<br/>Output1=alpha, Output2=betta, Output3=gamma"]
     UpdateOutputs --> End
 ```
 
@@ -396,16 +396,16 @@ flowchart TD
 ```mermaid
 graph TB
     Gyro[[NAstaticGyro]]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Gyro -->|использует| BasicLib
+    Gyro -->|uses| BasicLib
 
-    Input1["Input1<br/>Угловая скорость по оси X"]
-    Input2["Input2<br/>Угловая скорость по оси Y"]
-    Input3["Input3<br/>Угловая скорость по оси Z"]
-    Output1["Output1<br/>Угол alpha"]
-    Output2["Output2<br/>Угол betta"]
-    Output3["Output3<br/>Угол gamma"]
+    Input1["Input1<br/>Angular speed on X axis"]
+    Input2["Input2<br/>Angular speed on Y axis"]
+    Input3["Input3<br/>Angular speed on Z axis"]
+    Output1["Output1<br/>Angle alpha"]
+    Output2["Output2<br/>Angle betta"]
+    Output3["Output3<br/>Angle gamma"]
 
     Gyro --> Input1
     Gyro --> Input2
@@ -424,7 +424,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 21 — гироскоп в иерархии управления и согласованном управлении.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 21 — gyroscope in the control hierarchy and coordinated control.
 
 ## Usage Examples
 

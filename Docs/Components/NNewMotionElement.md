@@ -490,18 +490,18 @@ sequenceDiagram
     Element->>Motoneuron: new NPulseNeuron("MotoneuronL")
     Element->>Motoneuron: new NPulseNeuron("MotoneuronR")
     Element->>Element: CreateAfferents()
-    Element->>Afferent: new NAfferentNeuron() для каждого контура
+    Element->>Afferent: new NAfferentNeuron() for each loop
     Element->>Element: CreateInterneurons()
     Element->>Element: CreateInternalLinks()
     Element->>Element: LinkMotoneurons()
-    Element->>Element: LinkRenshow() (если включен)
-    Element->>Element: LinkPM() (если включен)
+    Element->>Element: LinkRenshow() (if enabled)
+    Element->>Element: LinkPM() (if enabled)
     Element->>Element: RestoreExternalLinks()
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Storage->>Element: Calculate()
         Element->>Element: ACalculate()
-        Note over Element: Вычисления выполняются нейронами внутри
+        Note over Element: Calculations are performed by internal neurons
     end
 ```
 
@@ -509,7 +509,7 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
     Building --> BackingUp: BackupExternalLinks()
@@ -519,36 +519,36 @@ stateDiagram-v2
     CreatingAfferents --> CreatingInterneurons: CreateInterneurons()
     CreatingInterneurons --> Linking: CreateInternalLinks()
     Linking --> Restoring: RestoreExternalLinks()
-    Restoring --> Ready: Готов к работе
+    Restoring --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> Ready: Завершение шага
+    Calculating --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> Backup[BackupExternalLinks]
+    Start([Start ABuild]) --> Backup[BackupExternalLinks]
     Backup --> CreateStruct[CreateStructure]
     CreateStruct --> DelAll[DelAllComponents]
-    DelAll --> CheckStorage["Storage<br/>существует?"]
-    CheckStorage -->|Нет| End([Конец])
-    CheckStorage -->|Да| CheckNames["Имена классов<br/>заданы?"]
-    CheckNames -->|Нет| End
-    CheckNames -->|Да| CreateMN["CreateMotoneurons:<br/>Создание MotoneuronL и MotoneuronR"]
-    CreateMN --> CreateAff["CreateAfferents:<br/>Создание афферентов для каждого контура"]
-    CreateAff --> CreateIN["CreateInterneurons:<br/>Создание интернейронов если включены"]
+    DelAll --> CheckStorage["Storage<br/>exists?"]
+    CheckStorage -->|No| End([End])
+    CheckStorage -->|Yes| CheckNames["Class names<br/>set?"]
+    CheckNames -->|No| End
+    CheckNames -->|Yes| CreateMN["CreateMotoneurons:<br/>Creating MotoneuronL and MotoneuronR"]
+    CreateMN --> CreateAff["CreateAfferents:<br/>Creating afferents for each loop"]
+    CreateAff --> CreateIN["CreateInterneurons:<br/>Creating interneurons if enabled"]
     CreateIN --> CreateLinks[CreateInternalLinks]
-    CreateLinks --> LinkMN["LinkMotoneurons:<br/>Связывание моторных нейронов"]
+    CreateLinks --> LinkMN["LinkMotoneurons:<br/>Linking motoneurons"]
     LinkMN --> CheckRenshow{RenshowMode?}
-    CheckRenshow -->|Да| LinkRenshow[LinkRenshow]
-    CheckRenshow -->|Нет| CheckPM
+    CheckRenshow -->|Yes| LinkRenshow[LinkRenshow]
+    CheckRenshow -->|No| CheckPM
     LinkRenshow --> CheckPM{PacemakerMode?}
-    CheckPM -->|Да| LinkPM[LinkPM]
-    CheckPM -->|Нет| Restore
+    CheckPM -->|Yes| LinkPM[LinkPM]
+    CheckPM -->|No| Restore
     LinkPM --> Restore[RestoreExternalLinks]
     Restore --> End
 ```
@@ -559,17 +559,17 @@ flowchart TD
 graph TB
     Element[[NMotionElement]]
     PulseLib["Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron, NPulseGenerator"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Element -->|использует| PulseLib
-    Element -->|использует| BasicLib
+    Element -->|uses| PulseLib
+    Element -->|uses| BasicLib
 
-    MotoneuronL["MotoneuronL<br/>Левый моторный нейрон"]
-    MotoneuronR["MotoneuronR<br/>Правый моторный нейрон"]
-    Afferents["Afferents<br/>Афферентные нейроны"]
-    Interneurons["Interneurons<br/>Интернейроны"]
-    Renshow["Renshow Cells<br/>Клетки Реншоу"]
-    Pacemaker["Pacemaker<br/>Пейсмейкеры"]
+    MotoneuronL["MotoneuronL<br/>Left motoneuron"]
+    MotoneuronR["MotoneuronR<br/>Right motoneuron"]
+    Afferents["Afferents<br/>Afferent neurons"]
+    Interneurons["Interneurons<br/>Interneurons"]
+    Renshow["Renshow Cells<br/>Renshaw cells"]
+    Pacemaker["Pacemaker<br/>Pacemakers"]
 
     Element --> MotoneuronL
     Element --> MotoneuronR
@@ -602,4 +602,5 @@ graph TB
 [Same as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 21, 22, 23 — элементы движения, моторная память, согласованное управление.
+
+- [Literature-References.md](../Literature-References.md): [A], 21, 22, 23 — motion elements, motor memory, coordinated control.

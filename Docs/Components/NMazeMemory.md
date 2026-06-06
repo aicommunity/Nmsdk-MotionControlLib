@@ -351,19 +351,19 @@ sequenceDiagram
 
     Storage->>Memory: Build()
     Memory->>Memory: ABuild()
-    Memory->>TE: Создание начальных элементов траектории
-    Memory->>MPC: Создание блоков MultiPC
-    Memory->>NT: Создание нейронных тренеров
+    Memory->>TE: Creating initial trajectory elements
+    Memory->>MPC: Creating MultiPC blocks
+    Memory->>NT: Creating neural trainers
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Storage->>Memory: Calculate()
         Memory->>Memory: ACalculate()
-        alt Новая ситуация
-            Memory->>NT: Запоминание признаков ситуации
-            Memory->>TE: Создание нового элемента траектории
-            Memory->>MPC: Создание нового блока MultiPC
+        alt New situation
+            Memory->>NT: Storing situation features
+            Memory->>TE: Creating new trajectory element
+            Memory->>MPC: Creating new MultiPC block
         end
-        Memory->>TE: Обновление текущего элемента траектории
+        Memory->>TE: Updating current trajectory element
     end
 ```
 
@@ -371,44 +371,44 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
-    Building --> CreatingStructure: Создание начальной структуры
-    CreatingStructure --> Ready: Готов к работе
+    Building --> CreatingStructure: Creating initial structure
+    CreatingStructure --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> CheckingSituation: Проверка ситуации
-    CheckingSituation --> NewSituation: Новая ситуация?
-    NewSituation -->|Да| Training: Обучение NeuronTrainer
-    NewSituation -->|Нет| Updating: Обновление траектории
-    Training --> CreatingTE: Создание нового TE
-    CreatingTE --> CreatingMPC: Создание нового MPC
-    CreatingMPC --> Updating: Обновление траектории
-    Updating --> Ready: Завершение шага
+    Calculating --> CheckingSituation: Checking situation
+    CheckingSituation --> NewSituation: New situation?
+    NewSituation -->|Yes| Training: Training NeuronTrainer
+    NewSituation -->|No| Updating: Updating trajectory
+    Training --> CreatingTE: Creating new TE
+    CreatingTE --> CreatingMPC: Creating new MPC
+    CreatingMPC --> Updating: Updating trajectory
+    Updating --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckSituation{Situation?}
-    CheckSituation -->|Да| CheckActions["InputActions<br/>доступны?"]
-    CheckSituation -->|Нет| UpdateCurrent[Обновление текущего TE]
-    CheckActions -->|Да| CheckTraining["NeuronTrainer<br/>обучен?"]
-    CheckActions -->|Нет| UpdateCurrent
-    CheckTraining -->|Нет| TrainNT["Обучение NeuronTrainer<br/>на SituationCoords"]
-    CheckTraining -->|Да| CreateTE[Создание нового NTrajectoryElement]
-    TrainNT --> WaitTraining[Ожидание завершения обучения]
+    Start([Start ACalculate]) --> CheckSituation{Situation?}
+    CheckSituation -->|Yes| CheckActions["InputActions<br/>available?"]
+    CheckSituation -->|No| UpdateCurrent[Updating current TE]
+    CheckActions -->|Yes| CheckTraining["NeuronTrainer<br/>trained?"]
+    CheckActions -->|No| UpdateCurrent
+    CheckTraining -->|No| TrainNT["Training NeuronTrainer<br/>on SituationCoords"]
+    CheckTraining -->|Yes| CreateTE[Creating new NTrajectoryElement]
+    TrainNT --> WaitTraining[Waiting for training completion]
     WaitTraining --> CreateTE
-    CreateTE --> CreateMPC[Создание нового NMultiPositionControl]
-    CreateMPC --> LinkComponents[Связывание компонентов]
+    CreateTE --> CreateMPC[Creating new NMultiPositionControl]
+    CreateMPC --> LinkComponents[Linking components]
     LinkComponents --> UpdateCurrent
     UpdateCurrent --> CheckFinish{IsDone?}
-    CheckFinish -->|Да| End([Конец])
-    CheckFinish -->|Нет| End
+    CheckFinish -->|Yes| End([End])
+    CheckFinish -->|No| End
 ```
 
 ## Component Diagram
@@ -418,16 +418,16 @@ graph TB
     Memory[[NMazeMemory]]
     MotionLib["Nmsdk-MotionControlLib<br/>NTrajectoryElement, NMultiPositionControl"]
     PulseLib["Nmsdk-PulseLib<br/>NNeuronTrainer, NPulseNeuron"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Memory -->|использует| MotionLib
-    Memory -->|использует| PulseLib
-    Memory -->|использует| BasicLib
+    Memory -->|uses| MotionLib
+    Memory -->|uses| PulseLib
+    Memory -->|uses| BasicLib
 
-    TrajectoryElements["TrajectoryElements<br/>Элементы траектории"]
-    MultiPCs["MultiPCs<br/>Блоки множественного контроля"]
-    NTrainers["NTrainers<br/>Нейронные тренеры"]
-    ActionNeurons["ActionNeurons<br/>Нейроны действий"]
+    TrajectoryElements["TrajectoryElements<br/>Trajectory elements"]
+    MultiPCs["MultiPCs<br/>Multi-position control blocks"]
+    NTrainers["NTrainers<br/>Neural trainers"]
+    ActionNeurons["ActionNeurons<br/>Action neurons"]
 
     Memory --> TrajectoryElements
     Memory --> MultiPCs
@@ -448,4 +448,5 @@ graph TB
 [Same as RU section, with English comments]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 22, 24 — моторная память, запоминание пространственных конфигураций.
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24 — motor memory, storing spatial configurations.

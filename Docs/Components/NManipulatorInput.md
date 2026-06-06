@@ -277,7 +277,7 @@ sequenceDiagram
     Storage->>Input: Reset()
     Input->>Input: AReset()
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Controller->>Input: Input = control_signal
         Storage->>Input: Calculate()
         Input->>Input: ACalculate()
@@ -290,27 +290,27 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> ReadingInput: Чтение Input
+    Calculating --> ReadingInput: Reading Input
     ReadingInput --> SettingVoltage: Voltage = Input
     SettingVoltage --> UpdatingOutput: Output = Voltage
-    UpdatingOutput --> Ready: Завершение шага
+    UpdatingOutput --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadInput["Чтение входного сигнала:<br/>Voltage = Input(0,0)"]
-    ReadInput --> UpdateOutput["Обновление выхода:<br/>Output(0,0) = Voltage"]
-    UpdateOutput --> End([Конец])
+    Start([Start ACalculate]) --> ReadInput["Reading input signal:<br/>Voltage = Input(0,0)"]
+    ReadInput --> UpdateOutput["Updating output:<br/>Output(0,0) = Voltage"]
+    UpdateOutput --> End([End])
 ```
 
 ## Component Diagram
@@ -319,13 +319,13 @@ flowchart TD
 graph TB
     Input[[NManipulatorInput]]
     PulseLib["Nmsdk-PulseLib<br/>NSource"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Input -->|наследуется от| PulseLib
-    Input -->|использует| BasicLib
+    Input -->|inherits from| PulseLib
+    Input -->|uses| BasicLib
 
-    InputSignal["Input<br/>Входной сигнал управления"]
-    Output["Output<br/>Выходное напряжение"]
+    InputSignal["Input<br/>Control input signal"]
+    Output["Output<br/>Output voltage"]
 
     Input --> InputSignal
     Input --> Output
@@ -340,7 +340,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 21 — вход манипулятора в иерархии управления.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 21 — manipulator input in the control hierarchy.
 
 ## Usage Examples
 

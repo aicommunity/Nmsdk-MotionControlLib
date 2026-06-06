@@ -357,11 +357,11 @@ sequenceDiagram
     Storage->>Source: Reset()
     Source->>Source: AReset()
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Manipulator->>Source: InputAngle, InputSpeed, InputForce, InputMovement
         Storage->>Source: Calculate()
         Source->>Source: ACalculate()
-        Note over Source: Обновление выходов из входов или параметров
+        Note over Source: Updating outputs from inputs or parameters
         Source->>Controller: OutputAngle, OutputSpeed, OutputForce, OutputMovement
     end
 ```
@@ -370,39 +370,39 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> ReadingInputs: Чтение входных данных
-    ReadingInputs --> UpdatingOutputs: Обновление выходов
-    UpdatingOutputs --> Ready: Завершение шага
+    Calculating --> ReadingInputs: Reading input data
+    ReadingInputs --> UpdatingOutputs: Updating outputs
+    UpdatingOutputs --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckInputAngle["InputAngle<br/>подключен?"]
-    CheckInputAngle -->|Да| ReadInputAngle[OutputAngle = InputAngle]
-    CheckInputAngle -->|Нет| UseParamAngle[OutputAngle = Angle]
+    Start([Start ACalculate]) --> CheckInputAngle["InputAngle<br/>connected?"]
+    CheckInputAngle -->|Yes| ReadInputAngle[OutputAngle = InputAngle]
+    CheckInputAngle -->|No| UseParamAngle[OutputAngle = Angle]
     ReadInputAngle --> CheckInputSpeed
-    UseParamAngle --> CheckInputSpeed["InputSpeed<br/>подключен?"]
-    CheckInputSpeed -->|Да| ReadInputSpeed[OutputSpeed = InputSpeed]
-    CheckInputSpeed -->|Нет| UseParamSpeed[OutputSpeed = Speed]
+    UseParamAngle --> CheckInputSpeed["InputSpeed<br/>connected?"]
+    CheckInputSpeed -->|Yes| ReadInputSpeed[OutputSpeed = InputSpeed]
+    CheckInputSpeed -->|No| UseParamSpeed[OutputSpeed = Speed]
     ReadInputSpeed --> CheckInputForce
-    UseParamSpeed --> CheckInputForce["InputForce<br/>подключен?"]
-    CheckInputForce -->|Да| ReadInputForce[OutputForce = InputForce]
-    CheckInputForce -->|Нет| UseParamForce[OutputForce = Force]
+    UseParamSpeed --> CheckInputForce["InputForce<br/>connected?"]
+    CheckInputForce -->|Yes| ReadInputForce[OutputForce = InputForce]
+    CheckInputForce -->|No| UseParamForce[OutputForce = Force]
     ReadInputForce --> CheckInputMovement
-    UseParamForce --> CheckInputMovement["InputMovement<br/>подключен?"]
-    CheckInputMovement -->|Да| ReadInputMovement[OutputMovement = InputMovement]
-    CheckInputMovement -->|Нет| UseParamMovement[OutputMovement = Movement]
-    ReadInputMovement --> End([Конец])
+    UseParamForce --> CheckInputMovement["InputMovement<br/>connected?"]
+    CheckInputMovement -->|Yes| ReadInputMovement[OutputMovement = InputMovement]
+    CheckInputMovement -->|No| UseParamMovement[OutputMovement = Movement]
+    ReadInputMovement --> End([End])
     UseParamMovement --> End
 ```
 
@@ -412,19 +412,19 @@ flowchart TD
 graph TB
     Source[[NManipulatorSource]]
     PulseLib["Nmsdk-PulseLib<br/>NSource"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Source -->|наследуется от| PulseLib
-    Source -->|использует| BasicLib
+    Source -->|inherits from| PulseLib
+    Source -->|uses| BasicLib
 
-    InputAngle["InputAngle<br/>Входной угол"]
-    InputSpeed["InputSpeed<br/>Входная скорость"]
-    InputForce["InputForce<br/>Входная сила"]
-    InputMovement["InputMovement<br/>Входное перемещение"]
-    OutputAngle["OutputAngle<br/>Выходной угол"]
-    OutputSpeed["OutputSpeed<br/>Выходная скорость"]
-    OutputForce["OutputForce<br/>Выходная сила"]
-    OutputMovement["OutputMovement<br/>Выходное перемещение"]
+    InputAngle["InputAngle<br/>Input angle"]
+    InputSpeed["InputSpeed<br/>Input speed"]
+    InputForce["InputForce<br/>Input force"]
+    InputMovement["InputMovement<br/>Input movement"]
+    OutputAngle["OutputAngle<br/>Output angle"]
+    OutputSpeed["OutputSpeed<br/>Output speed"]
+    OutputForce["OutputForce<br/>Output force"]
+    OutputMovement["OutputMovement<br/>Output movement"]
 
     Source --> InputAngle
     Source --> InputSpeed
@@ -445,7 +445,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21 — источник данных манипулятора в иерархии управления.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21 — manipulator data source in the control hierarchy.
 
 ## Usage Examples
 

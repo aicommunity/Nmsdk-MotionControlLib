@@ -412,6 +412,45 @@ flowchart TD
 | `InputAngle` | `MDMatrix<double>` | - | Input angle |
 | `OutputAngle` | `MDMatrix<double>` | - | Output angle |
 
+```mermaid
+graph TB
+    subgraph "Nmsdk-MotionControlLib"
+        Emulator[NManipulatorSourceEmulator]
+        BaseSource[NManipulatorSource]
+    end
+
+    subgraph "Nmsdk-PulseLib"
+        NSource[NSource]
+    end
+
+    subgraph "Rdk-BasicLib"
+        UNet[UNet]
+    end
+
+    Emulator -->|inherits от| BaseSource
+    BaseSource -->|inherits от| NSource
+    NSource -->|inherits от| UNet
+
+    InputAngle["InputAngle<br/>Входной угол"]
+    InputSpeed["InputSpeed<br/>Входная скорость"]
+    InputForce["InputForce<br/>Входная сила"]
+    InputMovement["InputMovement<br/>Входное перемещение"]
+
+    OutputAngle["OutputAngle<br/>Выходной угол"]
+    OutputSpeed["OutputSpeed<br/>Выходная скорость"]
+    OutputForce["OutputForce<br/>Выходная сила"]
+    OutputMovement["OutputMovement<br/>Выходное перемещение"]
+
+    Emulator --> InputAngle
+    Emulator --> InputSpeed
+    Emulator --> InputForce
+    Emulator --> InputMovement
+    Emulator --> OutputAngle
+    Emulator --> OutputSpeed
+    Emulator --> OutputForce
+    Emulator --> OutputMovement
+```
+
 ## Methods
 
 ### Lifecycle Methods
@@ -459,4 +498,5 @@ while (simulation_running) {
 ```
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 21 — эмулятор источника манипулятора в иерархии управления.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 21 — manipulator source emulator in the control hierarchy.

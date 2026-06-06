@@ -376,20 +376,20 @@ sequenceDiagram
     Storage->>Manipulator: new NManipulator()
     Storage->>Manipulator: Default()
     Manipulator->>Manipulator: ADefault()
-    Note over Manipulator: Инициализация параметров
+    Note over Manipulator: Parameter initialization
 
     Storage->>Manipulator: Build()
     Manipulator->>Manipulator: ABuild()
 
     Storage->>Manipulator: Reset()
     Manipulator->>Manipulator: AReset()
-    Note over Manipulator: Сброс тока (Current=0)
+    Note over Manipulator: Reset current (Current=0)
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Controller->>Manipulator: Input = control_signal
         Storage->>Manipulator: Calculate()
         Manipulator->>Manipulator: ACalculate()
-        Note over Manipulator: Вычисление тока на основе входного сигнала
+        Note over Manipulator: Computing current based on input signal
         Manipulator->>Actuator: Output = current
     end
 ```
@@ -398,25 +398,25 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> Ready: Завершение шага
+    Calculating --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadInput["Чтение входного сигнала:<br/>cs = Input(0,0)"]
-    ReadInput --> CalcCurrent["Вычисление тока:<br/>Current = f(cs, EMFactor, Inductance, Resistance, TimeStep)"]
-    CalcCurrent --> UpdateOutput["Обновление выхода:<br/>Output(0,0) = Current"]
-    UpdateOutput --> End([Конец])
+    Start([Start ACalculate]) --> ReadInput["Reading input signal:<br/>cs = Input(0,0)"]
+    ReadInput --> CalcCurrent["Computing current:<br/>Current = f(cs, EMFactor, Inductance, Resistance, TimeStep)"]
+    CalcCurrent --> UpdateOutput["Updating output:<br/>Output(0,0) = Current"]
+    UpdateOutput --> End([End])
 ```
 
 ## Component Diagram
@@ -424,12 +424,12 @@ flowchart TD
 ```mermaid
 graph TB
     Manipulator[[NManipulator]]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Manipulator -->|использует| BasicLib
+    Manipulator -->|uses| BasicLib
 
-    Input["Input<br/>Входной управляющий сигнал"]
-    Output["Output<br/>Выходной ток/сигнал"]
+    Input["Input<br/>Input control signal"]
+    Output["Output<br/>Output current/signal"]
 
     Manipulator --> Input
     Manipulator --> Output
@@ -494,4 +494,5 @@ See RU section for full XML; typical properties: `EMFactor`, `Inductance`, `Resi
 Used in robotic manipulator and motion control systems; example configs: `Bin/Configs/SpikeSamples/MC-Muscles/`, `Bin/Configs/SpikeSamples/MC0-RCN/`, `Bin/Configs/SpikeSamples/MC1-PCN/`. Typical combinations: with [NDCEngine](NDCEngine.md), [NEngineMotionControl](NEngineMotionControl.md).
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 23 — иерархия управления поведением робота, согласованное управление исполнительной системой, бионические модели управления движением.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 23 — robot behavior control hierarchy, coordinated actuator control, bionic motion control models.

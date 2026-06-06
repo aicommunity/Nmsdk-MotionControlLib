@@ -358,16 +358,16 @@ sequenceDiagram
     Storage->>Statistic: Reset()
     Statistic->>Statistic: AReset()
     Statistic->>Statistic: ReCreateFile()
-    Statistic->>File: Создание файла статистики
+    Statistic->>File: Creating file statistics
     
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Source1->>Statistic: Inputs[0] = data1
         Source2->>Statistic: Inputs[1] = data2
         Storage->>Statistic: Calculate()
         Statistic->>Statistic: ACalculate()
-        Statistic->>Statistic: Обновление StatsMin, StatsMax, StatsAvg, StatsDelta
-        alt StatsInterval достигнут
-            Statistic->>File: Запись статистики в файл
+        Statistic->>Statistic: update StatsMin, StatsMax, StatsAvg, StatsDelta
+        alt StatsInterval reached
+            Statistic->>File: recording statistics in file
             Statistic->>Statistic: ClearStats()
         end
     end
@@ -377,42 +377,42 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> Collecting: Сбор статистики
-    Collecting --> CheckingInterval["StatsInterval<br/>достигнут?"]
-    CheckingInterval -->|Да| WritingFile: Запись в файл
-    CheckingInterval -->|Нет| Ready: Завершение шага
+    Calculating --> Collecting: Collecting statistics
+    Collecting --> CheckingInterval["StatsInterval<br/>reached?"]
+    CheckingInterval -->|Yes| WritingFile: recording in file
+    CheckingInterval -->|No| Ready: Step complete
     WritingFile --> Clearing: ClearStats()
-    Clearing --> Ready: После очистки
+    Clearing --> Ready: after clearing
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckFile["StatsFile<br/>существует?"]
-    CheckFile -->|Нет| ReCreateFile["ReCreateFile:<br/>Создание файла"]
-    CheckFile -->|Да| CheckMode
+    Start([Start ACalculate]) --> CheckFile["StatsFile<br/>exists?"]
+    CheckFile -->|No| ReCreateFile["ReCreateFile:<br/>Creating file"]
+    CheckFile -->|Yes| CheckMode
     ReCreateFile --> CheckMode{Mode?}
-    CheckMode -->|0| Mode0["Режим 0:<br/>Min, Max, Avg, Delta"]
-    CheckMode -->|1| Mode1["Режим 1:<br/>Построчная запись"]
-    CheckMode -->|2| Mode2["Режим 2:<br/>Построчная запись всех данных"]
-    Mode0 --> CheckInterval["StatsInterval<br/>достигнут?"]
+    CheckMode -->|0| Mode0["mode 0:<br/>Min, Max, Avg, Delta"]
+    CheckMode -->|1| Mode1["mode 1:<br/>Line-by-line recording"]
+    CheckMode -->|2| Mode2["mode 2:<br/>Line-by-line recording of all data"]
+    Mode0 --> CheckInterval["StatsInterval<br/>reached?"]
     Mode1 --> CheckInterval
     Mode2 --> CheckInterval
-    CheckInterval -->|Да| WriteStats[Запись статистики в файл]
-    CheckInterval -->|Нет| ResizeStats["ResizeStats:<br/>Изменение размеров массивов"]
-    WriteStats --> ClearStats["ClearStats:<br/>Очистка статистики"]
+    CheckInterval -->|Yes| WriteStats[recording statistics in file]
+    CheckInterval -->|No| ResizeStats["ResizeStats:<br/>Resizing arrays"]
+    WriteStats --> ClearStats["ClearStats:<br/>Clearing statistics"]
     ClearStats --> ResizeStats
-    ResizeStats --> UpdateStats[Обновление StatsMin, StatsMax, StatsAvg, StatsDelta]
-    UpdateStats --> End([Конец])
+    ResizeStats --> UpdateStats[update StatsMin, StatsMax, StatsAvg, StatsDelta]
+    UpdateStats --> End([End])
 ```
 
 ## Component Diagram
@@ -420,13 +420,13 @@ flowchart TD
 ```mermaid
 graph TB
     Statistic[[NSimpleStatistic]]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
     
-    Statistic -->|использует| BasicLib
+    Statistic -->|uses| BasicLib
     
-    Inputs["Inputs<br/>Вектор входных данных"]
-    Output["Output<br/>Выходная статистика"]
-    StatsFile["StatsFile<br/>Файл статистики"]
+    Inputs["Inputs<br/>vector input data"]
+    Output["Output<br/>Output statistics"]
+    StatsFile["StatsFile<br/>Statistics file"]
     
     Statistic --> Inputs
     Statistic --> Output
@@ -442,7 +442,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 22 — статистика в контурах управления движением.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 22 — statistics in motion control loops.
 
 ## Usage Examples
 

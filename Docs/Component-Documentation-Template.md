@@ -355,7 +355,7 @@ for (int step = 0; step < numSteps; step++) {
 
 ## EN
 
-[ComponentName] — [EN название]
+[ComponentName] — [EN name]
 
 **Class**: `[ComponentName]` — [brief description in English].
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("[ComponentName]", ...)`.
@@ -367,21 +367,103 @@ for (int step = 0; step < numSteps; step++) {
 
 [Same as RU section, translated to English]
 
+```mermaid
+classDiagram
+    [BaseClass] <|-- [ComponentName]
+    [ComponentName] *-- [RelatedComponent] : [relationship]
+    class [ComponentName] {
+        +UProperty[Type] PropertyName : [flags]
+        +MethodName() ReturnType
+        #ProtectedProperty : Type
+        #ADefault() bool
+        #ABuild() bool
+        #AReset() bool
+        #ACalculate() bool
+    }
+```
+
 ## Sequence Diagram
 
 [Same as RU section, translated to English]
+
+```mermaid
+sequenceDiagram
+    participant Storage as UStorage
+    participant Component as [ComponentName]
+    participant Input as InputComponent
+    participant Output as OutputComponent
+
+    Storage->>Component: new [ComponentName]()
+    Storage->>Component: Default()
+    Component->>Component: ADefault()
+    Storage->>Component: Build()
+    Component->>Component: ABuild()
+    Storage->>Component: Reset()
+    Component->>Component: AReset()
+    loop Each calculation step
+        Input->>Component: SetInputProperty(value)
+        Storage->>Component: Calculate()
+        Component->>Component: ACalculate()
+        Component->>Output: SetOutputProperty(value)
+    end
+```
 
 ## State Diagram
 
 [Same as RU section, translated to English]
 
+```mermaid
+stateDiagram-v2
+    [*] --> NotInitialized: Creation
+    NotInitialized --> Initialized: ADefault()
+    Initialized --> Built: ABuild()
+    Built --> Ready: Ready
+    Ready --> Calculating: ACalculate()
+    Calculating --> Ready: Step complete
+    Ready --> Reset: AReset()
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
+```
+
 ## Activity Diagram
 
 [Same as RU section, translated to English]
 
+```mermaid
+flowchart TD
+    Start([Start ACalculate]) --> ReadInputs[Чтение входных свойств]
+    ReadInputs --> Process[Processing данных]
+    Process --> Condition{Условие?}
+    Condition -->|Да| Branch1[Ветвь 1]
+    Condition -->|Нет| Branch2[Ветвь 2]
+    Branch1 --> UpdateOutputs[Обновление выходных свойств]
+    Branch2 --> UpdateOutputs
+    UpdateOutputs --> End([End])
+```
+
 ## Component Diagram
 
 [Same as RU section, translated to English]
+
+```mermaid
+graph TB
+    Component[[ComponentName]]
+    PulseLib[Nmsdk-PulseLib]
+    BasicLib[Rdk-BasicLib]
+    CvLib[Rdk-CvBasicLib]
+    HardwareLib[Rdk-HardwareLib]
+
+    Component -->|uses| PulseLib
+    Component -->|uses| BasicLib
+    Component -->|uses| CvLib
+    Component -->|uses| HardwareLib
+
+    InputInterface["Input Properties<br/>ptInput"]
+    OutputInterface["Output Properties<br/>ptOutput"]
+
+    Component --> InputInterface
+    Component --> OutputInterface
+```
 
 ## Properties
 

@@ -760,4 +760,5 @@ manipulator->UnInit();
 ```
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21 — физический манипулятор в иерархии управления поведением робота.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21 — physical manipulator in the robot behavior control hierarchy.

@@ -349,15 +349,15 @@ sequenceDiagram
     Element->>Element: ABuild()
     Element->>Neuron1: new NPulseNeuron("Neuron1")
     Element->>Neuron2: new NPulseNeuron("Neuron2")
-    Element->>Element: Создание связей между нейронами
-    Element->>Element: Создание связей с другими элементами
+    Element->>Element: Creating links between neurons
+    Element->>Element: Creating links with other elements
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Storage->>Element: Calculate()
         Element->>Element: ACalculate()
-        Element->>Neuron1: Вычисления
-        Element->>Neuron2: Вычисления
-        Element->>NextElement: Output сигнал
+        Element->>Neuron1: Calculations
+        Element->>Neuron2: Calculations
+        Element->>NextElement: Output signal
     end
 ```
 
@@ -365,30 +365,30 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
-    Building --> CreatingNeurons: Создание нейронов
-    CreatingNeurons --> CreatingLinks: Создание связей
-    CreatingLinks --> Ready: Готов к работе
+    Building --> CreatingNeurons: Creating neurons
+    CreatingNeurons --> CreatingLinks: Creating links
+    CreatingLinks --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> Ready: Завершение шага
+    Calculating --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> CreateNeuron1[Создание Neuron1<br/>SomaSize=1, DendSizes1=[5]]
-    CreateNeuron1 --> CreateNeuron2[Создание Neuron2<br/>SomaSize=1, DendSizes2=[3]]
-    CreateNeuron2 --> LinkN1toN2["Связь от N1 к N2:<br/>LTZone -> Dendrite1_1, Dendrite1_3"]
-    LinkN1toN2 --> LinkN2toN1["Связь от N2 к N1:<br/>LTZone -> Dendrite1_2, Dendrite1_5"]
-    LinkN2toN1 --> LinkForwards["Связи с дочерними элементами<br/>через ForwardSyns"]
-    LinkForwards --> LinkBackwards["Связи с родительскими элементами<br/>через BackwardSyns"]
-    LinkBackwards --> End([Конец])
+    Start([Start ABuild]) --> CreateNeuron1[Creation Neuron1<br/>SomaSize=1, DendSizes1=[5]]
+    CreateNeuron1 --> CreateNeuron2[Creation Neuron2<br/>SomaSize=1, DendSizes2=[3]]
+    CreateNeuron2 --> LinkN1toN2["Link from N1 to N2:<br/>LTZone -> Dendrite1_1, Dendrite1_3"]
+    LinkN1toN2 --> LinkN2toN1["Link from N2 to N1:<br/>LTZone -> Dendrite1_2, Dendrite1_5"]
+    LinkN2toN1 --> LinkForwards["links with child elements<br/>via ForwardSyns"]
+    LinkForwards --> LinkBackwards["links with parent elements<br/>via BackwardSyns"]
+    LinkBackwards --> End([End])
 ```
 
 ## Component Diagram
@@ -397,15 +397,15 @@ flowchart TD
 graph TB
     Element[[NTrajectoryElement]]
     PulseLib["Nmsdk-PulseLib<br/>NPulseNeuron, NPulseSynapse"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Element -->|использует| PulseLib
-    Element -->|использует| BasicLib
+    Element -->|uses| PulseLib
+    Element -->|uses| BasicLib
 
-    Neuron1["Neuron1<br/>Внутренний нейрон 1"]
-    Neuron2["Neuron2<br/>Внутренний нейрон 2"]
-    Forwards["Forwards<br/>Дочерние элементы"]
-    Backwards["Backwards<br/>Родительские элементы"]
+    Neuron1["Neuron1<br/>Internal neuron 1"]
+    Neuron2["Neuron2<br/>Internal neuron 2"]
+    Forwards["Forwards<br/>Child elements"]
+    Backwards["Backwards<br/>Parent elements"]
 
     Element --> Neuron1
     Element --> Neuron2
@@ -438,7 +438,8 @@ Output reflects current trajectory node activity (from neural structure).
 - **`ACalculate()`** — update neuron outputs (trajectory transitions)
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 22, 24 — элемент траектории, память и навигация.
+
+- [Literature-References.md](../Literature-References.md): [A], 22, 24 — trajectory element, memory, and navigation.
 
 ## Usage Examples
 

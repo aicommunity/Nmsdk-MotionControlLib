@@ -362,12 +362,12 @@ sequenceDiagram
     Unit->>ORNeuron: new NPulseNeuron("ORNeuron")
     Unit->>Unit: new NPulseGeneratorTransit("ControlledGenerator")
     Unit->>Neuron: new NPulseNeuron("Neuron")
-    Unit->>Unit: Создание связей между компонентами
+    Unit->>Unit: Creating links between components
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Storage->>Unit: Calculate()
         Unit->>Unit: ACalculate()
-        Note over Unit: Подавление импульсов в интервале [Delay1, Delay2]
+        Note over Unit: Suppressing pulses in interval [Delay1, Delay2]
     end
 ```
 
@@ -375,36 +375,36 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
-    Building --> CreatingGenerators: Создание генераторов
-    CreatingGenerators --> CreatingNeurons: Создание нейронов
-    CreatingNeurons --> CreatingLinks: Создание связей
-    CreatingLinks --> Ready: Готов к работе
+    Building --> CreatingGenerators: Creating generators
+    CreatingGenerators --> CreatingNeurons: Creating neurons
+    CreatingNeurons --> CreatingLinks: Creating links
+    CreatingLinks --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> Suppressing: Подавление импульсов
-    Suppressing --> Ready: Завершение шага
+    Calculating --> Suppressing: Suppressing pulses
+    Suppressing --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> CreateSourceGen[Создание SourceGenerator]
-    CreateSourceGen --> CreateDelayGens[Создание DelayGenerators[0,1]]
-    CreateDelayGens --> CreateORNeuron["Создание ORNeuron<br/>с 2 возбуждающими синапсами"]
-    CreateORNeuron --> CreateControlledGen["Создание ControlledGenerator<br/>с UsePatternOutput=true"]
-    CreateControlledGen --> CreateNeuron[Создание Neuron]
-    CreateNeuron --> LinkSourceToOR[Связь SourceGenerator -> ORNeuron]
-    LinkSourceToOR --> LinkDelaysToOR[Связь DelayGenerators -> ORNeuron]
-    LinkDelaysToOR --> LinkORToControlled[Связь ORNeuron -> ControlledGenerator]
-    LinkORToControlled --> LinkControlledToNeuron[Связь ControlledGenerator -> Neuron]
-    LinkControlledToNeuron --> LinkNeuronOutput[Связь Neuron -> Output]
-    LinkNeuronOutput --> End([Конец])
+    Start([Start ABuild]) --> CreateSourceGen[Creation SourceGenerator]
+    CreateSourceGen --> CreateDelayGens[Creation DelayGenerators[0,1]]
+    CreateDelayGens --> CreateORNeuron["Creating ORNeuron<br/>with 2 excitatory synapses"]
+    CreateORNeuron --> CreateControlledGen["Creation ControlledGenerator<br/>with UsePatternOutput=true"]
+    CreateControlledGen --> CreateNeuron[Creation Neuron]
+    CreateNeuron --> LinkSourceToOR[Link SourceGenerator -> ORNeuron]
+    LinkSourceToOR --> LinkDelaysToOR[Link DelayGenerators -> ORNeuron]
+    LinkDelaysToOR --> LinkORToControlled[Link ORNeuron -> ControlledGenerator]
+    LinkORToControlled --> LinkControlledToNeuron[Link ControlledGenerator -> Neuron]
+    LinkControlledToNeuron --> LinkNeuronOutput[Link Neuron -> Output]
+    LinkNeuronOutput --> End([End])
 ```
 
 ## Component Diagram
@@ -413,16 +413,16 @@ flowchart TD
 graph TB
     Unit[[NSuppressionUnit]]
     PulseLib["Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Unit -->|использует| PulseLib
-    Unit -->|использует| BasicLib
+    Unit -->|uses| PulseLib
+    Unit -->|uses| BasicLib
 
-    SourceGen["SourceGenerator<br/>Генератор входных импульсов"]
-    DelayGens["DelayGenerators<br/>Генераторы задержек"]
-    ORNeuron["ORNeuron<br/>Нейрон ИЛИ"]
-    ControlledGen["ControlledGenerator<br/>Управляемый генератор"]
-    Neuron["Neuron<br/>Выходной нейрон"]
+    SourceGen["SourceGenerator<br/>Input pulse generator"]
+    DelayGens["DelayGenerators<br/>generators delays"]
+    ORNeuron["ORNeuron<br/>neuron or"]
+    ControlledGen["ControlledGenerator<br/>Controlled generator"]
+    Neuron["Neuron<br/>output neuron"]
 
     Unit --> SourceGen
     Unit --> DelayGens
@@ -440,7 +440,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 28, 29 — подавление сигналов в нейронных структурах.
+
+- [Literature-References.md](../Literature-References.md): [A], 28, 29 — signal suppression in neural structures.
 
 ## Usage Examples
 

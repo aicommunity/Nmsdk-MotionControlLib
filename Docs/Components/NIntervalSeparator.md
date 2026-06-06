@@ -322,11 +322,11 @@ sequenceDiagram
     Storage->>Separator: Build()
     Separator->>Separator: ABuild()
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Source->>Separator: Input = signal
         Storage->>Separator: Calculate()
         Separator->>Separator: ACalculate()
-        Note over Separator: Разделение по интервалам<br/>в зависимости от Mode
+        Note over Separator: Separation by intervals<br/>depending on Mode
         Separator->>Source: Output = separated_signal
     end
 ```
@@ -335,52 +335,52 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> CheckingInterval: Проверка интервала
-    CheckingInterval --> ProcessingMode: Обработка по Mode
-    ProcessingMode --> Ready: Завершение шага
+    Calculating --> CheckingInterval: Checking interval
+    CheckingInterval --> ProcessingMode: Processing by Mode
+    ProcessingMode --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала]
-    ReadInput --> ResizeOutput[Изменение размера Output]
-    ResizeOutput --> LoopInputs[Цикл по элементам входа]
+    Start([Start ACalculate]) --> ReadInput[Reading input signal]
+    ReadInput --> ResizeOutput[Resizing Output]
+    ResizeOutput --> LoopInputs[Loop over input elements]
     LoopInputs --> CheckMode{Mode[j]?}
-    CheckMode -->|0| Mode0["input в<br/>[MinRange, MaxRange]?"]
-    CheckMode -->|1| Mode1["input в<br/>[MinRange, MaxRange]?"]
+    CheckMode -->|0| Mode0["input in<br/>[MinRange, MaxRange]?"]
+    CheckMode -->|1| Mode1["input in<br/>[MinRange, MaxRange]?"]
     CheckMode -->|2| Mode2["input ><br/>MinRange?"]
     CheckMode -->|3| Mode3["input <<br/>MaxRange?"]
     CheckMode -->|4| Mode4["input ><br/>MinRange?"]
-    CheckMode -->|5| Mode5["Режим 5:<br/>Сложная логика"]
-    CheckMode -->|6| Mode6["Режим 6:<br/>Сложная логика"]
-    Mode0 -->|Да| OutputInput[Output = input]
-    Mode0 -->|Нет| OutputZero[Output = 0]
-    Mode1 -->|Да| OutputShift[Output = input - MinRange]
-    Mode1 -->|Нет| OutputZero
-    Mode2 -->|Да| OutputInput
-    Mode2 -->|Нет| OutputZero
-    Mode3 -->|Да| OutputInput
-    Mode3 -->|Нет| OutputZero
-    Mode4 -->|Да| OutputShift
-    Mode4 -->|Нет| OutputZero
+    CheckMode -->|5| Mode5["Mode 5:<br/>Complex logic"]
+    CheckMode -->|6| Mode6["Mode 6:<br/>Complex logic"]
+    Mode0 -->|Yes| OutputInput[Output = input]
+    Mode0 -->|No| OutputZero[Output = 0]
+    Mode1 -->|Yes| OutputShift[Output = input - MinRange]
+    Mode1 -->|No| OutputZero
+    Mode2 -->|Yes| OutputInput
+    Mode2 -->|No| OutputZero
+    Mode3 -->|Yes| OutputInput
+    Mode3 -->|No| OutputZero
+    Mode4 -->|Yes| OutputShift
+    Mode4 -->|No| OutputZero
     Mode5 --> ApplyGain
     Mode6 --> ApplyGain
-    OutputInput --> ApplyGain[Применение Gain]
+    OutputInput --> ApplyGain[Applying Gain]
     OutputShift --> ApplyGain
     OutputZero --> ApplyGain
-    ApplyGain --> NextInput{Еще элементы?}
-    NextInput -->|Да| LoopInputs
-    NextInput -->|Нет| End([Конец])
+    ApplyGain --> NextInput{More elements?}
+    NextInput -->|Yes| LoopInputs
+    NextInput -->|No| End([End])
 ```
 
 ## Component Diagram
@@ -388,12 +388,12 @@ flowchart TD
 ```mermaid
 graph TB
     Separator[[NIntervalSeparator]]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Separator -->|использует| BasicLib
+    Separator -->|uses| BasicLib
 
-    Input["Input<br/>Входной сигнал"]
-    Output["Output<br/>Разделенный сигнал"]
+    Input["Input<br/>Input signal"]
+    Output["Output<br/>Separated signal"]
 
     Separator --> Input
     Separator --> Output
@@ -408,7 +408,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 22 — разделение интервалов в контурах управления движением.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 22 — interval separation in motion control loops.
 
 ## Usage Examples
 

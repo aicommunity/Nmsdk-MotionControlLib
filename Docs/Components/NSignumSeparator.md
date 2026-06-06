@@ -263,7 +263,7 @@ sequenceDiagram
     Storage->>Separator: Build()
     Separator->>Separator: ABuild()
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Source->>Separator: Input = signal
         Storage->>Separator: Calculate()
         Separator->>Separator: ACalculate()
@@ -276,26 +276,26 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> Separating: Разделение по знаку
-    Separating --> Ready: Завершение шага
+    Calculating --> Separating: Separation by sign
+    Separating --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала]
-    ReadInput --> ApplySign["Применение знака:<br/>Output = Input * Sign"]
-    ApplySign --> ApplyGain["Применение усиления:<br/>Output = Output * Gain"]
-    ApplyGain --> End([Конец])
+    Start([Start ACalculate]) --> ReadInput[Reading input signal]
+    ReadInput --> ApplySign["Applying sign:<br/>Output = Input * Sign"]
+    ApplySign --> ApplyGain["Applying gain:<br/>Output = Output * Gain"]
+    ApplyGain --> End([End])
 ```
 
 ## Component Diagram
@@ -303,12 +303,12 @@ flowchart TD
 ```mermaid
 graph TB
     Separator[[NSignumSeparator]]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Separator -->|использует| BasicLib
+    Separator -->|uses| BasicLib
 
-    Input["Input<br/>Входной сигнал"]
-    Output["Output<br/>Разделенный сигнал"]
+    Input["Input<br/>Input signal"]
+    Output["Output<br/>Separated signal"]
 
     Separator --> Input
     Separator --> Output
@@ -323,7 +323,8 @@ graph TB
 [Same structure as RU section, translated to English]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 25, 28 — разделение сигнум-сигналов в контурах управления.
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28 — signum signal separation in control loops.
 
 ## Usage Examples
 

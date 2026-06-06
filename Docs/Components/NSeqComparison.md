@@ -495,6 +495,36 @@ flowchart TD
 | `DelaysKFCls` | `MDMatrix<double>` | - | Reference sequence delays matrix |
 | `DelaysFrCls` | `MDMatrix<double>` | - | Test sequence delays matrix |
 
+```mermaid
+graph TB
+    subgraph "Nmsdk-MotionControlLib"
+        NSeqComp[NSeqComparison]
+    end
+
+    subgraph "Nmsdk-PulseLib"
+        NPulseGenMulti[NPulseGeneratorMulti]
+        NPulseNeuron[NPulseNeuron]
+        NLTZone[NLTZone]
+    end
+
+    subgraph "Rdk-BasicLib"
+        UNet[UNet]
+    end
+
+    NSeqComp -->|inherits от| UNet
+    NSeqComp -->|создаёт| NPulseGenMulti
+    NSeqComp -->|создаёт| NPulseNeuron
+    NPulseNeuron -->|uses| NLTZone
+
+    KFGen["KFClsSpikes<br/>Эталонные генераторы"]
+    FrGen["FrClsSpikes<br/>Тестовые генераторы"]
+    CompNeuron["CompNeuron<br/>Нейрон сравнения"]
+
+    NSeqComp --> KFGen
+    NSeqComp --> FrGen
+    NSeqComp --> CompNeuron
+```
+
 ## Methods
 
 ### Lifecycle Methods
@@ -548,4 +578,5 @@ while (simulation_running) {
 ```
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — сравнение последовательностей импульсов в нейронных структурах управления.
+
+- [Literature-References.md](../Literature-References.md): [A], 25, 28, 29 — pulse sequence comparison in neural control structures.

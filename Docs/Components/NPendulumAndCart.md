@@ -369,16 +369,16 @@ sequenceDiagram
 
     Storage->>Pendulum: Reset()
     Pendulum->>Pendulum: AReset()
-    Note over Pendulum: Сброс угла, скорости, ускорения
+    Note over Pendulum: Reset angle, speed, acceleration
 
-    loop Каждый шаг вычислений
+    loop Each calculation step
         Controller->>Pendulum: Input1, Input2 = control_signals
         Storage->>Pendulum: Calculate()
         Pendulum->>Pendulum: ACalculate()
         alt Mode == 1 (PID)
-            Pendulum->>Pendulum: Вычисление PID-управления
+            Pendulum->>Pendulum: Computing PID control
         end
-        Pendulum->>Pendulum: Вычисление динамики маятника
+        Pendulum->>Pendulum: Computing pendulum dynamics
         Pendulum->>Controller: Angle, Speed, Acceleration, Movement, MovementSpeed
     end
 ```
@@ -387,36 +387,36 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Built: ABuild()
-    Built --> Ready: Готов к работе
+    Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
     Calculating --> CheckMode{Mode == 1?}
-    CheckMode -->|Да| PIDControl: Вычисление PID
-    CheckMode -->|Нет| DirectInput: Использование прямого входа
-    PIDControl --> Dynamics: Вычисление динамики
-    DirectInput --> Dynamics: Вычисление динамики
-    Dynamics --> Ready: Завершение шага
+    CheckMode -->|Yes| PIDControl: Computing PID
+    CheckMode -->|No| DirectInput: Using direct input
+    PIDControl --> Dynamics: Computing dynamics
+    DirectInput --> Dynamics: Computing dynamics
+    Dynamics --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+    Reset --> Ready: After reset
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadInputs[Чтение Input1 и Input2]
+    Start([Start ACalculate]) --> ReadInputs[Reading Input1 and Input2]
     ReadInputs --> CheckMode["Mode == 1<br/>PID?"]
-    CheckMode -->|Да| CalcPID[Вычисление PID:<br/>input[0] = (theta0*Kp + y*Kd + Ki*theta0/TimeStep)*AngleWeight +<br/>(movement*MovementKp + x*MovementKd + MovementKi*movement/TimeStep)*MovementWeight]
-    CheckMode -->|Нет| AddExternal[Добавление ExtrenalMoment]
+    CheckMode -->|Yes| CalcPID[Computing PID:<br/>input[0] = (theta0*Kp + y*Kd + Ki*theta0/TimeStep)*AngleWeight +<br/>(movement*MovementKp + x*MovementKd + MovementKi*movement/TimeStep)*MovementWeight]
+    CheckMode -->|No| AddExternal[Adding ExternalMoment]
     CalcPID --> AddExternal
-    AddExternal --> CalcCoeffs["Вычисление коэффициентов:<br/>k1 = 3*g*(CartMass+RodMass)/((4*CartMass+RodMass)*RodLength)<br/>k2 = 3/(4*CartMass+RodMass)/RodLength"]
-    CalcCoeffs --> CalcDynamics["Вычисление динамики:<br/>y = y + (a*theta0 + b)/TimeStep<br/>Angle = theta0 + (y-OutXMovement)/TimeStep<br/>Speed = y<br/>Acceleration = (a*theta0 + b)"]
-    CalcDynamics --> CalcMovement["Вычисление движения тележки:<br/>x = x + ...<br/>Movement = x<br/>MovementSpeed = ..."]
-    CalcMovement --> UpdateOutputs[Обновление выходов]
-    UpdateOutputs --> End([Конец])
+    AddExternal --> CalcCoeffs["Computing coefficients:<br/>k1 = 3*g*(CartMass+RodMass)/((4*CartMass+RodMass)*RodLength)<br/>k2 = 3/(4*CartMass+RodMass)/RodLength"]
+    CalcCoeffs --> CalcDynamics["Computing dynamics:<br/>y = y + (a*theta0 + b)/TimeStep<br/>Angle = theta0 + (y-OutXMovement)/TimeStep<br/>Speed = y<br/>Acceleration = (a*theta0 + b)"]
+    CalcDynamics --> CalcMovement["Computing cart movement:<br/>x = x + ...<br/>Movement = x<br/>MovementSpeed = ..."]
+    CalcMovement --> UpdateOutputs[Updating outputs]
+    UpdateOutputs --> End([End])
 ```
 
 ## Component Diagram
@@ -424,17 +424,17 @@ flowchart TD
 ```mermaid
 graph TB
     Pendulum[[NPendulumAndCart]]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Pendulum -->|использует| BasicLib
+    Pendulum -->|uses| BasicLib
 
-    Input1["Input1<br/>Входной сигнал 1"]
-    Input2["Input2<br/>Входной сигнал 2"]
-    Acceleration["Acceleration<br/>Ускорение маятника"]
-    Angle["Angle<br/>Угол маятника"]
-    Speed["Speed<br/>Угловая скорость"]
-    Movement["Movement<br/>Перемещение тележки"]
-    MovementSpeed["MovementSpeed<br/>Скорость тележки"]
+    Input1["Input1<br/>Input signal 1"]
+    Input2["Input2<br/>Input signal 2"]
+    Acceleration["Acceleration<br/>Pendulum acceleration"]
+    Angle["Angle<br/>Pendulum angle"]
+    Speed["Speed<br/>Angular speed"]
+    Movement["Movement<br/>Cart displacement"]
+    MovementSpeed["MovementSpeed<br/>Cart speed"]
 
     Pendulum --> Input1
     Pendulum --> Input2
@@ -458,4 +458,5 @@ graph TB
 [Same as RU section, with English comments]
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 23, 27 — бионические модели управления движением.
+
+- [Literature-References.md](../Literature-References.md): [A], 23, 27 — bionic motion control models.

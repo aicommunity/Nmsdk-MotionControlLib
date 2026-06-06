@@ -316,15 +316,18 @@ element->Build();
 
 ---
 
+
 ## EN
 
-NPositionControlElement — position control element
+NPositionControlElement — element control position
+
+**Component catalog:** [Component-Catalog.md](../Component-Catalog.md).
 
 **Class**: `NPositionControlElement` — base element for position control using neural network components.
 **Registration**: `NMotionControlLibrary.cpp` → `UploadClass("NPositionControlElement", ...)`.
 **Base class**: `UNet` (from Rdk Framework).
 
-NPositionControlElement is a base class for position control elements. It creates a neural network structure with input and control neurons for computing control signals based on current and target positions.
+NPositionControlElement is the base class for position control elements. It creates a neural network structure with input and control neurons for computing control signals based on current and target positions.
 
 ## Class Diagram
 
@@ -367,6 +370,13 @@ classDiagram
     }
 ```
 
+**Inheritance hierarchy:**
+- `UNet` (Rdk Framework) — base class for networks components
+- `NPositionControlElement` — base element control position
+- [NNewPositionControlElement](NNewPositionControlElement.md) — new element control position
+- [NMultiPositionControl](NMultiPositionControl.md) — multi-position control
+- [NPCN](NPCN.md) (NPCNElement) — PCN element (Position Control Network)
+
 ## Sequence Diagram
 
 ```mermaid
@@ -379,7 +389,7 @@ sequenceDiagram
     Storage->>Element: new NPositionControlElement()
     Storage->>Element: Default()
     Element->>Element: ADefault()
-    Note over Element: Инициализация параметров
+    Note over Element: Parameter initialization
 
     Storage->>Element: Build()
     Element->>Element: ABuild()
@@ -391,10 +401,10 @@ sequenceDiagram
     Storage->>Element: Reset()
     Element->>Element: AReset()
 
-    loop Каждый шаг вычислений
+loop Each calculation step
         Storage->>Element: Calculate()
         Element->>Element: ACalculate()
-        Note over Element: Вычисления выполняются нейронами
+        Note over Element: Calculations are performed by neurons
     end
 ```
 
@@ -402,28 +412,28 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+[*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
     Building --> Creating: CreateNeurons()
     Creating --> Linking: LinkNeurons()
-    Linking --> Ready: Готов к работе
+Linking --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> Ready: Завершение шага
+Calculating --> Ready: Step complete
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> [*]: Уничтожение
+Reset --> Ready: After reset
+Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> InitArrays[Инициализация массивов позиций]
-    InitArrays --> ClearNeurons[Очистка векторов нейронов]
-    ClearNeurons --> CreateNeurons["CreateNeurons:<br/>Создание входных и управляющих нейронов"]
-    CreateNeurons --> LinkNeurons["LinkNeurons:<br/>Связывание нейронов"]
-    LinkNeurons --> End([Конец])
+Start([Start ABuild]) --> InitArrays[Initialization arrays positions]
+InitArrays --> ClearNeurons[Clearing vectors neurons]
+ClearNeurons --> CreateNeurons["CreateNeurons:<br/>Creating input and control neurons"]
+    CreateNeurons --> LinkNeurons["LinkNeurons:<br/>Linking neurons"]
+LinkNeurons --> End([End])
 ```
 
 ## Component Diagram
@@ -431,75 +441,187 @@ flowchart TD
 ```mermaid
 graph TB
     Element[[NPositionControlElement]]
-    PulseLib["Nmsdk-PulseLib<br/>NNet, нейроны"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, neurons"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
 
-    Element -->|использует| PulseLib
-    Element -->|использует| BasicLib
+    Element -->|uses| PulseLib
+    Element -->|uses| BasicLib
 
-    InputNeurons["InputNeurons<br/>Входные нейроны"]
-    ControlNeurons["ControlNeurons<br/>Управляющие нейроны"]
-    Generators["Generators<br/>Генераторы"]
+    InputNeurons["InputNeurons<br/>Input neurons"]
+ControlNeurons["ControlNeurons<br/>Control neurons"]
+    Generators["Generators<br/>Generators"]
 
     Element --> InputNeurons
     Element --> ControlNeurons
     Element --> Generators
 ```
 
+**Dependencies:**
+- **Nmsdk-PulseLib** - uses NNet and neurons for creation neural network structure
+- **Rdk-BasicLib** - base components and Rdk Framework utilities
+
 ## Properties
 
-### Parameters and state
+### Parameters position
 
-| Property | Type | Description |
-|----------|------|-------------|
-| `CurrentPosition` | `MDMatrix<double>` | Current position (ptPubState) |
-| `TargetPosition` | `MDMatrix<double>` | Target position (ptPubParameter) |
-| `InputNeuronType` | `string` | Input neuron class name |
-| `ControlNeuronType` | `string` | Control neuron class name |
-| `ExternalControl` | `bool` | Use external control |
-| `RememberState` | `bool` | Remember state |
-| `Delta` | `MDMatrix<double>` | Position error (ptPubState) |
+|Property|Type|Flags|Description|Default|
+|----------|-----|-------|----------|----------------------|
+| `CurrentPosition` | `MDMatrix<double>` | `ptPubState` | Current position (2x1) | `[0, 0]` |
+| `TargetPosition` | `MDMatrix<double>` | `ptPubParameter` | Target position (2x1) | `[0, 0]` |
+| `Delta` | `MDMatrix<double>` | `ptPubState` | Difference between target and current position (2x1) | `[0, 0]` |
 
-### Internal structures
+### Parameters neurons
 
-- **InputNeurons**, **ControlNeurons**, **PreControlNeurons**, **PostInputNeurons** — neural network elements
-- **Generators** — pulse generators
+|Property|Type|Flags|Description|Default|
+|----------|-----|-------|----------|----------------------|
+| `InputNeuronType` | `string` | `ptPubParameter` |Name class input neuron| `"NNewSPNeuron"` |
+| `ControlNeuronType` | `string` | `ptPubParameter` | Control neuron class name | `"NNewSPNeuron"` |
+| `ExternalControl` | `bool` | `ptPubParameter` | Whether to use external control | `false` |
+| `RememberState` | `bool` | `ptPubState` | State memory flag | `false` |
+
+### Internal Collections
+|Property|Type|Description|
+|----------|-----|----------|
+| `InputNeurons` | `vector<NNet*>` |Vector input neurons|
+| `ControlNeurons` | `vector<NNet*>` | Vector of control neurons |
+| `PreControlNeurons` | `vector<NNet*>` | Vector of pre-control neurons |
+| `PostInputNeurons` | `vector<NNet*>` | Vector of post-input neurons |
+| `Generators` | `vector<UNet*>` |Vector generators|
 
 ## Methods
 
-### Lifecycle
+### Constructors and Destructors
+#### `NPositionControlElement(void)`
+**Purpose:** Constructor component
+**Parameters:** No
+**Return value:** No
 
-- **`ADefault()`** — set default parameters
-- **`ABuild()`** — create neural structure (input/control neurons, generators)
-- **`AReset()`** — reset state
-- **`ACalculate()`** — compute control from current and target positions; update Delta
+#### `virtual ~NPositionControlElement(void)`
+**Purpose:** Destructor component
+**Parameters:** No
+**Return value:** No
 
-### Setters
+### Lifecycle Methods
+#### `virtual bool ADefault(void)`
+**Purpose:** Initialize default values
+**Parameters:** No
+**Return value:** `true` on success
+**Description:** Sets InputNeuronType="NNewSPNeuron", ControlNeuronType="NNewSPNeuron", ExternalControl=false
 
-- **`SetInputNeuronType(value)`**, **`SetControlNeuronType(value)`**, **`SetExternalControl(value)`**
+#### `virtual bool ABuild(void)`
+**Purpose:** Build internal component structure
+**Parameters:** No
+**Return value:** `true` on success
+**Description:** Initializes matrices positions (2x1), clears vectors neurons
 
-## References
-- [Literature-References.md](../Literature-References.md): [A], 22, 24, 25 — контроль позиции, запоминание конфигураций, преобразование импульсов.
+#### `virtual bool AReset(void)`
+**Purpose:** Reset state component
+**Parameters:** No
+**Return value:** `true` on success
+**Description:** Sets RememberState=false
+
+#### `virtual bool ACalculate(void)`
+**Purpose:** Execute calculations on the current step
+**Parameters:** No
+**Return value:** `true` on success
+**Description:** For the base class, does not execute calculations (overridden in subclasses)
+
+### Structure Creation Methods
+#### `virtual bool CreateNeurons(void)`
+**Purpose:** Creating neurons
+**Parameters:** No
+**Return value:** `true` on success
+**Description:** Creates input and control neurons (base implementation returns true, overridden in subclasses)
+
+#### `virtual bool CreateExternalControlElements(void)`
+**Purpose:** Create external control elements
+**Parameters:** No
+**Return value:** `true` on success
+
+#### `virtual bool LinkNeurons(vector<NNet*> start, vector<NNet*> finish)`
+**Purpose:** Linking neurons
+**Parameters:**
+- `start` - vector neurons-sources
+- `finish` - vector of receiver neurons
+**Return value:** `true` on success
+**Description:** Creates communication between neurons via membrane
+
+#### `virtual bool UnlinkNeurons(vector<NNet*> start, vector<NNet*> finish)`
+**Purpose:** Break links between neurons
+**Parameters:**
+- `start` - vector neurons-sources
+- `finish` - vector of receiver neurons
+**Return value:** `true` on success
+
+#### `virtual bool LinkGenerators(const bool &value)`
+**Purpose:** Link/break generators
+**Parameters:**
+- `value` - link (true) or break (false)
+**Return value:** `true` on success
+
+#### `vector<NNet*> GetInputNeurons(void)`
+**Purpose:** Receiving input neurons
+**Parameters:** No
+**Return value:** Vector input neurons
+
+#### `vector<NNet*> GetControlNeurons(void)`
+**Purpose:** Get control neurons
+**Parameters:** No
+**Return value:** Vector of control neurons
+
+### Property Setters
+#### `bool SetInputNeuronType(const string &value)`
+**Purpose:** Set input neuron type
+**Parameters:**
+- `value` - name class neuron
+**Return value:** `true` on success
+**Description:** Sets Ready=false for restructuring
+
+#### `bool SetControlNeuronType(const string &value)`
+**Purpose:** Set control neuron type
+**Parameters:**
+- `value` - name class neuron
+**Return value:** `true` on success
+**Description:** Sets Ready=false for restructuring
+
+#### `bool SetExternalControl(const bool &value)`
+**Purpose:** Set external control mode
+**Parameters:**
+- `value` - use external control
+**Return value:** `true` on success
+**Description:** Calls LinkGenerators(value), sets Ready=false
+
+### Public Methods
+#### `virtual NPositionControlElement* New(void)`
+**Purpose:** Creation new instance component
+**Parameters:** No
+**Return value:** Pointer on new instance
 
 ## Usage Examples
 
 ### C++ Code
-
 ```cpp
 #include "NPositionControlElement.h"
 
-UEPtr<NPositionControlElement> positionControl = storage->CreateComponent<NPositionControlElement>("PosCtrl1");
-positionControl->TargetPosition(0, 0) = target_pos;
-positionControl->CurrentPosition(0, 0) = current_pos;
-positionControl->ExternalControl = false;
-positionControl->Default();
-positionControl->Build();
-positionControl->Reset();
+UEPtr<NPositionControlElement> element = new NPositionControlElement;
+element->Default();
+element->InputNeuronType = "NNewSPNeuron";
+element->ControlNeuronType = "NNewSPNeuron";
+element->Build();
+```
 
-positionControl->Calculate();
-double delta = positionControl->Delta(0, 0);
+### XML Configuration
+```xml
+<Object Name="PositionControl" ClassName="NPositionControlElement">
+    <Property Name="InputNeuronType" Value="NNewSPNeuron" />
+    <Property Name="ControlNeuronType" Value="NNewSPNeuron" />
+    <Property Name="TargetPosition" Value="10.0,5.0" />
+</Object>
 ```
 
 ### Usage in Configurations
+Component `NPositionControlElement` is used as the base class for position control elements. Its subclasses are typically used: `NNewPositionControlElement`, `NMultiPositionControl`, `NPCNElement`.
 
-Base class for position control elements; used via [NNewPositionControlElement](NNewPositionControlElement.md), [NMultiPositionControl](NMultiPositionControl.md), [NPCN](NPCN.md). Example configs: `Bin/Configs/SpikeSamples/MC1-PCN/`.
+**Configuration examples:** `Bin/Configs/SpikeSamples/MC1-PCN/` (MotionControl_Test, MultiPositionControl_*, NewPositionControl_Test).
+
+---

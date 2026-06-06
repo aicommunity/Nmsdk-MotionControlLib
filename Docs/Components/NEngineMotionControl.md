@@ -961,7 +961,7 @@ sequenceDiagram
     Storage->>Engine: new NEngineMotionControl()
     Storage->>Engine: Default()
     Engine->>Engine: ADefault()
-    Note over Engine: Инициализация параметров по умолчанию
+    Note over Engine: Parameter initialization by default
 
     Storage->>Engine: Build()
     Engine->>Engine: ABuild()
@@ -970,30 +970,30 @@ sequenceDiagram
     Engine->>MotionElem: new NMotionElement()
     Engine->>MotionElem: Default()
     Engine->>MotionElem: Build()
-    Engine->>Receptor: Создание рецепторов
-    Engine->>Source: Создание источников
-    Engine->>PAC: Настройка PAC
+    Engine->>Receptor: Creating receptors
+    Engine->>Source: Creating sources
+    Engine->>PAC: PAC setup
     Engine->>Engine: SetupPacRange()
     Engine->>Engine: NewIntervalSeparatorsSetup()
     Engine->>Engine: NewStandardLinksSetup()
 
     Storage->>Engine: Reset()
     Engine->>Engine: AReset()
-    Note over Engine: Сброс статистики и истории
+    Note over Engine: Reset statistics and history
 
-    loop Каждый шаг вычислений
-        Source->>Engine: Данные от источника управления
+    loop Each calculation step
+        Source->>Engine: Data from control source
         Storage->>Engine: Calculate()
         Engine->>Engine: ACalculate()
-        Engine->>Source: Получение данных координат
-        Engine->>Engine: Вычисление статистики контуров
-        Engine->>Engine: Обновление CurrentContourAmplitude
-        Engine->>Engine: Обновление CurrentContourAverage
-        Engine->>Engine: Определение переходного процесса
+        Engine->>Source: Getting coordinate data
+        Engine->>Engine: Computing loop statistics
+        Engine->>Engine: Updating CurrentContourAmplitude
+        Engine->>Engine: Updating CurrentContourAverage
+        Engine->>Engine: Determining transient process
         alt AdaptiveStructureMode == 2
             Engine->>Engine: AdaptiveTuning()
         end
-        Engine->>Engine: Обновление Statistic
+        Engine->>Engine: Updating Statistic
     end
 ```
 
@@ -1001,48 +1001,48 @@ sequenceDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> NotInitialized: Создание
+    [*] --> NotInitialized: Creation
     NotInitialized --> Initialized: ADefault()
     Initialized --> Building: ABuild()
     Building --> Creating: Create()
-    Creating --> StructureCreated: Структура создана
-    StructureCreated --> Ready: Готов к работе
+    Creating --> StructureCreated: Structure created
+    StructureCreated --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> UpdatingStats: Обновление статистики
+    Calculating --> UpdatingStats: Updating statistics
     UpdatingStats --> AdaptiveTuning: AdaptiveStructureMode==2
-    AdaptiveTuning --> Ready: После настройки
-    UpdatingStats --> Ready: Обычный режим
+    AdaptiveTuning --> Ready: After tuning
+    UpdatingStats --> Ready: Normal mode
     Ready --> Reset: AReset()
-    Reset --> Ready: После сброса
-    Ready --> Rebuilding: Изменение параметров
+    Reset --> Ready: After reset
+    Ready --> Rebuilding: Parameter change
     Rebuilding --> Building: ABuild()
-    Ready --> [*]: Уничтожение
+    Ready --> [*]: Destroy
 ```
 
 ## Activity Diagram
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CreateLink[Создание связи Statistic]
-    CreateLink --> InitArrays[Инициализация массивов статистики]
-    InitArrays --> CalcHistorySize[Вычисление размера истории]
-    CalcHistorySize --> GetSourceData[Получение данных от источников]
-    GetSourceData --> UpdateHistory[Обновление истории измерений]
-    UpdateHistory --> CalcStats["Вычисление статистики<br/>для каждого контура"]
-    CalcStats --> FindMinMax[Поиск min/max в истории]
-    FindMinMax --> CalcAmplitude[Вычисление амплитуды контура]
-    CalcAmplitude --> CalcAverage[Вычисление среднего значения]
-    CalcAverage --> UpdateMaxAmplitude[Обновление максимальной амплитуды]
-    UpdateMaxAmplitude --> CalcSpeed[Вычисление мгновенной скорости]
-    CalcSpeed --> CheckTransient["Проверка<br/>переходного процесса"]
-    CheckTransient -->|Скорость >= порог| SetTransientState[Установка состояния перехода]
-    CheckTransient -->|Скорость < порог| ClearTransientState[Сброс состояния перехода]
+    Start([Start ACalculate]) --> CreateLink[Creating Statistic link]
+    CreateLink --> InitArrays[Initializing statistics arrays]
+    InitArrays --> CalcHistorySize[Computing history size]
+    CalcHistorySize --> GetSourceData[Getting data from sources]
+    GetSourceData --> UpdateHistory[Updating measurement history]
+    UpdateHistory --> CalcStats["Computing statistics<br/>for each loop"]
+    CalcStats --> FindMinMax[Finding min/max in history]
+    FindMinMax --> CalcAmplitude[Computing loop amplitude]
+    CalcAmplitude --> CalcAverage[Computing average value]
+    CalcAverage --> UpdateMaxAmplitude[Updating maximum amplitude]
+    UpdateMaxAmplitude --> CalcSpeed[Computing instantaneous speed]
+    CalcSpeed --> CheckTransient["Checking<br/>transient process"]
+    CheckTransient -->|Speed >= threshold| SetTransientState[Setting transition state]
+    CheckTransient -->|Speed < threshold| ClearTransientState[Resetting transition state]
     SetTransientState --> CheckAdaptive{AdaptiveStructureMode==2?}
     ClearTransientState --> CheckAdaptive
-    CheckAdaptive -->|Да| CallAdaptiveTuning[Вызов AdaptiveTuning]
-    CheckAdaptive -->|Нет| UpdateStatistic
-    CallAdaptiveTuning --> UpdateStatistic[Обновление матрицы Statistic]
-    UpdateStatistic --> End([Конец])
+    CheckAdaptive -->|Yes| CallAdaptiveTuning[Calling AdaptiveTuning]
+    CheckAdaptive -->|No| UpdateStatistic
+    CallAdaptiveTuning --> UpdateStatistic[Updating Statistic matrix]
+    UpdateStatistic --> End([End])
 ```
 
 ## Component Diagram
@@ -1051,18 +1051,18 @@ flowchart TD
 graph TB
     Engine[[NEngineMotionControl]]
     PulseLib["Nmsdk-PulseLib<br/>NNet, NReceptor, NPulseGenerator, NPac"]
-    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    BasicLib["Rdk-BasicLib<br/>Basic components"]
     MotionLib["Nmsdk-MotionControlLib<br/>NMotionElement, NControlObjectSource"]
 
-    Engine -->|использует| PulseLib
-    Engine -->|использует| BasicLib
-    Engine -->|создает| MotionLib
+    Engine -->|uses| PulseLib
+    Engine -->|uses| BasicLib
+    Engine -->|creates| MotionLib
 
-    MotionElem["NMotionElement<br/>Элементы движения"]
-    Receptor["NReceptor<br/>Рецепторы"]
-    Source["NControlObjectSource<br/>Источник управления"]
-    PAC["NPac<br/>Проприоцептивная обратная связь"]
-    Separator["NIntervalSeparator<br/>Разделитель интервалов"]
+    MotionElem["NMotionElement<br/>Motion elements"]
+    Receptor["NReceptor<br/>Receptors"]
+    Source["NControlObjectSource<br/>Control source"]
+    PAC["NPac<br/>Proprioceptive feedback"]
+    Separator["NIntervalSeparator<br/>Interval separator"]
 
     Engine --> MotionElem
     Engine --> Receptor
@@ -1070,8 +1070,8 @@ graph TB
     Engine --> PAC
     Engine --> Separator
 
-    InputInterface["Входные интерфейсы<br/>Данные от источников управления"]
-    OutputInterface["Выходные интерфейсы<br/>Статистика и состояние"]
+    InputInterface["Input interfaces<br/>Data from control sources"]
+    OutputInterface["Output interfaces<br/>Statistics and state"]
 
     Source --> InputInterface
     Engine --> OutputInterface
@@ -1127,4 +1127,5 @@ See RU section for full examples. Typical usage: create NEngineMotionControl, se
 Central component for motion control; example configs: `Bin/Configs/SpikeSamples/MC-Muscles/`, `Bin/Configs/SpikeSamples/MC1-PCN/`, `Bin/Configs/SpikeSamples/MC0-RCN/`, `Bin/Configs/SpikeSamples/EyeRetina/`. Typical combinations: with [NControlObjectSource](NControlObjectSource.md), [NPositionControlElement](NPositionControlElement.md), [NEyeRetina](NEyeRetina.md), [NAstaticGyro](NAstaticGyro.md).
 
 ## References
-- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22, 27 — иерархия управления поведением робота, моторная память, согласованное управление исполнительной системой.
+
+- [Literature-References.md](../Literature-References.md): [A], 19, 20, 21, 22, 27 — robot behavior control hierarchy, motor memory, coordinated actuator control.
