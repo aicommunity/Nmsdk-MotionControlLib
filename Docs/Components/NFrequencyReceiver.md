@@ -89,13 +89,13 @@ stateDiagram-v2
 flowchart TD
     Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала cs]
     ReadInput --> CheckPulse{cs > 0?}
-    CheckPulse -->|Да| CheckStart{PrevPulseStartTime<br/>== -1?}
+    CheckPulse -->|Да| CheckStart["PrevPulseStartTime<br/>== -1?"]
     CheckPulse -->|Нет| UpdateStop[Обновление PrevPulseStopTime]
-    CheckStart -->|Да| CheckStop{PrevPulseStopTime<br/>!= -1?}
+    CheckStart -->|Да| CheckStop["PrevPulseStopTime<br/>!= -1?"]
     CheckStart -->|Нет| UpdateStart[Обновление PrevPulseStartTime]
     CheckStop -->|Да| CalcFreq[Вычисление frequency = 1/PrevPulseStopTime]
     CheckStop -->|Нет| UpdateStart
-    CalcFreq --> CheckRange{frequency в<br/>диапазоне?}
+    CalcFreq --> CheckRange["frequency в<br/>диапазоне?"]
     CheckRange -->|Да| UpdateHistogram[Обновление Results гистограммы]
     CheckRange -->|Нет| UpdateStart
     UpdateHistogram --> IncrementCounter[Увеличение PulseCounter]
@@ -110,15 +110,15 @@ flowchart TD
 ```mermaid
 graph TB
     Receiver[[NFrequencyReceiver]]
-    PulseLib[Nmsdk-PulseLib<br/>NReceiver]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NReceiver"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Receiver -->|наследуется от| PulseLib
     Receiver -->|использует| BasicLib
 
-    Input[Input<br/>Импульсный сигнал]
-    OutputFreq[OutputFreq<br/>Гистограмма частот]
-    Results[Results<br/>Результаты измерений]
+    Input["Input<br/>Импульсный сигнал"]
+    OutputFreq["OutputFreq<br/>Гистограмма частот"]
+    Results["Results<br/>Результаты измерений"]
 
     Receiver --> Input
     Receiver --> OutputFreq

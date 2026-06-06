@@ -120,8 +120,8 @@ graph TB
     Component -->|использует| CvLib
     Component -->|использует| HardwareLib
 
-    InputInterface[Input Properties<br/>ptInput]
-    OutputInterface[Output Properties<br/>ptOutput]
+    InputInterface["Input Properties<br/>ptInput"]
+    OutputInterface["Output Properties<br/>ptOutput"]
 
     Component --> InputInterface
     Component --> OutputInterface

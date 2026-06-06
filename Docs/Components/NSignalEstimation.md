@@ -97,12 +97,12 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> CheckZones{NumZones<br/>изменилось?}
+    Start([Начало ABuild]) --> CheckZones["NumZones<br/>изменилось?"]
     CheckZones -->|Да| DeleteOld[Удаление старых нейронов]
     CheckZones -->|Нет| CreateSignalGen
-    DeleteOld --> CreateSignalGen[Создание SignalGen<br/>с UseTransitSignal]
-    CreateSignalGen --> CreateSinchroGen[Создание SinchroGen<br/>с UseTransitSinchro]
-    CreateSinchroGen --> CreateZoneNeurons[Создание NumZones нейронов<br/>для каждой зоны]
+    DeleteOld --> CreateSignalGen["Создание SignalGen<br/>с UseTransitSignal"]
+    CreateSignalGen --> CreateSinchroGen["Создание SinchroGen<br/>с UseTransitSinchro"]
+    CreateSinchroGen --> CreateZoneNeurons["Создание NumZones нейронов<br/>для каждой зоны"]
     CreateZoneNeurons --> LinkSignal[Связь SignalGen -> ZoneNeurons]
     LinkSignal --> LinkSinchro[Связь SinchroGen -> ZoneNeurons]
     LinkSinchro --> End([Конец])
@@ -113,15 +113,15 @@ flowchart TD
 ```mermaid
 graph TB
     Estimator[[NSignalEstimation]]
-    PulseLib[Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Estimator -->|использует| PulseLib
     Estimator -->|использует| BasicLib
 
-    SignalGen[SignalGen<br/>Генератор сигнала]
-    SinchroGen[SinchroGen<br/>Генератор синхронизации]
-    ZoneNeurons[ZoneNeurons<br/>Нейроны для каждой зоны]
+    SignalGen["SignalGen<br/>Генератор сигнала"]
+    SinchroGen["SinchroGen<br/>Генератор синхронизации"]
+    ZoneNeurons["ZoneNeurons<br/>Нейроны для каждой зоны"]
 
     Estimator --> SignalGen
     Estimator --> SinchroGen

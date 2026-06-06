@@ -112,11 +112,11 @@ stateDiagram-v2
 ```mermaid
 flowchart TD
     Start([Начало ACalculate]) --> CheckSituation{Situation?}
-    CheckSituation -->|Да| CheckActions{InputActions<br/>доступны?}
+    CheckSituation -->|Да| CheckActions["InputActions<br/>доступны?"]
     CheckSituation -->|Нет| UpdateCurrent[Обновление текущего TE]
-    CheckActions -->|Да| CheckTraining{NeuronTrainer<br/>обучен?}
+    CheckActions -->|Да| CheckTraining["NeuronTrainer<br/>обучен?"]
     CheckActions -->|Нет| UpdateCurrent
-    CheckTraining -->|Нет| TrainNT[Обучение NeuronTrainer<br/>на SituationCoords]
+    CheckTraining -->|Нет| TrainNT["Обучение NeuronTrainer<br/>на SituationCoords"]
     CheckTraining -->|Да| CreateTE[Создание нового NTrajectoryElement]
     TrainNT --> WaitTraining[Ожидание завершения обучения]
     WaitTraining --> CreateTE
@@ -133,18 +133,18 @@ flowchart TD
 ```mermaid
 graph TB
     Memory[[NMazeMemory]]
-    MotionLib[Nmsdk-MotionControlLib<br/>NTrajectoryElement, NMultiPositionControl]
-    PulseLib[Nmsdk-PulseLib<br/>NNeuronTrainer, NPulseNeuron]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    MotionLib["Nmsdk-MotionControlLib<br/>NTrajectoryElement, NMultiPositionControl"]
+    PulseLib["Nmsdk-PulseLib<br/>NNeuronTrainer, NPulseNeuron"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Memory -->|использует| MotionLib
     Memory -->|использует| PulseLib
     Memory -->|использует| BasicLib
 
-    TrajectoryElements[TrajectoryElements<br/>Элементы траектории]
-    MultiPCs[MultiPCs<br/>Блоки множественного контроля]
-    NTrainers[NTrainers<br/>Нейронные тренеры]
-    ActionNeurons[ActionNeurons<br/>Нейроны действий]
+    TrajectoryElements["TrajectoryElements<br/>Элементы траектории"]
+    MultiPCs["MultiPCs<br/>Блоки множественного контроля"]
+    NTrainers["NTrainers<br/>Нейронные тренеры"]
+    ActionNeurons["ActionNeurons<br/>Нейроны действий"]
 
     Memory --> TrajectoryElements
     Memory --> MultiPCs

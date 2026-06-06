@@ -78,8 +78,8 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала:<br/>Voltage = Input(0,0)]
-    ReadInput --> UpdateOutput[Обновление выхода:<br/>Output(0,0) = Voltage]
+    Start([Начало ACalculate]) --> ReadInput["Чтение входного сигнала:<br/>Voltage = Input(0,0)"]
+    ReadInput --> UpdateOutput["Обновление выхода:<br/>Output(0,0) = Voltage"]
     UpdateOutput --> End([Конец])
 ```
 
@@ -88,14 +88,14 @@ flowchart TD
 ```mermaid
 graph TB
     Input[[NManipulatorInput]]
-    PulseLib[Nmsdk-PulseLib<br/>NSource]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NSource"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Input -->|наследуется от| PulseLib
     Input -->|использует| BasicLib
 
-    InputSignal[Input<br/>Входной сигнал управления]
-    Output[Output<br/>Выходное напряжение]
+    InputSignal["Input<br/>Входной сигнал управления"]
+    Output["Output<br/>Выходное напряжение"]
 
     Input --> InputSignal
     Input --> Output

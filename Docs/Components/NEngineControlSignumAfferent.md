@@ -82,10 +82,10 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> SetMode[Установка CreationMode = 0<br/>Signum режим]
-    SetMode --> CreateSignumSep[Создание NSignumSeparator<br/>для обработки афферентов]
+    Start([Начало ABuild]) --> SetMode["Установка CreationMode = 0<br/>Signum режим"]
+    SetMode --> CreateSignumSep["Создание NSignumSeparator<br/>для обработки афферентов"]
     CreateSignumSep --> CreateMotions[Создание элементов движения]
-    CreateMotions --> LinkSignum[Связывание SignumSeparator<br/>с афферентными нейронами]
+    CreateMotions --> LinkSignum["Связывание SignumSeparator<br/>с афферентными нейронами"]
     LinkSignum --> End([Конец])
 ```
 
@@ -94,14 +94,14 @@ flowchart TD
 ```mermaid
 graph TB
     Controller[[NEngineControlSignumAfferent]]
-    MotionLib[Nmsdk-MotionControlLib<br/>NSignumSeparator, NMotionElement]
-    PulseLib[Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron]
+    MotionLib["Nmsdk-MotionControlLib<br/>NSignumSeparator, NMotionElement"]
+    PulseLib["Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron"]
 
     Controller -->|использует| MotionLib
     Controller -->|использует| PulseLib
 
-    SignumSeparators[SignumSeparators<br/>Разделители по знаку]
-    MotionElements[MotionElements<br/>Элементы движения]
+    SignumSeparators["SignumSeparators<br/>Разделители по знаку"]
+    MotionElements["MotionElements<br/>Элементы движения"]
 
     Controller --> SignumSeparators
     Controller --> MotionElements

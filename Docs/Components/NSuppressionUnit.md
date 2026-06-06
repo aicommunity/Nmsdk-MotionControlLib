@@ -107,8 +107,8 @@ stateDiagram-v2
 flowchart TD
     Start([Начало ABuild]) --> CreateSourceGen[Создание SourceGenerator]
     CreateSourceGen --> CreateDelayGens[Создание DelayGenerators[0,1]]
-    CreateDelayGens --> CreateORNeuron[Создание ORNeuron<br/>с 2 возбуждающими синапсами]
-    CreateORNeuron --> CreateControlledGen[Создание ControlledGenerator<br/>с UsePatternOutput=true]
+    CreateDelayGens --> CreateORNeuron["Создание ORNeuron<br/>с 2 возбуждающими синапсами"]
+    CreateORNeuron --> CreateControlledGen["Создание ControlledGenerator<br/>с UsePatternOutput=true"]
     CreateControlledGen --> CreateNeuron[Создание Neuron]
     CreateNeuron --> LinkSourceToOR[Связь SourceGenerator -> ORNeuron]
     LinkSourceToOR --> LinkDelaysToOR[Связь DelayGenerators -> ORNeuron]
@@ -123,17 +123,17 @@ flowchart TD
 ```mermaid
 graph TB
     Unit[[NSuppressionUnit]]
-    PulseLib[Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Unit -->|использует| PulseLib
     Unit -->|использует| BasicLib
 
-    SourceGen[SourceGenerator<br/>Генератор входных импульсов]
-    DelayGens[DelayGenerators<br/>Генераторы задержек]
-    ORNeuron[ORNeuron<br/>Нейрон ИЛИ]
-    ControlledGen[ControlledGenerator<br/>Управляемый генератор]
-    Neuron[Neuron<br/>Выходной нейрон]
+    SourceGen["SourceGenerator<br/>Генератор входных импульсов"]
+    DelayGens["DelayGenerators<br/>Генераторы задержек"]
+    ORNeuron["ORNeuron<br/>Нейрон ИЛИ"]
+    ControlledGen["ControlledGenerator<br/>Управляемый генератор"]
+    Neuron["Neuron<br/>Выходной нейрон"]
 
     Unit --> SourceGen
     Unit --> DelayGens

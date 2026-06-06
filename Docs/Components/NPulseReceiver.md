@@ -111,14 +111,14 @@ flowchart TD
 ```mermaid
 graph TB
     Receiver[[NPulseReceiver]]
-    PulseLib[Nmsdk-PulseLib<br/>NReceiver]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NReceiver"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
     
     Receiver -->|наследуется от| PulseLib
     Receiver -->|использует| BasicLib
     
-    Inputs[Inputs<br/>Вектор входных сигналов]
-    Output[Output<br/>История импульсов]
+    Inputs["Inputs<br/>Вектор входных сигналов"]
+    Output["Output<br/>История импульсов"]
     
     Receiver --> Inputs
     Receiver --> Output

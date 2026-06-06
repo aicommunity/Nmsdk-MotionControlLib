@@ -78,8 +78,8 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckInput{Input<br/>подключен?}
-    CheckInput -->|Да| ResizeArrays[Изменение размеров массивов:<br/>DataShift, DataIndexes, DataMul]
+    Start([Начало ACalculate]) --> CheckInput["Input<br/>подключен?"]
+    CheckInput -->|Да| ResizeArrays["Изменение размеров массивов:<br/>DataShift, DataIndexes, DataMul"]
     CheckInput -->|Нет| ResizeOutputZero[Output.Resize(0,0)]
     ResizeArrays --> ResizeOutput[Output.Resize(1, Input->GetSize())]
     ResizeOutput --> LoopStart[Цикл по элементам Input]
@@ -95,14 +95,14 @@ flowchart TD
 ```mermaid
 graph TB
     Source[[NControlObjectSource]]
-    PulseLib[Nmsdk-PulseLib<br/>NSource]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NSource"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Source -->|наследуется от| PulseLib
     Source -->|использует| BasicLib
 
-    Input[Input<br/>Входные данные объекта]
-    Output[Output<br/>Преобразованные данные]
+    Input["Input<br/>Входные данные объекта"]
+    Output["Output<br/>Преобразованные данные"]
 
     Source --> Input
     Source --> Output

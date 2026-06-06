@@ -201,17 +201,17 @@ flowchart TD
     UnlockRead --> End([Конец])
 
     subgraph SendThread["Поток отправки (SendCommand)"]
-        STStart([Начало потока]) --> STCheck{ManipulatorDLL<br/>загружена?}
+        STStart([Начало потока]) --> STCheck["ManipulatorDLL<br/>загружена?"]
         STCheck -->|Нет| STSleep[Ожидание 10 мс]
         STCheck -->|Да| STLock[Блокировка SendMutex]
-        STLock --> STCheckTime{Время прошло<br/>> MaxSendCounter?}
+        STLock --> STCheckTime["Время прошло<br/>> MaxSendCounter?"]
         STCheckTime -->|Нет| STWait[Ожидание]
         STCheckTime -->|Да| STLockCmd[Блокировка CommandMutex]
         STLockCmd --> STMove[MoveServoByCommand]
         STMove --> STCalcVoltage[Вычисление OutputVoltage]
         STCalcVoltage --> STSend[Отправка команды через DLL]
         STSend --> STUnlock[Разблокировка мьютексов]
-        STUnlock --> STCheckTerm{Поток<br/>завершён?}
+        STUnlock --> STCheckTerm["Поток<br/>завершён?"]
         STCheckTerm -->|Нет| STCheck
         STCheckTerm -->|Да| STEnd([Конец потока])
         STWait --> STCheckTerm
@@ -219,10 +219,10 @@ flowchart TD
     end
 
     subgraph ReadThread["Поток чтения (ReadData)"]
-        RTStart([Начало потока]) --> RTCheck{ManipulatorDLL<br/>загружена?}
+        RTStart([Начало потока]) --> RTCheck["ManipulatorDLL<br/>загружена?"]
         RTCheck -->|Нет| RTSleep[Ожидание 10 мс]
         RTCheck -->|Да| RTLock[Блокировка ReadMutex]
-        RTLock --> RTCheckTime{Время прошло<br/>> MaxReadCounter?}
+        RTLock --> RTCheckTime["Время прошло<br/>> MaxReadCounter?"]
         RTCheckTime -->|Нет| RTWait[Ожидание]
         RTCheckTime -->|Да| RTLockData[Блокировка DataMutex]
         RTLockData --> RTRead[ReadManipulatorData]
@@ -230,7 +230,7 @@ flowchart TD
         RTGetData --> RTProcess[Обработка и масштабирование]
         RTProcess --> RTUpdate[Обновление SafeOutput]
         RTUpdate --> RTUnlock[Разблокировка мьютексов]
-        RTUnlock --> RTCheckTerm{Поток<br/>завершён?}
+        RTUnlock --> RTCheckTerm["Поток<br/>завершён?"]
         RTCheckTerm -->|Нет| RTCheck
         RTCheckTerm -->|Да| RTEnd([Конец потока])
         RTWait --> RTCheckTerm

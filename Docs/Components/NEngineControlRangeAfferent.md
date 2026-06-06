@@ -83,11 +83,11 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> SetMode[Установка CreationMode = 1<br/>Range режим]
-    SetMode --> CalcRanges[Вычисление диапазонов афферентов<br/>на основе AfferentMin, AfferentMax]
-    CalcRanges --> CreateIntervalSep[Создание NIntervalSeparator<br/>для каждого диапазона]
+    Start([Начало ABuild]) --> SetMode["Установка CreationMode = 1<br/>Range режим"]
+    SetMode --> CalcRanges["Вычисление диапазонов афферентов<br/>на основе AfferentMin, AfferentMax"]
+    CalcRanges --> CreateIntervalSep["Создание NIntervalSeparator<br/>для каждого диапазона"]
     CreateIntervalSep --> CreateMotions[Создание элементов движения]
-    CreateMotions --> LinkInterval[Связывание IntervalSeparator<br/>с афферентными нейронами]
+    CreateMotions --> LinkInterval["Связывание IntervalSeparator<br/>с афферентными нейронами"]
     LinkInterval --> End([Конец])
 ```
 
@@ -96,14 +96,14 @@ flowchart TD
 ```mermaid
 graph TB
     Controller[[NEngineControlRangeAfferent]]
-    MotionLib[Nmsdk-MotionControlLib<br/>NIntervalSeparator, NMotionElement]
-    PulseLib[Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron]
+    MotionLib["Nmsdk-MotionControlLib<br/>NIntervalSeparator, NMotionElement"]
+    PulseLib["Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron"]
 
     Controller -->|использует| MotionLib
     Controller -->|использует| PulseLib
 
-    IntervalSeparators[IntervalSeparators<br/>Разделители по диапазонам]
-    MotionElements[MotionElements<br/>Элементы движения]
+    IntervalSeparators["IntervalSeparators<br/>Разделители по диапазонам"]
+    MotionElements["MotionElements<br/>Элементы движения"]
 
     Controller --> IntervalSeparators
     Controller --> MotionElements

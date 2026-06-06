@@ -114,12 +114,12 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ABuild]) --> CheckObj{NumObj<br/>изменилось?}
+    Start([Начало ABuild]) --> CheckObj["NumObj<br/>изменилось?"]
     CheckObj -->|Да| DeleteOld[Удаление старых генераторов]
     CheckObj -->|Нет| CreateGenerators
-    DeleteOld --> CreateGenerators[Создание NumObj генераторов ClsSpikeFr<br/>с задержками из DelaysClsSpikeFr]
-    CreateGenerators --> CreateSuppress1[Создание SuppressUnit1<br/>с Delay1=Delay11, Delay2=Delay12]
-    CreateSuppress1 --> CreateSuppress2[Создание SuppressUnit2<br/>с Delay1=Delay21, Delay2=Delay22]
+    DeleteOld --> CreateGenerators["Создание NumObj генераторов ClsSpikeFr<br/>с задержками из DelaysClsSpikeFr"]
+    CreateGenerators --> CreateSuppress1["Создание SuppressUnit1<br/>с Delay1=Delay11, Delay2=Delay12"]
+    CreateSuppress1 --> CreateSuppress2["Создание SuppressUnit2<br/>с Delay1=Delay21, Delay2=Delay22"]
     CreateSuppress2 --> CreateOR[Создание ORNeuron]
     CreateOR --> CreateAND[Создание ANDNeuron]
     CreateAND --> CreateDeciding[Создание DecidingNeuron]
@@ -133,20 +133,20 @@ flowchart TD
 ```mermaid
 graph TB
     Detector[[NObjInArea]]
-    PulseLib[Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron]
-    MotionLib[Nmsdk-MotionControlLib<br/>NSuppressionUnit]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NPulseGenerator, NPulseNeuron"]
+    MotionLib["Nmsdk-MotionControlLib<br/>NSuppressionUnit"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Detector -->|использует| PulseLib
     Detector -->|использует| MotionLib
     Detector -->|использует| BasicLib
 
-    ClsGenerators[ClsSpikeFr<br/>Генераторы последовательностей]
-    Suppress1[SuppressUnit1<br/>Блок подавления 1]
-    Suppress2[SuppressUnit2<br/>Блок подавления 2]
-    ORNeuron[ORNeuron<br/>Нейрон ИЛИ]
-    ANDNeuron[ANDNeuron<br/>Нейрон И]
-    DecidingNeuron[DecidingNeuron<br/>Нейрон принятия решения]
+    ClsGenerators["ClsSpikeFr<br/>Генераторы последовательностей"]
+    Suppress1["SuppressUnit1<br/>Блок подавления 1"]
+    Suppress2["SuppressUnit2<br/>Блок подавления 2"]
+    ORNeuron["ORNeuron<br/>Нейрон ИЛИ"]
+    ANDNeuron["ANDNeuron<br/>Нейрон И"]
+    DecidingNeuron["DecidingNeuron<br/>Нейрон принятия решения"]
 
     Detector --> ClsGenerators
     Detector --> Suppress1

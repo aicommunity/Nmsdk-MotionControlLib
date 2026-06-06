@@ -83,13 +83,13 @@ flowchart TD
     ReadInput --> ResizeOutput[Изменение размера Output]
     ResizeOutput --> LoopInputs[Цикл по элементам входа]
     LoopInputs --> CheckMode{Mode[j]?}
-    CheckMode -->|0| Mode0{input в<br/>[MinRange, MaxRange]?}
-    CheckMode -->|1| Mode1{input в<br/>[MinRange, MaxRange]?}
-    CheckMode -->|2| Mode2{input ><br/>MinRange?}
-    CheckMode -->|3| Mode3{input <<br/>MaxRange?}
-    CheckMode -->|4| Mode4{input ><br/>MinRange?}
-    CheckMode -->|5| Mode5[Режим 5:<br/>Сложная логика]
-    CheckMode -->|6| Mode6[Режим 6:<br/>Сложная логика]
+    CheckMode -->|0| Mode0["input в<br/>[MinRange, MaxRange]?"]
+    CheckMode -->|1| Mode1["input в<br/>[MinRange, MaxRange]?"]
+    CheckMode -->|2| Mode2["input ><br/>MinRange?"]
+    CheckMode -->|3| Mode3["input <<br/>MaxRange?"]
+    CheckMode -->|4| Mode4["input ><br/>MinRange?"]
+    CheckMode -->|5| Mode5["Режим 5:<br/>Сложная логика"]
+    CheckMode -->|6| Mode6["Режим 6:<br/>Сложная логика"]
     Mode0 -->|Да| OutputInput[Output = input]
     Mode0 -->|Нет| OutputZero[Output = 0]
     Mode1 -->|Да| OutputShift[Output = input - MinRange]
@@ -115,12 +115,12 @@ flowchart TD
 ```mermaid
 graph TB
     Separator[[NIntervalSeparator]]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Separator -->|использует| BasicLib
 
-    Input[Input<br/>Входной сигнал]
-    Output[Output<br/>Разделенный сигнал]
+    Input["Input<br/>Входной сигнал"]
+    Output["Output<br/>Разделенный сигнал"]
 
     Separator --> Input
     Separator --> Output

@@ -110,8 +110,8 @@ stateDiagram-v2
 flowchart TD
     Start([Начало ABuild]) --> InitArrays[Инициализация массивов позиций]
     InitArrays --> ClearNeurons[Очистка векторов нейронов]
-    ClearNeurons --> CreateNeurons[CreateNeurons:<br/>Создание входных и управляющих нейронов]
-    CreateNeurons --> LinkNeurons[LinkNeurons:<br/>Связывание нейронов]
+    ClearNeurons --> CreateNeurons["CreateNeurons:<br/>Создание входных и управляющих нейронов"]
+    CreateNeurons --> LinkNeurons["LinkNeurons:<br/>Связывание нейронов"]
     LinkNeurons --> End([Конец])
 ```
 
@@ -120,15 +120,15 @@ flowchart TD
 ```mermaid
 graph TB
     Element[[NPositionControlElement]]
-    PulseLib[Nmsdk-PulseLib<br/>NNet, нейроны]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, нейроны"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Element -->|использует| PulseLib
     Element -->|использует| BasicLib
 
-    InputNeurons[InputNeurons<br/>Входные нейроны]
-    ControlNeurons[ControlNeurons<br/>Управляющие нейроны]
-    Generators[Generators<br/>Генераторы]
+    InputNeurons["InputNeurons<br/>Входные нейроны"]
+    ControlNeurons["ControlNeurons<br/>Управляющие нейроны"]
+    Generators["Generators<br/>Генераторы"]
 
     Element --> InputNeurons
     Element --> ControlNeurons

@@ -131,15 +131,15 @@ stateDiagram-v2
 ```mermaid
 flowchart TD
     Start([Начало ACalculate]) --> AddTrajectory[Добавление координат в траекторию]
-    AddTrajectory --> CheckImage{Изображение<br/>валидно?}
+    AddTrajectory --> CheckImage["Изображение<br/>валидно?"]
     CheckImage -->|Нет| End([Конец])
     CheckImage -->|Да| SetResolution[Установка разрешения изображения]
     SetResolution --> ConvertImage[Конвертация CaptureImage в InputImage]
-    ConvertImage --> ProcessRods[Обработка палочек:<br/>EyeRetina.SetInputImage + Calculate]
-    ProcessRods --> ProcessRCone[Обработка R колбочек:<br/>EyeRetinaRCone.Calculate]
-    ProcessRCone --> ProcessGCone[Обработка G колбочек:<br/>EyeRetinaGCone.Calculate]
-    ProcessGCone --> ProcessBCone[Обработка B колбочек:<br/>EyeRetinaBCone.Calculate]
-    ProcessBCone --> UpdateImages[UpdateImages:<br/>Обновление выходных изображений]
+    ConvertImage --> ProcessRods["Обработка палочек:<br/>EyeRetina.SetInputImage + Calculate"]
+    ProcessRods --> ProcessRCone["Обработка R колбочек:<br/>EyeRetinaRCone.Calculate"]
+    ProcessRCone --> ProcessGCone["Обработка G колбочек:<br/>EyeRetinaGCone.Calculate"]
+    ProcessGCone --> ProcessBCone["Обработка B колбочек:<br/>EyeRetinaBCone.Calculate"]
+    ProcessBCone --> UpdateImages["UpdateImages:<br/>Обновление выходных изображений"]
     UpdateImages --> End
 ```
 
@@ -148,18 +148,18 @@ flowchart TD
 ```mermaid
 graph TB
     Retina[[NEyeRetina]]
-    CvLib[Rdk-CvBasicLib<br/>Обработка изображений]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    CvLib["Rdk-CvBasicLib<br/>Обработка изображений"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Retina -->|использует| CvLib
     Retina -->|использует| BasicLib
 
-    CaptureImage[CaptureImage<br/>Входное изображение]
-    GanglionicOuts[GanglionicOuts<br/>Выход ганглиозных клеток]
-    LeftGanglionicOut[LeftGanglionicOut<br/>Сигнал для левой мышцы]
-    RightGanglionicOut[RightGanglionicOut<br/>Сигнал для правой мышцы]
-    TopGanglionicOut[TopGanglionicOut<br/>Сигнал для верхней мышцы]
-    BottomGanglionicOut[BottomGanglionicOut<br/>Сигнал для нижней мышцы]
+    CaptureImage["CaptureImage<br/>Входное изображение"]
+    GanglionicOuts["GanglionicOuts<br/>Выход ганглиозных клеток"]
+    LeftGanglionicOut["LeftGanglionicOut<br/>Сигнал для левой мышцы"]
+    RightGanglionicOut["RightGanglionicOut<br/>Сигнал для правой мышцы"]
+    TopGanglionicOut["TopGanglionicOut<br/>Сигнал для верхней мышцы"]
+    BottomGanglionicOut["BottomGanglionicOut<br/>Сигнал для нижней мышцы"]
 
     Retina --> CaptureImage
     Retina --> GanglionicOuts

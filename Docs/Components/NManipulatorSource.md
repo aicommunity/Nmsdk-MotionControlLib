@@ -88,19 +88,19 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckInputAngle{InputAngle<br/>подключен?}
+    Start([Начало ACalculate]) --> CheckInputAngle["InputAngle<br/>подключен?"]
     CheckInputAngle -->|Да| ReadInputAngle[OutputAngle = InputAngle]
     CheckInputAngle -->|Нет| UseParamAngle[OutputAngle = Angle]
     ReadInputAngle --> CheckInputSpeed
-    UseParamAngle --> CheckInputSpeed{InputSpeed<br/>подключен?}
+    UseParamAngle --> CheckInputSpeed["InputSpeed<br/>подключен?"]
     CheckInputSpeed -->|Да| ReadInputSpeed[OutputSpeed = InputSpeed]
     CheckInputSpeed -->|Нет| UseParamSpeed[OutputSpeed = Speed]
     ReadInputSpeed --> CheckInputForce
-    UseParamSpeed --> CheckInputForce{InputForce<br/>подключен?}
+    UseParamSpeed --> CheckInputForce["InputForce<br/>подключен?"]
     CheckInputForce -->|Да| ReadInputForce[OutputForce = InputForce]
     CheckInputForce -->|Нет| UseParamForce[OutputForce = Force]
     ReadInputForce --> CheckInputMovement
-    UseParamForce --> CheckInputMovement{InputMovement<br/>подключен?}
+    UseParamForce --> CheckInputMovement["InputMovement<br/>подключен?"]
     CheckInputMovement -->|Да| ReadInputMovement[OutputMovement = InputMovement]
     CheckInputMovement -->|Нет| UseParamMovement[OutputMovement = Movement]
     ReadInputMovement --> End([Конец])
@@ -112,20 +112,20 @@ flowchart TD
 ```mermaid
 graph TB
     Source[[NManipulatorSource]]
-    PulseLib[Nmsdk-PulseLib<br/>NSource]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NSource"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Source -->|наследуется от| PulseLib
     Source -->|использует| BasicLib
 
-    InputAngle[InputAngle<br/>Входной угол]
-    InputSpeed[InputSpeed<br/>Входная скорость]
-    InputForce[InputForce<br/>Входная сила]
-    InputMovement[InputMovement<br/>Входное перемещение]
-    OutputAngle[OutputAngle<br/>Выходной угол]
-    OutputSpeed[OutputSpeed<br/>Выходная скорость]
-    OutputForce[OutputForce<br/>Выходная сила]
-    OutputMovement[OutputMovement<br/>Выходное перемещение]
+    InputAngle["InputAngle<br/>Входной угол"]
+    InputSpeed["InputSpeed<br/>Входная скорость"]
+    InputForce["InputForce<br/>Входная сила"]
+    InputMovement["InputMovement<br/>Входное перемещение"]
+    OutputAngle["OutputAngle<br/>Выходной угол"]
+    OutputSpeed["OutputSpeed<br/>Выходная скорость"]
+    OutputForce["OutputForce<br/>Выходная сила"]
+    OutputMovement["OutputMovement<br/>Выходное перемещение"]
 
     Source --> InputAngle
     Source --> InputSpeed

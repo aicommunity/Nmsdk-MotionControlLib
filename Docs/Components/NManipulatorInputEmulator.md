@@ -100,8 +100,8 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала:<br/>Voltage = Input(0,0)]
-    ReadInput --> UpdateOutput[Обновление выхода:<br/>Output(0,0) = Voltage]
+    Start([Начало ACalculate]) --> ReadInput["Чтение входного сигнала:<br/>Voltage = Input(0,0)"]
+    ReadInput --> UpdateOutput["Обновление выхода:<br/>Output(0,0) = Voltage"]
     UpdateOutput --> End([Конец])
 ```
 
@@ -132,8 +132,8 @@ graph TB
     BaseInput -->|наследуется от| NSource
     NSource -->|наследуется от| UNet
 
-    Input[Input<br/>Входной сигнал управления]
-    Output[Output<br/>Выходное напряжение]
+    Input["Input<br/>Входной сигнал управления"]
+    Output["Output<br/>Выходное напряжение"]
 
     Emulator --> Input
     Emulator --> Output
@@ -313,8 +313,8 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Start ACalculate]) --> ReadInput[Read Input signal:<br/>Voltage = Input(0,0)]
-    ReadInput --> UpdateOutput[Update Output:<br/>Output(0,0) = Voltage]
+    Start([Start ACalculate]) --> ReadInput["Read Input signal:<br/>Voltage = Input(0,0)"]
+    ReadInput --> UpdateOutput["Update Output:<br/>Output(0,0) = Voltage"]
     UpdateOutput --> End([End])
 ```
 

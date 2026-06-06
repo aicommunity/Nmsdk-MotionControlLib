@@ -136,8 +136,8 @@ stateDiagram-v2
 flowchart TD
     Start([Начало ACalculate]) --> ReadAfferents[Чтение афферентных сигналов]
     ReadAfferents --> ProcessReceptors[Обработка через NReceptor]
-    ProcessReceptors --> ClassifyRanges[Классификация диапазонов<br/>через NIntervalSeparator]
-    ClassifyRanges --> BranchAfferents{Разветвление<br/>афферентов}
+    ProcessReceptors --> ClassifyRanges["Классификация диапазонов<br/>через NIntervalSeparator"]
+    ClassifyRanges --> BranchAfferents["Разветвление<br/>афферентов"]
     BranchAfferents -->|Ia| ProcessIa[Обработка Ia афферентов]
     BranchAfferents -->|Ib| ProcessIb[Обработка Ib афферентов]
     BranchAfferents -->|II| ProcessII[Обработка II афферентов]

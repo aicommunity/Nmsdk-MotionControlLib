@@ -84,7 +84,7 @@ stateDiagram-v2
     Built --> Ready: Готов к работе
     Ready --> Calculating: ACalculate()
     Calculating --> Collecting: Сбор статистики
-    Collecting --> CheckingInterval{StatsInterval<br/>достигнут?}
+    Collecting --> CheckingInterval["StatsInterval<br/>достигнут?"]
     CheckingInterval -->|Да| WritingFile: Запись в файл
     CheckingInterval -->|Нет| Ready: Завершение шага
     WritingFile --> Clearing: ClearStats()
@@ -98,19 +98,19 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckFile{StatsFile<br/>существует?}
-    CheckFile -->|Нет| ReCreateFile[ReCreateFile:<br/>Создание файла]
+    Start([Начало ACalculate]) --> CheckFile["StatsFile<br/>существует?"]
+    CheckFile -->|Нет| ReCreateFile["ReCreateFile:<br/>Создание файла"]
     CheckFile -->|Да| CheckMode
     ReCreateFile --> CheckMode{Mode?}
-    CheckMode -->|0| Mode0[Режим 0:<br/>Min, Max, Avg, Delta]
-    CheckMode -->|1| Mode1[Режим 1:<br/>Построчная запись]
-    CheckMode -->|2| Mode2[Режим 2:<br/>Построчная запись всех данных]
-    Mode0 --> CheckInterval{StatsInterval<br/>достигнут?}
+    CheckMode -->|0| Mode0["Режим 0:<br/>Min, Max, Avg, Delta"]
+    CheckMode -->|1| Mode1["Режим 1:<br/>Построчная запись"]
+    CheckMode -->|2| Mode2["Режим 2:<br/>Построчная запись всех данных"]
+    Mode0 --> CheckInterval["StatsInterval<br/>достигнут?"]
     Mode1 --> CheckInterval
     Mode2 --> CheckInterval
     CheckInterval -->|Да| WriteStats[Запись статистики в файл]
-    CheckInterval -->|Нет| ResizeStats[ResizeStats:<br/>Изменение размеров массивов]
-    WriteStats --> ClearStats[ClearStats:<br/>Очистка статистики]
+    CheckInterval -->|Нет| ResizeStats["ResizeStats:<br/>Изменение размеров массивов"]
+    WriteStats --> ClearStats["ClearStats:<br/>Очистка статистики"]
     ClearStats --> ResizeStats
     ResizeStats --> UpdateStats[Обновление StatsMin, StatsMax, StatsAvg, StatsDelta]
     UpdateStats --> End([Конец])
@@ -121,13 +121,13 @@ flowchart TD
 ```mermaid
 graph TB
     Statistic[[NSimpleStatistic]]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
     
     Statistic -->|использует| BasicLib
     
-    Inputs[Inputs<br/>Вектор входных данных]
-    Output[Output<br/>Выходная статистика]
-    StatsFile[StatsFile<br/>Файл статистики]
+    Inputs["Inputs<br/>Вектор входных данных"]
+    Output["Output<br/>Выходная статистика"]
+    StatsFile["StatsFile<br/>Файл статистики"]
     
     Statistic --> Inputs
     Statistic --> Output

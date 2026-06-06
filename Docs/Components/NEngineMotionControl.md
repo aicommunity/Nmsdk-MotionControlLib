@@ -218,13 +218,13 @@ flowchart TD
     InitArrays --> CalcHistorySize[Вычисление размера истории]
     CalcHistorySize --> GetSourceData[Получение данных от источников]
     GetSourceData --> UpdateHistory[Обновление истории измерений]
-    UpdateHistory --> CalcStats{Вычисление статистики<br/>для каждого контура}
+    UpdateHistory --> CalcStats["Вычисление статистики<br/>для каждого контура"]
     CalcStats --> FindMinMax[Поиск min/max в истории]
     FindMinMax --> CalcAmplitude[Вычисление амплитуды контура]
     CalcAmplitude --> CalcAverage[Вычисление среднего значения]
     CalcAverage --> UpdateMaxAmplitude[Обновление максимальной амплитуды]
     UpdateMaxAmplitude --> CalcSpeed[Вычисление мгновенной скорости]
-    CalcSpeed --> CheckTransient{Проверка<br/>переходного процесса}
+    CalcSpeed --> CheckTransient["Проверка<br/>переходного процесса"]
     CheckTransient -->|Скорость >= порог| SetTransientState[Установка состояния перехода]
     CheckTransient -->|Скорость < порог| ClearTransientState[Сброс состояния перехода]
     SetTransientState --> CheckAdaptive{AdaptiveStructureMode==2?}
@@ -255,19 +255,19 @@ flowchart TD
 ```mermaid
 graph TB
     Engine[[NEngineMotionControl]]
-    PulseLib[Nmsdk-PulseLib<br/>NNet, NReceptor, NPulseGenerator, NPac]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
-    MotionLib[Nmsdk-MotionControlLib<br/>NMotionElement, NControlObjectSource]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, NReceptor, NPulseGenerator, NPac"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
+    MotionLib["Nmsdk-MotionControlLib<br/>NMotionElement, NControlObjectSource"]
 
     Engine -->|использует| PulseLib
     Engine -->|использует| BasicLib
     Engine -->|создает| MotionLib
 
-    MotionElem[NMotionElement<br/>Элементы движения]
-    Receptor[NReceptor<br/>Рецепторы]
-    Source[NControlObjectSource<br/>Источник управления]
-    PAC[NPac<br/>Проприоцептивная обратная связь]
-    Separator[NIntervalSeparator<br/>Разделитель интервалов]
+    MotionElem["NMotionElement<br/>Элементы движения"]
+    Receptor["NReceptor<br/>Рецепторы"]
+    Source["NControlObjectSource<br/>Источник управления"]
+    PAC["NPac<br/>Проприоцептивная обратная связь"]
+    Separator["NIntervalSeparator<br/>Разделитель интервалов"]
 
     Engine --> MotionElem
     Engine --> Receptor
@@ -275,8 +275,8 @@ graph TB
     Engine --> PAC
     Engine --> Separator
 
-    InputInterface[Входные интерфейсы<br/>Данные от источников управления]
-    OutputInterface[Выходные интерфейсы<br/>Статистика и состояние]
+    InputInterface["Входные интерфейсы<br/>Данные от источников управления"]
+    OutputInterface["Выходные интерфейсы<br/>Статистика и состояние"]
 
     Source --> InputInterface
     Engine --> OutputInterface

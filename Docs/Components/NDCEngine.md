@@ -119,20 +119,20 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadVoltage{InputVoltage<br/>подключен?}
+    Start([Начало ACalculate]) --> ReadVoltage["InputVoltage<br/>подключен?"]
     ReadVoltage -->|Да| GetVoltage[Получить InputVoltage]
     ReadVoltage -->|Нет| SetVoltageZero[input[0] = 0]
     GetVoltage --> ReadMomentum
-    SetVoltageZero --> ReadMomentum{InputMomentum<br/>подключен?}
+    SetVoltageZero --> ReadMomentum["InputMomentum<br/>подключен?"]
     ReadMomentum -->|Да| GetMomentum[Получить InputMomentum + OutMoment]
     ReadMomentum -->|Нет| SetMomentumOut[input[1] = OutMoment]
-    GetMomentum --> CalcCurrent[Вычисление тока:<br/>Current = f(Voltage, EMF, Resistance, Inductance)]
+    GetMomentum --> CalcCurrent["Вычисление тока:<br/>Current = f(Voltage, EMF, Resistance, Inductance)"]
     SetMomentumOut --> CalcCurrent
-    CalcCurrent --> CalcEMF[Вычисление ЭДС:<br/>EMF = f(Current, Momentum, Tm)]
-    CalcEMF --> CalcMoment[Вычисление момента:<br/>Moment = Current * EMFactor / Resistance]
-    CalcMoment --> CalcSpeed[Вычисление угловой скорости:<br/>OutputAngleSpeed = EMF / EMFactor]
-    CalcSpeed --> CalcAngle[Вычисление угла:<br/>Angle += OutputAngleSpeed / ReductionRate / TimeStep]
-    CalcAngle --> UpdateOutputs[Обновление выходов:<br/>OutputMomentum, OutputAngle, OutputAngleSpeed]
+    CalcCurrent --> CalcEMF["Вычисление ЭДС:<br/>EMF = f(Current, Momentum, Tm)"]
+    CalcEMF --> CalcMoment["Вычисление момента:<br/>Moment = Current * EMFactor / Resistance"]
+    CalcMoment --> CalcSpeed["Вычисление угловой скорости:<br/>OutputAngleSpeed = EMF / EMFactor"]
+    CalcSpeed --> CalcAngle["Вычисление угла:<br/>Angle += OutputAngleSpeed / ReductionRate / TimeStep"]
+    CalcAngle --> UpdateOutputs["Обновление выходов:<br/>OutputMomentum, OutputAngle, OutputAngleSpeed"]
     UpdateOutputs --> End([Конец])
 ```
 
@@ -151,15 +151,15 @@ flowchart TD
 ```mermaid
 graph TB
     Engine[[NDCEngine]]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Engine -->|использует| BasicLib
 
-    InputVoltage[InputVoltage<br/>Входное напряжение]
-    InputMomentum[InputMomentum<br/>Входной момент нагрузки]
-    OutputMomentum[OutputMomentum<br/>Выходной момент]
-    OutputAngle[OutputAngle<br/>Выходной угол]
-    OutputAngleSpeed[OutputAngleSpeed<br/>Выходная угловая скорость]
+    InputVoltage["InputVoltage<br/>Входное напряжение"]
+    InputMomentum["InputMomentum<br/>Входной момент нагрузки"]
+    OutputMomentum["OutputMomentum<br/>Выходной момент"]
+    OutputAngle["OutputAngle<br/>Выходной угол"]
+    OutputAngleSpeed["OutputAngleSpeed<br/>Выходная угловая скорость"]
 
     Engine --> InputVoltage
     Engine --> InputMomentum

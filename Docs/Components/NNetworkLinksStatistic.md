@@ -89,7 +89,7 @@ stateDiagram-v2
     Initialized --> Built: ABuild()
     Built --> Ready: Готов к работе
     Ready --> Calculating: ACalculate()
-    Calculating --> CheckingInterval{Интервал<br/>истёк?}
+    Calculating --> CheckingInterval["Интервал<br/>истёк?"]
     CheckingInterval -->|Нет| Ready: Продолжить
     CheckingInterval -->|Да| CollectingLinks: Сбор связей
     CollectingLinks --> ProcessingData: Обработка данных
@@ -118,21 +118,21 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckInterval{Environment->GetTime() -<br/>StatsStartTime >=<br/>StatsInterval?}
+    Start([Начало ACalculate]) --> CheckInterval["Environment->GetTime() -<br/>StatsStartTime >=<br/>StatsInterval?"]
     CheckInterval -->|Нет| End([Конец])
     CheckInterval -->|Да| LoopStart[Для каждого Input в Inputs]
     LoopStart --> GetNetwork[network = dynamic_cast UNet из Input]
-    GetNetwork --> CheckNetwork{network<br/>существует?}
-    CheckNetwork -->|Нет| NextInput{Есть ещё<br/>Inputs?}
+    GetNetwork --> CheckNetwork["network<br/>существует?"]
+    CheckNetwork -->|Нет| NextInput["Есть ещё<br/>Inputs?"]
     CheckNetwork -->|Да| GetLinks[network->GetLinks(linkslist)]
     GetLinks --> ProcessLinks[Обработка списка связей]
-    ProcessLinks --> ExtractData[Извлечение данных:<br/>Id, Name, Weight]
-    ExtractData --> SaveToFile[Сохранение в StatsFile:<br/>Id, SourceId, SourceName, Weight]
+    ProcessLinks --> ExtractData["Извлечение данных:<br/>Id, Name, Weight"]
+    ExtractData --> SaveToFile["Сохранение в StatsFile:<br/>Id, SourceId, SourceName, Weight"]
     SaveToFile --> NextInput
     NextInput -->|Да| LoopStart
-    NextInput -->|Нет| SaveFile[StatsFile.SaveToFile<br/>GetName_StatsNumber.ini]
+    NextInput -->|Нет| SaveFile["StatsFile.SaveToFile<br/>GetName_StatsNumber.ini"]
     SaveFile --> ClearStats[ClearStats()]
-    ClearStats --> UpdateTime[StatsStartTime =<br/>Environment->GetTime()]
+    ClearStats --> UpdateTime["StatsStartTime =<br/>Environment->GetTime()"]
     UpdateTime --> End
 ```
 
@@ -165,8 +165,8 @@ graph TB
     Statistic -->|использует| UIniFile
     Statistic -->|использует| ULongTime
 
-    Networks[Inputs: UNet networks<br/>для анализа]
-    File[StatsFile<br/>Файл статистики]
+    Networks["Inputs: UNet networks<br/>для анализа"]
+    File["StatsFile<br/>Файл статистики"]
 
     Statistic --> Networks
     Statistic --> File
@@ -382,7 +382,7 @@ stateDiagram-v2
     Initialized --> Built: ABuild()
     Built --> Ready: Ready
     Ready --> Calculating: ACalculate()
-    Calculating --> CheckingInterval{Interval<br/>elapsed?}
+    Calculating --> CheckingInterval["Interval<br/>elapsed?"]
     CheckingInterval -->|Yes| CollectingLinks[Collect links]
     CollectingLinks --> SavingFile[Save to file]
     SavingFile --> Ready: Update time
@@ -393,7 +393,7 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Start ACalculate]) --> CheckInterval{Time interval<br/>elapsed?}
+    Start([Start ACalculate]) --> CheckInterval["Time interval<br/>elapsed?"]
     CheckInterval -->|No| End([End])
     CheckInterval -->|Yes| GetLinks[Get links from networks]
     GetLinks --> ProcessLinks[Process links data]

@@ -96,14 +96,14 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckInputs{Все входы<br/>подключены?}
+    Start([Начало ACalculate]) --> CheckInputs["Все входы<br/>подключены?"]
     CheckInputs -->|Нет| End([Конец])
     CheckInputs -->|Да| ReadInputs[Чтение входных сигналов:<br/>input[0]=Input1, input[1]=Input2, input[2]=Input3]
-    ReadInputs --> CalcAlpha[Вычисление alpha:<br/>Фильтр 2-го порядка для оси X]
-    CalcAlpha --> CalcBetta[Вычисление betta:<br/>Фильтр 2-го порядка для оси Y]
-    CalcBetta --> CalcGamma[Вычисление gamma:<br/>Фильтр 2-го порядка для оси Z]
+    ReadInputs --> CalcAlpha["Вычисление alpha:<br/>Фильтр 2-го порядка для оси X"]
+    CalcAlpha --> CalcBetta["Вычисление betta:<br/>Фильтр 2-го порядка для оси Y"]
+    CalcBetta --> CalcGamma["Вычисление gamma:<br/>Фильтр 2-го порядка для оси Z"]
     CalcGamma --> UpdatePrev[Обновление предыдущих значений]
-    UpdatePrev --> UpdateOutputs[Обновление выходов:<br/>Output1=alpha, Output2=betta, Output3=gamma]
+    UpdatePrev --> UpdateOutputs["Обновление выходов:<br/>Output1=alpha, Output2=betta, Output3=gamma"]
     UpdateOutputs --> End
 ```
 
@@ -112,16 +112,16 @@ flowchart TD
 ```mermaid
 graph TB
     Gyro[[NAstaticGyro]]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Gyro -->|использует| BasicLib
 
-    Input1[Input1<br/>Угловая скорость по оси X]
-    Input2[Input2<br/>Угловая скорость по оси Y]
-    Input3[Input3<br/>Угловая скорость по оси Z]
-    Output1[Output1<br/>Угол alpha]
-    Output2[Output2<br/>Угол betta]
-    Output3[Output3<br/>Угол gamma]
+    Input1["Input1<br/>Угловая скорость по оси X"]
+    Input2["Input2<br/>Угловая скорость по оси Y"]
+    Input3["Input3<br/>Угловая скорость по оси Z"]
+    Output1["Output1<br/>Угол alpha"]
+    Output2["Output2<br/>Угол betta"]
+    Output3["Output3<br/>Угол gamma"]
 
     Gyro --> Input1
     Gyro --> Input2

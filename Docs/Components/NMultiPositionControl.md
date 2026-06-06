@@ -118,15 +118,15 @@ flowchart TD
 ```mermaid
 graph TB
     MultiPC[[NMultiPositionControl]]
-    PulseLib[Nmsdk-PulseLib<br/>NNet, нейроны]
-    MotionLib[Nmsdk-MotionControlLib<br/>NPositionControlElement]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, нейроны"]
+    MotionLib["Nmsdk-MotionControlLib<br/>NPositionControlElement"]
 
     MultiPC -->|использует| PulseLib
     MultiPC -->|содержит| MotionLib
 
-    PositionControls[PositionControlElement<br/>Вектор элементов контроля]
-    InputNeurons[InputNeuronsByContours<br/>Входные нейроны по контурам]
-    ControlNeurons[ControlNeuronsByContours<br/>Управляющие нейроны по контурам]
+    PositionControls["PositionControlElement<br/>Вектор элементов контроля"]
+    InputNeurons["InputNeuronsByContours<br/>Входные нейроны по контурам"]
+    ControlNeurons["ControlNeuronsByContours<br/>Управляющие нейроны по контурам"]
 
     MultiPC --> PositionControls
     MultiPC --> InputNeurons

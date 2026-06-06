@@ -104,9 +104,9 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала:<br/>cs = Input(0,0)]
-    ReadInput --> CalcCurrent[Вычисление тока:<br/>Current = f(cs, EMFactor, Inductance, Resistance, TimeStep)]
-    CalcCurrent --> UpdateOutput[Обновление выхода:<br/>Output(0,0) = Current]
+    Start([Начало ACalculate]) --> ReadInput["Чтение входного сигнала:<br/>cs = Input(0,0)"]
+    ReadInput --> CalcCurrent["Вычисление тока:<br/>Current = f(cs, EMFactor, Inductance, Resistance, TimeStep)"]
+    CalcCurrent --> UpdateOutput["Обновление выхода:<br/>Output(0,0) = Current"]
     UpdateOutput --> End([Конец])
 ```
 
@@ -120,12 +120,12 @@ flowchart TD
 ```mermaid
 graph TB
     Manipulator[[NManipulator]]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Manipulator -->|использует| BasicLib
 
-    Input[Input<br/>Входной управляющий сигнал]
-    Output[Output<br/>Выходной ток/сигнал]
+    Input["Input<br/>Входной управляющий сигнал"]
+    Output["Output<br/>Выходной ток/сигнал"]
 
     Manipulator --> Input
     Manipulator --> Output

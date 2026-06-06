@@ -146,16 +146,16 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> GetNeuronOutput[Получение выхода нейрона:<br/>Output = CompNeuron->Output]
+    Start([Начало ACalculate]) --> GetNeuronOutput["Получение выхода нейрона:<br/>Output = CompNeuron->Output"]
     GetNeuronOutput --> End([Конец])
 
     subgraph NeuronProcess["Процесс в CompNeuron"]
-        KFGen[KFClsSpikes генераторы<br/>генерируют эталонные<br/>последовательности]
-        FrGen[FrClsSpikes генераторы<br/>генерируют тестовые<br/>последовательности]
-        ExcSyn[Возбуждающие синапсы<br/>сомы получают KF сигналы]
-        InhSyn[Тормозные синапсы<br/>сомы получают Fr сигналы]
-        LTZone[LTZone сравнивает<br/>потенциалы]
-        NeuronOutput[Выход нейрона:<br/>результат сравнения]
+        KFGen["KFClsSpikes генераторы<br/>генерируют эталонные<br/>последовательности"]
+        FrGen["FrClsSpikes генераторы<br/>генерируют тестовые<br/>последовательности"]
+        ExcSyn["Возбуждающие синапсы<br/>сомы получают KF сигналы"]
+        InhSyn["Тормозные синапсы<br/>сомы получают Fr сигналы"]
+        LTZone["LTZone сравнивает<br/>потенциалы"]
+        NeuronOutput["Выход нейрона:<br/>результат сравнения"]
 
         KFGen --> ExcSyn
         FrGen --> InhSyn
@@ -196,9 +196,9 @@ graph TB
     NSeqComp -->|создаёт| NPulseNeuron
     NPulseNeuron -->|использует| NLTZone
 
-    KFGen[KFClsSpikes<br/>Эталонные генераторы]
-    FrGen[FrClsSpikes<br/>Тестовые генераторы]
-    CompNeuron[CompNeuron<br/>Нейрон сравнения]
+    KFGen["KFClsSpikes<br/>Эталонные генераторы"]
+    FrGen["FrClsSpikes<br/>Тестовые генераторы"]
+    CompNeuron["CompNeuron<br/>Нейрон сравнения"]
 
     NSeqComp --> KFGen
     NSeqComp --> FrGen

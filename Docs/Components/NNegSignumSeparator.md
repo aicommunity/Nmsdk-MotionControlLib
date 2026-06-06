@@ -97,18 +97,18 @@ stateDiagram-v2
 ```mermaid
 flowchart TD
     Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала Input]
-    ReadInput --> CheckConnection{Input<br/>подключен?}
+    ReadInput --> CheckConnection["Input<br/>подключен?"]
     CheckConnection -->|Нет| ResizeZero[Resize Output 0x0]
     CheckConnection -->|Да| GetSize[Получить размер входных данных]
     GetSize --> ResizeOutput[Resize Output 1xN]
     ResizeOutput --> LoopStart[Для каждого элемента i]
     LoopStart --> ReadElement[input = Input[i]]
-    ReadElement --> CheckSign{input < 0<br/>AND<br/>Sign[i] > 0?}
+    ReadElement --> CheckSign["input < 0<br/>AND<br/>Sign[i] > 0?"]
     CheckSign -->|Да| SetZero[Output[i] = 0]
-    CheckSign -->|Нет| CheckSign2{input > 0<br/>AND<br/>Sign[i] < 0?}
+    CheckSign -->|Нет| CheckSign2["input > 0<br/>AND<br/>Sign[i] < 0?"]
     CheckSign2 -->|Да| SetZero
     CheckSign2 -->|Нет| Calculate[Output[i] = input * Sign[i] * Gain[i]]
-    SetZero --> NextElement{Есть ещё<br/>элементы?}
+    SetZero --> NextElement["Есть ещё<br/>элементы?"]
     Calculate --> NextElement
     NextElement -->|Да| LoopStart
     NextElement -->|Нет| End([Конец])
@@ -138,8 +138,8 @@ graph TB
 
     NNegSep -->|наследуется от| UNet
 
-    Input[Input<br/>Входной сигнал]
-    Output[Output<br/>Отрицательная часть]
+    Input["Input<br/>Входной сигнал"]
+    Output["Output<br/>Отрицательная часть"]
 
     NNegSep --> Input
     NNegSep --> Output

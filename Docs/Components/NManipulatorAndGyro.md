@@ -83,9 +83,9 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> ReadInputs[Чтение входов:<br/>external_moment, engine_moment, angle]
-    ReadInputs --> CalcGravity[Вычисление гравитационного момента:<br/>Mass * gravity_constant * Length * sin(angle)]
-    CalcGravity --> CalcOutput[Вычисление результирующего момента:<br/>Output = -external_moment + engine_moment - gravity_moment]
+    Start([Начало ACalculate]) --> ReadInputs["Чтение входов:<br/>external_moment, engine_moment, angle"]
+    ReadInputs --> CalcGravity["Вычисление гравитационного момента:<br/>Mass * gravity_constant * Length * sin(angle)"]
+    CalcGravity --> CalcOutput["Вычисление результирующего момента:<br/>Output = -external_moment + engine_moment - gravity_moment"]
     CalcOutput --> End([Конец])
 ```
 
@@ -94,14 +94,14 @@ flowchart TD
 ```mermaid
 graph TB
     Manipulator[[NManipulatorAndGyro]]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Manipulator -->|использует| BasicLib
 
-    InputMomentumExt[InputMomentumExt<br/>Внешний момент]
-    InputMomentum[InputMomentum<br/>Момент двигателя]
-    InputAngle[InputAngle<br/>Угол манипулятора]
-    Output[Output<br/>Результирующий момент]
+    InputMomentumExt["InputMomentumExt<br/>Внешний момент"]
+    InputMomentum["InputMomentum<br/>Момент двигателя"]
+    InputAngle["InputAngle<br/>Угол манипулятора"]
+    Output["Output<br/>Результирующий момент"]
 
     Manipulator --> InputMomentumExt
     Manipulator --> InputMomentum

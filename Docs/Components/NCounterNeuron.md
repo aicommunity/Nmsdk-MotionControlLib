@@ -102,16 +102,16 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> TransferInput[Передача Input на синапсы<br/>первых CurCount сом]
-    TransferInput --> CheckPulse{Input >= 0.01<br/>и TheSamePulse == false?}
+    Start([Начало ACalculate]) --> TransferInput["Передача Input на синапсы<br/>первых CurCount сом"]
+    TransferInput --> CheckPulse["Input >= 0.01<br/>и TheSamePulse == false?"]
     CheckPulse -->|Да| SetPulseStart[TheSamePulse = true]
     CheckPulse -->|Нет| CheckPulseEnd
-    SetPulseStart --> CheckPulseEnd{Input <= 0.01<br/>и TheSamePulse == true?}
+    SetPulseStart --> CheckPulseEnd["Input <= 0.01<br/>и TheSamePulse == true?"]
     CheckPulseEnd -->|Да| SetPulseEnd[TheSamePulse = false]
     CheckPulseEnd -->|Нет| CallBase
-    SetPulseEnd --> CheckCount{CurCount <<br/>MaxCount?}
+    SetPulseEnd --> CheckCount["CurCount <<br/>MaxCount?"]
     CheckCount -->|Да| IncrementCount[CurCount++]
-    IncrementCount --> CreateLinks[CreateSomaLinks<br/>для новой сомы]
+    IncrementCount --> CreateLinks["CreateSomaLinks<br/>для новой сомы"]
     CreateLinks --> CallBase[NPulseNeuronCommon::ACalculate]
     CheckCount -->|Нет| CallBase
     CallBase --> End([Конец])
@@ -122,16 +122,16 @@ flowchart TD
 ```mermaid
 graph TB
     Counter[[NCounterNeuron]]
-    PulseLib[Nmsdk-PulseLib<br/>NPulseNeuronCommon, NPulseMembrane, NLTZone]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NPulseNeuronCommon, NPulseMembrane, NLTZone"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Counter -->|наследуется от| PulseLib
     Counter -->|использует| BasicLib
 
-    LTZone[LTZone<br/>Низкопороговая зона]
-    Somas[Somas<br/>Участки мембраны]
-    PosGenerator[PosGenerator<br/>Возбуждающий генератор]
-    NegGenerator[NegGenerator<br/>Тормозной генератор]
+    LTZone["LTZone<br/>Низкопороговая зона"]
+    Somas["Somas<br/>Участки мембраны"]
+    PosGenerator["PosGenerator<br/>Возбуждающий генератор"]
+    NegGenerator["NegGenerator<br/>Тормозной генератор"]
 
     Counter --> LTZone
     Counter --> Somas

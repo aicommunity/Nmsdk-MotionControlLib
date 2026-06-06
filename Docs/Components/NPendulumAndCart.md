@@ -107,13 +107,13 @@ stateDiagram-v2
 ```mermaid
 flowchart TD
     Start([Начало ACalculate]) --> ReadInputs[Чтение Input1 и Input2]
-    ReadInputs --> CheckMode{Mode == 1<br/>PID?}
+    ReadInputs --> CheckMode["Mode == 1<br/>PID?"]
     CheckMode -->|Да| CalcPID[Вычисление PID:<br/>input[0] = (theta0*Kp + y*Kd + Ki*theta0/TimeStep)*AngleWeight +<br/>(movement*MovementKp + x*MovementKd + MovementKi*movement/TimeStep)*MovementWeight]
     CheckMode -->|Нет| AddExternal[Добавление ExtrenalMoment]
     CalcPID --> AddExternal
-    AddExternal --> CalcCoeffs[Вычисление коэффициентов:<br/>k1 = 3*g*(CartMass+RodMass)/((4*CartMass+RodMass)*RodLength)<br/>k2 = 3/(4*CartMass+RodMass)/RodLength]
-    CalcCoeffs --> CalcDynamics[Вычисление динамики:<br/>y = y + (a*theta0 + b)/TimeStep<br/>Angle = theta0 + (y-OutXMovement)/TimeStep<br/>Speed = y<br/>Acceleration = (a*theta0 + b)]
-    CalcDynamics --> CalcMovement[Вычисление движения тележки:<br/>x = x + ...<br/>Movement = x<br/>MovementSpeed = ...]
+    AddExternal --> CalcCoeffs["Вычисление коэффициентов:<br/>k1 = 3*g*(CartMass+RodMass)/((4*CartMass+RodMass)*RodLength)<br/>k2 = 3/(4*CartMass+RodMass)/RodLength"]
+    CalcCoeffs --> CalcDynamics["Вычисление динамики:<br/>y = y + (a*theta0 + b)/TimeStep<br/>Angle = theta0 + (y-OutXMovement)/TimeStep<br/>Speed = y<br/>Acceleration = (a*theta0 + b)"]
+    CalcDynamics --> CalcMovement["Вычисление движения тележки:<br/>x = x + ...<br/>Movement = x<br/>MovementSpeed = ..."]
     CalcMovement --> UpdateOutputs[Обновление выходов]
     UpdateOutputs --> End([Конец])
 ```
@@ -123,17 +123,17 @@ flowchart TD
 ```mermaid
 graph TB
     Pendulum[[NPendulumAndCart]]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Pendulum -->|использует| BasicLib
 
-    Input1[Input1<br/>Входной сигнал 1]
-    Input2[Input2<br/>Входной сигнал 2]
-    Acceleration[Acceleration<br/>Ускорение маятника]
-    Angle[Angle<br/>Угол маятника]
-    Speed[Speed<br/>Угловая скорость]
-    Movement[Movement<br/>Перемещение тележки]
-    MovementSpeed[MovementSpeed<br/>Скорость тележки]
+    Input1["Input1<br/>Входной сигнал 1"]
+    Input2["Input2<br/>Входной сигнал 2"]
+    Acceleration["Acceleration<br/>Ускорение маятника"]
+    Angle["Angle<br/>Угол маятника"]
+    Speed["Speed<br/>Угловая скорость"]
+    Movement["Movement<br/>Перемещение тележки"]
+    MovementSpeed["MovementSpeed<br/>Скорость тележки"]
 
     Pendulum --> Input1
     Pendulum --> Input2

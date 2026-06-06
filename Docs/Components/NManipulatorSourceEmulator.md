@@ -118,19 +118,19 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckInputAngle{InputAngle<br/>подключен?}
+    Start([Начало ACalculate]) --> CheckInputAngle["InputAngle<br/>подключен?"]
     CheckInputAngle -->|Да| ReadInputAngle[OutputAngle = InputAngle]
     CheckInputAngle -->|Нет| ResizeAngleZero[OutputAngle.Resize(0,0)]
     ReadInputAngle --> CheckInputSpeed
-    ResizeAngleZero --> CheckInputSpeed{InputSpeed<br/>подключен?}
+    ResizeAngleZero --> CheckInputSpeed["InputSpeed<br/>подключен?"]
     CheckInputSpeed -->|Да| ReadInputSpeed[OutputSpeed = InputSpeed]
     CheckInputSpeed -->|Нет| ResizeSpeedZero[OutputSpeed.Resize(0,0)]
     ReadInputSpeed --> CheckInputForce
-    ResizeSpeedZero --> CheckInputForce{InputForce<br/>подключен?}
+    ResizeSpeedZero --> CheckInputForce["InputForce<br/>подключен?"]
     CheckInputForce -->|Да| ReadInputForce[OutputForce = InputForce]
     CheckInputForce -->|Нет| ResizeForceZero[OutputForce.Resize(0,0)]
     ReadInputForce --> CheckInputMovement
-    ResizeForceZero --> CheckInputMovement{InputMovement<br/>подключен?}
+    ResizeForceZero --> CheckInputMovement["InputMovement<br/>подключен?"]
     CheckInputMovement -->|Да| ReadInputMovement[OutputMovement = InputMovement]
     CheckInputMovement -->|Нет| ResizeMovementZero[OutputMovement.Resize(0,0)]
     ReadInputMovement --> End([Конец])
@@ -164,15 +164,15 @@ graph TB
     BaseSource -->|наследуется от| NSource
     NSource -->|наследуется от| UNet
 
-    InputAngle[InputAngle<br/>Входной угол]
-    InputSpeed[InputSpeed<br/>Входная скорость]
-    InputForce[InputForce<br/>Входная сила]
-    InputMovement[InputMovement<br/>Входное перемещение]
+    InputAngle["InputAngle<br/>Входной угол"]
+    InputSpeed["InputSpeed<br/>Входная скорость"]
+    InputForce["InputForce<br/>Входная сила"]
+    InputMovement["InputMovement<br/>Входное перемещение"]
 
-    OutputAngle[OutputAngle<br/>Выходной угол]
-    OutputSpeed[OutputSpeed<br/>Выходная скорость]
-    OutputForce[OutputForce<br/>Выходная сила]
-    OutputMovement[OutputMovement<br/>Выходное перемещение]
+    OutputAngle["OutputAngle<br/>Выходной угол"]
+    OutputSpeed["OutputSpeed<br/>Выходная скорость"]
+    OutputForce["OutputForce<br/>Выходная сила"]
+    OutputMovement["OutputMovement<br/>Выходное перемещение"]
 
     Emulator --> InputAngle
     Emulator --> InputSpeed
@@ -387,10 +387,10 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Start ACalculate]) --> CheckInputAngle{InputAngle<br/>connected?}
+    Start([Start ACalculate]) --> CheckInputAngle["InputAngle<br/>connected?"]
     CheckInputAngle -->|Yes| ReadInputAngle[OutputAngle = InputAngle]
     CheckInputAngle -->|No| ResizeAngleZero[OutputAngle.Resize(0,0)]
-    ReadInputAngle --> CheckInputSpeed{InputSpeed<br/>connected?}
+    ReadInputAngle --> CheckInputSpeed["InputSpeed<br/>connected?"]
     ResizeAngleZero --> CheckInputSpeed
     CheckInputSpeed -->|Yes| ReadInputSpeed[OutputSpeed = InputSpeed]
     CheckInputSpeed -->|No| ResizeSpeedZero[OutputSpeed.Resize(0,0)]

@@ -96,11 +96,11 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> CheckEngine{MotionControlElement<br/>существует?}
+    Start([Начало ACalculate]) --> CheckEngine["MotionControlElement<br/>существует?"]
     CheckEngine -->|Нет| End([Конец])
-    CheckEngine -->|Да| CheckSize{Размеры<br/>совпадают?}
+    CheckEngine -->|Да| CheckSize["Размеры<br/>совпадают?"]
     CheckSize -->|Нет| Reset[Reset и выход]
-    CheckSize -->|Да| CheckNeurons{Нейроны<br/>созданы?}
+    CheckSize -->|Да| CheckNeurons["Нейроны<br/>созданы?"]
     CheckNeurons -->|Нет| CreateNeurons[CreateNeurons]
     CreateNeurons --> InitArrays[Инициализация массивов]
     CheckNeurons -->|Да| InitArrays
@@ -125,16 +125,16 @@ flowchart TD
 ```mermaid
 graph TB
     PCN[[NPCNElement]]
-    PulseLib[Nmsdk-PulseLib<br/>NNet, нейроны]
-    MotionLib[Nmsdk-MotionControlLib<br/>NEngineMotionControl, NMotionElement]
+    PulseLib["Nmsdk-PulseLib<br/>NNet, нейроны"]
+    MotionLib["Nmsdk-MotionControlLib<br/>NEngineMotionControl, NMotionElement"]
 
     PCN -->|использует| PulseLib
     PCN -->|связан с| MotionLib
 
-    Engine[NEngineMotionControl<br/>Движок управления]
-    MotionElem[NMotionElement<br/>Элементы движения]
-    AfferentNeurons[AfferentNeurons<br/>Афферентные нейроны]
-    ControlNeurons[ControlNeurons<br/>Управляющие нейроны]
+    Engine["NEngineMotionControl<br/>Движок управления"]
+    MotionElem["NMotionElement<br/>Элементы движения"]
+    AfferentNeurons["AfferentNeurons<br/>Афферентные нейроны"]
+    ControlNeurons["ControlNeurons<br/>Управляющие нейроны"]
 
     PCN --> Engine
     PCN --> MotionElem

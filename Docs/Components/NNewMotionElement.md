@@ -137,15 +137,15 @@ flowchart TD
     Start([Начало ABuild]) --> Backup[BackupExternalLinks]
     Backup --> CreateStruct[CreateStructure]
     CreateStruct --> DelAll[DelAllComponents]
-    DelAll --> CheckStorage{Storage<br/>существует?}
+    DelAll --> CheckStorage["Storage<br/>существует?"]
     CheckStorage -->|Нет| End([Конец])
-    CheckStorage -->|Да| CheckNames{Имена классов<br/>заданы?}
+    CheckStorage -->|Да| CheckNames["Имена классов<br/>заданы?"]
     CheckNames -->|Нет| End
-    CheckNames -->|Да| CreateMN[CreateMotoneurons:<br/>Создание MotoneuronL и MotoneuronR]
-    CreateMN --> CreateAff[CreateAfferents:<br/>Создание афферентов для каждого контура]
-    CreateAff --> CreateIN[CreateInterneurons:<br/>Создание интернейронов если включены]
+    CheckNames -->|Да| CreateMN["CreateMotoneurons:<br/>Создание MotoneuronL и MotoneuronR"]
+    CreateMN --> CreateAff["CreateAfferents:<br/>Создание афферентов для каждого контура"]
+    CreateAff --> CreateIN["CreateInterneurons:<br/>Создание интернейронов если включены"]
     CreateIN --> CreateLinks[CreateInternalLinks]
-    CreateLinks --> LinkMN[LinkMotoneurons:<br/>Связывание моторных нейронов]
+    CreateLinks --> LinkMN["LinkMotoneurons:<br/>Связывание моторных нейронов"]
     LinkMN --> CheckRenshow{RenshowMode?}
     CheckRenshow -->|Да| LinkRenshow[LinkRenshow]
     CheckRenshow -->|Нет| CheckPM
@@ -161,18 +161,18 @@ flowchart TD
 ```mermaid
 graph TB
     Element[[NMotionElement]]
-    PulseLib[Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron, NPulseGenerator]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NAfferentNeuron, NPulseNeuron, NPulseGenerator"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Element -->|использует| PulseLib
     Element -->|использует| BasicLib
 
-    MotoneuronL[MotoneuronL<br/>Левый моторный нейрон]
-    MotoneuronR[MotoneuronR<br/>Правый моторный нейрон]
-    Afferents[Afferents<br/>Афферентные нейроны]
-    Interneurons[Interneurons<br/>Интернейроны]
-    Renshow[Renshow Cells<br/>Клетки Реншоу]
-    Pacemaker[Pacemaker<br/>Пейсмейкеры]
+    MotoneuronL["MotoneuronL<br/>Левый моторный нейрон"]
+    MotoneuronR["MotoneuronR<br/>Правый моторный нейрон"]
+    Afferents["Afferents<br/>Афферентные нейроны"]
+    Interneurons["Interneurons<br/>Интернейроны"]
+    Renshow["Renshow Cells<br/>Клетки Реншоу"]
+    Pacemaker["Pacemaker<br/>Пейсмейкеры"]
 
     Element --> MotoneuronL
     Element --> MotoneuronR

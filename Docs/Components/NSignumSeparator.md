@@ -75,8 +75,8 @@ stateDiagram-v2
 ```mermaid
 flowchart TD
     Start([Начало ACalculate]) --> ReadInput[Чтение входного сигнала]
-    ReadInput --> ApplySign[Применение знака:<br/>Output = Input * Sign]
-    ApplySign --> ApplyGain[Применение усиления:<br/>Output = Output * Gain]
+    ReadInput --> ApplySign["Применение знака:<br/>Output = Input * Sign"]
+    ApplySign --> ApplyGain["Применение усиления:<br/>Output = Output * Gain"]
     ApplyGain --> End([Конец])
 ```
 
@@ -85,12 +85,12 @@ flowchart TD
 ```mermaid
 graph TB
     Separator[[NSignumSeparator]]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Separator -->|использует| BasicLib
 
-    Input[Input<br/>Входной сигнал]
-    Output[Output<br/>Разделенный сигнал]
+    Input["Input<br/>Входной сигнал"]
+    Output["Output<br/>Разделенный сигнал"]
 
     Separator --> Input
     Separator --> Output

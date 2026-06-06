@@ -136,17 +136,17 @@ flowchart TD
 ```mermaid
 graph TB
     Signals[[NActuatorSignals]]
-    PulseLib[Nmsdk-PulseLib<br/>NPulseGenerator, NPulseDelay, NPulseNeuron]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NPulseGenerator, NPulseDelay, NPulseNeuron"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Signals -->|использует| PulseLib
     Signals -->|использует| BasicLib
 
-    LeftEngine[LeftEngine<br/>Генератор левого двигателя]
-    RightEngine[RightEngine<br/>Генератор правого двигателя]
-    Sinchro1[Sinchro1<br/>Синхронизация 1]
-    Sinchro2[Sinchro2<br/>Синхронизация 2]
-    DecisionNeurons[DecisionNeurons<br/>Нейроны принятия решений]
+    LeftEngine["LeftEngine<br/>Генератор левого двигателя"]
+    RightEngine["RightEngine<br/>Генератор правого двигателя"]
+    Sinchro1["Sinchro1<br/>Синхронизация 1"]
+    Sinchro2["Sinchro2<br/>Синхронизация 2"]
+    DecisionNeurons["DecisionNeurons<br/>Нейроны принятия решений"]
 
     Signals --> LeftEngine
     Signals --> RightEngine

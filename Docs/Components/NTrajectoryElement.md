@@ -104,10 +104,10 @@ stateDiagram-v2
 flowchart TD
     Start([Начало ABuild]) --> CreateNeuron1[Создание Neuron1<br/>SomaSize=1, DendSizes1=[5]]
     CreateNeuron1 --> CreateNeuron2[Создание Neuron2<br/>SomaSize=1, DendSizes2=[3]]
-    CreateNeuron2 --> LinkN1toN2[Связь от N1 к N2:<br/>LTZone -> Dendrite1_1, Dendrite1_3]
-    LinkN1toN2 --> LinkN2toN1[Связь от N2 к N1:<br/>LTZone -> Dendrite1_2, Dendrite1_5]
-    LinkN2toN1 --> LinkForwards[Связи с дочерними элементами<br/>через ForwardSyns]
-    LinkForwards --> LinkBackwards[Связи с родительскими элементами<br/>через BackwardSyns]
+    CreateNeuron2 --> LinkN1toN2["Связь от N1 к N2:<br/>LTZone -> Dendrite1_1, Dendrite1_3"]
+    LinkN1toN2 --> LinkN2toN1["Связь от N2 к N1:<br/>LTZone -> Dendrite1_2, Dendrite1_5"]
+    LinkN2toN1 --> LinkForwards["Связи с дочерними элементами<br/>через ForwardSyns"]
+    LinkForwards --> LinkBackwards["Связи с родительскими элементами<br/>через BackwardSyns"]
     LinkBackwards --> End([Конец])
 ```
 
@@ -116,16 +116,16 @@ flowchart TD
 ```mermaid
 graph TB
     Element[[NTrajectoryElement]]
-    PulseLib[Nmsdk-PulseLib<br/>NPulseNeuron, NPulseSynapse]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    PulseLib["Nmsdk-PulseLib<br/>NPulseNeuron, NPulseSynapse"]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Element -->|использует| PulseLib
     Element -->|использует| BasicLib
 
-    Neuron1[Neuron1<br/>Внутренний нейрон 1]
-    Neuron2[Neuron2<br/>Внутренний нейрон 2]
-    Forwards[Forwards<br/>Дочерние элементы]
-    Backwards[Backwards<br/>Родительские элементы]
+    Neuron1["Neuron1<br/>Внутренний нейрон 1"]
+    Neuron2["Neuron2<br/>Внутренний нейрон 2"]
+    Forwards["Forwards<br/>Дочерние элементы"]
+    Backwards["Backwards<br/>Родительские элементы"]
 
     Element --> Neuron1
     Element --> Neuron2

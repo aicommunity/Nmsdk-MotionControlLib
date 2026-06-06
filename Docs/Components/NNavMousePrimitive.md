@@ -111,20 +111,20 @@ stateDiagram-v2
 
 ```mermaid
 flowchart TD
-    Start([Начало ACalculate]) --> UpdateState[UpdateState:<br/>Обновление состояния движения]
+    Start([Начало ACalculate]) --> UpdateState["UpdateState:<br/>Обновление состояния движения"]
     UpdateState --> CheckForward{MotionControlSpikeForward?}
-    CheckForward -->|Да| SetForward[MotionControlState = 1<br/>ForwardSpikeTime = текущее время]
+    CheckForward -->|Да| SetForward["MotionControlState = 1<br/>ForwardSpikeTime = текущее время"]
     CheckForward -->|Нет| CheckBackward
     SetForward --> CheckBackward{MotionControlSpikeBackward?}
-    CheckBackward -->|Да| SetBackward[MotionControlState = -1<br/>BackwardSpikeTime = текущее время]
+    CheckBackward -->|Да| SetBackward["MotionControlState = -1<br/>BackwardSpikeTime = текущее время"]
     CheckBackward -->|Нет| CheckStop
     SetBackward --> CheckStop{MotionControlSpikeStop?}
-    CheckStop -->|Да| SetStop[MotionControlState = 0<br/>StopSpikeTime = текущее время]
+    CheckStop -->|Да| SetStop["MotionControlState = 0<br/>StopSpikeTime = текущее время"]
     CheckStop -->|Нет| UpdatePosition
-    SetStop --> UpdatePosition[Обновление MousePosition<br/>на основе Velocity и MotionControlState]
-    UpdatePosition --> CheckCollision{Столкновение<br/>с препятствием?}
-    CheckCollision -->|Да| GeneratePain[Генерация PainOutput<br/>PainState = 1]
-    CheckCollision -->|Нет| GenerateVibriss[Генерация VibrissOutput<br/>на основе позиции и VibrissSize]
+    SetStop --> UpdatePosition["Обновление MousePosition<br/>на основе Velocity и MotionControlState"]
+    UpdatePosition --> CheckCollision["Столкновение<br/>с препятствием?"]
+    CheckCollision -->|Да| GeneratePain["Генерация PainOutput<br/>PainState = 1"]
+    CheckCollision -->|Нет| GenerateVibriss["Генерация VibrissOutput<br/>на основе позиции и VibrissSize"]
     GeneratePain --> GenerateVibriss
     GenerateVibriss --> UpdateOutput[Обновление Output]
     UpdateOutput --> End([Конец])
@@ -135,15 +135,15 @@ flowchart TD
 ```mermaid
 graph TB
     Mouse[[NNavMousePrimitive]]
-    BasicLib[Rdk-BasicLib<br/>Базовые компоненты]
+    BasicLib["Rdk-BasicLib<br/>Базовые компоненты"]
 
     Mouse -->|использует| BasicLib
 
-    Input[Input<br/>Входной сигнал]
-    MotionControl[MotionControlSpikes<br/>Сигналы управления движением]
-    VibrissOutput[VibrissOutput<br/>Выход вибрисс]
-    PainOutput[PainOutput<br/>Выход болевого сигнала]
-    Output[Output<br/>Выходной сигнал]
+    Input["Input<br/>Входной сигнал"]
+    MotionControl["MotionControlSpikes<br/>Сигналы управления движением"]
+    VibrissOutput["VibrissOutput<br/>Выход вибрисс"]
+    PainOutput["PainOutput<br/>Выход болевого сигнала"]
+    Output["Output<br/>Выходной сигнал"]
 
     Mouse --> Input
     Mouse --> MotionControl
