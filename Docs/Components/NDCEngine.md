@@ -493,6 +493,16 @@ for (int step = 0; step < 1000; step++) {
 
 ---
 
+### Ключевые свойства / Favorites
+
+| Свойство | Роль |
+|----------|------|
+| `EMFactor` / `Resistance` / `Inductance` / `Tm` / `ReductionRate` | Параметры двигателя |
+| `InputVoltage` | Управление |
+| `OutputAngle` / `OutputAngleSpeed` | Выходная кинематика |
+
+ClDesc: `Bin/ClDesc/MotionControlLibrary/ru-RU/NDCEngine.xml`.
+
 ## EN
 
 NDCEngine — DC motor

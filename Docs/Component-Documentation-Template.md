@@ -29,6 +29,8 @@ classDiagram
 - `[BaseClass]` — [описание базового класса]
 - `[ComponentName]` — [описание компонента]
 
+**Ключевые свойства / Favorites:** таблица primary для ClDesc Favorites (`{CompName}:Prop`); secondary (`Activity`, `Coord`, `Name`, `TimeStep`, debug…) не включать; опционально curated nested I/O aliases. См. `Docs/ClDesc-Detailed-Methodology.md`.
+
 **Связи с другими компонентами:**
 - [Описание связей: композиция, агрегация, зависимости]
 

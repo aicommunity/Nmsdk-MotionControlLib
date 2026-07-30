@@ -292,6 +292,17 @@ multiPC->Build();
 
 ---
 
+### Ключевые свойства / Favorites
+
+| Свойство | Роль |
+|----------|------|
+| `NumOfPositions` / `PCsNum` | Структура |
+| `TargetPosition` / `CurrentPosition` / `Delta` | Позиционирование |
+| `BuildSolo` / `ExternalControl` / `RememberState` | Режимы |
+| `ControlNeuronType` / `InputNeuronType` | Типы нейронов |
+
+ClDesc: `Bin/ClDesc/MotionControlLibrary/ru-RU/NMultiPositionControl.xml`.
+
 ## EN
 
 NMultiPositionControl — multi position control
