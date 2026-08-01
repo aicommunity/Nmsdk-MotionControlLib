@@ -15,6 +15,8 @@ MotionControlComponentControllerWidget::MotionControlComponentControllerWidget(Q
     setAccessibleName("MotionControlComponentControllerWidget");
 
     QVBoxLayout* rootLayout = new QVBoxLayout(this);
+    rootLayout->setContentsMargins(4, 4, 4, 4);
+    rootLayout->setSpacing(4);
     rootLayout->addWidget(m_titleLabel);
     rootLayout->addWidget(m_details);
 

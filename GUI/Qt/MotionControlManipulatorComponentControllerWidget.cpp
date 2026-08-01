@@ -25,8 +25,8 @@ MotionControlManipulatorComponentControllerWidget::MotionControlManipulatorCompo
     : UVisualControllerWidget(parent, app)
 {
     auto* mainLayout = new QVBoxLayout(this);
-    mainLayout->setContentsMargins(8, 8, 8, 8);
-    mainLayout->setSpacing(8);
+    mainLayout->setContentsMargins(4, 4, 4, 4);
+    mainLayout->setSpacing(4);
 
     m_titleLabel = new QLabel("Manipulator control (partial parity)", this);
     mainLayout->addWidget(m_titleLabel);
@@ -114,7 +114,7 @@ MotionControlManipulatorComponentControllerWidget::MotionControlManipulatorCompo
     auto* contoursFrame = new QFrame(this);
     contoursFrame->setFrameShape(QFrame::StyledPanel);
     auto* contoursFrameLayout = new QVBoxLayout(contoursFrame);
-    contoursFrameLayout->setContentsMargins(6, 6, 6, 6);
+    contoursFrameLayout->setContentsMargins(4, 4, 4, 4);
     contoursFrameLayout->addWidget(new QLabel("Active contours", contoursFrame));
     m_contoursContainer = new QWidget(contoursFrame);
     m_contoursLayout = new QVBoxLayout(m_contoursContainer);
