@@ -4,6 +4,7 @@
 
 #include "../../../Rdk/LLM/Core/Context/ILLMProjectContextProvider.h"
 #include "../../../Rdk/LLM/Core/Context/UDocSearchIndex.h"
+#include "../../../Rdk/LLM/Core/Domain/URdkDomainAccess.h"
 #include "../../../Rdk/LLM/Core/Tools/ULLMToolRegistry.h"
 
 namespace fs = std::filesystem;
@@ -35,7 +36,6 @@ void RegisterMotionControlLibLlmTools(RDK::LLM::ULLMToolRegistry& registry,
                                     RDK::LLM::ILLMProjectContextProvider* project_context,
                                     RDK::LLM::URdkDomainAccess& domain)
 {
-    (void)domain;
     registry.registerTool(
         makeReadDef("search_motion_control_docs",
                     "Search Nmsdk-MotionControlLib documentation (manipulators, motion, retina)",
@@ -66,18 +66,16 @@ void RegisterMotionControlLibLlmTools(RDK::LLM::ULLMToolRegistry& registry,
 
     registry.registerTool(
         makeReadDef("list_motion_control_component_classes",
-                    "Lists motion control component classes (use add_component to create)",
+                    "Lists motion control component classes from the live registry",
                     {{"type", "object"}, {"additionalProperties", false}}),
-        [](const nlohmann::json& args) -> RDK::LLM::ToolGatewayResult {
+        [&domain](const nlohmann::json& args) -> RDK::LLM::ToolGatewayResult {
             (void)args;
             RDK::LLM::ToolGatewayResult r;
-            r.result["classes"] = nlohmann::json::array({
-                {{"class_name", "NManipulator"}, {"summary", "Robot manipulator control"}},
-                {{"class_name", "NEngineMotionControl"}, {"summary", "Engine motion control hub"}},
-                {{"class_name", "NNewMotionElement"}, {"summary", "Motion element node"}},
-                {{"class_name", "NEyeRetina"}, {"summary", "Eye retina processing"}},
-                {{"class_name", "NAstaticGyro"}, {"summary", "Astatic gyroscope integration"}},
-            });
+            nlohmann::json out;
+            if(domain.listRegisteredClasses(out, "MotionControlLibrary").ok())
+                r.result = std::move(out);
+            else
+                r.result["classes"] = nlohmann::json::array();
             r.result["docs_hint"] = "Libraries/Nmsdk-MotionControlLib/Docs/README.md";
             r.result["mutation_hint"] = "Use add_component with class_name from this list.";
             r.ok = true;
