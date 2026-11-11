@@ -17,7 +17,7 @@ target_include_directories(${TARGET_CORE_NAME}
     ${CMAKE_SOURCE_DIR}/Libraries/Nmsdk-MotionControlLib/Core
 )
 
-file(GLOB MOTION_SOURCES
+file(GLOB MOTION_SOURCES CONFIGURE_DEPENDS
   ${CMAKE_SOURCE_DIR}/Libraries/Nmsdk-MotionControlLib/Core/*.cpp
 )
 
