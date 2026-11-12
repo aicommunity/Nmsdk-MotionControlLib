@@ -14,28 +14,28 @@ using namespace RDK;
 
 class RDK_LIB_TYPE NAstaticGyro: public UNet
 {
-public: // Общедоступные свойства
+public: //  
 
-// Собственная частота вращения гироскопа
-RDK::ULProperty<double, NAstaticGyro, ptPubParameter> natural_freq;
-// Коэф. демпфирования
-RDK::ULProperty<double, NAstaticGyro, ptPubParameter> z_g;
+// РЎРѕР±СЃС‚РІРµРЅРЅР°СЏ С‡Р°СЃС‚РѕС‚Р° РІСЂР°С‰РµРЅРёСЏ РіРёСЂРѕСЃРєРѕРїР°
+RDK::UProperty<double, NAstaticGyro, ptPubParameter> natural_freq;
+// РљРѕСЌС„. РґРµРјРїС„РёСЂРѕРІР°РЅРёСЏ
+RDK::UProperty<double, NAstaticGyro, ptPubParameter> z_g;
 
-RDK::ULProperty<double, NAstaticGyro,ptPubState> alpha;
-RDK::ULProperty<double, NAstaticGyro,ptPubState> betta;
-RDK::ULProperty<double, NAstaticGyro,ptPubState> gamma;
+RDK::UProperty<double, NAstaticGyro,ptPubState> alpha;
+RDK::UProperty<double, NAstaticGyro,ptPubState> betta;
+RDK::UProperty<double, NAstaticGyro,ptPubState> gamma;
 
-public: // Входы и выходы
-UPropertyInputData<MDMatrix<double>, NAstaticGyro, ptInput | ptPubState> Input1;
-UPropertyInputData<MDMatrix<double>, NAstaticGyro, ptInput | ptPubState> Input2;
-UPropertyInputData<MDMatrix<double>, NAstaticGyro, ptInput | ptPubState> Input3;
+public: //   
+UProperty<MDMatrix<double>, NAstaticGyro, ptInput | ptPubState> Input1;
+UProperty<MDMatrix<double>, NAstaticGyro, ptInput | ptPubState> Input2;
+UProperty<MDMatrix<double>, NAstaticGyro, ptInput | ptPubState> Input3;
 
-UPropertyOutputData<MDMatrix<double>, NAstaticGyro, ptOutput | ptPubState> Output1;
-UPropertyOutputData<MDMatrix<double>, NAstaticGyro, ptOutput | ptPubState> Output2;
-UPropertyOutputData<MDMatrix<double>, NAstaticGyro, ptOutput | ptPubState> Output3;
+UProperty<MDMatrix<double>, NAstaticGyro, ptOutput | ptPubState> Output1;
+UProperty<MDMatrix<double>, NAstaticGyro, ptOutput | ptPubState> Output2;
+UProperty<MDMatrix<double>, NAstaticGyro, ptOutput | ptPubState> Output3;
 
 //
-protected: // Данные
+protected: // 
 
 double x11_prev;
 double x12_prev;
@@ -52,38 +52,45 @@ double z12_prev;
 double z21_prev;
 double z22_prev;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+// --------------------------
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
+// --------------------------
 // --------------------------
 NAstaticGyro(void);
 virtual ~NAstaticGyro(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
+// --------------------------
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
+// --------------------------
 virtual NAstaticGyro* New(void);
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом 
+// --------------------------
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ СЃС‡РµС‚РѕРј 
+// --------------------------
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
+//    Reset()   Ready  true
 virtual bool ABuild(void);
 
-// Сброс процесса счета без потери настроек
+// РЎР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р° Р±РµР· РїРѕС‚РµСЂРё РЅР°СЃС‚СЂРѕРµРє
 virtual bool AReset(void);
 
-// Выполняет расчет этого объекта
+// Р’С‹РїРѕР»РЅСЏРµС‚ СЂР°СЃС‡РµС‚ СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
 virtual bool ACalculate(void);
 // --------------------------
 };

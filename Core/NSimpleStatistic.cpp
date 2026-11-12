@@ -19,7 +19,7 @@ See file license.txt for more information
 namespace NMSDK {
 
 // --------------------------
-// Конструкторы и деструкторы
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
 // --------------------------
 NSimpleStatistic::NSimpleStatistic(void)
 : StatsInterval("StatsInterval",this),
@@ -45,9 +45,9 @@ NSimpleStatistic::~NSimpleStatistic(void)
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NSimpleStatistic* NSimpleStatistic::New(void)
 {
  return new NSimpleStatistic;
@@ -58,10 +58,10 @@ NSimpleStatistic* NSimpleStatistic::New(void)
 // --------------------------
 // Computation methods
 // --------------------------
-// Открывает новый файл, сохраняя предыдущий
+// РћС‚РєСЂС‹РІР°РµС‚ РЅРѕРІС‹Р№ С„Р°Р№Р», СЃРѕС…СЂР°РЅСЏСЏ РїСЂРµРґС‹РґСѓС‰РёР№
 bool NSimpleStatistic::ReCreateFile(void)
 {
-// return true;// Заглушка !!!
+// return true;// Р—Р°РіР»СѓС€РєР° !!!
  if(StatsFile)
  {
   StatsFile->close();
@@ -72,7 +72,7 @@ bool NSimpleStatistic::ReCreateFile(void)
  if(!StatsFile || !(*StatsFile))
   return false;
 
- // Пишем заголовки
+ // РџРёС€РµРј Р·Р°РіРѕР»РѕРІРєРё
  if(Mode == 0)
  {
   (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<"Time"<<"\t";
@@ -104,7 +104,7 @@ bool NSimpleStatistic::ReCreateFile(void)
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NSimpleStatistic::ADefault(void)
 {
  StatsInterval=1;
@@ -113,10 +113,10 @@ bool NSimpleStatistic::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NSimpleStatistic::ABuild(void)
 {
  return true;
@@ -133,14 +133,14 @@ bool NSimpleStatistic::AReset(void)
 // Execute math. computations of current object on current step
 bool NSimpleStatistic::ACalculate(void)
 {
-// return true; // Заглушка !!
+// return true; // Р—Р°РіР»СѓС€РєР° !!
  if(!StatsFile)
   if(!ReCreateFile())
    return false;
 
  if(Mode == 0)
  {
-  // Проверяем, возможно нам уже пора сохранять статистику
+  // РџСЂРѕРІРµСЂСЏРµРј, РІРѕР·РјРѕР¶РЅРѕ РЅР°Рј СѓР¶Рµ РїРѕСЂР° СЃРѕС…СЂР°РЅСЏС‚СЊ СЃС‚Р°С‚РёСЃС‚РёРєСѓ
   if(Environment->GetTime().GetDoubleTime()-StatsStartTime>=StatsInterval)
   {
    (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<Environment->GetTime().GetDoubleTime()<<"\t";
@@ -195,7 +195,7 @@ bool NSimpleStatistic::ACalculate(void)
  else
  if(Mode == 2)
  {
-  // Проверяем, возможно нам уже пора сохранять статистику
+  // РџСЂРѕРІРµСЂСЏРµРј, РІРѕР·РјРѕР¶РЅРѕ РЅР°Рј СѓР¶Рµ РїРѕСЂР° СЃРѕС…СЂР°РЅСЏС‚СЊ СЃС‚Р°С‚РёСЃС‚РёРєСѓ
   if(Environment->GetTime().GetDoubleTime()-StatsStartTime>=StatsInterval)
   {
    (*StatsFile)<<showpoint<<internal<<fixed<<setfill(' ')<<right<<setprecision(8)<<setw(10)<<Environment->GetTime().GetDoubleTime()<<"\t";
@@ -219,12 +219,12 @@ bool NSimpleStatistic::ACalculate(void)
 
 
 // --------------------------
-// Вспомогательные методы счета статистики
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РјРµС‚РѕРґС‹ СЃС‡РµС‚Р° СЃС‚Р°С‚РёСЃС‚РёРєРё
 // --------------------------
-// Сбрасывает текущую статистику
+// РЎР±СЂР°СЃС‹РІР°РµС‚ С‚РµРєСѓС‰СѓСЋ СЃС‚Р°С‚РёСЃС‚РёРєСѓ
 void NSimpleStatistic::ClearStats(void)
 {
- // Данные текущей статистики
+ // Р”Р°РЅРЅС‹Рµ С‚РµРєСѓС‰РµР№ СЃС‚Р°С‚РёСЃС‚РёРєРё
  StatsMin.clear();
 
  StatsMax.clear();
@@ -234,7 +234,7 @@ void NSimpleStatistic::ClearStats(void)
  StatsDelta.clear();
 }
 
-// Задает размеры векторов данных текущей статистики
+// Р—Р°РґР°РµС‚ СЂР°Р·РјРµСЂС‹ РІРµРєС‚РѕСЂРѕРІ РґР°РЅРЅС‹С… С‚РµРєСѓС‰РµР№ СЃС‚Р°С‚РёСЃС‚РёРєРё
 void NSimpleStatistic::ResizeStats(void)
 {
  StatsMin.resize(Inputs->size());

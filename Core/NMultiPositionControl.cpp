@@ -18,9 +18,9 @@ See file license.txt for more information
 
 namespace NMSDK {
 
-// Методы
+// РњРµС‚РѕРґС‹
 // --------------------------
-// Конструкторы и деструкторы
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
 // --------------------------
 NMultiPositionControl::NMultiPositionControl(void)
 :
@@ -42,7 +42,7 @@ NMultiPositionControl::~NMultiPositionControl(void)
 
 
 // ---------------------
-// Методы управления параметрами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°РјРё
 // ---------------------
 bool NMultiPositionControl::SetBuildSolo(const bool &value)
 {
@@ -89,14 +89,14 @@ bool NMultiPositionControl::SetPrebuildStructure(const bool &value)
 // ---------------------
 
 // ---------------------
-// Методы управления переменными состояния
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїРµСЂРµРјРµРЅРЅС‹РјРё СЃРѕСЃС‚РѕСЏРЅРёСЏ
 // ---------------------
 // ---------------------
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NMultiPositionControl* NMultiPositionControl::New(void)
 {
  return new NMultiPositionControl;
@@ -105,9 +105,9 @@ NMultiPositionControl* NMultiPositionControl::New(void)
 
 
 // --------------------------
-// Скрытые методы управления счетом 
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ СЃС‡РµС‚РѕРј 
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NMultiPositionControl::ADefault(void)
 {
  NPositionControlElement::ADefault();
@@ -122,10 +122,10 @@ bool NMultiPositionControl::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NMultiPositionControl::ABuild(void)
 {
   PositionControlElement.resize(PositionControl.size());
@@ -151,8 +151,9 @@ bool NMultiPositionControl::ABuild(void)
         vector<NNet*> postInputs, preControls;
 
         //Adding PreControlNeuron
-        size_t preControlSize = PreControlNeurons.size();
-        string preControlNeuronName = "PreControlNeuron"+sntoa(preControlSize+1);
+        //size_t preControlSize = PreControlNeurons.size();
+        string preControlNeuronName = "PreControlNeuron1";//РљРѕСЃС‚С‹Р»СЊ! РћРє РґР»СЏ Mazememory, РЅРѕ РµСЃР»Рё РЅСѓР¶РЅРѕ Р·Р°РїРѕРјРёРЅР°С‚СЊ Р±РѕР»СЊС€Рµ 1 РїСЂРёР·РЅР°РєР°, РїСЂРѕР±Р»РµРјР°
+        //string preControlNeuronName = "PreControlNeuron"+sntoa(preControlSize+1);
         if(CheckComponentL(preControlNeuronName))
         {
           PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronName)));
@@ -170,8 +171,10 @@ bool NMultiPositionControl::ABuild(void)
         }
 
         //Adding PostInputNeuron
-        size_t postInputSize = PostInputNeurons.size();
-        string postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
+        string name = this->GetName();
+        //size_t postInputSize = PostInputNeurons.size();
+        string postInputNeuronName = "PostInputNeuron1"; //РљРѕСЃС‚С‹Р»СЊ! РћРє РґР»СЏ Mazememory, РЅРѕ РµСЃР»Рё РЅСѓР¶РЅРѕ Р·Р°РїРѕРјРёРЅР°С‚СЊ Р±РѕР»СЊС€Рµ 1 РїСЂРёР·РЅР°РєР°, РїСЂРѕР±Р»РµРјР°
+        //string postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
 
         if(CheckComponentL(postInputNeuronName))
         {
@@ -187,6 +190,12 @@ bool NMultiPositionControl::ABuild(void)
           AddComponent(cont);
           PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
           postInputs.push_back(static_pointer_cast<NNet>(cont));
+
+          UEPtr<NPulseNeuron> neuron = cont->GetComponentL<NPulseNeuron>("PostInputNeuron1", true);
+          //UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(neuron->GetComponentL("LTZone"));
+          UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(cont->GetComponentL("LTZone"));
+          if(ltzone)
+              ltzone->AvgInterval = 3; //СѓРІРµР»РёС‡РёРІР°РµРј РёРЅС‚РµСЂРІР°Р» РґР»СЏ РїРѕРґС‡РµС‚Р° OutputFrequency, С‡С‚РѕР±С‹ РїСЂРѕРІРµСЂСЏС‚СЊ Р°РєС‚РёРІРЅРѕСЃС‚СЊ РЅРµР№СЂРѕРЅР° РІ MazeMemory
         }
         PositionNeurons();
       }
@@ -199,7 +208,7 @@ bool NMultiPositionControl::ABuild(void)
 
 
 
-// Сброс процесса счета без потери настроек
+// РЎР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р° Р±РµР· РїРѕС‚РµСЂРё РЅР°СЃС‚СЂРѕРµРє
 bool NMultiPositionControl::AReset(void)
 {
   return true;
@@ -207,7 +216,7 @@ bool NMultiPositionControl::AReset(void)
 
 
 
-// Выполняет расчет этого объекта
+// Р’С‹РїРѕР»РЅСЏРµС‚ СЂР°СЃС‡РµС‚ СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
 bool NMultiPositionControl::ACalculate(void)
 {
   if (BuildSolo)
@@ -218,7 +227,7 @@ bool NMultiPositionControl::ACalculate(void)
   UEPtr<UContainer> cont;
   UEPtr<UStorage> storage = GetStorage();
 
-  //Запоминание положения/признака
+  //Р—Р°РїРѕРјРёРЅР°РЅРёРµ РїРѕР»РѕР¶РµРЅРёСЏ/РїСЂРёР·РЅР°РєР°
   if(RememberState)
   {
     RememberState = false;
@@ -253,7 +262,7 @@ bool NMultiPositionControl::ACalculate(void)
     size_t postInputSize = PostInputNeurons.size();
     postInputNeuronName = "PostInputNeuron"+sntoa(postInputSize+1);
 
-    if(CheckComponentL(postInputNeuronName))//Если мы не перестраиваем структуру заново, нет смысла заново добавлять уже существующие PostInput- нейроны в вектор, они там уже есть)
+    if(CheckComponentL(postInputNeuronName))//Р•СЃР»Рё РјС‹ РЅРµ РїРµСЂРµСЃС‚СЂР°РёРІР°РµРј СЃС‚СЂСѓРєС‚СѓСЂСѓ Р·Р°РЅРѕРІРѕ, РЅРµС‚ СЃРјС‹СЃР»Р° Р·Р°РЅРѕРІРѕ РґРѕР±Р°РІР»СЏС‚СЊ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёРµ PostInput- РЅРµР№СЂРѕРЅС‹ РІ РІРµРєС‚РѕСЂ, РѕРЅРё С‚Р°Рј СѓР¶Рµ РµСЃС‚СЊ)
     {
       if (IsNeedToRebuild)
       {
@@ -291,7 +300,7 @@ bool NMultiPositionControl::ACalculate(void)
     }
 
 
-    //Выбор активных InputNeurons для построения связей с PostInput
+    //Р’С‹Р±РѕСЂ Р°РєС‚РёРІРЅС‹С… InputNeurons РґР»СЏ РїРѕСЃС‚СЂРѕРµРЅРёСЏ СЃРІСЏР·РµР№ СЃ PostInput
     for(size_t i=0;i<InputNeurons.size();i++)
     {
       UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(InputNeurons[i]->GetComponentL("LTZone"));
@@ -303,12 +312,12 @@ bool NMultiPositionControl::ACalculate(void)
       }
     }
 
-    //Задание количества сом и порогов для PostInput
+    //Р—Р°РґР°РЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° СЃРѕРј Рё РїРѕСЂРѕРіРѕРІ РґР»СЏ PostInput
     if (BuildSolo)
     {
       NPulseNeuron *postInputNeuron = static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronName));
       if (activeInputs.size()>0)
-        postInputNeuron->NumSomaMembraneParts = activeInputs.size();
+        postInputNeuron->NumSomaMembraneParts = int(activeInputs.size());
       else
         postInputNeuron->NumSomaMembraneParts = 1;
 
@@ -408,7 +417,7 @@ bool NMultiPositionControl::CreateNeurons(void)
         InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
         cont->GetLongName(owner, inputName);
       }
-    //Построение связей между PostInput Neurons в NNewPositionControl и InputNeurons в MultiPositionControl
+    //РџРѕСЃС‚СЂРѕРµРЅРёРµ СЃРІСЏР·РµР№ РјРµР¶РґСѓ PostInput Neurons РІ NNewPositionControl Рё InputNeurons РІ MultiPositionControl
     owner->CreateLink(ltzoneName+".LTZone","Output",inputName+".Soma1.ExcSynapse1", "Input");
     }
   }
@@ -444,7 +453,7 @@ bool NMultiPositionControl::CreateNeurons(void)
         ControlNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
         cont->GetLongName(owner, controlName);
       }
-      //Построение связей между Control Neurons в MultiPositionControl и PreControl Neurons в NewPositionControl
+      //РџРѕСЃС‚СЂРѕРµРЅРёРµ СЃРІСЏР·РµР№ РјРµР¶РґСѓ Control Neurons РІ MultiPositionControl Рё PreControl Neurons РІ NewPositionControl
       owner->CreateLink(controlName+".LTZone","Output",outputName+".Soma1.ExcSynapse2", "Input");
     }
   }
@@ -510,40 +519,39 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
   UEPtr<UContainer> cont;
   UEPtr<UStorage> storage = GetStorage();
 
-  //Creating InputNeurons
-  int positionControlSize = PCsNum;
-  InputNeuronsByContours.resize(positionControlSize);
+   //Creating InputNeurons
+   int positionControlSize = PCsNum;
+   InputNeuronsByContours.resize(positionControlSize);
 
-  for(int i=0; i<positionControlSize; i++)
-  {
-    for(int j=0; j<InputsNum; j++)
-    {
-      UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
-      string inputNeuronName = "InputNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
-      string inputName;
+  // for(int i=0; i<positionControlSize; i++)
+  // {
+  //   for(int j=0; j<InputsNum; j++)
+  //   {
+  //     UNet *owner=dynamic_pointer_cast<UNet>(GetOwner());
+  //     string inputNeuronName = "InputNeuron"+sntoa(i+1)+"-"+sntoa(j+1);
+  //     string inputName;
 
-      if(CheckComponentL(inputNeuronName))
-      {
-        NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronName));
-        InputNeurons.push_back(inputNeuron);
-        InputNeuronsByContours[i].push_back(inputNeuron);
-        inputNeuron->GetLongName(owner, inputName);
-      }
-      else
-      {
-        //InputNeuronType = "NSPNeuronGen";
-        InputNeuronType = "NNeuronTrainer";
-        cont=dynamic_pointer_cast<NNeuronTrainer>(storage->TakeObject(InputNeuronType));
-        if(!cont)
-          return 0;
-        cont->SetName(inputNeuronName);
-        AddComponent(cont);           
-        InputNeurons.push_back(static_pointer_cast<NNet>(cont));
-        InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
-        cont->GetLongName(owner, inputName);
-      }
-    }
-  }
+  //     if(CheckComponentL(inputNeuronName))
+  //     {
+  //       NNet *inputNeuron = static_pointer_cast<NNet>(GetComponent(inputNeuronName));
+  //       InputNeurons.push_back(inputNeuron);
+  //       InputNeuronsByContours[i].push_back(inputNeuron);
+  //       inputNeuron->GetLongName(owner, inputName);
+  //     }
+  //     else
+  //     {
+  //       InputNeuronType = "NSPNeuronGen";
+  //       cont=dynamic_pointer_cast<UContainer>(storage->TakeObject(InputNeuronType));
+  //       if(!cont)
+  //         return 0;
+  //       cont->SetName(inputNeuronName);
+  //       AddComponent(cont);
+  //       InputNeurons.push_back(static_pointer_cast<NNet>(cont));
+  //       InputNeuronsByContours[i].push_back(static_pointer_cast<NNet>(cont));
+  //       cont->GetLongName(owner, inputName);
+  //     }
+  //   }
+  // }
 
   //Creating ControlNeurons 0
   ControlNeuronsByContours.resize(positionControlSize);
@@ -612,8 +620,8 @@ bool NMultiPositionControl::CreateNeuronsSolo(void)
 //      PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
 //     }
 
-//     //КОЛИЧЕСТВО СОМ НАСТРАИВАЕТСЯ ТОЛЬКО В CALCULATE! - возможно, сюда тоже нужно добавить (?)
-//     //Задание порогов для PostInput
+//     //РљРћР›РР§Р•РЎРўР’Рћ РЎРћРњ РќРђРЎРўР РђРР’РђР•РўРЎРЇ РўРћР›Р¬РљРћ Р’ CALCULATE! - РІРѕР·РјРѕР¶РЅРѕ, СЃСЋРґР° С‚РѕР¶Рµ РЅСѓР¶РЅРѕ РґРѕР±Р°РІРёС‚СЊ (?)
+//     //Р—Р°РґР°РЅРёРµ РїРѕСЂРѕРіРѕРІ РґР»СЏ PostInput
 //     NPulseNeuron *postInputNeuron = static_pointer_cast<NPulseNeuron>(GetComponent(postInputNeuronName));
 //     UEPtr<NPulseLTZoneCommon> ltzone=dynamic_pointer_cast<NPulseLTZoneCommon>(postInputNeuron->GetComponentL("LTZone"));
 //         //bool check_LTZ = true;
@@ -683,13 +691,13 @@ bool NMultiPositionControl::LinkNeuronsWithNorm(vector <NNet*> start, vector <NN
         //string check_finishName = finish[j]->GetName()+".Soma"+sntoa(m+1)+".ExcSynapse1";
 
         if(CheckLink(startName,finishName))
-          break; //перейти к следующему элементу в start
+          break; //РїРµСЂРµР№С‚Рё Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СЌР»РµРјРµРЅС‚Сѓ РІ start
 
         UEPtr<NPulseSynapse> syn = finish[j]->GetComponentL<NPulseSynapse>("Soma"+sntoa(m+1)+".ExcSynapse1",true);
         if(!syn)
           return true;
         if (syn->Input.IsConnected())
-          continue; //перейти к следующему участку сомы
+          continue; //РїРµСЂРµР№С‚Рё Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СѓС‡Р°СЃС‚РєСѓ СЃРѕРјС‹
 
         CreateLink(startName, "Output", finishName,"Input");
         break;

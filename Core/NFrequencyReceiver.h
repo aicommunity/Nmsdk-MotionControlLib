@@ -23,62 +23,72 @@ namespace NMSDK {
 /* *************************************************************************** */
 class RDK_LIB_TYPE NFrequencyReceiver: public NReceiver
 {
-public: // Общедоступные свойства
-/// Наблюдаемый интервал частот
-ULProperty<double, NFrequencyReceiver, ptPubParameter> LeftRange,RightRange;
+public: //  
+/// РќР°Р±Р»СЋРґР°РµРјС‹Р№ РёРЅС‚РµСЂРІР°Р» С‡Р°СЃС‚РѕС‚
+UProperty<double, NFrequencyReceiver, ptPubParameter> LeftRange,RightRange;
 
-/// Шаг по частоте
-ULProperty<double, NFrequencyReceiver, ptPubParameter> FrequencyStep;
+/// РЁР°Рі РїРѕ С‡Р°СЃС‚РѕС‚Рµ
+UProperty<double, NFrequencyReceiver, ptPubParameter> FrequencyStep;
 
-protected: // Данные
-UPropertyOutputData<MDMatrix<double>, NFrequencyReceiver, ptPubOutput | ptState> OutputFreq;
+protected: // 
+UProperty<MDMatrix<double>, NFrequencyReceiver, ptPubOutput | ptState> OutputFreq;
 
-/// Суммарное число импульсов
-ULProperty<size_t, NFrequencyReceiver, ptPubParameter> PulseCounter;
+/// РЎСѓРјРјР°СЂРЅРѕРµ С‡РёСЃР»Рѕ РёРјРїСѓР»СЊСЃРѕРІ
+UProperty<size_t, NFrequencyReceiver, ptPubParameter> PulseCounter;
 
-/// Множество входных данных
-/// Каждая строка - последовательность данных
-UPropertyInputData<MDMatrix<double>, NFrequencyReceiver, ptPubParameter> Input;
+/// РњРЅРѕР¶РµСЃС‚РІРѕ РІС…РѕРґРЅС‹С… РґР°РЅРЅС‹С…
+/// РљР°Р¶РґР°СЏ СЃС‚СЂРѕРєР° - РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ РґР°РЅРЅС‹С…
+///   -  
+UProperty<MDMatrix<double>, NFrequencyReceiver, ptPubParameter> Input;
 
-/// Результаты в строках
-/// Каждая строка - последовательность данных
-UPropertyOutputData<MDMatrix<double>, NFrequencyReceiver, ptPubParameter> Results;
+/// Р РµР·СѓР»СЊС‚Р°С‚С‹ РІ СЃС‚СЂРѕРєР°С…
+/// РљР°Р¶РґР°СЏ СЃС‚СЂРѕРєР° - РїРѕСЃР»РµРґРѕРІР°С‚РµР»СЊРЅРѕСЃС‚СЊ РґР°РЅРЅС‹С…
+///   -  
+UProperty<MDMatrix<double>, NFrequencyReceiver, ptPubParameter> Results;
 
-protected: // Временные переменные
+protected: //  
 double PrevPulseStartTime;
 double PrevPulseStopTime;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+// --------------------------
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
+// --------------------------
 // --------------------------
 NFrequencyReceiver(void);
 virtual ~NFrequencyReceiver(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
+// --------------------------
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
+// --------------------------
 virtual NFrequencyReceiver* New(void);
 // --------------------------
 
 protected:
 // --------------------------
-// Методы управления общедоступными свойствами
 // --------------------------
-/// Устанавливает левую границу наблюдаемого интервала частот
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±С‰РµРґРѕСЃС‚СѓРїРЅС‹РјРё СЃРІРѕР№СЃС‚РІР°РјРё
+// --------------------------
+/// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ Р»РµРІСѓСЋ РіСЂР°РЅРёС†Сѓ РЅР°Р±Р»СЋРґР°РµРјРѕРіРѕ РёРЅС‚РµСЂРІР°Р»Р° С‡Р°СЃС‚РѕС‚
+// --------------------------
 bool SetLeftRange(const double &range);
 
-/// Устанавливает правую границу наблюдаемого интервала частот
+/// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РїСЂР°РІСѓСЋ РіСЂР°РЅРёС†Сѓ РЅР°Р±Р»СЋРґР°РµРјРѕРіРѕ РёРЅС‚РµСЂРІР°Р»Р° С‡Р°СЃС‚РѕС‚
 bool SetRightRange(const double &range);
 
-/// Устанавливает шаг по частоте
+/// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С€Р°Рі РїРѕ С‡Р°СЃС‚РѕС‚Рµ
 bool SetFrequencyStep(const double &step);
 // --------------------------
 
 // --------------------------
+// --------------------------
 // Watch results control methods
+// --------------------------
 // --------------------------
 public:
 /// Return number of results points
@@ -86,15 +96,18 @@ size_t GetResultsSize(void) const;
 // --------------------------
 
 // --------------------------
+// --------------------------
 // Computation methods
 // --------------------------
-/// Восстановление настроек по умолчанию и сброс процесса счета
+/// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
+// --------------------------
 virtual bool ADefault(void);
 
-/// Обеспечивает сборку внутренней структуры объекта
-/// после настройки параметров
-/// Автоматически вызывает метод Reset() и выставляет Ready в true
-/// в случае успешной сборки
+/// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+/// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+/// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+/// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
+///    Reset()   Ready  true
 virtual bool ABuild(void);
 
 /// Reset computation

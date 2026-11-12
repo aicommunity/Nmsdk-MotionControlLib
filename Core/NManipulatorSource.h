@@ -23,48 +23,50 @@ namespace NMSDK {
 
 class RDK_LIB_TYPE NManipulatorSource: public NSource
 {
-public: // Конструкционные константные поправки к данным
-/// Поправка к углу разворота ротора
-ULProperty<double,NManipulatorSource, ptPubParameter> Angle;
+public: //     
+/// РџРѕРїСЂР°РІРєР° Рє СѓРіР»Сѓ СЂР°Р·РІРѕСЂРѕС‚Р° СЂРѕС‚РѕСЂР°
+UProperty<double,NManipulatorSource, ptPubParameter> Angle;
 
-/// Поправка к угловой скорости
-ULProperty<double,NManipulatorSource, ptPubParameter> Speed;
+/// РџРѕРїСЂР°РІРєР° Рє СѓРіР»РѕРІРѕР№ СЃРєРѕСЂРѕСЃС‚Рё
+UProperty<double,NManipulatorSource, ptPubParameter> Speed;
 
-/// Поправка к моменту двигателя
-ULProperty<double,NManipulatorSource, ptPubParameter> Force;
+/// РџРѕРїСЂР°РІРєР° Рє РјРѕРјРµРЅС‚Сѓ РґРІРёРіР°С‚РµР»СЏ
+UProperty<double,NManipulatorSource, ptPubParameter> Force;
 
-/// Поправка к смещению тележки
-ULProperty<double,NManipulatorSource, ptPubParameter> Movement;
+/// РџРѕРїСЂР°РІРєР° Рє СЃРјРµС‰РµРЅРёСЋ С‚РµР»РµР¶РєРё
+UProperty<double,NManipulatorSource, ptPubParameter> Movement;
 
-public: // Входы и выходы
-/// Вход: угол разворота ротора
-UPropertyInputData<MDMatrix<double>,NManipulatorSource> InputAngle;
+public: //   
+/// Input angle
+UProperty<MDMatrix<double>,NManipulatorSource, ptPubInput> InputAngle;
 
-/// Вход: угловая скорость
-UPropertyInputData<MDMatrix<double>,NManipulatorSource> InputSpeed;
+/// Input speed
+UProperty<MDMatrix<double>,NManipulatorSource, ptPubInput> InputSpeed;
 
-/// Вход: момент двигателя
-UPropertyInputData<MDMatrix<double>,NManipulatorSource> InputForce;
+/// Input force
+UProperty<MDMatrix<double>,NManipulatorSource, ptPubInput> InputForce;
 
-/// Вход: Смещение тележки
-UPropertyInputData<MDMatrix<double>,NManipulatorSource> InputMovement;
+/// Input movement
+UProperty<MDMatrix<double>,NManipulatorSource, ptPubInput> InputMovement;
 
-/// Вход: угол разворота ротора
-UPropertyOutputData<MDMatrix<double>,NManipulatorSource, ptOutput | ptPubState> OutputAngle;
+/// Р’С…РѕРґ: СѓРіРѕР» СЂР°Р·РІРѕСЂРѕС‚Р° СЂРѕС‚РѕСЂР°
+UProperty<MDMatrix<double>,NManipulatorSource, ptOutput | ptPubState> OutputAngle;
 
-/// Вход: угловая скорость
-UPropertyOutputData<MDMatrix<double>,NManipulatorSource, ptOutput | ptPubState> OutputSpeed;
+/// Р’С…РѕРґ: СѓРіР»РѕРІР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ
+UProperty<MDMatrix<double>,NManipulatorSource, ptOutput | ptPubState> OutputSpeed;
 
-/// Вход: момент двигателя
-UPropertyOutputData<MDMatrix<double>,NManipulatorSource, ptOutput | ptPubState> OutputForce;
+/// Р’С…РѕРґ: РјРѕРјРµРЅС‚ РґРІРёРіР°С‚РµР»СЏ
+UProperty<MDMatrix<double>,NManipulatorSource, ptOutput | ptPubState> OutputForce;
 
-/// Вход: Смещение тележки
-UPropertyOutputData<MDMatrix<double>,NManipulatorSource, ptOutput | ptPubState> OutputMovement;
+/// Р’С…РѕРґ: РЎРјРµС‰РµРЅРёРµ С‚РµР»РµР¶РєРё
+UProperty<MDMatrix<double>,NManipulatorSource, ptOutput | ptPubState> OutputMovement;
 
-public: // Методы
+public: // 
 bool UpdateOutputFlag;
 // --------------------------
-// Конструкторы и деструкторы
+// --------------------------
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
+// --------------------------
 // --------------------------
 NManipulatorSource(void);
 virtual ~NManipulatorSource(void);
@@ -72,37 +74,43 @@ virtual ~NManipulatorSource(void);
 
 protected:
 // --------------------------
-// Методы управления общедоступными свойствами
 // --------------------------
-// Устанавливает угол
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±С‰РµРґРѕСЃС‚СѓРїРЅС‹РјРё СЃРІРѕР№СЃС‚РІР°РјРё
+// --------------------------
+// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СѓРіРѕР»
+// --------------------------
 bool SetAngle(const double &value);
 
-// Устанавливает скорость
+// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СЃРєРѕСЂРѕСЃС‚СЊ
 bool SetSpeed(const double &value);
 
-// Устанавливает момент
+// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РјРѕРјРµРЅС‚
 bool SetForce(const double &value);
 // --------------------------
 
 public:
 // --------------------------
-// Системные методы управления объектом
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
+// --------------------------
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
+// --------------------------
 virtual NManipulatorSource* New(void);
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом
+// --------------------------
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ СЃС‡РµС‚РѕРј
+// --------------------------
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 virtual bool ADefault(void);
 
-// Сброс процесса счета.
+// РЎР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°.
 virtual bool AReset(void);
 
-// Выполняет расчет этого объекта
+// Р’С‹РїРѕР»РЅСЏРµС‚ СЂР°СЃС‡РµС‚ СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
 virtual bool ACalculate(void);
 // --------------------------
 };

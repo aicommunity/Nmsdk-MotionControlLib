@@ -21,7 +21,7 @@ See file license.txt for more information
 namespace NMSDK {
 
 // --------------------------
-// Конструкторы и деструкторы
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
 // --------------------------
 NNetworkLinksStatistic::NNetworkLinksStatistic(void)
 : StatsInterval("StatsInterval",this),
@@ -41,9 +41,9 @@ NNetworkLinksStatistic::~NNetworkLinksStatistic(void)
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NNetworkLinksStatistic* NNetworkLinksStatistic::New(void)
 {
  return new NNetworkLinksStatistic;
@@ -54,7 +54,7 @@ NNetworkLinksStatistic* NNetworkLinksStatistic::New(void)
 // --------------------------
 // Computation methods
 // --------------------------
-// Открывает новый файл, сохраняя предыдущий
+// РћС‚РєСЂС‹РІР°РµС‚ РЅРѕРІС‹Р№ С„Р°Р№Р», СЃРѕС…СЂР°РЅСЏСЏ РїСЂРµРґС‹РґСѓС‰РёР№
 bool NNetworkLinksStatistic::ReCreateFile(void)
 {
  StatsFile.SaveToFile(GetName()+string("_")+RDK::sntoa(StatsNumber++,5)+".ini");
@@ -67,7 +67,7 @@ bool NNetworkLinksStatistic::ReCreateFile(void)
 // --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NNetworkLinksStatistic::ADefault(void)
 {
  StatsInterval=0.1;
@@ -76,10 +76,10 @@ bool NNetworkLinksStatistic::ADefault(void)
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NNetworkLinksStatistic::ABuild(void)
 {
  return true;
@@ -96,7 +96,7 @@ bool NNetworkLinksStatistic::AReset(void)
 // Execute math. computations of current object on current step
 bool NNetworkLinksStatistic::ACalculate(void)
 {
- // Проверяем, возможно нам уже пора сохранять статистику
+ // РџСЂРѕРІРµСЂСЏРµРј, РІРѕР·РјРѕР¶РЅРѕ РЅР°Рј СѓР¶Рµ РїРѕСЂР° СЃРѕС…СЂР°РЅСЏС‚СЊ СЃС‚Р°С‚РёСЃС‚РёРєСѓ
  if(Environment->GetTime().GetTime()-StatsStartTime>=StatsInterval)
  {
   UNet *network=0;
@@ -159,7 +159,7 @@ bool NNetworkLinksStatistic::ACalculate(void)
    I=b.second;
   }
 
-  // А теперь сохраняем
+  // Рђ С‚РµРїРµСЂСЊ СЃРѕС…СЂР°РЅСЏРµРј
   map<NAConnector*,vector<pair<NAItem*,double> > >::iterator rI,rJ;
   rI=ResLinks.begin();
   rJ=ResLinks.end();
@@ -213,12 +213,12 @@ bool NNetworkLinksStatistic::ACalculate(void)
 
 
 // --------------------------
-// Вспомогательные методы счета статистики
+// Р’СЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹Рµ РјРµС‚РѕРґС‹ СЃС‡РµС‚Р° СЃС‚Р°С‚РёСЃС‚РёРєРё
 // --------------------------
-// Сбрасывает текущую статистику
+// РЎР±СЂР°СЃС‹РІР°РµС‚ С‚РµРєСѓС‰СѓСЋ СЃС‚Р°С‚РёСЃС‚РёРєСѓ
 void NNetworkLinksStatistic::ClearStats(void)
 {
- // Данные текущей статистики
+ // Р”Р°РЅРЅС‹Рµ С‚РµРєСѓС‰РµР№ СЃС‚Р°С‚РёСЃС‚РёРєРё
 /* StatsMin.clear();
 
  StatsMax.clear();
@@ -228,7 +228,7 @@ void NNetworkLinksStatistic::ClearStats(void)
  StatsDelta.clear();*/
 }
 
-// Задает размеры векторов данных текущей статистики
+// Р—Р°РґР°РµС‚ СЂР°Р·РјРµСЂС‹ РІРµРєС‚РѕСЂРѕРІ РґР°РЅРЅС‹С… С‚РµРєСѓС‰РµР№ СЃС‚Р°С‚РёСЃС‚РёРєРё
 void NNetworkLinksStatistic::ResizeStats(void)
 {
 /* StatsMin.resize(NumInputs);

@@ -25,124 +25,130 @@ using namespace RDK;
 /* *************************************************************************** */
 class RDK_LIB_TYPE NNavMousePrimitive: public UNet
 {
-public: // Общедоступные свойства
-/// Размер поля перемещения "мыши", от начала (0) до упора (PoleSize)
-/// пусть будет в см, так как робот планируется мелкий
-ULProperty<double, NNavMousePrimitive, ptPubParameter> PoleSize;
+public: //  
+/// Р Р°Р·РјРµСЂ РїРѕР»СЏ РїРµСЂРµРјРµС‰РµРЅРёСЏ "РјС‹С€Рё", РѕС‚ РЅР°С‡Р°Р»Р° (0) РґРѕ СѓРїРѕСЂР° (PoleSize)
+/// РїСѓСЃС‚СЊ Р±СѓРґРµС‚ РІ СЃРј, С‚Р°Рє РєР°Рє СЂРѕР±РѕС‚ РїР»Р°РЅРёСЂСѓРµС‚СЃСЏ РјРµР»РєРёР№
+UProperty<double, NNavMousePrimitive, ptPubParameter> PoleSize;
 
-/// Размер "мыши" ("радиус" так сказать)
-ULProperty<double, NNavMousePrimitive, ptPubParameter> MouseSize;
+/// Р Р°Р·РјРµСЂ "РјС‹С€Рё" ("СЂР°РґРёСѓСЃ" С‚Р°Рє СЃРєР°Р·Р°С‚СЊ)
+UProperty<double, NNavMousePrimitive, ptPubParameter> MouseSize;
 
-/// Размер вибриссы "мыши", упираясь которыми в "стенки" будет выдавать сигнал
-/// направлены вперед и назад по умолчанию
-ULProperty<double, NNavMousePrimitive, ptPubParameter> VibrissSize;
+/// Р Р°Р·РјРµСЂ РІРёР±СЂРёСЃСЃС‹ "РјС‹С€Рё", СѓРїРёСЂР°СЏСЃСЊ РєРѕС‚РѕСЂС‹РјРё РІ "СЃС‚РµРЅРєРё" Р±СѓРґРµС‚ РІС‹РґР°РІР°С‚СЊ СЃРёРіРЅР°Р»
+/// РЅР°РїСЂР°РІР»РµРЅС‹ РІРїРµСЂРµРґ Рё РЅР°Р·Р°Рґ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
+UProperty<double, NNavMousePrimitive, ptPubParameter> VibrissSize;
 
-/// Скорость движения за 1 "большой" такт (т.е. за Freqiency)
-ULProperty<double, NNavMousePrimitive, ptPubParameter> Velocity;
+/// РЎРєРѕСЂРѕСЃС‚СЊ РґРІРёР¶РµРЅРёСЏ Р·Р° 1 "Р±РѕР»СЊС€РѕР№" С‚Р°РєС‚ (С‚.Рµ. Р·Р° Freqiency)
+UProperty<double, NNavMousePrimitive, ptPubParameter> Velocity;
 
-/// Частота, с которой идут импульсы для обработки логики
-ULProperty<double, NNavMousePrimitive, ptPubParameter> Frequency;
+/// Р§Р°СЃС‚РѕС‚Р°, СЃ РєРѕС‚РѕСЂРѕР№ РёРґСѓС‚ РёРјРїСѓР»СЊСЃС‹ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё Р»РѕРіРёРєРё
+UProperty<double, NNavMousePrimitive, ptPubParameter> Frequency;
 
-/// Дополнительная задержка, с которой идет передача сигналов
-/// (0.1 по дефолту для учета переходного процесса в нейроне)
-ULProperty<double, NNavMousePrimitive, ptPubParameter> Delay;
+/// Р”РѕРїРѕР»РЅРёС‚РµР»СЊРЅР°СЏ Р·Р°РґРµСЂР¶РєР°, СЃ РєРѕС‚РѕСЂРѕР№ РёРґРµС‚ РїРµСЂРµРґР°С‡Р° СЃРёРіРЅР°Р»РѕРІ
+/// (0.1 РїРѕ РґРµС„РѕР»С‚Сѓ РґР»СЏ СѓС‡РµС‚Р° РїРµСЂРµС…РѕРґРЅРѕРіРѕ РїСЂРѕС†РµСЃСЃР° РІ РЅРµР№СЂРѕРЅРµ)
+UProperty<double, NNavMousePrimitive, ptPubParameter> Delay;
 
-/// Задержка, с которой выдается сигнал боли
-/// (0.1 - середина стандартного периода классификации 0.2 по умолчанию)
-ULProperty<double, NNavMousePrimitive, ptPubParameter> PainDelay;
+/// Р—Р°РґРµСЂР¶РєР°, СЃ РєРѕС‚РѕСЂРѕР№ РІС‹РґР°РµС‚СЃСЏ СЃРёРіРЅР°Р» Р±РѕР»Рё
+/// (0.1 - СЃРµСЂРµРґРёРЅР° СЃС‚Р°РЅРґР°СЂС‚РЅРѕРіРѕ РїРµСЂРёРѕРґР° РєР»Р°СЃСЃРёС„РёРєР°С†РёРё 0.2 РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ)
+UProperty<double, NNavMousePrimitive, ptPubParameter> PainDelay;
 
-/// Стандартный параметр для генерации - длина импульса
-/// по умолчанию - 0.001
-ULProperty<double, NNavMousePrimitive, ptPubParameter> PulseLength;
+///     -  
+/// РЎС‚Р°РЅРґР°СЂС‚РЅС‹Р№ РїР°СЂР°РјРµС‚СЂ РґР»СЏ РіРµРЅРµСЂР°С†РёРё - РґР»РёРЅР° РёРјРїСѓР»СЊСЃР°
+/// РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - 0.001
+UProperty<double, NNavMousePrimitive, ptPubParameter> PulseLength;
 
-/// Использовать внешний вход на актуаторы (по умолчанию - да)
-ULProperty<bool, NNavMousePrimitive, ptPubParameter> UseExternalInput;
+/// РСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РІРЅРµС€РЅРёР№ РІС…РѕРґ РЅР° Р°РєС‚СѓР°С‚РѕСЂС‹ (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ - РґР°)
+UProperty<bool, NNavMousePrimitive, ptPubParameter> UseExternalInput;
 
-///Амплитуда импульсов
-ULProperty<double, NNavMousePrimitive, ptPubParameter> Amplitude;
+///РђРјРїР»РёС‚СѓРґР° РёРјРїСѓР»СЊСЃРѕРІ
+UProperty<double, NNavMousePrimitive, ptPubParameter> Amplitude;
 
-/// По возможности - простой вход управления движением:
-/// 0 - стоим на месте
-/// 1 - едем вперед со скоростью Velocity
-/// -1 - едем назад со скоростью Velocity
-/// для начала - просто свойством
-ULProperty<int, NNavMousePrimitive, ptPubParameter> MotionControlSimple;
+/// РџРѕ РІРѕР·РјРѕР¶РЅРѕСЃС‚Рё - РїСЂРѕСЃС‚РѕР№ РІС…РѕРґ СѓРїСЂР°РІР»РµРЅРёСЏ РґРІРёР¶РµРЅРёРµРј:
+/// 0 - СЃС‚РѕРёРј РЅР° РјРµСЃС‚Рµ
+/// 1 - РµРґРµРј РІРїРµСЂРµРґ СЃРѕ СЃРєРѕСЂРѕСЃС‚СЊСЋ Velocity
+/// -1 - РµРґРµРј РЅР°Р·Р°Рґ СЃРѕ СЃРєРѕСЂРѕСЃС‚СЊСЋ Velocity
+/// РґР»СЏ РЅР°С‡Р°Р»Р° - РїСЂРѕСЃС‚Рѕ СЃРІРѕР№СЃС‚РІРѕРј
+///   -  
+UProperty<int, NNavMousePrimitive, ptPubParameter> MotionControlSimple;
 
-public: // Входы и выходы
-/// Входной сигнал
-UPropertyInputData<MDMatrix<double>, NNavMousePrimitive, ptInput | ptPubState> Input;
+public: //   
+/// Р’С…РѕРґРЅРѕР№ СЃРёРіРЅР°Р»
+UProperty<MDMatrix<double>, NNavMousePrimitive, ptInput | ptPubState> Input;
 
-/// Аналогичные команды, только вход обрабатывается как спайковый за период
-/// если спайк только один, то
-UPropertyInputData<MDMatrix<double>, NNavMousePrimitive, ptInput | ptPubState> MotionControlSpikeForward;
-UPropertyInputData<MDMatrix<double>, NNavMousePrimitive, ptInput | ptPubState> MotionControlSpikeBackward;
-UPropertyInputData<MDMatrix<double>, NNavMousePrimitive, ptInput | ptPubState> MotionControlSpikeStop;
+/// РђРЅР°Р»РѕРіРёС‡РЅС‹Рµ РєРѕРјР°РЅРґС‹, С‚РѕР»СЊРєРѕ РІС…РѕРґ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚СЃСЏ РєР°Рє СЃРїР°Р№РєРѕРІС‹Р№ Р·Р° РїРµСЂРёРѕРґ
+/// РµСЃР»Рё СЃРїР°Р№Рє С‚РѕР»СЊРєРѕ РѕРґРёРЅ, С‚Рѕ
+UProperty<MDMatrix<double>, NNavMousePrimitive, ptInput | ptPubState> MotionControlSpikeForward;
+UProperty<MDMatrix<double>, NNavMousePrimitive, ptInput | ptPubState> MotionControlSpikeBackward;
+UProperty<MDMatrix<double>, NNavMousePrimitive, ptInput | ptPubState> MotionControlSpikeStop;
 
-/// Состояние движения после обработки времен
-///  0 - стоим на месте
-///  1 - едем вперед со скоростью Velocity
-/// -1 - едем назад со скоростью Velocity
-UPropertyOutputData<int, NNavMousePrimitive, ptPubState> MotionControlState;
+/// РЎРѕСЃС‚РѕСЏРЅРёРµ РґРІРёР¶РµРЅРёСЏ РїРѕСЃР»Рµ РѕР±СЂР°Р±РѕС‚РєРё РІСЂРµРјРµРЅ
+///  0 - СЃС‚РѕРёРј РЅР° РјРµСЃС‚Рµ
+///  1 - РµРґРµРј РІРїРµСЂРµРґ СЃРѕ СЃРєРѕСЂРѕСЃС‚СЊСЋ Velocity
+/// -1 - РµРґРµРј РЅР°Р·Р°Рґ СЃРѕ СЃРєРѕСЂРѕСЃС‚СЊСЋ Velocity
+UProperty<int, NNavMousePrimitive, ptPubState> MotionControlState;
 
-///Состояние боли - чтобы подать сигнал и можно было посмотреть в интерфейсе
-UPropertyOutputData<int, NNavMousePrimitive, ptPubState> PainState;
+///  -         
+UProperty<int, NNavMousePrimitive, ptPubState> PainState;
 
-/// Положение "мыши" в "коридоре"
-UPropertyOutputData<double, NNavMousePrimitive, ptPubState> MousePosition;
+/// РџРѕР»РѕР¶РµРЅРёРµ "РјС‹С€Рё" РІ "РєРѕСЂРёРґРѕСЂРµ"
+UProperty<double, NNavMousePrimitive, ptPubState> MousePosition;
 
-/// Выходой сигнал
-UPropertyOutputData<MDMatrix<double>, NNavMousePrimitive, ptOutput | ptPubState> Output;
+/// Р’С‹С…РѕРґРѕР№ СЃРёРіРЅР°Р»
+UProperty<MDMatrix<double>, NNavMousePrimitive, ptOutput | ptPubState> Output;
 
-/// Выходой сигнал вибрисс
-/// Выдает сразу импульсы с частотой Frequency, задержкой от начала Delay
-///  и основной задержкой в зависимости от того, какое расстояние до препятствия
-UPropertyOutputData<MDMatrix<double>, NNavMousePrimitive, ptOutput | ptPubState> VibrissOutput;
+/// Р’С‹С…РѕРґРѕР№ СЃРёРіРЅР°Р» РІРёР±СЂРёСЃСЃ
+/// Р’С‹РґР°РµС‚ СЃСЂР°Р·Сѓ РёРјРїСѓР»СЊСЃС‹ СЃ С‡Р°СЃС‚РѕС‚РѕР№ Frequency, Р·Р°РґРµСЂР¶РєРѕР№ РѕС‚ РЅР°С‡Р°Р»Р° Delay
+///  Рё РѕСЃРЅРѕРІРЅРѕР№ Р·Р°РґРµСЂР¶РєРѕР№ РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ С‚РѕРіРѕ, РєР°РєРѕРµ СЂР°СЃСЃС‚РѕСЏРЅРёРµ РґРѕ РїСЂРµРїСЏС‚СЃС‚РІРёСЏ
+UProperty<MDMatrix<double>, NNavMousePrimitive, ptOutput | ptPubState> VibrissOutput;
 
-/// Выходой сигнал боли
-UPropertyOutputData<MDMatrix<double>, NNavMousePrimitive, ptOutput | ptPubState> PainOutput;
+/// Р’С‹С…РѕРґРѕР№ СЃРёРіРЅР°Р» Р±РѕР»Рё
+UProperty<MDMatrix<double>, NNavMousePrimitive, ptOutput | ptPubState> PainOutput;
 
-protected: // Временные переменные
+protected: //  
 
-//Задержки для вибрисс, чтобы генератор сообразить аналогично мультигенератору
+//Р—Р°РґРµСЂР¶РєРё РґР»СЏ РІРёР±СЂРёСЃСЃ, С‡С‚РѕР±С‹ РіРµРЅРµСЂР°С‚РѕСЂ СЃРѕРѕР±СЂР°Р·РёС‚СЊ Р°РЅР°Р»РѕРіРёС‡РЅРѕ РјСѓР»СЊС‚РёРіРµРЅРµСЂР°С‚РѕСЂСѓ
 std::vector<double> VibrDelays;
 
-//Расчетные задержки входов для принятия решений о том, какой победил
+//Р Р°СЃС‡РµС‚РЅС‹Рµ Р·Р°РґРµСЂР¶РєРё РІС…РѕРґРѕРІ РґР»СЏ РїСЂРёРЅСЏС‚РёСЏ СЂРµС€РµРЅРёР№ Рѕ С‚РѕРј, РєР°РєРѕР№ РїРѕР±РµРґРёР»
 double ForwardSpikeTime;
 double BackwardSpikeTime;
 double StopSpikeTime;
 
-//Отсчеты итераций, аналогично тому как это работает при обучении нейрона
+//РћС‚СЃС‡РµС‚С‹ РёС‚РµСЂР°С†РёР№, Р°РЅР°Р»РѕРіРёС‡РЅРѕ С‚РѕРјСѓ РєР°Рє СЌС‚Рѕ СЂР°Р±РѕС‚Р°РµС‚ РїСЂРё РѕР±СѓС‡РµРЅРёРё РЅРµР№СЂРѕРЅР°
 double start_iter_time;
 
 double OldFrequency;
 double ResetTime;
 
-//Счетчики импульсов для выходов
+//РЎС‡РµС‚С‡РёРєРё РёРјРїСѓР»СЊСЃРѕРІ РґР»СЏ РІС‹С…РѕРґРѕРІ
 std::vector<int> vibriss_counters;
 int pain_counter;
 
-// Класс рисования
-// TODO: (когда-то потом надо будет запилить визуализацию)
+// РљР»Р°СЃСЃ СЂРёСЃРѕРІР°РЅРёСЏ
+// TODO: (РєРѕРіРґР°-С‚Рѕ РїРѕС‚РѕРј РЅР°РґРѕ Р±СѓРґРµС‚ Р·Р°РїРёР»РёС‚СЊ РІРёР·СѓР°Р»РёР·Р°С†РёСЋ)
 UGraphics Graphics;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+// --------------------------
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
+// --------------------------
 // --------------------------
 NNavMousePrimitive(void);
 virtual ~NNavMousePrimitive(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
+// --------------------------
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
+// --------------------------
 virtual NNavMousePrimitive* New(void);
 // --------------------------
 
 protected:
 // --------------------------
-// Методы управления общедоступными свойствами
+//    
 // --------------------------
 
 bool SetPoleSize(const double &value);
@@ -151,24 +157,27 @@ bool SetMouseSize(const double &value);
 bool SetVelocity(const double &value);
 
 // --------------------------
-// Методы расчета
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// РњРµС‚РѕРґС‹ СЂР°СЃС‡РµС‚Р°
+// --------------------------
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
+// --------------------------
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
+//    Reset()   Ready  true
 virtual bool ABuild(void);
 
 // Reset computation
 virtual bool AReset(void);
 
-// Метод обновления состояния компонента. Именно здесь:
-// 1) обрабатывается логика на основе собранных входов
-// 2) применяется скорость, обновляется позиция и
-// 3) определяется, какие данные будут транслироваться на выходе следующий период
+// РњРµС‚РѕРґ РѕР±РЅРѕРІР»РµРЅРёСЏ СЃРѕСЃС‚РѕСЏРЅРёСЏ РєРѕРјРїРѕРЅРµРЅС‚Р°. РРјРµРЅРЅРѕ Р·РґРµСЃСЊ:
+// 1) РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚СЃСЏ Р»РѕРіРёРєР° РЅР° РѕСЃРЅРѕРІРµ СЃРѕР±СЂР°РЅРЅС‹С… РІС…РѕРґРѕРІ
+// 2) РїСЂРёРјРµРЅСЏРµС‚СЃСЏ СЃРєРѕСЂРѕСЃС‚СЊ, РѕР±РЅРѕРІР»СЏРµС‚СЃСЏ РїРѕР·РёС†РёСЏ Рё
+// 3) РѕРїСЂРµРґРµР»СЏРµС‚СЃСЏ, РєР°РєРёРµ РґР°РЅРЅС‹Рµ Р±СѓРґСѓС‚ С‚СЂР°РЅСЃР»РёСЂРѕРІР°С‚СЊСЃСЏ РЅР° РІС‹С…РѕРґРµ СЃР»РµРґСѓСЋС‰РёР№ РїРµСЂРёРѕРґ
 virtual bool UpdateState(void);
 
 // Execute math. computations of current object on current step

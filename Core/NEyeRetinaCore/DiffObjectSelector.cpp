@@ -6,9 +6,9 @@
 
 
 // --------------------------
-// Методы управления
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ
 // --------------------------
-// Расширяет текущий объект до размеров объекта 'segm'+текущий
+// Р Р°СЃС€РёСЂСЏРµС‚ С‚РµРєСѓС‰РёР№ РѕР±СЉРµРєС‚ РґРѕ СЂР°Р·РјРµСЂРѕРІ РѕР±СЉРµРєС‚Р° 'segm'+С‚РµРєСѓС‰РёР№
 void MSIntegrate(MovingSegment &currsegm, MovingSegment &segm)
 {
  currsegm.Width=(currsegm.X+currsegm.Width>segm.X+segm.Width)?
@@ -19,9 +19,9 @@ void MSIntegrate(MovingSegment &currsegm, MovingSegment &segm)
 
 
 // --------------------------
-// Методы управления
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ
 // --------------------------
-// Расширяет текущий объект до размеров объекта 'rect'+текущий
+// Р Р°СЃС€РёСЂСЏРµС‚ С‚РµРєСѓС‰РёР№ РѕР±СЉРµРєС‚ РґРѕ СЂР°Р·РјРµСЂРѕРІ РѕР±СЉРµРєС‚Р° 'rect'+С‚РµРєСѓС‰РёР№
 void MRIntegrate(MovingRect &currrect, MovingRect &rect)
 {
  currrect.X1=(currrect.X1<rect.X1)?currrect.X1:rect.X1;
@@ -33,10 +33,10 @@ void MRIntegrate(MovingRect &currrect, MovingRect &rect)
 
 /*
   class MovingSegmentContainer
-  Описывает хранилище набора результатов.
+  РћРїРёСЃС‹РІР°РµС‚ С…СЂР°РЅРёР»РёС‰Рµ РЅР°Р±РѕСЂР° СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ.
 */
 // --------------------------
-// Методы инициализации и деинциализации
+// РњРµС‚РѕРґС‹ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё Рё РґРµРёРЅС†РёР°Р»РёР·Р°С†РёРё
 // --------------------------
 void MSCInit(MovingSegmentContainer &obj, int numlines, int numsegments)
 {
@@ -72,9 +72,9 @@ void MSCUninit(MovingSegmentContainer &obj)
 // --------------------------
 
 // --------------------------
-// Методы управления параметрами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°РјРё
 // --------------------------
-// Число строк
+// Р§РёСЃР»Рѕ СЃС‚СЂРѕРє
 bool MSCSetDimensions(MovingSegmentContainer &obj, int numlines, int numsegments)
 //bool MSCSetNumLines(MovingSegmentContainer &obj, int num)
 {
@@ -114,7 +114,7 @@ bool MSCSetDimensions(MovingSegmentContainer &obj, int numlines, int numsegments
  return true;
 }
 /*
-// Число найденных движущихся сегментов
+// Р§РёСЃР»Рѕ РЅР°Р№РґРµРЅРЅС‹С… РґРІРёР¶СѓС‰РёС…СЃСЏ СЃРµРіРјРµРЅС‚РѕРІ
 bool MSCSetNumSegments(MovingSegmentContainer &obj, int line, int num)
 {
  if(num <0 || line < 0)
@@ -133,10 +133,10 @@ bool MSCSetNumSegments(MovingSegmentContainer &obj, int line, int num)
 
 /*
   class MovingSegmentSelector.
-  Обеспечивает выделение движущихся объектов
+  РћР±РµСЃРїРµС‡РёРІР°РµС‚ РІС‹РґРµР»РµРЅРёРµ РґРІРёР¶СѓС‰РёС…СЃСЏ РѕР±СЉРµРєС‚РѕРІ
 */
 // --------------------------
-// инициализация и деинициализация
+// РёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ Рё РґРµРёРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
 // --------------------------
 void MSSInit(MovingSegmentSelector &obj)
 {
@@ -212,9 +212,9 @@ void MSSUninit(MovingSegmentSelector &obj)
 // --------------------------
 
 // --------------------------
-// Методы управления параметрами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°РјРё
 // --------------------------
-// Число различных фреймов наблюдения
+// Р§РёСЃР»Рѕ СЂР°Р·Р»РёС‡РЅС‹С… С„СЂРµР№РјРѕРІ РЅР°Р±Р»СЋРґРµРЅРёСЏ
 bool MSSSetNumFrames(MovingSegmentSelector &obj, int num)
 {
  int i;
@@ -228,7 +228,7 @@ bool MSSSetNumFrames(MovingSegmentSelector &obj, int num)
  obj.NumFrames=num;
  obj.FrameSize=(int*)realloc(obj.FrameSize,sizeof(int)*obj.NumFrames);
 
- // Параметры пространственного нейрона
+ // РџР°СЂР°РјРµС‚СЂС‹ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµРЅРЅРѕРіРѕ РЅРµР№СЂРѕРЅР°
  obj.SNWeights=(int**)realloc(obj.SNWeights, sizeof(int*)*obj.NumFrames);
  obj.SNOutput=(int*)realloc(obj.SNOutput, sizeof(int)*obj.NumFrames);
  obj.SNThresold=(int*)realloc(obj.SNThresold, sizeof(int)*obj.NumFrames);
@@ -239,7 +239,7 @@ bool MSSSetNumFrames(MovingSegmentSelector &obj, int num)
  return true;
 }
 
-// Размеры фреймов наблюдения
+// Р Р°Р·РјРµСЂС‹ С„СЂРµР№РјРѕРІ РЅР°Р±Р»СЋРґРµРЅРёСЏ
 bool MSSSetFrameSize(MovingSegmentSelector &obj, int frame, int size)
 {
  if(obj.FrameSize[frame] == size)
@@ -256,7 +256,7 @@ bool MSSSetFrameSize(MovingSegmentSelector &obj, int frame, int size)
    obj.SNWeights[frame][i]=1;
   }
 
- // Порог нейрона
+ // РџРѕСЂРѕРі РЅРµР№СЂРѕРЅР°
  obj.SNThresold[frame]=96*size;
 
  return true;
@@ -285,9 +285,9 @@ bool MSSSetNumMoveObjects(MovingSegmentSelector &obj, int num)
 // --------------------------
 
 // --------------------------
-// Методы управления пространственным нейроном
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµРЅРЅС‹Рј РЅРµР№СЂРѕРЅРѕРј
 // --------------------------
-// Веса нейрона
+// Р’РµСЃР° РЅРµР№СЂРѕРЅР°
 bool MSSSetSNWeight(MovingSegmentSelector &obj, int frame, int num, int value)
 {
  if(value < 0 || frame < 0 || num < 0)
@@ -297,7 +297,7 @@ bool MSSSetSNWeight(MovingSegmentSelector &obj, int frame, int num, int value)
  return true;
 }
 
-// Порог нейрона
+// РџРѕСЂРѕРі РЅРµР№СЂРѕРЅР°
 bool MSSSetSNThresold(MovingSegmentSelector &obj, int frame, int value)
 {
  if(value < 0 || frame < 0)
@@ -307,7 +307,7 @@ bool MSSSetSNThresold(MovingSegmentSelector &obj, int frame, int value)
  return true;
 }
 
-// Коэффициент передаточной функции
+// РљРѕСЌС„С„РёС†РёРµРЅС‚ РїРµСЂРµРґР°С‚РѕС‡РЅРѕР№ С„СѓРЅРєС†РёРё
 bool MSSSetSNTrFuncCoeff(MovingSegmentSelector &obj, int frame, int num, int value)
 {
  if(value < 0 || num <0 || frame < 0)
@@ -320,9 +320,9 @@ bool MSSSetSNTrFuncCoeff(MovingSegmentSelector &obj, int frame, int num, int val
 
 
 // --------------------------
-// Методы счета
+// РњРµС‚РѕРґС‹ СЃС‡РµС‚Р°
 // --------------------------
-// Устанавливает кадр для счета
+// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РєР°РґСЂ РґР»СЏ СЃС‡РµС‚Р°
 bool MSSSetImage(MovingSegmentSelector &obj, char *addr,
 										int xres, int yres)
 {
@@ -344,7 +344,7 @@ bool MSSSetImage(MovingSegmentSelector &obj, char *addr,
  return true;
 }
 
-// Устанавливает набор движущихся сегментов
+// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РЅР°Р±РѕСЂ РґРІРёР¶СѓС‰РёС…СЃСЏ СЃРµРіРјРµРЅС‚РѕРІ
 bool MSSSetSegments(MovingSegmentSelector &obj, int numlines,
 										int *numsegments,
                                         int *x_coords, int *widths)
@@ -371,7 +371,7 @@ bool MSSSetSegments(MovingSegmentSelector &obj, int numlines,
  return true;
 }
 
-// Эмулирует аппаратное определение движущихся сегментов
+// Р­РјСѓР»РёСЂСѓРµС‚ Р°РїРїР°СЂР°С‚РЅРѕРµ РѕРїСЂРµРґРµР»РµРЅРёРµ РґРІРёР¶СѓС‰РёС…СЃСЏ СЃРµРіРјРµРЅС‚РѕРІ
 void MSSSimulate(MovingSegmentSelector &obj)
 {
  int i,j,k,n,m;
@@ -446,7 +446,7 @@ void MSSSimulate(MovingSegmentSelector &obj)
  obj.IsCalculatedFlag=false;
 }
 
-// Производит расчет зон движения по имеющимся сегментам
+// РџСЂРѕРёР·РІРѕРґРёС‚ СЂР°СЃС‡РµС‚ Р·РѕРЅ РґРІРёР¶РµРЅРёСЏ РїРѕ РёРјРµСЋС‰РёРјСЃСЏ СЃРµРіРјРµРЅС‚Р°Рј
 void MSSCalculate(MovingSegmentSelector &obj)
 {
  int j,k,n;
@@ -499,7 +499,7 @@ void MSSCalculate(MovingSegmentSelector &obj)
            }
          }
        }
-      // Если не нашли подходящих объектов то создаем новый
+      // Р•СЃР»Рё РЅРµ РЅР°С€Р»Рё РїРѕРґС…РѕРґСЏС‰РёС… РѕР±СЉРµРєС‚РѕРІ С‚Рѕ СЃРѕР·РґР°РµРј РЅРѕРІС‹Р№
       if(createkey)
        {
         obj.CNumMoveObjects++;
@@ -514,7 +514,7 @@ void MSSCalculate(MovingSegmentSelector &obj)
 
 
 /*
- // Объединяем и удаляем лишние объекты
+ // РћР±СЉРµРґРёРЅСЏРµРј Рё СѓРґР°Р»СЏРµРј Р»РёС€РЅРёРµ РѕР±СЉРµРєС‚С‹
  vector<int> eraselist;
  vector<MovingRect>::iterator I;
 
@@ -579,19 +579,19 @@ void MSSCalculate(MovingSegmentSelector &obj)
  obj.IsCalculatedFlag=true;
 }
 
-// Сбрасывает модель в исходное состояние
+// РЎР±СЂР°СЃС‹РІР°РµС‚ РјРѕРґРµР»СЊ РІ РёСЃС…РѕРґРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
 void MSSReset(MovingSegmentSelector &obj)
 {
  int i;
 
- // Модель считающего нейрона (Counter Neuron)
- // Выходы нейрона
+ // РњРѕРґРµР»СЊ СЃС‡РёС‚Р°СЋС‰РµРіРѕ РЅРµР№СЂРѕРЅР° (Counter Neuron)
+ // Р’С‹С…РѕРґС‹ РЅРµР№СЂРѕРЅР°
  obj.CNOutput=0;
 
- // Флаг наличия сформированного набора движущихся сегментов
+ // Р¤Р»Р°Рі РЅР°Р»РёС‡РёСЏ СЃС„РѕСЂРјРёСЂРѕРІР°РЅРЅРѕРіРѕ РЅР°Р±РѕСЂР° РґРІРёР¶СѓС‰РёС…СЃСЏ СЃРµРіРјРµРЅС‚РѕРІ
  obj.IsSegmentedFlag=false;
 
- // Флаг успешного рачета
+ // Р¤Р»Р°Рі СѓСЃРїРµС€РЅРѕРіРѕ СЂР°С‡РµС‚Р°
  obj.IsCalculatedFlag=false;
 
  for(i=0;i<obj.Segments.NumLines;i++)
@@ -601,26 +601,26 @@ void MSSReset(MovingSegmentSelector &obj)
  obj.CNumMoveObjects=0;
 }
 
-// Восстанавливает настройки по умолчанию
+// Р’РѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РЅР°СЃС‚СЂРѕР№РєРё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
 void MSSDefaults(MovingSegmentSelector &obj)
 {
- // Указатель на разностное изображение-источник
+ // РЈРєР°Р·Р°С‚РµР»СЊ РЅР° СЂР°Р·РЅРѕСЃС‚РЅРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ-РёСЃС‚РѕС‡РЅРёРє
  obj.Image=0; obj.XRes=0; obj.YRes=0;
 
- // Число различных фреймов наблюдения
+ // Р§РёСЃР»Рѕ СЂР°Р·Р»РёС‡РЅС‹С… С„СЂРµР№РјРѕРІ РЅР°Р±Р»СЋРґРµРЅРёСЏ
  MSSSetNumFrames(obj, 3);
 
  MSSSetNumMoveObjects(obj, 100);
 
- // Размеры фреймов наблюдения
+ // Р Р°Р·РјРµСЂС‹ С„СЂРµР№РјРѕРІ РЅР°Р±Р»СЋРґРµРЅРёСЏ
  MSSSetFrameSize(obj, 0, 4);
  MSSSetFrameSize(obj, 1, 10);
  MSSSetFrameSize(obj, 2, 15);
 //etFrameSize(3, 20);
 //etFrameSize(4, 25);
 
- // Модель пространственного нейрона (Space Neuron)
- // Веса нейрона
+ // РњРѕРґРµР»СЊ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµРЅРЅРѕРіРѕ РЅРµР№СЂРѕРЅР° (Space Neuron)
+ // Р’РµСЃР° РЅРµР№СЂРѕРЅР°
  for(int j=0;j<obj.NumFrames;j++)
   for(int i=0;i<obj.FrameSize[j];i++)
    {
@@ -632,11 +632,11 @@ void MSSDefaults(MovingSegmentSelector &obj)
     obj.SNWeights[j][i]=1;
    }
 
- // Порог нейрона
+ // РџРѕСЂРѕРі РЅРµР№СЂРѕРЅР°
  obj.SNThresold[0]=96*obj.FrameSize[0];
  obj.SNThresold[1]=96*obj.FrameSize[1];
 
- // Коэффициенты передаточной функции
+ // РљРѕСЌС„С„РёС†РёРµРЅС‚С‹ РїРµСЂРµРґР°С‚РѕС‡РЅРѕР№ С„СѓРЅРєС†РёРё
 // SNTrFuncCoeff[0][0]=100;
 // SNTrFuncCoeff[1][0]=100;
                                         
@@ -645,9 +645,9 @@ void MSSDefaults(MovingSegmentSelector &obj)
 // --------------------------
 
 // --------------------------
-// Скрытые методы счета
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СЃС‡РµС‚Р°
 // --------------------------
-// Функция активации пространственного нейрона
+// Р¤СѓРЅРєС†РёСЏ Р°РєС‚РёРІР°С†РёРё РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµРЅРЅРѕРіРѕ РЅРµР№СЂРѕРЅР°
 int MSSSNActivationFn(MovingSegmentSelector &obj, int frame, int input)
 {
  if(input < obj.SNThresold[frame])
@@ -663,7 +663,7 @@ int MSSSNActivationFn(MovingSegmentSelector &obj, int frame, int input)
 */
 }
 
-// Функция активации считающего нейрона
+// Р¤СѓРЅРєС†РёСЏ Р°РєС‚РёРІР°С†РёРё СЃС‡РёС‚Р°СЋС‰РµРіРѕ РЅРµР№СЂРѕРЅР°
 int MSSCNActivationFn(MovingSegmentSelector &obj)
 {
  for(int i=0;i<obj.NumFrames;i++)

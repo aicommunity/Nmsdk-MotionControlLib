@@ -14,59 +14,66 @@ using namespace RDK;
 
 class RDK_LIB_TYPE NManipulatorAndGyro: public UNet
 {
-public: // Свойства
-ULProperty<double, NManipulatorAndGyro, ptPubParameter> Mass;
+public: // 
+UProperty<double, NManipulatorAndGyro, ptPubParameter> Mass;
 
-ULProperty<double, NManipulatorAndGyro, ptPubParameter> Length;
+UProperty<double, NManipulatorAndGyro, ptPubParameter> Length;
 
-public: // Входы и выходы
-/// Внешний момент
-UPropertyInputData<MDMatrix<double>, NManipulatorAndGyro, ptInput | ptPubState> InputMomentumExt;
+public: //   
+/// Р’РЅРµС€РЅРёР№ РјРѕРјРµРЅС‚
+UProperty<MDMatrix<double>, NManipulatorAndGyro, ptInput | ptPubState> InputMomentumExt;
 
-/// Момент на валу двигателя
-UPropertyInputData<MDMatrix<double>, NManipulatorAndGyro, ptInput | ptPubState> InputMomentum;
+/// РњРѕРјРµРЅС‚ РЅР° РІР°Р»Сѓ РґРІРёРіР°С‚РµР»СЏ
+UProperty<MDMatrix<double>, NManipulatorAndGyro, ptInput | ptPubState> InputMomentum;
 
-/// Текущий угол поворота вала
-UPropertyInputData<MDMatrix<double>, NManipulatorAndGyro, ptInput | ptPubState> InputAngle;
+/// РўРµРєСѓС‰РёР№ СѓРіРѕР» РїРѕРІРѕСЂРѕС‚Р° РІР°Р»Р°
+UProperty<MDMatrix<double>, NManipulatorAndGyro, ptInput | ptPubState> InputAngle;
 
-UPropertyOutputData<MDMatrix<double>, NManipulatorAndGyro, ptOutput | ptPubState> Output;
+UProperty<MDMatrix<double>, NManipulatorAndGyro, ptOutput | ptPubState> Output;
 
 
-protected: // Переменные состояния
+protected: //  
  double gravity_constant;
 
- public: // Методы
+ public: // 
 // --------------------------
-// Конструкторы и деструкторы
+// --------------------------
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
+// --------------------------
 // --------------------------
 NManipulatorAndGyro(void);
 virtual ~NManipulatorAndGyro(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
+// --------------------------
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
+// --------------------------
 virtual NManipulatorAndGyro* New(void);
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом 
+// --------------------------
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ СЃС‡РµС‚РѕРј 
+// --------------------------
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
+//    Reset()   Ready  true
 virtual bool ABuild(void);
 
-// Сброс процесса счета без потери настроек
+// РЎР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р° Р±РµР· РїРѕС‚РµСЂРё РЅР°СЃС‚СЂРѕРµРє
 virtual bool AReset(void);
 
-// Выполняет расчет этого объекта
+// Р’С‹РїРѕР»РЅСЏРµС‚ СЂР°СЃС‡РµС‚ СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
 virtual bool ACalculate(void);
 // --------------------------
 };

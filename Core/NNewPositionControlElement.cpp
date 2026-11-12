@@ -17,9 +17,9 @@ See file license.txt for more information
 
 namespace NMSDK {
 
-// Методы
+// РњРµС‚РѕРґС‹
 // --------------------------
-// Конструкторы и деструкторы
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
 // --------------------------
 NNewPositionControlElement::NNewPositionControlElement(void)
 :   MotionControl("MotionControl",this),
@@ -42,7 +42,7 @@ NNewPositionControlElement::~NNewPositionControlElement(void)
 
 
 // ---------------------
-// Методы управления параметрами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°РјРё
 // ---------------------
 bool NNewPositionControlElement::SetInputNeuronType(const string &value)
 {
@@ -57,14 +57,14 @@ bool NNewPositionControlElement::SetControlNeuronType(const string &value)
 // ---------------------
 
 // ---------------------
-// Методы управления переменными состояния
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїРµСЂРµРјРµРЅРЅС‹РјРё СЃРѕСЃС‚РѕСЏРЅРёСЏ
 // ---------------------
 // ---------------------
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NNewPositionControlElement* NNewPositionControlElement::New(void)
 {
  return new NNewPositionControlElement;
@@ -73,25 +73,25 @@ NNewPositionControlElement* NNewPositionControlElement::New(void)
 
 
 // --------------------------
-// Скрытые методы управления счетом
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ СЃС‡РµС‚РѕРј
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NNewPositionControlElement::ADefault(void)
 {
  NPositionControlElement::ADefault();
  return true;
 }
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
 bool NNewPositionControlElement::ABuild(void)
 {
  MotionControlElement = dynamic_cast<NEngineMotionControl*>(MotionControl.GetItem());
  CurrentPosition->Assign(2,1,0.0);
 
- //удаление старой структуры перед перестройкой, добавлено
+ //СѓРґР°Р»РµРЅРёРµ СЃС‚Р°СЂРѕР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РїРµСЂРµРґ РїРµСЂРµСЃС‚СЂРѕР№РєРѕР№, РґРѕР±Р°РІР»РµРЅРѕ
  if (MotionControlElement)
  {
   TargetPosition->Assign(MotionControlElement->GetNumControlLoops(),2*MotionControlElement->NumMotionElements,0.0);
@@ -136,8 +136,8 @@ bool NNewPositionControlElement::ABuild(void)
  }
 
  InputNeurons.clear();
- PostInputNeurons.clear();//добавлено
- PreControlNeurons.clear();//добавлено
+ PostInputNeurons.clear();//РґРѕР±Р°РІР»РµРЅРѕ
+ PreControlNeurons.clear();//РґРѕР±Р°РІР»РµРЅРѕ
  ControlNeurons.clear();
 
  Generators.clear();
@@ -148,14 +148,14 @@ bool NNewPositionControlElement::ABuild(void)
  return true;
 }
 
-// Сброс процесса счета без потери настроек
+// РЎР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р° Р±РµР· РїРѕС‚РµСЂРё РЅР°СЃС‚СЂРѕРµРє
 bool NNewPositionControlElement::AReset(void)
 {
  RememberState = false;
  return true;
 }
 
-// Выполняет расчет этого объекта
+// Р’С‹РїРѕР»РЅСЏРµС‚ СЂР°СЃС‡РµС‚ СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
 bool NNewPositionControlElement::ACalculate(void)
 {
  if(!MotionControlElement)
@@ -271,13 +271,13 @@ bool NNewPositionControlElement::CreateNeurons()
    bool res(true);
    vector<NMotionElement *> Motions = MotionControlElement->GetMotion();
 
-   if(Motions.empty())//добавлено
+   if(Motions.empty())//РґРѕР±Р°РІР»РµРЅРѕ
     return false;
 
 
    //Creating InputNeurons
-   LeftInputNeurons.clear(); //добавлено
-   RightInputNeurons.clear(); //добавлено
+   LeftInputNeurons.clear(); //РґРѕР±Р°РІР»РµРЅРѕ
+   RightInputNeurons.clear(); //РґРѕР±Р°РІР»РµРЅРѕ
    for(int i=0;i<MotionControlElement->NumMotionElements;i++)
    {
     NMotionElement *melem=Motions[i];
@@ -336,8 +336,8 @@ bool NNewPositionControlElement::CreateNeurons()
       RightInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(inputNeuronRName)));
      }
 
-        //Построение связей от афферентных нейронов в EngineMotionControl->MotionElement
-        //ко входным нейронам (InputNeuron) в NNewPositionControlElement
+        //РџРѕСЃС‚СЂРѕРµРЅРёРµ СЃРІСЏР·РµР№ РѕС‚ Р°С„С„РµСЂРµРЅС‚РЅС‹С… РЅРµР№СЂРѕРЅРѕРІ РІ EngineMotionControl->MotionElement
+        //РєРѕ РІС…РѕРґРЅС‹Рј РЅРµР№СЂРѕРЅР°Рј (InputNeuron) РІ NNewPositionControlElement
      res = owner->CreateLink(ltzoneLName,"Output",inputLName+".Soma1.ExcSynapse1","Input");
      res = owner->CreateLink(ltzoneLName,"Output",inputRName+".Soma1.InhSynapse1","Input");
      res = owner->CreateLink(ltzoneRName,"Output",inputLName+".Soma1.InhSynapse1","Input");
@@ -348,8 +348,8 @@ bool NNewPositionControlElement::CreateNeurons()
    //int num_motions = MotionControlElement->NumMotionElements;
 
    //Creating ControlNeurons
-   LeftControlNeurons.clear(); //добавлено
-   RightControlNeurons.clear(); //добавлено
+   LeftControlNeurons.clear(); //РґРѕР±Р°РІР»РµРЅРѕ
+   RightControlNeurons.clear(); //РґРѕР±Р°РІР»РµРЅРѕ
    for(int i=0;i<MotionControlElement->NumMotionElements;i++)
    {
     NMotionElement *melem=Motions[i];
@@ -377,7 +377,7 @@ bool NNewPositionControlElement::CreateNeurons()
          ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
       controlNeuron->GetLongName(owner, controlLName);
       LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
-         //Adding synapses for links to PrecontrolNeurons, добавлено
+         //Adding synapses for links to PrecontrolNeurons, РґРѕР±Р°РІР»РµРЅРѕ
          UEPtr<NPulseMembrane> soma = controlNeuron->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
@@ -394,7 +394,7 @@ bool NNewPositionControlElement::CreateNeurons()
       ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
       cont->GetLongName(owner, controlLName);
          LeftControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronLName)));
-         //Adding synapses for links to PrecontrolNeurons, добавлено
+         //Adding synapses for links to PrecontrolNeurons, РґРѕР±Р°РІР»РµРЅРѕ
          UEPtr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
@@ -409,7 +409,7 @@ bool NNewPositionControlElement::CreateNeurons()
       ControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
       controlNeuron->GetLongName(owner, controlRName);
       RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
-         //Adding synapses for links to PrecontrolNeurons, добавлено
+         //Adding synapses for links to PrecontrolNeurons, РґРѕР±Р°РІР»РµРЅРѕ
          UEPtr<NPulseMembrane> soma = controlNeuron->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
@@ -426,7 +426,7 @@ bool NNewPositionControlElement::CreateNeurons()
       ControlNeurons.push_back(static_pointer_cast<NNet>(cont));
       cont->GetLongName(owner, controlRName);
       RightControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(controlNeuronRName)));
-         //Adding synapses for links to PrecontrolNeurons, добавлено
+         //Adding synapses for links to PrecontrolNeurons, РґРѕР±Р°РІР»РµРЅРѕ
          UEPtr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
@@ -434,8 +434,8 @@ bool NNewPositionControlElement::CreateNeurons()
          soma->Build();
      }
 
-        //Построение связей от ControlNeuron-ов в NNewPositionControlElement к
-        //постафферентным нейронам (PostAfferent)в EngineMotionControl->MotionElement
+        //РџРѕСЃС‚СЂРѕРµРЅРёРµ СЃРІСЏР·РµР№ РѕС‚ ControlNeuron-РѕРІ РІ NNewPositionControlElement Рє
+        //РїРѕСЃС‚Р°С„С„РµСЂРµРЅС‚РЅС‹Рј РЅРµР№СЂРѕРЅР°Рј (PostAfferent)РІ EngineMotionControl->MotionElement
         res = owner->CreateLink(controlLName+".LTZone","Output",postAfferentLName+".Soma1.ExcSynapse2","Input");
      res = owner->CreateLink(controlLName+".LTZone","Output",postAfferentRName+".Soma1.InhSynapse1","Input");
      res = owner->CreateLink(controlRName+".LTZone","Output",postAfferentLName+".Soma1.InhSynapse1","Input");
@@ -450,8 +450,8 @@ bool NNewPositionControlElement::CreateNeurons()
 
 
    //Creating PreControlNeurons
-   LeftPreControlNeurons.clear(); //добавлено
-   RightPreControlNeurons.clear(); //добавлено
+   LeftPreControlNeurons.clear(); //РґРѕР±Р°РІР»РµРЅРѕ
+   RightPreControlNeurons.clear(); //РґРѕР±Р°РІР»РµРЅРѕ
    for(int i=0;i<MotionControlElement->NumMotionElements;i++)
    {
     NMotionElement *melem=Motions[i];
@@ -470,7 +470,7 @@ bool NNewPositionControlElement::CreateNeurons()
      {
       PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
       LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
-         //Adding synapses for links from Control Neurons in NMultiPositionControl, добавлено
+         //Adding synapses for links from Control Neurons in NMultiPositionControl, РґРѕР±Р°РІР»РµРЅРѕ
          UEPtr<NPulseMembrane> soma = GetComponent(preControlNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
@@ -486,7 +486,7 @@ bool NNewPositionControlElement::CreateNeurons()
          res&=(AddComponent(cont) != ForbiddenId);
       PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
       LeftPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronLName)));
-         //Adding synapses for links from Control Neurons in NMultiPositionControl, добавлено
+         //Adding synapses for links from Control Neurons in NMultiPositionControl, РґРѕР±Р°РІР»РµРЅРѕ
          UEPtr<NPulseMembrane> soma = GetComponent(preControlNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
@@ -499,7 +499,7 @@ bool NNewPositionControlElement::CreateNeurons()
      {
       PreControlNeurons.push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
       RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
-         //Adding synapses for links from Control Neurons in NMultiPositionControl, добавлено
+         //Adding synapses for links from Control Neurons in NMultiPositionControl, РґРѕР±Р°РІР»РµРЅРѕ
          UEPtr<NPulseMembrane> soma = GetComponent(preControlNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
@@ -515,7 +515,7 @@ bool NNewPositionControlElement::CreateNeurons()
          res&=(AddComponent(cont) != ForbiddenId);
       PreControlNeurons.push_back(static_pointer_cast<NNet>(cont));
       RightPreControlNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(preControlNeuronRName)));
-         //Adding synapses for links from Control Neurons in NMultiPositionControl, добавлено
+         //Adding synapses for links from Control Neurons in NMultiPositionControl, РґРѕР±Р°РІР»РµРЅРѕ
          UEPtr<NPulseMembrane> soma = GetComponent(preControlNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
@@ -546,7 +546,7 @@ bool NNewPositionControlElement::CreateNeurons()
      {
       PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)));
       LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronLName)));
-         //Adding synapses for links from InputNeurons, добавлено
+         //Adding synapses for links from InputNeurons, РґРѕР±Р°РІР»РµРЅРѕ
          UEPtr<NPulseMembrane> soma = GetComponent(postInputNeuronLName)->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
@@ -562,7 +562,7 @@ bool NNewPositionControlElement::CreateNeurons()
          res&=(AddComponent(cont) != ForbiddenId);
       PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
       LeftPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
-         //Adding synapses for links from InputNeurons, добавлено
+         //Adding synapses for links from InputNeurons, РґРѕР±Р°РІР»РµРЅРѕ
          UEPtr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
@@ -575,7 +575,7 @@ bool NNewPositionControlElement::CreateNeurons()
      {
       PostInputNeurons.push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)));
       RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(GetComponent(postInputNeuronRName)));
-         //Adding synapses for links from InputNeurons, добавлено
+         //Adding synapses for links from InputNeurons, РґРѕР±Р°РІР»РµРЅРѕ
          UEPtr<NPulseMembrane> soma = GetComponent(postInputNeuronRName)->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
@@ -592,7 +592,7 @@ bool NNewPositionControlElement::CreateNeurons()
       PostInputNeurons.push_back(static_pointer_cast<NNet>(cont));
       RightPostInputNeurons[j].push_back(static_pointer_cast<NNet>(cont));
 
-         //Adding synapses for links from InputNeurons, добавлено
+         //Adding synapses for links from InputNeurons, РґРѕР±Р°РІР»РµРЅРѕ
          UEPtr<NPulseMembrane> soma = cont->GetComponentL<NPulseMembrane>("Soma1",true);
          if(!soma)
           return true;
@@ -715,7 +715,7 @@ bool NNewPositionControlElement::CreateExternalControlElements(void)
    bool res(true);
    vector<NMotionElement *> Motions = MotionControlElement->GetMotion();
    //vector<NNet*> Motions = MotionControlElement->GetMotion();
-   if(Motions.empty())//добавлено
+   if(Motions.empty())//РґРѕР±Р°РІР»РµРЅРѕ
        return false;
 
    for(int i=0;i<MotionControlElement->NumMotionElements;i++)
@@ -797,7 +797,7 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
    NameT finishName;
    int syns_max = branch->NumExcitatorySynapses;
 
-   for(size_t i=0;i<start.size();i++) //добавлено
+   for(size_t i=0;i<start.size();i++) //РґРѕР±Р°РІР»РµРЅРѕ
 	  {
     startName = start[i]->GetName()+".LTZone";
 
@@ -810,10 +810,10 @@ bool NNewPositionControlElement::LinkNeurons(vector <NNet*> start, vector <NNet*
      finishName = finish[j]->GetName()+"."+branch->GetName()+".ExcSynapse"+sntoa(m+1);
 
      if(CheckLink(startName,finishName))
-       break;//перейти к следующему элементу в start
+       break;//РїРµСЂРµР№С‚Рё Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СЌР»РµРјРµРЅС‚Сѓ РІ start
 
      if (syn->Input.IsConnected())
-       continue; //перейти к следующему синапсу
+       continue; //РїРµСЂРµР№С‚Рё Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СЃРёРЅР°РїСЃСѓ
 
      CreateLink(startName, "Output", finishName,"Input");
      break;
@@ -847,7 +847,7 @@ bool NNewPositionControlElement::LinkNeuronsNeg(vector <NNet*> start, vector <NN
 	  if(!hasEmptyMembrane)
    {
     //branch=neuron->BranchDendrite("Soma1",false);
-    neuron->NumSomaMembraneParts = 1; //добавлено
+    neuron->NumSomaMembraneParts = 1; //РґРѕР±Р°РІР»РµРЅРѕ
     neuron->Build();
    }
 
@@ -855,7 +855,7 @@ bool NNewPositionControlElement::LinkNeuronsNeg(vector <NNet*> start, vector <NN
   NameT finishName;
   int syns_max = branch->NumInhibitorySynapses;
 
-  for(size_t i=0;i<start.size();i++) //добавлено
+  for(size_t i=0;i<start.size();i++) //РґРѕР±Р°РІР»РµРЅРѕ
   {
    startName = start[i]->GetName()+".LTZone";
 
@@ -868,10 +868,10 @@ bool NNewPositionControlElement::LinkNeuronsNeg(vector <NNet*> start, vector <NN
     finishName = finish[j]->GetName()+"."+branch->GetName()+".InhSynapse"+sntoa(m+1);
 
     if(CheckLink(startName,finishName))
-      break;//перейти к следующему элементу в start
+      break;//РїРµСЂРµР№С‚Рё Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СЌР»РµРјРµРЅС‚Сѓ РІ start
 
     if (syn->Input.IsConnected())
-      continue; //перейти к следующему синапсу
+      continue; //РїРµСЂРµР№С‚Рё Рє СЃР»РµРґСѓСЋС‰РµРјСѓ СЃРёРЅР°РїСЃСѓ
 
     CreateLink(startName, "Output", finishName,"Input");
     break;

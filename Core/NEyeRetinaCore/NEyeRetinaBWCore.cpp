@@ -3,9 +3,9 @@
 
 #include "NEyeRetinaBWCore.h"
 
-// Методы
+// РњРµС‚РѕРґС‹
 // --------------------------
-// Конструкторы и деструкторы
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
 // --------------------------
 NEyeRetinaBWCore::NEyeRetinaBWCore(void)
 {
@@ -68,7 +68,7 @@ NEyeRetinaBWCore::~NEyeRetinaBWCore(void)
 // --------------------------
 
 // --------------------------
-// Методы управления параметрами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°РјРё
 // --------------------------
 bool NEyeRetinaBWCore::SetGangCalcEnabled(bool enabled)
 {
@@ -223,9 +223,9 @@ bool NEyeRetinaBWCore::SetConeFreqThr(int thr)
 // --------------------------
 
 // --------------------------
-// Методы счета
+// РњРµС‚РѕРґС‹ СЃС‡РµС‚Р°
 // --------------------------
-// Устанавливает новое изображение
+// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ РЅРѕРІРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ
 bool NEyeRetinaBWCore::SetInputImage(UColorT *bmp, ReceptorType rec_type)
 {
  if(!ReadyState)
@@ -247,29 +247,29 @@ bool NEyeRetinaBWCore::SetInputImage(UColorT *bmp, ReceptorType rec_type)
  return true;
 }
 
-// Сброс модели в исходное состояние (с сохранением
-// настроек параметров)
+// РЎР±СЂРѕСЃ РјРѕРґРµР»Рё РІ РёСЃС…РѕРґРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ (СЃ СЃРѕС…СЂР°РЅРµРЅРёРµРј
+// РЅР°СЃС‚СЂРѕРµРє РїР°СЂР°РјРµС‚СЂРѕРІ)
 void NEyeRetinaBWCore::Reset(void)
 {
  if(!ReadyState)
   UpdateDataStructure();
   
  ResetBipolarHistory();
- if(GangCalcEnabled) // Если расчет уровня ганглиозных клеток разрешен
+ if(GangCalcEnabled) // Р•СЃР»Рё СЂР°СЃС‡РµС‚ СѓСЂРѕРІРЅСЏ РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє СЂР°Р·СЂРµС€РµРЅ
   ResetGanglionicHistory();
 
  BiMin=BiMax=GangMin=GangMax=0;
  ResetMinMaxHistory(); 
 }
 
-// Сброс модели в исходное состояние (с восстановлением
-// настроек по умолчанию)
+// РЎР±СЂРѕСЃ РјРѕРґРµР»Рё РІ РёСЃС…РѕРґРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ (СЃ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµРј
+// РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ)
 void NEyeRetinaBWCore::ResetDefaults(void)
 {
  SetRetinaRes(10, 10, 1);
 
- // Было в дипломе
- // Но должно зависеть от разрешения
+ // Р‘С‹Р»Рѕ РІ РґРёРїР»РѕРјРµ
+ // РќРѕ РґРѕР»Р¶РЅРѕ Р·Р°РІРёСЃРµС‚СЊ РѕС‚ СЂР°Р·СЂРµС€РµРЅРёСЏ
  /*SetHorizontRecSize(3);
  SetBipolarRecSize(3);
 
@@ -292,7 +292,7 @@ void NEyeRetinaBWCore::ResetDefaults(void)
  UpdateDataStructure();
 }
 
-// Расчет
+// Р Р°СЃС‡РµС‚
 void NEyeRetinaBWCore::Calculate(void)
 {
  if(!ReadyState)
@@ -302,10 +302,10 @@ void NEyeRetinaBWCore::Calculate(void)
   return;
 
  BipolarCalculate();
- if(GangCalcEnabled) // Если расчет уровня ганглиозных клеток разрешен
+ if(GangCalcEnabled) // Р•СЃР»Рё СЂР°СЃС‡РµС‚ СѓСЂРѕРІРЅСЏ РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє СЂР°Р·СЂРµС€РµРЅ
   GanglionicCalculate();
 
- // Активность ганглиозных клеток на перефирии
+ // РђРєС‚РёРІРЅРѕСЃС‚СЊ РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє РЅР° РїРµСЂРµС„РёСЂРёРё
  int threshold = int(ConeFreqThr / RodReduceCoef);
 
  LeftOnActivity=0;
@@ -403,9 +403,9 @@ void NEyeRetinaBWCore::Calculate(void)
 
 
 // --------------------------
-// Скрытые методы управления параметрами
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°РјРё
 // --------------------------
-// Создает буфер BiNeibBuf 
+// РЎРѕР·РґР°РµС‚ Р±СѓС„РµСЂ BiNeibBuf 
 void NEyeRetinaBWCore::CreateBiNeibBuf(void)
 {
  int i,j;
@@ -423,7 +423,7 @@ void NEyeRetinaBWCore::CreateBiNeibBuf(void)
   }
 }
 
-// Создает буфер GangNeibBuf 
+// РЎРѕР·РґР°РµС‚ Р±СѓС„РµСЂ GangNeibBuf 
 void NEyeRetinaBWCore::CreateGangNeibBuf(void)
 {
  int i,j,k;
@@ -446,7 +446,7 @@ void NEyeRetinaBWCore::CreateGangNeibBuf(void)
   }
 }
 
-// Генерирует веса вкладов от рецептивной зоны размера 0-level
+// Р“РµРЅРµСЂРёСЂСѓРµС‚ РІРµСЃР° РІРєР»Р°РґРѕРІ РѕС‚ СЂРµС†РµРїС‚РёРІРЅРѕР№ Р·РѕРЅС‹ СЂР°Р·РјРµСЂР° 0-level
 void NEyeRetinaBWCore::CreateWeights(int *weights, size_t level)
 {
 // int sum=100;
@@ -512,9 +512,9 @@ void NEyeRetinaBWCore::CreateWeights(int *weights, size_t level)
 // --------------------------
 
 // --------------------------
-// Скрытые методы счета
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СЃС‡РµС‚Р°
 // --------------------------
-// Удаляет все структуры данных
+// РЈРґР°Р»СЏРµС‚ РІСЃРµ СЃС‚СЂСѓРєС‚СѓСЂС‹ РґР°РЅРЅС‹С…
 void NEyeRetinaBWCore::DestroyDataStructure(void)
 {
  int i,j;
@@ -592,8 +592,8 @@ void NEyeRetinaBWCore::DestroyDataStructure(void)
  ReadyState=false;
 }
 
-// Вызывает пересоздание внутренней структуры класса
-// и сброс модели (с сохранением настроек)
+// Р’С‹Р·С‹РІР°РµС‚ РїРµСЂРµСЃРѕР·РґР°РЅРёРµ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РєР»Р°СЃСЃР°
+// Рё СЃР±СЂРѕСЃ РјРѕРґРµР»Рё (СЃ СЃРѕС…СЂР°РЅРµРЅРёРµРј РЅР°СЃС‚СЂРѕРµРє)
 bool NEyeRetinaBWCore::UpdateDataStructure(void)
 {
  int i;
@@ -638,7 +638,7 @@ bool NEyeRetinaBWCore::UpdateDataStructure(void)
  return true;
 }
 
-// Пересчитывает входное изображение
+// РџРµСЂРµСЃС‡РёС‚С‹РІР°РµС‚ РІС…РѕРґРЅРѕРµ РёР·РѕР±СЂР°Р¶РµРЅРёРµ
 void NEyeRetinaBWCore::InputImageCalculate(ReceptorType rec_type)
 {
  int i;
@@ -649,7 +649,7 @@ void NEyeRetinaBWCore::InputImageCalculate(ReceptorType rec_type)
 
 // retina_pix_length = sqrt(double((BiWidth/2)*(BiWidth/2) + (BiHeight/2)*(BiHeight/2)));
 
- // Модифицируем историю уровня биполяров
+ // РњРѕРґРёС„РёС†РёСЂСѓРµРј РёСЃС‚РѕСЂРёСЋ СѓСЂРѕРІРЅСЏ Р±РёРїРѕР»СЏСЂРѕРІ
  if(CurrBipolarHistIndex >= BipolarHistorySize-1)
   CurrBipolarHistIndex=0;
  else
@@ -705,7 +705,7 @@ void NEyeRetinaBWCore::InputImageCalculate(ReceptorType rec_type)
   }
  }
 
- // Вычисляем сумму истории уровня биполяров
+ // Р’С‹С‡РёСЃР»СЏРµРј СЃСѓРјРјСѓ РёСЃС‚РѕСЂРёРё СѓСЂРѕРІРЅСЏ Р±РёРїРѕР»СЏСЂРѕРІ
  for(i=0;i<InputImageLength;i++)
   {
    CurrentBipolarHistorySum=&(BipolarHistorySum[i]);
@@ -719,7 +719,7 @@ void NEyeRetinaBWCore::InputImageCalculate(ReceptorType rec_type)
 
 }
 
-// Расчет первого этапа обработки
+// Р Р°СЃС‡РµС‚ РїРµСЂРІРѕРіРѕ СЌС‚Р°РїР° РѕР±СЂР°Р±РѕС‚РєРё
 void NEyeRetinaBWCore::BipolarCalculate(void)
 {
  int l,i,j;
@@ -732,7 +732,7 @@ void NEyeRetinaBWCore::BipolarCalculate(void)
  int *CurrentBipolarHistory;
  int BiPosMin=255,BiNegMax=-255;
 
-  // Модифицируем историю граничных уровней
+  // РњРѕРґРёС„РёС†РёСЂСѓРµРј РёСЃС‚РѕСЂРёСЋ РіСЂР°РЅРёС‡РЅС‹С… СѓСЂРѕРІРЅРµР№
  if(CurrMinMaxHistIndex >= MinMaxHistorySize-1)
   CurrMinMaxHistIndex=0;
  else
@@ -741,9 +741,9 @@ void NEyeRetinaBWCore::BipolarCalculate(void)
  BiMinHistory[CurrMinMaxHistIndex]=0;
  BiMaxHistory[CurrMinMaxHistIndex]=0;
 
- if(GangCalcEnabled) // Если расчет уровня ганглиозных клеток разрешен
+ if(GangCalcEnabled) // Р•СЃР»Рё СЂР°СЃС‡РµС‚ СѓСЂРѕРІРЅСЏ РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє СЂР°Р·СЂРµС€РµРЅ
   {
-   // Модифицируем историю уровня ганглиозных клеток
+   // РњРѕРґРёС„РёС†РёСЂСѓРµРј РёСЃС‚РѕСЂРёСЋ СѓСЂРѕРІРЅСЏ РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє
    if(CurrGanglionicHistIndex >= GanglionicHistorySize-1)
 	CurrGanglionicHistIndex=0;
    else
@@ -751,7 +751,7 @@ void NEyeRetinaBWCore::BipolarCalculate(void)
 
    BipolarOutput=GanglionicHistory[CurrGanglionicHistIndex];
   }
- else // Если расчет уровня ганглиозных клеток запрещен
+ else // Р•СЃР»Рё СЂР°СЃС‡РµС‚ СѓСЂРѕРІРЅСЏ РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє Р·Р°РїСЂРµС‰РµРЅ
   {
    BipolarOutput=ARetinaOut;
   }
@@ -763,7 +763,7 @@ void NEyeRetinaBWCore::BipolarCalculate(void)
    currneibbuf=BiNeibBuf[l];
    currbufnumbers=BiNeibBufNumbers[l];
 
-   // Рассчитываем вклад от биполяров
+   // Р Р°СЃСЃС‡РёС‚С‹РІР°РµРј РІРєР»Р°Рґ РѕС‚ Р±РёРїРѕР»СЏСЂРѕРІ
    for(i=0;i<BipolarRecSize;i++)
     {
      sum=0;
@@ -775,7 +775,7 @@ void NEyeRetinaBWCore::BipolarCalculate(void)
 	}
 	BipolarOutput[l]/=100;
 
-   // Рассчитываем вклад от горизонтальных клеток
+   // Р Р°СЃСЃС‡РёС‚С‹РІР°РµРј РІРєР»Р°Рґ РѕС‚ РіРѕСЂРёР·РѕРЅС‚Р°Р»СЊРЅС‹С… РєР»РµС‚РѕРє
    sum=0;
    for(i=0;i<HorizontRecSize;i++)
     {
@@ -788,7 +788,7 @@ void NEyeRetinaBWCore::BipolarCalculate(void)
     }
    BipolarOutput[l]-=sum/((int)(BipolarHistorySize-1)*100);
 
-   // Расчитываем граничные значения уровня биполяров
+   // Р Р°СЃС‡РёС‚С‹РІР°РµРј РіСЂР°РЅРёС‡РЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ СѓСЂРѕРІРЅСЏ Р±РёРїРѕР»СЏСЂРѕРІ
    if(BipolarOutput[l]<BiMinHistory[CurrMinMaxHistIndex])
 	BiMinHistory[CurrMinMaxHistIndex]=BipolarOutput[l];
    else
@@ -811,7 +811,7 @@ void NEyeRetinaBWCore::BipolarCalculate(void)
     }
   }
 
- // Масштабирование
+ // РњР°СЃС€С‚Р°Р±РёСЂРѕРІР°РЅРёРµ
 /* for(l=0;l<InputImageLength;l++)
  {
    if(BipolarOutput[l]>=0 && (BiMaxHistory[CurrMinMaxHistIndex]-BiPosMin))
@@ -825,9 +825,9 @@ void NEyeRetinaBWCore::BipolarCalculate(void)
  }*/
 
 
- if(GangCalcEnabled) // Если расчет уровня ганглиозных клеток разрешен
+ if(GangCalcEnabled) // Р•СЃР»Рё СЂР°СЃС‡РµС‚ СѓСЂРѕРІРЅСЏ РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє СЂР°Р·СЂРµС€РµРЅ
   {
-   // Вычисляем сумму истории уровня ганглиозных клеток
+   // Р’С‹С‡РёСЃР»СЏРµРј СЃСѓРјРјСѓ РёСЃС‚РѕСЂРёРё СѓСЂРѕРІРЅСЏ РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє
    for(i=0;i<InputImageLength;i++)
     {
      CurrentGanglionicHistorySum=&(GanglionicHistorySum[i]);
@@ -841,7 +841,7 @@ void NEyeRetinaBWCore::BipolarCalculate(void)
   }  
 }
 
-// Расчет второго этапа обработки
+// Р Р°СЃС‡РµС‚ РІС‚РѕСЂРѕРіРѕ СЌС‚Р°РїР° РѕР±СЂР°Р±РѕС‚РєРё
 void NEyeRetinaBWCore::GanglionicCalculate(void)
 {
  int l,i,j;
@@ -860,7 +860,7 @@ void NEyeRetinaBWCore::GanglionicCalculate(void)
    currneibbuf=GangNeibBuf[l];
    currbufnumbers=GangNeibBufNumbers[l];
 
-   // Рассчитываем вклад от ганглиозных клеток
+   // Р Р°СЃСЃС‡РёС‚С‹РІР°РµРј РІРєР»Р°Рґ РѕС‚ РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє
    for(i=0;i<GanglionicRecSize;i++)
     {
      sum=0;
@@ -872,7 +872,7 @@ void NEyeRetinaBWCore::GanglionicCalculate(void)
 	}
    ARetinaOut[l]/=100;
 
-   // Рассчитываем вклад от амокриновых клеток                               
+   // Р Р°СЃСЃС‡РёС‚С‹РІР°РµРј РІРєР»Р°Рґ РѕС‚ Р°РјРѕРєСЂРёРЅРѕРІС‹С… РєР»РµС‚РѕРє                               
    sum=0;
    for(i=0;i<AmocrineRecSize;i++)
     {
@@ -886,7 +886,7 @@ void NEyeRetinaBWCore::GanglionicCalculate(void)
    ARetinaOut[l]-=sum/((int)(GanglionicHistorySize-1)*100);
 
 
-   // Расчитываем граничные значения уровня ганглиозных клеток 
+   // Р Р°СЃС‡РёС‚С‹РІР°РµРј РіСЂР°РЅРёС‡РЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ СѓСЂРѕРІРЅСЏ РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє 
    if(ARetinaOut[l]<GangMinHistory[CurrMinMaxHistIndex])
     GangMinHistory[CurrMinMaxHistIndex]=ARetinaOut[l];
    else
@@ -904,31 +904,31 @@ void NEyeRetinaBWCore::GanglionicCalculate(void)
   }
 }
 
-// Очищает буфер истории уровня биполяров
+// РћС‡РёС‰Р°РµС‚ Р±СѓС„РµСЂ РёСЃС‚РѕСЂРёРё СѓСЂРѕРІРЅСЏ Р±РёРїРѕР»СЏСЂРѕРІ
 void NEyeRetinaBWCore::ResetBipolarHistory(void)
 {
  int i;
 
- // Модифицируем историю уровня биполяров
+ // РњРѕРґРёС„РёС†РёСЂСѓРµРј РёСЃС‚РѕСЂРёСЋ СѓСЂРѕРІРЅСЏ Р±РёРїРѕР»СЏСЂРѕРІ
  for(i=0;i<BipolarHistorySize;i++)
   memset(BipolarHistory[i],0,InputImageLength*sizeof(int));
 
  CurrBipolarHistIndex=BipolarHistorySize-1;
 }
 
-// Очищает буфер истории уровня ганглиозных клеток
+// РћС‡РёС‰Р°РµС‚ Р±СѓС„РµСЂ РёСЃС‚РѕСЂРёРё СѓСЂРѕРІРЅСЏ РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє
 void NEyeRetinaBWCore::ResetGanglionicHistory(void)
 {
  int i;
 
- // Модифицируем историю уровня биполяров
+ // РњРѕРґРёС„РёС†РёСЂСѓРµРј РёСЃС‚РѕСЂРёСЋ СѓСЂРѕРІРЅСЏ Р±РёРїРѕР»СЏСЂРѕРІ
  for(i=0;i<GanglionicHistorySize;i++)
   memset(GanglionicHistory[i],0,InputImageLength*sizeof(int));
 
  CurrGanglionicHistIndex=GanglionicHistorySize-1;
 }
 
-// Очищает буфер истории граничных уровней выходных сигналов
+// РћС‡РёС‰Р°РµС‚ Р±СѓС„РµСЂ РёСЃС‚РѕСЂРёРё РіСЂР°РЅРёС‡РЅС‹С… СѓСЂРѕРІРЅРµР№ РІС‹С…РѕРґРЅС‹С… СЃРёРіРЅР°Р»РѕРІ
 void NEyeRetinaBWCore::ResetMinMaxHistory(void)
 {
  memset(BiMinHistory,0,MinMaxHistorySize*sizeof(int));
@@ -942,9 +942,9 @@ void NEyeRetinaBWCore::ResetMinMaxHistory(void)
 }
 
 
-// Производит поиск соседей элемента с номером index, уровня level
-// и записывает результат в массивы NeibBuf и NeibBufNumbers
-// по индексу putindex
+// РџСЂРѕРёР·РІРѕРґРёС‚ РїРѕРёСЃРє СЃРѕСЃРµРґРµР№ СЌР»РµРјРµРЅС‚Р° СЃ РЅРѕРјРµСЂРѕРј index, СѓСЂРѕРІРЅСЏ level
+// Рё Р·Р°РїРёСЃС‹РІР°РµС‚ СЂРµР·СѓР»СЊС‚Р°С‚ РІ РјР°СЃСЃРёРІС‹ NeibBuf Рё NeibBufNumbers
+// РїРѕ РёРЅРґРµРєСЃСѓ putindex
 void NEyeRetinaBWCore::SearchNeighbors(int index, int putindex, int level,
 						int ***NeibBuf,
 						int **NeibBufNumbers)

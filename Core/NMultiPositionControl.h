@@ -13,71 +13,76 @@ See file license.txt for more information
 #define NMultiPositionControl_H
 
 #include "NPositionControlElement.h"
-#include "../../Nmsdk-PulseLib/Core/NNeuronTrainer.h"
 //#include <string>
 
 namespace NMSDK {
 
 class RDK_LIB_TYPE NMultiPositionControl: public NPositionControlElement
 {
-protected: // Свойства
-RDK::UPropertyInputCData<MDMatrix<double>,NMultiPositionControl> PositionControl;
-RDK::ULProperty<int, NPositionControlElement> NumOfPositions;
+protected: // 
+RDK::UProperty<std::vector<MDMatrix<double>>,NMultiPositionControl, ptPubInput> PositionControl;
+RDK::UProperty<int, NPositionControlElement, ptPubParameter> NumOfPositions;
 
-public: // Переменные состояния
-// Входные нейроны, разделённые по нижним уровням
-// IN(0,0) IN(0,1), ..., IN(0,M) - нейроны, подключенные к первому элементу нижнего уровня
-// IN(1,0) IN(1,1), ..., IN(1,M) - нейроны, подключенные ко второму элементу нижнего уровня
+public: //  
+// Р’С…РѕРґРЅС‹Рµ РЅРµР№СЂРѕРЅС‹, СЂР°Р·РґРµР»С‘РЅРЅС‹Рµ РїРѕ РЅРёР¶РЅРёРј СѓСЂРѕРІРЅСЏРј
+// IN(0,0) IN(0,1), ..., IN(0,M) - РЅРµР№СЂРѕРЅС‹, РїРѕРґРєР»СЋС‡РµРЅРЅС‹Рµ Рє РїРµСЂРІРѕРјСѓ СЌР»РµРјРµРЅС‚Сѓ РЅРёР¶РЅРµРіРѕ СѓСЂРѕРІРЅСЏ
+// IN(1,0) IN(1,1), ..., IN(1,M) - РЅРµР№СЂРѕРЅС‹, РїРѕРґРєР»СЋС‡РµРЅРЅС‹Рµ РєРѕ РІС‚РѕСЂРѕРјСѓ СЌР»РµРјРµРЅС‚Сѓ РЅРёР¶РЅРµРіРѕ СѓСЂРѕРІРЅСЏ
+// IN(0,0) IN(0,1), ..., IN(0,M) - ,      
+// IN(1,0) IN(1,1), ..., IN(1,M) - ,      
 vector<vector<NNet*> > InputNeuronsByContours;
-// Выходные нейроны, разделённые по нижним уровням
-// Ctrl(0,0) Ctrl(0,1), ..., Ctrl(0,M) - нейроны, подключенные к первому элементу нижнего уровня
-// Ctrl(1,0) Ctrl(1,1), ..., Ctrl(1,M) - нейроны, подключенные ко второму элементу нижнего уровня
+// Р’С‹С…РѕРґРЅС‹Рµ РЅРµР№СЂРѕРЅС‹, СЂР°Р·РґРµР»С‘РЅРЅС‹Рµ РїРѕ РЅРёР¶РЅРёРј СѓСЂРѕРІРЅСЏРј
+// Ctrl(0,0) Ctrl(0,1), ..., Ctrl(0,M) - РЅРµР№СЂРѕРЅС‹, РїРѕРґРєР»СЋС‡РµРЅРЅС‹Рµ Рє РїРµСЂРІРѕРјСѓ СЌР»РµРјРµРЅС‚Сѓ РЅРёР¶РЅРµРіРѕ СѓСЂРѕРІРЅСЏ
+// Ctrl(1,0) Ctrl(1,1), ..., Ctrl(1,M) - РЅРµР№СЂРѕРЅС‹, РїРѕРґРєР»СЋС‡РµРЅРЅС‹Рµ РєРѕ РІС‚РѕСЂРѕРјСѓ СЌР»РµРјРµРЅС‚Сѓ РЅРёР¶РЅРµРіРѕ СѓСЂРѕРІРЅСЏ
+// Ctrl(0,0) Ctrl(0,1), ..., Ctrl(0,M) - ,      
+// Ctrl(1,0) Ctrl(1,1), ..., Ctrl(1,M) - ,      
 vector<vector<NNet*> > ControlNeuronsByContours;
 
-//Режим сборки
-//true - сбока структуры в Build и автономная работа, без подключения NewPositionControl
-//false - сбока структуры в Calculate и работа в системе с NewPositionControl
-RDK::ULProperty<bool, NMultiPositionControl> BuildSolo;
+// 
+//true -    Build   ,   NewPositionControl
+//false -    Calculate      NewPositionControl
+RDK::UProperty<bool, NMultiPositionControl, ptPubParameter> BuildSolo;
 
-//Число групп входов
-//используется при автономной работе Multi (при BuildSolo = true),
-//заменяет число подключенных NNewPositionControls
-//может быть интерпретировано как число звеньев объекта управления, число групп входных признаков
-RDK::ULProperty<int, NMultiPositionControl> PCsNum;
+//  
+//    Multi ( BuildSolo = true),
+//   NNewPositionControls
+//       ,    
+RDK::UProperty<int, NMultiPositionControl, ptPubParameter> PCsNum;
 
-//Число InputNeurons и ControlNeurons
-//используется при автономной работе Multi (при BuildSolo = true)
-//может быть интерпретировано как число признаков в одной группе
-RDK::ULProperty<int, NMultiPositionControl> InputsNum;
+// InputNeurons  ControlNeurons
+//    Multi ( BuildSolo = true)
+//        
+RDK::UProperty<int, NMultiPositionControl, ptPubParameter> InputsNum;
 
-//Флаг необходимости обновления структуры внутри блока
-//используется при автономной работе Multi (при BuildSolo = true)
-//true - если необходимо изменить InputsNum или PCsNum, false - иначе
-//Важно! При обновлении структуры поверх переименованных блоков схемы строятся новые, со стандартными названиями!
-RDK::ULProperty<bool, NMultiPositionControl> IsNeedToRebuild;
+//     
+//    Multi ( BuildSolo = true)
+//true -    InputsNum  PCsNum, false - 
+//!         ,   !
+RDK::UProperty<bool, NMultiPositionControl, ptPubParameter> IsNeedToRebuild;
 
-//Порог срабатывания нейронов PostInput
-//устанавливается для всех PostInput в схеме,
-//используется при автономной работе Multi (при BuildSolo = true)
-RDK::ULProperty<double, NMultiPositionControl> PostInputThreshold;
+//   PostInput
+//   PostInput  ,
+//    Multi ( BuildSolo = true)
+RDK::UProperty<double, NMultiPositionControl, ptPubParameter> PostInputThreshold;
 
-//Флаг необходимости построения PostInput и PreControl нейронов
-//независимо от момента обучения (true при использовании в MazeMemory, иначе false)
-RDK::ULProperty<bool, NMultiPositionControl> PrebuildStructure;
+//   PostInput  PreControl 
+//    (true    MazeMemory,  false)
+RDK::UProperty<bool, NMultiPositionControl, ptPubParameter> PrebuildStructure;
 
 protected:
 std::vector<UEPtr<NPositionControlElement>> PositionControlElement;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+// --------------------------
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
+// --------------------------
 // --------------------------
 NMultiPositionControl(void);
 virtual ~NMultiPositionControl(void);
 // --------------------------
 
 // ---------------------
-// Методы управления параметрами
+//   
 // ---------------------
 bool SetBuildSolo(const bool &value);
 bool SetInputsNum(const int &value);
@@ -90,34 +95,38 @@ bool SetPrebuildStructure(const bool &value);
 // ---------------------
 
 // ---------------------
-// Методы управления переменными состояния
+// --------------------------
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
+// --------------------------
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 // ---------------------
 // ---------------------
 
 // --------------------------
-// Системные методы управления объектом
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
 virtual NMultiPositionControl* New(void);
 // --------------------------        
 
 // --------------------------
-// Скрытые методы управления счетом 
+// --------------------------
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ СЃС‡РµС‚РѕРј 
+// --------------------------
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
+//    Reset()   Ready  true
 virtual bool ABuild(void);
 
-// Сброс процесса счета без потери настроек
+// РЎР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р° Р±РµР· РїРѕС‚РµСЂРё РЅР°СЃС‚СЂРѕРµРє
 virtual bool AReset(void);
 
-// Выполняет расчет этого объекта
+// Р’С‹РїРѕР»РЅСЏРµС‚ СЂР°СЃС‡РµС‚ СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
 virtual bool ACalculate(void);
 // --------------------------
 public:

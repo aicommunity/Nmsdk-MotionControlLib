@@ -22,9 +22,9 @@ See file license.txt for more information
 
 namespace NMSDK {
 
-// Методы
+// РњРµС‚РѕРґС‹
 // --------------------------
-// Конструкторы и деструкторы
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
 // --------------------------
 NControlObjectSource::NControlObjectSource(void)
 : NSource(),
@@ -42,9 +42,9 @@ NControlObjectSource::~NControlObjectSource(void)
 // --------------------------
 
 // --------------------------
-// Методы управления общедоступными свойствами
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±С‰РµРґРѕСЃС‚СѓРїРЅС‹РјРё СЃРІРѕР№СЃС‚РІР°РјРё
 // --------------------------
-// Устанавливает угол, скорость, момент 
+// РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ СѓРіРѕР», СЃРєРѕСЂРѕСЃС‚СЊ, РјРѕРјРµРЅС‚ 
 bool NControlObjectSource::SetDataShift(const MDVector<double> &value)
 {
  return true;
@@ -52,9 +52,9 @@ bool NControlObjectSource::SetDataShift(const MDVector<double> &value)
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 NControlObjectSource* NControlObjectSource::New(void)
 {
  return new NControlObjectSource;
@@ -62,9 +62,9 @@ NControlObjectSource* NControlObjectSource::New(void)
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ СЃС‡РµС‚РѕРј
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 bool NControlObjectSource::ADefault(void)
 {
 // SetNumOutputs(5);
@@ -78,7 +78,7 @@ bool NControlObjectSource::ADefault(void)
 }
 
 
-// Сброс процесса счета.
+// РЎР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°.
 bool NControlObjectSource::AReset(void)
 {
  UpdateOutputFlag=true;
@@ -92,7 +92,7 @@ bool NControlObjectSource::AReset(void)
  return NSource::AReset();
 }
 
-// Выполняет расчет этого объекта
+// Р’С‹РїРѕР»РЅСЏРµС‚ СЂР°СЃС‡РµС‚ СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
 bool NControlObjectSource::ACalculate(void)
 {
  if(Input.IsConnected() && Input->GetSize()>0)

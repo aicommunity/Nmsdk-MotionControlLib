@@ -10,89 +10,94 @@ namespace NMSDK {
 
 class NEyeRetina: public RDK::UNet
 {
-protected: // Свойства
+protected: // 
 	int EyeX,EyeY,EyeWidth,EyeHeight;
 	vector<pair<int,int> > EyeTraectory;
 
     int CaptureReadyCount;
 
 	MovingSegmentSelector MovingObjects;
-	// Палочки
+	// РџР°Р»РѕС‡РєРё
 	NEyeRetinaBWCore EyeRetina;
-	// Колбочки
+	// РљРѕР»Р±РѕС‡РєРё
 	NEyeRetinaBWCore EyeRetinaRCone;
 	NEyeRetinaBWCore EyeRetinaGCone;
 	NEyeRetinaBWCore EyeRetinaBCone;
 
-protected: // Переменные состояния
-UPropertyInputData<UBitmap,NEyeRetina> CaptureImage;
-UPropertyOutputData<UBitmap,NEyeRetina> InputImage;
-//UPropertyOutputData<UBitmap,NEyeRetina> BipolarOuts;
-UPropertyOutputData<UBitmap,NEyeRetina> GanglionicOuts;
-UPropertyOutputData<UBitmap,NEyeRetina> RConeGanglionicOuts;
-UPropertyOutputData<UBitmap,NEyeRetina> GConeGanglionicOuts;
-UPropertyOutputData<UBitmap,NEyeRetina> BConeGanglionicOuts;
-UPropertyOutputData<UBitmap,NEyeRetina> RodGanglionicOuts;
-UPropertyOutputData<UBitmap,NEyeRetina> OnGanglionicOuts;
-UPropertyOutputData<UBitmap,NEyeRetina> OffGanglionicOuts;
-// Выходы для мотонейронов
-// Активность выходов с групп ганглиозных клеток, отвечающих за рефлекторные
-// движения четырёх глазных мышц
-UPropertyOutputData<MDMatrix<double>,NEyeRetina, ptOutput | ptPubState> LeftGanglionicOut;
-UPropertyOutputData<MDMatrix<double>,NEyeRetina, ptOutput | ptPubState> RightGanglionicOut;
-UPropertyOutputData<MDMatrix<double>,NEyeRetina, ptOutput | ptPubState> TopGanglionicOut;
-UPropertyOutputData<MDMatrix<double>,NEyeRetina, ptOutput | ptPubState> BottomGanglionicOut;
-// ДЛЯ ОТЛАДКИ
-// АКТИВНОСТЬ ВХОДОВ ДЛЯ 4-ч ГЛАЗНЫХ МЫШЦ
-UPropertyOutputData<UBitmap,NEyeRetina> LeftMuscle;
-UPropertyOutputData<UBitmap,NEyeRetina> RightMuscle;
-UPropertyOutputData<UBitmap,NEyeRetina> TopMuscle;
-UPropertyOutputData<UBitmap,NEyeRetina> BottomMuscle;
+protected: //  
+UProperty<UBitmap,NEyeRetina, ptPubParameter> CaptureImage;
+UProperty<UBitmap,NEyeRetina, ptPubParameter> InputImage;
+//UProperty<UBitmap,NEyeRetina, ptPubParameter> BipolarOuts;
+UProperty<UBitmap,NEyeRetina, ptPubParameter> GanglionicOuts;
+UProperty<UBitmap,NEyeRetina, ptPubParameter> RConeGanglionicOuts;
+UProperty<UBitmap,NEyeRetina, ptPubParameter> GConeGanglionicOuts;
+UProperty<UBitmap,NEyeRetina, ptPubParameter> BConeGanglionicOuts;
+UProperty<UBitmap,NEyeRetina, ptPubParameter> RodGanglionicOuts;
+UProperty<UBitmap,NEyeRetina, ptPubParameter> OnGanglionicOuts;
+UProperty<UBitmap,NEyeRetina, ptPubParameter> OffGanglionicOuts;
+// Р’С‹С…РѕРґС‹ РґР»СЏ РјРѕС‚РѕРЅРµР№СЂРѕРЅРѕРІ
+// РђРєС‚РёРІРЅРѕСЃС‚СЊ РІС‹С…РѕРґРѕРІ СЃ РіСЂСѓРїРї РіР°РЅРіР»РёРѕР·РЅС‹С… РєР»РµС‚РѕРє, РѕС‚РІРµС‡Р°СЋС‰РёС… Р·Р° СЂРµС„Р»РµРєС‚РѕСЂРЅС‹Рµ
+// РґРІРёР¶РµРЅРёСЏ С‡РµС‚С‹СЂС‘С… РіР»Р°Р·РЅС‹С… РјС‹С€С†
+UProperty<MDMatrix<double>,NEyeRetina, ptOutput | ptPubState> LeftGanglionicOut;
+UProperty<MDMatrix<double>,NEyeRetina, ptOutput | ptPubState> RightGanglionicOut;
+UProperty<MDMatrix<double>,NEyeRetina, ptOutput | ptPubState> TopGanglionicOut;
+UProperty<MDMatrix<double>,NEyeRetina, ptOutput | ptPubState> BottomGanglionicOut;
+//  
+//    4-  
+UProperty<UBitmap,NEyeRetina, ptPubParameter> LeftMuscle;
+UProperty<UBitmap,NEyeRetina, ptPubParameter> RightMuscle;
+UProperty<UBitmap,NEyeRetina, ptPubParameter> TopMuscle;
+UProperty<UBitmap,NEyeRetina, ptPubParameter> BottomMuscle;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+// --------------------------
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
+// --------------------------
 // --------------------------
 NEyeRetina(void);
 virtual ~NEyeRetina(void);
 // --------------------------
 
 // ---------------------
-// Методы управления параметрами
+// --------------------------
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
+// --------------------------
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 // ---------------------
 // ---------------------
 
 // ---------------------
-// Методы управления переменными состояния
 // ---------------------
 // ---------------------
 
 // --------------------------
-// Системные методы управления объектом
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
 virtual NEyeRetina* New(void);
 // --------------------------        
 
 // --------------------------
-// Скрытые методы управления счетом 
+// --------------------------
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ СЃС‡РµС‚РѕРј 
+// --------------------------
 // --------------------------
 protected:
 void UpdateImages(void);
 
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
+//    Reset()   Ready  true
 virtual bool ABuild(void);
 
-// Сброс процесса счета без потери настроек
+// РЎР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р° Р±РµР· РїРѕС‚РµСЂРё РЅР°СЃС‚СЂРѕРµРє
 virtual bool AReset(void);
 
-// Выполняет расчет этого объекта
+// Р’С‹РїРѕР»РЅСЏРµС‚ СЂР°СЃС‡РµС‚ СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
 virtual bool ACalculate(void);
 // --------------------------
 };

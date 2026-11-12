@@ -26,107 +26,116 @@ using namespace RDK;
 /* *************************************************************************** */
 class RDK_LIB_TYPE NDCEngine: public UNet
 {
-public: // Общедоступные свойства
-/// Электромагнитный коэффициент
-ULProperty<double, NDCEngine, ptPubParameter> EMFactor;
+public: //  
+/// Р­Р»РµРєС‚СЂРѕРјР°РіРЅРёС‚РЅС‹Р№ РєРѕСЌС„С„РёС†РёРµРЅС‚
+UProperty<double, NDCEngine, ptPubParameter> EMFactor;
 
-/// Индуктивность
-ULProperty<double, NDCEngine, ptPubParameter> Inductance;
+/// РРЅРґСѓРєС‚РёРІРЅРѕСЃС‚СЊ
+UProperty<double, NDCEngine, ptPubParameter> Inductance;
 
-/// Сопротивление
-ULProperty<double, NDCEngine, ptPubParameter> Resistance;
+/// РЎРѕРїСЂРѕС‚РёРІР»РµРЅРёРµ
+UProperty<double, NDCEngine, ptPubParameter> Resistance;
 
-/// Электромеханическая постоянная времени
-ULProperty<double, NDCEngine, ptPubParameter> Tm;
+/// Р­Р»РµРєС‚СЂРѕРјРµС…Р°РЅРёС‡РµСЃРєР°СЏ РїРѕСЃС‚РѕСЏРЅРЅР°СЏ РІСЂРµРјРµРЅРё
+UProperty<double, NDCEngine, ptPubParameter> Tm;
 
-/// Передаточное число
-ULProperty<double, NDCEngine, ptPubParameter> ReductionRate;
+/// РџРµСЂРµРґР°С‚РѕС‡РЅРѕРµ С‡РёСЃР»Рѕ
+UProperty<double, NDCEngine, ptPubParameter> ReductionRate;
 
-/// Внешний момент
-ULProperty<double, NDCEngine, ptPubParameter> OutMoment;
+/// Р’РЅРµС€РЅРёР№ РјРѕРјРµРЅС‚
+UProperty<double, NDCEngine, ptPubParameter> OutMoment;
 
-public: // Входы и выходы
-/// Входное напряжение
-UPropertyInputData<MDMatrix<double>, NDCEngine, ptInput | ptPubState> InputVoltage;
+public: //   
+/// Р’С…РѕРґРЅРѕРµ РЅР°РїСЂСЏР¶РµРЅРёРµ
+UProperty<MDMatrix<double>, NDCEngine, ptInput | ptPubState> InputVoltage;
 
-/// Внешний момент на валу
-UPropertyInputData<MDMatrix<double>, NDCEngine, ptInput | ptPubState> InputMomentum;
+/// Р’РЅРµС€РЅРёР№ РјРѕРјРµРЅС‚ РЅР° РІР°Р»Сѓ
+UProperty<MDMatrix<double>, NDCEngine, ptInput | ptPubState> InputMomentum;
 
-/// Выходной момент
-UPropertyOutputData<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputMomentum;
+/// Р’С‹С…РѕРґРЅРѕР№ РјРѕРјРµРЅС‚
+UProperty<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputMomentum;
 
-/// Выходной угол поворота вала
-UPropertyOutputData<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputAngle;
+/// Р’С‹С…РѕРґРЅРѕР№ СѓРіРѕР» РїРѕРІРѕСЂРѕС‚Р° РІР°Р»Р°
+UProperty<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputAngle;
 
-/// Выходная угловая скорость вращения
-UPropertyOutputData<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputAngleSpeed;
+/// Р’С‹С…РѕРґРЅР°СЏ СѓРіР»РѕРІР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ РІСЂР°С‰РµРЅРёСЏ
+UProperty<MDMatrix<double>, NDCEngine, ptOutput | ptPubState> OutputAngleSpeed;
 
-protected: // Данные
-// Угол поворота
+protected: // 
+//  
 UProperty<double,NDCEngine, ptPubParameter> Angle;
 
-// Ток якоря
+// РўРѕРє СЏРєРѕСЂСЏ
 double Current;
 
-// ЭДС якоря
+// Р­Р”РЎ СЏРєРѕСЂСЏ
 double EMF;
 
-// Момент развиваемый двигателем
+// РњРѕРјРµРЅС‚ СЂР°Р·РІРёРІР°РµРјС‹Р№ РґРІРёРіР°С‚РµР»РµРј
 double Moment;
 
-// Угловая скорость
+// РЈРіР»РѕРІР°СЏ СЃРєРѕСЂРѕСЃС‚СЊ
 double AngleSpeed;
 
-// Производная момента
+// РџСЂРѕРёР·РІРѕРґРЅР°СЏ РјРѕРјРµРЅС‚Р°
 double DiffMoment;
 
-protected: // Временные переменные
+protected: //  
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+// --------------------------
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
+// --------------------------
 // --------------------------
 NDCEngine(void);
 virtual ~NDCEngine(void);
 // --------------------------
 
 // --------------------------
-// Системные методы управления объектом
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
+// --------------------------
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
+// --------------------------
 virtual NDCEngine* New(void);
 // --------------------------
 
 protected:
 // --------------------------
-// Методы управления общедоступными свойствами
 // --------------------------
-// Электромагнитный коэффициент
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±С‰РµРґРѕСЃС‚СѓРїРЅС‹РјРё СЃРІРѕР№СЃС‚РІР°РјРё
+// --------------------------
+// Р­Р»РµРєС‚СЂРѕРјР°РіРЅРёС‚РЅС‹Р№ РєРѕСЌС„С„РёС†РёРµРЅС‚
+// --------------------------
 bool SetEMFactor(const double &value);
 
-// Индуктивность
+// РРЅРґСѓРєС‚РёРІРЅРѕСЃС‚СЊ
 bool SetInductance(const double &value);
 
-// Сопротивление
+// РЎРѕРїСЂРѕС‚РёРІР»РµРЅРёРµ
 bool SetResistance(const double &value);
 
-// Электромеханическая постоянная времени
+// Р­Р»РµРєС‚СЂРѕРјРµС…Р°РЅРёС‡РµСЃРєР°СЏ РїРѕСЃС‚РѕСЏРЅРЅР°СЏ РІСЂРµРјРµРЅРё
 bool SetTm(const double &value);
 
-// Передаточное число
+// РџРµСЂРµРґР°С‚РѕС‡РЅРѕРµ С‡РёСЃР»Рѕ
 bool SetReductionRate(const double &value);
 // --------------------------
 
 // --------------------------
+// --------------------------
 // Computation methods
 // --------------------------
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
+// --------------------------
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
+//    Reset()   Ready  true
 virtual bool ABuild(void);
 
 // Reset computation

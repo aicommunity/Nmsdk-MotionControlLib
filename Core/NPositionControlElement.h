@@ -20,16 +20,16 @@ namespace NMSDK {
 //class NEngineMotionControl;
 class RDK_LIB_TYPE NPositionControlElement: public UNet
 {
-public: // Свойства
-RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> CurrentPosition;
-RDK::ULProperty<MDMatrix<double>, NPositionControlElement> TargetPosition;
-RDK::ULProperty<string, NPositionControlElement> InputNeuronType;
-RDK::ULProperty<string, NPositionControlElement> ControlNeuronType;
-RDK::ULProperty<bool, NPositionControlElement> ExternalControl;
-RDK::ULProperty<bool, NPositionControlElement, ptPubState> RememberState;
-RDK::ULProperty<MDMatrix<double>, NPositionControlElement, ptPubState> Delta;
+public: // 
+RDK::UProperty<MDMatrix<double>, NPositionControlElement, ptPubState> CurrentPosition;
+RDK::UProperty<MDMatrix<double>, NPositionControlElement, ptPubParameter> TargetPosition;
+RDK::UProperty<string, NPositionControlElement, ptPubParameter> InputNeuronType;
+RDK::UProperty<string, NPositionControlElement, ptPubParameter> ControlNeuronType;
+RDK::UProperty<bool, NPositionControlElement, ptPubParameter> ExternalControl;
+RDK::UProperty<bool, NPositionControlElement, ptPubState> RememberState;
+RDK::UProperty<MDMatrix<double>, NPositionControlElement, ptPubState> Delta;
 
-public: // Переменные состояния
+public: //  
 vector<NNet*> InputNeurons;
 vector<NNet*> ControlNeurons;
 vector<NNet*> PreControlNeurons;
@@ -38,16 +38,20 @@ vector<NNet*> PostInputNeurons;
 
 vector<UNet*> Generators;
 
-public: // Методы
+public: // 
 // --------------------------
-// Конструкторы и деструкторы
+// --------------------------
+// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹ Рё РґРµСЃС‚СЂСѓРєС‚РѕСЂС‹
+// --------------------------
 // --------------------------
 NPositionControlElement(void);
 virtual ~NPositionControlElement(void);
 // --------------------------
 
 // ---------------------
-// Методы управления параметрами
+// ---------------------
+// РњРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РїР°СЂР°РјРµС‚СЂР°РјРё
+// ---------------------
 // ---------------------
 bool SetInputNeuronType(const string &value);
 bool SetControlNeuronType(const string &value);
@@ -55,34 +59,38 @@ bool SetExternalControl(const bool &value);
 // ---------------------
 
 // ---------------------
-// Методы управления переменными состояния
+// --------------------------
+// РЎРёСЃС‚РµРјРЅС‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ РѕР±СЉРµРєС‚РѕРј
+// --------------------------
+// Р’С‹РґРµР»СЏРµС‚ РїР°РјСЏС‚СЊ РґР»СЏ РЅРѕРІРѕР№ С‡РёСЃС‚РѕР№ РєРѕРїРёРё РѕР±СЉРµРєС‚Р° СЌС‚РѕРіРѕ РєР»Р°СЃСЃР°
 // ---------------------
 // ---------------------
 
 // --------------------------
-// Системные методы управления объектом
 // --------------------------
-// Выделяет память для новой чистой копии объекта этого класса
 virtual NPositionControlElement* New(void);
 // --------------------------
 
 // --------------------------
-// Скрытые методы управления счетом
+// --------------------------
+// РЎРєСЂС‹С‚С‹Рµ РјРµС‚РѕРґС‹ СѓРїСЂР°РІР»РµРЅРёСЏ СЃС‡РµС‚РѕРј
+// --------------------------
 // --------------------------
 protected:
-// Восстановление настроек по умолчанию и сброс процесса счета
+// Р’РѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ Рё СЃР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р°
 virtual bool ADefault(void);
 
-// Обеспечивает сборку внутренней структуры объекта
-// после настройки параметров
-// Автоматически вызывает метод Reset() и выставляет Ready в true
-// в случае успешной сборки
+// РћР±РµСЃРїРµС‡РёРІР°РµС‚ СЃР±РѕСЂРєСѓ РІРЅСѓС‚СЂРµРЅРЅРµР№ СЃС‚СЂСѓРєС‚СѓСЂС‹ РѕР±СЉРµРєС‚Р°
+// РїРѕСЃР»Рµ РЅР°СЃС‚СЂРѕР№РєРё РїР°СЂР°РјРµС‚СЂРѕРІ
+// РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРё РІС‹Р·С‹РІР°РµС‚ РјРµС‚РѕРґ Reset() Рё РІС‹СЃС‚Р°РІР»СЏРµС‚ Ready РІ true
+// РІ СЃР»СѓС‡Р°Рµ СѓСЃРїРµС€РЅРѕР№ СЃР±РѕСЂРєРё
+//    Reset()   Ready  true
 virtual bool ABuild(void);
 
-// Сброс процесса счета без потери настроек
+// РЎР±СЂРѕСЃ РїСЂРѕС†РµСЃСЃР° СЃС‡РµС‚Р° Р±РµР· РїРѕС‚РµСЂРё РЅР°СЃС‚СЂРѕРµРє
 virtual bool AReset(void);
 
-// Выполняет расчет этого объекта
+// Р’С‹РїРѕР»РЅСЏРµС‚ СЂР°СЃС‡РµС‚ СЌС‚РѕРіРѕ РѕР±СЉРµРєС‚Р°
 virtual bool ACalculate(void);
 // --------------------------
 template <typename T>
